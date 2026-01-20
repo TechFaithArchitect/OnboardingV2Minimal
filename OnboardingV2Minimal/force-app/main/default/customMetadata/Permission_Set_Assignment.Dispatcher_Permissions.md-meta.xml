@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Dispatcher Permissions</label>
+    <protected>false</protected>
+    <values>
+        <field>Business_Unit__c</field>
+        <value xsi:type="xsd:string">Perfect Vision</value>
+    </values>
+    <values>
+        <field>Permission_Set_Group__c</field>
+        <value xsi:type="xsd:string">FSL_Community_Dispatcher</value>
+    </values>
+    <values>
+        <field>Permission_Set_Licenses__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Permission_Set_Name__c</field>
+        <value xsi:type="xsd:string">FSL_Dispatcher_License,FSL_Dispatcher_Permissions,FSL_Agent_Permissions</value>
+    </values>
+    <values>
+        <field>Permission_Sets__c</field>
+        <value xsi:type="xsd:string">PV_Dispatcher_Permissions</value>
+    </values>
+    <values>
+        <field>Profile__c</field>
+        <value xsi:type="xsd:string">External Partner – General</value>
+    </values>
+    <values>
+        <field>Resource_Type__c</field>
+        <value xsi:type="xsd:string">Dispatcher</value>
+    </values>
+</CustomMetadata>

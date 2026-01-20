@@ -1,0 +1,49 @@
+<template>
+  <lightning-card title="Onboarding Rule" icon-name="custom:custom63">
+    <lightning-record-edit-form
+      object-api-name="Onboarding_Status_Rules_Engine__c"
+      record-id={recordId}
+      onsuccess={handleSuccess}
+      onsubmit={handleSubmit}
+    >
+      <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size_1-of-1">
+          <lightning-input-field field-name="Name"></lightning-input-field>
+          <lightning-input-field
+            field-name="Vendor_Program_Group__c"
+          ></lightning-input-field>
+          <lightning-input-field
+            field-name="Evaluation_Logic__c"
+            onchange={handleEvalLogicChange}
+          ></lightning-input-field>
+
+          <template if:true={showCustomLogic}>
+            <lightning-input-field
+              field-name="Custom_Evaluation_Logic__c"
+            ></lightning-input-field>
+          </template>
+
+          <lightning-input-field
+            field-name="Override_Status__c"
+          ></lightning-input-field>
+        </div>
+      </div>
+
+      <div class="slds-m-top_medium">
+        <lightning-button
+          variant="brand"
+          type="submit"
+          label="Save"
+        ></lightning-button>
+      </div>
+    </lightning-record-edit-form>
+
+    <template if:true={recordId}>
+      <div class="slds-m-top_large">
+        <c-requirement-conditions-list
+          rule-id={recordId}
+        ></c-requirement-conditions-list>
+      </div>
+    </template>
+  </lightning-card>
+</template>

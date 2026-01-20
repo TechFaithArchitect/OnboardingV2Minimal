@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SSN_validation</fullName>
+    <active>false</active>
+    <errorConditionFormula>!ISBLANK(POE_Ssn__c ) &amp;&amp; (LEN(POE_Ssn__c)  &lt; 9  || !ISNUMBER(POE_Ssn__c))</errorConditionFormula>
+    <errorMessage>SSN Format invalid</errorMessage>
+</ValidationRule>

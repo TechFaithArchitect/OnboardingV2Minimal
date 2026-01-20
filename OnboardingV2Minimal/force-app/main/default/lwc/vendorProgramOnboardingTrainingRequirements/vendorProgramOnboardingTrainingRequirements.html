@@ -1,0 +1,259 @@
+<template>
+    <lightning-card title={cardTitle}>
+        <div class="slds-p-around_medium">
+            <!-- Info Box -->
+            <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <p class="slds-text-body_small slds-m-bottom_none">
+                            <strong>Training Requirements:</strong> Courses vendors must complete. Include course codes and sequence numbers. Mark mandatory training as "Required".
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radio Buttons - Always Visible -->
+            <p class="slds-text-heading_small slds-m-bottom_medium">Are Training Requirements needed for this Vendor Program?</p>
+            
+            <lightning-radio-group
+                name="trainingNeeded"
+                options={trainingNeededOptions}
+                value={trainingNeededValue}
+                type="radio"
+                onchange={handleTrainingNeededChange}
+                class="slds-m-bottom_medium">
+            </lightning-radio-group>
+
+            <!-- Training Management - Shown when "Yes" is selected -->
+            <template if:true={showTrainingManagement}>
+                <template if:true={isLoading}>
+                    <lightning-spinner size="small"></lightning-spinner>
+                </template>
+
+                <template if:false={isLoading}>
+                    <lightning-button label="Add Training" onclick={toggleForm} class="slds-m-bottom_small"></lightning-button>
+
+            <template if:true={showForm}>
+                <!-- Training System Selection with Inline Creation -->
+                <div class="slds-form-element slds-m-bottom_small">
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">*</abbr>
+                        Training System
+                    </label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-end">
+                            <div class="slds-col slds-grow slds-m-right_x-small">
+                                <lightning-combobox
+                                    name="Training_System__c"
+                                    value={newTraining.Training_System__c}
+                                    options={trainingSystemOptions}
+                                    onchange={handleFieldChange}
+                                    placeholder="Select a Training System"
+                                    required>
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <lightning-button
+                                    icon-name="utility:add"
+                                    label="Add Training System"
+                                    onclick={toggleTrainingSystemForm}
+                                    variant="neutral"
+                                    title="Create a new Training System">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Training System Creation Form -->
+                <template if:true={showTrainingSystemForm}>
+                    <div class="slds-box slds-theme_shade slds-m-bottom_small" style="padding: 0.75rem;">
+                        <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                            <p class="slds-text-heading_small slds-m-bottom_none">Create New Training System</p>
+                            <lightning-button-icon
+                                icon-name="utility:close"
+                                alternative-text="Close"
+                                title="Close"
+                                onclick={toggleTrainingSystemForm}
+                                variant="border-filled"
+                                size="small">
+                            </lightning-button-icon>
+                        </div>
+                        <lightning-input
+                            label="Training System Name"
+                            name="Name"
+                            value={newTrainingSystem.Name}
+                            onchange={handleTrainingSystemFieldChange}
+                            placeholder="e.g., LearnUpon, Vendor Portal, Manual Entry"
+                            required>
+                        </lightning-input>
+                        
+                        <lightning-input
+                            label="System Type"
+                            name="System_Type__c"
+                            value={newTrainingSystem.System_Type__c}
+                            onchange={handleTrainingSystemFieldChange}
+                            placeholder="e.g., External, Internal, Manual"
+                            class="slds-m-top_small">
+                        </lightning-input>
+                        
+                        <lightning-input
+                            type="checkbox"
+                            label="Active"
+                            name="Active__c"
+                            checked={newTrainingSystem.Active__c}
+                            onchange={handleTrainingSystemFieldChange}
+                            class="slds-m-top_small">
+                        </lightning-input>
+                        <div class="slds-text-body_small slds-text-color_weak slds-m-left_medium slds-m-top_xx-small">
+                            <strong>Tip:</strong> Active Training Systems will appear in the dropdown for selection. Uncheck to hide from dropdowns.
+                        </div>
+                        
+                        <div class="slds-m-top_small">
+                            <lightning-button
+                                variant="brand"
+                                label="Create Training System"
+                                onclick={handleCreateTrainingSystem}>
+                            </lightning-button>
+                            <lightning-button
+                                variant="neutral"
+                                label="Cancel"
+                                onclick={toggleTrainingSystemForm}
+                                class="slds-m-left_x-small">
+                            </lightning-button>
+                        </div>
+                    </div>
+                </template>
+                
+                <template if:true={isExternalTrainingSystem}>
+                    <lightning-input 
+                        label="Course Code" 
+                        name="External_Course_Code__c" 
+                        value={newTraining.External_Course_Code__c} 
+                        onchange={handleFieldChange}>
+                    </lightning-input>
+                    
+                    <lightning-input 
+                        label="Course Name" 
+                        name="External_Course_Name__c" 
+                        value={newTraining.External_Course_Name__c} 
+                        onchange={handleFieldChange}
+                        class="slds-m-top_small">
+                    </lightning-input>
+                </template>
+                
+                <template if:false={isExternalTrainingSystem}>
+                    <lightning-input 
+                        label="Training Code" 
+                        name="Training_Code__c" 
+                        value={newTraining.Training_Code__c} 
+                        onchange={handleFieldChange}
+                        class="slds-m-top_small">
+                    </lightning-input>
+                </template>
+                
+                <lightning-input 
+                    type="checkbox" 
+                    label="Is Required" 
+                    name="Is_Required__c" 
+                    checked={newTraining.Is_Required__c} 
+                    onchange={handleFieldChange}
+                    class="slds-m-top_small">
+                </lightning-input>
+                
+                <template if:true={isExternalTrainingSystem}>
+                    <lightning-input 
+                        type="number" 
+                        label="Sequence" 
+                        name="Sequence__c" 
+                        value={newTraining.Sequence__c} 
+                        onchange={handleFieldChange}
+                        class="slds-m-top_small">
+                    </lightning-input>
+                </template>
+
+                <div class="slds-m-top_small">
+                    <lightning-button variant="brand" label="Save" onclick={handleCreate}></lightning-button>
+                    <lightning-button variant="neutral" label="Cancel" onclick={toggleForm} class="slds-m-left_x-small"></lightning-button>
+                </div>
+            </template>
+
+                    <!-- Selectable Training Requirements List -->
+                    <template if:true={hasTrainingRequirements}>
+                        <div class="slds-m-top_medium">
+                            <h3 class="slds-text-heading_small slds-m-bottom_small">Saved Training Requirements</h3>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                                Select training requirements below to add them to this step as a group.
+                            </p>
+                            
+                            <!-- Multi-select for Training Requirements -->
+                            <lightning-dual-listbox
+                                label="Select Training Requirements to Group"
+                                source-label="Available"
+                                selected-label="Selected for Group"
+                                options={trainingRequirementOptions}
+                                value={selectedTrainingRequirementIds}
+                                onchange={handleTrainingRequirementSelection}
+                                min={minTrainingRequirements}
+                                max={maxTrainingRequirements}>
+                            </lightning-dual-listbox>
+                            
+                            <!-- Display required training requirements in table -->
+                            <div class="slds-m-top_medium">
+                                <h4 class="slds-text-heading_small slds-m-bottom_small">Required Training Requirements</h4>
+                                <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                                    These are the training requirements marked as required for this vendor program. You can proceed to the next step once you're satisfied with the selection.
+                                </p>
+                                <template if:true={hasRequiredExternalRequirements}>
+                                    <div class="slds-m-bottom_medium">
+                                        <p class="slds-text-title slds-m-bottom_x-small">External Training</p>
+                                        <lightning-datatable
+                                            key-field="Id"
+                                            data={requiredExternalRequirements}
+                                            columns={columnsExternal}
+                                            hide-checkbox-column
+                                            onrowaction={handleRowAction}>
+                                        </lightning-datatable>
+                                    </div>
+                                </template>
+                                <template if:true={hasRequiredInternalRequirements}>
+                                    <div class="slds-m-bottom_medium">
+                                        <p class="slds-text-title slds-m-bottom_x-small">Internal Training</p>
+                                        <lightning-datatable
+                                            key-field="Id"
+                                            data={requiredInternalRequirements}
+                                            columns={columnsInternal}
+                                            hide-checkbox-column
+                                            onrowaction={handleRowAction}>
+                                        </lightning-datatable>
+                                    </div>
+                                </template>
+                                <template if:false={hasRequiredExternalRequirements}>
+                                    <template if:false={hasRequiredInternalRequirements}>
+                                        <div class="slds-text-align_center slds-p-around_medium">
+                                            <p class="slds-text-body_regular slds-text-color_weak">
+                                                No required training requirements selected. Move items to "Selected for Group" to mark them as required.
+                                            </p>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Empty State -->
+                    <template if:false={hasTrainingRequirements}>
+                        <div class="slds-box slds-theme_shade slds-m-top_small" style="padding: 1rem;">
+                            <p class="slds-text-body_small slds-text-color_weak slds-text-align_center">
+                                No training requirements yet. Click "Add Training" to create your first one.
+                            </p>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

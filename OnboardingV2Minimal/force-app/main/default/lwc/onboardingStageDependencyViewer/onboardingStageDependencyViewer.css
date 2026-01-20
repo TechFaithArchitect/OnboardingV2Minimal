@@ -1,0 +1,68 @@
+.stage-viewer-container {
+    overflow: auto;
+    max-height: 600px;
+    border: 1px solid var(--lwc-colorBorder, #dddbda);
+    border-radius: 4px;
+    padding: var(--lwc-spacingMedium, 1rem);
+}
+
+.stage-svg {
+    display: block;
+    background-color: var(--lwc-colorBackgroundAlt, #fafaf9);
+}
+
+.stage-group {
+    cursor: pointer;
+}
+
+.stage-box {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.stage-box:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.stage-name {
+    font-size: 14px;
+    font-weight: 600;
+    fill: var(--lwc-colorTextDefault, #080707);
+    pointer-events: none;
+}
+
+.stage-sequence {
+    font-size: 11px;
+    fill: var(--lwc-colorTextWeak, #706e6b);
+    pointer-events: none;
+}
+
+.dependency-line {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.dependency-line:hover {
+    opacity: 1;
+    stroke-width: 3;
+}
+
+.dependency-line[data-blocked="true"] {
+    stroke-dasharray: 5,5;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .stage-viewer-container {
+        max-height: 400px;
+    }
+    
+    .stage-name {
+        font-size: 12px;
+    }
+    
+    .stage-sequence {
+        font-size: 10px;
+    }
+}
+

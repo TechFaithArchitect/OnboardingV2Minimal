@@ -1,0 +1,77 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <p class="slds-text-body_small slds-m-bottom_none">
+              <strong>Add Members:</strong> Add users, public groups, or territory role assignments to receive onboarding notifications. Click "Add Member" for each selection.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- USER -->
+      <lightning-combobox
+        label="Select User"
+        value={selectedUserId}
+        options={userOptions}
+        onchange={handleUserChange}>
+      </lightning-combobox>
+
+      <!-- PUBLIC GROUP -->
+      <lightning-combobox
+        label="Select Public Group"
+        value={selectedPublicGroupId}
+        options={publicGroupOptions}
+        onchange={handlePublicGroupChange}
+        class="slds-m-top_small">
+      </lightning-combobox>
+
+      <!-- TERRITORY ROLE ASSIGNMENT -->
+      <lightning-combobox
+        label="Select Territory Role Assignment"
+        value={selectedTerritoryRoleAssignmentId}
+        options={territoryRoleAssignmentOptions}
+        onchange={handleTerritoryRoleAssignmentChange}
+        class="slds-m-top_small">
+      </lightning-combobox>
+
+      <!-- ADD MEMBER BUTTON -->
+      <lightning-button
+        variant="brand"
+        label="Add Member"
+        onclick={handleAddMember}
+        class="slds-m-top_medium">
+      </lightning-button>
+
+      <!-- SUCCESS / ERROR -->
+      <template if:true={successMessage}>
+        <p class="slds-text-color_success slds-m-top_small">{successMessage}</p>
+      </template>
+      <template if:true={errorMessage}>
+        <p class="slds-text-color_error slds-m-top_small">{errorMessage}</p>
+      </template>
+
+      <!-- LOADING -->
+      <template if:true={isLoading}>
+        <div class="slds-m-top_medium">
+          <lightning-spinner size="small"></lightning-spinner>
+        </div>
+      </template>
+
+      <!-- NEXT -->
+      <div class="slds-m-top_large">
+        <lightning-button
+          label="Next"
+          variant="neutral"
+          onclick={handleNext}>
+        </lightning-button>
+      </div>
+
+    </div>
+  </lightning-card>
+</template>

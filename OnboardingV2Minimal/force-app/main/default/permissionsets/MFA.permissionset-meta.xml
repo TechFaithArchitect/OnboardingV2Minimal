@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>PS for SMS Identity Verification</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>MFA SMS</label>
+    <license>Partner Community</license>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ForceTwoFactor</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>SmsAs2faUserPerm</name>
+    </userPermissions>
+</PermissionSet>

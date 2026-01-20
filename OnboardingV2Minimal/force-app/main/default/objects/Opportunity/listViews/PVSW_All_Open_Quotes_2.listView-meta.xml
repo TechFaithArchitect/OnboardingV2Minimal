@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PVSW_All_Open_Quotes_2</fullName>
+    <columns>Opportunity_Owner__c</columns>
+    <columns>OPPORTUNITY.CREATED_DATE</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <columns>Quote__c</columns>
+    <columns>Quote_Total__c</columns>
+    <columns>PO_Total_from_Quote__c</columns>
+    <columns>OPPORTUNITY.NEXT_STEP</columns>
+    <columns>Next_Step_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>OPPORTUNITY.NAME</field>
+        <operation>contains</operation>
+        <value>Quote</value>
+    </filters>
+    <filters>
+        <field>Accessory_Region__c</field>
+        <operation>equals</operation>
+        <value>WISW</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>notEqual</operation>
+        <value>Needs Quoted,Closed Lost,Closed Won</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Opportunity.Accessory_Opportunity</value>
+    </filters>
+    <filters>
+        <field>Opportunity_Owner__c</field>
+        <operation>equals</operation>
+        <value>Maria Atencio,Benjy Richards,John Cortez,Laney Hubbard,Anthony Castillo,Ryan Wicker,James Lee,Wunam Ebenja</value>
+    </filters>
+    <label>PVSW All Open Quotes 2</label>
+    <sharedTo>
+        <roleAndSubordinatesInternal>Infrastructure_VP</roleAndSubordinatesInternal>
+    </sharedTo>
+</ListView>

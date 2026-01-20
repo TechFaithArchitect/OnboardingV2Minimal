@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Source</fullName>
+    <active>false</active>
+    <description>Rule for when a specific opportunity source value is selected the source tactic will be required.</description>
+    <errorConditionFormula>AND(
+OR(
+ISPICKVAL(Opportunity__c ,&quot;Outside Rep Cold Call&quot;),
+ISBLANK(TEXT(Source_Tactic__c))))</errorConditionFormula>
+    <errorDisplayField>Source_Tactic__c</errorDisplayField>
+    <errorMessage>A Source Tactic must be selected in order to save the record.</errorMessage>
+</ValidationRule>

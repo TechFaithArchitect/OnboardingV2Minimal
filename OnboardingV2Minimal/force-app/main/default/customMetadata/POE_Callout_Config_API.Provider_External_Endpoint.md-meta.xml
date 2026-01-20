@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Provider External Endpoint</label>
+    <protected>false</protected>
+    <values>
+        <field>Base_URL__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Batch_Size__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Password__c</field>
+        <value xsi:type="xsd:string">7o9der492wklsmnxcvrt48f1</value>
+    </values>
+    <values>
+        <field>Phone__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>URL__c</field>
+        <value xsi:type="xsd:string">https://anypoint.mulesoft.com/mocking/api/v1/links/69eb1e3f-358c-49a7-bcc3-31846be97052</value>
+    </values>
+    <values>
+        <field>User__c</field>
+        <value xsi:type="xsd:string">1a3rfe496jfkms49402srr93</value>
+    </values>
+</CustomMetadata>

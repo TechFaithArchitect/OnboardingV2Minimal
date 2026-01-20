@@ -1,0 +1,62 @@
+<template>
+    <lightning-card title={panelTitle} icon-name="utility:warning">
+        <div class="slds-p-around_medium">
+            <template if:true={hasBlockedItems}>
+                <div class="slds-text-body_regular slds-m-bottom_small">
+                    <p>There {blockedCountText} {blockedCount} blocked or at-risk onboarding record{blockedCountPlural}.</p>
+                </div>
+                
+                <div class="slds-grid slds-gutters_small slds-m-bottom_small">
+                    <div class="slds-col">
+                        <lightning-button
+                            variant="neutral"
+                            label={showDetailsLabel}
+                            icon-name={showDetailsIcon}
+                            onclick={handleToggleDetails}
+                            class="slds-m-right_small">
+                        </lightning-button>
+                    </div>
+                    <div class="slds-col">
+                        <lightning-button
+                            variant="neutral"
+                            label="View All"
+                            icon-name="utility:list"
+                            onclick={handleViewAll}>
+                        </lightning-button>
+                    </div>
+                </div>
+
+                <template if:true={showDetails}>
+                    <template if:true={isLoading}>
+                        <div class="slds-align_absolute-center slds-p-around_medium">
+                            <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+                        </div>
+                    </template>
+                    <template if:false={isLoading}>
+                        <template if:true={blockedOnboarding.length}>
+                            <lightning-datatable
+                                key-field="Id"
+                                data={blockedOnboarding}
+                                columns={columns}
+                                onrowaction={handleRowAction}
+                                hide-checkbox-column
+                                show-row-number-column>
+                            </lightning-datatable>
+                        </template>
+                        <template if:false={blockedOnboarding.length}>
+                            <div class="slds-text-align_center slds-p-around_medium">
+                                <p class="slds-text-body_regular">No blocked records found in current view.</p>
+                            </div>
+                        </template>
+                    </template>
+                </template>
+            </template>
+            <template if:false={hasBlockedItems}>
+                <div class="slds-text-align_center slds-p-around_medium">
+                    <lightning-icon icon-name="utility:success" size="small" class="slds-m-bottom_small"></lightning-icon>
+                    <p class="slds-text-body_regular">No blocked or at-risk onboarding records.</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Next_Steps_Past_Due_GLK</fullName>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>Program_Type__c</columns>
+    <columns>OPPORTUNITY.CREATED_DATE</columns>
+    <columns>Program_Status__c</columns>
+    <columns>Next_Step_Date__c</columns>
+    <columns>OPPORTUNITY.NEXT_STEP</columns>
+    <columns>OPPORTUNITY.CLOSE_DATE</columns>
+    <columns>Opportunity_Paperwork_Status__c</columns>
+    <columns>OPPORTUNITY.STAGE_NAME</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Account_Territory__c</field>
+        <operation>equals</operation>
+        <value>GLK</value>
+    </filters>
+    <filters>
+        <field>OPPORTUNITY.STAGE_NAME</field>
+        <operation>notEqual</operation>
+        <value>Closed Won,Closed Lost</value>
+    </filters>
+    <filters>
+        <field>Next_Step_Date__c</field>
+        <operation>lessOrEqual</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>Next Steps Past Due-GLK</label>
+    <sharedTo>
+        <roleAndSubordinatesInternal>Program_Acquisitions</roleAndSubordinatesInternal>
+    </sharedTo>
+</ListView>

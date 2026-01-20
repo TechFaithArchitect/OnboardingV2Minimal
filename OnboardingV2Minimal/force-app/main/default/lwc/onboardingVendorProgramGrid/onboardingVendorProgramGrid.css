@@ -1,0 +1,25 @@
+.program-card {
+    min-height: 200px;
+    transition: box-shadow 0.2s ease;
+}
+
+.program-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .program-card {
+        min-height: 150px;
+    }
+    
+    .program-card .slds-card__footer {
+        flex-direction: column;
+    }
+    
+    .program-card .slds-card__footer lightning-button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+

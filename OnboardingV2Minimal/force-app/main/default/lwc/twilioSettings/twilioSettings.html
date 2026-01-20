@@ -1,0 +1,78 @@
+<template>
+    <lightning-card title="Twilio SMS Configuration" icon-name="utility:phone_portrait">
+        <div class="slds-p-around_medium">
+            <!-- Access Denied Message -->
+            <template if:true={showAccessDenied}>
+                <lightning-alert variant="error" title="Access Denied">
+                    Twilio Settings is restricted to System Administrators only. Please contact your administrator for access.
+                </lightning-alert>
+            </template>
+
+            <!-- Help Text -->
+            <template if:false={showAccessDenied}>
+                <div class="slds-text-body_small slds-m-bottom_medium">
+                    <p>Manage Twilio SMS provider settings. At least one active configuration with From Phone Number and Named Credential is required.</p>
+                    <p class="slds-m-top_x-small">
+                        <strong>Note:</strong> Custom Metadata records must be edited via Setup > Custom Metadata Types or Metadata API.
+                    </p>
+                </div>
+            
+                <!-- Validation Status -->
+                <template if:true={validationMessage}>
+                    <div class="slds-box slds-theme_warning slds-m-bottom_medium">
+                        <lightning-icon icon-name="utility:warning" size="small" class="slds-m-right_x-small"></lightning-icon>
+                        <span>{validationMessage}</span>
+                    </div>
+                </template>
+                
+                <!-- Action Buttons -->
+                <div class="slds-grid slds-grid_align-end slds-m-bottom_medium">
+                    <lightning-button 
+                        label="Validate Configuration" 
+                        variant="neutral"
+                        onclick={handleValidate}
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button 
+                        label="Refresh" 
+                        variant="brand"
+                        onclick={handleRefresh}
+                        disabled={isLoading}
+                        class="slds-m-left_small">
+                    </lightning-button>
+                </div>
+                
+                <!-- Loading Spinner -->
+                <template if:true={isLoading}>
+                    <div class="slds-text-align_center slds-p-around_large">
+                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                    </div>
+                </template>
+                
+                <!-- Configuration Table -->
+                <template if:true={hasConfigurations}>
+                    <lightning-datatable
+                        key-field="developerName"
+                        data={configurations}
+                        columns={columns}
+                        hide-checkbox-column
+                        show-row-number-column
+                        onrowaction={handleRowAction}>
+                    </lightning-datatable>
+                </template>
+                
+                <!-- Empty State -->
+                <template if:false={hasConfigurations}>
+                    <div class="slds-text-align_center slds-p-around_large">
+                        <lightning-icon icon-name="utility:info" size="small" class="slds-m-bottom_small"></lightning-icon>
+                        <p class="slds-text-body_regular">No Twilio configurations found.</p>
+                        <p class="slds-text-body_small slds-m-top_x-small">
+                            Create a configuration via Setup > Custom Metadata Types > Twilio Configuration.
+                        </p>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
+

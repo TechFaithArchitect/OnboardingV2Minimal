@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Frontier_Only__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>When enabled, this checkbox restricts Chuzo user interface to automatically restrict Chuzo user interface experience site tabs. PER-5462</description>
+    <externalId>false</externalId>
+    <label>Frontier Only</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

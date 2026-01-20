@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Review validation outcomes for Requirement_Field_Value__c.</description>
+    <label>Validation Failures</label>
+    <motif>Custom37: Form</motif>
+    <sobjectName>Validation_Failure__c</sobjectName>
+</CustomTab>

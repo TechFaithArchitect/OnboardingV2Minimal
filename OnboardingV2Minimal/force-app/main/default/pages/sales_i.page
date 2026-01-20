@@ -1,0 +1,3 @@
+<apex:page standardController="Account">
+  <apex:iframe src="https://us2t.sales-i.com/net/Authentication/Login.aspx?SugarCRM=true&appMode=true&account_number={!account.P10_Invoice_Account__c}&salesforce_id={!account.Id}" />
+</apex:page>

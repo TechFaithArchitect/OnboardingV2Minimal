@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="Onboarding Status Rules">
+        <lightning-combobox
+            name="vendorGroup"
+            label="Vendor Program Group"
+            value={selectedVendorGroup}
+            options={vendorGroupOptions}
+            onchange={handleVendorGroupChange}>
+        </lightning-combobox>
+
+        <template if:true={rules}>
+            <lightning-datatable
+                key-field="Id"
+                data={rules}
+                columns={columns}
+                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </template>
+    </lightning-card>
+</template>

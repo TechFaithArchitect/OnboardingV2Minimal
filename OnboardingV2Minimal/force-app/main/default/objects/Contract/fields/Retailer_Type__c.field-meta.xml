@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Retailer_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Retailer Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>SI</fullName>
+                <default>false</default>
+                <label>SI</label>
+            </value>
+            <value>
+                <fullName>SO</fullName>
+                <default>false</default>
+                <label>SO</label>
+            </value>
+            <value>
+                <fullName>Combo</fullName>
+                <default>false</default>
+                <label>Combo</label>
+            </value>
+            <value>
+                <fullName>Existing Customer App</fullName>
+                <default>false</default>
+                <label>Existing Customer App</label>
+            </value>
+            <value>
+                <fullName>New customer w/o Chuzo</fullName>
+                <default>false</default>
+                <label>New customer w/o Chuzo App</label>
+            </value>
+            <value>
+                <fullName>New customer with Chuzo</fullName>
+                <default>false</default>
+                <label>New customer with Chuzo App</label>
+            </value>
+            <value>
+                <fullName>NFFL</fullName>
+                <default>false</default>
+                <label>NFFL &amp; FFL</label>
+            </value>
+            <value>
+                <fullName>FFL</fullName>
+                <default>false</default>
+                <label>FFL Only</label>
+            </value>
+            <value>
+                <fullName>National Agent</fullName>
+                <default>false</default>
+                <label>National Agent</label>
+            </value>
+            <value>
+                <fullName>National Agent and D2D</fullName>
+                <default>false</default>
+                <label>National Agent and D2D</label>
+            </value>
+            <value>
+                <fullName>National Agent and National Retail</fullName>
+                <default>false</default>
+                <label>National Agent and National Retail</label>
+            </value>
+            <value>
+                <fullName>National Agent, D2D and National Retail</fullName>
+                <default>false</default>
+                <label>National Agent, D2D and National Retail</label>
+            </value>
+            <value>
+                <fullName>D2D</fullName>
+                <default>false</default>
+                <label>D2D</label>
+            </value>
+            <value>
+                <fullName>D2D and National Retail</fullName>
+                <default>false</default>
+                <label>D2D and National Retail</label>
+            </value>
+            <value>
+                <fullName>National Retail</fullName>
+                <default>false</default>
+                <label>National Retail</label>
+            </value>
+            <value>
+                <fullName>Digital</fullName>
+                <default>false</default>
+                <label>Digital</label>
+            </value>
+            <value>
+                <fullName>Intercept F2F</fullName>
+                <default>false</default>
+                <label>Intercept F2F</label>
+            </value>
+            <value>
+                <fullName>Brick &amp; Mortar</fullName>
+                <default>false</default>
+                <label>Brick &amp; Mortar</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>false</default>
+                <label>N/A</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

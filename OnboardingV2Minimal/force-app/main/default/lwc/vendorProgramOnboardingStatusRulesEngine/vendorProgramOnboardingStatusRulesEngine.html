@@ -1,0 +1,276 @@
+<template>
+  <lightning-card title={cardTitle} data-step-component>
+    <div class="slds-p-around_medium">
+      <!-- Guidance Box -->
+      <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_medium">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <p class="slds-text-body_small slds-m-bottom_none">
+              <strong>Status Rules Engine:</strong> Automatically updates onboarding status based on requirement completion using AND/ALL or OR/ANY logic. 
+              <strong>Best Practice:</strong> Create engines for common workflows like "Standard Healthcare Provider Rules".
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <template if:true={isLoading}>
+        <lightning-spinner size="small" alternative-text="Loading..."></lightning-spinner>
+      </template>
+
+      <template if:false={isLoading}>
+        <!-- Selected Engine Display -->
+        <template if:true={selectedEngineId}>
+          <div class="slds-box slds-box_x-small slds-theme_success slds-m-bottom_medium" style="background-color: #f3f2f2; border-left: 3px solid #04844b;">
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:success" size="small" alternative-text="Selected"></lightning-icon>
+              </div>
+              <div class="slds-media__body">
+                <h3 class="slds-text-heading_small slds-m-bottom_x-small">Selected Status Rules Engine</h3>
+                <p class="slds-text-body_regular slds-m-bottom_none">
+                  <strong>{selectedEngineDisplay}</strong>
+                </p>
+                <p class="slds-text-body_small slds-m-top_x-small slds-m-bottom_none slds-text-color_weak">
+                  Manage rules below. Click Next to continue when finished.
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Historical/Suggested Engines (if available) -->
+        <template if:true={hasHistoricalEngines}>
+          <div class="slds-m-bottom_medium">
+            <h3 class="slds-text-heading_small slds-m-bottom_small">
+              Suggested Engines (from Requirement Set)
+            </h3>
+            <lightning-combobox
+              label="Select a Suggested Engine"
+              value={selectedEngineId}
+              options={historicalEngineOptions}
+              onchange={handleHistoricalEngineSelect}
+              placeholder="Choose a suggested engine">
+            </lightning-combobox>
+            <p class="slds-text-body_small slds-m-top_x-small slds-text-color_weak">
+              These engines were previously used with the selected Requirement Set.
+            </p>
+          </div>
+        </template>
+
+        <!-- Search Existing Engines -->
+        <div class="slds-m-bottom_medium">
+          <h3 class="slds-text-heading_small slds-m-bottom_small">
+            Search Existing Engines
+          </h3>
+          <lightning-input
+            label="Search by Name"
+            value={searchText}
+            onchange={handleSearchChange}
+            placeholder="Type to search (min 2 characters)..."
+            class="slds-m-bottom_x-small">
+          </lightning-input>
+
+          <template if:true={isLoading}>
+            <lightning-spinner size="x-small" alternative-text="Searching..."></lightning-spinner>
+          </template>
+
+          <template if:true={showSearchResults}>
+            <lightning-combobox
+              label="Select from Search Results"
+              value={selectedEngineId}
+              options={searchResultOptions}
+              onchange={handleSearchResultSelect}
+              placeholder="Choose an engine from results"
+              class="slds-m-top_small">
+            </lightning-combobox>
+          </template>
+
+          <template if:false={showSearchResults}>
+            <template if:true={searchText}>
+              <p class="slds-text-body_small slds-m-top_x-small slds-text-color_weak">
+                <template if:true={isLoading}>Searching...</template>
+                <template if:false={isLoading}>No engines found. Try a different search or create a new one.</template>
+              </p>
+            </template>
+          </template>
+        </div>
+
+        <!-- Rules Management Section (shown when engine is selected) -->
+        <template if:true={selectedEngineId}>
+          <hr class="slds-m-vertical_large" />
+          
+          <div class="slds-m-bottom_medium">
+            <h2 class="slds-text-heading_medium slds-m-bottom_small">Manage Status Rules</h2>
+            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
+              Create and manage rules that link requirements to expected statuses for this engine.
+            </p>
+
+            <!-- Existing Rules Table -->
+            <template if:true={isLoadingRules}>
+              <lightning-spinner size="small" alternative-text="Loading rules..."></lightning-spinner>
+            </template>
+
+            <template if:false={isLoadingRules}>
+              <template if:true={hasRules}>
+                <lightning-datatable
+                  key-field="Id"
+                  data={rules}
+                  columns={columns}
+                  onrowaction={handleRuleRowAction}
+                  onsave={handleRuleSave}
+                  hide-checkbox-column>
+                </lightning-datatable>
+              </template>
+              
+              <template if:false={hasRules}>
+                <div class="slds-box slds-box_x-small slds-theme_info slds-text-align_center slds-m-bottom_medium">
+                  <p class="slds-text-body_small">No rules created yet. Create your first rule below.</p>
+                </div>
+              </template>
+            </template>
+
+            <!-- Create/Edit Rule Form -->
+            <div class="slds-m-top_large">
+              <lightning-button 
+                variant={createRuleButtonVariant}
+                label={createRuleButtonLabel} 
+                onclick={toggleCreateRuleForm}
+                class="slds-m-bottom_small">
+              </lightning-button>
+
+              <template if:true={showCreateRuleForm}>
+                <div class="slds-box slds-box_x-small slds-m-top_small" style="background-color: #fafaf9;">
+                  <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                    {ruleFormTitle}
+                  </h3>
+                  
+                  <lightning-input
+                    name="ruleName"
+                    label="Rule Name"
+                    value={newRuleName}
+                    onchange={handleRuleInputChange}
+                    placeholder="e.g., Complete Background Check"
+                    required
+                    class="slds-m-bottom_small">
+                  </lightning-input>
+
+                  <template if:true={isLoadingRequirements}>
+                    <lightning-spinner size="x-small" alternative-text="Loading requirements..."></lightning-spinner>
+                  </template>
+
+                  <template if:true={requirementOptions.length}>
+                    <lightning-combobox
+                      label="Vendor Program Requirement"
+                      value={selectedRequirementId}
+                      options={requirementOptions}
+                      onchange={handleRequirementSelect}
+                      placeholder="Select a requirement"
+                      required
+                      class="slds-m-bottom_small">
+                    </lightning-combobox>
+                  </template>
+
+                  <template if:false={requirementOptions.length}>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                      No requirements available. Please create requirements for this vendor program first.
+                    </p>
+                  </template>
+
+                  <lightning-input
+                    name="expectedStatus"
+                    label="Expected Status"
+                    value={newRuleExpectedStatus}
+                    onchange={handleRuleInputChange}
+                    placeholder="e.g., Complete"
+                    class="slds-m-bottom_small">
+                  </lightning-input>
+
+                  <div class="slds-button-group slds-m-top_medium">
+                    <lightning-button
+                      label={saveRuleButtonLabel}
+                      variant="brand"
+                      onclick={handleSaveRule}
+                      disabled={isSaveRuleButtonDisabled}>
+                    </lightning-button>
+                    <lightning-button
+                      label="Cancel"
+                      variant="neutral"
+                      onclick={toggleCreateRuleForm}>
+                    </lightning-button>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <!-- Create New Engine -->
+        <div class="slds-m-top_large">
+          <lightning-button 
+            variant={createButtonVariant}
+            label={createButtonLabel} 
+            onclick={toggleCreateForm}
+            class="slds-m-bottom_small">
+          </lightning-button>
+
+          <template if:true={showCreateForm}>
+            <div class="slds-box slds-box_x-small slds-m-top_small" style="background-color: #fafaf9;">
+              <h3 class="slds-text-heading_small slds-m-bottom_medium">Create New Status Rules Engine</h3>
+              
+              <lightning-input
+                name="name"
+                label="Engine Name"
+                value={newName}
+                onchange={handleInputChange}
+                placeholder="e.g., Standard Healthcare Provider Rules"
+                required
+                class="slds-m-bottom_small">
+              </lightning-input>
+
+              <lightning-combobox
+                label="Evaluation Logic"
+                value={newEvaluationLogic}
+                options={evaluationLogicOptions}
+                onchange={handleEvaluationLogicChange}
+                required
+                class="slds-m-bottom_small">
+              </lightning-combobox>
+
+              <lightning-combobox
+                label="Required Status"
+                value={newRequiredStatus}
+                options={requiredStatusOptions}
+                onchange={handleRequiredStatusChange}
+                required
+                class="slds-m-bottom_small">
+              </lightning-combobox>
+
+              <lightning-combobox
+                label="Target Onboarding Status"
+                value={newTargetOnboardingStatus}
+                options={targetOnboardingStatusOptions}
+                onchange={handleTargetOnboardingStatusChange}
+                required
+                class="slds-m-bottom_small">
+              </lightning-combobox>
+
+              <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                This engine will be used to automatically update onboarding status when requirements are completed.
+              </p>
+
+              <lightning-button
+                label="Create Engine"
+                variant="brand"
+                onclick={handleCreateClick}
+                disabled={isCreateEngineButtonDisabled}>
+              </lightning-button>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

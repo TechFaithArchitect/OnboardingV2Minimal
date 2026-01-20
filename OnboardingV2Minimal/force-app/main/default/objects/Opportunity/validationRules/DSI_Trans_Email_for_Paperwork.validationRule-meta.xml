@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DSI_Trans_Email_for_Paperwork</fullName>
+    <active>false</active>
+    <description>Message to alert user that &apos;All required fields must be completed prior to Requesting Paperwork to be Sent. Required fields are: Email for Paperwork, Paperwork Contact &amp; Contact Phone.&apos;</description>
+    <errorConditionFormula>AND(ISPICKVAL(Opportunity_Paperwork_Status__c, &quot;Request For Paperwork&quot;),
+   ISBLANK(Email_for_Paperwork__c))</errorConditionFormula>
+    <errorDisplayField>Email_for_Paperwork__c</errorDisplayField>
+    <errorMessage>All required fields must be completed prior to Requesting Paperwork to be Sent. Email for Paperwork is a required field.</errorMessage>
+</ValidationRule>

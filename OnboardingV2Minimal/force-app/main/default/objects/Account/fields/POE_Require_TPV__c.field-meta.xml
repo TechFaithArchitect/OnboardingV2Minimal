@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POE_Require_TPV__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Flags the account so that Representatives require TPV on the buyflows.</description>
+    <externalId>false</externalId>
+    <label>Require TPV</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

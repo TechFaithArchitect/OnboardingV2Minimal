@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <masterLabel>Onboarding Admin Dashboard</masterLabel>
+    <description>System health dashboard showing real-time metrics for validation failures, message failures, webhook failures, and Platform Event volume</description>
+</LightningComponentBundle>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requirement_Template__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>Base requirement template</description>
+    <externalId>false</externalId>
+    <label>Requirement Template</label>
+    <referenceTo>Vendor_Program_Onboarding_Req_Template__c</referenceTo>
+    <relationshipLabel>Vendor Program Requirements</relationshipLabel>
+    <relationshipName>Vendor_Program_Requirements</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

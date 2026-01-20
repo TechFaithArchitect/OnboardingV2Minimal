@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Must_Be_Linked_to_Training_Requirement</fullName>
+    <active>true</active>
+    <description>Training Assignment must be linked to Training Requirement</description>
+    <errorConditionFormula>ISBLANK( Vendor_Training_Requirement__c )</errorConditionFormula>
+    <errorDisplayField>Vendor_Training_Requirement__c</errorDisplayField>
+    <errorMessage>Training Assignment must be linked to a Training Requirement.</errorMessage>
+</ValidationRule>

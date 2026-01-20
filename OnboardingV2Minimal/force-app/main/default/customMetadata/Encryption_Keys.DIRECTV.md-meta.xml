@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>DIRECTV</label>
+    <protected>false</protected>
+    <values>
+        <field>E__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>K__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>L__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>POE_Public_K__c</field>
+        <value xsi:type="xsd:string">-----BEGIN PUBLIC KEY-----MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAi7aHf7E7CT7RT+PcFdWTGF8nSCRr8qVgWp+/RWOooiymO4+RzwkgCsfq1aEtVVmwAGJKDN+dW50ES6Pp7j1Bfe7OE7SSBIDDh6y0JKpFj7G7oIJgMREu2g+HDE7M0A0pnhVLYkMcYqFCmakAyevAdMezWQRe+etn/cvWmrFVbgO7Tx755i8mFIZzgqMI5G8syni9X0+fsEMt2kZ1RtzNTgp8PYuK1v4KhMoXFmB3L4dtx48X18E7JkXeTNJB7B/AnOV3iLaMfeusgjOVIf2tycYpteC4dXBIXUPiMTYhgJ4QlOpVhf9oqFCbcjFS65t3Cjx8hzzXTTn9Oo+yTiFnyhhSMnBxcAbxH8jTYXTkvwMEWpEL5cVqz+1JpFlQmp7yyf4ezuKEgWEspXrBHewBJ2y2sD4Pu180RbYDPzljjADk5muhndfwSeNAX04s2oxJjwUbCME1xi9Mzh0EwX3dnjhhsYvkcF0ghXApvh95PAHMMSXa1a5FSBBGK2xWsD1fBRKX60oE0gKHQkoOHjsD5nsSnKnV394cSYAMCp17RDwWW2KoaWqww15SGMu+f4fm4uceYZblW7sKf+JF1zB2D0MmPBIS7QdXdUG/6YMAozEm2zMw+OwY7swq5QrtqHCAdpheMjwwGgqHc4gtmksr4tfAg+ha8XLVh8r/nvo/AVUCAwEAAQ==-----END PUBLIC KEY-----</value>
+    </values>
+    <values>
+        <field>key_id__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>phase__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

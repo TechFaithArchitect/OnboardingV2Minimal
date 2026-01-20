@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>ManageServiceResourceErrorMsg1</label>
+    <protected>false</protected>
+    <values>
+        <field>Is_Trigger_Enabled__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Type__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Value__c</field>
+        <value xsi:type="xsd:string">User already exists and is associated with some other Account.,A dispatcher and technician with the entered details already exists.,A dispatcher with the entered details already exists.,A technician with the entered details already exists.</value>
+    </values>
+</CustomMetadata>

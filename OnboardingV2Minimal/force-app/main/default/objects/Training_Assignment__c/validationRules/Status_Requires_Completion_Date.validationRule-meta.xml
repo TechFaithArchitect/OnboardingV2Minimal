@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status_Requires_Completion_Date</fullName>
+    <active>true</active>
+    <description>Completed Training Assignments Must Have a Completed Date.</description>
+    <errorConditionFormula>AND(
+  ISPICKVAL(Status__c, &quot;Completed&quot;),
+  ISBLANK( Date_Completed__c )
+)</errorConditionFormula>
+    <errorDisplayField>Date_Completed__c</errorDisplayField>
+    <errorMessage>Completion Date must be filled when status is Completed.</errorMessage>
+</ValidationRule>

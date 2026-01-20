@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Partner_Status__c</fullName>
+    <externalId>false</externalId>
+    <label>Partner Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>No Action</fullName>
+                <default>false</default>
+                <label>No Action Required</label>
+            </value>
+            <value>
+                <fullName>ATT - Pending Dealer Code</fullName>
+                <default>false</default>
+                <label>ATT - Pending Dealer Code</label>
+            </value>
+            <value>
+                <fullName>ATT - Pending UID</fullName>
+                <default>false</default>
+                <label>ATT - Pending UID</label>
+            </value>
+            <value>
+                <fullName>ATT - Pending Eligibility</fullName>
+                <default>false</default>
+                <label>ATT - Pending Eligibility</label>
+            </value>
+            <value>
+                <fullName>VS - Pending Initial Review</fullName>
+                <default>false</default>
+                <label>VS - Pending Initial Review</label>
+            </value>
+            <value>
+                <fullName>VS - Pending Setup</fullName>
+                <default>false</default>
+                <label>VS - Pending Setup</label>
+            </value>
+            <value>
+                <fullName>CLINK - Pending Field Approval</fullName>
+                <default>false</default>
+                <label>CLINK - Pending Field Approval</label>
+            </value>
+            <value>
+                <fullName>CLINK - Pending Compliance</fullName>
+                <default>false</default>
+                <label>CLINK - Pending Compliance</label>
+            </value>
+            <value>
+                <fullName>CLINK - Pending Setup</fullName>
+                <default>false</default>
+                <label>CLINK - Pending Setup</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

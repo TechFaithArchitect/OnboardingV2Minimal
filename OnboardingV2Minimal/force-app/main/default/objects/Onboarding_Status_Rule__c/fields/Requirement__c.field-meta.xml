@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requirement__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Each rule checks the status of one specific onboarding requirement that was generated from the Vendor Program Requirement.</description>
+    <externalId>false</externalId>
+    <label>Requirement</label>
+    <referenceTo>Vendor_Program_Requirement__c</referenceTo>
+    <relationshipLabel>Onboarding Status Rules</relationshipLabel>
+    <relationshipName>Onboarding_Status_Rules</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

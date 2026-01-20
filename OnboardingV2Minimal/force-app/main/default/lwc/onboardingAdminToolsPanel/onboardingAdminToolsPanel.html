@@ -1,0 +1,124 @@
+<template>
+    <div class="slds-p-horizontal_medium slds-m-top_large">
+        <lightning-card title="Admin Tools" icon-name="utility:settings">
+            <lightning-tabset class="slds-m-bottom_medium">
+                <lightning-tab label="Validation Failures" value="validation-failures">
+                    <div class="slds-m-bottom_small slds-text-align_right">
+                        <lightning-button
+                            variant="neutral"
+                            label="Open List"
+                            icon-name="utility:list"
+                            onclick={navigateToValidationFailuresList}>
+                        </lightning-button>
+                    </div>
+                    <c-validation-failures-panel></c-validation-failures-panel>
+                </lightning-tab>
+
+                <lightning-tab label="Messaging Issues" value="messaging-issues">
+                    <div class="slds-m-bottom_small slds-text-align_right">
+                        <lightning-button
+                            variant="neutral"
+                            label="Open List"
+                            icon-name="utility:list"
+                            onclick={navigateToMessagingIssuesList}>
+                        </lightning-button>
+                    </div>
+                    <c-messaging-issues-panel></c-messaging-issues-panel>
+                    <div class="slds-m-top_medium">
+                        <lightning-card title="Follow-Up Lists" icon-name="utility:list">
+                            <div class="slds-p-around_medium slds-grid slds-wrap slds-gutters_small">
+                                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4">
+                                    <lightning-button
+                                        variant="neutral"
+                                        label="Pending"
+                                        class="slds-m-bottom_small"
+                                        onclick={handleViewPending}>
+                                    </lightning-button>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4">
+                                    <lightning-button
+                                        variant="neutral"
+                                        label="Pending Retry"
+                                        class="slds-m-bottom_small"
+                                        onclick={handleViewPendingRetry}>
+                                    </lightning-button>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4">
+                                    <lightning-button
+                                        variant="neutral"
+                                        label="Failed"
+                                        class="slds-m-bottom_small"
+                                        onclick={handleViewFailed}>
+                                    </lightning-button>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4">
+                                    <lightning-button
+                                        variant="neutral"
+                                        label="Due Today"
+                                        class="slds-m-bottom_small"
+                                        onclick={handleViewDueToday}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </div>
+                </lightning-tab>
+
+                <lightning-tab label="Rule Tester" value="rule-tester">
+                    <c-validation-rule-tester></c-validation-rule-tester>
+                </lightning-tab>
+
+                <lightning-tab label="Override Audit" value="override-audit">
+                    <div class="slds-m-bottom_small slds-text-align_right">
+                        <lightning-button
+                            variant="neutral"
+                            label="Open List"
+                            icon-name="utility:list"
+                            onclick={navigateToOverrideAuditList}>
+                        </lightning-button>
+                    </div>
+                    <c-override-audit-panel></c-override-audit-panel>
+                </lightning-tab>
+
+                <lightning-tab label="Rule Builder" value="rule-builder">
+                    <c-requirement-rule-builder></c-requirement-rule-builder>
+                </lightning-tab>
+            </lightning-tabset>
+
+            <div class="slds-grid slds-wrap slds-gutters_medium">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-5">
+                    <div class="slds-box slds-text-align_center admin-card" onclick={handleManageRequirements}>
+                        <lightning-icon icon-name="utility:list" size="medium" class="slds-m-bottom_small"></lightning-icon>
+                        <div class="slds-text-body_small">Manage Requirements</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-5">
+                    <div class="slds-box slds-text-align_center admin-card" onclick={handleManageStatusRules}>
+                        <lightning-icon icon-name="utility:rules" size="medium" class="slds-m-bottom_small"></lightning-icon>
+                        <div class="slds-text-body_small">Manage Status Rules</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-5">
+                    <div class="slds-box slds-text-align_center admin-card" onclick={handleStageDependencies}>
+                        <lightning-icon icon-name="utility:flow" size="medium" class="slds-m-bottom_small"></lightning-icon>
+                        <div class="slds-text-body_small">Stage Dependencies</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-5">
+                    <div class="slds-box slds-text-align_center admin-card" onclick={handleVendorProgramWizard}>
+                        <lightning-icon icon-name="utility:setup" size="medium" class="slds-m-bottom_small"></lightning-icon>
+                        <div class="slds-text-body_small">Vendor Program Wizard</div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-5">
+                    <div class="slds-box slds-text-align_center admin-card" onclick={handleComponentLibrary}>
+                        <lightning-icon icon-name="utility:apps" size="medium" class="slds-m-bottom_small"></lightning-icon>
+                        <div class="slds-text-body_small">Component Library</div>
+                    </div>
+                </div>
+            </div>
+        </lightning-card>
+    </div>
+</template>
+
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Frontier_Welcome_Email_Data_Fields</fullName>
+    <active>false</active>
+    <description>Alerts users that when data is missing in fields that are used to populate info into the welcome email.</description>
+    <errorConditionFormula>AND(
+ISPICKVAL(Application_Status__c, &quot;Setup Complete&quot;),
+RecordType.Name = &quot;Frontier&quot;,
+
+OR(
+ISBLANK(WLP_Sales_Buddy_Username__c),
+ISBLANK(Sales_Buddy_Username__c)))</errorConditionFormula>
+    <errorMessage>Please fill in the WLP &amp; Sales Buddy Username before saving record.</errorMessage>
+</ValidationRule>

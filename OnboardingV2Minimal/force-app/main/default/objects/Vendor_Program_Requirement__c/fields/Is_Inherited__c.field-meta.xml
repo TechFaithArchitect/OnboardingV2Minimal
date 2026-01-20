@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Inherited__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>Indicates the record came from a group template</description>
+    <externalId>false</externalId>
+    <label>Is Inherited</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

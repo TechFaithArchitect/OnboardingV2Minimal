@@ -1,0 +1,109 @@
+<template>
+    <template if:true={hasData}>
+        <div class="slds-grid slds-gutters_medium">
+            <!-- Status Distribution with Donut Chart -->
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-card title="Status Distribution" icon-name="utility:chart">
+                    <div class="chart-container">
+                        <div class="donut-chart">
+                            <svg width={DONUT_SIZE} height={DONUT_SIZE} viewBox="0 0 {DONUT_SIZE} {DONUT_SIZE}">
+                                <template for:each={donutChartData.paths} for:item="path">
+                                    <path
+                                        key={path.index}
+                                        class="donut-segment"
+                                        d={path.d}
+                                        fill={path.color}
+                                        stroke="white"
+                                        stroke-width="2"
+                                        data-label={path.label}
+                                        data-value={path.value}
+                                    ></path>
+                                </template>
+                            </svg>
+                            <div class="donut-center">
+                                <div class="donut-total">{donutChartData.total}</div>
+                                <div class="donut-label">Total</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="legend">
+                        <template for:each={statusDistribution} for:item="item">
+                            <div key={item.label} class="legend-item">
+                                <div class="legend-color" style={item.colorStyle}></div>
+                                <span class="legend-label">{item.label}: {item.value} ({item.percentage}%)</span>
+                            </div>
+                        </template>
+                    </div>
+                </lightning-card>
+            </div>
+
+            <!-- Funnel Visualization -->
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-card title="Onboarding Funnel" icon-name="utility:filterList">
+                    <div class="slds-p-around_medium">
+                        <template for:each={funnelData} for:item="stage">
+                            <div key={stage.stage} class="slds-m-bottom_medium">
+                                <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                                    {stage.stage}
+                                </div>
+                                <div class="slds-progress-bar slds-progress-bar_large" role="progressbar" aria-valuemin="0" aria-valuemax={totalOnboarding} aria-valuenow={stage.count}>
+                                    <span class="slds-progress-bar__value" style={stage.progressStyle}></span>
+                                </div>
+                                <div class="slds-text-heading_small slds-m-top_xx-small">{stage.count}</div>
+                            </div>
+                        </template>
+                    </div>
+                </lightning-card>
+            </div>
+        </div>
+
+        <!-- Vendor Program Metrics with Bar Chart -->
+        <div class="slds-m-top_medium">
+            <lightning-card title="Vendor Program Overview" icon-name="utility:work_order_type">
+                <div class="slds-p-around_medium">
+                    <div class="slds-grid slds-gutters_medium slds-m-bottom_medium">
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="slds-text-body_small slds-text-color_weak">Total Programs</div>
+                            <div class="slds-text-heading_large">{vendorProgramStats.total}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="slds-text-body_small slds-text-color_weak">Active Programs</div>
+                            <div class="slds-text-heading_large">{vendorProgramStats.active}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="slds-text-body_small slds-text-color_weak">Draft Programs</div>
+                            <div class="slds-text-heading_large">{vendorProgramStats.draft}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-4">
+                            <div class="slds-text-body_small slds-text-color_weak">Total Dealers Onboarded</div>
+                            <div class="slds-text-heading_large">{vendorProgramStats.totalDealers}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bar Chart for Top Programs -->
+                    <template if:true={barChartData.length}>
+                        <div class="slds-text-heading_small slds-m-bottom_small">Top Programs by Dealers Onboarded</div>
+                        <div class="bar-chart">
+                            <template for:each={barChartData} for:item="bar">
+                                <div key={bar.name} class="bar-item">
+                                    <div class="bar-label" title={bar.name}>{bar.name}</div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill" style={bar.barStyle}>
+                                            <span class="bar-value" if:true={bar.dealers}>{bar.dealers}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </lightning-card>
+        </div>
+    </template>
+    <template if:false={hasData}>
+        <div class="slds-text-align_center slds-p-around_large">
+            <p class="slds-text-body_regular">No data available for insights.</p>
+        </div>
+    </template>
+</template>
+

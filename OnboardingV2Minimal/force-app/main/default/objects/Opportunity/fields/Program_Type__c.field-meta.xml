@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Program_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Program Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>Brightspeed</fullName>
+                <default>false</default>
+                <label>Brightspeed</label>
+            </value>
+            <value>
+                <fullName>Brinks</fullName>
+                <default>false</default>
+                <label>Brinks</label>
+            </value>
+            <value>
+                <fullName>Chuzo</fullName>
+                <default>false</default>
+                <label>Chuzo</label>
+            </value>
+            <value>
+                <fullName>Chuzo Shop Link</fullName>
+                <default>false</default>
+                <label>Chuzo Shop Link</label>
+            </value>
+            <value>
+                <fullName>DTV-COM</fullName>
+                <default>false</default>
+                <label>DTV-COM</label>
+            </value>
+            <value>
+                <fullName>DTV-MDU</fullName>
+                <default>false</default>
+                <label>DTV-MDU</label>
+            </value>
+            <value>
+                <fullName>EarthLink</fullName>
+                <color>#FF6600</color>
+                <default>false</default>
+                <label>EarthLink</label>
+            </value>
+            <value>
+                <fullName>Frontier</fullName>
+                <color>#CC0000</color>
+                <default>false</default>
+                <label>Frontier</label>
+            </value>
+            <value>
+                <fullName>MSA</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+                <label>MDP</label>
+            </value>
+            <value>
+                <fullName>MDP D2D</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+                <label>MDP D2D</label>
+            </value>
+            <value>
+                <fullName>MDP - ISP</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+                <label>MDP - ISP</label>
+            </value>
+            <value>
+                <fullName>National Retail</fullName>
+                <color>#0B24BE</color>
+                <default>false</default>
+                <label>MDP National Retail</label>
+            </value>
+            <value>
+                <fullName>MSO - C</fullName>
+                <default>false</default>
+                <label>MSO - C</label>
+            </value>
+            <value>
+                <fullName>MSOS - P10</fullName>
+                <default>false</default>
+                <label>MSO-S</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>false</default>
+                <label>N/A</label>
+            </value>
+            <value>
+                <fullName>NDA</fullName>
+                <default>false</default>
+                <label>NDA</label>
+            </value>
+            <value>
+                <fullName>NDA/Program Base App</fullName>
+                <default>false</default>
+                <label>NDA/Program Base App</label>
+            </value>
+            <value>
+                <fullName>New Customer Application (WIRE)</fullName>
+                <default>false</default>
+                <label>New Customer Application (WIRE)</label>
+            </value>
+            <value>
+                <fullName>New Dealer Base Application (DOM)</fullName>
+                <default>false</default>
+                <label>New Dealer Base Application (DOM)</label>
+            </value>
+            <value>
+                <fullName>Offshore</fullName>
+                <default>false</default>
+                <label>Offshore</label>
+            </value>
+            <value>
+                <fullName>Optimum</fullName>
+                <default>false</default>
+                <label>Optimum</label>
+            </value>
+            <value>
+                <fullName>SafeHaven</fullName>
+                <default>false</default>
+                <label>SafeHaven</label>
+            </value>
+            <value>
+                <fullName>Security Lead Referral</fullName>
+                <default>false</default>
+                <label>Security Lead Referral</label>
+            </value>
+            <value>
+                <fullName>Spectrum</fullName>
+                <default>false</default>
+                <label>Spectrum</label>
+            </value>
+            <value>
+                <fullName>Spectrum Commercial</fullName>
+                <default>false</default>
+                <label>Spectrum Commercial</label>
+            </value>
+            <value>
+                <fullName>T-Mobile</fullName>
+                <default>false</default>
+                <label>T-Mobile</label>
+            </value>
+            <value>
+                <fullName>T-Mobile FFL</fullName>
+                <default>false</default>
+                <label>T-Mobile FFL</label>
+            </value>
+            <value>
+                <fullName>Verizon D2D/COM</fullName>
+                <default>false</default>
+                <label>Verizon D2D/COM</label>
+            </value>
+            <value>
+                <fullName>Verizon D2D/RES</fullName>
+                <default>false</default>
+                <label>Verizon D2D/RES</label>
+            </value>
+            <value>
+                <fullName>Viasat</fullName>
+                <color>#F3D904</color>
+                <default>false</default>
+                <label>Viasat</label>
+            </value>
+            <value>
+                <fullName>Exede - FFL</fullName>
+                <default>false</default>
+                <label>Viasat - FFL</label>
+            </value>
+            <value>
+                <fullName>Exede - Strategic SO</fullName>
+                <default>false</default>
+                <label>Viasat - Strategic SO</label>
+            </value>
+            <value>
+                <fullName>Windstream</fullName>
+                <color>#33FF33</color>
+                <default>false</default>
+                <label>Windstream</label>
+            </value>
+            <value>
+                <fullName>Windstream D2D</fullName>
+                <default>false</default>
+                <label>Windstream D2D</label>
+            </value>
+            <value>
+                <fullName>Xfinity</fullName>
+                <default>false</default>
+                <label>Xfinity</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

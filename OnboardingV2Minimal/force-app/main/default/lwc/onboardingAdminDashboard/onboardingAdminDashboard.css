@@ -1,0 +1,23 @@
+.metric-card {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-height: 120px;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.metric-card.success {
+    border-left: 4px solid #04844b;  /* Success green - no SLDS border token available */
+}
+
+.metric-card.warning {
+    border-left: 4px solid #ffb75d;  /* Warning orange - no SLDS border token available */
+}
+
+.metric-card.error {
+    border-left: 4px solid #c23934;  /* Error red - no SLDS border token available */
+}
+

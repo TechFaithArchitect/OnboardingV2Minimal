@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CustomerTBDChange</fullName>
+    <active>true</active>
+    <description>Restricts changes on Account</description>
+    <errorConditionFormula>OR( Name = &apos;Customer To Be Determined&apos;, (AND(ISCHANGED( Name ),PRIORVALUE(Name)=&apos;Customer To Be Determined&apos;)))</errorConditionFormula>
+    <errorMessage>Edit is not allowed for the &apos;Customer to Be Determined&apos; account</errorMessage>
+</ValidationRule>

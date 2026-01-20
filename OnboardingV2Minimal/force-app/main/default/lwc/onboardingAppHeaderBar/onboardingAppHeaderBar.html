@@ -1,0 +1,92 @@
+<template>
+    <div class="header-bar">
+        <div class="slds-grid slds-grid_align-end slds-grid_vertical-align-center slds-wrap slds-col">
+            <div class="slds-grid slds-grid_vertical-align-center" role="group">
+
+                <!-- Last Saved + Status Badge -->
+                <div class="slds-m-right_medium status-section">
+                    <span>Last saved on {lastModifiedDate}</span>
+                    <span class={statusBadgeClass}>{statusLabel}</span>
+                </div>
+
+                <!-- Save As New Version Split Button -->
+                <div class="combo-button-wrapper slds-m-right_xx-small">
+                    <div class="slds-button-group" role="group">
+                        <button class="slds-button slds-button_neutral" onclick={handleMenuButtonClick}>
+                            Save As New Version
+                        </button>
+                        <button
+                            class="slds-button slds-button_icon slds-button_icon-border-filled"
+                            onclick={toggleMenu}
+                            aria-haspopup="true"
+                            aria-expanded={isMenuOpen}
+                        >
+                            <lightning-icon
+                                icon-name="utility:down"
+                                size="xx-small"
+                                alternative-text="More Options"
+                            ></lightning-icon>
+                        </button>
+                    </div>
+
+                    <!-- Corrected: Custom Dropdown -->
+                    <template if:true={isMenuOpen}>
+                        <div
+                            class="custom-dropdown slds-dropdown slds-dropdown_left slds-dropdown_small"
+                            onkeydown={handleKeyDown}
+                        >
+                            <ul class="slds-dropdown__list" role="menu">
+                                <li class="slds-dropdown__item" role="presentation">
+                                    <a
+                                        href="javascript:void(0);"
+                                        role="menuitem"
+                                        onclick={handleCloneVendorProgram}
+                                    >
+                                        <span class="slds-truncate">{cloneMenuText}</span>
+                                    </a>
+                                </li>
+                                <li class="slds-dropdown__item" role="presentation">
+                                    <a
+                                        href="javascript:void(0);"
+                                        role="menuitem"
+                                        onclick={handleNewVendorProgram}
+                                    >
+                                        <span class="slds-truncate">{createNewMenuText}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Save, Activate, Deactivate Buttons -->
+                <div class="slds-m-left_small slds-grid slds-grid_vertical-align-center">
+                    <lightning-button
+                        label="Save"
+                        onclick={handleSave}
+                        disabled={isActive}
+                        title={saveButtonTooltip}
+                        class="slds-m-left_xx-small"
+                    ></lightning-button>
+
+                    <template if:true={showActivateButton}>
+                        <lightning-button
+                            variant="brand"
+                            label="Activate"
+                            onclick={handleActivate}
+                            class="slds-m-left_xx-small"
+                        ></lightning-button>
+                    </template>
+
+                    <template if:true={showDeactivateButton}>
+                        <lightning-button
+                            label="Deactivate"
+                            onclick={handleDeactivate}
+                            class="slds-m-left_xx-small"
+                        ></lightning-button>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

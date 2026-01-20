@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Training_System_System_Required</fullName>
+    <active>true</active>
+    <description>External Training must have a Training System</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Training_Type__c, &quot;External&quot;),
+    ISBLANK(Training_System__c)
+)</errorConditionFormula>
+    <errorDisplayField>Training_System__c</errorDisplayField>
+    <errorMessage>External Training Requirements must be linked to a Training System.</errorMessage>
+</ValidationRule>

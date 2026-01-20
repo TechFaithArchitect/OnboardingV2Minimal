@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Application_Status__c</fullName>
+    <externalId>false</externalId>
+    <label>Application Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <default>false</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Paperwork Sent</fullName>
+                <default>false</default>
+                <label>Paperwork Sent</label>
+            </value>
+            <value>
+                <fullName>Pending Initial Review</fullName>
+                <default>false</default>
+                <label>Pending Initial Review</label>
+            </value>
+            <value>
+                <fullName>Awaiting Training</fullName>
+                <default>false</default>
+                <label>Pending Training</label>
+            </value>
+            <value>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+                <label>Canceled</label>
+            </value>
+            <value>
+                <fullName>Denied</fullName>
+                <default>false</default>
+                <label>Denied</label>
+            </value>
+            <value>
+                <fullName>Setup Complete</fullName>
+                <default>false</default>
+                <label>Setup Complete</label>
+            </value>
+            <value>
+                <fullName>Pending Compliance</fullName>
+                <default>false</default>
+                <label>Pending Compliance</label>
+            </value>
+            <value>
+                <fullName>Expired</fullName>
+                <default>false</default>
+                <label>Expired</label>
+            </value>
+            <value>
+                <fullName>Pending Partner</fullName>
+                <default>false</default>
+                <label>Pending Partner</label>
+            </value>
+            <value>
+                <fullName>Pending Sales</fullName>
+                <default>false</default>
+                <label>Pending Sales</label>
+            </value>
+            <value>
+                <fullName>Pending Onboarding</fullName>
+                <default>false</default>
+                <label>Pending Onboarding</label>
+            </value>
+            <value>
+                <fullName>Pending Setup</fullName>
+                <default>false</default>
+                <label>Pending Setup</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Twilio Configuration</label>
+    <pluralLabel>Twilio Configurations</pluralLabel>
+    <visibility>Public</visibility>
+    <description
+  >Custom metadata storing Twilio SMS provider configuration settings for onboarding SMS communications. Contains Twilio account credentials, phone numbers, and named credential references used by follow-up messaging services. Example: A Twilio_Configuration metadata record with DeveloperName__c=&quot;Primary_Twilio_Account&quot; might have Account_SID__c=&quot;AC1234567890&quot;, From_Phone_Number__c=&quot;+15551234567&quot;, and Named_Credential__c=&quot;Twilio_API&quot;. When Follow_Up_Rule__mdt records specify SMS follow-ups (Follow_Up_Type__c=&quot;SMS&quot;), the messaging service references this configuration to authenticate with Twilio and send SMS messages. Multiple configurations can exist for different Twilio accounts (e.g., primary, backup, region-specific), allowing flexible SMS routing. Active__c flag controls which configurations are available for use.</description>
+</CustomObject>

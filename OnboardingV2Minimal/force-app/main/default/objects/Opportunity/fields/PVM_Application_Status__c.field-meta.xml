@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PVM_Application_Status__c</fullName>
+    <description>This is the paperwork status for the PVM opportunities for an account.</description>
+    <externalId>false</externalId>
+    <label>PV Application Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>PVM_Application_Type__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pending</fullName>
+                <default>false</default>
+                <label>Pending</label>
+            </value>
+            <value>
+                <fullName>Request paperwork from Account Compliance</fullName>
+                <default>false</default>
+                <label>Request paperwork from Account Compliance</label>
+            </value>
+            <value>
+                <fullName>Paperwork Sent</fullName>
+                <default>false</default>
+                <label>Paperwork Sent</label>
+            </value>
+            <value>
+                <fullName>Paperwork Incomplete - Attempt 1</fullName>
+                <default>false</default>
+                <label>Paperwork Incomplete - Attempt 1</label>
+            </value>
+            <value>
+                <fullName>Paperwork Incomplete - Attempt 2</fullName>
+                <default>false</default>
+                <label>Paperwork Incomplete - Attempt 2</label>
+            </value>
+            <value>
+                <fullName>Paperwork Incomplete - Attempt 3 - Back to Sales Rep</fullName>
+                <default>false</default>
+                <label>Paperwork Incomplete - Attempt 3 - Back to Sales Rep</label>
+            </value>
+            <value>
+                <fullName>Paperwork Received - Not Reviewed</fullName>
+                <default>false</default>
+                <label>Paperwork Received - Not Reviewed</label>
+            </value>
+            <value>
+                <fullName>Pending CC Charge - A/R</fullName>
+                <default>false</default>
+                <label>Pending CC Charge - A/R</label>
+            </value>
+            <value>
+                <fullName>Under Review - Net Terms</fullName>
+                <default>false</default>
+                <label>Under Review - Net Terms</label>
+            </value>
+            <value>
+                <fullName>Under Review - Account Compliance</fullName>
+                <default>false</default>
+                <label>Under Review - Account Compliance</label>
+            </value>
+            <value>
+                <fullName>Expired</fullName>
+                <default>false</default>
+                <label>Expired</label>
+            </value>
+            <value>
+                <fullName>Pending Compliance</fullName>
+                <default>false</default>
+                <label>Pending Compliance</label>
+            </value>
+            <value>
+                <fullName>Account Setup</fullName>
+                <default>false</default>
+                <label>Account Setup</label>
+            </value>
+            <value>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+                <label>Canceled</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Request paperwork from Account Compliance</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Paperwork Sent</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Paperwork Incomplete - Attempt 1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Paperwork Incomplete - Attempt 2</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Paperwork Incomplete - Attempt 3 - Back to Sales Rep</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Under Review - Account Compliance</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Account Setup</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

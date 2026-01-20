@@ -1,0 +1,118 @@
+<template>
+    <lightning-quick-action-panel header="Account Onboarding - Vendor Program">
+        <template if:true={isLoading}>
+            <lightning-spinner size="small" alternative-text="Loading"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium slds-grid slds-grid_vertical slds-grid_align-start slds-gaps_small">
+            <template if:true={eligibilityMessage}>
+                <div class="slds-box slds-theme_default slds-m-bottom_small">
+                    <p class="slds-text-title_bold">Eligibility</p>
+                    <p>{eligibilityMessage}</p>
+                </div>
+            </template>
+
+            <lightning-input
+                type="text"
+                label="Search Vendor Programs"
+                value={searchText}
+                onchange={handleSearchChange}
+                placeholder="Enter program name"
+            ></lightning-input>
+            <div class="slds-m-top_x-small">
+                <lightning-button
+                    label="Search"
+                    variant="brand"
+                    onclick={handleSearch}
+                    disabled={disableSearch}
+                ></lightning-button>
+            </div>
+
+            <template if:true={programOptions.length}>
+                <lightning-combobox
+                    class="slds-m-top_medium"
+                    label="Select Vendor Program"
+                    value={selectedProgramId}
+                    options={programOptions}
+                    onchange={handleProgramChange}
+                ></lightning-combobox>
+            </template>
+
+            <template if:false={programOptions.length}>
+                <p class="slds-m-top_medium slds-text-color_weak">No programs to show. Adjust search or eligibility requirements.</p>
+            </template>
+
+            <div class="slds-m-top_large">
+                <p class="slds-text-title_bold slds-m-bottom_small">Contacts &amp; Roles (required)</p>
+                <lightning-button
+                    label="New Contact"
+                    variant="neutral"
+                    onclick={handleCreateContact}
+                    class="slds-m-bottom_small"
+                ></lightning-button>
+                <template for:each={contacts} for:item="contact">
+                    <div key={contact.contactId} class="slds-box slds-m-bottom_small">
+                        <p class="slds-text-title_caps">{contact.name}</p>
+                        <p class="slds-text-body_small slds-text-color_weak">{contact.email}</p>
+                        <lightning-input
+                            type="radio"
+                            label="Primary contact"
+                            name="primaryContact"
+                            value={contact.contactId}
+                            checked={contact.isPrimary}
+                            onchange={handlePrimaryChange}
+                        ></lightning-input>
+                        <lightning-combobox
+                            class="slds-m-top_small"
+                            label="Role"
+                            data-contact-id={contact.contactId}
+                            value={contact.role}
+                            options={acrRoleOptions}
+                            onchange={handleContactRoleChange}
+                        ></lightning-combobox>
+                    </div>
+                </template>
+                <template if:true={contacts.length}>
+                    <p class="slds-text-body_small slds-text-color_error">
+                        All contacts must have a role before proceeding.
+                    </p>
+                </template>
+                <template if:false={contacts.length}>
+                    <p class="slds-text-color_error">No contacts found for this Account. Add contacts and assign roles before proceeding.</p>
+                </template>
+            </div>
+
+            <div class="slds-m-top_large slds-grid slds-gutters">
+                <div class="slds-col">
+                    <lightning-input
+                        type="text"
+                        label="Opportunity Name"
+                        value={oppName}
+                        onchange={handleOppNameChange}
+                    ></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-combobox
+                        label="Stage"
+                        value={oppStage}
+                        options={stageOptions}
+                        onchange={handleOppStageChange}
+                    ></lightning-combobox>
+                </div>
+                <div class="slds-col">
+                    <lightning-input
+                        type="date"
+                        label="Close Date"
+                        value={oppCloseDate}
+                        onchange={handleOppCloseDateChange}
+                    ></lightning-input>
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer" class="slds-grid slds-grid_align-end slds-gaps_small">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+            <lightning-button variant="brand" label="Next" onclick={handleNext} disabled={disableNext}></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

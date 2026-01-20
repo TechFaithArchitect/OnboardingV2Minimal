@@ -1,0 +1,487 @@
+<template>
+    <lightning-card title="Quick Actions" icon-name="utility:settings">
+        <div class="slds-grid slds-gutter slds-wrap">
+            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                <lightning-button 
+                    label="Create Vendor Program Group" 
+                    variant="neutral"
+                    icon-name="utility:groups"
+                    onclick={handleOpenCreateGroupModal}
+                    class="slds-m-bottom_small slds-m-right_small">
+                </lightning-button>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                <lightning-button 
+                    label="Create Requirement Group" 
+                    variant="neutral"
+                    icon-name="utility:list"
+                    onclick={handleOpenCreateRequirementGroupModal}
+                    class="slds-m-bottom_small slds-m-right_small">
+                </lightning-button>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                <lightning-button 
+                    label="Create Recipient Group" 
+                    variant="neutral"
+                    icon-name="utility:user"
+                    onclick={handleOpenCreateRecipientGroupModal}
+                    class="slds-m-bottom_small slds-m-right_small">
+                </lightning-button>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-3">
+                <lightning-button 
+                    label="Create Status Rules Engine" 
+                    variant="neutral"
+                    icon-name="utility:rules"
+                    onclick={handleOpenCreateRulesEngineModal}
+                    class="slds-m-bottom_small slds-m-right_small">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+
+    <!-- Create Vendor Program Group Modal -->
+    <template if:true={showCreateGroupModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="group-modal-heading" aria-modal="true" 
+                 aria-describedby="group-modal-content" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick={handleCloseModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="group-modal-heading" class="slds-modal__title slds-hyphenate">Create Vendor Program Group</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="group-modal-content">
+                    <p class="slds-text-body_regular slds-m-bottom_medium">
+                        Search for an existing Vendor Program Group or create a new one.
+                    </p>
+                    
+                    <!-- Search Existing Groups -->
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="group-search">
+                            Search for Existing Group
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="group-search"
+                                        type="text"
+                                        value={groupSearchText}
+                                        onchange={handleGroupSearchChange}
+                                        placeholder="Enter group name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Search"
+                                        variant="neutral"
+                                        onclick={handleSearchGroups}
+                                        disabled={isLoadingGroups}
+                                        icon-name="utility:search">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group Search Results -->
+                    <template if:true={groups.length}>
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label">
+                                Select Existing Group
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-radio-group
+                                    name="group-selection"
+                                    options={groupOptions}
+                                    value={selectedGroupId}
+                                    type="radio"
+                                    onchange={handleGroupSelect}>
+                                </lightning-radio-group>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Or Create New -->
+                    <div class="slds-divider slds-m-vertical_medium">
+                        <span class="slds-text-body_small slds-p-horizontal_medium">OR</span>
+                    </div>
+
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="new-group-name">
+                            Create New Group
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="new-group-name"
+                                        type="text"
+                                        value={newGroupName}
+                                        onchange={handleNewGroupNameChange}
+                                        placeholder="Enter new group name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Create"
+                                        variant="neutral"
+                                        onclick={handleCreateGroup}
+                                        icon-name="utility:add">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Done" 
+                        onclick={handleCloseModal}
+                        if:true={selectedGroupId}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Create Requirement Group Modal -->
+    <template if:true={showCreateRequirementGroupModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="req-group-modal-heading" aria-modal="true" 
+                 aria-describedby="req-group-modal-content" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick={handleCloseModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="req-group-modal-heading" class="slds-modal__title slds-hyphenate">Create Vendor Program Requirement Group</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="req-group-modal-content">
+                    <p class="slds-text-body_regular slds-m-bottom_medium">
+                        Search for an existing Vendor Program Requirement Group or create a new one.
+                    </p>
+                    
+                    <!-- Search Existing Groups -->
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="req-group-search">
+                            Search for Existing Group
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="req-group-search"
+                                        type="text"
+                                        value={requirementGroupSearchText}
+                                        onchange={handleRequirementGroupSearchChange}
+                                        placeholder="Enter group name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Search"
+                                        variant="neutral"
+                                        onclick={handleSearchRequirementGroups}
+                                        disabled={isLoadingRequirementGroups}
+                                        icon-name="utility:search">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group Search Results -->
+                    <template if:true={requirementGroups.length}>
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label">
+                                Select Existing Group
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-radio-group
+                                    name="requirement-group-selection"
+                                    options={requirementGroupOptions}
+                                    value={selectedRequirementGroupId}
+                                    type="radio"
+                                    onchange={handleRequirementGroupSelect}>
+                                </lightning-radio-group>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Or Create New -->
+                    <div class="slds-divider slds-m-vertical_medium">
+                        <span class="slds-text-body_small slds-p-horizontal_medium">OR</span>
+                    </div>
+
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="new-req-group-name">
+                            Create New Group
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="new-req-group-name"
+                                        type="text"
+                                        value={newRequirementGroupName}
+                                        onchange={handleNewRequirementGroupNameChange}
+                                        placeholder="Enter new group name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Create"
+                                        variant="neutral"
+                                        onclick={handleCreateRequirementGroup}
+                                        icon-name="utility:add">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Done" 
+                        onclick={handleCloseModal}
+                        if:true={selectedRequirementGroupId}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Create Recipient Group Modal -->
+    <template if:true={showCreateRecipientGroupModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="recipient-modal-heading" aria-modal="true" 
+                 aria-describedby="recipient-modal-content" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick={handleCloseModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="recipient-modal-heading" class="slds-modal__title slds-hyphenate">Create Recipient Group</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="recipient-modal-content">
+                    <p class="slds-text-body_regular slds-m-bottom_medium">
+                        Search for an existing Recipient Group or create a new one.
+                    </p>
+                    
+                    <!-- Search Existing Groups -->
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="recipient-group-search">
+                            Search for Existing Group
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="recipient-group-search"
+                                        type="text"
+                                        value={recipientGroupSearchText}
+                                        onchange={handleRecipientGroupSearchChange}
+                                        placeholder="Enter group name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Search"
+                                        variant="neutral"
+                                        onclick={handleSearchRecipientGroups}
+                                        disabled={isLoadingRecipientGroups}
+                                        icon-name="utility:search">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group Search Results -->
+                    <template if:true={recipientGroups.length}>
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label">
+                                Select Existing Group
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-radio-group
+                                    name="recipient-group-selection"
+                                    options={recipientGroupOptions}
+                                    value={selectedRecipientGroupId}
+                                    type="radio"
+                                    onchange={handleRecipientGroupSelect}>
+                                </lightning-radio-group>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Or Create New -->
+                    <div class="slds-divider slds-m-vertical_medium">
+                        <span class="slds-text-body_small slds-p-horizontal_medium">OR</span>
+                    </div>
+
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="new-recipient-group-name">
+                            Create New Group
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="new-recipient-group-name"
+                                        type="text"
+                                        value={newRecipientGroupName}
+                                        onchange={handleNewRecipientGroupNameChange}
+                                        placeholder="Enter new group name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Create"
+                                        variant="neutral"
+                                        onclick={handleCreateRecipientGroup}
+                                        icon-name="utility:add">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Done" 
+                        onclick={handleCloseModal}
+                        if:true={selectedRecipientGroupId}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Create Status Rules Engine Modal -->
+    <template if:true={showCreateRulesEngineModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="rules-modal-heading" aria-modal="true" 
+                 aria-describedby="rules-modal-content" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick={handleCloseModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="rules-modal-heading" class="slds-modal__title slds-hyphenate">Create Status Rules Engine</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="rules-modal-content">
+                    <p class="slds-text-body_regular slds-m-bottom_medium">
+                        Search for an existing Status Rules Engine or create a new one.
+                    </p>
+                    
+                    <!-- Search Existing Engines -->
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="rules-engine-search">
+                            Search for Existing Rules Engine
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="rules-engine-search"
+                                        type="text"
+                                        value={rulesEngineSearchText}
+                                        onchange={handleRulesEngineSearchChange}
+                                        placeholder="Enter rules engine name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Search"
+                                        variant="neutral"
+                                        onclick={handleSearchRulesEngines}
+                                        disabled={isLoadingRulesEngines}
+                                        icon-name="utility:search">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rules Engine Search Results -->
+                    <template if:true={rulesEngines.length}>
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label">
+                                Select Existing Rules Engine
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-radio-group
+                                    name="rules-engine-selection"
+                                    options={rulesEngineOptions}
+                                    value={selectedRulesEngineId}
+                                    type="radio"
+                                    onchange={handleRulesEngineSelect}>
+                                </lightning-radio-group>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Or Create New -->
+                    <div class="slds-divider slds-m-vertical_medium">
+                        <span class="slds-text-body_small slds-p-horizontal_medium">OR</span>
+                    </div>
+
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="new-rules-engine-name">
+                            Create New Rules Engine
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="new-rules-engine-name"
+                                        type="text"
+                                        value={newRulesEngineName}
+                                        onchange={handleNewRulesEngineNameChange}
+                                        placeholder="Enter new rules engine name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Create"
+                                        variant="neutral"
+                                        onclick={handleCreateRulesEngine}
+                                        icon-name="utility:add">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCloseModal}></lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Done" 
+                        onclick={handleCloseModal}
+                        if:true={selectedRulesEngineId}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
+

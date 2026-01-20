@@ -1,0 +1,3307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Installations_Service_Group</fullName>
+    <active>true</active>
+    <businessProcess>ISG Record Type %28General%29</businessProcess>
+    <description>ISG Opportunity Flow - General</description>
+    <label>Installations Service Group</label>
+    <picklistValues>
+        <picklist>Account_Type__c</picklist>
+        <values>
+            <fullName>Both</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NFFL</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Antennas__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Application_Status__c</picklist>
+        <values>
+            <fullName>Awaiting Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expired</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Initial Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Onboarding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Setup Complete</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CATV_Opportunity_Source__c</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Project Based</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rep Generated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trade Show</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web Lead</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cable_Accessories__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Cables__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Chemicals_Paint__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Connectors__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Current_Queue__c</picklist>
+        <values>
+            <fullName>APPROVED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ASM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BB CHAIN NUMBER</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CONTRACT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CORPORATE MANAGEMENT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DENIED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>INCOMPLETE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LEGAL REVIEW</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NEW APPLICATION</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>QUEUE PENDING INCOMPLETE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>REGION HEAD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RISK MANAGEMENT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>THE BUCKET</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Diplexers_Splitters__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Electrical_Supplies__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Fiber__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ForecastCategoryName</picklist>
+        <values>
+            <fullName>Best Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Omitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pipeline</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Grounding_Lightning__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Hardware__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Incomplete_Type__c</picklist>
+        <values>
+            <fullName>Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Both</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Buydown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Resale</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Installation_Supplies__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>LeadSource</picklist>
+        <values>
+            <fullName>CE Pro</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cable%2Ecom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Compli</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Construct Connect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Craigslist</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Event</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing DLR Chuzo Program Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing DLR Inbound Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google Search</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inside Towers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Leads List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Letters</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn Sales Navigator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mailer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Publications</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radio%2FPod Casts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referred by Existing DLR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SWAP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SafeHaven</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Intel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tower Times</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trade Show</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WISP Brief</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web Search</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Loss_Reason__c</picklist>
+        <values>
+            <fullName>Lost to Competitor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Budget %2F Lost Funding</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Decision %2F Non-Responsive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Price</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Maps_State__c</picklist>
+        <values>
+            <fullName>Alabama</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alaska</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arizona</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arkansas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>California</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Colorado</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Connecticut</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Delaware</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>District of Columbia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Florida</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Georgia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hawaii</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Idaho</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Illinois</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Indiana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Iowa</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kansas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kentucky</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Louisiana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Maryland</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Massachusetts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Michigan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Minnesota</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mississippi</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Missouri</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Montana</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nebraska</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nevada</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Hampshire</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Jersey</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Mexico</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New York</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>North Carolina</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>North Dakota</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ohio</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oklahoma</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oregon</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pennsylvania</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rhode Island</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>South Carolina</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>South Dakota</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tennessee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Texas</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Utah</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vermont</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Virginia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Washington</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>West Virginia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wisconsin</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wyoming</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Marketing_Tactics_Used__c</picklist>
+        <values>
+            <fullName>Aggregator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Call Center</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D2D</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Social Media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Store Front</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Traditional</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Mounts__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Onboarding_Tier__c</picklist>
+        <values>
+            <fullName>Tier 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tier 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tier 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tier 4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tier 5</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Opportunity_Paperwork_Status__c</picklist>
+        <values>
+            <fullName>Account Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved By Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Approved by DIRECTV - Account Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Background Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Cancellation of Existing UID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Credit Check</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Background Complete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract Executed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract Received %2F Awaiting Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract Received %2F DLR Code Not Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract Received %2F DLR Code Requested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract Sent %2F DLR Code Not Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contract Sent %2F DLR Code Requested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit Check Complete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dealer Code Received %2F Pending Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Denied by CenturyLink</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede Denied-Closed Beam</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede Denied-Incomplete 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede Denied-Incomplete 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede Denied-Incomplete 3 Back to Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede V2 Prep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede approved - Pending training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede training complete - Pending setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expired</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Final Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete - Attempt 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete - Attempt 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete - Attempt 3</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete - Attempt 3 - Back to Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete - Attempt 4</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete - Attempt 5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete Ongoing Attempt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Paperwork Incomplete - See Notes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Received - Not Reviewed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partially Signed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending AC  Initial Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Approval By Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Approval by Sales %2F Credit Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Approval by Sales %2F Pending Credit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Approval from CenturyLink</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Buydown Verification</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending CC Charge - A%2FR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Dealer Code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Eligibility From DIRECTV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Eligibility From Multiband</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Field Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending UID %26 Background</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending_UID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request for Paperwork</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request paperwork from Account Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SME Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Setup Complete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Status Pending System Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted to Exede for approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under Review - Net Terms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under Review - Resale Compliance</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Opportunity_Source_Layer_3__c</picklist>
+        <values>
+            <fullName>AT%26T</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T AR Leads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T ASM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Called In Cross Recruiting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Frontier</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LAD%27s List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>N%2FA</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Optidge</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outbound Cross Recruiting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Predictive Modeling List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SafeStreets</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Viasat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windstream</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Opportunity__c</picklist>
+        <values>
+            <fullName>Marketing Paid Ads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Organic SEO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outbound Recruiting Efforts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Owner__c</picklist>
+        <values>
+            <fullName>Account Manager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>BDS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM Specialist</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Director</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ISG</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inside COM BDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inside Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National Acct Mgrs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outside BB BDM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Outside Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recruiter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VP</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>POE_CC_CreditCardType__c</picklist>
+        <values>
+            <fullName>AMEX</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Discover</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MasterCard</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Visa</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>POE_CC_ExpirationMonth__c</picklist>
+        <values>
+            <fullName>01</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>02</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>03</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>04</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>05</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>06</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>07</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>08</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>09</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>11</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>12</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>POE_CC_ExpirationYear__c</picklist>
+        <values>
+            <fullName>2022</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2023</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2024</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2025</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2026</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2027</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2028</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2029</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2030</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2031</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2032</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>POE_DL_State__c</picklist>
+        <values>
+            <fullName>AK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AZ</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>IN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>KY</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ME</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ND</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NH</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NJ</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NY</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OH</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OK</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TX</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>UT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WY</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>POE_Identification_Method__c</picklist>
+        <values>
+            <fullName>Driver%27s License</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Opted Out</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Social Security Number</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>POE_Outcome__c</picklist>
+        <values>
+            <fullName>Address Does Not Exist</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed Won</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Competitor Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit Card Declined</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer Changed Mind</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DNK%2FDNC Request</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Existing Customer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failed Credit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Install Date</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Language Barrier</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Answer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No SSN</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Past Due Balance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pricing</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>PVM_Application_Status__c</picklist>
+        <values>
+            <fullName>Account Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expired</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Incomplete - Attempt 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Incomplete - Attempt 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Incomplete - Attempt 3 - Back to Sales Rep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Received - Not Reviewed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending CC Charge - A%2FR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request paperwork from Account Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under Review - Account Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Under Review - Net Terms</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>PVM_Application_Type__c</picklist>
+        <values>
+            <fullName>CC Terms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Net Terms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prepaid Wire</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Quote</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>PVM_Paperwork_Completed__c</picklist>
+        <values>
+            <fullName>App for Dealer Status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank %26 Trade Info</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business License</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Certificate of Insurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Copy of Credit%2FDebit Card</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Copy of Driver%27s License</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit%2FDebit Card Auth</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal Guaranty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Resale Certificate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Terms %26 Conditions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>W-9</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Paperwork_Completed1__c</picklist>
+        <values>
+            <fullName>ACH Authorization</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ACH Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ASP Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ASP Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ATT Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alliance Referral Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alliance Referral Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>App for Dealer Status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Auto Ship %2F Deferred Invoice agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank and Trade Info</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business License</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business Plan Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CPP Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink Base Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink Cert of Insurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink Contract - B5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink Contract - B7</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink Contract - C8</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink Contract -19</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CenturyLink D2D Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Certificate of Insurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Commercial Retailer Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Connected Services Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Copy of Credit%2FDebit Card</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Copy of Driver%27s License</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit Card%2FDebit Card Auth</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DIRECTV COMM Buydown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DIRECTV MDU Buydown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DIRECTV MSO Buydown - MB</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DIRECTV MSO Buydown - P10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DIRECTV Residential Buydown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DIRECTV SMATV Buydown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DSA - Final Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dealer Insurance Requirements</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ELearning Dealer Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Elearning Sales Agent Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Equifax Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede - P10 Fulfillment Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede - Statement of Exemption</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede Dealer Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede Distributor Reassignment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Frontier Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Frontier Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS - Credit Card%2FDebit Card Auth</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS - Driver%27s License One-Time CC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS Cert of Insurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS DDO Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS DSA Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS DSA Agreement - A%2F1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS DSA Agreement - A%2F2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS DSA Set-up Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS ENT - Att%2E A Form 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS ENT - Att%2E A Form 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS ENT Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS ENT Set-up Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>HNS%2FDIRECTV Bundle Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hands-on Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Installer Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MIRA Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MIRA Cert of Insurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MIRA Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MIRA Vendor ACHP Authorization</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MIRA W-9</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA Application %26 Sign-up Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NDA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nest Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>P10 Cert of Insurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal Guaranty</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Req%2E for Taxpayer ID Number and Cert</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Resale Certificate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SME Agreement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SME Agreement 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SME Agreement 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sales Only Commissions Rate Sheet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Certification Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Self Installing Commission Rate Sheet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Terms and Conditions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vendor ACHP Authorization</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ViaSat Dealer Reassignment Conditions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>W-9</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windstream Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windstream Contract</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>eero Agreement</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Paperwork_Follow_Up_Attempts__c</picklist>
+        <values>
+            <fullName>1st Attempt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>2nd Attempt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>3rd Attempt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AC Working</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Back to AC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Back to Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Action</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Partner_Status__c</picklist>
+        <values>
+            <fullName>ATT - Pending Dealer Code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ATT - Pending Eligibility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ATT - Pending UID</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLINK - Pending Compliance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLINK - Pending Field Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CLINK - Pending Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No Action</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VS - Pending Initial Review</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>VS - Pending Setup</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Passive_DAS__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Perfect_Home_Solutions__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Power_Cabinets__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Program_Base_App_Selection__c</picklist>
+        <values>
+            <fullName>Base Application - Infrastructure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Applicable</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Program Base Application - with Chuzo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Program Base Application - with Chuzo %28No Personal Guarantee%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Program Base Application - without Chuzo</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Program_Status__c</picklist>
+        <values>
+            <fullName>Account Built In Axapta</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Account Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application Started</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application Started Not Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application%2FBusiness Plan Forwarded to Exede</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application%2FBusiness Plan Forwarded to Hughes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Application%2FBusiness Plan Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Awaiting Installation Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business Plan Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Business Plan Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM App - Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM App - Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM App - In Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM App - Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM App - Pending Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM App - Reset</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM App - Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM Prescreen -  Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM Prescreen -  Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM Prescreen -  Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM Prescreen -  Reset</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM Prescreen - In Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>COM Prescreen - Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CPP Demo Scheduled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CPP Sizzle Video Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Canceled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D2Lite - ASM approved%2FApp in Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D2Lite - Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D2Lite - Awaiting ASM Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D2Lite - Awaiting Buydown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D2Lite - Qualified</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demo Attended</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Demo Requested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede SI Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede SO Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expired</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FFL Agreement Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FFL Agreement Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>FFL Agreement Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Follow Up Order Only</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ID Entered in Axapta and Salesforce</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete Attempt 1</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete Attempt 2</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete Attempt 3 - Back to Sales</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Installation Training Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Interested - No Paperwork Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDU Std App - APPROVED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDU Std App - DENIED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDU Std App - INCOMPLETE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDU Std App - PENDING INCOMPLETE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDU Std App - SUBMITTED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA - APP Submitted%2FIn Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA - OPP Created%2FNo Paperwork Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA Account Setup</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA Approved Pending%2FFinal Set Up</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA Paperwork Sent%2FUn-returned</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Interested</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not a current Exede dealer %2F No paperwork sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not a current HNS dealer %2F No paperwork sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Training Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Training Mods Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>P10 Received HARD COPY APP%2FBusiness Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PPW Received</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PPW Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Complete - Pending BP Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Complete - Pending BP Approval%2FTraining</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Complete - Pending Training</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Incomplete - See Notes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Received - Not Reviewed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Requested From ART</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Sent</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paperwork Sent to Dealer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending Buydown%2FResale Docs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Request for Paperwork</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Res Std App - APPROVED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Res Std App - DENIED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Res Std App - IN PROCESS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Res Std App - INCOMPLETE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Res Std App - PENDING INCOMPLETE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Res Std App - RESET</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Res Std App - SUBMITTED</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV App - Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV App - Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV App - In Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV App - Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV App - Pending Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV App - Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV Prescreen -  Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV Prescreen -  Denied</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV Prescreen -  Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV Prescreen -  Reset</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV Prescreen - In Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SMATV Prescreen - Submitted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted to Exede for Approval</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Submitted to HNS for Approval</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Program_Type__c</picklist>
+        <values>
+            <fullName>Brinks</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chuzo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chuzo Shop Link</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DTV-COM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DTV-MDU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EarthLink</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede - FFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Exede - Strategic SO</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Frontier</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDP - ISP</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDP D2D</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSO - C</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MSOS - P10</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>N%2FA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NDA</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National Retail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Customer Application %28WIRE%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Dealer Base Application %28DOM%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Offshore</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Optimum</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SafeHaven</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Spectrum</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Spectrum Commercial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T-Mobile</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>T-Mobile FFL</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Verizon D2D%2FCOM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Verizon D2D%2FRES</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Viasat</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windstream</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windstream D2D</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Referral_Option__c</picklist>
+        <values>
+            <fullName>Email Newsletter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referred by friend or family</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Search Engine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Social Media %28Facebook%2C Instagram%29</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Rigging__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Safety_PPE__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Sales_Method__c</picklist>
+        <values>
+            <fullName>Call Center</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Call in to Home Office</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Call in to Retail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>D2D</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Events</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Installations - upselling while in customer%27s home</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Storefront</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Shelter_Materials__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Signal_Meters__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Source_Tactic__c</picklist>
+        <values>
+            <fullName>ACC from Outside</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ADT SEO - Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ADT SEO - Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T COM SEO - Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T COM SEO - Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T Leads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T Paid - Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T Paid - Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T SEO - Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>AT%26T SEO - Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Addressable GeoFencing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CABL%2Ecom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed Lost List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Craigslist</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cross Recruited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Current Dealer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Current%2FPrevious Dealer association</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DSI List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DeRegulated Energy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dealer Initiated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Digital Hire</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct Mail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dish List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email Campaign</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Energy Letter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo %E2%80%93 Small Biz %E2%80%93 Chicago 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo %E2%80%93 Small Biz %E2%80%93 New York 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo %E2%80%93 Small Biz %E2%80%93 Orlando 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo - BICSI Vegas 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo - Franchise Expo FT Lauderdale 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo - Latino Business - Ventura Oct 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo - Prepaid %26 Wireless Vegas 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo - Small Biz - LA 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Expo - Small Biz - Phoenix 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facebook</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fispalive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>From List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Frontier SEO - Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Frontier SEO - Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Google</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Industry - Other products</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Person</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead Lists</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>LinkedIn</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mailers</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>N%2FA</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>National Event E-Blast</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other Paid</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Print Ads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reddit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referred by Current Dealer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rural BB</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SEO Page Retargeting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telvista</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Third Party Campaign</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Viasat SEO - Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Viasat SEO - Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WISP List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WISP-America 2021</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>WISPAPALOOZA Vegas 2019</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web Search</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windstream SEO Call</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Windstream SEO Form</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wisp America 2019</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Steel_Components__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Structural_Modification__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Strut_Fittings__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Terms__c</picklist>
+        <values>
+            <fullName>ACH</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Credit Card</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Net Terms</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Test_Measurement__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Tools_Equipment__c</picklist>
+        <values>
+            <fullName>Lost</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Negotiation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Won</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Training_Status__c</picklist>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In Process</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Requested</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Existing Business</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Business</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>vlocity_cmt__AsyncOperation__c</picklist>
+        <values>
+            <fullName>Price</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Validate</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>vlocity_cmt__DefaultCurrencyPaymentMode__c</picklist>
+        <values>
+            <fullName>Currency</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Loyalty</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>vlocity_cmt__LockedFor__c</picklist>
+        <values>
+            <fullName>Async Operation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manual Edit</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>vlocity_cmt__OriginatingChannel__c</picklist>
+        <values>
+            <fullName>Call Center</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dealer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>vlocity_cmt__ValidationStatus__c</picklist>
+        <values>
+            <fullName>Failed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not yet run</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Passed</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

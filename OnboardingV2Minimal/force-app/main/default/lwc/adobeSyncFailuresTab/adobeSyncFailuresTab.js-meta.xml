@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+    </targets>
+    <masterLabel>Adobe Sync Failures Tab</masterLabel>
+    <description>Displays Adobe sync failures with retry and resolve capabilities</description>
+</LightningComponentBundle>

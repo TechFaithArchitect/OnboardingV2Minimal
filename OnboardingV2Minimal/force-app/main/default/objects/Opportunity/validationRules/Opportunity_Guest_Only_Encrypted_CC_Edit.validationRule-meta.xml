@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Guest_Only_Encrypted_CC_Edit</fullName>
+    <active>true</active>
+    <description>Prevent users other than Guest Users and Chuzo Users from editing POE_Credit_Card__c [PER-3161].</description>
+    <errorConditionFormula>AND(
+    ISCHANGED(POE_Credit_Card__c),
+     NOT(
+         OR(
+            $Profile.Name = &apos;POE Profile&apos;,
+            $Profile.Name = &apos;System Administrator&apos;,
+            $Profile.Name = &apos;Owner Profile&apos;,
+            $Profile.Name = &apos;Phone Sales Profile&apos;,
+            $Profile.Name = &apos;Residential Profile&apos;,
+            $Profile.Name = &apos;External Partner – General&apos;
+            )
+         )
+)</errorConditionFormula>
+    <errorDisplayField>POE_Credit_Card__c</errorDisplayField>
+    <errorMessage>You can&apos;t edit the Credit Card Field.</errorMessage>
+</ValidationRule>

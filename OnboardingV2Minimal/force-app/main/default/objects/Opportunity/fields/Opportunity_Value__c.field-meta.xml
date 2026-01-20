@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Value__c</fullName>
+    <description>CATVMSO Field - Overall value of opportunity</description>
+    <externalId>false</externalId>
+    <inlineHelpText>CATVMSO Field - Overall value of opportunity</inlineHelpText>
+    <label>Opportunity Value</label>
+    <precision>12</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

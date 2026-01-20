@@ -1,0 +1,197 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <!-- Guidance Box - Explains relationship between Step 6 and Step 7 -->
+      <div class="guidance-box slds-box slds-box_x-small slds-theme_info slds-m-bottom_medium">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <h3 class="slds-text-heading_small slds-m-bottom_x-small">What is a Vendor Program Group?</h3>
+            <p class="slds-text-body_small slds-m-bottom_x-small">
+              A <strong>Vendor Program Group</strong> is a logical collection of vendor programs with similar characteristics. 
+              This is different from the <strong>Requirement Group</strong> you selected in Step 5 (which defines what documents/credentials vendors need).
+            </p>
+            <p class="slds-text-body_small slds-m-bottom_none">
+              <strong>Group Labels:</strong> The dropdown shows the <strong>Label</strong> field (descriptive name). If you see an auto-number like "VPG-00001", it means no Label was set. 
+              <strong>Best Practice:</strong> Always set a descriptive Label like "Healthcare Vendor Programs" or "Retail Partner Programs" when creating groups.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show existing requirements from Step 6 for context -->
+      <template if:true={hasExistingRequirements}>
+        <div class="info-banner slds-box slds-box_x-small slds-m-bottom_medium" style="background-color: #f3f2f2; border-left: 3px solid #0176d3;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:list" size="small" alternative-text="Context"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-body_small slds-m-bottom_none">
+                <strong>Context from Step 6:</strong> You've created <strong>{existingRequirements.length} requirement(s)</strong> for this Vendor Program. 
+                Now you'll group this program with others that share similar characteristics.
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Selection Section -->
+      <div class="group-selection-box slds-box slds-box_x-small slds-m-bottom_medium" style="background-color: #fafaf9; padding: 1rem;">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+          <div class="slds-col slds-size_1-of-1">
+            <label class="slds-form-element__label slds-text-heading_small">
+              <abbr class="slds-required" title="required">* </abbr>Select Vendor Program Group
+            </label>
+            <p class="slds-text-body_small slds-m-top_x-small slds-m-bottom_small" style="color: #706e6b;">
+              Choose an existing group or create a new one below. This will link your Vendor Program to other programs with similar characteristics.
+            </p>
+          </div>
+        </div>
+
+        <template if:true={isLoadingGroups}>
+          <lightning-spinner alternative-text="Loading groups..." size="small"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoadingGroups}>
+          <template if:true={hasNoGroups}>
+            <div class="slds-box slds-box_x-small slds-theme_warning slds-m-bottom_small">
+              <p class="slds-text-body_small slds-m-bottom_none">
+                No Vendor Program Groups available. Please create a new group below.
+              </p>
+            </div>
+          </template>
+
+          <template if:false={hasNoGroups}>
+            <lightning-combobox
+              label=""
+              value={selectedGroupId}
+              options={groupOptions}
+              placeholder="Select a group..."
+              onchange={handleGroupSelect}
+              variant="label-hidden">
+            </lightning-combobox>
+          </template>
+
+          <template if:true={selectedGroupId}>
+            <div class="success-banner slds-box slds-box_x-small slds-m-top_small" style="background-color: #04844b; color: white;">
+              <div class="slds-media">
+                <div class="slds-media__figure">
+                  <lightning-icon icon-name="utility:check" size="small" alternative-text="Selected" style="color: white;"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                  <p class="slds-text-body_small slds-m-bottom_none" style="color: white;">
+                    <strong>Selected:</strong> {selectedGroupName}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </template>
+        </template>
+      </div>
+
+      <!-- Create New Group Section -->
+      <div class="create-group-section slds-m-bottom_medium">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+          <div class="slds-col">
+            <h3 class="slds-text-heading_small">Or create a new Vendor Program Group</h3>
+            <p class="slds-text-body_small slds-m-top_x-small" style="color: #706e6b;">
+              Create a new group if none of the existing groups match your needs.
+            </p>
+          </div>
+          <div class="slds-col slds-no-flex">
+            <template if:true={showCreateGroupForm}>
+              <lightning-button
+                label="Cancel"
+                variant="neutral"
+                onclick={toggleCreateGroupForm}
+                class="slds-m-left_medium">
+              </lightning-button>
+            </template>
+            <template if:false={showCreateGroupForm}>
+              <lightning-button
+                label="+ Create New Group"
+                variant="brand"
+                onclick={toggleCreateGroupForm}
+                class="slds-m-left_medium">
+              </lightning-button>
+            </template>
+          </div>
+        </div>
+
+        <template if:true={showCreateGroupForm}>
+          <div class="slds-box slds-theme_shade slds-m-bottom_small" style="padding: 1rem; background-color: #fafaf9;">
+            <p class="slds-text-heading_small slds-m-bottom_x-small">Create New Vendor Program Group</p>
+            <p class="slds-text-body_small slds-m-bottom_medium">Fill in all required fields below to create a new group.</p>
+            
+            <lightning-input 
+              label="Group Name" 
+              value={newGroupName} 
+              onchange={handleNewGroupNameChange}
+              placeholder="e.g., Healthcare Vendor Programs"
+              required>
+            </lightning-input>
+
+            <lightning-input 
+              label="Label" 
+              value={newGroupLabel} 
+              onchange={handleNewGroupLabelChange}
+              class="slds-m-top_small"
+              placeholder="Display label for the group"
+              required>
+            </lightning-input>
+
+            <lightning-combobox
+              label="Logic Type"
+              value={newGroupLogicType}
+              options={logicTypeOptions}
+              onchange={handleLogicTypeChange}
+              placeholder="Select a logic type..."
+              class="slds-m-top_small"
+              required>
+            </lightning-combobox>
+
+            <div class="slds-m-top_medium">
+              <lightning-button 
+                label="Create Group" 
+                onclick={handleCreateGroup} 
+                variant="brand"
+                disabled={isCreateGroupButtonDisabled}
+                class="slds-m-right_small">
+              </lightning-button>
+              <lightning-button 
+                label="Cancel" 
+                onclick={toggleCreateGroupForm} 
+                variant="neutral">
+              </lightning-button>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Error/Required Message -->
+      <template if:false={selectedGroupId}>
+        <template if:false={showCreateGroupForm}>
+          <div class="slds-notify slds-notify_alert slds-alert_error slds-theme_alert-texture slds-m-bottom_medium" role="alert">
+            <span class="slds-assistive-text">Error</span>
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:error" size="small" alternative-text="Error" variant="error"></lightning-icon>
+              </div>
+              <div class="slds-media__body">
+                <h2 class="slds-text-heading_small slds-m-bottom_xx-small">Required Field</h2>
+                <p class="slds-text-body_regular">
+                  Please select a Vendor Program Group or create a new one to continue.
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
+
+      <!-- Navigation buttons removed - handled by flow engine footer -->
+    </div>
+  </lightning-card>
+</template>

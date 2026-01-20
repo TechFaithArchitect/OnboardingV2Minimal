@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Current_Queue__c</fullName>
+    <externalId>false</externalId>
+    <label>Current Queue</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>APPROVED</fullName>
+                <default>false</default>
+                <label>APPROVED</label>
+            </value>
+            <value>
+                <fullName>ASM</fullName>
+                <default>false</default>
+                <label>ASM</label>
+            </value>
+            <value>
+                <fullName>BB CHAIN NUMBER</fullName>
+                <default>false</default>
+                <label>BB CHAIN NUMBER</label>
+            </value>
+            <value>
+                <fullName>CONTRACT</fullName>
+                <default>false</default>
+                <label>CONTRACT</label>
+            </value>
+            <value>
+                <fullName>CORPORATE MANAGEMENT</fullName>
+                <default>false</default>
+                <label>CORPORATE MANAGEMENT</label>
+            </value>
+            <value>
+                <fullName>DENIED</fullName>
+                <default>false</default>
+                <label>DENIED</label>
+            </value>
+            <value>
+                <fullName>INCOMPLETE</fullName>
+                <default>false</default>
+                <label>INCOMPLETE</label>
+            </value>
+            <value>
+                <fullName>LEGAL REVIEW</fullName>
+                <default>false</default>
+                <label>LEGAL REVIEW</label>
+            </value>
+            <value>
+                <fullName>NEW APPLICATION</fullName>
+                <default>false</default>
+                <label>NEW APPLICATION</label>
+            </value>
+            <value>
+                <fullName>QUEUE PENDING INCOMPLETE</fullName>
+                <default>false</default>
+                <label>QUEUE PENDING INCOMPLETE</label>
+            </value>
+            <value>
+                <fullName>REGION HEAD</fullName>
+                <default>false</default>
+                <label>REGION HEAD</label>
+            </value>
+            <value>
+                <fullName>RISK MANAGEMENT</fullName>
+                <default>false</default>
+                <label>RISK MANAGEMENT</label>
+            </value>
+            <value>
+                <fullName>THE BUCKET</fullName>
+                <default>false</default>
+                <label>THE BUCKET</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

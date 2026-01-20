@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Chuzo_Compact_Layout</fullName>
+    <fields>AccountId</fields>
+    <fields>POE_Program__c</fields>
+    <fields>StageName</fields>
+    <fields>Maps_Street__c</fields>
+    <fields>Maps_Appartment__c</fields>
+    <fields>Maps_City__c</fields>
+    <fields>Maps_State__c</fields>
+    <fields>Maps_PostalCode__c</fields>
+    <label>Chuzo Compact Layout</label>
+</CompactLayout>

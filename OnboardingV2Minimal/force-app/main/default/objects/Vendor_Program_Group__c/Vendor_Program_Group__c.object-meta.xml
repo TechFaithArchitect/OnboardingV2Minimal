@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description
+  >Logical grouping of vendor program configurations that share requirement sets, rules, and stage dependencies; used by the onboarding wizard for selection and inheritance. Example: A &quot;Healthcare Vendor Programs&quot; group might contain multiple Vendor Programs (Vendor_Customization__c records) like &quot;Medicare Provider&quot; and &quot;Medicaid Provider&quot; that share the same requirement sets and status evaluation rules. Programs within a group can inherit configurations from each other based on Logic_Type__c settings.</description>
+    <enableActivities>true</enableActivities>
+    <enableReports>true</enableReports>
+    <enableSharing>true</enableSharing>
+    <enableHistory>true</enableHistory>
+    <label>Vendor Program Group</label>
+    <pluralLabel>Vendor Program Groups</pluralLabel>
+    <nameField>
+        <label>Vendor Program Group Name</label>
+        <type>Text</type>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requirement_Group_Member__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Optional inherited group member</description>
+    <externalId>false</externalId>
+    <label>Requirement Group Member</label>
+    <referenceTo>Vendor_Program_Requirement_Group_Member__c</referenceTo>
+    <relationshipLabel>Vendor Program Requirements</relationshipLabel>
+    <relationshipName>Vendor_Program_Requirements</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

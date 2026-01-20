@@ -1,0 +1,1071 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Marketing_Areas__c</fullName>
+    <externalId>false</externalId>
+    <label>Marketing Areas</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Nationwide</fullName>
+                <default>false</default>
+                <label>Nationwide</label>
+            </value>
+            <value>
+                <fullName>Abilene-Sweetwater (#164)</fullName>
+                <default>false</default>
+                <label>Abilene-Sweetwater (#164)</label>
+            </value>
+            <value>
+                <fullName>Albany, GA (#154)</fullName>
+                <default>false</default>
+                <label>Albany, GA (#154)</label>
+            </value>
+            <value>
+                <fullName>Albany-Schenectady-Troy (#59)</fullName>
+                <default>false</default>
+                <label>Albany-Schenectady-Troy (#59)</label>
+            </value>
+            <value>
+                <fullName>Albuquerque-Santa Fe (#46)</fullName>
+                <default>false</default>
+                <label>Albuquerque-Santa Fe (#46)</label>
+            </value>
+            <value>
+                <fullName>Alexandria, LA (#178)</fullName>
+                <default>false</default>
+                <label>Alexandria, LA (#178)</label>
+            </value>
+            <value>
+                <fullName>Alpena (#208)</fullName>
+                <default>false</default>
+                <label>Alpena (#208)</label>
+            </value>
+            <value>
+                <fullName>Amarillo (#132)</fullName>
+                <default>false</default>
+                <label>Amarillo (#132)</label>
+            </value>
+            <value>
+                <fullName>Anchorage (#151)</fullName>
+                <default>false</default>
+                <label>Anchorage (#151)</label>
+            </value>
+            <value>
+                <fullName>Atlanta (#10)</fullName>
+                <default>false</default>
+                <label>Atlanta (#10)</label>
+            </value>
+            <value>
+                <fullName>Augusta-Aiken (#108)</fullName>
+                <default>false</default>
+                <label>Augusta-Aiken (#108)</label>
+            </value>
+            <value>
+                <fullName>Austin (#40)</fullName>
+                <default>false</default>
+                <label>Austin (#40)</label>
+            </value>
+            <value>
+                <fullName>Bakersfield (#125)</fullName>
+                <default>false</default>
+                <label>Bakersfield (#125)</label>
+            </value>
+            <value>
+                <fullName>Baltimore (#26)</fullName>
+                <default>false</default>
+                <label>Baltimore (#26)</label>
+            </value>
+            <value>
+                <fullName>Bangor (#159)</fullName>
+                <default>false</default>
+                <label>Bangor (#159)</label>
+            </value>
+            <value>
+                <fullName>Baton Rouge (#94)</fullName>
+                <default>false</default>
+                <label>Baton Rouge (#94)</label>
+            </value>
+            <value>
+                <fullName>Beaumont-Port Arthur (#143)</fullName>
+                <default>false</default>
+                <label>Beaumont-Port Arthur (#143)</label>
+            </value>
+            <value>
+                <fullName>Bend, OR (#185)</fullName>
+                <default>false</default>
+                <label>Bend, OR (#185)</label>
+            </value>
+            <value>
+                <fullName>Billings (#168)</fullName>
+                <default>false</default>
+                <label>Billings (#168)</label>
+            </value>
+            <value>
+                <fullName>Biloxi-Gulfport (#155)</fullName>
+                <default>false</default>
+                <label>Biloxi-Gulfport (#155)</label>
+            </value>
+            <value>
+                <fullName>Binghamton (#161)</fullName>
+                <default>false</default>
+                <label>Binghamton (#161)</label>
+            </value>
+            <value>
+                <fullName>Birmingham (Anniston and Tuscaloosa) (#44)</fullName>
+                <default>false</default>
+                <label>Birmingham (Anniston and Tuscaloosa) (#44)</label>
+            </value>
+            <value>
+                <fullName>Bluefield-Beckley-Oak Hill (#166)</fullName>
+                <default>false</default>
+                <label>Bluefield-Beckley-Oak Hill (#166)</label>
+            </value>
+            <value>
+                <fullName>Boise (#102)</fullName>
+                <default>false</default>
+                <label>Boise (#102)</label>
+            </value>
+            <value>
+                <fullName>Boston (Manchester) (#9)</fullName>
+                <default>false</default>
+                <label>Boston (Manchester) (#9)</label>
+            </value>
+            <value>
+                <fullName>Bowling Green (#177)</fullName>
+                <default>false</default>
+                <label>Bowling Green (#177)</label>
+            </value>
+            <value>
+                <fullName>Buffalo (#52)</fullName>
+                <default>false</default>
+                <label>Buffalo (#52)</label>
+            </value>
+            <value>
+                <fullName>Burlington-Plattsburgh (#96)</fullName>
+                <default>false</default>
+                <label>Burlington-Plattsburgh (#96)</label>
+            </value>
+            <value>
+                <fullName>Butte-Bozeman (#186)</fullName>
+                <default>false</default>
+                <label>Butte-Bozeman (#186)</label>
+            </value>
+            <value>
+                <fullName>Casper-Riverton (#199)</fullName>
+                <default>false</default>
+                <label>Casper-Riverton (#199)</label>
+            </value>
+            <value>
+                <fullName>Cedar Rapids-Waterloo-Iowa City &amp; Dubuque (#90)</fullName>
+                <default>false</default>
+                <label>Cedar Rapids-Waterloo-Iowa City &amp; Dubuque (#90)</label>
+            </value>
+            <value>
+                <fullName>Champaign &amp; Springfield-Decatur (#88)</fullName>
+                <default>false</default>
+                <label>Champaign &amp; Springfield-Decatur (#88)</label>
+            </value>
+            <value>
+                <fullName>Charleston, SC (#91)</fullName>
+                <default>false</default>
+                <label>Charleston, SC (#91)</label>
+            </value>
+            <value>
+                <fullName>Charleston-Huntington (#75)</fullName>
+                <default>false</default>
+                <label>Charleston-Huntington (#75)</label>
+            </value>
+            <value>
+                <fullName>Charlotte (#21)</fullName>
+                <default>false</default>
+                <label>Charlotte (#21)</label>
+            </value>
+            <value>
+                <fullName>Charlottesville (#182)</fullName>
+                <default>false</default>
+                <label>Charlottesville (#182)</label>
+            </value>
+            <value>
+                <fullName>Chattanooga (#92)</fullName>
+                <default>false</default>
+                <label>Chattanooga (#92)</label>
+            </value>
+            <value>
+                <fullName>Cheyenne-Scottsbluff (#196)</fullName>
+                <default>false</default>
+                <label>Cheyenne-Scottsbluff (#196)</label>
+            </value>
+            <value>
+                <fullName>Chicago (#3)</fullName>
+                <default>false</default>
+                <label>Chicago (#3)</label>
+            </value>
+            <value>
+                <fullName>Chico-Redding (#131)</fullName>
+                <default>false</default>
+                <label>Chico-Redding (#131)</label>
+            </value>
+            <value>
+                <fullName>Cincinnati (#37)</fullName>
+                <default>false</default>
+                <label>Cincinnati (#37)</label>
+            </value>
+            <value>
+                <fullName>Clarksburg-Weston (#173)</fullName>
+                <default>false</default>
+                <label>Clarksburg-Weston (#173)</label>
+            </value>
+            <value>
+                <fullName>Cleveland-Akron (Canton) (#19)</fullName>
+                <default>false</default>
+                <label>Cleveland-Akron (Canton) (#19)</label>
+            </value>
+            <value>
+                <fullName>Colorado Springs-Pueblo (#85)</fullName>
+                <default>false</default>
+                <label>Colorado Springs-Pueblo (#85)</label>
+            </value>
+            <value>
+                <fullName>Columbia, SC (#74)</fullName>
+                <default>false</default>
+                <label>Columbia, SC (#74)</label>
+            </value>
+            <value>
+                <fullName>Columbia-Jefferson City (#137)</fullName>
+                <default>false</default>
+                <label>Columbia-Jefferson City (#137)</label>
+            </value>
+            <value>
+                <fullName>Columbus, GA (#130)</fullName>
+                <default>false</default>
+                <label>Columbus, GA (#130)</label>
+            </value>
+            <value>
+                <fullName>Columbus, OH (#34)</fullName>
+                <default>false</default>
+                <label>Columbus, OH (#34)</label>
+            </value>
+            <value>
+                <fullName>Columbus-Tupelo-West Point-Houston (#133)</fullName>
+                <default>false</default>
+                <label>Columbus-Tupelo-West Point-Houston (#133)</label>
+            </value>
+            <value>
+                <fullName>Corpus Christi (#128)</fullName>
+                <default>false</default>
+                <label>Corpus Christi (#128)</label>
+            </value>
+            <value>
+                <fullName>Dallas-Fort Worth (#5)</fullName>
+                <default>false</default>
+                <label>Dallas-Fort Worth (#5)</label>
+            </value>
+            <value>
+                <fullName>Davenport-Rock Island-Moline (#103)</fullName>
+                <default>false</default>
+                <label>Davenport-Rock Island-Moline (#103)</label>
+            </value>
+            <value>
+                <fullName>Dayton (#63)</fullName>
+                <default>false</default>
+                <label>Dayton (#63)</label>
+            </value>
+            <value>
+                <fullName>Denver (#17)</fullName>
+                <default>false</default>
+                <label>Denver (#17)</label>
+            </value>
+            <value>
+                <fullName>Des Moines-Ames (#68)</fullName>
+                <default>false</default>
+                <label>Des Moines-Ames (#68)</label>
+            </value>
+            <value>
+                <fullName>Detroit (#14)</fullName>
+                <default>false</default>
+                <label>Detroit (#14)</label>
+            </value>
+            <value>
+                <fullName>Dothan (#171)</fullName>
+                <default>false</default>
+                <label>Dothan (#171)</label>
+            </value>
+            <value>
+                <fullName>Duluth-Superior (#139)</fullName>
+                <default>false</default>
+                <label>Duluth-Superior (#139)</label>
+            </value>
+            <value>
+                <fullName>Elmira (Corning) (#179)</fullName>
+                <default>false</default>
+                <label>Elmira (Corning) (#179)</label>
+            </value>
+            <value>
+                <fullName>El Paso (Las Cruces) (#93)</fullName>
+                <default>false</default>
+                <label>El Paso (Las Cruces) (#93)</label>
+            </value>
+            <value>
+                <fullName>Erie (#152)</fullName>
+                <default>false</default>
+                <label>Erie (#152)</label>
+            </value>
+            <value>
+                <fullName>Eugene (#117)</fullName>
+                <default>false</default>
+                <label>Eugene (#117)</label>
+            </value>
+            <value>
+                <fullName>Eureka (#197)</fullName>
+                <default>false</default>
+                <label>Eureka (#197)</label>
+            </value>
+            <value>
+                <fullName>Evansville (#105)</fullName>
+                <default>false</default>
+                <label>Evansville (#105)</label>
+            </value>
+            <value>
+                <fullName>Fairbanks (#203)</fullName>
+                <default>false</default>
+                <label>Fairbanks (#203)</label>
+            </value>
+            <value>
+                <fullName>Fargo (#116)</fullName>
+                <default>false</default>
+                <label>Fargo (#116)</label>
+            </value>
+            <value>
+                <fullName>Flint-Saginaw-Bay City (#77)</fullName>
+                <default>false</default>
+                <label>Flint-Saginaw-Bay City (#77)</label>
+            </value>
+            <value>
+                <fullName>Fort Myers-Naples (#53)</fullName>
+                <default>false</default>
+                <label>Fort Myers-Naples (#53)</label>
+            </value>
+            <value>
+                <fullName>Fort Smith-Fayetteville-Springdale-Rogers (#101)</fullName>
+                <default>false</default>
+                <label>Fort Smith-Fayetteville-Springdale-Rogers (#101)</label>
+            </value>
+            <value>
+                <fullName>Fort Wayne (#110)</fullName>
+                <default>false</default>
+                <label>Fort Wayne (#110)</label>
+            </value>
+            <value>
+                <fullName>Fresno-Visalia (#55)</fullName>
+                <default>false</default>
+                <label>Fresno-Visalia (#55)</label>
+            </value>
+            <value>
+                <fullName>Gainesville (#156)</fullName>
+                <default>false</default>
+                <label>Gainesville (#156)</label>
+            </value>
+            <value>
+                <fullName>Glendive</fullName>
+                <default>false</default>
+                <label>Glendive</label>
+            </value>
+            <value>
+                <fullName>Grand Junction-Montrose (#188)</fullName>
+                <default>false</default>
+                <label>Grand Junction-Montrose (#188)</label>
+            </value>
+            <value>
+                <fullName>Grand Rapids-Kalamazoo-Battle Creek (#45)</fullName>
+                <default>false</default>
+                <label>Grand Rapids-Kalamazoo-Battle Creek (#45)</label>
+            </value>
+            <value>
+                <fullName>Great Falls (#192)</fullName>
+                <default>false</default>
+                <label>Great Falls (#192)</label>
+            </value>
+            <value>
+                <fullName>Green Bay-Appleton (#67)</fullName>
+                <default>false</default>
+                <label>Green Bay-Appleton (#67)</label>
+            </value>
+            <value>
+                <fullName>Greensboro-High Point-Winston-Salem (#49)</fullName>
+                <default>false</default>
+                <label>Greensboro-High Point-Winston-Salem (#49)</label>
+            </value>
+            <value>
+                <fullName>Greenville-New Bern-Washington (#100)</fullName>
+                <default>false</default>
+                <label>Greenville-New Bern-Washington (#100)</label>
+            </value>
+            <value>
+                <fullName>Greenville-Spartanburg-Asheville-Anderson (#38)</fullName>
+                <default>false</default>
+                <label>Greenville-Spartanburg-Asheville-Anderson (#38)</label>
+            </value>
+            <value>
+                <fullName>Greenwood-Greenville (#194)</fullName>
+                <default>false</default>
+                <label>Greenwood-Greenville (#194)</label>
+            </value>
+            <value>
+                <fullName>Harlingen-Weslaco-Brownsville-McAllen (#83)</fullName>
+                <default>false</default>
+                <label>Harlingen-Weslaco-Brownsville-McAllen (#83)</label>
+            </value>
+            <value>
+                <fullName>Harrisburg-Lancaster-Lebanon-York (#47)</fullName>
+                <default>false</default>
+                <label>Harrisburg-Lancaster-Lebanon-York (#47)</label>
+            </value>
+            <value>
+                <fullName>Harrisonburg (#175)</fullName>
+                <default>false</default>
+                <label>Harrisonburg (#175)</label>
+            </value>
+            <value>
+                <fullName>Hartford &amp; New Haven (#33)</fullName>
+                <default>false</default>
+                <label>Hartford &amp; New Haven (#33)</label>
+            </value>
+            <value>
+                <fullName>Hattiesburg-Laurel (#167)</fullName>
+                <default>false</default>
+                <label>Hattiesburg-Laurel (#167)</label>
+            </value>
+            <value>
+                <fullName>Helena (#205)</fullName>
+                <default>false</default>
+                <label>Helena (#205)</label>
+            </value>
+            <value>
+                <fullName>Honolulu (#66)</fullName>
+                <default>false</default>
+                <label>Honolulu (#66)</label>
+            </value>
+            <value>
+                <fullName>Houston (#8)</fullName>
+                <default>false</default>
+                <label>Houston (#8)</label>
+            </value>
+            <value>
+                <fullName>Huntsville-Decatur (Florence) (#78)</fullName>
+                <default>false</default>
+                <label>Huntsville-Decatur (Florence) (#78)</label>
+            </value>
+            <value>
+                <fullName>Idaho Falls-Pocatello (Jackson) (#162)</fullName>
+                <default>false</default>
+                <label>Idaho Falls-Pocatello (Jackson) (#162)</label>
+            </value>
+            <value>
+                <fullName>Indianapolis (#25)</fullName>
+                <default>false</default>
+                <label>Indianapolis (#25)</label>
+            </value>
+            <value>
+                <fullName>Jackson, MS (#95)</fullName>
+                <default>false</default>
+                <label>Jackson, MS (#95)</label>
+            </value>
+            <value>
+                <fullName>Jackson, TN (#176)</fullName>
+                <default>false</default>
+                <label>Jackson, TN (#176)</label>
+            </value>
+            <value>
+                <fullName>Jacksonville (#41)</fullName>
+                <default>false</default>
+                <label>Jacksonville (#41)</label>
+            </value>
+            <value>
+                <fullName>Johnstown-Altoona-State College (#106)</fullName>
+                <default>false</default>
+                <label>Johnstown-Altoona-State College (#106)</label>
+            </value>
+            <value>
+                <fullName>Jonesboro (#183)</fullName>
+                <default>false</default>
+                <label>Jonesboro (#183)</label>
+            </value>
+            <value>
+                <fullName>Joplin-Pittsburg (#153)</fullName>
+                <default>false</default>
+                <label>Joplin-Pittsburg (#153)</label>
+            </value>
+            <value>
+                <fullName>Juneau (#207)</fullName>
+                <default>false</default>
+                <label>Juneau (#207)</label>
+            </value>
+            <value>
+                <fullName>Kansas City (#32)</fullName>
+                <default>false</default>
+                <label>Kansas City (#32)</label>
+            </value>
+            <value>
+                <fullName>Knoxville (#61)</fullName>
+                <default>false</default>
+                <label>Knoxville (#61)</label>
+            </value>
+            <value>
+                <fullName>La Crosse-Eau Claire (#129)</fullName>
+                <default>false</default>
+                <label>La Crosse-Eau Claire (#129)</label>
+            </value>
+            <value>
+                <fullName>Lafayette, IN (#187)</fullName>
+                <default>false</default>
+                <label>Lafayette, IN (#187)</label>
+            </value>
+            <value>
+                <fullName>Lafayette, LA (#123)</fullName>
+                <default>false</default>
+                <label>Lafayette, LA (#123)</label>
+            </value>
+            <value>
+                <fullName>Lake Charles (#170)</fullName>
+                <default>false</default>
+                <label>Lake Charles (#170)</label>
+            </value>
+            <value>
+                <fullName>Lansing (#112)</fullName>
+                <default>false</default>
+                <label>Lansing (#112)</label>
+            </value>
+            <value>
+                <fullName>Laredo (#184)</fullName>
+                <default>false</default>
+                <label>Laredo (#184)</label>
+            </value>
+            <value>
+                <fullName>Las Vegas (#39)</fullName>
+                <default>false</default>
+                <label>Las Vegas (#39)</label>
+            </value>
+            <value>
+                <fullName>Lexington (#64)</fullName>
+                <default>false</default>
+                <label>Lexington (#64)</label>
+            </value>
+            <value>
+                <fullName>Lima (#189)</fullName>
+                <default>false</default>
+                <label>Lima (#189)</label>
+            </value>
+            <value>
+                <fullName>Lincoln &amp; Hastings-Kearney (#107)</fullName>
+                <default>false</default>
+                <label>Lincoln &amp; Hastings-Kearney (#107)</label>
+            </value>
+            <value>
+                <fullName>Little Rock-Pine Bluff (#62)</fullName>
+                <default>false</default>
+                <label>Little Rock-Pine Bluff (#62)</label>
+            </value>
+            <value>
+                <fullName>Los Angeles (#2)</fullName>
+                <default>false</default>
+                <label>Los Angeles (#2)</label>
+            </value>
+            <value>
+                <fullName>Louisville (#48)</fullName>
+                <default>false</default>
+                <label>Louisville (#48)</label>
+            </value>
+            <value>
+                <fullName>Lubbock (#142)</fullName>
+                <default>false</default>
+                <label>Lubbock (#142)</label>
+            </value>
+            <value>
+                <fullName>Macon (#119)</fullName>
+                <default>false</default>
+                <label>Macon (#119)</label>
+            </value>
+            <value>
+                <fullName>Madison (#81)</fullName>
+                <default>false</default>
+                <label>Madison (#81)</label>
+            </value>
+            <value>
+                <fullName>Mankato (#198)</fullName>
+                <default>false</default>
+                <label>Mankato (#198)</label>
+            </value>
+            <value>
+                <fullName>Marquette (#180)</fullName>
+                <default>false</default>
+                <label>Marquette (#180)</label>
+            </value>
+            <value>
+                <fullName>Medford-Klamath Falls (#135)</fullName>
+                <default>false</default>
+                <label>Medford-Klamath Falls (#135)</label>
+            </value>
+            <value>
+                <fullName>Memphis (#51)</fullName>
+                <default>false</default>
+                <label>Memphis (#51)</label>
+            </value>
+            <value>
+                <fullName>Meridian (#190)</fullName>
+                <default>false</default>
+                <label>Meridian (#190)</label>
+            </value>
+            <value>
+                <fullName>Miami-Fort Lauderdale (#16)</fullName>
+                <default>false</default>
+                <label>Miami-Fort Lauderdale (#16)</label>
+            </value>
+            <value>
+                <fullName>Milwaukee (#35)</fullName>
+                <default>false</default>
+                <label>Milwaukee (#35)</label>
+            </value>
+            <value>
+                <fullName>Minneapolis-St. Paul (#15)</fullName>
+                <default>false</default>
+                <label>Minneapolis-St. Paul (#15)</label>
+            </value>
+            <value>
+                <fullName>Minot-Bismarck-Dickinson (Williston) (#146)</fullName>
+                <default>false</default>
+                <label>Minot-Bismarck-Dickinson (Williston) (#146)</label>
+            </value>
+            <value>
+                <fullName>Missoula (#163)</fullName>
+                <default>false</default>
+                <label>Missoula (#163)</label>
+            </value>
+            <value>
+                <fullName>Mobile-Pensacola (Navarre) (#57)</fullName>
+                <default>false</default>
+                <label>Mobile-Pensacola (Navarre) (#57)</label>
+            </value>
+            <value>
+                <fullName>Monroe-El Dorado (#140)</fullName>
+                <default>false</default>
+                <label>Monroe-El Dorado (#140)</label>
+            </value>
+            <value>
+                <fullName>Monterey-Salinas (#124)</fullName>
+                <default>false</default>
+                <label>Monterey-Salinas (#124)</label>
+            </value>
+            <value>
+                <fullName>Montgomery-Selma (#122)</fullName>
+                <default>false</default>
+                <label>Montgomery-Selma (#122)</label>
+            </value>
+            <value>
+                <fullName>Myrtle Beach-Florence (#97)</fullName>
+                <default>false</default>
+                <label>Myrtle Beach-Florence (#97)</label>
+            </value>
+            <value>
+                <fullName>Nashville (#28)</fullName>
+                <default>false</default>
+                <label>Nashville (#28)</label>
+            </value>
+            <value>
+                <fullName>New Orleans (#50)</fullName>
+                <default>false</default>
+                <label>New Orleans (#50)</label>
+            </value>
+            <value>
+                <fullName>New York (#1)</fullName>
+                <default>false</default>
+                <label>New York (#1)</label>
+            </value>
+            <value>
+                <fullName>Norfolk-Portsmouth-Newport News (#42)</fullName>
+                <default>false</default>
+                <label>Norfolk-Portsmouth-Newport News (#42)</label>
+            </value>
+            <value>
+                <fullName>North Platte (#209)</fullName>
+                <default>false</default>
+                <label>North Platte (#209)</label>
+            </value>
+            <value>
+                <fullName>Odessa-Midland (#145)</fullName>
+                <default>false</default>
+                <label>Odessa-Midland (#145)</label>
+            </value>
+            <value>
+                <fullName>Oklahoma City (#43)</fullName>
+                <default>false</default>
+                <label>Oklahoma City (#43)</label>
+            </value>
+            <value>
+                <fullName>Omaha (#71)</fullName>
+                <default>false</default>
+                <label>Omaha (#71)</label>
+            </value>
+            <value>
+                <fullName>Orlando-Daytona Beach-Melbourne (#18)</fullName>
+                <default>false</default>
+                <label>Orlando-Daytona Beach-Melbourne (#18)</label>
+            </value>
+            <value>
+                <fullName>Ottumwa-Kirksville (#201)</fullName>
+                <default>false</default>
+                <label>Ottumwa-Kirksville (#201)</label>
+            </value>
+            <value>
+                <fullName>Paducah-Cape Girardeau-Harrisburg (#84)</fullName>
+                <default>false</default>
+                <label>Paducah-Cape Girardeau-Harrisburg (#84)</label>
+            </value>
+            <value>
+                <fullName>Palm Springs (#141)</fullName>
+                <default>false</default>
+                <label>Palm Springs (#141)</label>
+            </value>
+            <value>
+                <fullName>Panama City (#149)</fullName>
+                <default>false</default>
+                <label>Panama City (#149)</label>
+            </value>
+            <value>
+                <fullName>Parkersburg (#193)</fullName>
+                <default>false</default>
+                <label>Parkersburg (#193)</label>
+            </value>
+            <value>
+                <fullName>Peoria-Bloomington (#120)</fullName>
+                <default>false</default>
+                <label>Peoria-Bloomington (#120)</label>
+            </value>
+            <value>
+                <fullName>Philadelphia (#4)</fullName>
+                <default>false</default>
+                <label>Philadelphia (#4)</label>
+            </value>
+            <value>
+                <fullName>Phoenix (Prescott) (#11)</fullName>
+                <default>false</default>
+                <label>Phoenix (Prescott) (#11)</label>
+            </value>
+            <value>
+                <fullName>Pittsburgh (#24)</fullName>
+                <default>false</default>
+                <label>Pittsburgh (#24)</label>
+            </value>
+            <value>
+                <fullName>Portland, OR (#22)</fullName>
+                <default>false</default>
+                <label>Portland, OR (#22)</label>
+            </value>
+            <value>
+                <fullName>Portland-Auburn (#79)</fullName>
+                <default>false</default>
+                <label>Portland-Auburn (#79)</label>
+            </value>
+            <value>
+                <fullName>Presque Isle (#206)</fullName>
+                <default>false</default>
+                <label>Presque Isle (#206)</label>
+            </value>
+            <value>
+                <fullName>Providence-New Bedford (#56)</fullName>
+                <default>false</default>
+                <label>Providence-New Bedford (#56)</label>
+            </value>
+            <value>
+                <fullName>Quincy-Hannibal-Keokuk (#174)</fullName>
+                <default>false</default>
+                <label>Quincy-Hannibal-Keokuk (#174)</label>
+            </value>
+            <value>
+                <fullName>Raleigh-Durham (Fayetteville) (#27)</fullName>
+                <default>false</default>
+                <label>Raleigh-Durham (Fayetteville) (#27)</label>
+            </value>
+            <value>
+                <fullName>Rapid City (#169)</fullName>
+                <default>false</default>
+                <label>Rapid City (#169)</label>
+            </value>
+            <value>
+                <fullName>Reno (#104)</fullName>
+                <default>false</default>
+                <label>Reno (#104)</label>
+            </value>
+            <value>
+                <fullName>Richmond-Petersburg (#54)</fullName>
+                <default>false</default>
+                <label>Richmond-Petersburg (#54)</label>
+            </value>
+            <value>
+                <fullName>Roanoke-Lynchburg (#69)</fullName>
+                <default>false</default>
+                <label>Roanoke-Lynchburg (#69)</label>
+            </value>
+            <value>
+                <fullName>Rochester, NY (#76)</fullName>
+                <default>false</default>
+                <label>Rochester, NY (#76)</label>
+            </value>
+            <value>
+                <fullName>Rochester-Mason City-Austin (#150)</fullName>
+                <default>false</default>
+                <label>Rochester-Mason City-Austin (#150)</label>
+            </value>
+            <value>
+                <fullName>Rockford (#138)</fullName>
+                <default>false</default>
+                <label>Rockford (#138)</label>
+            </value>
+            <value>
+                <fullName>Sacramento-Stockton-Modesto (#20)</fullName>
+                <default>false</default>
+                <label>Sacramento-Stockton-Modesto (#20)</label>
+            </value>
+            <value>
+                <fullName>Salisbury (#136)</fullName>
+                <default>false</default>
+                <label>Salisbury (#136)</label>
+            </value>
+            <value>
+                <fullName>Salt Lake City (#30)</fullName>
+                <default>false</default>
+                <label>Salt Lake City (#30)</label>
+            </value>
+            <value>
+                <fullName>San Angelo (#195)</fullName>
+                <default>false</default>
+                <label>San Angelo (#195)</label>
+            </value>
+            <value>
+                <fullName>San Antonio (#31)</fullName>
+                <default>false</default>
+                <label>San Antonio (#31)</label>
+            </value>
+            <value>
+                <fullName>San Diego (#29)</fullName>
+                <default>false</default>
+                <label>San Diego (#29)</label>
+            </value>
+            <value>
+                <fullName>San Francisco-Oakland-San Jose (#6)</fullName>
+                <default>false</default>
+                <label>San Francisco-Oakland-San Jose (#6)</label>
+            </value>
+            <value>
+                <fullName>Santa Barbara-Santa Maria-San Luis Obispo (#126)</fullName>
+                <default>false</default>
+                <label>Santa Barbara-Santa Maria-San Luis Obispo (#126)</label>
+            </value>
+            <value>
+                <fullName>Savannah (#89)</fullName>
+                <default>false</default>
+                <label>Savannah (#89)</label>
+            </value>
+            <value>
+                <fullName>Seattle-Tacoma (#13)</fullName>
+                <default>false</default>
+                <label>Seattle-Tacoma (#13)</label>
+            </value>
+            <value>
+                <fullName>Sherman-Ada (#158)</fullName>
+                <default>false</default>
+                <label>Sherman-Ada (#158)</label>
+            </value>
+            <value>
+                <fullName>Shreveport-Texarkana (#86)</fullName>
+                <default>false</default>
+                <label>Shreveport-Texarkana (#86)</label>
+            </value>
+            <value>
+                <fullName>Sioux City (#148)</fullName>
+                <default>false</default>
+                <label>Sioux City (#148)</label>
+            </value>
+            <value>
+                <fullName>Sioux Falls (Mitchell) (#113)</fullName>
+                <default>false</default>
+                <label>Sioux Falls (Mitchell) (#113)</label>
+            </value>
+            <value>
+                <fullName>South Bend-Elkhart (#98)</fullName>
+                <default>false</default>
+                <label>South Bend-Elkhart (#98)</label>
+            </value>
+            <value>
+                <fullName>Spokane (#70)</fullName>
+                <default>false</default>
+                <label>Spokane (#70)</label>
+            </value>
+            <value>
+                <fullName>Springfield, MO (#73)</fullName>
+                <default>false</default>
+                <label>Springfield, MO (#73)</label>
+            </value>
+            <value>
+                <fullName>Springfield-Holyoke (#111)</fullName>
+                <default>false</default>
+                <label>Springfield-Holyoke (#111)</label>
+            </value>
+            <value>
+                <fullName>St. Joseph (#200)</fullName>
+                <default>false</default>
+                <label>St. Joseph (#200)</label>
+            </value>
+            <value>
+                <fullName>St. Louis (#23)</fullName>
+                <default>false</default>
+                <label>St. Louis (#23)</label>
+            </value>
+            <value>
+                <fullName>Syracuse (#87)</fullName>
+                <default>false</default>
+                <label>Syracuse (#87)</label>
+            </value>
+            <value>
+                <fullName>Tallahassee-Thomasville (#109)</fullName>
+                <default>false</default>
+                <label>Tallahassee-Thomasville (#109)</label>
+            </value>
+            <value>
+                <fullName>Tampa-St. Petersburg (Sarasota) (#12)</fullName>
+                <default>false</default>
+                <label>Tampa-St. Petersburg (Sarasota) (#12)</label>
+            </value>
+            <value>
+                <fullName>Terre Haute (#160)</fullName>
+                <default>false</default>
+                <label>Terre Haute (#160)</label>
+            </value>
+            <value>
+                <fullName>Toledo (#80)</fullName>
+                <default>false</default>
+                <label>Toledo (#80)</label>
+            </value>
+            <value>
+                <fullName>Topeka (#144)</fullName>
+                <default>false</default>
+                <label>Topeka (#144)</label>
+            </value>
+            <value>
+                <fullName>Traverse City-Cadillac (#121)</fullName>
+                <default>false</default>
+                <label>Traverse City-Cadillac (#121)</label>
+            </value>
+            <value>
+                <fullName>Tri-Cities, TN-VA (#99)</fullName>
+                <default>false</default>
+                <label>Tri-Cities, TN-VA (#99)</label>
+            </value>
+            <value>
+                <fullName>Tucson (Sierra Vista) (#65)</fullName>
+                <default>false</default>
+                <label>Tucson (Sierra Vista) (#65)</label>
+            </value>
+            <value>
+                <fullName>Tulsa (#58)</fullName>
+                <default>false</default>
+                <label>Tulsa (#58)</label>
+            </value>
+            <value>
+                <fullName>Twin Falls (#191)</fullName>
+                <default>false</default>
+                <label>Twin Falls (#191)</label>
+            </value>
+            <value>
+                <fullName>Tyler-Longview (Lufkin &amp; Nacogdoches) (#114)</fullName>
+                <default>false</default>
+                <label>Tyler-Longview (Lufkin &amp; Nacogdoches) (#114)</label>
+            </value>
+            <value>
+                <fullName>Utica (#172)</fullName>
+                <default>false</default>
+                <label>Utica (#172)</label>
+            </value>
+            <value>
+                <fullName>Victoria (#202)</fullName>
+                <default>false</default>
+                <label>Victoria (#202)</label>
+            </value>
+            <value>
+                <fullName>Waco-Temple-Bryan (#82)</fullName>
+                <default>false</default>
+                <label>Waco-Temple-Bryan (#82)</label>
+            </value>
+            <value>
+                <fullName>Washington, D.C. (Hagerstown) (#7)</fullName>
+                <default>false</default>
+                <label>Washington, D.C. (Hagerstown) (#7)</label>
+            </value>
+            <value>
+                <fullName>Watertown (#181)</fullName>
+                <default>false</default>
+                <label>Watertown (#181)</label>
+            </value>
+            <value>
+                <fullName>Wausau-Rhinelander (#134)</fullName>
+                <default>false</default>
+                <label>Wausau-Rhinelander (#134)</label>
+            </value>
+            <value>
+                <fullName>West Palm Beach-Fort Pierce (#36)</fullName>
+                <default>false</default>
+                <label>West Palm Beach-Fort Pierce (#36)</label>
+            </value>
+            <value>
+                <fullName>Wheeling-Steubenville (#157)</fullName>
+                <default>false</default>
+                <label>Wheeling-Steubenville (#157)</label>
+            </value>
+            <value>
+                <fullName>Wichita Falls &amp; Lawton (#147)</fullName>
+                <default>false</default>
+                <label>Wichita Falls &amp; Lawton (#147)</label>
+            </value>
+            <value>
+                <fullName>Wichita-Hutchinson Plus (#72)</fullName>
+                <default>false</default>
+                <label>Wichita-Hutchinson Plus (#72)</label>
+            </value>
+            <value>
+                <fullName>Wilkes Barre-Scranton-Hazleton (#60)</fullName>
+                <default>false</default>
+                <label>Wilkes Barre-Scranton-Hazleton (#60)</label>
+            </value>
+            <value>
+                <fullName>Wilmington (#127)</fullName>
+                <default>false</default>
+                <label>Wilmington (#127)</label>
+            </value>
+            <value>
+                <fullName>Yakima-Pasco-Richland-Kennewick (#118)</fullName>
+                <default>false</default>
+                <label>Yakima-Pasco-Richland-Kennewick (#118)</label>
+            </value>
+            <value>
+                <fullName>Youngstown (#115)</fullName>
+                <default>false</default>
+                <label>Youngstown (#115)</label>
+            </value>
+            <value>
+                <fullName>Yuma-El Centro (#165)</fullName>
+                <default>false</default>
+                <label>Yuma-El Centro (#165)</label>
+            </value>
+            <value>
+                <fullName>Zanesville (#204)</fullName>
+                <default>false</default>
+                <label>Zanesville (#204)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>10</visibleLines>
+</CustomField>

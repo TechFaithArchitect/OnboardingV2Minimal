@@ -1,0 +1,247 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <template if:true={isLoading}>
+        <lightning-spinner size="small"></lightning-spinner>
+      </template>
+
+      <template if:false={isLoading}>
+        <!-- Search View -->
+        <template if:true={isSearchView}>
+          <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+              </div>
+              <div class="slds-media__body">
+                <p class="slds-text-body_small slds-m-bottom_none">
+                  <strong>Option 1:</strong> Select an existing Onboarding Requirement Set to reuse its templates and requirements.
+                  <strong>Option 2:</strong> Skip and create new requirements directly using templates.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <lightning-input
+            label="Search Requirement Set"
+            value={searchText}
+            onchange={handleSearchChange}
+            placeholder="Enter requirement set name">
+          </lightning-input>
+
+          <lightning-button 
+            label="Search" 
+            onclick={searchRequirementSets} 
+            class="slds-m-top_small">
+          </lightning-button>
+
+          <template if:true={requirementSets.length}>
+            <p class="slds-m-top_medium">Select an existing requirement set:</p>
+            <lightning-radio-group
+              options={requirementSetOptions}
+              value={selectedRequirementSetId}
+              type="radio"
+              onchange={handleRequirementSetSelect}
+              class="slds-m-top_small">
+            </lightning-radio-group>
+
+            <lightning-button 
+              variant="brand" 
+              label="Select and Continue" 
+              onclick={handleSelectAndContinue}
+              disabled={nextDisabled}
+              class="slds-m-top_medium">
+            </lightning-button>
+          </template>
+
+          <!-- Show currently selected requirement set if navigating back -->
+          <template if:true={hasSelectedRequirementSetFromContext}>
+            <div class="slds-box slds-theme_info slds-m-top_medium" style="padding: 0.75rem;">
+              <p class="slds-text-heading_small slds-m-bottom_small">Currently Selected Requirement Set:</p>
+              <p class="slds-text-body_regular"><strong>Name:</strong> {selectedRequirementSet.Name}</p>
+              <p class="slds-text-body_regular"><strong>Status:</strong> {selectedRequirementSet.Status__c}</p>
+              <p class="slds-text-body_small slds-m-top_small slds-text-color_weak">
+                This requirement set was selected in a previous step. You can continue with it or search for a different one.
+              </p>
+              <lightning-button 
+                variant="brand" 
+                label="Continue with Selected Set" 
+                onclick={handleSelectAndContinue}
+                class="slds-m-top_small">
+              </lightning-button>
+            </div>
+          </template>
+
+          <div class="slds-m-top_large">
+            <lightning-button 
+              variant="neutral" 
+              label="Skip - Create New Requirements" 
+              onclick={handleSkipToCreateRequirements}
+              class="slds-m-top_small">
+            </lightning-button>
+          </div>
+        </template>
+
+        <!-- Confirm View -->
+        <template if:true={isConfirmView}>
+          <div class="slds-box slds-theme_success slds-m-bottom_small" style="padding: 0.75rem;">
+            <p class="slds-text-heading_small slds-m-bottom_small">Selected Requirement Set</p>
+            <p class="slds-text-body_regular"><strong>Name:</strong> {selectedRequirementSet.Name}</p>
+            <p class="slds-text-body_regular"><strong>Status:</strong> {selectedRequirementSet.Status__c}</p>
+          </div>
+
+          <template if:true={hasTemplates}>
+            <p class="slds-text-heading_small slds-m-top_medium">Templates in this Requirement Set:</p>
+            <lightning-datatable
+              key-field="Id"
+              data={templates}
+              columns={templateColumns}
+              hide-checkbox-column>
+            </lightning-datatable>
+          </template>
+
+          <template if:false={hasTemplates}>
+            <div class="slds-box slds-theme_warning slds-m-top_medium" style="padding: 0.75rem;">
+              <p class="slds-text-body_small">This Requirement Set has no templates yet.</p>
+            </div>
+          </template>
+
+          <div class="slds-m-top_medium">
+            <lightning-button 
+              variant="brand" 
+              label="Confirm Selection" 
+              onclick={handleConfirmSelection}
+              class="slds-m-right_small">
+            </lightning-button>
+            <lightning-button 
+              variant="neutral" 
+              label="Make Changes (Create New Set)" 
+              onclick={handleMakeChanges}>
+            </lightning-button>
+          </div>
+        </template>
+
+        <!-- Create Requirements View -->
+        <template if:true={isCreateRequirementsView}>
+          <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+              </div>
+              <div class="slds-media__body">
+                <p class="slds-text-body_small slds-m-bottom_none">
+                  Create Requirement Templates and then create Vendor Program Requirements from them. 
+                  You can create templates inline without leaving this screen.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inline Template Creation -->
+          <div class="slds-m-bottom_medium">
+            <lightning-button 
+              variant="neutral" 
+              label={templateFormButtonLabel} 
+              onclick={toggleTemplateForm}
+              class="slds-m-bottom_small">
+            </lightning-button>
+
+            <template if:true={showTemplateForm}>
+              <div class="slds-box slds-theme_shade slds-m-bottom_small" style="padding: 0.75rem;">
+                <lightning-input 
+                  label="Requirement Label" 
+                  name="Requirement_Label__c"
+                  value={newTemplate.Requirement_Label__c} 
+                  onchange={handleTemplateFieldChange}
+                  placeholder="e.g., Business License, W9 Tax Form"
+                  required
+                  class="slds-m-bottom_small">
+                </lightning-input>
+
+                <lightning-combobox
+                  label="Requirement Type"
+                  name="Requirement_Type__c"
+                  value={newTemplate.Requirement_Type__c}
+                  options={requirementTypeOptions}
+                  onchange={handleTemplateFieldChange}
+                  class="slds-m-bottom_small"
+                  required>
+                </lightning-combobox>
+
+                <lightning-combobox
+                  label="Status"
+                  name="Status__c"
+                  value={newTemplate.Status__c}
+                  options={statusOptions}
+                  onchange={handleTemplateFieldChange}
+                  class="slds-m-bottom_small"
+                  required>
+                </lightning-combobox>
+
+                <lightning-input
+                  type="checkbox"
+                  label="Is Current Version"
+                  name="Is_Current_Version__c"
+                  checked={newTemplate.Is_Current_Version__c}
+                  onchange={handleTemplateFieldChange}
+                  class="slds-m-bottom_small">
+                </lightning-input>
+
+                <lightning-button 
+                  label="Create Template" 
+                  onclick={createTemplate} 
+                  variant="brand"
+                  class="slds-m-top_small">
+                </lightning-button>
+              </div>
+            </template>
+          </div>
+
+          <!-- Templates List -->
+          <template if:true={hasTemplates}>
+            <p class="slds-text-heading_small slds-m-top_medium">Available Templates:</p>
+            <lightning-datatable
+              key-field="Id"
+              data={templatesWithCreatedStatus}
+              columns={templateColumns}
+              onrowaction={handleTemplateRowAction}
+              hide-checkbox-column>
+            </lightning-datatable>
+          </template>
+
+          <template if:false={hasTemplates}>
+            <div class="slds-box slds-theme_warning slds-m-top_medium" style="padding: 0.75rem;">
+              <p class="slds-text-body_small">No templates yet. Create your first template above.</p>
+            </div>
+          </template>
+
+          <!-- Created Requirements List -->
+          <template if:true={hasCreatedRequirements}>
+            <p class="slds-text-heading_small slds-m-top_large">Created Requirements:</p>
+            <lightning-datatable
+              key-field="Id"
+              data={createdRequirements}
+              columns={createdRequirementsColumns}
+              hide-checkbox-column>
+            </lightning-datatable>
+          </template>
+
+          <div class="slds-m-top_large">
+            <lightning-button 
+              variant="brand" 
+              label="Confirm All Requirements Created" 
+              onclick={handleConfirmRequirementsCreated}
+              disabled={isConfirmButtonDisabled}>
+            </lightning-button>
+          </div>
+        </template>
+      </template>
+
+      <!-- Navigation -->
+      <div class="slds-m-top_medium">
+        <lightning-button label="Back" onclick={handleBack}></lightning-button>
+      </div>
+    </div>
+  </lightning-card>
+</template>
+

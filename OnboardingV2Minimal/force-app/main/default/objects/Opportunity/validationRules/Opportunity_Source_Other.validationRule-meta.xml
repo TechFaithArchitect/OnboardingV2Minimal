@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Source_Other</fullName>
+    <active>false</active>
+    <description>Rule for when the opportunity source value is &quot;other&quot; the opp source details will be required.</description>
+    <errorConditionFormula>AND(
+ISPICKVAL(Opportunity__c ,&quot;Other&quot;),
+ISBLANK(If_Other_What_Source__c))</errorConditionFormula>
+    <errorDisplayField>If_Other_What_Source__c</errorDisplayField>
+    <errorMessage>Opp Source Details must be provided in order to save the record.</errorMessage>
+</ValidationRule>

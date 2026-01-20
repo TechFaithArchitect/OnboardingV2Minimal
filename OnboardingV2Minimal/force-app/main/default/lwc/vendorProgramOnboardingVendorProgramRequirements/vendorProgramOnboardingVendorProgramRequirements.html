@@ -1,0 +1,368 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <template if:true={isLoading}>
+        <lightning-spinner size="small" alternative-text="Loading"></lightning-spinner>
+      </template>
+
+      <template if:false={isLoading}>
+        <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-body_small slds-m-bottom_x-small">
+                <strong>What happens on this step?</strong> You're creating the actual Vendor Program Requirements (instances) for this Vendor Program, based on the Requirement Templates you set up in Step 5.
+              </p>
+              <p class="slds-text-body_small slds-m-bottom_x-small">
+                <strong>📋 What's the difference?</strong>
+              </p>
+              <ul class="slds-list_dotted slds-text-body_small slds-m-bottom_none">
+                <li><strong>Step 5:</strong> You created Requirement Templates (reusable definitions like "Business License", "W9 Form")</li>
+                <li><strong>Step 6:</strong> You're now creating the actual Requirement for THIS Vendor Program (think: Template = Recipe, Requirement = The actual dish you're serving)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Requirement Group Selection -->
+        <div class="group-selection-box">
+          <template if:true={isLoadingGroups}>
+            <div class="slds-align_absolute-center slds-p-around_small">
+              <lightning-spinner alternative-text="Loading groups..." size="small"></lightning-spinner>
+            </div>
+          </template>
+          <template if:false={isLoadingGroups}>
+            <h3 class="slds-text-heading_small slds-m-bottom_small">
+              <lightning-icon icon-name="utility:groups" size="x-small" alternative-text="Group"></lightning-icon>
+              Requirement Group Selection
+            </h3>
+            <lightning-combobox
+              label="Select Requirement Group (required)"
+              value={selectedGroupId}
+              options={requirementGroupOptions}
+              onchange={handleRequirementGroupSelect}
+              placeholder="Select a group..."
+              class="slds-m-bottom_small"
+              required>
+            </lightning-combobox>
+            
+            <template if:false={hasRequirementGroups}>
+              <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+                No Requirement Groups available. Create a new one below.
+              </p>
+            </template>
+            
+            <template if:true={hasRequirementGroups}>
+              <template if:false={hasSelectedGroup}>
+                <p class="slds-text-body_small slds-text-color_error slds-m-top_x-small">
+                  <lightning-icon icon-name="utility:error" size="xx-small" alternative-text="Error"></lightning-icon>
+                  <strong>Required:</strong> Please select a Requirement Group to continue.
+                </p>
+              </template>
+            </template>
+            
+            <template if:true={isGroupFromStep5}>
+              <div class="slds-box slds-theme_success slds-m-top_small" style="padding: 0.5rem;">
+                <p class="slds-text-body_small slds-m-bottom_none">
+                  <lightning-icon icon-name="utility:success" size="xx-small" alternative-text="Success"></lightning-icon>
+                  <strong>Using Requirement Group from Step 5:</strong> {selectedGroupName}
+                </p>
+              </div>
+            </template>
+            
+            <template if:true={hasSelectedGroup}>
+              <template if:false={isGroupFromStep5}>
+                <div class="slds-text-body_small slds-text-color_success slds-m-top_small">
+                  ✓ Requirement Group selected: <strong>{selectedGroupName}</strong>
+                </div>
+              </template>
+            </template>
+            
+            <!-- Create New Group Option -->
+            <div class="slds-m-top_medium">
+              <template if:false={showCreateGroupForm}>
+                <lightning-button
+                  variant="neutral"
+                  label="Create New Requirement Group"
+                  icon-name="utility:add"
+                  onclick={toggleCreateGroupForm}
+                  class="slds-m-bottom_small">
+                </lightning-button>
+              </template>
+              
+              <template if:true={showCreateGroupForm}>
+                <div class="slds-box slds-theme_shade slds-m-bottom_small" style="padding: 1rem;">
+                  <p class="slds-text-heading_small slds-m-bottom_small">Create New Requirement Group</p>
+                  
+                  <lightning-input
+                    label="Group Name"
+                    value={newGroupName}
+                    onchange={handleNewGroupNameChange}
+                    placeholder="e.g., Standard Documentation, Healthcare Requirements"
+                    required
+                    class="slds-m-bottom_small">
+                  </lightning-input>
+                  
+                  <lightning-combobox
+                    label="Status"
+                    value={newGroupStatus}
+                    options={groupStatusOptions}
+                    onchange={handleNewGroupStatusChange}
+                    required
+                    class="slds-m-bottom_small">
+                  </lightning-combobox>
+                  
+                  <div class="slds-m-top_small">
+                    <lightning-button
+                      variant="brand"
+                      label="Create Group"
+                      onclick={handleCreateGroup}
+                      disabled={isCreateGroupButtonDisabled}
+                      class="slds-m-right_small">
+                    </lightning-button>
+                    <lightning-button
+                      variant="neutral"
+                      label="Cancel"
+                      onclick={toggleCreateGroupForm}
+                      disabled={isCancelGroupButtonDisabled}>
+                    </lightning-button>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+
+        <!-- Bulk Create Requirements from Templates -->
+        <template if:true={hasSelectedGroup}>
+          <div class="bulk-create-section">
+            <h3>
+              <lightning-icon icon-name="utility:add" size="x-small" alternative-text="Create"></lightning-icon>
+              Create Requirements from Templates
+            </h3>
+            
+            <template if:true={isLoadingGroupData}>
+              <div class="slds-align_absolute-center slds-p-around_small">
+                <lightning-spinner alternative-text="Loading templates..." size="small"></lightning-spinner>
+              </div>
+            </template>
+            
+            <template if:false={isLoadingGroupData}>
+              <template if:true={hasTemplatesFromGroup}>
+                <p class="slds-text-body_small slds-m-bottom_small">
+                  Select the templates below to create requirements for this Vendor Program. Requirements will be created with the default settings you specify.
+                </p>
+                
+                <!-- Bulk Settings -->
+                <div class="settings-row">
+                  <div>
+                    <lightning-combobox
+                      label="Default Status for New Requirements"
+                      value={bulkCreateStatus}
+                      options={statusOptions}
+                      onchange={handleBulkStatusChange}
+                      class="slds-m-bottom_small">
+                    </lightning-combobox>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-left_small">
+                      Status applied to all newly created requirements.
+                    </p>
+                  </div>
+                  <div>
+                    <div class="slds-m-top_large">
+                      <lightning-input
+                        type="checkbox"
+                        label="Mark as Required (default)"
+                        checked={bulkCreateIsRequired}
+                        onchange={handleBulkIsRequiredChange}>
+                      </lightning-input>
+                    </div>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-left_small">
+                      All new requirements will be marked as required by default.
+                    </p>
+                  </div>
+                </div>
+                
+                <!-- Template Selection -->
+                <div class="dual-listbox-container">
+                  <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                    <div>
+                      <p class="slds-text-heading_small slds-m-bottom_none">Select Templates to Create Requirements</p>
+                      <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                        Move templates from "Available" to "Selected" to create requirements from them.
+                      </p>
+                    </div>
+                    <div class="slds-align-middle">
+                      <lightning-button
+                        variant="neutral"
+                        label="Select All"
+                        onclick={handleSelectAllTemplates}
+                        class="slds-m-right_x-small"
+                        size="small"
+                        icon-name="utility:chevronright">
+                      </lightning-button>
+                      <lightning-button
+                        variant="neutral"
+                        label="Deselect All"
+                        onclick={handleDeselectAllTemplates}
+                        size="small"
+                        icon-name="utility:chevronleft">
+                      </lightning-button>
+                    </div>
+                  </div>
+                  
+                  <lightning-dual-listbox
+                    name="templateSelection"
+                    label="Templates from Requirement Group"
+                    source-label="Available Templates"
+                    selected-label="Selected for Creation"
+                    options={templateOptions}
+                    value={selectedTemplateIds}
+                    onchange={handleTemplateSelectionChange}
+                    min="0">
+                  </lightning-dual-listbox>
+                  
+                  <template if:true={hasSelectedTemplates}>
+                    <p class="slds-text-body_small slds-text-color_success slds-m-top_small">
+                      <lightning-icon icon-name="utility:success" size="xx-small" alternative-text="Selected"></lightning-icon>
+                      <strong>{selectedTemplateIds.length} template(s)</strong> selected. Click "Create Requirements from Selected Templates" below.
+                    </p>
+                  </template>
+                </div>
+                
+                <!-- Create Button -->
+                <div class="slds-m-top_medium">
+                  <lightning-button
+                    variant="brand"
+                    label="Create Requirements from Selected Templates"
+                    onclick={handleBulkCreateRequirements}
+                    disabled={cannotCreateRequirements}
+                    class="slds-m-right_small">
+                  </lightning-button>
+                  <template if:true={cannotCreateRequirements}>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                      Please select at least one template to create requirements.
+                    </p>
+                  </template>
+                </div>
+              </template>
+              
+              <template if:false={hasTemplatesFromGroup}>
+                <div class="slds-box slds-theme_shade slds-m-top_small" style="padding: 1rem;">
+                  <p class="slds-text-body_small slds-text-color_weak slds-text-align_center">
+                    No templates found in this Requirement Group. Please go back to Step 5 and link templates to this group first.
+                  </p>
+                </div>
+              </template>
+            </template>
+          </div>
+        </template>
+
+        <!-- Summary Section (Existing or Created Requirements) -->
+        <template if:true={hasCreatedRequirements}>
+          <div class="full-width-section">
+            <div class="summary-box">
+              <div class="slds-media slds-media_center">
+                <div class="slds-media__figure">
+                  <lightning-icon icon-name="utility:check" size="small" alternative-text="Success" class="summary-icon"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                  <h2 class="summary-title slds-m-bottom_x-small">
+                    <template if:true={showSummary}>
+                      Requirements Created Successfully
+                    </template>
+                    <template if:false={showSummary}>
+                      Existing Requirements
+                    </template>
+                  </h2>
+                  <p class="summary-description slds-m-bottom_medium">
+                    <template if:true={showSummary}>
+                      <strong>{createdRequirements.length} requirement(s)</strong> are ready for this Vendor Program. Review the details below, reorder if needed, then click "Next" to continue.
+                    </template>
+                    <template if:false={showSummary}>
+                      <strong>{createdRequirements.length} existing requirement(s)</strong> found for this Vendor Program. You can create additional requirements above or manage existing ones below.
+                    </template>
+                  </p>
+                  
+                  <div class="stats-display">
+                    <div class="stat-item">
+                      <span class="stat-label">Total Requirements:</span>
+                      <span class="stat-value">{createdRequirements.length}</span>
+                    </div>
+                    <div class="stat-item">
+                      <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Ready"></lightning-icon>
+                      <span class="stat-label">Status:</span>
+                      <span class="stat-value">Ready to Proceed</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="slds-grid slds-wrap">
+              <div class="slds-col slds-size_1-of-1">
+                <div class="slds-scrollable_x requirements-table-wrapper">
+                  <lightning-datatable
+                    key-field="Id"
+                    data={formattedRequirements}
+                    columns={requirementsColumns}
+                    onsave={handleSequenceChange}
+                    onrowaction={handleRequirementRowAction}
+                    draft-values={emptyDraftValues}
+                    hide-checkbox-column
+                    show-row-number-column="false"
+                    resize-column-disabled="false"
+                    wrap-text-max-lines="3"
+                    min-column-width="70"
+                    max-column-width="none"
+                    column-widths-mode="auto">
+                  </lightning-datatable>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="requirements-help-text">
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col slds-size_1-of-2">
+                <p class="slds-text-body_small">
+                  <lightning-icon icon-name="utility:edit" size="xx-small" alternative-text="Edit"></lightning-icon>
+                  <strong>To reorder:</strong> Double-click the Sequence column to edit. Changes save automatically.
+                </p>
+              </div>
+              <div class="slds-col slds-size_1-of-2">
+                <p class="slds-text-body_small">
+                  <lightning-icon icon-name="utility:delete" size="xx-small" alternative-text="Delete"></lightning-icon>
+                  <strong>To delete:</strong> Use the row actions menu (three dots) on the right.
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Navigation buttons removed - handled by flow engine footer -->
+        <!-- Action status messages -->
+        <div class="action-buttons-container">
+          <div>
+            <template if:true={cannotProceed}>
+              <div class="slds-box slds-box_x-small slds-theme_warning" style="padding: 0.5rem;">
+                <p class="slds-text-body_small slds-text-color_error slds-m-bottom_none">
+                  <lightning-icon icon-name="utility:warning" size="xx-small" alternative-text="Warning"></lightning-icon>
+                  <strong>Action Required:</strong> Please create at least one requirement to continue.
+                </p>
+              </div>
+            </template>
+            <template if:false={cannotProceed}>
+              <p class="slds-text-body_small slds-text-color_success">
+                <lightning-icon icon-name="utility:success" size="xx-small" alternative-text="Ready"></lightning-icon>
+                <strong>Ready to proceed!</strong> All requirements are created.
+              </p>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

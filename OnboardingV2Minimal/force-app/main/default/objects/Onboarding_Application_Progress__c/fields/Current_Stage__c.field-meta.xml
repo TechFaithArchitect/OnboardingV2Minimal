@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Current_Stage__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Progress indicator</description>
+    <externalId>false</externalId>
+    <label>Current Stage</label>
+    <referenceTo>Onboarding_Application_Stage__c</referenceTo>
+    <relationshipLabel>Onboarding Application Progress</relationshipLabel>
+    <relationshipName>Onboarding_Application_Progress</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

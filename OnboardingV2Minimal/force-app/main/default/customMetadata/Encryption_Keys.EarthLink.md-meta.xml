@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>EarthLink</label>
+    <protected>false</protected>
+    <values>
+        <field>E__c</field>
+        <value xsi:type="xsd:double">4.0</value>
+    </values>
+    <values>
+        <field>K__c</field>
+        <value xsi:type="xsd:string">39F1EA874CD0AD538BDD7A1CAD2F56A9</value>
+    </values>
+    <values>
+        <field>L__c</field>
+        <value xsi:type="xsd:double">6.0</value>
+    </values>
+    <values>
+        <field>POE_Public_K__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>key_id__c</field>
+        <value xsi:type="xsd:string">fb867b0a</value>
+    </values>
+    <values>
+        <field>phase__c</field>
+        <value xsi:type="xsd:double">1.0</value>
+    </values>
+</CustomMetadata>

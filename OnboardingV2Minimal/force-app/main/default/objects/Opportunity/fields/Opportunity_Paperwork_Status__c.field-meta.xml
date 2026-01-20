@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Paperwork_Status__c</fullName>
+    <description>This is the paperwork status for the various program opportunities for an account.</description>
+    <externalId>false</externalId>
+    <label>Opportunity Paperwork Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Program_Type__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <default>true</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Account Setup</fullName>
+                <default>false</default>
+                <label>Account Setup</label>
+            </value>
+            <value>
+                <fullName>Approved by DIRECTV - Account Setup</fullName>
+                <default>false</default>
+                <label>Approved by DIRECTV - Account Setup</label>
+            </value>
+            <value>
+                <fullName>Approved By Sales</fullName>
+                <default>false</default>
+                <label>Approved By Sales</label>
+            </value>
+            <value>
+                <fullName>Awaiting Background Check</fullName>
+                <default>false</default>
+                <label>Awaiting Background Check</label>
+            </value>
+            <value>
+                <fullName>Awaiting Credit Check</fullName>
+                <default>false</default>
+                <label>Awaiting Credit Check</label>
+            </value>
+            <value>
+                <fullName>Background Complete</fullName>
+                <default>false</default>
+                <label>Background Complete</label>
+            </value>
+            <value>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+                <label>Canceled</label>
+            </value>
+            <value>
+                <fullName>Contract Sent</fullName>
+                <default>false</default>
+                <label>Contract Sent</label>
+            </value>
+            <value>
+                <fullName>Credit Check Complete</fullName>
+                <default>false</default>
+                <label>Credit Check Complete</label>
+            </value>
+            <value>
+                <fullName>Customer Canceled</fullName>
+                <default>false</default>
+                <label>Customer Canceled</label>
+            </value>
+            <value>
+                <fullName>Denied</fullName>
+                <default>false</default>
+                <label>Denied</label>
+            </value>
+            <value>
+                <fullName>Denied by CenturyLink</fullName>
+                <default>false</default>
+                <label>Denied by CenturyLink</label>
+            </value>
+            <value>
+                <fullName>Exede approved - Pending training</fullName>
+                <default>false</default>
+                <label>Viasat approved - Pending training</label>
+            </value>
+            <value>
+                <fullName>Exede Denied-Closed Beam</fullName>
+                <default>false</default>
+                <label>Viasat Denied-Closed Beam</label>
+            </value>
+            <value>
+                <fullName>Exede Denied-Incomplete 1</fullName>
+                <default>false</default>
+                <label>Viasat Denied-Incomplete 1</label>
+            </value>
+            <value>
+                <fullName>Exede Denied-Incomplete 2</fullName>
+                <default>false</default>
+                <label>Viasat Denied-Incomplete 2</label>
+            </value>
+            <value>
+                <fullName>Exede Denied-Incomplete 3 Back to Sales</fullName>
+                <default>false</default>
+                <label>Viasat Denied-Incomplete 3 Back to Sales</label>
+            </value>
+            <value>
+                <fullName>Exede training complete - Pending setup</fullName>
+                <default>false</default>
+                <label>Viasat training complete - Pending setup</label>
+            </value>
+            <value>
+                <fullName>Exede V2 Prep</fullName>
+                <default>false</default>
+                <label>Viasat V2 Prep</label>
+            </value>
+            <value>
+                <fullName>Expired</fullName>
+                <default>false</default>
+                <label>Expired</label>
+            </value>
+            <value>
+                <fullName>Final Setup</fullName>
+                <default>false</default>
+                <label>Final Setup</label>
+            </value>
+            <value>
+                <fullName>Incomplete</fullName>
+                <default>false</default>
+                <label>Incomplete</label>
+            </value>
+            <value>
+                <fullName>Incomplete - Attempt 1</fullName>
+                <default>false</default>
+                <label>Incomplete - Attempt 1</label>
+            </value>
+            <value>
+                <fullName>Incomplete - Attempt 2</fullName>
+                <default>false</default>
+                <label>Incomplete - Attempt 2</label>
+            </value>
+            <value>
+                <fullName>Incomplete - Attempt 3</fullName>
+                <default>false</default>
+                <label>Incomplete - Attempt 3</label>
+            </value>
+            <value>
+                <fullName>Incomplete - Attempt 3 - Back to Sales</fullName>
+                <default>false</default>
+                <label>Incomplete - Attempt 3 - Back to Sales</label>
+            </value>
+            <value>
+                <fullName>Incomplete - Attempt 4</fullName>
+                <default>false</default>
+                <label>Incomplete - Attempt 4</label>
+            </value>
+            <value>
+                <fullName>Incomplete - Attempt 5</fullName>
+                <default>false</default>
+                <label>Incomplete - Attempt 5</label>
+            </value>
+            <value>
+                <fullName>Incomplete Ongoing Attempt</fullName>
+                <default>false</default>
+                <label>Incomplete Ongoing Attempt</label>
+            </value>
+            <value>
+                <fullName>Paperwork Incomplete - See Notes</fullName>
+                <default>false</default>
+                <label>Paperwork Incomplete - See Notes</label>
+            </value>
+            <value>
+                <fullName>Paperwork Received - Not Reviewed</fullName>
+                <default>false</default>
+                <label>Paperwork Received - Not Reviewed</label>
+            </value>
+            <value>
+                <fullName>Paperwork Sent</fullName>
+                <default>false</default>
+                <label>Paperwork Sent</label>
+            </value>
+            <value>
+                <fullName>Partially Signed</fullName>
+                <default>false</default>
+                <label>Partially Signed</label>
+            </value>
+            <value>
+                <fullName>Pending</fullName>
+                <default>false</default>
+                <label>Pending</label>
+            </value>
+            <value>
+                <fullName>Pending AC  Initial Review</fullName>
+                <default>false</default>
+                <label>Pending AC Initial Review</label>
+            </value>
+            <value>
+                <fullName>Pending Approval By Sales</fullName>
+                <default>false</default>
+                <label>Pending Approval By Sales</label>
+            </value>
+            <value>
+                <fullName>Pending Approval from CenturyLink</fullName>
+                <default>false</default>
+                <label>Pending Approval from CenturyLink</label>
+            </value>
+            <value>
+                <fullName>Pending_UID</fullName>
+                <default>false</default>
+                <label>Pending UID</label>
+            </value>
+            <value>
+                <fullName>Pending Buydown Verification</fullName>
+                <default>false</default>
+                <label>Pending Buydown Verification</label>
+            </value>
+            <value>
+                <fullName>Pending CC Charge - A/R</fullName>
+                <default>false</default>
+                <label>Pending CC Charge - A/R</label>
+            </value>
+            <value>
+                <fullName>Pending Compliance</fullName>
+                <default>false</default>
+                <label>Pending Compliance</label>
+            </value>
+            <value>
+                <fullName>Pending Eligibility From DIRECTV</fullName>
+                <default>false</default>
+                <label>Pending Eligibility From DIRECTV</label>
+            </value>
+            <value>
+                <fullName>Pending Eligibility From Multiband</fullName>
+                <default>false</default>
+                <label>Pending Eligibility From Multiband</label>
+            </value>
+            <value>
+                <fullName>Pending Field Approval</fullName>
+                <default>false</default>
+                <label>Pending Field Approval</label>
+            </value>
+            <value>
+                <fullName>Pending Training</fullName>
+                <default>false</default>
+                <label>Pending Training</label>
+            </value>
+            <value>
+                <fullName>Request for Paperwork</fullName>
+                <default>false</default>
+                <label>Request for Paperwork</label>
+            </value>
+            <value>
+                <fullName>Request paperwork from Account Compliance</fullName>
+                <default>false</default>
+                <label>Request paperwork from Account Compliance</label>
+            </value>
+            <value>
+                <fullName>Setup Complete</fullName>
+                <default>false</default>
+                <label>Setup Complete</label>
+            </value>
+            <value>
+                <fullName>SME Setup</fullName>
+                <default>false</default>
+                <label>SME Setup</label>
+            </value>
+            <value>
+                <fullName>Status Pending System Setup</fullName>
+                <default>false</default>
+                <label>Status Pending System Setup</label>
+            </value>
+            <value>
+                <fullName>Submitted to Exede for approval</fullName>
+                <default>false</default>
+                <label>Submitted to Viasat for approval</label>
+            </value>
+            <value>
+                <fullName>Under Review</fullName>
+                <default>false</default>
+                <label>Under Review</label>
+            </value>
+            <value>
+                <fullName>Under Review - Net Terms</fullName>
+                <default>false</default>
+                <label>Under Review - Net Terms</label>
+            </value>
+            <value>
+                <fullName>Under Review - Resale Compliance</fullName>
+                <default>false</default>
+                <label>Under Review - Resale Compliance</label>
+            </value>
+            <value>
+                <fullName>Pending Dealer Code</fullName>
+                <default>false</default>
+                <label>Pending Dealer Code</label>
+            </value>
+            <value>
+                <fullName>Awaiting Training</fullName>
+                <default>false</default>
+                <label>Awaiting Training</label>
+            </value>
+            <value>
+                <fullName>Contract Executed</fullName>
+                <default>false</default>
+                <label>Contract Executed</label>
+            </value>
+            <value>
+                <fullName>Pending Approval by Sales / Pending Credit</fullName>
+                <default>false</default>
+                <label>Pending Approval by Sales / Pending Credit</label>
+            </value>
+            <value>
+                <fullName>Pending Approval by Sales / Credit Approved</fullName>
+                <default>false</default>
+                <label>Pending Approval by Sales / Credit Approved</label>
+            </value>
+            <value>
+                <fullName>Pending UID &amp; Background</fullName>
+                <default>false</default>
+                <label>Pending UID &amp; Background</label>
+            </value>
+            <value>
+                <fullName>Awaiting Cancellation of Existing UID</fullName>
+                <default>false</default>
+                <label>Awaiting Cancellation of Existing UID</label>
+            </value>
+            <value>
+                <fullName>Contract Sent / DLR Code Not Submitted</fullName>
+                <default>false</default>
+                <label>Contract Sent / DLR Code Not Submitted</label>
+            </value>
+            <value>
+                <fullName>Contract Sent / DLR Code Requested</fullName>
+                <default>false</default>
+                <label>Contract Sent / DLR Code Requested</label>
+            </value>
+            <value>
+                <fullName>Contract Received / Awaiting Review</fullName>
+                <default>false</default>
+                <label>Contract Received / Awaiting Review</label>
+            </value>
+            <value>
+                <fullName>Contract Received / DLR Code Not Submitted</fullName>
+                <default>false</default>
+                <label>Contract Received / DLR Code Not Submitted</label>
+            </value>
+            <value>
+                <fullName>Contract Received / DLR Code Requested</fullName>
+                <default>false</default>
+                <label>Contract Received / DLR Code Requested</label>
+            </value>
+            <value>
+                <fullName>Dealer Code Received / Pending Contract</fullName>
+                <default>false</default>
+                <label>Dealer Code Received / Pending Contract</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - Strategic SO</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>New</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Account Setup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Incomplete - Attempt 1</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Incomplete - Attempt 2</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Incomplete - Attempt 3 - Back to Sales</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Paperwork Sent</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Pending</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <valueName>Pending Eligibility From DIRECTV</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Request paperwork from Account Compliance</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <valueName>Under Review - Resale Compliance</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <valueName>Status Pending System Setup</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Canceled</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <valueName>Request for Paperwork</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

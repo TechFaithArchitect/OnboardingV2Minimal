@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DTV_LAST_STATUS_DATE__c</fullName>
+    <description>DIRECTV last status date</description>
+    <externalId>false</externalId>
+    <inlineHelpText>DIRECTV last status date</inlineHelpText>
+    <label>DTV Last Status Date</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

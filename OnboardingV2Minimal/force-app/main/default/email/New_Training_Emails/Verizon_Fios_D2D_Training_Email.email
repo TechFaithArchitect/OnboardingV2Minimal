@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        
+        <!-- Facebook sharing information tags -->
+        <meta property="og:title" content="%%subject%%">
+        
+        <title>%%subject%%</title>
+		<style type="text/css">
+	
+	body {font-family: arial} 
+		.articlelink a { font-family: Arial; color: darkblue; font-size: 12px; text-decoration: none;}
+	.articlelink a:hover {text-decoration: underline;}
+	
+	.footerlink a { font-family: Arial; color: white; font-size: 13px; text-decoration: none;}
+	.footerlink a:hover {text-decoration: underline;}
+	
+.title  {font-family:arial; font-size:22px; font-weight: bold; line-height: 22px; margin-bottom: 8px; color: #202020}
+	
+	.info { font-family:arial; font-size: 14px; font-weight: normal; line-height: 21px; color: #505050}
+	
+	.clickhere {font-family:arial;font-size: 12px; font-weight: normal; line-height: 16px; margin-top:16px}
+	
+	.tablebr {padding: 15px;}
+	
+	.headerbr {margin-top:0px}
+	.copyblock {margin-left: 15px}
+	
+
+	
+	#outlook a {
+              padding: 0;
+          }
+          .body{
+              width: 100% !important;
+              -webkit-text-size-adjust: 100%;
+              -ms-text-size-adjust: 100%;
+              margin: 0;
+              padding: 0;
+			  font-family: Arial;
+			  line-height: 18px;
+			  font-size: 13px;
+          }
+          .ExternalClass {
+              width:100%;
+          }
+          .ExternalClass,
+          .ExternalClass p,
+          .ExternalClass span,
+          .ExternalClass font,
+          .ExternalClass td,
+          .ExternalClass div {
+              line-height: 100%;
+          }
+          img {
+              outline: none;
+              text-decoration: none;
+              -ms-interpolation-mode: bicubic;
+          }
+          a img {
+              border: none;
+          }
+          p {
+              margin: 1em 0;
+          }
+       table td {
+              border-collapse: collapse;
+			   font-family: Arial;
+          }
+          /* hide unsubscribe from forwards*/
+          blockquote .original-only, .WordSection1 .original-only {
+            display: none !important;
+          }
+			h1 {line-height: 1.0}
+	h2 {color: #202020; font-size: 19px; line-height: 22px; font-family: Arial}
+	h4 {color: #202020;display: block;font-family: Arial;font-size: 25px;font-weight: bold;line-height: 1.3;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left;}
+	
+	</style>
+	
+	</head>
+    <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="-webkit-text-size-adjust: none;margin: 0;padding: 0;background-color: #FAFAFA;width: 100%;">
+<center>
+<table border="0" cellpadding="0" cellspacing="0" height="100%" id="backgroundTable" style="margin: 0;padding: 0;background-color: #FAFAFA;height: 100%;width: 100%;" width="100%">
+	<tbody>
+		<tr>
+			<td align="center" style="border-collapse: collapse;" valign="top"><!-- // Begin Template Preheader \ -->
+			<table border="0" cellpadding="10" cellspacing="0" id="templatePreheader" style="background-color: #FAFAFA;" width="600">
+				<tbody>
+					<tr>
+						<td class="preheaderContent" style="border-collapse: collapse;" valign="top"><!-- // Begin Module: Standard Preheader  -->
+						<table border="0" cellpadding="10" cellspacing="0" width="100%">
+							<tbody>
+								<tr>
+									<td style="border-collapse: collapse;" valign="top">&nbsp;</td>
+									<td style="border-collapse: collapse;" valign="top" width="190">&nbsp;</td>
+								</tr>
+							</tbody>
+						</table>
+						<!-- // End Module: Standard Preheader  --></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- // End Template Preheader \ -->
+
+			<table border="0" cellpadding="0" cellspacing="0" id="templateContainer" style="border: 1px solid #DDDDDD;background-color: #FFFFFF;" width="600">
+				<tbody>
+					<tr>
+						<td align="center" style="border-collapse: collapse;" valign="top"><!-- // Begin Template Header \ -->
+						<table border="0" cellpadding="0" cellspacing="0" id="templateHeader" style="background-color: #FFFFFF;border-bottom: 0;" width="600">
+							<tbody>
+								<tr style="">
+									<td class="headerContent" pardot-region="header_image" style="border-collapse: collapse;color: #202020;font-family: Arial; padding: 0;text-align: center;vertical-align: middle;"><!-- // Begin Module: Standard Header Image \ --><img alt="PerfectVision" border="0" height="101" src="https://perfectvoice.perfect-vision.com/eblasts/temp/verizon/images/Verizon-PV-bnr.jpg" style="width: 100%"> <!-- // End Module: Standard Header Image \ --></td>
+								</tr>
+							</tbody>
+						</table>
+						<table align="center" border="0" cellpadding="3" cellspacing="3" style="font-family: arial; font-size: 16px; line-height: 21px"  width="550">
+							<tbody>
+								<tr>
+									<td>
+<br />
+
+									<h4 style="text-align: center">You're Almost There!<br />
+Complete Required Training Below!</h4>
+									
+									 <p><strong>PerfectVision Account Number:  {!Account.P10_Invoice_Account__c}</strong><br />
+								      <strong>Contract  Number:&nbsp;{!Contract.ContractNumber}</strong></p>
+<p>You're just steps away from onboarding your dealership to sell Verizon  Fios products and services. Complete the required training to finalize your  setup.</p>
+<p>  <strong>Complete Your Training Via Workday</strong></p>
+<ul>
+  <li>Follow this link to create your S-PIN and  security questions: <a href=" https://ilogin.verizon.com/manageaccount/VerifyUserController ">Verizon Fios PIN Setup</a>&nbsp; </li>
+  <li>Once completed, follow this link to create your  password and select the second option (ADEBP): <a href="https://ilogin.verizon.com/manageaccount/VerifyUserController ">Verizon Fios Password Creation</a>&nbsp; </li>
+  <li>Begin your training here: <a href="https://wd12.myworkday.com/verizon/learning">WorkDay Dashboard</a>&nbsp; </li>
+  <ul>
+    <li>Type <strong>VZ4444</strong> in the  search bar at the top of the page to load your required training</li>
+  </ul>
+</ul>
+<p><strong>Your Verizon Fios Login Credentials</strong></p>
+<ul>
+  <li>Last Name: {!Contact.LastName}</li>
+  <li>SSOID/Username: {!Contact.ECC_Username__c}</li>
+  <li>Community ID: <strong>PERFVIS</strong></li>
+  <li>Employee ID/Native Worker Number: {!Contact.ECC_CIM_Workers__c}</li>
+  <li>PIN: {!Contact.ECC_PIN__c}</li>
+</ul>
+<p><strong>Required Training</strong></p>
+<ul>
+  <li>VZ154364 – CPNI 2025 Annual Training – Third  Parties</li>
+  <li>VZ154774 – FCC Broadband Labels for VCG – 2025</li>
+  <li>VZ154335 – Intro to Wireless for RSS</li>
+  <li>VZ151889 – Mobile Sale Requirements</li>
+  <li>VZ154587 – Portable Electronics Insurance (PEI)  Training – 2025</li>
+  <li>VZ153801 – RSS Flex 2.0 Order Process</li>
+  <li>VZ125211 RSS Onboarding Benes-Wavier  Guideline-Certs</li>
+  <li>VZ127680 – RSS Onboarding CD2D Weekly Compliance  Checklist</li>
+  <li>VZ125487 – RSS Onboarding Do Not Solicit</li>
+  <li>VZ154077 – Selling with Integrity for RSS/VEC</li>
+  <li>VZ135918 – State Comprehensive Privacy Laws –  Consumer</li>
+  <li>VZ152837 – Verizon Home Device Protect (VHDP_  Refresh 2024</li>
+  <li>VZ152337 – Verizon Sales Agent Standards of  Conduct 2024</li>
+</ul>
+
+<hr style="margin:20px 0px"><h1 style="margin-bottom: 15px;  text-align: center">Your Support Team</h1>
+<hr style="margin:20px 0px">
+<table width="550" border="0" cellspacing="5" cellpadding="5" style="font-family: arial">
+                                      <tbody>
+                                       
+                                 
+                                      
+                                       
+                                       
+                                   
+                                        <tr>
+                                          <td><div><img alt="PerfectVision" border="0" src="http://perfectvoice.perfect-vision.com/eblasts/temp/images/shipping-ico.jpg" width="100%"></div></td>
+                                          <td><h2 style="font-family: arial">Customer Service</h2>
+                                            <strong>800.205.8620 ext. 2655<br />
+                                            </strong><a href="mailto:CustomerService@perfect-vision.com">CustomerService@perfect-vision.com</a>
+                                            <ul type="circle">
+                                              <li>General Request or Escalations</li>
+                                              <li>Product Returns</li>
+                                              <li>Shipment Discrepancies</li>
+<li>Website Support</li>
+<li>Insurance / Resale Document</li>
+<li>Reporting &amp; Order Support</li>
+                                          </ul></td>
+                                        </tr> <tr>
+                                          <td colspan="2"><hr></td>
+                                        </tr><tr>
+                                          <td><div><img alt="PerfectVision" border="0" src="http://perfectvoice.perfect-vision.com/eblasts/temp/images/ce-ico.jpg" width="100%"></div></td>
+                                          <td><h2 style="font-family: arial">Commission Escalations</h2>
+                                            <strong>800.205.8620 ext. 2140<br />
+                                            </strong><a href="mailto:CommissionEscalations@perfect-vision.com">CommissionEscalations@perfect-vision.com</a>
+                                            <ul type="circle">
+                                              <li>Commission Support</li>
+                                              <li>Incentive Pay Questions</li>
+												 <li>Incorrect Payment</li>
+												 <li>Order Status Dispute</li>
+                                          </ul></td>
+                                        </tr> <tr>
+                                          <td colspan="2"><hr></td>
+                                        </tr>
+                                        <tr>
+                                          <td><div><img alt="PerfectVision" border="0" src="http://perfectvoice.perfect-vision.com/eblasts/temp/images/marketing-ico.jpg" width="100%"></div></td>
+                                          <td><h2 style="font-family: arial">Marketing</h2>
+                                            <strong>800.205.8620 ext. 2611</strong><a href="mailto:PVMarketing@perfect-vision.com"><br />
+                                            PVMarketing@perfect-vision.com</a><br />
+                                          
+                                           
+                                            <ul type="circle">
+                                              <li>General       Marketing Assistance</li>
+                                              <li>Building       Ads</li>
+                                              <li>Ordering       or Placing Pre-approved Ads</li>
+                                             
+                                              <li>Marketing       Consulting</li>
+                                          </ul></td>
+                                        </tr>
+                                         <tr>
+                                          <td colspan="2"><hr></td>
+                                        </tr>   
+                                     <tr>
+                                          <td width="151"><div><img alt="PerfectVision" border="0" src="http://perfectvoice.perfect-vision.com/eblasts/temp/images/training-ico.jpg" width="100%"></div></td>
+                                          <td width="364" valign="top"><h2 style="font-family: arial">Training<br />
+</h2>
+ <strong>800.205.8620 ext. 3127</strong><a href="mailto:ProgramSpecialists@perfect-vision.com"><br />
+                                            ProgramSpecialists@perfect-vision.com</a><br />
+                                          
+                                           
+                                            <ul type="circle">
+                                              <li>Webinar Trainings to Train Sales Staff</li>
+                                              <li>Instructions on Order Entry</li>
+                                              <li>Resources Available</li>
+                                             
+                                              <li>Sales Positioning</li>
+                                          </ul></td>
+                                        </tr>
+                                     
+                                     
+                                        
+                            </tbody>
+                                    </table><hr><div><img alt="PerfectVision" border="0" height="173" src="https://perfectvoice.perfect-vision.com/eblasts/temp/images/PV-Resource-Center-bnr.jpg" width="540"></div>  <p>Log in to the <a href="https://www.perfect-vision.com" target="_blank">PerfectVision website</a> to access all learning resources.</p>
+                                            
+                                            <p><strong>Login Credentials </strong></p>
+                                            <ul>
+                                              <li><strong>Username:</strong> Your PerfectVision account number</li>
+                                              <li><strong>Password:</strong> Your current password for the website</li>
+                                            </ul>
+                                            <p><em>Note:</em> You must be signed in to view Partner Resources pages. If this is your  first time logging in and you encounter issues, please contact <a href="mailto:customerservice@perfect-vision.com">Customer  Service</a>.<br />
+                                            <ul>
+                                               <li><strong>Phone: </strong> 800.205.8620 ext. 2655</li></ul>
+                                            <strong>How to Access Partner Resources</strong></p>
+                                            <ul type="disc">
+                                              <li>After signing in, navigate to <strong>Resources       &gt; Partner Resources &gt; </strong> <strong>select desired program</strong>.</li>
+                                          </ul></td>
+								</tr>
+							</tbody>
+						</table>
+					
+
+						<table border="0" cellpadding="0" cellspacing="0" id="templateHeader2" style="background-color: #FFFFFF;border-bottom: 0;" width="600">
+							<tbody>
+								<tr style="">
+									<td class="headerContent" pardot-region="header_image" style="border-collapse: collapse;color: #202020;font-family: Arial;font-size: 34px;font-weight: bold;line-height: 34px;padding: 0;text-align: center;vertical-align: middle;"><!-- // Begin Module: Standard Header Image \ --><!-- // End Module: Standard Header Image \ --></td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+					</tr>
+					<tr>
+						<td align="center" style="border-collapse: collapse;" valign="top"><!-- // Begin Template Body \ -->
+						<table border="0" cellpadding="0" cellspacing="0" id="templateBody" width="600">
+							<tbody>
+								<tr>
+									<td class="bodyContent" style="border-collapse: collapse;background-color: #FFFFFF;" valign="top"><!-- // End Module: Left Image with Content \ --><!-- // Begin Module: Right Image with Content \ --><!-- // End Module: Right Image with Content \ --></td>
+								</tr>
+							</tbody>
+						</table>
+						<!-- // End Template Body \ --></td>
+					</tr>
+					<tr>
+						<td align="center" style="border-collapse: collapse;" valign="top"><!-- // Begin Template Footer \ -->
+						<table border="0" cellpadding="10" cellspacing="0" id="templateFooter" style="background-color: #FFFFFF;border-top: 0;" width="600">
+							<tbody>
+								<tr>
+									<td class="footerContent" style="border-collapse: collapse;" valign="top"><!-- // Begin Module: Standard Footer \ -->
+									<table border="0" cellpadding="10" cellspacing="0" width="100%">
+										<tbody>
+											<tr pardot-removable="" style="">
+												<td colspan="2" id="social" style="border-collapse: collapse;background-color: #FAFAFA;border: 0;" valign="middle">
+												<div pardot-region="std_social" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: center;"><a href="https://twitter.com/PerfectVision79" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;" target="_blank">Follow on X</a>&nbsp;&nbsp;<a href="https://www.facebook.com/PVBetterSolutions/" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;" target="_blank">Friend on Facebook</a>&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/company/pvbettersolutions/" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;" target="_blank">Connect on LinkedIn </a></div>
+												</td>
+											</tr>
+											<tr>
+												<td style="border-collapse: collapse;" valign="top" width="350">
+												<div pardot-region="std_footer" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: left;"><em>Copyright © 2025, All rights reserved.</em><br>
+												<br>
+												<strong>Our mailing address is:</strong><br />
+												<br />
+												PerfectVision<br />
+16101 La Grande Dr.<br />
+Little Rock, AR 72223</div>
+												</td>
+												<td style="border-collapse: collapse;" valign="top" width="190">
+												<div pardot-region="std_footer_alt" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: left;"><a href="http://www.perfect-vision.com"><img src="http://perfectvoice.perfect-vision.com/images/static/pv-logo-foot.jpg" alt="PerfectVision" width="200" height="96"></a></div>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" id="utility" style="border-collapse: collapse;background-color: #FFFFFF;border: 0;" valign="middle">
+											<!--	<div class="original-only" pardot-region="std_utility" style="color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: center;"><a href="%%unsubscribe%%" style="color: #336699;font-weight: normal;text-decoration: underline;">unsubscribe from all emails</a> | <a href="%%email_preference_center%%" style="color: #336699;font-weight: normal;text-decoration: underline;">update subscription preferences</a></div>-->
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<!-- // End Module: Standard Footer \ --></td>
+								</tr>
+							</tbody>
+						</table>
+						<!-- // End Template Footer \ --></td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</center>
+<!--
+          This email was originally designed by the wonderful folks at MailChimp and remixed by Pardot.
+          It is licensed under CC BY-SA 3.0
+        -->
+</body>
+</html>

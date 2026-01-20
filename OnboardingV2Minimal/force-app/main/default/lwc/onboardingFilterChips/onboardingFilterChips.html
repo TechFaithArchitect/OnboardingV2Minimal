@@ -1,0 +1,45 @@
+<template>
+    <div class="slds-grid slds-wrap slds-gutters_x-small slds-grid_align-spread">
+        <div class="slds-col slds-size_1-of-4">
+            <lightning-combobox
+                label="Time Range"
+                value={timeFilter}
+                options={timeFilterOptions}
+                onchange={handleTimeFilterChange}
+                variant="label-hidden">
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4">
+            <lightning-combobox
+                label="Vendor"
+                value={selectedVendorValue}
+                options={vendorOptions}
+                onchange={handleVendorFilterChange}
+                variant="label-hidden"
+                placeholder="All Vendors">
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4">
+            <lightning-combobox
+                label="Vendor Program"
+                value={selectedProgramValue}
+                options={programOptions}
+                onchange={handleProgramFilterChange}
+                variant="label-hidden"
+                placeholder="All Programs">
+            </lightning-combobox>
+        </div>
+        <template if:true={showTeamView}>
+            <div class="slds-col slds-size_1-of-4">
+                <lightning-combobox
+                    label="View"
+                    value={viewFilter}
+                    options={filteredViewOptions}
+                    onchange={handleViewFilterChange}
+                    variant="label-hidden">
+                </lightning-combobox>
+            </div>
+        </template>
+    </div>
+</template>
+

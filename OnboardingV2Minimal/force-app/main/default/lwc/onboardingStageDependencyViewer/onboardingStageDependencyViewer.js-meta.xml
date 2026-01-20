@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage">
+            <property name="vendorProgramId" type="String" label="Vendor Program ID" description="The vendor program ID to show dependencies for"/>
+            <property name="processId" type="String" label="Process ID" description="The onboarding process ID to show stages for" required="true"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

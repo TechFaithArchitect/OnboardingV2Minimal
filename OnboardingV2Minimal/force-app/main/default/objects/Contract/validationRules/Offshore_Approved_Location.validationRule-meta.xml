@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Offshore_Approved_Location</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+AND(
+RecordType.Name = &quot;PV Offshore&quot;,
+ISPICKVAL(Application_Status__c ,&quot;Setup Complete&quot;),
+ISBLANK(Offshore_Approved_Location_s__c)),
+
+
+AND(
+OR(
+RecordType.Name = &quot;Charter&quot;,
+RecordType.Name = &quot;MDP&quot;),
+ISPICKVAL(Offshore_Status__c,&quot;Approved&quot;),
+ISBLANK(Offshore_Approved_Location_s__c)))</errorConditionFormula>
+    <errorDisplayField>Offshore_Approved_Location_s__c</errorDisplayField>
+    <errorMessage>Please enter an Offshore Location</errorMessage>
+</ValidationRule>

@@ -1,0 +1,59 @@
+<template>
+  <lightning-card title="Credential Type Manager" icon-name="standard:education">
+    <template if:true={requiredCredentials}>
+      <lightning-datatable
+        key-field="Id"
+        data={requiredCredentials}
+        columns={columns}
+        hide-checkbox-column>
+      </lightning-datatable>
+
+      <template if:true={selectedRequiredCredentialId}>
+        <div class="slds-p-top_medium">
+          <lightning-combobox
+            label="Select Credential Type"
+            placeholder="Select or create..."
+            options={credentialTypeOptions}
+            value={selectedCredentialTypeId}
+            onchange={handleCredentialTypeChange}>
+          </lightning-combobox>
+
+          <lightning-button
+            label="Link Selected Credential Type"
+            onclick={handleLinkCredential}
+            class="slds-m-top_small"
+            variant="brand">
+          </lightning-button>
+
+          <lightning-button
+            label="Create New Credential Type"
+            onclick={handleShowModal}
+            class="slds-m-top_small slds-m-left_small">
+          </lightning-button>
+        </div>
+      </template>
+    </template>
+
+    <template if:true={showModal}>
+      <section role="dialog" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <h2 class="slds-modal__title">New Credential Type</h2>
+          </header>
+          <div class="slds-modal__content">
+            <lightning-input
+              label="Credential Type Name"
+              value={newCredentialTypeName}
+              onchange={handleNameInput}>
+            </lightning-input>
+          </div>
+          <footer class="slds-modal__footer">
+            <lightning-button label="Cancel" onclick={handleCloseModal}></lightning-button>
+            <lightning-button label="Create" variant="brand" onclick={handleCreateCredentialType}></lightning-button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+  </lightning-card>
+</template>

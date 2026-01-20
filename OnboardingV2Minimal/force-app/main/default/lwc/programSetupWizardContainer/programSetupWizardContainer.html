@@ -1,0 +1,60 @@
+<template>
+  <div class="slds-box slds-theme_default">
+    <lightning-card title="Vendor Program Setup Wizard (Placeholder)">
+      <div class="slds-p-around_small">
+        <template if:true={recordId}>
+          <div class="slds-wizard">
+            <div class="slds-wizard__steps">
+              <div class="slds-wizard__step slds-is-active">
+                <span class="slds-wizard__step-number">1</span>
+                <span class="slds-wizard__step-label">Program Details</span>
+              </div>
+              <div class="slds-wizard__step">
+                <span class="slds-wizard__step-number">2</span>
+                <span class="slds-wizard__step-label">Requirements</span>
+              </div>
+              <div class="slds-wizard__step">
+                <span class="slds-wizard__step-number">3</span>
+                <span class="slds-wizard__step-label">Training</span>
+              </div>
+              <div class="slds-wizard__step">
+                <span class="slds-wizard__step-number">4</span>
+                <span class="slds-wizard__step-label">Review</span>
+              </div>
+            </div>
+
+            <div class="slds-wizard__content">
+              <div class="slds-wizard__step-content">
+                <h2>Program Setup (Placeholder)</h2>
+                <p>Processing requirements for program: {programId}</p>
+                <p>Record ID: {recordId}</p>
+
+                <template if:true={requirements}>
+                  <p>Found {requirements.length} requirements</p>
+                </template>
+
+                <lightning-button-group>
+                  <lightning-button
+                    label="Previous"
+                    onclick={handlePrevious}
+                    disabled={isFirstStep}
+                  >
+                  </lightning-button>
+                  <lightning-button
+                    label="Next"
+                    onclick={handleNext}
+                    variant="brand"
+                  >
+                  </lightning-button>
+                </lightning-button-group>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template if:false={recordId}>
+          <p>No program selected for setup.</p>
+        </template>
+      </div>
+    </lightning-card>
+  </div>
+</template>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description
+  >Custom metadata storing reusable validation rules for Requirement_Field__c fields, enabling configuration-driven validation without code deployments. Rules support format validation, cross-field validation, and external validation via Validation Rule Builder UI. Example: A validation rule with DeveloperName=&quot;Insurance_Policy_Number_Format&quot; might validate that a policy number field matches a 10-digit format (regex: ^[0-9]{10}$). Another rule might enforce cross-field validation ensuring Policy_Expiry_Date__c is after Policy_Start_Date__c. When users enter values in Requirement_Field_Value__c records, these rules are automatically evaluated, and failures create Validation_Failure__c records. Rules can be activated/deactivated and modified via metadata without deploying code, providing flexibility for business users.</description>
+    <label>Requirement Field Validation Rule</label>
+    <pluralLabel>Requirement Field Validation Rules</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

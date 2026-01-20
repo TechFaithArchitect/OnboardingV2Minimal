@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Other_Lead_Type</fullName>
+    <active>true</active>
+    <description>If &apos;Other&apos; is chosen in the lead type</description>
+    <errorConditionFormula>AND(ISPICKVAL(Lead_Type__c, &apos;Other&apos;), ISBLANK( Other_Lead_Type__c))</errorConditionFormula>
+    <errorDisplayField>Other_Lead_Type__c</errorDisplayField>
+    <errorMessage>This field is required when &apos;Other&apos; is chosen in the Lead Type picklist</errorMessage>
+</ValidationRule>

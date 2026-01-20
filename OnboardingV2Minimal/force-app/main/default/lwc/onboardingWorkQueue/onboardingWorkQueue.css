@@ -1,0 +1,25 @@
+.blocked-row {
+    border-left: 4px solid #c23934;  /* Error red - no SLDS border token available */
+    background-color: #fef7f7;
+}
+
+.at-risk-row {
+    border-left: 4px solid #ffb75d;  /* Warning orange - no SLDS border token available */
+    background-color: #fffbf0;
+}
+
+.normal-row {
+    border-left: 4px solid var(--lwc-colorBrand, #0176d3);  /* SLDS: brand */
+    background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .slds-grid {
+        flex-direction: column;
+    }
+    
+    .slds-col {
+        width: 100%;
+    }
+}
+

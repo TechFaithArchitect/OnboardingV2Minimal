@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Optimum Outage Notification</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>End_Date__c</field>
+        <value xsi:type="xsd:date">2025-05-18</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">Optimum: Scheduled Maintenance – Temporary Downtime for order entry. 
+
+Start: Saturday, May 17 at 10:00 PM EST 
+End: Sunday, May 18 at 10:00 AM EST</value>
+    </values>
+    <values>
+        <field>Program__c</field>
+        <value xsi:type="xsd:string">Optimum</value>
+    </values>
+    <values>
+        <field>Start_Date__c</field>
+        <value xsi:type="xsd:date">2025-05-17</value>
+    </values>
+</CustomMetadata>

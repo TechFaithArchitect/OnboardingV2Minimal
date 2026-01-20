@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Owner__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This is the owner field for all contacts that are at least part owners of the account.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Only check this box if this contact is an owner, but not the principal owner.</inlineHelpText>
+    <label>Owner</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

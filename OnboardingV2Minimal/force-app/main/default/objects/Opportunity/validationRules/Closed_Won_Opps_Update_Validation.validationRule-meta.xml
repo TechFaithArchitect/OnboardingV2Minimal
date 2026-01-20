@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closed_Won_Opps_Update_Validation</fullName>
+    <active>true</active>
+    <description>Only System Administrators can update Opportunities in Closed Won stages</description>
+    <errorConditionFormula>$Profile.Name &lt;&gt; &apos;System Administrator&apos;
+&amp;&amp; $Profile.Name &lt;&gt; &apos;Self Service Profile&apos;
+&amp;&amp; OR(ISPICKVAL(PRIORVALUE(StageName), &apos;Order Created&apos;), ISPICKVAL(PRIORVALUE(StageName), &apos;Security Stop&apos;))
+&amp;&amp; NOT(ISCHANGED(POE_CC_Flag__c))
+&amp;&amp; NOT(ISCHANGED(Maps_Latitude__c))
+&amp;&amp; NOT(ISCHANGED(Maps_Longitude__c))
+&amp;&amp; NOT(ISCHANGED(POE_Sensitive_Data__c))
+&amp;&amp; NOT(ISCHANGED(Chuzo_CSA_Form_Data__c))
+&amp;&amp; NOT(ISCHANGED(Tab_Reached__c))</errorConditionFormula>
+    <errorMessage>You don&apos;t have permission to update closed opportunities</errorMessage>
+</ValidationRule>

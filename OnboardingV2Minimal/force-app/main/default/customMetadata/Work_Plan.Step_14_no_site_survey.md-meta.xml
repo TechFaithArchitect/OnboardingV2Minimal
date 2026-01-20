@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Step 14 - no site survey</label>
+    <protected>false</protected>
+    <values>
+        <field>Order__c</field>
+        <value xsi:type="xsd:double">14.0</value>
+    </values>
+    <values>
+        <field>Work_Plan__c</field>
+        <value xsi:type="xsd:string">Step 14 : Complete customer Education with POC</value>
+    </values>
+    <values>
+        <field>Work_Type__c</field>
+        <value xsi:type="xsd:string">T-Mobile Commercial Install - Cellular Gateway Only - LSOW (No Site Survey)</value>
+    </values>
+</CustomMetadata>

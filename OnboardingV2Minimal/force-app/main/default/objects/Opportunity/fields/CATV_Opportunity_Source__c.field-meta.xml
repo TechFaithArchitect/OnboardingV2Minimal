@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CATV_Opportunity_Source__c</fullName>
+    <description>CATVMSO Field</description>
+    <externalId>false</externalId>
+    <inlineHelpText>CATVMSO Field</inlineHelpText>
+    <label>Opp Source</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Trade Show</fullName>
+                <default>false</default>
+                <label>Trade Show</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Rep Generated</fullName>
+                <default>false</default>
+                <label>Rep Generated</label>
+            </value>
+            <value>
+                <fullName>Project Based</fullName>
+                <default>false</default>
+                <label>Project Based</label>
+            </value>
+            <value>
+                <fullName>Referral</fullName>
+                <default>false</default>
+                <label>Referral</label>
+            </value>
+            <value>
+                <fullName>Web Lead</fullName>
+                <default>false</default>
+                <label>Web Lead</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

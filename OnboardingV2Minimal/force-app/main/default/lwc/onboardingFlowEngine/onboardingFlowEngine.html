@@ -1,0 +1,71 @@
+<template>
+  <template if:true={loaded}>
+    <lightning-card>
+      <!-- Header with title, status, and save indicator -->
+      <div class="slds-card__header slds-grid">
+        <div class="slds-col slds-grow">
+          <h2 class="slds-card__header-title slds-text-heading_medium">
+            <span>{processName}</span>
+            <template if:true={showSaveIndicator}>
+              <lightning-icon 
+                icon-name="utility:check" 
+                size="xx-small" 
+                alternative-text="Saved" 
+                class="slds-m-left_x-small slds-icon-text-success">
+              </lightning-icon>
+              <span class="slds-text-color_success slds-text-body_small slds-m-left_x-small">Saved</span>
+            </template>
+            <template if:true={isSaving}>
+              <lightning-icon 
+                icon-name="utility:spinner" 
+                size="xx-small" 
+                alternative-text="Saving" 
+                class="slds-m-left_x-small slds-spin">
+              </lightning-icon>
+              <span class="slds-text-body_small slds-m-left_x-small">Saving...</span>
+            </template>
+          </h2>
+        </div>
+        <div class="slds-col slds-no-flex slds-align-middle">
+          <div class="slds-text-align_right">
+            <div class="slds-text-body_small slds-text-color_weak">{stepCounter}</div>
+            <div class="slds-text-heading_small slds-m-top_xx-small">{completionText}</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Progress Indicator -->
+      <div class="slds-p-around_medium">
+        <lightning-progress-indicator current-step={activeStageValue} type="base">
+          <template for:each={stages} for:item="stage">
+            <lightning-progress-step
+              key={stage.Id}
+              label={stage.Label__c}
+              value={stage.Id}>
+            </lightning-progress-step>
+          </template>
+        </lightning-progress-indicator>
+      </div>
+
+      <!-- Dynamic component slot -->
+      <div class="slds-card__body slds-card__body_inner">
+        <template if:true={activeComponentName}>
+          <c-onboarding-stage-renderer
+            component-name={activeComponentName}
+            context={componentContext}
+            onnext={handleNext}
+            onback={handleBack}
+            onfieldchange={handleFieldChange}
+            onvalidationchanged={handleValidationChanged}>
+          </c-onboarding-stage-renderer>
+        </template>
+      </div>
+    </lightning-card>
+    
+    <!-- Footer buttons exposed for parent to render -->
+  </template>
+
+  <template if:false={loaded}>
+    <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+  </template>
+</template>

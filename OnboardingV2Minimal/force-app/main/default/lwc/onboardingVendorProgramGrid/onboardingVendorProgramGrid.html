@@ -1,0 +1,95 @@
+<template>
+    <template if:true={hasPrograms}>
+        <div class="slds-grid slds-wrap slds-gutters_medium">
+            <template for:each={processedPrograms} for:item="program">
+                <div key={program.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3">
+                    <article class="slds-card slds-card_boundary program-card">
+                        <div class="slds-card__header slds-grid">
+                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                <div class="slds-media__figure">
+                                    <lightning-icon icon-name="utility:work_order_type" size="small"></lightning-icon>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h2 class="slds-card__header-title">
+                                        <span class="slds-text-heading_small">{program.Label}</span>
+                                    </h2>
+                                    <p class="slds-text-body_small slds-text-color_weak">{program.VendorName}</p>
+                                </div>
+                            </header>
+                            <div class="slds-no-flex">
+                                <span class={program.statusClass}>{program.Status}</span>
+                            </div>
+                        </div>
+                        <div class="slds-card__body slds-card__body_inner">
+                            <div class="slds-grid slds-gutters_small slds-m-bottom_small">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <div class="slds-text-body_small slds-text-color_weak">Dealers Onboarded</div>
+                                    <div class="slds-text-heading_medium">{program.DealersOnboarded}</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <div class="slds-text-body_small slds-text-color_weak">In Progress</div>
+                                    <div class="slds-text-heading_medium">{program.InProgressCount}</div>
+                                </div>
+                            </div>
+                            
+                            <template if:true={program.TotalRequirements}>
+                                <div class="slds-m-bottom_small">
+                                    <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                                        Requirements: {program.CompleteRequirements} / {program.TotalRequirements}
+                                    </div>
+                                    <div class="slds-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={program.requirementPercentage}>
+                                        <span class="slds-progress-bar__value" style={program.progressStyle}></span>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <div class="slds-grid slds-gutters_x-small slds-m-top_small">
+                                <div class="slds-col">
+                                    <template if:true={program.RulesEngineValid}>
+                                        <lightning-icon icon-name="utility:success" size="x-small" class="slds-text-color_success"></lightning-icon>
+                                        <span class="slds-text-body_small">Rules Engine Valid</span>
+                                    </template>
+                                    <template if:false={program.RulesEngineValid}>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-text-color_warning"></lightning-icon>
+                                        <span class="slds-text-body_small">Rules Engine Missing</span>
+                                    </template>
+                                </div>
+                                <div class="slds-col">
+                                    <template if:true={program.DependenciesValid}>
+                                        <lightning-icon icon-name="utility:success" size="x-small" class="slds-text-color_success"></lightning-icon>
+                                        <span class="slds-text-body_small">Dependencies OK</span>
+                                    </template>
+                                    <template if:false={program.DependenciesValid}>
+                                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-text-color_warning"></lightning-icon>
+                                        <span class="slds-text-body_small">Dependencies Missing</span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-card__footer">
+                            <lightning-button 
+                                label="View Program" 
+                                variant="neutral" 
+                                onclick={handleViewProgram}
+                                data-id={program.Id}
+                                class="slds-m-right_x-small">
+                            </lightning-button>
+                            <lightning-button 
+                                label="Launch Wizard" 
+                                variant="brand" 
+                                onclick={handleLaunchWizard}
+                                data-id={program.Id}>
+                            </lightning-button>
+                        </div>
+                    </article>
+                </div>
+            </template>
+        </div>
+    </template>
+    <template if:false={hasPrograms}>
+        <div class="slds-text-align_center slds-p-around_large">
+            <p class="slds-text-body_regular">No vendor programs found.</p>
+        </div>
+    </template>
+</template>
+

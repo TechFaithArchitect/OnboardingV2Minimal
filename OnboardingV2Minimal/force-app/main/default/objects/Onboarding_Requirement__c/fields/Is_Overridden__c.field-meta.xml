@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Overridden__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Marks that the inherited requirement has been overridden for this onboarding.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Set this to True to Override</inlineHelpText>
+    <label>Is Overridden</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

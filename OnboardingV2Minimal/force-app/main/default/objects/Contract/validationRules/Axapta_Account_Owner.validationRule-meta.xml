@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Axapta_Account_Owner</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+RecordType.Name = &quot;New Customer Application (WIRE)&quot;,
+ISBLANK( Axapta_Acct_Owner__c ),
+ISPICKVAL( Application_Status__c , &quot;NEW&quot;)
+)</errorConditionFormula>
+    <errorDisplayField>Axapta_Acct_Owner__c</errorDisplayField>
+    <errorMessage>Enter the Representatives Full Name to be assigned as the Account Owner.</errorMessage>
+</ValidationRule>

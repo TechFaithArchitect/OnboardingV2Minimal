@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POE_Email_TMobile__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( NOT(ISBLANK(POE_TMobileDealer__c )),BR() &amp; &quot;T-Mobile&quot; &amp; BR() &amp; BR() &amp; &quot;NTID:&quot; &amp;  POE_TMobileDealer__c  &amp; BR() &amp; &quot;NTID Temporary Password:&quot; &amp;  UID_TMobile__c  &amp; BR() &amp; &quot;Credentials&quot; &amp; BR() &amp;  BR() &amp; &quot;Dealer Code:&quot; &amp;  POE_T_Mobile_User__c  &amp; BR() &amp; &quot;Dealer Code Temporary Password:&quot; &amp;  POE_TMobile_Pass__c  &amp; BR() &amp; BR(), &apos;&apos;)</formula>
+    <label>Email Body T-Mobile</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

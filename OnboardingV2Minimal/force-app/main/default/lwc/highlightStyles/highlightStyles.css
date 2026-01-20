@@ -1,0 +1,20 @@
+.highlight-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    background-color: var(--lwc-colorBackgroundAlt, #f3f2f2);
+    border-bottom: 1px solid var(--lwc-colorBorder, #d8dde6);
+    border-radius: 0.25rem;
+}
+
+.highlight-fields {
+    text-align: right;
+    line-height: 1.5;
+}
+
+.highlight-fields lightning-formatted-text {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--lwc-colorTextLabel, #3e3e3c);
+}

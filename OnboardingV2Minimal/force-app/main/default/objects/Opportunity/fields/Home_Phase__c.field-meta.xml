@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Home_Phase__c</fullName>
+    <description>This field determines the initial phase for the Exede FFL rollout based on the billing state.</description>
+    <externalId>false</externalId>
+    <formula>IF(Account.BillingState = &apos;AR&apos;, &apos;2.1, 2.2&apos;,
+IF(Account.BillingState = &apos;CO&apos;, &apos;1.1, 1.2&apos;,
+IF(Account.BillingState = &apos;CT&apos;, &apos;3.1&apos;,
+IF(Account.BillingState = &apos;DC&apos;, &apos;1.3, 3.1&apos;,
+IF(Account.BillingState = &apos;DE&apos;, &apos;1.3&apos;,
+IF(Account.BillingState = &apos;FL&apos;, &apos;3.2&apos;,
+IF(Account.BillingState = &apos;GA&apos;, &apos;3.2&apos;,
+IF(Account.BillingState = &apos;IA&apos;, &apos;1.1&apos;,
+IF(Account.BillingState = &apos;ID&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;IL&apos;, &apos;1.2, 1.3, 2.2&apos;,
+IF(Account.BillingState = &apos;IN&apos;, &apos;1.3, 2.2&apos;,
+IF(Account.BillingState = &apos;KS&apos;, &apos;1.1&apos;,
+IF(Account.BillingState = &apos;KY&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;LA&apos;, &apos;2.1&apos;,
+IF(Account.BillingState = &apos;MA&apos;, &apos;2.2, 3.1&apos;,
+IF(Account.BillingState = &apos;MD&apos;, &apos;1.3&apos;,
+IF(Account.BillingState = &apos;ME&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;MI&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;MN&apos;, &apos;1.2&apos;,
+IF(Account.BillingState = &apos;MO&apos;, &apos;1.1&apos;,
+IF(Account.BillingState = &apos;MT&apos;, &apos;1.1, 2.2&apos;,
+IF(Account.BillingState = &apos;NC&apos;, &apos;3.2&apos;,
+IF(Account.BillingState = &apos;ND&apos;, &apos;1.1&apos;,
+IF(Account.BillingState = &apos;NE&apos;, &apos;1.2&apos;,
+IF(Account.BillingState = &apos;NH&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;NJ&apos;, &apos;1.3, 2.2&apos;,
+IF(Account.BillingState = &apos;NM&apos;, &apos;3.1&apos;,
+IF(Account.BillingState = &apos;NY&apos;, &apos;3.1&apos;,
+IF(Account.BillingState = &apos;OH&apos;, &apos;1.3, 2.2&apos;,
+IF(Account.BillingState = &apos;OR&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;PA&apos;, &apos;1.3,3.1&apos;,
+IF(Account.BillingState = &apos;RI&apos;, &apos;3.1&apos;,
+IF(Account.BillingState = &apos;SC&apos;, &apos;3.2&apos;,
+IF(Account.BillingState = &apos;SD&apos;, &apos;1.1&apos;,
+IF(Account.BillingState = &apos;TN&apos;, &apos;2.2, 3.2&apos;,
+IF(Account.BillingState = &apos;TX&apos;, &apos;2.1, 3.1, 3.3&apos;,
+IF(Account.BillingState = &apos;UT&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;VA&apos;, &apos;1.3, 3.2&apos;,
+IF(Account.BillingState = &apos;WA&apos;, &apos;2.2&apos;,
+IF(Account.BillingState = &apos;WI&apos;, &apos;1.2&apos;,
+IF(Account.BillingState = &apos;WV&apos;, &apos;1.3&apos;,
+IF(Account.BillingState = &apos;WY&apos;, &apos;1.1, 2.2&apos;,
+NULL))))))))))))))))))))))))))))))))))))))))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>FFL Home Phase(s)</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Workers_Comp_Waived</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+RecordType.Name = &quot;T-Mobile FFL&quot;,
+ISPICKVAL(Insurance__c,&quot;Complete&quot;),
+ISBLANK(TEXT(Workers_Comp_Ins_Waived__c)))</errorConditionFormula>
+    <errorDisplayField>Workers_Comp_Ins_Waived__c</errorDisplayField>
+    <errorMessage>Please specify if Workers Comp Ins is waived?</errorMessage>
+</ValidationRule>

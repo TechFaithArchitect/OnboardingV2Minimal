@@ -1,0 +1,37 @@
+<template>
+  <section class="slds-card slds-p-around_medium">
+    <div class="slds-grid slds-wrap slds-grid_vertical-align-center">
+      <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+        <div class="slds-text-title_caps slds-m-bottom_xx-small">
+          Onboarding Progress
+        </div>
+        <div class="slds-grid slds-grid_vertical-align-center">
+          <lightning-progress-bar
+            value={progressPercent}
+            size="large"
+            class="slds-m-right_small"
+          ></lightning-progress-bar>
+          <span class="slds-text-body_regular">{progressLabel}</span>
+        </div>
+        <div
+          class="slds-m-top_small slds-grid slds-grid_vertical-align-center slds-wrap"
+        >
+          <template if:true={activePrograms}>
+            <template for:each={activePrograms} for:item="p">
+              <lightning-pill
+                key={p.id}
+                label={p.name}
+                class="slds-m-right_xx-small slds-m-bottom_xx-small"
+              ></lightning-pill>
+            </template>
+          </template>
+        </div>
+      </div>
+      <div
+        class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-text-align_right"
+      >
+        <span class={riskClass} title="SLA Risk">{riskBadge}</span>
+      </div>
+    </div>
+  </section>
+</template>

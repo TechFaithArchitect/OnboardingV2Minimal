@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ATTUID</fullName>
+    <active>true</active>
+    <description>If the UID is changed to complete alert the user to ensure the ATTUID field is updated.</description>
+    <errorConditionFormula>AND(
+ISPICKVAL(UID__c, &apos;Complete&apos;),
+ISBLANK(ATTUID__c))</errorConditionFormula>
+    <errorDisplayField>ATTUID__c</errorDisplayField>
+    <errorMessage>Please enter the dealers ATTUID</errorMessage>
+</ValidationRule>

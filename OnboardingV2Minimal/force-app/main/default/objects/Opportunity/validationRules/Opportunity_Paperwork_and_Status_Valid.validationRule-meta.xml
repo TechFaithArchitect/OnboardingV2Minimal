@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Paperwork_and_Status_Valid</fullName>
+    <active>false</active>
+    <description>Validate the Opportunity Paperwork Status is updated when paperwork is received.</description>
+    <errorConditionFormula>IF(
+AND(
+ISCHANGED( Paperwork_Completed1__c),
+NOT(ISCHANGED( Opportunity_Paperwork_Status__c ))),
+TRUE, FALSE)</errorConditionFormula>
+    <errorDisplayField>Paperwork_Completed1__c</errorDisplayField>
+    <errorMessage>If the Paperwork Completed field is updated, the Opportunity Paperwork Status field must be updated too.</errorMessage>
+</ValidationRule>

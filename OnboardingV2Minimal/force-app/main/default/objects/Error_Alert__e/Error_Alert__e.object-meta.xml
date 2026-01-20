@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description
+  >Platform Event for publishing error alerts from onboarding processes to external systems or monitoring tools. High-volume event that can be subscribed to by other Salesforce processes, external integrations, or monitoring dashboards. Example: When a critical error occurs during status evaluation (e.g., rule evaluation failure), the system might publish an Error_Alert__e event with error details, context information, and correlation IDs. External monitoring systems can subscribe to these events via Streaming API to receive real-time error notifications. This enables distributed error handling and centralized logging without tight coupling between components. The event is published immediately (PublishImmediately) for real-time alerting.</description>
+    <eventType>HighVolume</eventType>
+    <label>Error Alert</label>
+    <pluralLabel>Error Alerts</pluralLabel>
+    <publishBehavior>PublishImmediately</publishBehavior>
+</CustomObject>

@@ -1,0 +1,37 @@
+<template>
+  <template if:true={vendors}>
+    <lightning-combobox
+      name="vendor"
+      label="Vendor"
+      value={selectedVendorId}
+      options={vendors}
+      onchange={handleVendorChange}
+      placeholder="Select a Vendor"
+    >
+    </lightning-combobox>
+  </template>
+
+  <template if:true={retailOptions}>
+    <lightning-combobox
+      name="retailOption"
+      label="Retail Option"
+      value={selectedRetailOption}
+      options={retailOptions}
+      onchange={handleRetailChange}
+      placeholder="Select a Retail Option"
+    >
+    </lightning-combobox>
+  </template>
+
+  <template if:true={businessVerticals}>
+    <lightning-combobox
+      name="businessVertical"
+      label="Business Vertical"
+      value={selectedBusinessVertical}
+      options={businessVerticals}
+      onchange={handleVerticalChange}
+      placeholder="Select a Business Vertical"
+    >
+    </lightning-combobox>
+  </template>
+</template>

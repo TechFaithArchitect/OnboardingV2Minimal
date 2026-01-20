@@ -1,0 +1,218 @@
+<template>
+    <lightning-card title="Validation Rule Builder" icon-name="utility:rules">
+        <div class="slds-m-around_medium">
+            <!-- Rule Configuration Form -->
+            <div class="slds-grid slds-wrap slds-gutters">
+                <!-- Rule Name -->
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input
+                        label="Rule Name"
+                        value={rule.name}
+                        name="name"
+                        onchange={handleFieldChange}
+                        required>
+                    </lightning-input>
+                </div>
+
+                <!-- Validation Type -->
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox
+                        label="Validation Type"
+                        value={rule.validationType}
+                        options={validationTypeOptions}
+                        name="validationType"
+                        onchange={handleFieldChange}
+                        required>
+                    </lightning-combobox>
+                </div>
+
+                <!-- Description -->
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning-textarea
+                        label="Description"
+                        value={rule.description}
+                        name="description"
+                        onchange={handleFieldChange}>
+                    </lightning-textarea>
+                </div>
+
+                <!-- Requirement Field (if applicable) -->
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox
+                        label="Requirement Field"
+                        value={rule.requirementFieldId}
+                        options={fieldOptions}
+                        name="requirementFieldId"
+                        onchange={handleFieldChange}>
+                    </lightning-combobox>
+                </div>
+
+                <!-- Validation Mode -->
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-combobox
+                        label="Validation Mode"
+                        value={rule.validationMode}
+                        options={validationModeOptions}
+                        name="validationMode"
+                        onchange={handleFieldChange}
+                        required>
+                    </lightning-combobox>
+                </div>
+
+                <!-- External Service (if External type) -->
+                <template if:true={showExternalServiceField}>
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning-input
+                            label="External Service ID"
+                            value={rule.externalServiceId}
+                            name="externalServiceId"
+                            onchange={handleFieldChange}>
+                        </lightning-input>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Expression Builder Section -->
+            <div class="slds-m-top_large">
+                <div class="slds-grid slds-grid_align-spread">
+                    <h3 class="slds-text-heading_small">Validation Expression</h3>
+                    <lightning-button
+                        label={expressionBuilderLabel}
+                        variant="neutral"
+                        onclick={toggleExpressionBuilder}
+                        icon-name="utility:settings">
+                    </lightning-button>
+                </div>
+
+                <!-- Common Patterns -->
+                <div class="slds-m-top_small">
+                    <lightning-combobox
+                        label="Common Patterns"
+                        placeholder="Select a pattern to insert"
+                        options={commonPatternOptions}
+                        onchange={handlePatternSelect}>
+                    </lightning-combobox>
+                </div>
+
+                <!-- Expression Input -->
+                <div class="slds-m-top_small">
+                    <lightning-textarea
+                        label="Expression"
+                        value={rule.expression}
+                        name="expression"
+                        onchange={handleFieldChange}
+                        required
+                        placeholder="Enter validation expression (e.g., REGEX(Value__c, pattern))">
+                    </lightning-textarea>
+                </div>
+
+                <!-- Expression Builder Panel (collapsible) -->
+                <template if:true={showExpressionBuilder}>
+                    <div class="slds-box slds-theme_shade slds-m-top_small">
+                        <p class="slds-text-body_small">
+                            <strong>Expression Syntax Help:</strong><br/>
+                            • Use field API names (e.g., Value__c, Encrypted_Value__c)<br/>
+                            • Functions: REGEX(), ISBLANK(), LEN(), CONTAINS()<br/>
+                            • Operators: AND, OR, NOT, =, !=, &lt;, &gt;, &lt;=, &gt;=<br/>
+                            • Example: REGEX(Value__c, '\\d&#123;3&#125;-\\d&#123;2&#125;-\\d&#123;4&#125;') for SSN format
+                        </p>
+                    </div>
+                </template>
+
+                <!-- Validation Result -->
+                <template if:true={validationResult}>
+                    <div class="slds-m-top_small">
+                        <template if:true={validationResult.isValid}>
+                            <lightning-icon icon-name="utility:success" size="small" class="slds-icon-text-success"></lightning-icon>
+                            <span class="slds-text-color_success">Expression is valid</span>
+                        </template>
+                        <template if:false={validationResult.isValid}>
+                            <lightning-icon icon-name="utility:error" size="small" class="slds-icon-text-error"></lightning-icon>
+                            <span class="slds-text-color_error">{validationResult.errorMessage}</span>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Validate Button -->
+                <div class="slds-m-top_small">
+                    <lightning-button
+                        label="Validate Expression"
+                        variant="neutral"
+                        onclick={handleValidateExpression}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="slds-m-top_large">
+                <lightning-textarea
+                    label="Error Message"
+                    value={rule.errorMessage}
+                    name="errorMessage"
+                    onchange={handleFieldChange}
+                    required
+                    placeholder="Error message to display when validation fails (e.g., 'SSN must be in format XXX-XX-XXXX')">
+                </lightning-textarea>
+            </div>
+
+            <!-- Test Panel -->
+            <div class="slds-m-top_large">
+                <div class="slds-grid slds-grid_align-spread">
+                    <h3 class="slds-text-heading_small">Test Rule</h3>
+                    <lightning-button
+                        label={testPanelLabel}
+                        variant="neutral"
+                        onclick={toggleTestPanel}
+                        icon-name="utility:preview">
+                    </lightning-button>
+                </div>
+
+                <template if:true={showTestPanel}>
+                    <div class="slds-box slds-theme_shade slds-m-top_small">
+                        <p class="slds-text-body_small slds-m-bottom_small">
+                            <strong>Test Values:</strong> Enter test values for fields referenced in your expression.
+                        </p>
+                        <lightning-input
+                            label="Value__c"
+                            name="testValue"
+                            placeholder="Enter test value">
+                        </lightning-input>
+                        <div class="slds-m-top_small">
+                            <lightning-button
+                                label="Run Test"
+                                variant="brand"
+                                onclick={handleTestRule}
+                                disabled={isLoading}>
+                            </lightning-button>
+                        </div>
+
+                        <template if:true={testResult}>
+                            <div class="slds-m-top_medium">
+                                <template if:true={testResult.isValid}>
+                                    <lightning-icon icon-name="utility:success" size="small" class="slds-icon-text-success"></lightning-icon>
+                                    <span class="slds-text-color_success">Test Passed</span>
+                                </template>
+                                <template if:false={testResult.isValid}>
+                                    <lightning-icon icon-name="utility:error" size="small" class="slds-icon-text-error"></lightning-icon>
+                                    <span class="slds-text-color_error">{testResult.errorMessage}</span>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="slds-m-top_large slds-grid slds-grid_align-end">
+                <lightning-button
+                    label="Save Rule"
+                    variant="brand"
+                    onclick={handleSave}
+                    disabled={isSaveDisabled}>
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
+

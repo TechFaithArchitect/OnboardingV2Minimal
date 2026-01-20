@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>CC Encryption Key</label>
+    <protected>false</protected>
+    <values>
+        <field>key__c</field>
+        <value xsi:type="xsd:string">kHKTXj7490kg6LK4+GBM2TT6WIIEv6nZdr42d4Vrvh8=</value>
+    </values>
+</CustomMetadata>

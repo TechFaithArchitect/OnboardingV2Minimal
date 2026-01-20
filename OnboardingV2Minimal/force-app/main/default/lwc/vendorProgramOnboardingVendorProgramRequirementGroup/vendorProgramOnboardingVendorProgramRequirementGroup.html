@@ -1,0 +1,210 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <!-- Guidance Box - Explains relationship to previous steps -->
+      <div class="guidance-box slds-box slds-box_x-small slds-theme_info slds-m-bottom_medium">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <h3 class="slds-text-heading_small slds-m-bottom_x-small">What is a Requirement Group?</h3>
+            <p class="slds-text-body_small slds-m-bottom_x-small">
+              A <strong>Requirement Group</strong> is a collection of onboarding requirements (documents, credentials, training) vendors must complete. 
+              This is the same group you selected in <strong>Step 5</strong> when linking templates.
+            </p>
+            <p class="slds-text-body_small slds-m-bottom_none">
+              <strong>Group Names:</strong> If you see an auto-number like "RPG-00001" in the dropdown, it means the group was created without a descriptive name. 
+              <strong>Best Practice:</strong> Always use descriptive names like "Standard Documentation Requirements" or "Healthcare Provider Requirements" when creating groups.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show if group was auto-selected from Step 5 -->
+      <template if:true={wasAutoSelectedFromStep5}>
+        <div class="success-banner slds-box slds-box_x-small slds-m-bottom_medium" style="background-color: #04844b; color: white;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:check" size="small" alternative-text="Selected" style="color: white;"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-body_small slds-m-bottom_none" style="color: white;">
+                <strong>Using Requirement Group from Step 5:</strong> {selectedGroupName}
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Show existing requirements from Step 6 for context -->
+      <template if:true={hasExistingRequirements}>
+        <div class="info-banner slds-box slds-box_x-small slds-m-bottom_medium" style="background-color: #f3f2f2; border-left: 3px solid #0176d3;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:list" size="small" alternative-text="Context"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-body_small slds-m-bottom_none">
+                <strong>Context from Step 6:</strong> You've created <strong>{existingRequirements.length} requirement(s)</strong> for this Vendor Program using the templates linked to this Requirement Group.
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Selection Section -->
+      <div class="group-selection-box slds-box slds-box_x-small slds-m-bottom_medium" style="background-color: #fafaf9; padding: 1rem;">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+          <div class="slds-col slds-size_1-of-1">
+            <label class="slds-form-element__label slds-text-heading_small">
+              <abbr class="slds-required" title="required">* </abbr>Select Requirement Group
+            </label>
+            <p class="slds-text-body_small slds-m-top_x-small slds-m-bottom_small" style="color: #706e6b;">
+              <template if:true={wasAutoSelectedFromStep5}>
+                The group selected in Step 5 is shown below. You can change it if needed, or proceed to the next step.
+              </template>
+              <template if:false={wasAutoSelectedFromStep5}>
+                Choose an existing group or create a new one below. This Requirement Group contains the templates used to create requirements in Step 6.
+              </template>
+            </p>
+          </div>
+        </div>
+
+        <template if:true={isLoadingGroups}>
+          <lightning-spinner alternative-text="Loading groups..." size="small"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoadingGroups}>
+          <template if:true={hasNoGroups}>
+            <div class="slds-box slds-box_x-small slds-theme_warning slds-m-bottom_small">
+              <p class="slds-text-body_small slds-m-bottom_none">
+                No Requirement Groups available. Please create a new group below.
+              </p>
+            </div>
+          </template>
+
+          <template if:false={hasNoGroups}>
+            <lightning-combobox
+              label=""
+              value={selectedGroupId}
+              options={groupOptions}
+              placeholder="Select a group..."
+              onchange={handleGroupSelect}
+              variant="label-hidden">
+            </lightning-combobox>
+          </template>
+
+          <template if:true={selectedGroupId}>
+            <template if:false={wasAutoSelectedFromStep5}>
+              <div class="success-banner slds-box slds-box_x-small slds-m-top_small" style="background-color: #04844b; color: white;">
+                <div class="slds-media">
+                  <div class="slds-media__figure">
+                    <lightning-icon icon-name="utility:check" size="small" alternative-text="Selected" style="color: white;"></lightning-icon>
+                  </div>
+                  <div class="slds-media__body">
+                    <p class="slds-text-body_small slds-m-bottom_none" style="color: white;">
+                      <strong>Selected:</strong> {selectedGroupName}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </template>
+        </template>
+      </div>
+
+      <!-- Create New Group Section -->
+      <div class="create-group-section slds-m-bottom_medium">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+          <div class="slds-col">
+            <h3 class="slds-text-heading_small">Or create a new Requirement Group</h3>
+            <p class="slds-text-body_small slds-m-top_x-small" style="color: #706e6b;">
+              Create a new group if you need to change the Requirement Group used for this Vendor Program.
+            </p>
+          </div>
+          <div class="slds-col slds-no-flex">
+            <template if:true={showCreateGroupForm}>
+              <lightning-button
+                label="Cancel"
+                variant="neutral"
+                onclick={toggleCreateGroupForm}
+                class="slds-m-left_medium">
+              </lightning-button>
+            </template>
+            <template if:false={showCreateGroupForm}>
+              <lightning-button
+                label="+ Create New Group"
+                variant="brand"
+                onclick={toggleCreateGroupForm}
+                class="slds-m-left_medium">
+              </lightning-button>
+            </template>
+          </div>
+        </div>
+
+        <template if:true={showCreateGroupForm}>
+          <div class="slds-box slds-theme_shade slds-m-bottom_small" style="padding: 1rem; background-color: #fafaf9;">
+            <p class="slds-text-heading_small slds-m-bottom_x-small">Create New Requirement Group</p>
+            <p class="slds-text-body_small slds-m-bottom_medium">Fill in all required fields below to create a new group.</p>
+            
+            <lightning-input 
+              label="Group Name" 
+              value={newGroupName} 
+              onchange={handleNewGroupChange}
+              placeholder="e.g., Standard Documentation Requirements"
+              required>
+            </lightning-input>
+
+            <lightning-combobox
+              label="Status"
+              value={newGroupStatus}
+              options={statusOptions}
+              onchange={handleStatusChange}
+              placeholder="Select a status..."
+              class="slds-m-top_small"
+              required>
+            </lightning-combobox>
+
+            <div class="slds-m-top_medium">
+              <lightning-button 
+                label="Create Group" 
+                onclick={handleCreateGroup} 
+                variant="brand"
+                disabled={isCreateGroupButtonDisabled}
+                class="slds-m-right_small">
+              </lightning-button>
+              <lightning-button 
+                label="Cancel" 
+                onclick={toggleCreateGroupForm} 
+                variant="neutral">
+              </lightning-button>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Error/Required Message -->
+      <template if:false={selectedGroupId}>
+        <template if:false={showCreateGroupForm}>
+          <div class="slds-notify slds-notify_alert slds-alert_error slds-theme_alert-texture slds-m-bottom_medium" role="alert">
+            <span class="slds-assistive-text">Error</span>
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning-icon icon-name="utility:error" size="small" alternative-text="Error" variant="error"></lightning-icon>
+              </div>
+              <div class="slds-media__body">
+                <h2 class="slds-text-heading_small slds-m-bottom_xx-small">Required Field</h2>
+                <p class="slds-text-body_regular">
+                  Please select a Requirement Group or create a new one to continue.
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
+
+      <!-- Navigation buttons removed - handled by flow engine footer -->
+    </div>
+  </lightning-card>
+</template>

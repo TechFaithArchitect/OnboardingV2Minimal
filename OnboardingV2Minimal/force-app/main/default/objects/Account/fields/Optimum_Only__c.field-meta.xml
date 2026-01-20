@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Optimum_Only__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>When enabled, this checkbox automatically restricts Chuzo user interface experience site tabs to the Optimum Buyflow only. [PER-4389]</description>
+    <externalId>false</externalId>
+    <label>Optimum Only</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Auto_Insurance_Expiration_Dates</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+
+AND(
+RecordType.Name = &quot;Viasat&quot;,
+ISPICKVAL(Retailer_Type__c,&quot;Combo&quot;),
+ISPICKVAL(Insurance__c,&quot;Complete&quot;),
+ISBLANK(Auto_Ins_Exp_Date__c)),
+
+
+AND(
+RecordType.Name = &quot;Viasat Fulfillment&quot;,
+ISPICKVAL(Insurance__c,&quot;Complete&quot;),
+ISBLANK(Auto_Ins_Exp_Date__c)),
+
+
+AND(
+RecordType.Name = &quot;MDP&quot;,
+ISPICKVAL(Retailer_Type__c,&quot;NFFL&quot;),
+ISPICKVAL(Insurance__c,&quot;Complete&quot;),
+ISBLANK(Auto_Ins_Exp_Date__c)),
+
+
+AND(
+RecordType.Name = &quot;T-Mobile FFL&quot;,
+ISPICKVAL(Insurance__c,&quot;Complete&quot;),
+ISBLANK(Auto_Ins_Exp_Date__c))
+
+)</errorConditionFormula>
+    <errorDisplayField>Auto_Ins_Exp_Date__c</errorDisplayField>
+    <errorMessage>Please enter the expiration date of the Auto Liability Insurance</errorMessage>
+</ValidationRule>

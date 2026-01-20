@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Duplicates</fullName>
+    <active>true</active>
+    <description>This can enforce uniqueness if you don’t want duplicates across Vendor + ECC Type</description>
+    <errorConditionFormula>AND(
+  ISNEW(),
+  NOT(ISBLANK(External_Contact_Credential_Type__c)),
+  NOT(ISBLANK(  Vendor_Customization__r.Vendor__c  )),
+  NOT(ISBLANK(Name))
+)</errorConditionFormula>
+    <errorMessage>Vendors and External Contact Credential Types combinations can only appear one time. Please check you do not already have a Vendor and External Contact Credential Type already created.</errorMessage>
+</ValidationRule>

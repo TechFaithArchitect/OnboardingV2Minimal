@@ -1,0 +1,111 @@
+<template>
+    <lightning-card title="Onboarding Work Queue" icon-name="standard:work_order">
+        <div class="slds-p-around_medium">
+            <!-- Filters -->
+            <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-combobox
+                        label="Status"
+                        value={statusFilter}
+                        options={statusOptions}
+                        onchange={handleStatusFilterChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-combobox
+                        label="Blocked"
+                        value={blockedFilter}
+                        options={blockedOptions}
+                        onchange={handleBlockedFilterChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-combobox
+                        label="Age"
+                        value={ageFilter}
+                        options={ageOptions}
+                        onchange={handleAgeFilterChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <template if:true={showBlockingIndicators}>
+                <div class="slds-m-bottom_small">
+                    <span class="slds-text-body_small slds-m-right_medium"><strong>Legend:</strong></span>
+                    <template for:each={legendItems} for:item="item">
+                        <span key={item.label} class="slds-badge slds-m-right_small">
+                            <lightning-icon 
+                                icon-name="utility:check" 
+                                size="xx-small" 
+                                class="slds-m-right_xxx-small">
+                            </lightning-icon>
+                            {item.label}
+                        </span>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Loading State -->
+            <template if:true={isLoading}>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Data Table -->
+            <template if:true={hasFilteredRecords}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={paginatedRecords}
+                    columns={tableColumns}
+                    onrowaction={handleRowAction}
+                    onsort={handleSort}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    hide-checkbox-column
+                    show-row-number-column>
+                </lightning-datatable>
+
+                <!-- Pagination -->
+                <template if:true={showPagination}>
+                    <div class="slds-grid slds-grid_align-spread slds-m-top_medium">
+                        <div class="slds-col">
+                            <p class="slds-text-body_small">{pageInfo}</p>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button-group>
+                                <lightning-button
+                                    label="Previous"
+                                    onclick={handlePreviousPage}
+                                    disabled={isFirstPage}>
+                                </lightning-button>
+                                <lightning-button
+                                    label="Next"
+                                    onclick={handleNextPage}
+                                    disabled={isLastPage}>
+                                </lightning-button>
+                            </lightning-button-group>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <!-- Empty State -->
+            <template if:false={hasFilteredRecords}>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon icon-name="utility:info" size="small" class="slds-m-bottom_small"></lightning-icon>
+                    <p class="slds-text-body_regular">
+                        <template if:true={hasRecords}>
+                            No records match the current filters.
+                        </template>
+                        <template if:false={hasRecords}>
+                            No records found.
+                        </template>
+                    </p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
+

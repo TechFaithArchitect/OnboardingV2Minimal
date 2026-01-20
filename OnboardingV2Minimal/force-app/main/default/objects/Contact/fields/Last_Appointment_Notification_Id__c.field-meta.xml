@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Last_Appointment_Notification_Id__c</fullName>
+    <description>This field contains the Id of the last service appointment that received a notification. (PVFSL-214)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This field contains the Id of the last service appointment that received a notification.</inlineHelpText>
+    <label>Last Appointment Notification Id</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

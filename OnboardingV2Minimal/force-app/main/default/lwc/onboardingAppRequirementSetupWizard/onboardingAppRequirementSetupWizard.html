@@ -1,0 +1,64 @@
+<template>
+  <lightning-card title="Configure Onboarding Requirements">
+    <div class="slds-p-around_medium">
+
+      <!-- Requirement Set -->
+      <lightning-input
+        label="Requirement Set Name"
+        value={requirementSetName}
+        onchange={handleRequirementSetNameChange}>
+      </lightning-input>
+
+      <lightning-button
+        variant="brand"
+        label="Create Requirement Set"
+        onclick={createRequirementSet}
+        class="slds-m-top_small"
+        disabled={requirementSetCreated}>
+      </lightning-button>
+
+      <template if:true={requirementSetCreated}>
+        <hr class="slds-m-vertical_medium"/>
+
+        <!-- Requirement Template Creation -->
+        <lightning-input
+          label="New Requirement Template Name"
+          value={newTemplateName}
+          onchange={handleNewTemplateNameChange}>
+        </lightning-input>
+
+        <lightning-combobox
+          label="Requirement Type"
+          value={newRequirementType}
+          options={requirementTypeOptions}
+          onchange={handleRequirementTypeChange}>
+        </lightning-combobox>
+
+        <lightning-button
+          label="Add Requirement Template"
+          onclick={addRequirementTemplate}
+          class="slds-m-top_small">
+        </lightning-button>
+
+        <!-- Templates List -->
+        <template if:true={requirementTemplates.length}>
+          <lightning-layout multiple-rows class="slds-m-top_medium">
+            <template for:each={requirementTemplates} for:item="tpl">
+              <lightning-layout-item key={tpl.Id} size="12">
+                • {tpl.Name} ({tpl.Requirement_Type__c})
+              </lightning-layout-item>
+            </template>
+          </lightning-layout>
+        </template>
+
+       <lightning-button
+        variant="success"
+        label="Done"
+        onclick={finalizeSetup}
+        class="slds-m-top_large"
+        disabled={isDoneDisabled}>
+        </lightning-button>
+      </template>
+    </div>
+  </lightning-card>
+</template>

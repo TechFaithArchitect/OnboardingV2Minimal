@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Wireless_Business_Segment__c</fullName>
+    <externalId>false</externalId>
+    <label>Infrastructure Business Segment</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>3PO (Extenet, Mobility) (Third Party Operator)</fullName>
+                <default>false</default>
+                <label>3PO (Extenet, Mobility) (Third Party Operator)</label>
+            </value>
+            <value>
+                <fullName>Broadband Provider (ISP)</fullName>
+                <default>false</default>
+                <label>Broadband Provider (ISP)</label>
+            </value>
+            <value>
+                <fullName>Building Owner</fullName>
+                <default>false</default>
+                <label>Building Owner</label>
+            </value>
+            <value>
+                <fullName>Carrier</fullName>
+                <default>false</default>
+                <label>Carrier (VZW, TMOB, etc: Tier I and II)</label>
+            </value>
+            <value>
+                <fullName>CATV</fullName>
+                <default>false</default>
+                <label>CATV</label>
+            </value>
+            <value>
+                <fullName>Competition</fullName>
+                <default>false</default>
+                <label>Competition</label>
+            </value>
+            <value>
+                <fullName>Electrical/Network Cabling</fullName>
+                <default>false</default>
+                <label>Electrical Supplies/Distributor</label>
+            </value>
+            <value>
+                <fullName>Engineering Firm</fullName>
+                <default>false</default>
+                <label>Engineering, A/E company</label>
+            </value>
+            <value>
+                <fullName>Government</fullName>
+                <default>false</default>
+                <label>Government Entity</label>
+            </value>
+            <value>
+                <fullName>MDU</fullName>
+                <default>false</default>
+                <label>MDU/L&amp;I</label>
+            </value>
+            <value>
+                <fullName>OEM</fullName>
+                <default>false</default>
+                <label>OEM</label>
+            </value>
+            <value>
+                <fullName>OSP</fullName>
+                <default>false</default>
+                <label>OSP</label>
+            </value>
+            <value>
+                <fullName>Structure Cabling/Electrical contractor</fullName>
+                <default>false</default>
+                <label>Structure Cabling/Electrical contractor</label>
+            </value>
+            <value>
+                <fullName>Telecom Distributor/reseller</fullName>
+                <default>false</default>
+                <label>Telecom Distributor/reseller</label>
+            </value>
+            <value>
+                <fullName>Tower Contractor</fullName>
+                <default>false</default>
+                <label>Tower Contractor</label>
+            </value>
+            <value>
+                <fullName>Tower Owner</fullName>
+                <default>false</default>
+                <label>Tower Owner</label>
+            </value>
+            <value>
+                <fullName>Turf/GC</fullName>
+                <default>false</default>
+                <label>Turf/GC</label>
+            </value>
+            <value>
+                <fullName>Utility</fullName>
+                <default>false</default>
+                <label>Utility</label>
+            </value>
+            <value>
+                <fullName>DAS Integrator</fullName>
+                <default>false</default>
+                <label>DAS Integrator</label>
+            </value>
+            <value>
+                <fullName>Public Safety</fullName>
+                <default>false</default>
+                <label>Public Safety</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>6</visibleLines>
+</CustomField>

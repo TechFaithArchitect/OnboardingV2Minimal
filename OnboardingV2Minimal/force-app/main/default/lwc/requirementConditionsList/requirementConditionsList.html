@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="Requirement Conditions">
+        <template if:true={conditions}>
+            <lightning-datatable
+                key-field="Id"
+                data={conditions}
+                columns={columns}
+                onrowaction={handleRowAction}
+            ></lightning-datatable>
+        </template>
+
+        <lightning-button label="Add Condition" variant="brand" onclick={addCondition} class="slds-m-top_medium"></lightning-button>
+    </lightning-card>
+</template>

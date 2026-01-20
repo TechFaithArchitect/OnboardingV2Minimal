@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Onboarding__c</fullName>
+    <description>Vendor Program Onboarding record this account engagement relates to.</description>
+    <label>Vendor Program Onboarding</label>
+    <referenceTo>Onboarding__c</referenceTo>
+    <relationshipLabel>Account Vendor Program Onboardings</relationshipLabel>
+    <relationshipName>Account_Vendor_Onboarding_Links</relationshipName>
+    <relationshipOrder>1</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

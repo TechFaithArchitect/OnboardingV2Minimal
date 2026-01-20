@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Viasat_Training_Email_Data_Fields</fullName>
+    <active>true</active>
+    <description>Alerts users that when data is missing in fields that are used to populate info into the training email.</description>
+    <errorConditionFormula>AND(
+RecordType.Name = &quot;Viasat&quot;,
+ISBLANK(Training_Email_Sent__c),
+ISPICKVAL(Submitted_to_Viasat__c, &quot;Complete&quot;),
+ISBLANK(Viasat_Training_Username__c),
+NOT(ISPICKVAL(Application_Status__c, &quot;Setup Complete&quot;)))</errorConditionFormula>
+    <errorDisplayField>Viasat_Training_Username__c</errorDisplayField>
+    <errorMessage>Please ensure the Viasat Training Username field is filled in before saving the record.</errorMessage>
+</ValidationRule>

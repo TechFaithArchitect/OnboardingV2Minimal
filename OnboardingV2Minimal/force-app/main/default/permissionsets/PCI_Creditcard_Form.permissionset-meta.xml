@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>CreditCheckTabController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ErrorLogModel</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>POECCEncryptionService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>POE_RegExObtainer</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>checkoutTabController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>Permissions needed to use the PCI CreditCard Form</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>PCI Creditcard Form</label>
+</PermissionSet>

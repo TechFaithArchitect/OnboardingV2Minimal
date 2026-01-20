@@ -1,0 +1,129 @@
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--lwc-spacingMedium, 1rem);
+}
+
+.donut-chart {
+    position: relative;
+    display: inline-block;
+}
+
+.donut-segment {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.donut-segment:hover {
+    opacity: 0.8;
+}
+
+.donut-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.donut-total {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--lwc-colorTextDefault, #080707);
+}
+
+.donut-label {
+    font-size: 0.875rem;
+    color: var(--lwc-colorTextWeak, #706e6b);
+}
+
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lwc-spacingSmall, 0.5rem);
+    padding: var(--lwc-spacingMedium, 1rem);
+}
+
+.bar-item {
+    display: flex;
+    align-items: center;
+    gap: var(--lwc-spacingSmall, 0.5rem);
+}
+
+.bar-label {
+    min-width: 150px;
+    font-size: 0.875rem;
+    color: var(--lwc-colorTextDefault, #080707);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bar-container {
+    flex: 1;
+    height: 24px;
+    background-color: var(--lwc-colorBackground, #f3f2f2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--lwc-colorBrand, #0070d2) 0%, var(--lwc-colorBrandDark, #005fb2) 100%);
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: var(--lwc-spacingXxxSmall, 0.25rem);
+}
+
+.bar-value {
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 600;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--lwc-spacingMedium, 1rem);
+    padding: var(--lwc-spacingMedium, 1rem);
+    margin-top: var(--lwc-spacingMedium, 1rem);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--lwc-spacingXSmall, 0.5rem);
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+}
+
+.legend-label {
+    font-size: 0.875rem;
+    color: var(--lwc-colorTextDefault, #080707);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .chart-container {
+        padding: var(--lwc-spacingSmall, 0.5rem);
+    }
+    
+    .bar-label {
+        min-width: 100px;
+        font-size: 0.75rem;
+    }
+    
+    .legend {
+        flex-direction: column;
+        gap: var(--lwc-spacingXSmall, 0.5rem);
+    }
+}
+

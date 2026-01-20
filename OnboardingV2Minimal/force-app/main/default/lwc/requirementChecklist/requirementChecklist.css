@@ -1,0 +1,8 @@
+.stage {
+  border-left: 4px solid var(--lwc-colorBorder, #dddbda);
+  padding-left: 0.75rem;
+}
+.requirement .status {
+  background: #f3f2f2;
+  color: #3e3e3c;
+}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contract_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Contract Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Program Base Application - with Chuzo</fullName>
+                <default>false</default>
+                <label>Program Base Application - with Chuzo</label>
+            </value>
+            <value>
+                <fullName>Program Base Application - without Chuzo</fullName>
+                <default>false</default>
+                <label>Program Base Application - without Chuzo</label>
+            </value>
+            <value>
+                <fullName>Program Base Application - with Chuzo (No Personal Guarantee)</fullName>
+                <default>false</default>
+                <label>Program Base Application - with Chuzo (No Personal Guarantee)</label>
+            </value>
+            <value>
+                <fullName>Base Application - Infrastructure</fullName>
+                <default>false</default>
+                <label>Base Application - Infrastructure</label>
+            </value>
+            <value>
+                <fullName>Not Applicable</fullName>
+                <default>false</default>
+                <label>Not Applicable</label>
+            </value>
+            <value>
+                <fullName>NDA</fullName>
+                <default>false</default>
+                <label>NDA</label>
+            </value>
+            <value>
+                <fullName>Vendor</fullName>
+                <default>false</default>
+                <label>Vendor</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

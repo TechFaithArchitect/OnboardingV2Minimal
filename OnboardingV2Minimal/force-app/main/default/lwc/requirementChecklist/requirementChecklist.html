@@ -1,0 +1,88 @@
+<template>
+  <section class="slds-card slds-p-around_medium">
+    <div class="slds-text-title_caps slds-m-bottom_small">
+      Your Onboarding Checklist
+    </div>
+
+    <template if:true={loading}>
+      <lightning-spinner
+        alternative-text="Loading checklist"
+        size="small"
+      ></lightning-spinner>
+    </template>
+
+    <template if:true={error}>
+      <div
+        class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error"
+        role="alert"
+      >
+        <span class="slds-assistive-text">Error</span>
+        <h2>Unable to load checklist: {error}</h2>
+      </div>
+    </template>
+
+    <template if:true={stages}>
+      <template for:each={stages} for:item="stage">
+        <div key={stage.name} class="stage slds-m-bottom_medium">
+          <div class="slds-text-heading_small slds-m-bottom_x-small">
+            {stage.name}
+          </div>
+          <div class="slds-grid slds-wrap slds-gutters">
+            <template for:each={stage.requirements} for:item="req">
+              <div
+                key={req.requirementId}
+                class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-around_x-small"
+              >
+                <article class="slds-card slds-p-around_small requirement">
+                  <div
+                    class="slds-grid slds-grid_align-spread slds-m-bottom_x-small"
+                  >
+                    <div class="slds-text-title_bold">
+                      {req.requirementName}
+                    </div>
+                    <span class="status slds-badge">{req.status}</span>
+                  </div>
+                  <div class="slds-text-body_small slds-m-bottom_small">
+                    <template if:true={req.dueDate}>
+                      Due:
+                      <lightning-formatted-date-time
+                        value={req.dueDate}
+                      ></lightning-formatted-date-time>
+                    </template>
+                  </div>
+                  <template if:false={req.lockReason}>
+                    <lightning-button
+                      label="Open Form"
+                      variant="brand"
+                      onclick={handleOpenForm}
+                      data-id={req.requirementId}
+                    >
+                    </lightning-button>
+                  </template>
+                  <template if:true={req.lockReason}>
+                    <div class="slds-text-color_error slds-text-body_small">
+                      Locked: {req.lockReason}
+                    </div>
+                  </template>
+                </article>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </template>
+
+    <template if:true={stages}>
+      <template if:true={stages.length}>
+        <!-- spacer -->
+      </template>
+      <template if:false={stages.length}>
+        <div
+          class="slds-text-body_regular slds-p-vertical_medium slds-text-color_weak"
+        >
+          No requirements available yet.
+        </div>
+      </template>
+    </template>
+  </section>
+</template>

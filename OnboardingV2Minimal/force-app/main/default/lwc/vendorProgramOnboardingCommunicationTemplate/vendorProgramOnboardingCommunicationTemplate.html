@@ -1,0 +1,80 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <template if:true={isLoading}>
+        <lightning-spinner size="small"></lightning-spinner>
+      </template>
+
+      <template if:false={isLoading}>
+        <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-body_small slds-m-bottom_none">
+                <strong>Communication Template:</strong> Standardized emails/notifications sent to vendors during onboarding. 
+                Select a template, recipient group, and when to send (trigger condition).
+                <strong>Example:</strong> "Onboarding Status = 'Setup Complete'"
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <template if:true={hasTemplates}>
+          <lightning-combobox
+            label="Select Communication Template"
+            value={selectedTemplateId}
+            options={templateOptions}
+            onchange={handleTemplateChange}
+            required
+            class="slds-m-bottom_medium">
+          </lightning-combobox>
+        </template>
+
+        <template if:false={hasTemplates}>
+          <p class="slds-text-body_regular slds-m-bottom_medium">No Communication Templates found.</p>
+        </template>
+
+        <template if:true={hasRecipientGroups}>
+          <lightning-combobox
+            label="Select Recipient Group"
+            value={selectedRecipientGroupId}
+            options={recipientGroupOptions}
+            onchange={handleRecipientGroupChange}
+            required
+            class="slds-m-bottom_medium">
+          </lightning-combobox>
+        </template>
+
+        <template if:false={hasRecipientGroups}>
+          <p class="slds-text-body_regular slds-m-bottom_medium">No Recipient Groups found. Please create one in Step 9.</p>
+        </template>
+
+        <lightning-input
+          label="Trigger Condition"
+          value={triggerCondition}
+          onchange={handleTriggerConditionChange}
+          placeholder="e.g., Onboarding Status = 'Setup Complete'"
+          required
+          class="slds-m-bottom_medium">
+        </lightning-input>
+
+        <div class="slds-m-top_medium">
+          <lightning-button
+            label="Save"
+            variant="brand"
+            onclick={handleSaveClick}
+            disabled={isSaveDisabled}>
+          </lightning-button>
+        </div>
+      </template>
+
+      <!-- Navigation -->
+      <div class="slds-m-top_medium">
+        <!-- Navigation buttons removed - handled by flow engine footer -->
+      </div>
+    </div>
+  </lightning-card>
+</template>
+

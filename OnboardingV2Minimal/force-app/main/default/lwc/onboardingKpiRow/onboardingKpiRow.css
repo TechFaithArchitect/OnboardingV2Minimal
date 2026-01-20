@@ -1,0 +1,30 @@
+.kpi-card {
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+    min-height: 100px;
+}
+
+.kpi-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-card .slds-text-heading_large {
+    font-weight: 600;
+    color: var(--lwc-colorTextDefault, #080707);  /* SLDS: default text */
+}
+
+.negative {
+    color: #c23934;  /* Error red - no SLDS text error token available */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .kpi-card {
+        min-height: 80px;
+    }
+    
+    .kpi-card .slds-text-heading_large {
+        font-size: 1.5rem;
+    }
+}
+

@@ -1,0 +1,38 @@
+<template>
+  <template if:true={processId}>
+    <c-onboarding-flow-engine 
+      process-id={processId} 
+      vendor-program-id={effectiveVendorProgramId}>
+    </c-onboarding-flow-engine>
+  </template>
+
+  <template if:false={processId}>
+    <template if:true={hasError}>
+      <div class="slds-box slds-theme_error slds-m-around_medium">
+        <div class="slds-text-heading_small slds-m-bottom_small">
+          <lightning-icon icon-name="utility:error" alternative-text="Error" size="small" class="slds-m-right_x-small"></lightning-icon>
+          Process Not Found
+        </div>
+        <p class="slds-text-body_regular">
+          No onboarding process is configured for this Vendor Program. To start the onboarding wizard, you need to:
+        </p>
+        <ul class="slds-list_dotted slds-m-top_small slds-m-left_large">
+          <li>Create an <strong>Onboarding_Application_Process__c</strong> record named "Vendor Program Onboarding"</li>
+          <li>Set the process to <strong>Active__c = true</strong></li>
+          <li>Configure stages with components from the Component Library</li>
+          <li>Or, go to the Home Dashboard and click "Sync Component Library" to ensure all components are available</li>
+        </ul>
+        <div class="slds-m-top_medium">
+          <lightning-button 
+            variant="brand" 
+            label="Go to Dashboard" 
+            onclick={handleGoToDashboard}>
+          </lightning-button>
+        </div>
+      </div>
+    </template>
+    <template if:false={hasError}>
+      <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+    </template>
+  </template>
+</template>

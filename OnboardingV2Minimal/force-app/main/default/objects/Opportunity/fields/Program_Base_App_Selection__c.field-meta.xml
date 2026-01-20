@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Program_Base_App_Selection__c</fullName>
+    <externalId>false</externalId>
+    <label>Program Base App Selection</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Program Base Application - with Chuzo</fullName>
+                <default>false</default>
+                <label>Program Base Application - with Chuzo</label>
+            </value>
+            <value>
+                <fullName>Program Base Application - without Chuzo</fullName>
+                <default>false</default>
+                <label>Program Base Application - without Chuzo</label>
+            </value>
+            <value>
+                <fullName>Program Base Application - with Chuzo (No Personal Guarantee)</fullName>
+                <default>false</default>
+                <label>Program Base Application - with Chuzo (No Personal Guarantee)</label>
+            </value>
+            <value>
+                <fullName>Base Application - Infrastructure</fullName>
+                <default>false</default>
+                <label>Base Application - Infrastructure</label>
+            </value>
+            <value>
+                <fullName>Not Applicable</fullName>
+                <default>false</default>
+                <label>Not Applicable</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

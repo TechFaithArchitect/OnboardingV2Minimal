@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description
+  >Custom metadata mirror of org-wide email addresses synchronized from OrgWideEmailAddress via OrgWideEmailSyncService. Keeps email sending options in sync with Salesforce org-wide email addresses, enabling onboarding communications and Vendor Program setup to reference valid From addresses without querying OrgWideEmailAddress directly. Example: An Org_Wide_Email metadata record with DeveloperName__c=&quot;Onboarding_Support&quot; and Email_Address__c=&quot;onboarding@company.com&quot; can be referenced by Communication_Template__c records or Vendor Program configuration. The sync process (OrgWideEmailSyncService) runs nightly to ensure this custom metadata stays in sync with source OrgWideEmailAddress records, preventing email send failures due to invalid or inactive addresses. Also synced to OrgWideEmail__c custom object for SOQL queries.</description>
+    <label>Org Wide Email</label>
+    <pluralLabel>Org Wide Emails</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

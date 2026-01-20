@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POE_Email_EarthLink__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( NOT(ISBLANK(POE_365Pass__c )),BR() &amp; &quot;EarthLink&quot; &amp; BR() &amp; BR() &amp; &quot;Partner Portal User Name: &quot; &amp;  Email &amp; BR() &amp; &quot;Partner Portal Temporary Password:&quot; &amp;  POE_365Pass__c &amp; BR() &amp; BR() &amp; &quot;AOE Order Entry User Name:&quot; &amp;  POE_AOE_Id__c &amp; BR() &amp; &quot;AOE Temporary Password:&quot; &amp; POE_AOE_Pass__c &amp; BR() &amp; BR(), &apos;&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Email Body EarthLink</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

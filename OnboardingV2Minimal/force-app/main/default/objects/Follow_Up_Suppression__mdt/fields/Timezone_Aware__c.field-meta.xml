@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Timezone_Aware__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Respect dealer timezone when applying suppression window.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Timezone Aware</label>
+    <type>Checkbox</type>
+</CustomField>

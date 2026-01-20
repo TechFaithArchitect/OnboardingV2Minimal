@@ -1,0 +1,79 @@
+<template>
+    <lightning-card title="Requirement Validation Rules" icon-name="utility:rules">
+        <div class="slds-p-horizontal_small slds-p-vertical_x-small">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12">
+                    <lightning-button variant="brand" label="New Rule" onclick={handleNew}></lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item size="12">
+                    <lightning-datatable
+                        key-field="developerName"
+                        data={rules}
+                        columns={columns}
+                        onrowaction={handleRowAction}
+                        hide-checkbox-column>
+                    </lightning-datatable>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+
+        <template if:true={editing}>
+            <div class="slds-p-horizontal_small slds-p-vertical_small slds-border_top">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12">
+                        <div class="slds-text-heading_small slds-m-bottom_small">
+                            {formTitle}
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-input label="Rule Label" value={form.label} data-field="label" onchange={handleInputChange} required></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-input label="Requirement Field API Name" value={form.requirementField} data-field="requirementField" onchange={handleInputChange} required></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-combobox
+                            label="Validation Type"
+                            value={form.validationType}
+                            data-field="validationType"
+                            options={validationTypeOptions}
+                            onchange={handleInputChange}
+                            required>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-combobox
+                            label="Validation Mode"
+                            value={form.validationMode}
+                            data-field="validationMode"
+                            options={validationModeOptions}
+                            onchange={handleInputChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-textarea label="Validation Expression" value={form.validationExpression} data-field="validationExpression" onchange={handleInputChange} required></lightning-textarea>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-textarea label="Error Message" value={form.errorMessage} data-field="errorMessage" onchange={handleInputChange} required></lightning-textarea>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-input label="External Service Id (optional)" value={form.externalService} data-field="externalService" onchange={handleInputChange}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <lightning-input type="number" label="Sequence" value={form.sequence} data-field="sequence" onchange={handleInputChange}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-textarea label="Description" value={form.description} data-field="description" onchange={handleInputChange}></lightning-textarea>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-input type="checkbox" label="Active" checked={form.isActive} data-field="isActive" onchange={handleCheckboxChange}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" class="slds-m-top_small">
+                        <lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+                        <lightning-button class="slds-m-left_small" label="Cancel" onclick={handleCancel}></lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        </template>
+    </lightning-card>
+</template>

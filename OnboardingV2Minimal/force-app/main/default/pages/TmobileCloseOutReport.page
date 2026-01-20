@@ -1,0 +1,20 @@
+<apex:page standardController="WorkOrder" extensions="PV_TmobileReportGenerator" renderAs="pdf">
+    <apex:form >
+        <apex:pageBlock >
+            
+            <!-- Header for images -->
+            <apex:outputPanel layout="block" style="font-weight:bold;">
+                <apex:outputText value="All SharinPix and VRA images for {!tmoNumber}" rendered="{!relatedImages.size > 0}"/>
+                <apex:outputText value="No images" rendered="{!relatedImages.size == 0}"/>
+            </apex:outputPanel>
+            
+            <apex:outputPanel rendered="{!relatedImages.size > 0}">
+            <apex:repeat value="{!relatedImages}" var="file">
+                <apex:outputPanel layout="block" style="float:left;margin-right:10px;">
+                    <apex:image url="/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&versionId={!file.Id}" width="250" height="250"/>
+                </apex:outputPanel>
+            </apex:repeat>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>Background_Check_Status__c</columns>
+    <columns>Business_License_Status__c</columns>
+    <columns>Compliance_Status__c</columns>
+    <columns>Contract_Status__c</columns>
+    <columns>Credit_Check_Status__c</columns>
+    <columns>Contract_Type__c</columns>
+    <columns>Territory_Assignments__c</columns>
+    <columns>Action_Plan__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CREATED_DATE</field>
+        <operation>greaterOrEqual</operation>
+        <value>7/25/2025 12:00 AM</value>
+    </filters>
+    <label>All</label>
+</ListView>

@@ -1,0 +1,33 @@
+<template>
+  <div class="slds-box slds-theme_default">
+    <template if:true={recordId}>
+      <lightning-card title="Requirement Details (Placeholder)">
+        <div class="slds-p-around_small">
+          <p>Requirements for Onboarding Record: {recordId}</p>
+          <template for:each={requirements} for:item="req">
+            <div key={req.id} class="slds-p-around_x-small">
+              <lightning-layout>
+                <lightning-layout-item size="12">
+                  <h3>{req.name}</h3>
+                </lightning-layout-item>
+                <lightning-layout-item size="6">
+                  <p>Status: {req.status}</p>
+                </lightning-layout-item>
+                <lightning-layout-item size="6">
+                  <p>Due Date: {req.dueDate}</p>
+                </lightning-layout-item>
+              </lightning-layout>
+            </div>
+          </template>
+        </div>
+      </lightning-card>
+    </template>
+    <template if:false={recordId}>
+      <lightning-card title="No Onboarding Selected">
+        <div class="slds-p-around_small">
+          <p>Please select an onboarding record to view requirements.</p>
+        </div>
+      </lightning-card>
+    </template>
+  </div>
+</template>

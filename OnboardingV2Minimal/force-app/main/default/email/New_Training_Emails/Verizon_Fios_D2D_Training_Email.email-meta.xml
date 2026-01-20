@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Verizon Fios D2D Training Email Template</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Verizon Fios D2D Training Email</name>
+    <style>none</style>
+    <subject
+  >You&apos;re Almost There! Complete Required Training Below!</subject>
+    <textOnly>%%subject%%
+
+
+You&apos;re Almost There!
+Complete Required Training Below!
+
+PerfectVision Account Number:  {!Account.P10_Invoice_Account__c}
+Contract  Number: {!Contract.ContractNumber}
+
+You&apos;re just steps away from onboarding your dealership to sell Verizon  Fios products and services. Complete the required training to finalize your  setup.
+
+Complete Your Training Via Workday
+
+Follow this link to create your S-PIN and  security questions: Verizon Fios PIN Setup
+Once completed, follow this link to create your  password and select the second option (ADEBP): Verizon Fios Password Creation
+Begin your training here: WorkDay Dashboard
+
+Type VZ4444 in the  search bar at the top of the page to load your required training
+
+
+Your Verizon Fios Login Credentials
+
+Last Name: {!Contact.LastName}
+SSOID/Username: {!Contact.ECC_Username__c}
+Community ID: PERFVIS
+Employee ID/Native Worker Number: {!Contact.ECC_CIM_Workers__c}
+PIN: {!Contact.ECC_PIN__c}
+
+Required Training
+
+VZ154364 – CPNI 2025 Annual Training – Third  Parties
+VZ154774 – FCC Broadband Labels for VCG – 2025
+VZ154335 – Intro to Wireless for RSS
+VZ151889 – Mobile Sale Requirements
+VZ154587 – Portable Electronics Insurance (PEI)  Training – 2025
+VZ153801 – RSS Flex 2.0 Order Process
+VZ125211 RSS Onboarding Benes-Wavier  Guideline-Certs
+VZ127680 – RSS Onboarding CD2D Weekly Compliance  Checklist
+VZ125487 – RSS Onboarding Do Not Solicit
+VZ154077 – Selling with Integrity for RSS/VEC
+VZ135918 – State Comprehensive Privacy Laws –  Consumer
+VZ152837 – Verizon Home Device Protect (VHDP_  Refresh 2024
+VZ152337 – Verizon Sales Agent Standards of  Conduct 2024
+
+Your Support Team
+
+Customer Service 800.205.8620 ext. 2655
+CustomerService@perfect-vision.com
+
+General Request or Escalations
+Product Returns
+Shipment Discrepancies
+Website Support
+Insurance / Resale Document
+Reporting &amp; Order Support
+
+Commission Escalations 800.205.8620 ext. 2140
+CommissionEscalations@perfect-vision.com
+
+Commission Support
+Incentive Pay Questions
+Incorrect Payment
+Order Status Dispute
+
+Marketing 800.205.8620 ext. 2611
+PVMarketing@perfect-vision.com
+
+General       Marketing Assistance
+Building       Ads
+Ordering       or Placing Pre-approved Ads
+Marketing       Consulting
+
+Training
+800.205.8620 ext. 3127
+ProgramSpecialists@perfect-vision.com
+
+Webinar Trainings to Train Sales Staff
+Instructions on Order Entry
+Resources Available
+Sales Positioning
+
+Log in to the PerfectVision website to access all learning resources.
+
+Login Credentials
+
+Username: Your PerfectVision account number
+Password: Your current password for the website
+
+Note: You must be signed in to view Partner Resources pages. If this is your  first time logging in and you encounter issues, please contact Customer  Service.
+
+Phone:  800.205.8620 ext. 2655
+
+How to Access Partner Resources
+
+After signing in, navigate to Resources       &gt; Partner Resources &gt;  select desired program.
+
+Follow on X Friend on Facebook Connect on LinkedIn
+Copyright © 2025, All rights reserved.
+
+Our mailing address is:
+
+PerfectVision
+16101 La Grande Dr.
+Little Rock, AR 72223</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

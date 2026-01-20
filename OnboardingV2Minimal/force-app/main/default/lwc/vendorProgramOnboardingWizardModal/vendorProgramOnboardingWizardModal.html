@@ -1,0 +1,240 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container">
+            <!-- Modal Header -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleClose}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+                    <template if:true={showSelection}>Vendors & Programs</template>
+                    <template if:true={showVendorCreation}>Select or Create Vendor</template>
+                    <template if:true={showWizard}>Vendor Program Onboarding</template>
+                </h2>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="min-height: 600px; max-height: 80vh; overflow-y: auto;">
+                
+                <!-- Vendor/Program Selection Tree Grid (First Step) -->
+                <template if:true={showSelection}>
+                    <template if:true={isResumingOnboarding}>
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <lightning-spinner alternative-text="Starting onboarding..." size="medium"></lightning-spinner>
+                            <p class="slds-text-align_center slds-m-top_medium slds-text-body_regular">Starting onboarding process...</p>
+                        </div>
+                    </template>
+                    <template if:false={isResumingOnboarding}>
+                        <div class="slds-grid slds-gutter slds-m-bottom_small">
+                            <div class="slds-col slds-size_3-of-4">
+                                <lightning-input
+                                    label="Search Vendors or Programs"
+                                    value={vendorSearchText}
+                                    onchange={handleVendorSearchChange}
+                                    placeholder="Type to search..."
+                                    icon-name="utility:search">
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-4 slds-align_absolute-center">
+                                <lightning-button
+                                    label="Create New"
+                                    variant="brand"
+                                    icon-name="utility:add"
+                                    onclick={handleCreateNew}
+                                    class="slds-m-top_large">
+                                </lightning-button>
+                            </div>
+                        </div>
+                        <template if:true={isVendorHierarchyLoading}>
+                            <div class="slds-align_absolute-center slds-p-around_large">
+                                <lightning-spinner alternative-text="Loading vendors and programs..." size="medium"></lightning-spinner>
+                            </div>
+                        </template>
+                        <template if:false={isVendorHierarchyLoading}>
+                            <template if:true={vendorHierarchy.length}>
+                                <lightning-tree-grid
+                                    key-field="id"
+                                    data={vendorHierarchy}
+                                    columns={vendorHierarchyColumns}
+                                    onrowaction={handleVendorHierarchyRowAction}
+                                    expanded-rows={expandedVendorRows}
+                                    hide-checkbox-column>
+                                </lightning-tree-grid>
+                            </template>
+                            <template if:false={vendorHierarchy.length}>
+                                <div class="slds-text-align_center slds-p-around_large">
+                                    <p class="slds-text-body_regular">
+                                        <template if:true={vendorSearchText}>
+                                            No vendors or programs found matching "{vendorSearchText}".
+                                        </template>
+                                        <template if:false={vendorSearchText}>
+                                            No vendors found. Click "Create New" to create a new vendor program.
+                                        </template>
+                                    </p>
+                                </div>
+                            </template>
+                        </template>
+                    </template>
+                </template>
+
+                <!-- Vendor Creation Screen -->
+                <template if:true={showVendorCreation}>
+                    <p class="slds-text-body_regular slds-m-bottom_medium">
+                        Select an existing vendor or create a new one to continue with vendor program creation.
+                    </p>
+                    
+                    <!-- Search Existing Vendors -->
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="vendor-search-create">
+                            Search for Existing Vendor
+                        </label>
+                        <div class="slds-form-element__control">
+                            <lightning-input
+                                id="vendor-search-create"
+                                type="text"
+                                value={vendorSearchTextForCreate}
+                                onchange={handleVendorSearchChangeForCreate}
+                                placeholder="Type to search vendors (min 2 characters)...">
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <!-- Vendor Search Results -->
+                    <template if:true={vendors.length}>
+                        <div class="slds-form-element slds-m-bottom_medium">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">*</abbr> Select Vendor
+                            </label>
+                            <div class="slds-form-element__control">
+                                <lightning-combobox
+                                    label="Select Vendor"
+                                    value={selectedVendorId}
+                                    options={vendorOptions}
+                                    onchange={handleVendorSelectForCreate}
+                                    placeholder="Select a vendor from the list">
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Or Create New Vendor -->
+                    <div class="slds-divider slds-m-vertical_medium">
+                        <span class="slds-text-body_small slds-p-horizontal_medium">OR</span>
+                    </div>
+
+                    <div class="slds-form-element slds-m-bottom_medium">
+                        <label class="slds-form-element__label" for="new-vendor-name-create">
+                            Create New Vendor
+                        </label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-gutter_x-small">
+                                <div class="slds-col slds-size_3-of-4">
+                                    <lightning-input
+                                        id="new-vendor-name-create"
+                                        type="text"
+                                        value={newVendorName}
+                                        onchange={handleNewVendorNameChange}
+                                        placeholder="Enter new vendor name">
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-4">
+                                    <lightning-button
+                                        label="Create"
+                                        variant="neutral"
+                                        onclick={handleCreateVendor}
+                                        disabled={isCreatingVendor}
+                                        icon-name="utility:add">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Loading State -->
+                <template if:true={isLoading}>
+                    <div class="slds-align_absolute-center slds-m-around_large">
+                        <lightning-spinner alternative-text="Loading wizard..." size="medium"></lightning-spinner>
+                    </div>
+                </template>
+
+                <!-- Error State -->
+                <template if:false={isLoading}>
+                    <template if:true={error}>
+                        <div class="slds-box slds-theme_error slds-m-around_medium">
+                            <div class="slds-text-heading_small slds-m-bottom_small">
+                                <lightning-icon icon-name="utility:error" alternative-text="Error" size="small" class="slds-m-right_x-small"></lightning-icon>
+                                Error
+                            </div>
+                            <p class="slds-text-body_regular slds-m-bottom_medium">
+                                {error}
+                            </p>
+                            <lightning-button 
+                                variant="brand" 
+                                label="Go to Dashboard" 
+                                onclick={handleGoToDashboard}>
+                            </lightning-button>
+                        </div>
+                    </template>
+
+                    <!-- Onboarding Wizard -->
+                    <template if:true={showWizard}>
+                        <c-onboarding-flow-engine 
+                            process-id={processId} 
+                            vendor-program-id={effectiveVendorProgramId}
+                            oncomplete={handleWizardComplete}
+                            onfooterstatechanged={handleFooterStateChanged}
+                            class="wizard-flow-engine">
+                        </c-onboarding-flow-engine>
+                    </template>
+                </template>
+            </div>
+
+            <!-- Modal Footer -->
+            <footer class="slds-modal__footer">
+                <!-- Vendor Creation Footer (Back | Continue) -->
+                <template if:true={showVendorCreation}>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Back" 
+                        onclick={handleBackToSelection}
+                        class="slds-m-right_small">
+                    </lightning-button>
+                    <div class="slds-col slds-text-align_right">
+                        <lightning-button 
+                            variant="brand" 
+                            label="Continue" 
+                            onclick={handleProceedWithVendor}
+                            disabled={cannotProceedWithVendor}>
+                        </lightning-button>
+                    </div>
+                </template>
+
+                <!-- Wizard Footer (Back | Next) -->
+                <template if:true={showWizard}>
+                    <template if:false={showVendorCreation}>
+                        <lightning-button
+                            label="Back"
+                            variant="neutral"
+                            onclick={handleWizardBack}
+                            disabled={wizardBackDisabled}
+                            icon-name="utility:chevronleft"
+                            icon-position="left"
+                            class="slds-m-right_small">
+                        </lightning-button>
+                        <lightning-button
+                            label="Next"
+                            variant="brand"
+                            onclick={handleWizardNext}
+                            disabled={wizardNextDisabled}
+                            icon-name="utility:chevronright"
+                            icon-position="right">
+                        </lightning-button>
+                    </template>
+                </template>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>

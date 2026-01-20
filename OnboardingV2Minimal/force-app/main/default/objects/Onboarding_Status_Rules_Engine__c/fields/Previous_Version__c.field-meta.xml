@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Previous_Version__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Links to the prior version of this rules engine (for version chains).</description>
+    <externalId>false</externalId>
+    <label>Previous Version</label>
+    <referenceTo>Onboarding_Status_Rules_Engine__c</referenceTo>
+    <relationshipLabel>Onboarding Status Rules Engines</relationshipLabel>
+    <relationshipName>Previous_Versions</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

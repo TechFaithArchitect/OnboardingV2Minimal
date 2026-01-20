@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__HomePage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+    <masterLabel>Onboarding Home Dashboard</masterLabel>
+    <description>Home dashboard for the Vendor Onboarding application. Displays summary statistics, active onboarding records, eligible accounts, and recent activity.</description>
+</LightningComponentBundle>

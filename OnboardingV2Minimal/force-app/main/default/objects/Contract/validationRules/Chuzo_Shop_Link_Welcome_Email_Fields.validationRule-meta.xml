@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Chuzo_Shop_Link_Welcome_Email_Fields</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISBLANK(Welcome_Email_Sent__c),
+ISPICKVAL(Application_Status__c, &quot;Setup Complete&quot;),
+RecordType.Name = &quot;Chuzo Shop Link&quot;,
+
+OR(
+ISBLANK(Microsite_URL__c),
+ISBLANK(Toll_Free__c),
+ISBLANK(Shop_ID__c)))</errorConditionFormula>
+    <errorMessage>Please ensure the following fields are filled in before saving the record.
+Microsite URL, Toll Free # and Shop ID before saving the record.</errorMessage>
+</ValidationRule>

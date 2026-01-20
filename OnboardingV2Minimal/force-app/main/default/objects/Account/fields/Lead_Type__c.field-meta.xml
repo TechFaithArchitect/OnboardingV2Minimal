@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Lead Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>SWAP</fullName>
+                <default>false</default>
+                <label>SWAP</label>
+            </value>
+            <value>
+                <fullName>NATE</fullName>
+                <default>false</default>
+                <label>NATE</label>
+            </value>
+            <value>
+                <fullName>WIA</fullName>
+                <default>false</default>
+                <label>WIA</label>
+            </value>
+            <value>
+                <fullName>CTIA</fullName>
+                <default>false</default>
+                <label>CTIA</label>
+            </value>
+            <value>
+                <fullName>Tradeshow</fullName>
+                <default>false</default>
+                <label>Tradeshow</label>
+            </value>
+            <value>
+                <fullName>Social Media</fullName>
+                <default>false</default>
+                <label>Social Media</label>
+            </value>
+            <value>
+                <fullName>Network</fullName>
+                <default>false</default>
+                <label>Network</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>DSI Transition</fullName>
+                <default>false</default>
+                <label>DSI Transition</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

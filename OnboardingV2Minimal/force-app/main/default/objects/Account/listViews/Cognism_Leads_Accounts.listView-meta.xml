@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cognism_Leads_Accounts</fullName>
+    <columns>ACCOUNT_SOURCE</columns>
+    <columns>Account_Owner__pc</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>ACCOUNT.ADDRESS1_STREET</columns>
+    <columns>ACCOUNT.ADDRESS1_CITY</columns>
+    <columns>ACCOUNT.ADDRESS1_STATE</columns>
+    <columns>ACCOUNT.ADDRESS1_ZIP</columns>
+    <columns>ACCOUNT.PHONE1</columns>
+    <columns>PC_EMAIL</columns>
+    <columns>ACCOUNT.URL</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ACCOUNT_SOURCE</field>
+        <operation>equals</operation>
+        <value>Cognism</value>
+    </filters>
+    <label>Cognism Accounts</label>
+    <sharedTo>
+        <group>PV_Manager</group>
+        <roleAndSubordinatesInternal>Program_Acquisitions</roleAndSubordinatesInternal>
+    </sharedTo>
+</ListView>

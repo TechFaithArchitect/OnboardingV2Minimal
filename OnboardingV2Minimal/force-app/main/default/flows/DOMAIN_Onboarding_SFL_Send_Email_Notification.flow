@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email_Action_Deposit_Needed</name>
+        <label>Send Email Action</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>NeededDepositAddressListConstant</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>programspecialists@perfect-vision.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>iPad Deposit Request </stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>Account #: {!OnboardingRecord.Account__r.AccountNumber}
+Account Name: {!OnboardingRecord.Account__r.Name}
+Owner Name: {!OnboardingRecord.Contract__r.Principal_Owner__r.FirstName} {!OnboardingRecord.Contract__r.Principal_Owner__r.LastName}
+Vendor Name: {!OnboardingRecord.Vendor__r.Name}
+Onboarding Status: {!OnboardingRecord.Onboarding_Status__c}</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_Action_Deposit_Paid</name>
+        <label>Send Email Action</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>NeededDepositAddressListConstant</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWideEmailAddress</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>programspecialists@perfect-vision.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>iPad Deposit Paid</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <stringValue>Account #: {!OnboardingRecord.Account__r.AccountNumber}
+Account Name: {!OnboardingRecord.Account__r.Name}
+Owner Name: {!OnboardingRecord.Contract__r.Principal_Owner__r.FirstName} {!OnboardingRecord.Contract__r.Principal_Owner__r.LastName}
+Vendor Name: {!OnboardingRecord.Vendor__r.Name}
+Onboarding Status: {!OnboardingRecord.Onboarding_Status__c}</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>64.0</apiVersion>
+    <constants>
+        <name>NeededDepositAddressListConstant</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>CustomerFinance@perfect-vision.com, SalesProgramManager@perfect-vision.com, Mitchell.Jensen@perfect-vision.com</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>PaidDepositAddressListConstant</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>CustomerService@perfect-vision.com, SalesProgramManager@perfect-vision.com </stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <name>Deposit_Needed_or_Deposit_Paid</name>
+        <label>Deposit Needed or Deposit Paid</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Send_Email_Action_Deposit_Paid</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Deposit Paid</defaultConnectorLabel>
+        <rules>
+            <name>Deposit_Needed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>DepositNeeded</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_Action_Deposit_Needed</targetReference>
+            </connector>
+            <label>Deposit Needed</label>
+        </rules>
+    </decisions>
+    <description>DOMAIN LAYER - Onboarding Record - Subflow - Send Email Notification</description>
+    <environments>Default</environments>
+    <interviewLabel>DOMAIN - Onboarding - SFL - Send Email Notification {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>DOMAIN - Onboarding - SFL - Send Email Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Deposit_Needed_or_Deposit_Paid</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>DepositNeeded</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>true</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>OnboardingRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding__c</objectType>
+    </variables>
+</Flow>

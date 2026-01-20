@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Under_Contract__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates whether the person account is currently under a service contract with a provider.</description>
+    <externalId>false</externalId>
+    <label>Under Contract</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requires_Program_Base__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates this program group requires a Program Base Application on file for eligibility.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>When selected, accounts must have a completed Program Base Application onboarding to be eligible.</inlineHelpText>
+    <label>Requires Program Base</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

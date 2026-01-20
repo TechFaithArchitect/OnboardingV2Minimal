@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity__c</fullName>
+    <description>Rep Generated</description>
+    <externalId>false</externalId>
+    <label>Opportunity Source</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>LeadSource</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Organic SEO</fullName>
+                <default>false</default>
+                <label>Organic SEO</label>
+            </value>
+            <value>
+                <fullName>Referral</fullName>
+                <default>false</default>
+                <label>Referral</label>
+            </value>
+            <value>
+                <fullName>Marketing Paid Ads</fullName>
+                <default>false</default>
+                <label>Marketing Paid Ads</label>
+            </value>
+            <value>
+                <fullName>Outbound Recruiting Efforts</fullName>
+                <default>false</default>
+                <label>Outbound Recruiting Efforts</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Mailer</controllingFieldValue>
+            <controllingFieldValue>Web Search</controllingFieldValue>
+            <controllingFieldValue>Sales Intel</controllingFieldValue>
+            <controllingFieldValue>Cable.com</controllingFieldValue>
+            <controllingFieldValue>Leads List</controllingFieldValue>
+            <controllingFieldValue>LinkedIn Sales Navigator</controllingFieldValue>
+            <controllingFieldValue>Craigslist</controllingFieldValue>
+            <controllingFieldValue>Trade Show</controllingFieldValue>
+            <valueName>Outbound Recruiting Efforts</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Web Search</controllingFieldValue>
+            <controllingFieldValue>Radio/Pod Casts</controllingFieldValue>
+            <controllingFieldValue>Publications</controllingFieldValue>
+            <controllingFieldValue>Cable.com</controllingFieldValue>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <controllingFieldValue>LinkedIn</controllingFieldValue>
+            <controllingFieldValue>Craigslist</controllingFieldValue>
+            <valueName>Organic SEO</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Radio/Pod Casts</controllingFieldValue>
+            <controllingFieldValue>Publications</controllingFieldValue>
+            <controllingFieldValue>CE Pro</controllingFieldValue>
+            <controllingFieldValue>Facebook</controllingFieldValue>
+            <controllingFieldValue>Google Search</controllingFieldValue>
+            <controllingFieldValue>Letters</controllingFieldValue>
+            <controllingFieldValue>LinkedIn</controllingFieldValue>
+            <valueName>Marketing Paid Ads</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Existing DLR Chuzo Program Request</controllingFieldValue>
+            <controllingFieldValue>Partner Referral</controllingFieldValue>
+            <controllingFieldValue>Referred by Existing DLR</controllingFieldValue>
+            <controllingFieldValue>Existing DLR Inbound Call</controllingFieldValue>
+            <valueName>Referral</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

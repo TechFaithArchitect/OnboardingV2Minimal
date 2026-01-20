@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictContactOnCustomerToBeDetermined</fullName>
+    <active>true</active>
+    <description>Contact cannot be created on the account Customer To Be Determined</description>
+    <errorConditionFormula>Account.Name = &quot;Customer To Be Determined&quot;</errorConditionFormula>
+    <errorDisplayField>AccountId</errorDisplayField>
+    <errorMessage>The Contact cannot be created for this Account</errorMessage>
+</ValidationRule>

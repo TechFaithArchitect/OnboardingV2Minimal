@@ -1,0 +1,49 @@
+<template>
+  <template if:true={eccRecords}>
+    <!-- Gray Header with Count -->
+    <div
+      class="slds-section slds-border_bottom slds-p-around_small slds-theme_shade slds-grid slds-grid_vertical-align-center"
+    >
+      <lightning-icon
+        icon-name="standard:form"
+        size="small"
+        class="slds-m-right_small"
+        alternative-text="Required Credential Status"
+      ></lightning-icon>
+      <h2 class="slds-text-heading_small slds-text-title_bold">
+        Required Credential Status ({eccRecords.length})
+      </h2>
+    </div>
+
+    <!-- Card Container -->
+    <div class="slds-box slds-theme_default slds-p-around_medium">
+      <template for:each={eccRecords} for:item="record">
+        <article
+          key={record.Id}
+          class="slds-tile slds-media slds-m-bottom_medium slds-p-around_small slds-border"
+        >
+          <div class="slds-media__body">
+            <ul class="slds-list_horizontal slds-wrap">
+              <li class="slds-size_1-of-1 slds-p-bottom_xx-small">
+                <strong>Credential Type:</strong>
+                {record.External_Contact_Credential_Type__r.Name}
+              </li>
+              <li class="slds-size_1-of-1 slds-p-bottom_xx-small">
+                <strong>Process Status:</strong> {record.POE_Process_Status__c}
+              </li>
+              <li class="slds-size_1-of-1">
+                <strong>Username:</strong> {record.POE_Username__c}
+              </li>
+            </ul>
+          </div>
+        </article>
+      </template>
+    </div>
+  </template>
+
+  <template if:true={error}>
+    <p class="slds-text-color_error slds-p-around_small">
+      ⚠ Error loading ECC records
+    </p>
+  </template>
+</template>

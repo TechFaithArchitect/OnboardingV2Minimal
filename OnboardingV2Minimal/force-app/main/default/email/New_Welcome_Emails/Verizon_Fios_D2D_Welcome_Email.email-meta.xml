@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Verizon Fios D2D Welcome Email</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Verizon Fios D2D Welcome Email</name>
+    <style>none</style>
+    <subject
+  >Congratulations on Becoming a Verizon Fios D2D Authorized Retailer</subject>
+    <textOnly>%%subject%%
+
+Congratulations on Becoming a
+Verizon Fios D2D Authorized Retailer
+
+Log-ins: You will receive your Verizon Fios login credentials shortly after this email, along with a temporary password. If you do not receive it, please contact Customer Service for assistance.
+
+PerfectVision Account Number:  {!Account.P10_Invoice_Account__c}
+Contract  Number: {!Contract.ContractNumber}
+
+Helpful Resources
+
+Log in to the PerfectVision website to access all learning resources.
+
+Login Credentials
+
+Username: Your PerfectVision account number
+Password: Your current password for the website
+
+Note: You must be signed in to view Partner Resources pages. If this is your  first time logging in and you encounter issues, please contact Customer  Service.
+
+Phone:  800.205.8620 ext. 2655
+
+How to Access Partner Resources
+
+After signing in, navigate to Resources       &gt; Partner Resources &gt;  select desired program.
+
+Couldn&apos;t Find What You Need?  We&apos;re Happy to Help!
+
+Sales
+Support
+
+800.205.8620 ext. 2600
+AccountManagers@perfect-vision.com
+
+Chuzo Tech Support   888.993.9480 ext. 2140
+ChuzoSupport@perfect-vision.com
+Customer
+Service   800.205.8620 ext. 2655
+CustomerService@perfect-vision.com
+Commission Escalations   800.205.8620 ext. 2140
+CommissionEscalations@perfect-vision.com
+Marketing
+Materials   800.205.8620 ext. 2611
+PVMarketing@perfect-vision.com
+
+Follow on X Friend on Facebook Connect on LinkedIn
+Copyright © 2025, All rights reserved.
+
+Our mailing address is:
+
+PerfectVision
+16101 La Grande Drive
+Little Rock, AR 72223</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

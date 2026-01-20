@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requires_NDA__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates this program group requires an NDA on file for eligibility.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>When selected, accounts must have a completed NDA onboarding to be eligible for programs in this group.</inlineHelpText>
+    <label>Requires NDA</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Opportunity_Source_Layer_3__c</fullName>
+    <description>This is used for the third layer of opportunities from our marketing efforts to give us the ability to drill down into each tactic and how it is working for us.</description>
+    <externalId>false</externalId>
+    <label>Opportunity Source Layer 3</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Source_Tactic__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>AT&amp;T AR Leads</fullName>
+                <default>false</default>
+                <label>AT&amp;T AR Leads</label>
+            </value>
+            <value>
+                <fullName>Called In Cross Recruiting</fullName>
+                <default>false</default>
+                <label>Called In Cross Recruiting</label>
+            </value>
+            <value>
+                <fullName>Outbound Cross Recruiting</fullName>
+                <default>false</default>
+                <label>Outbound Cross Recruiting</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T ASM</fullName>
+                <default>false</default>
+                <label>AT&amp;T ASM</label>
+            </value>
+            <value>
+                <fullName>Viasat</fullName>
+                <default>false</default>
+                <label>Viasat</label>
+            </value>
+            <value>
+                <fullName>Frontier</fullName>
+                <default>false</default>
+                <label>Frontier</label>
+            </value>
+            <value>
+                <fullName>Windstream</fullName>
+                <default>false</default>
+                <label>Windstream</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T</fullName>
+                <default>false</default>
+                <label>AT&amp;T</label>
+            </value>
+            <value>
+                <fullName>Alder</fullName>
+                <default>false</default>
+                <label>Alder</label>
+            </value>
+            <value>
+                <fullName>SafeStreets</fullName>
+                <default>false</default>
+                <label>SafeStreets</label>
+            </value>
+            <value>
+                <fullName>Optidge</fullName>
+                <default>false</default>
+                <label>Optidge</label>
+            </value>
+            <value>
+                <fullName>PV</fullName>
+                <default>false</default>
+                <label>PV</label>
+            </value>
+            <value>
+                <fullName>Predictive Modeling List</fullName>
+                <default>false</default>
+                <label>Predictive Modeling List</label>
+            </value>
+            <value>
+                <fullName>LAD&apos;s List</fullName>
+                <default>false</default>
+                <label>LAD&apos;s List</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>true</default>
+                <label>N/A</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Current Dealer</controllingFieldValue>
+            <valueName>Called In Cross Recruiting</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Current Dealer</controllingFieldValue>
+            <valueName>Outbound Cross Recruiting</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LinkedIn</controllingFieldValue>
+            <valueName>Optidge</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>LinkedIn</controllingFieldValue>
+            <valueName>PV</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Lead Lists</controllingFieldValue>
+            <valueName>Predictive Modeling List</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Partner Referral</controllingFieldValue>
+            <valueName>AT&amp;T ASM</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Partner Referral</controllingFieldValue>
+            <valueName>Viasat</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Partner Referral</controllingFieldValue>
+            <valueName>Frontier</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Partner Referral</controllingFieldValue>
+            <valueName>Windstream</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Partner Referral</controllingFieldValue>
+            <valueName>Alder</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Partner Referral</controllingFieldValue>
+            <valueName>SafeStreets</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>AT&amp;T Leads</controllingFieldValue>
+            <valueName>AT&amp;T AR Leads</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>AT&amp;T Leads</controllingFieldValue>
+            <valueName>LAD&apos;s List</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

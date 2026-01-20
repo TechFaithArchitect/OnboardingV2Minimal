@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Application_Status__c</fullName>
+    <defaultValue>&quot;New&quot;</defaultValue>
+    <externalId>false</externalId>
+    <label>Application Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <color>#33CC00</color>
+                <default>false</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Paperwork Sent</fullName>
+                <color>#FFFFFF</color>
+                <default>false</default>
+                <label>Paperwork Sent</label>
+            </value>
+            <value>
+                <fullName>Pending Sales</fullName>
+                <default>false</default>
+                <label>Pending Sales</label>
+            </value>
+            <value>
+                <fullName>Pending Initial Review</fullName>
+                <default>false</default>
+                <label>Pending Initial Review</label>
+            </value>
+            <value>
+                <fullName>In Process</fullName>
+                <default>false</default>
+                <label>In Process</label>
+            </value>
+            <value>
+                <fullName>Canceled</fullName>
+                <color>#FFFFFF</color>
+                <default>false</default>
+                <label>Canceled</label>
+            </value>
+            <value>
+                <fullName>Denied</fullName>
+                <color>#FF0000</color>
+                <default>false</default>
+                <label>Denied</label>
+            </value>
+            <value>
+                <fullName>Expired</fullName>
+                <default>false</default>
+                <label>Expired</label>
+            </value>
+            <value>
+                <fullName>Setup Complete</fullName>
+                <color>#009900</color>
+                <default>false</default>
+                <label>Setup Complete</label>
+            </value>
+            <value>
+                <fullName>On Hold</fullName>
+                <default>false</default>
+                <label>On Hold</label>
+            </value>
+            <value>
+                <fullName>Dormant</fullName>
+                <default>false</default>
+                <label>Dormant</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

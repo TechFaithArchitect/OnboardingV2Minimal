@@ -1,0 +1,24 @@
+<template>
+    <div class="slds-grid slds-wrap slds-gutters_small slds-p-horizontal_small slds-p-bottom_small">
+        <template for:each={tiles} for:item="tile">
+            <div
+                key={tile.key}
+                class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-5">
+                <article 
+                    class="slds-card slds-card_boundary slds-p-around_small kpi-card"
+                    data-key={tile.key}
+                    onclick={handleTileClick}>
+                    <div class="slds-text-title_caps slds-text-color_weak slds-m-bottom_xx-small">
+                        <lightning-icon icon-name={tile.icon} size="x-small" class="slds-m-right_xx-small"></lightning-icon>
+                        {tile.label}
+                    </div>
+                    <div class="slds-text-heading_large slds-m-vertical_x-small">{tile.value}</div>
+                    <template if:true={tile.trendLabel}>
+                        <div class={tile.trendClass}>{tile.trendLabel}</div>
+                    </template>
+                </article>
+            </div>
+        </template>
+    </div>
+</template>
+

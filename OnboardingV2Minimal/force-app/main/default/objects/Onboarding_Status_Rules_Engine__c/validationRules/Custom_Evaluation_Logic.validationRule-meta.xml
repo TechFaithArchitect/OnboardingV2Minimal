@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Custom_Evaluation_Logic</fullName>
+    <active>true</active>
+    <description>Forces Evaluation Logic Field to be completed when &quot;Custom&quot; is selected</description>
+    <errorConditionFormula>OR(
+    AND(
+        ISPICKVAL(Evaluation_Logic__c, &apos;CUSTOM&apos;),
+        ISBLANK(Custom_Evaluation_Logic__c)
+    ),
+    AND(
+        NOT(ISPICKVAL(Evaluation_Logic__c, &apos;CUSTOM&apos;)),
+        NOT(ISBLANK(Custom_Evaluation_Logic__c))
+    )
+)</errorConditionFormula>
+    <errorDisplayField>Custom_Evaluation_Logic__c</errorDisplayField>
+    <errorMessage>Custom Evaluation Logic must have their evaluation logic filled out.</errorMessage>
+</ValidationRule>

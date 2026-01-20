@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_Tactic__c</fullName>
+    <externalId>false</externalId>
+    <label>Opportunity Source Layer 2</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Opportunity__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CABL.com</fullName>
+                <default>false</default>
+                <label>CABL.com</label>
+            </value>
+            <value>
+                <fullName>Craigslist</fullName>
+                <default>false</default>
+                <label>Craigslist</label>
+            </value>
+            <value>
+                <fullName>Direct Mail</fullName>
+                <default>false</default>
+                <label>Direct Mail</label>
+            </value>
+            <value>
+                <fullName>Expo - BICSI Vegas 2019</fullName>
+                <default>false</default>
+                <label>Expo - BICSI Vegas 2019</label>
+            </value>
+            <value>
+                <fullName>Expo - Franchise Expo FT Lauderdale 2019</fullName>
+                <default>false</default>
+                <label>Expo - Franchise Expo FT Lauderdale 2019</label>
+            </value>
+            <value>
+                <fullName>Expo - Latino Business - Ventura Oct 2019</fullName>
+                <default>false</default>
+                <label>Expo - Latino Business - Ventura Oct 2019</label>
+            </value>
+            <value>
+                <fullName>Expo - Prepaid &amp; Wireless Vegas 2019</fullName>
+                <default>false</default>
+                <label>Expo - Prepaid &amp; Wireless Vegas 2019</label>
+            </value>
+            <value>
+                <fullName>Expo – Small Biz – Chicago 2019</fullName>
+                <default>false</default>
+                <label>Expo – Small Biz – Chicago 2019</label>
+            </value>
+            <value>
+                <fullName>Expo - Small Biz - LA 2019</fullName>
+                <default>false</default>
+                <label>Expo - Small Biz - LA 2019</label>
+            </value>
+            <value>
+                <fullName>Expo – Small Biz – New York 2019</fullName>
+                <default>false</default>
+                <label>Expo – Small Biz – New York 2019</label>
+            </value>
+            <value>
+                <fullName>Expo – Small Biz – Orlando 2019</fullName>
+                <default>false</default>
+                <label>Expo – Small Biz – Orlando 2019</label>
+            </value>
+            <value>
+                <fullName>Expo - Small Biz - Phoenix 2019</fullName>
+                <default>false</default>
+                <label>Expo - Small Biz - Phoenix 2019</label>
+            </value>
+            <value>
+                <fullName>Facebook</fullName>
+                <default>false</default>
+                <label>Facebook</label>
+            </value>
+            <value>
+                <fullName>From List</fullName>
+                <default>false</default>
+                <label>From List</label>
+            </value>
+            <value>
+                <fullName>Google</fullName>
+                <default>false</default>
+                <label>Google</label>
+            </value>
+            <value>
+                <fullName>LinkedIn</fullName>
+                <default>false</default>
+                <label>LinkedIn</label>
+            </value>
+            <value>
+                <fullName>Print Ads</fullName>
+                <default>false</default>
+                <label>Print Ads</label>
+            </value>
+            <value>
+                <fullName>Web Search</fullName>
+                <default>false</default>
+                <label>Web Search</label>
+            </value>
+            <value>
+                <fullName>Wisp America 2019</fullName>
+                <default>false</default>
+                <label>Wisp America 2019</label>
+            </value>
+            <value>
+                <fullName>WISPAPALOOZA Vegas 2019</fullName>
+                <default>false</default>
+                <label>WISPAPALOOZA Vegas 2019</label>
+            </value>
+            <value>
+                <fullName>Reddit</fullName>
+                <default>false</default>
+                <label>Reddit</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>ACC from Outside</fullName>
+                <default>false</default>
+                <label>ACC from Outside</label>
+            </value>
+            <value>
+                <fullName>Partner Referral</fullName>
+                <default>false</default>
+                <label>Partner Referral</label>
+            </value>
+            <value>
+                <fullName>Current/Previous Dealer association</fullName>
+                <default>false</default>
+                <label>Current/Previous Dealer association</label>
+            </value>
+            <value>
+                <fullName>In Industry - Other products</fullName>
+                <default>false</default>
+                <label>In Industry - Other products</label>
+            </value>
+            <value>
+                <fullName>Dealer Initiated</fullName>
+                <default>false</default>
+                <label>Dealer Initiated</label>
+            </value>
+            <value>
+                <fullName>Cross Recruited</fullName>
+                <default>false</default>
+                <label>Cross Recruited</label>
+            </value>
+            <value>
+                <fullName>Fispalive</fullName>
+                <default>false</default>
+                <label>Fispalive</label>
+            </value>
+            <value>
+                <fullName>Rural BB</fullName>
+                <default>false</default>
+                <label>Rural BB</label>
+            </value>
+            <value>
+                <fullName>Other Paid</fullName>
+                <default>false</default>
+                <label>Other Paid</label>
+            </value>
+            <value>
+                <fullName>Email Campaign</fullName>
+                <default>false</default>
+                <label>Email Campaign</label>
+            </value>
+            <value>
+                <fullName>Third Party Campaign</fullName>
+                <default>false</default>
+                <label>Third Party Campaign</label>
+            </value>
+            <value>
+                <fullName>National Event E-Blast</fullName>
+                <default>false</default>
+                <label>National Event E-Blast</label>
+            </value>
+            <value>
+                <fullName>Energy Letter</fullName>
+                <default>false</default>
+                <label>Energy Letter</label>
+            </value>
+            <value>
+                <fullName>Addressable GeoFencing</fullName>
+                <default>false</default>
+                <label>Addressable GeoFencing</label>
+            </value>
+            <value>
+                <fullName>In Person</fullName>
+                <default>false</default>
+                <label>In Person</label>
+            </value>
+            <value>
+                <fullName>Phone</fullName>
+                <default>false</default>
+                <label>Phone</label>
+            </value>
+            <value>
+                <fullName>Mailers</fullName>
+                <default>false</default>
+                <label>Mailers</label>
+            </value>
+            <value>
+                <fullName>SEO Page Retargeting</fullName>
+                <default>false</default>
+                <label>SEO Page Retargeting</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T Leads</fullName>
+                <default>false</default>
+                <label>AT&amp;T Leads</label>
+            </value>
+            <value>
+                <fullName>DSI List</fullName>
+                <default>false</default>
+                <label>DSI List</label>
+            </value>
+            <value>
+                <fullName>Dish List</fullName>
+                <default>false</default>
+                <label>Dish List</label>
+            </value>
+            <value>
+                <fullName>Closed Lost List</fullName>
+                <default>false</default>
+                <label>Closed Lost List</label>
+            </value>
+            <value>
+                <fullName>Current Dealer</fullName>
+                <default>false</default>
+                <label>Current Dealer</label>
+            </value>
+            <value>
+                <fullName>Referred by Current Dealer</fullName>
+                <default>false</default>
+                <label>Referred by Current Dealer</label>
+            </value>
+            <value>
+                <fullName>Telvista</fullName>
+                <default>false</default>
+                <label>Telvista</label>
+            </value>
+            <value>
+                <fullName>ADT SEO - Call</fullName>
+                <default>false</default>
+                <label>ADT SEO - Call</label>
+            </value>
+            <value>
+                <fullName>ADT SEO - Form</fullName>
+                <default>false</default>
+                <label>ADT SEO - Form</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T COM SEO - Call</fullName>
+                <default>false</default>
+                <label>AT&amp;T COM SEO - Call</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T COM SEO - Form</fullName>
+                <default>false</default>
+                <label>AT&amp;T COM SEO - Form</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T Paid - Call</fullName>
+                <default>false</default>
+                <label>AT&amp;T Paid - Call</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T Paid - Form</fullName>
+                <default>false</default>
+                <label>AT&amp;T Paid - Form</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T SEO - Call</fullName>
+                <default>false</default>
+                <label>AT&amp;T SEO - Call</label>
+            </value>
+            <value>
+                <fullName>AT&amp;T SEO - Form</fullName>
+                <default>false</default>
+                <label>AT&amp;T SEO - Form</label>
+            </value>
+            <value>
+                <fullName>Frontier SEO - Call</fullName>
+                <default>false</default>
+                <label>Frontier SEO - Call</label>
+            </value>
+            <value>
+                <fullName>Frontier SEO - Form</fullName>
+                <default>false</default>
+                <label>Frontier SEO - Form</label>
+            </value>
+            <value>
+                <fullName>Viasat SEO - Call</fullName>
+                <default>false</default>
+                <label>Viasat SEO - Call</label>
+            </value>
+            <value>
+                <fullName>Viasat SEO - Form</fullName>
+                <default>false</default>
+                <label>Viasat SEO - Form</label>
+            </value>
+            <value>
+                <fullName>Windstream SEO Call</fullName>
+                <default>false</default>
+                <label>Windstream SEO Call</label>
+            </value>
+            <value>
+                <fullName>Windstream SEO Form</fullName>
+                <default>false</default>
+                <label>Windstream SEO Form</label>
+            </value>
+            <value>
+                <fullName>WISP List</fullName>
+                <default>false</default>
+                <label>WISP List</label>
+            </value>
+            <value>
+                <fullName>DeRegulated Energy</fullName>
+                <default>false</default>
+                <label>DeRegulated Energy</label>
+            </value>
+            <value>
+                <fullName>WISP-America 2021</fullName>
+                <default>false</default>
+                <label>WISP America 2021</label>
+            </value>
+            <value>
+                <fullName>Lead Lists</fullName>
+                <default>false</default>
+                <label>Lead Lists</label>
+            </value>
+            <value>
+                <fullName>Digital Hire</fullName>
+                <default>false</default>
+                <label>Digital Hire</label>
+            </value>
+            <value>
+                <fullName>N/A</fullName>
+                <default>true</default>
+                <label>N/A</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>ADT SEO - Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>ADT SEO - Form</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>AT&amp;T COM SEO - Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>AT&amp;T COM SEO - Form</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>AT&amp;T SEO - Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>AT&amp;T SEO - Form</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>Frontier SEO - Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>Frontier SEO - Form</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>Viasat SEO - Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>Viasat SEO - Form</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>Windstream SEO Call</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Organic SEO</controllingFieldValue>
+            <valueName>Windstream SEO Form</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Referral</controllingFieldValue>
+            <valueName>Partner Referral</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Referral</controllingFieldValue>
+            <valueName>Current Dealer</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Referral</controllingFieldValue>
+            <valueName>Referred by Current Dealer</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,78 @@
+<template>
+    <lightning-card title="Onboarding Requirements" icon-name="standard:task">
+        <!-- Rules Changed Banner -->
+        <template if:true={showRulesChangedBanner}>
+            <div class="slds-notification slds-notification_container slds-theme_warning slds-m-around_small">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:warning" size="small" alternative-text="Warning"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-text-heading_small">Rules changed since page load</h2>
+                        <p>Refresh to evaluate with latest rules.</p>
+                    </div>
+                    <div class="slds-media__figure slds-media__figure_reverse">
+                        <lightning-button
+                            variant="brand"
+                            label="Refresh"
+                            icon-name="utility:refresh"
+                            onclick={handleRefreshRules}
+                            disabled={isRefreshing}
+                            title="Refresh rules and re-evaluate status">
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={loading}>
+            <div class="slds-p-around_medium">
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={requirements}>
+            <template for:each={requirements} for:item="req">
+                <div key={req.Id} class="slds-box slds-m-bottom_small">
+                    <p><strong>{req.Name}</strong></p>
+                    <lightning-combobox
+                        name={req.Id}
+                        label="Status"
+                        value={req.Status}
+                        options={statusOptions}
+                        onchange={handleStatusChange}>
+                    </lightning-combobox>
+                </div>
+            </template>
+            <lightning-button
+                variant="brand"
+                label="Submit Updates"
+                onclick={submit}
+                class="slds-m-top_medium">
+            </lightning-button>
+        </template>
+
+        <template if:true={invalidFields.length}>
+            <div class="slds-box slds-m-top_medium">
+                <p class="slds-text-heading_small slds-m-bottom_small">Fields Needing Correction</p>
+                <template for:each={invalidFields} for:item="inv">
+                    <div key={inv.fieldValueId} class="slds-m-bottom_x-small">
+                        <strong>{inv.requirementName} • {inv.fieldName}</strong>
+                        <div class="slds-text-color_error">{inv.message}</div>
+                        <div class="slds-text-color_weak slds-text-body_small">{inv.status}</div>
+                    </div>
+                </template>
+                <lightning-button
+                    variant="neutral"
+                    label="Re-run Validation"
+                    onclick={rerunSelected}
+                    class="slds-m-top_small">
+                </lightning-button>
+            </div>
+        </template>
+
+        <template if:false={requirements}>
+            <p class="slds-p-around_medium">Loading requirements...</p>
+        </template>
+    </lightning-card>
+</template>

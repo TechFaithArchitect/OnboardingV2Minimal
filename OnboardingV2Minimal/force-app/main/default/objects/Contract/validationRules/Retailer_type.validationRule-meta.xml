@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Retailer_type</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISPICKVAL(Retailer_Type__c,&quot;&quot;),
+
+AND(
+OR(
+RecordType.Name = &quot;Viasat&quot;,
+RecordType.Name = &quot;MDP&quot;,
+RecordType.Name = &quot;New Dealer Application (DOM)&quot;,
+RecordType.Name = &quot;Frontier&quot;,
+RecordType.Name = &quot;Windstream&quot;,
+RecordType.Name = &quot;Windstream D2D&quot;)))</errorConditionFormula>
+    <errorDisplayField>Retailer_Type__c</errorDisplayField>
+    <errorMessage>Please enter a Retailer type</errorMessage>
+</ValidationRule>

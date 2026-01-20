@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Windstream Downtime Notification (4/26)</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>End_Date__c</field>
+        <value xsi:type="xsd:date">2025-04-28</value>
+    </values>
+    <values>
+        <field>Message__c</field>
+        <value xsi:type="xsd:string">On Sunday, 04/27/25 there will be scheduled systems maintenance.  The maintenance will begin at 9:00 PM EST Sunday night and end Monday between 1:00 and 2:00 AM EST.  The maintenance will impact online orders being submitted during this time.  You will be able to resubmit the orders once the maintenance has ended.</value>
+    </values>
+    <values>
+        <field>Program__c</field>
+        <value xsi:type="xsd:string">Windstream</value>
+    </values>
+    <values>
+        <field>Start_Date__c</field>
+        <value xsi:type="xsd:date">2025-04-26</value>
+    </values>
+</CustomMetadata>

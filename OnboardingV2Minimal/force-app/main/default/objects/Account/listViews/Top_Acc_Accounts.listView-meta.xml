@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Top_Acc_Accounts</fullName>
+    <columns>Customer_Classification__c</columns>
+    <columns>ACCOUNT.LAST_ACTIVITY</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>ACCOUNT.PHONE1</columns>
+    <columns>P10_Invoice_Account__c</columns>
+    <columns>MTD_DTV_RES_PVAs__c</columns>
+    <columns>MTD_Accessory_Sales__c</columns>
+    <columns>Previous_Month_Accessories__c</columns>
+    <columns>Accessories_2_mo_prior__c</columns>
+    <columns>Credit_Limit__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Customer_Classification__c</field>
+        <operation>equals</operation>
+        <value>Platinum,New</value>
+    </filters>
+    <label>Top Acc Accounts</label>
+    <sharedTo>
+        <roleAndSubordinatesInternal>Infrastructure_VP</roleAndSubordinatesInternal>
+    </sharedTo>
+</ListView>

@@ -1,0 +1,89 @@
+[
+  {
+    "epic": "Initiate Onboarding from Account (Program Specialist (Sales) Experience)",
+    "stories": [
+      {
+        "summary": "Launch Quick Action for Onboarding",
+        "description": "As a Program Specialist (Sales), I want to launch an onboarding modal from the Account record, so that I can initiate the onboarding process in-context."
+      },
+      {
+        "summary": "Validate Account Contact Roles",
+        "description": "As a Program Specialist (Sales), I want the system to enforce that all Account Contacts have defined roles, so that I can ensure accurate responsibility assignments before onboarding."
+      },
+      {
+        "summary": "Check Program Eligibility",
+        "description": "As a Program Specialist (Sales), I want the system to check for NDA and Program Base Application eligibility, so that I can only select valid vendor programs for onboarding."
+      },
+      {
+        "summary": "Select Eligible Vendor Program",
+        "description": "As a Program Specialist (Sales), I want to search for and select from eligible Vendor Programs based on account eligibility, so that I can match the Account to the right program."
+      },
+      {
+        "summary": "Create Onboarding Package",
+        "description": "As a Program Specialist (Sales), I want the system to auto-create Opportunity, Onboarding, and linking records, so that I don't have to manually set them up."
+      },
+      {
+        "summary": "Emit Program Selected Event",
+        "description": "As a Program Specialist (Sales), I want the modal to emit an event with relevant record IDs after onboarding is created, so that I can use this information in follow-up processes."
+      }
+    ]
+  },
+  {
+    "epic": "Configure Vendor Program Onboarding Flow (Program Manager Experience)",
+    "stories": [
+      {
+        "summary": "Launch Metadata-Driven Onboarding Flow",
+        "description": "As a Program Manager, I want to launch a dynamic onboarding wizard from a Vendor Program, so that I can configure the onboarding process using guided steps."
+      },
+      {
+        "summary": "Dynamically Render Onboarding Components",
+        "description": "As a Program Manager, I want the system to render LWC components based on metadata, so that the wizard remains flexible and scalable."
+      },
+      {
+        "summary": "Track and Resume Progress",
+        "description": "As a Program Manager, I want my progress in the onboarding wizard to be saved, so that I can return later and continue where I left off."
+      },
+      {
+        "summary": "Enforce Stage Dependencies",
+        "description": "As a Program Manager, I want the system to enforce stage prerequisites using dependency logic, so that stages are completed in a valid, logical sequence."
+      },
+      {
+        "summary": "Configure Onboarding Requirements",
+        "description": "As a Program Manager, I want to define requirement sets and associate them with vendor programs, so that onboarding tasks are tailored to program needs."
+      },
+      {
+        "summary": "Define Required Credentials and Training",
+        "description": "As a Program Manager, I want to set required credentials and training assignments, so that participants complete all necessary compliance steps."
+      },
+      {
+        "summary": "Set Up Status Rules Engine",
+        "description": "As a Program Manager, I want to configure rules that auto-update the onboarding status based on requirement completion, so that statuses reflect actual progress in real-time."
+      },
+      {
+        "summary": "Manage Communication Templates and Groups",
+        "description": "As a Program Manager, I want to configure recipient groups and communication templates, so that onboarding notifications are automated and targeted."
+      }
+    ]
+  },
+  {
+    "epic": "Evaluate and Automate Onboarding Status (Shared Logic)",
+    "stories": [
+      {
+        "summary": "Trigger Status Evaluation on Change",
+        "description": "As a system, I want to trigger status evaluation logic when onboarding records are updated, so that the onboarding status reflects the current requirement state."
+      },
+      {
+        "summary": "Support ALL / ANY / CUSTOM Rule Logic",
+        "description": "As a Program Manager, I want to define rules using ALL, ANY, or CUSTOM logic, so that I can model different status update conditions."
+      },
+      {
+        "summary": "Evaluate Rule Conditions Against Requirement Statuses",
+        "description": "As a system, I want to compare requirement statuses against rules, so that I can determine whether a rule passes."
+      },
+      {
+        "summary": "Update Onboarding Status When Rule Passes",
+        "description": "As a system, I want to update the Onboarding status when rule conditions are met, so that the record reflects its current state in the lifecycle."
+      }
+    ]
+  }
+]

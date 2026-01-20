@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TMobile_Welcome_Email</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(
+RecordType.Name = &quot;T-Mobile&quot;,
+ISPICKVAL(Application_Status__c, &quot;Setup Complete&quot;),
+OR(
+ISBLANK(NTID_Number__c),
+ISBLANK(SAPCRM_Sales_Code__c),
+ISBLANK(PV_VPNID__c),
+ISBLANK(Email_Address__c)))</errorConditionFormula>
+    <errorMessage>NTID login fields must be complete before the Application Status can be changed to Setup Complete.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Who_updates_the_Opp_Paperwork_Status</fullName>
+    <active>false</active>
+    <description>This rule limits who can update the Opportunity Paperwork Status field in Salesforce.</description>
+    <errorConditionFormula>AND
+(
+ISCHANGED( Opportunity_Paperwork_Status__c) = TRUE,
+NOT(OR(
+$UserRole.RollupDescription = &apos;Account Resources&apos;,
+$UserRole.RollupDescription = &apos;Account Resources Supervisor&apos;,
+$UserRole.RollupDescription = &apos;Account Service Manager&apos;))
+)</errorConditionFormula>
+    <errorMessage>Please contact the Account Resources Department for any updates to the Opportunity Paperwork Status field.</errorMessage>
+</ValidationRule>

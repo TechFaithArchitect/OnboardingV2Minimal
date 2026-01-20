@@ -1,0 +1,10 @@
+/* Custom styles for requirement set tree grid */
+.requirement-set-tree-grid {
+  /* Ensure checkbox column (radio-style selection) is visible and styled */
+}
+
+/* Style checkboxes to appear more like radio buttons for single-select */
+.requirement-set-tree-grid .slds-tree__item .slds-checkbox {
+  /* Radio button styling can be applied here if needed */
+}
+

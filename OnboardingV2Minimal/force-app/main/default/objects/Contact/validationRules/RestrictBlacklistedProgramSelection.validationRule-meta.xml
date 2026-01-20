@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RestrictBlacklistedProgramSelection</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;Charter/Spectrum&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;Charter/Spectrum&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;Charter/Spectrum&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;Charter/Spectrum&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;Charter/Spectrum&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;EarthLink&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;EarthLink&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;EarthLink&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;EarthLink&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;EarthLink&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;DirecTV&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;DirecTV&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;DirecTV&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;DirecTV&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;DirecTV&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;Windstream&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;Windstream&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;Windstream&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;Windstream&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;Windstream&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;Frontier&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;Frontier&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;Frontier&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;Frontier&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;Frontier&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;Viasat&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;Viasat&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;Viasat&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;Viasat&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;Viasat&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;T-Mobile&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;T-Mobile&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;T-Mobile&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;T-Mobile&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;T-Mobile&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;Altice&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;Altice&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;Altice&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;Altice&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;Altice&quot;)
+)
+||
+AND(
+	OR(
+		INCLUDES( D2D_Programs__c , &quot;Spectrum API&quot;),
+		INCLUDES( POE_Retail_Programs__c , &quot;Spectrum API&quot;),
+		INCLUDES( POE_Event_Programs__c , &quot;Spectrum API&quot;),
+		INCLUDES( POE_Programs_Available__c , &quot;Spectrum API&quot;)
+	),
+	
+	INCLUDES( POE_Blacklisted_Programs__c , &quot;Spectrum API&quot;)
+)</errorConditionFormula>
+    <errorMessage>You can&apos;t select a blacklisted program available for Phone Sales / Event / Retail / D2D.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,21 @@
+.risk {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+}
+.risk--ontrack {
+  background: #e3fcef;
+  color: #1f845a;
+  border: 1px solid #a6e9c7;
+}
+.risk--atrisk {
+  background: #fff7e6;
+  color: #975e00;
+  border: 1px solid #ffd699;
+}
+.risk--overdue {
+  background: #ffeceb;
+  color: #ae2e24;
+  border: 1px solid #ffb3ad;
+}

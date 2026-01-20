@@ -1,0 +1,132 @@
+<template>
+    <lightning-card title="Stage Dependencies" icon-name="utility:flow">
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="slds-text-align_center slds-p-around_large">
+                <p class="slds-text-body_regular slds-text-color_error">
+                    Error loading stage dependencies: {errorMessage}
+                </p>
+            </div>
+        </template>
+
+        <template if:true={hasStages}>
+            <div class="stage-viewer-container">
+                <svg width={svgWidth} height={svgHeight} class="stage-svg">
+                    <!-- Dependency connectors (drawn first, behind stages) -->
+                    <template for:each={dependencyConnectors} for:item="connector">
+                        <line
+                            key={connector.id}
+                            x1={connector.fromX}
+                            y1={connector.fromY}
+                            x2={connector.toX}
+                            y2={connector.toY}
+                            stroke={connector.color}
+                            stroke-width="2"
+                            marker-end="url(#arrowhead)"
+                            class="dependency-line"
+                            data-blocked={connector.isBlocked}
+                        ></line>
+                    </template>
+                    
+                    <!-- Arrow marker definition -->
+                    <defs>
+                        <marker
+                            id="arrowhead"
+                            marker-width="10"
+                            marker-height="10"
+                            ref-x="9"
+                            ref-y="3"
+                            orient="auto"
+                        >
+                            <polygon points="0 0, 10 3, 0 6" fill="#0070d2"></polygon>
+                        </marker>
+                    </defs>
+
+                    <!-- Stage boxes -->
+                    <template for:each={stages} for:item="stage">
+                        <g key={stage.stageId} class="stage-group">
+                            <rect
+                                x={stage.position.x}
+                                y={stage.position.y}
+                                width={stageWidth}
+                                height={stageHeight}
+                                rx="8"
+                                fill="white"
+                                stroke={stage.statusColor}
+                                stroke-width="3"
+                                class="stage-box"
+                                data-stage-id={stage.stageId}
+                                onclick={handleStageClick}
+                            ></rect>
+                            <text
+                                x={stage.textX}
+                                y={stage.textY}
+                                text-anchor="middle"
+                                class="stage-name"
+                                data-stage-id={stage.stageId}
+                                onclick={handleStageClick}
+                            >
+                                {stage.stageName}
+                            </text>
+                            <text
+                                x={stage.textX}
+                                y={stage.sequenceY}
+                                text-anchor="middle"
+                                class="stage-sequence"
+                                data-stage-id={stage.stageId}
+                                onclick={handleStageClick}
+                            >
+                                Sequence: {stage.sequence}
+                            </text>
+                            <foreignObject
+                                x={stage.badgeX}
+                                y={stage.badgeY}
+                                width={stage.badgeWidth}
+                                height="20"
+                            >
+                                <div class={stage.statusClass} data-stage-id={stage.stageId} onclick={handleStageClick}>
+                                    {stage.status}
+                                </div>
+                            </foreignObject>
+                        </g>
+                    </template>
+                </svg>
+            </div>
+
+            <!-- Legend -->
+            <div class="slds-m-top_medium slds-p-around_medium">
+                <div class="slds-text-heading_small slds-m-bottom_small">Legend</div>
+                <div class="slds-grid slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-4">
+                        <span class="slds-badge slds-badge_success">Complete</span>
+                        <span class="slds-text-body_small slds-m-left_x-small">Stage is completed</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <span class="slds-badge slds-badge_inverse">Ready</span>
+                        <span class="slds-text-body_small slds-m-left_x-small">Stage can be started</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <span class="slds-badge slds-badge_warning">Waiting</span>
+                        <span class="slds-text-body_small slds-m-left_x-small">Waiting for dependencies</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <span class="slds-badge slds-badge_error">Blocked</span>
+                        <span class="slds-text-body_small slds-m-left_x-small">Dependencies not met</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template if:false={hasStages}>
+            <div class="slds-text-align_center slds-p-around_large">
+                <p class="slds-text-body_regular">No stages found for this process.</p>
+            </div>
+        </template>
+    </lightning-card>
+</template>
+

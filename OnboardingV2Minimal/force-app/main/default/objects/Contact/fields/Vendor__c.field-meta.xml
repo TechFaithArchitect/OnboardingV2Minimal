@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vendor__c</fullName>
+    <externalId>false</externalId>
+    <label>Vendor</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>DIRECTV</fullName>
+                <default>false</default>
+                <label>DIRECTV</label>
+            </value>
+            <value>
+                <fullName>Viasat</fullName>
+                <default>false</default>
+                <label>Viasat</label>
+            </value>
+            <value>
+                <fullName>Viasat and DIRECTV</fullName>
+                <default>false</default>
+                <label>Viasat and DIRECTV</label>
+            </value>
+            <value>
+                <fullName>T-Mobile</fullName>
+                <default>false</default>
+                <label>T-Mobile</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

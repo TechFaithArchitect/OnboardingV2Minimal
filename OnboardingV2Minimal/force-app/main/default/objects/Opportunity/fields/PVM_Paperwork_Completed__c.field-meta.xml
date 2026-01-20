@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PVM_Paperwork_Completed__c</fullName>
+    <description>What PVM paperwork has been completed?</description>
+    <externalId>false</externalId>
+    <inlineHelpText>What PVM paperwork has been completed?</inlineHelpText>
+    <label>PV Paperwork Completed</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <controllingField>PVM_Application_Type__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>App for Dealer Status</fullName>
+                <default>false</default>
+                <label>App for Dealer Status</label>
+            </value>
+            <value>
+                <fullName>Bank &amp; Trade Info</fullName>
+                <default>false</default>
+                <label>Bank &amp; Trade Info</label>
+            </value>
+            <value>
+                <fullName>Business License</fullName>
+                <default>false</default>
+                <label>Business License</label>
+            </value>
+            <value>
+                <fullName>Certificate of Insurance</fullName>
+                <default>false</default>
+                <label>Certificate of Insurance</label>
+            </value>
+            <value>
+                <fullName>Copy of Credit/Debit Card</fullName>
+                <default>false</default>
+                <label>Copy of Credit/Debit Card</label>
+            </value>
+            <value>
+                <fullName>Copy of Driver&apos;s License</fullName>
+                <default>false</default>
+                <label>Copy of Driver&apos;s License</label>
+            </value>
+            <value>
+                <fullName>Credit/Debit Card Auth</fullName>
+                <default>false</default>
+                <label>Credit/Debit Card Auth</label>
+            </value>
+            <value>
+                <fullName>Personal Guaranty</fullName>
+                <default>false</default>
+                <label>Personal Guaranty</label>
+            </value>
+            <value>
+                <fullName>Resale Certificate</fullName>
+                <default>false</default>
+                <label>Resale Certificate</label>
+            </value>
+            <value>
+                <fullName>Terms &amp; Conditions</fullName>
+                <default>false</default>
+                <label>Terms &amp; Conditions</label>
+            </value>
+            <value>
+                <fullName>W-9</fullName>
+                <default>false</default>
+                <label>W-9</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>App for Dealer Status</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Copy of Driver&apos;s License</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Resale Certificate</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Terms &amp; Conditions</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Prepaid Wire</controllingFieldValue>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>W-9</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <valueName>Copy of Credit/Debit Card</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>CC Terms</controllingFieldValue>
+            <valueName>Credit/Debit Card Auth</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Bank &amp; Trade Info</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Business License</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Net Terms</controllingFieldValue>
+            <valueName>Personal Guaranty</valueName>
+        </valueSettings>
+    </valueSet>
+    <visibleLines>10</visibleLines>
+</CustomField>

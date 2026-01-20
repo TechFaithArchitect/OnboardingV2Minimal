@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Incomplete After 3 Days</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Escalation_Schedule__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Fatigue_Suppression_Enabled__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Fatigue_Window_Days__c</field>
+        <value xsi:type="xsd:double">7.0</value>
+    </values>
+    <values>
+        <field>Follow_Up_Type__c</field>
+        <value xsi:type="xsd:string">SMS</value>
+    </values>
+    <values>
+        <field>Initial_Delay_Days__c</field>
+        <value xsi:type="xsd:double">3.0</value>
+    </values>
+    <values>
+        <field>Max_Attempts_Per_Window__c</field>
+        <value xsi:type="xsd:double">3.0</value>
+    </values>
+    <values>
+        <field>Messaging_Channel__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Messaging_Template__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>SMS_Provider__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Trigger_Condition__c</field>
+        <value xsi:type="xsd:string">Incomplete</value>
+    </values>
+    <values>
+        <field>Twilio_Account_SID__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Twilio_From_Phone__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Twilio_Named_Credential__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

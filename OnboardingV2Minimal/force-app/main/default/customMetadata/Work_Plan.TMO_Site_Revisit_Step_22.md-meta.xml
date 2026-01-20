@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>TMO Site Revisit Step 22</label>
+    <protected>false</protected>
+    <values>
+        <field>Order__c</field>
+        <value xsi:type="xsd:double">22.0</value>
+    </values>
+    <values>
+        <field>Work_Plan__c</field>
+        <value xsi:type="xsd:string">Ensure external antenna is pointed correctly (If Applicable)</value>
+    </values>
+    <values>
+        <field>Work_Type__c</field>
+        <value xsi:type="xsd:string">Site Revisit</value>
+    </values>
+</CustomMetadata>

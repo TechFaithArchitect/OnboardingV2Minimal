@@ -1,0 +1,178 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <!-- Non-Admin Message -->
+      <template if:false={isAdmin}>
+        <div class="slds-box slds-theme_info slds-m-bottom_medium" style="padding: 1rem;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <h3 class="slds-text-heading_small slds-m-bottom_small">Admin Access Required</h3>
+              <p class="slds-text-body_regular">
+                This step is only available to users with the <strong>Onboarding Application - Administrator</strong> permission set.
+                Regular users will skip this step and proceed to Communication Template selection.
+              </p>
+              <p class="slds-text-body_regular slds-m-top_small">
+                If you need to create or manage Recipient Groups, please contact your administrator.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="slds-m-top_medium">
+          <lightning-button 
+            label="Continue to Next Step" 
+            variant="brand"
+            onclick={handleSkipForNonAdmin}>
+          </lightning-button>
+        </div>
+      </template>
+
+      <!-- Admin View -->
+      <template if:true={isAdmin}>
+        <template if:true={isLoading}>
+          <lightning-spinner size="small"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+        <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-body_small slds-m-bottom_none">
+                <strong>Recipient Group:</strong> A collection of users, roles, or public groups that receive onboarding notifications. 
+                You can use existing groups or create new ones with members.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Select View: Show existing or create new -->
+        <template if:true={isSelectView}>
+          <template if:true={hasExistingGroups}>
+            <p class="slds-text-heading_small slds-m-bottom_medium">Existing Recipient Groups for this Vendor Program:</p>
+            <lightning-datatable
+              key-field="Id"
+              data={existingGroups}
+              columns={existingGroupsColumns}
+              hide-checkbox-column>
+            </lightning-datatable>
+
+            <div class="slds-m-top_medium">
+              <lightning-button 
+                variant="brand" 
+                label="Use Existing Groups" 
+                onclick={linkGroupToVendorProgram}
+                class="slds-m-right_small">
+              </lightning-button>
+              <lightning-button 
+                variant="neutral" 
+                label="Create New Group" 
+                onclick={handleCreateNew}>
+              </lightning-button>
+            </div>
+          </template>
+
+          <template if:false={hasExistingGroups}>
+            <p class="slds-text-body_regular slds-m-bottom_medium">No existing Recipient Groups found. Create a new one:</p>
+            
+            <lightning-input label="Search Recipient Groups" value={searchText} onchange={handleSearchChange}></lightning-input>
+            <lightning-button label="Search" onclick={searchGroups} class="slds-m-top_small"></lightning-button>
+
+            <template if:true={recipientGroups.length}>
+              <lightning-radio-group
+                name="recipientGroups"
+                label="Select Existing Group"
+                options={groupOptions}
+                value={selectedRecipientGroupId}
+                onchange={handleGroupSelect}
+                class="slds-m-top_medium">
+              </lightning-radio-group>
+            </template>
+
+            <lightning-button 
+              variant="neutral" 
+              label={createButtonLabel} 
+              onclick={toggleCreateForm}
+              class="slds-m-top_medium">
+            </lightning-button>
+
+            <template if:true={showCreateForm}>
+              <lightning-input 
+                label="Group Name" 
+                value={newGroupName} 
+                onchange={handleNewGroupChange}
+                class="slds-m-top_small"
+                required>
+              </lightning-input>
+
+              <lightning-combobox
+                label="Group Type"
+                value={newGroupType}
+                options={groupTypeOptions}
+                onchange={handleGroupTypeChange}
+                class="slds-m-top_small"
+                required>
+              </lightning-combobox>
+
+              <lightning-button 
+                label="Create Group" 
+                onclick={createGroup} 
+                variant="brand"
+                disabled={nextDisabled}
+                class="slds-m-top_small">
+              </lightning-button>
+            </template>
+          </template>
+        </template>
+
+        <!-- Add Members View -->
+        <template if:true={isAddMembersView}>
+          <p class="slds-text-heading_small slds-m-bottom_medium">Add Members to Recipient Group:</p>
+          
+          <lightning-dual-listbox
+            label="Select Users"
+            source-label="Available Users"
+            selected-label="Selected Users"
+            options={userOptions}
+            value={selectedUserIds}
+            onchange={handleUserSelection}
+            min="0"
+            max={assignableUsers.length}>
+          </lightning-dual-listbox>
+
+          <div class="slds-m-top_medium">
+            <lightning-button 
+              label="Add Members" 
+              onclick={addMembers} 
+              variant="brand"
+              disabled={isAddMembersDisabled}
+              class="slds-m-right_small">
+            </lightning-button>
+            <lightning-button 
+              label="Skip - Link to Vendor Program" 
+              onclick={linkGroupToVendorProgram} 
+              variant="neutral">
+            </lightning-button>
+          </div>
+
+          <template if:true={groupMembers.length}>
+            <p class="slds-text-heading_small slds-m-top_large">Current Members:</p>
+            <lightning-datatable
+              key-field="Id"
+              data={groupMembers}
+              columns={memberColumns}
+              hide-checkbox-column>
+            </lightning-datatable>
+          </template>
+          </template>
+        </template>
+
+        <!-- Navigation buttons removed - handled by flow engine footer -->
+      </template>
+    </div>
+  </lightning-card>
+</template>

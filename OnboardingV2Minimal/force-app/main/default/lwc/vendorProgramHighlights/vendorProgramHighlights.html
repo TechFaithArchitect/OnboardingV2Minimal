@@ -1,0 +1,16 @@
+<template>
+    <lightning-card class="highlight-card" variant="Narrow" title="Vendor Program">
+        <div class="highlight-container">
+            <template if:true={record}>
+                <div class="highlight-fields">
+                    <lightning-formatted-text value={status}></lightning-formatted-text>
+                    <lightning-formatted-text value={version}></lightning-formatted-text>
+                    <lightning-formatted-text value={isActive}></lightning-formatted-text>
+                </div>
+            </template>
+            <template if:true={error}>
+                <p class="slds-text-color_error">Error loading record</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

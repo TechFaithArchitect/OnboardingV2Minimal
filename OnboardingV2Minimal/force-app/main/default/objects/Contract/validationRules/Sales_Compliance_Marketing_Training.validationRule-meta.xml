@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_Compliance_Marketing_Training</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+RecordType.Name = &quot;Spectrum&quot;,
+ISPICKVAL(Sales_Compliance_Marketing_Training__c,&quot;Incomplete&quot;),
+ISPICKVAL(Application_Status__c ,&quot;Setup Complete&quot;))</errorConditionFormula>
+    <errorMessage>Sales Compliance Marketing Training must be completed before contract can be Setup Complete.</errorMessage>
+</ValidationRule>

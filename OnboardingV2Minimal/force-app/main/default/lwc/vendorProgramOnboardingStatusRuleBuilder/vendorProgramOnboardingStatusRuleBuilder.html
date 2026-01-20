@@ -1,0 +1,180 @@
+<template>
+  <lightning-card title={cardTitle} data-step-component>
+    <div class="slds-p-around_medium">
+      <!-- Guidance Box -->
+      <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_medium">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <lightning-icon icon-name="utility:info" size="small" alternative-text="Info"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <p class="slds-text-body_small slds-m-bottom_none">
+              <strong>Status Rule:</strong> Links vendor program requirements to expected statuses. Rules work with the engine's logic (AND/ALL or OR/ANY) to automatically progress onboarding.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Engine Context -->
+      <template if:true={statusRulesEngineId}>
+        <div class="slds-box slds-box_x-small slds-m-bottom_medium" style="background-color: #f3f2f2; border-left: 3px solid #0176d3;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:settings" size="small" alternative-text="Rules Engine"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <h3 class="slds-text-heading_small slds-m-bottom_x-small">Rules Engine</h3>
+              <p class="slds-text-body_small slds-m-bottom_none">
+                Rules will be added to the engine selected in Step 11.
+                <template if:true={isLoadingEngine}>
+                  <br><strong>Loading engine details...</strong>
+                </template>
+                <template if:false={isLoadingEngine}>
+                  <template if:true={engineName}>
+                    <br><strong>Engine:</strong> {engineName}
+                  </template>
+                  <template if:false={engineName}>
+                    <br><strong>Engine ID:</strong> {statusRulesEngineId}
+                  </template>
+                </template>
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Selected Rule Display -->
+      <template if:true={selectedRuleId}>
+        <div class="slds-box slds-box_x-small slds-theme_success slds-m-bottom_medium" style="background-color: #f3f2f2; border-left: 3px solid #04844b;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:success" size="small" alternative-text="Selected"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <h3 class="slds-text-heading_small slds-m-bottom_x-small">Selected Status Rule</h3>
+              <p class="slds-text-body_regular slds-m-bottom_none">
+                <strong>{selectedRuleDisplay}</strong>
+              </p>
+              <p class="slds-text-body_small slds-m-top_x-small slds-m-bottom_none slds-text-color_weak">
+                Click Next to continue. You can search for a different rule or create a new one below.
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Search Existing Rules -->
+      <div class="slds-m-bottom_medium">
+        <h3 class="slds-text-heading_small slds-m-bottom_small">
+          Search Existing Rules
+        </h3>
+        <lightning-input
+          label="Search by Name"
+          value={searchText}
+          onchange={handleSearchChange}
+          placeholder="Type to search (min 2 characters)..."
+          class="slds-m-bottom_x-small">
+        </lightning-input>
+
+        <template if:true={isLoading}>
+          <lightning-spinner size="x-small" alternative-text="Searching..."></lightning-spinner>
+        </template>
+
+        <template if:true={showSearchResults}>
+          <lightning-combobox
+            label="Select from Search Results"
+            value={selectedRuleId}
+            options={searchResultOptions}
+            onchange={handleSearchResultSelect}
+            placeholder="Choose a rule from results"
+            class="slds-m-top_small">
+          </lightning-combobox>
+        </template>
+
+        <template if:false={showSearchResults}>
+          <template if:true={searchText}>
+            <p class="slds-text-body_small slds-m-top_x-small slds-text-color_weak">
+              <template if:true={isLoading}>Searching...</template>
+              <template if:false={isLoading}>No rules found. Try a different search or create a new rule.</template>
+            </p>
+          </template>
+        </template>
+      </div>
+
+      <hr class="slds-m-vertical_medium" />
+
+      <!-- Create New Rule -->
+      <div class="slds-m-top_medium">
+        <h3 class="slds-text-heading_small slds-m-bottom_medium">
+          Create New Status Rule
+        </h3>
+        
+        <div class="slds-box slds-box_x-small" style="background-color: #fafaf9;">
+          <lightning-input
+            name="name"
+            label="Rule Name"
+            value={newRuleName}
+            onchange={handleInputChange}
+            placeholder="e.g., Complete Background Check"
+            required
+            class="slds-m-bottom_small">
+          </lightning-input>
+
+          <template if:true={isLoadingRequirements}>
+            <lightning-spinner size="x-small" alternative-text="Loading requirements..."></lightning-spinner>
+          </template>
+
+          <template if:true={hasRequirements}>
+            <lightning-combobox
+              label="Vendor Program Requirement"
+              value={selectedRequirementId}
+              options={requirementOptions}
+              onchange={handleRequirementChange}
+              placeholder="Select a requirement"
+              required
+              class="slds-m-bottom_small">
+            </lightning-combobox>
+          </template>
+
+          <template if:false={hasRequirements}>
+            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+              No requirements found for this vendor program. Please create requirements first.
+            </p>
+          </template>
+
+          <template if:true={statusRulesEngineId}>
+            <div class="slds-form-element slds-m-bottom_small">
+              <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">* </abbr>Rules Engine
+              </label>
+              <div class="slds-form-element__control">
+                <template if:true={isLoadingEngine}>
+                  <lightning-spinner size="x-small" alternative-text="Loading..."></lightning-spinner>
+                </template>
+                <template if:false={isLoadingEngine}>
+                  <template if:true={engineName}>
+                    <div class="slds-text-body_regular">{engineName}</div>
+                  </template>
+                  <template if:false={engineName}>
+                    <div class="slds-text-body_regular slds-text-color_weak">{statusRulesEngineId}</div>
+                  </template>
+                </template>
+              </div>
+            </div>
+            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+              This rule will be automatically linked to the engine selected in Step 11.
+            </p>
+          </template>
+
+          <lightning-button
+            label="Create Rule"
+            variant="brand"
+            onclick={handleCreateClick}
+            disabled={isCreateButtonDisabled}
+            class="slds-m-top_small">
+          </lightning-button>
+        </div>
+      </div>
+    </div>
+  </lightning-card>
+</template>

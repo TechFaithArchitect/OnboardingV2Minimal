@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>DCC - Twilio</label>
+    <protected>false</protected>
+    <values>
+        <field>Base_URL__c</field>
+        <value xsi:type="xsd:string">https://api.twilio.com</value>
+    </values>
+    <values>
+        <field>Batch_Size__c</field>
+        <value xsi:type="xsd:double">200.0</value>
+    </values>
+    <values>
+        <field>Password__c</field>
+        <value xsi:type="xsd:string">c715d5b2b0d1383c03cfff270ffb4eb4</value>
+    </values>
+    <values>
+        <field>Phone__c</field>
+        <value xsi:type="xsd:string">15013008100</value>
+    </values>
+    <values>
+        <field>URL__c</field>
+        <value xsi:type="xsd:string">https://api.twilio.com/2010-04-01/Accounts/AC7656b3138fcc3ca75e7ebda9fdad0037/Messages.json</value>
+    </values>
+    <values>
+        <field>User__c</field>
+        <value xsi:type="xsd:string">AC7656b3138fcc3ca75e7ebda9fdad0037</value>
+    </values>
+</CustomMetadata>

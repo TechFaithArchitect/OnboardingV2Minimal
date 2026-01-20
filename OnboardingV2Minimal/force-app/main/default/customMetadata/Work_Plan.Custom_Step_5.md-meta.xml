@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Custom Step 5</label>
+    <protected>false</protected>
+    <values>
+        <field>Order__c</field>
+        <value xsi:type="xsd:double">5.0</value>
+    </values>
+    <values>
+        <field>Work_Plan__c</field>
+        <value xsi:type="xsd:string">Step 5: Review Building and Installation plan with customer (Site Survey if required)</value>
+    </values>
+    <values>
+        <field>Work_Type__c</field>
+        <value xsi:type="xsd:string">Custom Project</value>
+    </values>
+</CustomMetadata>

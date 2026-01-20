@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POE_Program__c</fullName>
+    <description>Program for which this credential is related to. (PER-2126)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Program for which this credential is related to.</inlineHelpText>
+    <label>Program</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>DIRECTV</fullName>
+                <default>false</default>
+                <label>DIRECTV</label>
+            </value>
+            <value>
+                <fullName>Optimum</fullName>
+                <default>false</default>
+                <label>Optimum</label>
+            </value>
+            <value>
+                <fullName>Spectrum</fullName>
+                <default>false</default>
+                <label>Spectrum</label>
+            </value>
+            <value>
+                <fullName>Telogix</fullName>
+                <default>false</default>
+                <label>Telogix</label>
+            </value>
+            <value>
+                <fullName>T-Mobile</fullName>
+                <default>false</default>
+                <label>T-Mobile</label>
+            </value>
+            <value>
+                <fullName>Verizon</fullName>
+                <default>false</default>
+                <label>Verizon</label>
+            </value>
+            <value>
+                <fullName>Verizon Fios D2D</fullName>
+                <default>false</default>
+                <label>Verizon Fios D2D</label>
+            </value>
+            <value>
+                <fullName>Verizon Residential</fullName>
+                <default>false</default>
+                <label>Verizon Residential</label>
+            </value>
+            <value>
+                <fullName>Windstream D2D</fullName>
+                <default>false</default>
+                <label>Windstream D2D</label>
+            </value>
+            <value>
+                <fullName>Xfinity</fullName>
+                <default>false</default>
+                <label>Xfinity</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MDP_ISP_Welcome_Email_Data_Fields</fullName>
+    <active>true</active>
+    <description>Alerts users that when data is missing in fields that are used to populate info into the welcome email.</description>
+    <errorConditionFormula>OR(
+AND(
+ISPICKVAL(Application_Status__c, &quot;Setup Complete&quot;),
+ISBLANK(Dedicated_Sale_Referral_Number__c),
+
+OR(
+RecordType.Name = &quot;MDP- ISP Exclusive&quot;,
+RecordType.Name = &quot;MDP- ISP Non-Exclusive&quot;)))</errorConditionFormula>
+    <errorMessage>Please fill in the Dedicated ph# before saving record.</errorMessage>
+</ValidationRule>

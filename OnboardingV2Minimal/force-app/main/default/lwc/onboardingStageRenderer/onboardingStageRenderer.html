@@ -1,0 +1,246 @@
+<template>
+  <!-- ✅ Conditional rendering with static imports (LWC requirement) -->
+  <!-- Components that don't need props -->
+  <template if:true={showVendorProgramOnboardingVendor}>
+    <c-vendor-program-onboarding-vendor
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-vendor>
+  </template>
+
+  <!-- Components that need vendorProgramId -->
+  <template if:true={showVendorProgramOnboardingVendorProgramRecipientGroup}>
+    <c-vendor-program-onboarding-vendor-program-recipient-group
+      vendor-program-id={vendorProgramId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}>
+    </c-vendor-program-onboarding-vendor-program-recipient-group>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingRecipientGroup}>
+    <c-vendor-program-onboarding-recipient-group
+      vendor-program-id={vendorProgramId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-recipient-group>
+  </template>
+
+  <!-- Components that need vendorProgramId and stageId -->
+  <template if:true={showVendorProgramOnboardingTrainingRequirements}>
+    <c-vendor-program-onboarding-training-requirements
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-training-requirements>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingRequiredCredentials}>
+    <c-vendor-program-onboarding-required-credentials
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-required-credentials>
+  </template>
+
+  <!-- Components that may need context object (for complex props) -->
+  <template if:true={showVendorProgramOnboardingVendorProgramCreate}>
+    <c-vendor-program-onboarding-vendor-program-create
+      vendor-program-id={vendorProgramId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-vendor-program-create>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingVendorProgramGroup}>
+    <c-vendor-program-onboarding-vendor-program-group
+      vendor-program-id={vendorProgramId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-vendor-program-group>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingVendorProgramRequirementGroup}>
+    <c-vendor-program-onboarding-vendor-program-requirement-group
+      vendor-program-id={vendorProgramId}
+      requirement-group-id={requirementGroupId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-vendor-program-requirement-group>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingRecipientGroupMembers}>
+    <c-vendor-program-onboarding-recipient-group-members
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}>
+    </c-vendor-program-onboarding-recipient-group-members>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingVendorProgramSearchOrCreate}>
+    <c-vendor-program-onboarding-vendor-program-search-or-create
+      vendor-program-id={vendorProgramId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-vendor-program-search-or-create>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingRequirementSet}>
+    <c-vendor-program-onboarding-requirement-set
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-requirement-set>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingReqTemplate}>
+    <c-vendor-program-onboarding-req-template
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      requirement-set-id={requirementSetId}
+      requirement-group-id={requirementGroupId}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-req-template>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingRequirementSetOrCreate}>
+    <c-vendor-program-onboarding-requirement-set-or-create
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      requirement-set-id={requirementSetId}
+      onnext={handleNext}
+      onback={handleBack}>
+    </c-vendor-program-onboarding-requirement-set-or-create>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingRequirementGroupLinking}>
+    <c-vendor-program-onboarding-requirement-group-linking
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      requirement-set-id={requirementSetId}
+      onnext={handleNext}
+      onback={handleBack}>
+    </c-vendor-program-onboarding-requirement-group-linking>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingVendorProgramRequirements}>
+    <c-vendor-program-onboarding-vendor-program-requirements
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      requirement-template-id={requirementTemplateId}
+      requirement-group-id={requirementGroupId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-vendor-program-requirements>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingStatusRulesEngine}>
+    <c-vendor-program-onboarding-status-rules-engine
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      requirement-set-id={requirementSetId}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-status-rules-engine>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingStatusRuleBuilder}>
+    <c-vendor-program-onboarding-status-rule-builder
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      status-rules-engine-id={statusRulesEngineId}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-status-rule-builder>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingCommunicationTemplate}>
+    <c-vendor-program-onboarding-communication-template
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      recipient-group-id={recipientGroupId}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-communication-template>
+  </template>
+
+  <template if:true={showVendorProgramOnboardingFinalize}>
+    <c-vendor-program-onboarding-finalize
+      vendor-program-id={vendorProgramId}
+      stage-id={stageId}
+      step-number={stepNumber}
+      onnext={handleNext}
+      onback={handleBack}
+      onvalidationchanged={handleValidationChanged}
+      data-step-component>
+    </c-vendor-program-onboarding-finalize>
+  </template>
+
+  <!-- Error state if component name doesn't match -->
+  <template if:false={componentName}>
+    <lightning-card>
+      <div class="slds-text-align_center slds-p-around_medium">
+        <p>No component specified</p>
+      </div>
+    </lightning-card>
+  </template>
+
+  <!-- Error state if component name doesn't match any known component -->
+  <template if:true={componentName}>
+    <template if:false={hasValidComponent}>
+      <lightning-card>
+        <div class="slds-text-align_center slds-p-around_medium">
+          <p class="slds-text-color_error">Unknown component: {componentName}</p>
+          <p class="slds-text-color_weak slds-m-top_small">Please check the Component_API_Name__c field in Onboarding_Component_Library__c</p>
+        </div>
+      </lightning-card>
+    </template>
+  </template>
+</template>

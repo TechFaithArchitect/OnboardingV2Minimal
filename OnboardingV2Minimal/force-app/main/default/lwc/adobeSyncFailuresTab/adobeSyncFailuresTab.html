@@ -1,0 +1,91 @@
+<template>
+    <lightning-card title="Adobe Sync Failures" icon-name="utility:sync">
+        <div class="slds-m-around_medium">
+            <!-- Filters and Actions -->
+            <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-5">
+                    <lightning-combobox
+                        label="Group By"
+                        value={groupBy}
+                        options={groupByOptions}
+                        onchange={handleGroupByChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-5">
+                    <lightning-combobox
+                        label="Status"
+                        value={filters.status}
+                        options={statusOptions}
+                        onchange={handleStatusChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-5">
+                    <lightning-combobox
+                        label="Type"
+                        value={filters.type}
+                        options={typeOptions}
+                        onchange={handleTypeChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-5">
+                    <lightning-combobox
+                        label="Date Range"
+                        value={filters.dateRange}
+                        options={dateRangeOptions}
+                        onchange={handleDateRangeChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-5 slds-align_absolute-center">
+                    <lightning-button
+                        label="Retry Selected"
+                        variant="brand"
+                        onclick={handleBulkRetry}
+                        class="slds-m-right_x-small"
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button
+                        label="Resolve Selected"
+                        variant="neutral"
+                        onclick={handleBulkResolve}
+                        class="slds-m-right_x-small"
+                        disabled={isLoading}>
+                    </lightning-button>
+                    <lightning-button
+                        label="Export"
+                        variant="neutral"
+                        onclick={handleExport}
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <template if:false={isLoading}>
+                <lightning-datatable
+                    key-field="id"
+                    data={filteredFailures}
+                    columns={columns}
+                    onrowaction={handleRowAction}
+                    onrowselection={handleSelectionChange}
+                    selected-rows={selectedRows}
+                    show-row-number-column>
+                </lightning-datatable>
+            </template>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Empty State -->
+            <template if:true={hasNoFailures}>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon icon-name="utility:success" size="large" class="slds-m-bottom_small"></lightning-icon>
+                    <p class="slds-text-heading_small">No Adobe sync failures found</p>
+                    <p class="slds-text-body_regular slds-text-color_weak">All Adobe sync operations are successful</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
+

@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Paperwork_Completed1__c</fullName>
+    <description>What paperwork has been completed?</description>
+    <externalId>false</externalId>
+    <inlineHelpText>What paperwork has been completed?</inlineHelpText>
+    <label>Paperwork Completed</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <controllingField>Program_Type__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>ACH Authorization</fullName>
+                <default>false</default>
+                <label>ACH Authorization</label>
+            </value>
+            <value>
+                <fullName>App for Dealer Status</fullName>
+                <default>false</default>
+                <label>App for Dealer Status</label>
+            </value>
+            <value>
+                <fullName>ATT Contract</fullName>
+                <default>false</default>
+                <label>ATT Contract</label>
+            </value>
+            <value>
+                <fullName>Auto Ship / Deferred Invoice agreement</fullName>
+                <default>false</default>
+                <label>Auto Ship / Deferred Invoice agreement</label>
+            </value>
+            <value>
+                <fullName>Bank and Trade Info</fullName>
+                <default>false</default>
+                <label>Bank and Trade Info</label>
+            </value>
+            <value>
+                <fullName>Business License</fullName>
+                <default>false</default>
+                <label>Business License</label>
+            </value>
+            <value>
+                <fullName>Business Plan</fullName>
+                <default>false</default>
+                <label>Business Plan</label>
+            </value>
+            <value>
+                <fullName>Business Plan Approval</fullName>
+                <default>false</default>
+                <label>Business Plan Approval</label>
+            </value>
+            <value>
+                <fullName>CenturyLink Application</fullName>
+                <default>false</default>
+                <label>CenturyLink Application</label>
+            </value>
+            <value>
+                <fullName>CenturyLink Cert of Insurance</fullName>
+                <default>false</default>
+                <label>CenturyLink Cert of Insurance</label>
+            </value>
+            <value>
+                <fullName>CenturyLink Base Contract</fullName>
+                <default>false</default>
+                <label>CenturyLink Base Contract</label>
+            </value>
+            <value>
+                <fullName>CenturyLink Contract -19</fullName>
+                <default>false</default>
+                <label>CenturyLink Contract -19</label>
+            </value>
+            <value>
+                <fullName>CenturyLink Contract - B5</fullName>
+                <default>false</default>
+                <label>CenturyLink Contract - B5</label>
+            </value>
+            <value>
+                <fullName>CenturyLink Contract - B7</fullName>
+                <default>false</default>
+                <label>CenturyLink Contract - B7</label>
+            </value>
+            <value>
+                <fullName>CenturyLink Contract - C8</fullName>
+                <default>false</default>
+                <label>CenturyLink Contract - C8</label>
+            </value>
+            <value>
+                <fullName>CenturyLink D2D Contract</fullName>
+                <default>false</default>
+                <label>CenturyLink D2D Contract</label>
+            </value>
+            <value>
+                <fullName>Certificate of Insurance</fullName>
+                <default>false</default>
+                <label>Certificate of Insurance</label>
+            </value>
+            <value>
+                <fullName>Commercial Retailer Agreement</fullName>
+                <default>false</default>
+                <label>Commercial Retailer Agreement</label>
+            </value>
+            <value>
+                <fullName>Connected Services Agreement</fullName>
+                <default>false</default>
+                <label>Connected Services Agreement</label>
+            </value>
+            <value>
+                <fullName>Copy of Credit/Debit Card</fullName>
+                <default>false</default>
+                <label>Copy of Credit/Debit Card</label>
+            </value>
+            <value>
+                <fullName>Copy of Driver&apos;s License</fullName>
+                <default>false</default>
+                <label>Copy of Driver&apos;s License</label>
+            </value>
+            <value>
+                <fullName>Credit Card/Debit Card Auth</fullName>
+                <default>false</default>
+                <label>Credit Card/Debit Card Auth</label>
+            </value>
+            <value>
+                <fullName>Dealer Insurance Requirements</fullName>
+                <default>false</default>
+                <label>Dealer Insurance Requirements</label>
+            </value>
+            <value>
+                <fullName>DIRECTV COMM Buydown</fullName>
+                <default>false</default>
+                <label>DIRECTV COMM Buydown</label>
+            </value>
+            <value>
+                <fullName>DIRECTV MDU Buydown</fullName>
+                <default>false</default>
+                <label>DIRECTV MDU Buydown</label>
+            </value>
+            <value>
+                <fullName>DIRECTV MSO Buydown - MB</fullName>
+                <default>false</default>
+                <label>DIRECTV MSO Buydown - MB</label>
+            </value>
+            <value>
+                <fullName>DIRECTV MSO Buydown - P10</fullName>
+                <default>false</default>
+                <label>DIRECTV MSO Buydown - PV</label>
+            </value>
+            <value>
+                <fullName>DIRECTV Residential Buydown</fullName>
+                <default>false</default>
+                <label>DIRECTV Residential Buydown</label>
+            </value>
+            <value>
+                <fullName>DIRECTV SMATV Buydown</fullName>
+                <default>false</default>
+                <label>DIRECTV SMATV Buydown</label>
+            </value>
+            <value>
+                <fullName>DSA - Final Agreement</fullName>
+                <default>false</default>
+                <label>DSA - Final Agreement</label>
+            </value>
+            <value>
+                <fullName>ELearning Dealer Training</fullName>
+                <default>false</default>
+                <label>ELearning Dealer Training</label>
+            </value>
+            <value>
+                <fullName>Elearning Sales Agent Training</fullName>
+                <default>false</default>
+                <label>Elearning Sales Agent Training</label>
+            </value>
+            <value>
+                <fullName>Equifax Agreement</fullName>
+                <default>false</default>
+                <label>Equifax Agreement</label>
+            </value>
+            <value>
+                <fullName>Exede Dealer Agreement</fullName>
+                <default>false</default>
+                <label>Viasat Dealer Agreement</label>
+            </value>
+            <value>
+                <fullName>eero Agreement</fullName>
+                <default>false</default>
+                <label>eero Agreement</label>
+            </value>
+            <value>
+                <fullName>Exede Distributor Reassignment</fullName>
+                <default>false</default>
+                <label>Viasat Distributor Reassignment</label>
+            </value>
+            <value>
+                <fullName>Exede - P10 Fulfillment Agreement</fullName>
+                <default>false</default>
+                <label>Viasat - PV Fulfillment Agreement</label>
+            </value>
+            <value>
+                <fullName>Exede - Statement of Exemption</fullName>
+                <default>false</default>
+                <label>Viasat - Statement of Exemption</label>
+            </value>
+            <value>
+                <fullName>Hands-on Training</fullName>
+                <default>false</default>
+                <label>Hands-on Training</label>
+            </value>
+            <value>
+                <fullName>HNS/DIRECTV Bundle Agreement</fullName>
+                <default>false</default>
+                <label>HNS/DIRECTV Bundle Agreement</label>
+            </value>
+            <value>
+                <fullName>HNS Cert of Insurance</fullName>
+                <default>false</default>
+                <label>HNS Cert of Insurance</label>
+            </value>
+            <value>
+                <fullName>HNS - Credit Card/Debit Card Auth</fullName>
+                <default>false</default>
+                <label>HNS - Credit Card/Debit Card Auth</label>
+            </value>
+            <value>
+                <fullName>HNS DDO Application</fullName>
+                <default>false</default>
+                <label>HNS DDO Application</label>
+            </value>
+            <value>
+                <fullName>HNS - Driver&apos;s License One-Time CC</fullName>
+                <default>false</default>
+                <label>HNS - Driver&apos;s License One-Time CC</label>
+            </value>
+            <value>
+                <fullName>HNS DSA Agreement</fullName>
+                <default>false</default>
+                <label>HNS DSA Agreement</label>
+            </value>
+            <value>
+                <fullName>HNS DSA Agreement - A/1</fullName>
+                <default>false</default>
+                <label>HNS DSA Agreement - A/1</label>
+            </value>
+            <value>
+                <fullName>HNS DSA Agreement - A/2</fullName>
+                <default>false</default>
+                <label>HNS DSA Agreement - A/2</label>
+            </value>
+            <value>
+                <fullName>HNS DSA Set-up Form</fullName>
+                <default>false</default>
+                <label>HNS DSA Set-up Form</label>
+            </value>
+            <value>
+                <fullName>HNS ENT Agreement</fullName>
+                <default>false</default>
+                <label>HNS ENT Agreement</label>
+            </value>
+            <value>
+                <fullName>HNS ENT - Att. A Form 1</fullName>
+                <default>false</default>
+                <label>HNS ENT - Att. A Form 1</label>
+            </value>
+            <value>
+                <fullName>HNS ENT - Att. A Form 2</fullName>
+                <default>false</default>
+                <label>HNS ENT - Att. A Form 2</label>
+            </value>
+            <value>
+                <fullName>HNS ENT Set-up Form</fullName>
+                <default>false</default>
+                <label>HNS ENT Set-up Form</label>
+            </value>
+            <value>
+                <fullName>Installer Training</fullName>
+                <default>false</default>
+                <label>Installer Training</label>
+            </value>
+            <value>
+                <fullName>MIRA Application</fullName>
+                <default>false</default>
+                <label>MIRA Application</label>
+            </value>
+            <value>
+                <fullName>MIRA Vendor ACHP Authorization</fullName>
+                <default>false</default>
+                <label>MIRA Vendor ACHP Authorization</label>
+            </value>
+            <value>
+                <fullName>MIRA W-9</fullName>
+                <default>false</default>
+                <label>MIRA W-9</label>
+            </value>
+            <value>
+                <fullName>MIRA Contract</fullName>
+                <default>false</default>
+                <label>MIRA Contract</label>
+            </value>
+            <value>
+                <fullName>MIRA Cert of Insurance</fullName>
+                <default>false</default>
+                <label>MIRA Cert of Insurance</label>
+            </value>
+            <value>
+                <fullName>MSA Application &amp; Sign-up Form</fullName>
+                <default>false</default>
+                <label>MSA Application &amp; Sign-up Form</label>
+            </value>
+            <value>
+                <fullName>P10 Cert of Insurance</fullName>
+                <default>false</default>
+                <label>PV Cert of Insurance</label>
+            </value>
+            <value>
+                <fullName>Personal Guaranty</fullName>
+                <default>false</default>
+                <label>Personal Guaranty</label>
+            </value>
+            <value>
+                <fullName>Req. for Taxpayer ID Number and Cert</fullName>
+                <default>false</default>
+                <label>Req. for Taxpayer ID Number and Cert</label>
+            </value>
+            <value>
+                <fullName>Resale Certificate</fullName>
+                <default>false</default>
+                <label>Resale Certificate</label>
+            </value>
+            <value>
+                <fullName>Sales Only Commissions Rate Sheet</fullName>
+                <default>false</default>
+                <label>Sales Only Commissions Rate Sheet</label>
+            </value>
+            <value>
+                <fullName>Self Certification Form</fullName>
+                <default>false</default>
+                <label>Self Certification Form</label>
+            </value>
+            <value>
+                <fullName>Self Installing Commission Rate Sheet</fullName>
+                <default>false</default>
+                <label>Self Installing Commission Rate Sheet</label>
+            </value>
+            <value>
+                <fullName>SME Agreement</fullName>
+                <default>false</default>
+                <label>SME Agreement</label>
+            </value>
+            <value>
+                <fullName>SME Agreement 1</fullName>
+                <default>false</default>
+                <label>SME Agreement 1</label>
+            </value>
+            <value>
+                <fullName>SME Agreement 2</fullName>
+                <default>false</default>
+                <label>SME Agreement 2</label>
+            </value>
+            <value>
+                <fullName>Terms and Conditions</fullName>
+                <default>false</default>
+                <label>Terms and Conditions</label>
+            </value>
+            <value>
+                <fullName>Vendor ACHP Authorization</fullName>
+                <default>false</default>
+                <label>Vendor ACHP Authorization</label>
+            </value>
+            <value>
+                <fullName>ViaSat Dealer Reassignment Conditions</fullName>
+                <default>false</default>
+                <label>ViaSat Dealer Reassignment Conditions</label>
+            </value>
+            <value>
+                <fullName>W-9</fullName>
+                <default>false</default>
+                <label>W-9</label>
+            </value>
+            <value>
+                <fullName>Frontier Application</fullName>
+                <default>false</default>
+                <label>Frontier Application</label>
+            </value>
+            <value>
+                <fullName>Frontier Contract</fullName>
+                <default>false</default>
+                <label>Frontier Contract</label>
+            </value>
+            <value>
+                <fullName>CPP Agreement</fullName>
+                <default>false</default>
+                <label>CPP Agreement</label>
+            </value>
+            <value>
+                <fullName>Windstream Contract</fullName>
+                <default>false</default>
+                <label>Windstream Contract</label>
+            </value>
+            <value>
+                <fullName>Windstream Application</fullName>
+                <default>false</default>
+                <label>Windstream Application</label>
+            </value>
+            <value>
+                <fullName>Nest Agreement</fullName>
+                <default>false</default>
+                <label>Nest Agreement</label>
+            </value>
+            <value>
+                <fullName>ASP Application</fullName>
+                <default>false</default>
+                <label>ASP Application</label>
+            </value>
+            <value>
+                <fullName>ACH Form</fullName>
+                <default>false</default>
+                <label>ACH Form</label>
+            </value>
+            <value>
+                <fullName>ASP Contract</fullName>
+                <default>false</default>
+                <label>ASP Contract</label>
+            </value>
+            <value>
+                <fullName>Alliance Referral Application</fullName>
+                <default>false</default>
+                <label>Alliance Referral Application</label>
+            </value>
+            <value>
+                <fullName>Alliance Referral Contract</fullName>
+                <default>false</default>
+                <label>Alliance Referral Contract</label>
+            </value>
+            <value>
+                <fullName>NDA</fullName>
+                <default>false</default>
+                <label>NDA</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <valueName>DIRECTV COMM Buydown</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-COM</controllingFieldValue>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <valueName>Resale Certificate</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>DTV-MDU</controllingFieldValue>
+            <valueName>DIRECTV MDU Buydown</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Certificate of Insurance</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <valueName>Commercial Retailer Agreement</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <valueName>DIRECTV MSO Buydown - P10</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Vendor ACHP Authorization</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MSOS - P10</controllingFieldValue>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>W-9</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <valueName>Auto Ship / Deferred Invoice agreement</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <valueName>Exede Distributor Reassignment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <valueName>Exede - P10 Fulfillment Agreement</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Exede - FFL</controllingFieldValue>
+            <valueName>Personal Guaranty</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <valueName>ACH Authorization</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <valueName>Windstream Contract</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Windstream</controllingFieldValue>
+            <valueName>Windstream Application</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Frontier Application</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Frontier</controllingFieldValue>
+            <valueName>Frontier Contract</valueName>
+        </valueSettings>
+    </valueSet>
+    <visibleLines>10</visibleLines>
+</CustomField>

@@ -1,0 +1,51 @@
+<template>
+    <lightning-card title="Resume Onboarding" icon-name="utility:resume">
+        <div class="slds-m-around_medium">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasIncompleteRequirements}>
+                    <!-- Progress Bar -->
+                    <div class="slds-m-bottom_medium">
+                        <div class="slds-text-heading_small slds-m-bottom_x-small">
+                            Progress: {completionPercentage}% Complete
+                        </div>
+                        <div class="slds-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={completionPercentage}>
+                            <span class="slds-progress-bar__value" style={progressBarStyle}></span>
+                        </div>
+                    </div>
+
+                    <!-- Last Completed -->
+                    <div class="slds-box slds-theme_success slds-m-bottom_small">
+                        <div class="slds-text-body_small slds-text-color_weak">Last Completed</div>
+                        <div class="slds-text-heading_small">{lastCompletedRequirementName}</div>
+                    </div>
+
+                    <!-- Next Incomplete -->
+                    <div class="slds-box slds-theme_warning slds-m-bottom_medium">
+                        <div class="slds-text-body_small slds-text-color_weak">Next Step</div>
+                        <div class="slds-text-heading_small">{nextIncompleteRequirementName}</div>
+                    </div>
+
+                    <!-- Resume Button -->
+                    <lightning-button
+                        label="Resume"
+                        variant="brand"
+                        onclick={handleResume}
+                        icon-name="utility:forward">
+                    </lightning-button>
+                </template>
+
+                <template if:false={hasIncompleteRequirements}>
+                    <div class="slds-text-align_center slds-p-around_medium">
+                        <lightning-icon icon-name="utility:success" size="large" class="slds-m-bottom_small"></lightning-icon>
+                        <p class="slds-text-heading_small">All requirements completed!</p>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
+

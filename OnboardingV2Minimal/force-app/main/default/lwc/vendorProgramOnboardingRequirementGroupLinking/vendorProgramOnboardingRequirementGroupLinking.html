@@ -1,0 +1,71 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <template if:true={isLoading}>
+        <lightning-spinner size="small"></lightning-spinner>
+      </template>
+
+      <template if:false={isLoading}>
+        <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-text-body_small slds-m-bottom_none">
+                Create and link Vendor Program Group, Vendor Program Requirement Group, and Vendor Program Group Member.
+                If you selected a Requirement Set in Step 4, you can use historical values or create new ones.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <template if:true={showHistoricalOption}>
+          <div class="slds-box slds-theme_success slds-m-bottom_small" style="padding: 0.75rem;">
+            <p class="slds-text-body_regular slds-m-bottom_small">
+              <strong>Historical Data Available:</strong>
+            </p>
+            <p class="slds-text-body_small slds-m-bottom_small">{historicalInfoText}</p>
+            
+            <lightning-input
+              type="checkbox"
+              label="Use Historical Values (Link from existing Requirement Set)"
+              checked={useHistorical}
+              onchange={handleUseHistoricalChange}
+              class="slds-m-top_small">
+            </lightning-input>
+            
+            <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">
+              If checked, components will be linked from the historical Requirement Set. 
+              If unchecked, new components will be created with naming convention: "Vendor Program Label - &lt;Object Name&gt;".
+            </p>
+          </div>
+        </template>
+
+        <template if:false={showHistoricalOption}>
+          <div class="slds-box slds-theme_warning slds-m-bottom_small" style="padding: 0.75rem;">
+            <p class="slds-text-body_small slds-m-bottom_none">
+              <strong>Note:</strong> No Requirement Set was selected in Step 4. New components will be created with naming convention: 
+              "Vendor Program Label - &lt;Object Name&gt;".
+            </p>
+          </div>
+        </template>
+
+        <div class="slds-m-top_medium">
+          <lightning-button 
+            variant="brand" 
+            label="Create and Link Components" 
+            onclick={handleCreateAndLink}
+            disabled={nextDisabled}>
+          </lightning-button>
+        </div>
+      </template>
+
+      <!-- Navigation -->
+      <div class="slds-m-top_medium">
+        <lightning-button label="Back" onclick={handleBack}></lightning-button>
+      </div>
+    </div>
+  </lightning-card>
+</template>
+

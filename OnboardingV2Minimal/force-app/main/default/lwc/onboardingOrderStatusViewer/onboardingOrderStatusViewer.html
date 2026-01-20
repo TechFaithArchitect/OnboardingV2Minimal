@@ -1,0 +1,16 @@
+<template>
+  <template if:true={hasOrders}>
+    <lightning-card title="Order Information">
+      <lightning-datatable
+        key-field="orderId"
+        data={orders}
+        columns={columns}
+        hide-checkbox-column
+      ></lightning-datatable>
+    </lightning-card>
+  </template>
+
+  <template if:true={error}>
+    <p class="slds-text-color_error slds-p-horizontal_small">{error}</p>
+  </template>
+</template>

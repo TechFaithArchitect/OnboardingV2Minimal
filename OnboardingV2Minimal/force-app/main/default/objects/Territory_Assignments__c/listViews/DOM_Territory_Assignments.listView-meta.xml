@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DOM_Territory_Assignments</fullName>
+    <columns>NAME</columns>
+    <columns>Region__c</columns>
+    <columns>Territory__c</columns>
+    <columns>Onboarding_Rep__c</columns>
+    <columns>Base_App_OB_Rep__c</columns>
+    <columns>Outside_Territory_Manager__c</columns>
+    <columns>Account_Manager__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Territory_Assignments__c.Program_Acquisitions</value>
+    </filters>
+    <filters>
+        <field>Territory__c</field>
+        <operation>equals</operation>
+        <value>GLK,HRT,PNW,SET,NET,SCT,MWT,GLF,SWT</value>
+    </filters>
+    <label>Program Territory Assignments</label>
+</ListView>

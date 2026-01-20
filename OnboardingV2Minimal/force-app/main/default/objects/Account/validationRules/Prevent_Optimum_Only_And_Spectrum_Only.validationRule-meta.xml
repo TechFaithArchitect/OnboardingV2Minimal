@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Optimum_Only_And_Spectrum_Only</fullName>
+    <active>false</active>
+    <description>Prevents an account from having Spectrum Only And Optimum Only checked at the same time.</description>
+    <errorConditionFormula>Optimum_Only__c = TRUE &amp;&amp; Spectrum_Only__c = TRUE</errorConditionFormula>
+    <errorMessage>You cannot select both Optimum Only and Spectrum Only at the same time.</errorMessage>
+</ValidationRule>

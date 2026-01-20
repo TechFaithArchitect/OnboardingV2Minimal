@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POE_Email_Windstream__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(POE_WS_Email__c , BR() &amp;  &quot;Windstream&quot; &amp; BR() &amp; BR() &amp; &quot;PerfectSource (Traditional)&quot; &amp; BR() &amp; BR() &amp; &quot;You will recieve an email to update the password and create your account.&quot;, &apos;&apos;) &amp; 
+IF(NOT(ISBLANK(UID_Windstream__c)) , BR() &amp; &quot;Winsales (D2D)&quot;  &amp; BR() &amp; BR()  &amp; &quot;Username Login:&quot; &amp;  UID_Windstream__c  &amp; BR() &amp; &quot;Password:&quot; &amp;  POE_WS_Pass__c &amp; BR() &amp; &quot;Vendor ID (VID):&quot; &amp;  POE_VendorId__c , &apos;&apos;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Email Body Windstream</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

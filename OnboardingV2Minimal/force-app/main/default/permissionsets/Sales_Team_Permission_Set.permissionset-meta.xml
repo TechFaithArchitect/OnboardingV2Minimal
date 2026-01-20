@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <applicationVisibilities>
+        <application>PV_Order_Management_System</application>
+        <visible>true</visible>
+    </applicationVisibilities>
+    <description>This permission set gives access to sales team for new order management feature.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>PV_Sales Team Permission Set</label>
+    <license>Salesforce</license>
+    </PermissionSet>

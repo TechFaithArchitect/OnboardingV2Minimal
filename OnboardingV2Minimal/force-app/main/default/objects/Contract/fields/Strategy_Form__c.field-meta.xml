@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Strategy_Form__c</fullName>
+    <externalId>false</externalId>
+    <label>Strategy Form/Smart Sheet</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Not Started</fullName>
+                <default>true</default>
+                <label>Not Started</label>
+            </value>
+            <value>
+                <fullName>Sent to Partner</fullName>
+                <default>false</default>
+                <label>Sent to Partner</label>
+            </value>
+            <value>
+                <fullName>Approved by Partner</fullName>
+                <default>false</default>
+                <label>Approved by Partner</label>
+            </value>
+            <value>
+                <fullName>Denied by Partner</fullName>
+                <default>false</default>
+                <label>Denied by Partner</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

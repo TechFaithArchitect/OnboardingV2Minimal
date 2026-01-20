@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MFAFieldRequiredForBusinessAccounts</fullName>
+    <active>true</active>
+    <description>Makes MFA field required for Business Accounts. (PER-2847)</description>
+    <errorConditionFormula>AND(
+   ISBLANK(TEXT(MFA__c)),
+    RecordType.Name = &apos;Dealer&apos;
+)</errorConditionFormula>
+    <errorDisplayField>MFA__c</errorDisplayField>
+    <errorMessage>Please complete MFA method for Account</errorMessage>
+</ValidationRule>

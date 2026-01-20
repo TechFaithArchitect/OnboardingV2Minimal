@@ -1,0 +1,28 @@
+<template>
+  <lightning-card title={processName}>
+    <lightning-progress-indicator current-step={currentStageLabel} type="base">
+      <template for:each={stages} for:item="stage">
+        <lightning-progress-step 
+          key={stage.Id}
+          label={stage.Label__c}
+          value={stage.Id}>
+        </lightning-progress-step>
+      </template>
+    </lightning-progress-indicator>
+
+    <!-- ✅ Use the working onboardingStageRenderer component -->
+    <template if:true={currentComponentName}>
+      <c-onboarding-stage-renderer
+        component-name={currentComponentName}
+        context={componentContext}
+        onnext={handleNext}
+        onback={handleBack}>
+      </c-onboarding-stage-renderer>
+    </template>
+
+    <div class="slds-align_absolute-center slds-m-top_medium">
+      <lightning-button label="Back" onclick={handleBack} disabled={isFirst}></lightning-button>
+      <lightning-button label="Next" variant="brand" onclick={handleNext} class="slds-m-left_small" disabled={isLast}></lightning-button>
+    </div>
+  </lightning-card>
+</template>

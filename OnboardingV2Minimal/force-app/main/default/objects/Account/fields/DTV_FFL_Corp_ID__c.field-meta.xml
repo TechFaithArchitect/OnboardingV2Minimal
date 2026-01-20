@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DTV_FFL_Corp_ID__c</fullName>
+    <description>DIRECTV FFL Corp ID number</description>
+    <externalId>false</externalId>
+    <inlineHelpText>DIRECTV FFL Corp ID number</inlineHelpText>
+    <label>* DTV-FFL CORP ID</label>
+    <length>50</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POE_Status_Reason__c</fullName>
+    <externalId>false</externalId>
+    <label>Closure Reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Business Moving (to a different state)</fullName>
+                <default>false</default>
+                <label>Business Moving (to a different state)</label>
+            </value>
+            <value>
+                <fullName>Financial</fullName>
+                <default>false</default>
+                <label>Financial</label>
+            </value>
+            <value>
+                <fullName>Leaving Business</fullName>
+                <default>false</default>
+                <label>Leaving Business</label>
+            </value>
+            <value>
+                <fullName>On a Re-Train</fullName>
+                <default>false</default>
+                <label>On a Re-Train</label>
+            </value>
+            <value>
+                <fullName>Personal</fullName>
+                <default>false</default>
+                <label>Personal</label>
+            </value>
+            <value>
+                <fullName>Legal</fullName>
+                <default>false</default>
+                <label>Legal</label>
+            </value>
+            <value>
+                <fullName>Leaving the business - Personal</fullName>
+                <default>false</default>
+                <label>Leaving the business - Personal</label>
+            </value>
+            <value>
+                <fullName>Leaving the business - Financial</fullName>
+                <default>false</default>
+                <label>Leaving the business - Financial</label>
+            </value>
+            <value>
+                <fullName>Changing Business Name</fullName>
+                <default>false</default>
+                <label>Changing Business Name</label>
+            </value>
+            <value>
+                <fullName>Performance Issue</fullName>
+                <default>false</default>
+                <label>Performance Issue</label>
+            </value>
+            <value>
+                <fullName>Retrain</fullName>
+                <default>false</default>
+                <label>Retrain</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

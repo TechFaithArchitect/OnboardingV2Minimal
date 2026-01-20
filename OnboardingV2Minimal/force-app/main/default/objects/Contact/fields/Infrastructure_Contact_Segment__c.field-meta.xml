@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Infrastructure_Contact_Segment__c</fullName>
+    <externalId>false</externalId>
+    <label>Infrastructure Contact Segment</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Account Payables</fullName>
+                <default>false</default>
+                <label>Account Payables</label>
+            </value>
+            <value>
+                <fullName>Civil</fullName>
+                <default>false</default>
+                <label>Civil</label>
+            </value>
+            <value>
+                <fullName>DAS</fullName>
+                <default>false</default>
+                <label>DAS</label>
+            </value>
+            <value>
+                <fullName>Engineer (SA, MA, CAD, PE)</fullName>
+                <default>false</default>
+                <label>Engineer (SA, MA, CAD, PE)</label>
+            </value>
+            <value>
+                <fullName>Macro</fullName>
+                <default>false</default>
+                <label>Macro</label>
+            </value>
+            <value>
+                <fullName>Maintenance and Operations</fullName>
+                <default>false</default>
+                <label>Maintenance and Operations</label>
+            </value>
+            <value>
+                <fullName>Public Safety</fullName>
+                <default>false</default>
+                <label>Public Safety</label>
+            </value>
+            <value>
+                <fullName>Safety</fullName>
+                <default>false</default>
+                <label>Safety</label>
+            </value>
+            <value>
+                <fullName>Scoping</fullName>
+                <default>false</default>
+                <label>Scoping</label>
+            </value>
+            <value>
+                <fullName>Site Acquisition</fullName>
+                <default>false</default>
+                <label>Site Acquisition</label>
+            </value>
+            <value>
+                <fullName>Small Cells</fullName>
+                <default>false</default>
+                <label>Small Cells</label>
+            </value>
+            <value>
+                <fullName>Structure cabling</fullName>
+                <default>false</default>
+                <label>Structure cabling</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,23 @@
+<template>
+    <div class="slds-form-element">
+        <lightning-input
+            label={fieldLabel}
+            type={fieldType}
+            value={fieldValue}
+            onchange={handleValueChange}
+            onblur={handleFieldBlur}
+            disabled={isSaving}>
+        </lightning-input>
+        <template if:true={saveStatusText}>
+            <div class="slds-m-top_x-small">
+                <lightning-icon
+                    icon-name={saveStatusIcon}
+                    size="x-small"
+                    class={saveStatusClass}>
+                </lightning-icon>
+                <span class="slds-m-left_x-small slds-text-body_small">{saveStatusText}</span>
+            </div>
+        </template>
+    </div>
+</template>
+

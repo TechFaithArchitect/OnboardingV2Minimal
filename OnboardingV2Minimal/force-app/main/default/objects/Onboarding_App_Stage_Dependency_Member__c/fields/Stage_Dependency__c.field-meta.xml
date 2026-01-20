@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage_Dependency__c</fullName>
+    <description>Master-detail to the stage dependency this member belongs to.</description>
+    <externalId>false</externalId>
+    <label>Dependency</label>
+    <referenceTo>Onboarding_Application_Stage_Dependency__c</referenceTo>
+    <relationshipLabel>Onboarding App Stage Dependency Members</relationshipLabel>
+    <relationshipName>Onboarding_App_Stage_Dependency_Members</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

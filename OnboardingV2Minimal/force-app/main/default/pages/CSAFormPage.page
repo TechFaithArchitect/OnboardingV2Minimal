@@ -1,0 +1,1278 @@
+<apex:page docType="html-5.0" controller="CSAFormPageController">
+
+    <html lang="en" class="html-alignment">
+
+    <head>
+        <title>Residential Sales Order</title>
+        <apex:stylesheet value="{!URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/css/csaFormPageStyle.css')}" />
+        <script>
+            function rerenderPage() {
+                submitForm(); // Trigger the Visualforce ActionFunction for final refresh
+            }
+        </script>
+    </head>
+
+    <body>
+        <apex:form id="form">
+            <apex:actionFunction name="submitForm" rerender="main-form, submit-screen" />
+
+            <!-- Main Form Panel, only visible when not submitted -->
+            <apex:outputPanel id="main-form" layout="block" rendered="{!NOT(submitted)}">
+                <div class="header-alignment">
+                    <h1 class="header">
+                        <span class="header-title-one">Residential Sales Order</span>
+                        <span class="header-title-two">Thank you. We appreciate your business.</span>
+                    </h1>
+                </div>
+                <table class="form-box main-table">
+                    <!--   Header field set -->
+                    <tr class="header-table-row">
+                        <td class="header-table-data-cell" colspan="2">
+                            <div class="s3 header-field-set">
+                                <span style="width: 160pt; display: inline-block;">
+                                    <label for="monthlyRecurringCharges">Monthly Recurring Charges: $</label>
+                                    <apex:outputText value="{!monthlyRecurringCharges}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="monthlyRecurringCharges" value="{!monthlyRecurringCharges}" size="9" required="true" />
+                                </span>
+                                <span style="width: 134pt; display: inline-block;">
+                                    <label for="dueDate">Due Date: </label>
+                                    <apex:outputText value="{!dueDate}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:input id="dueDate" value="{!dueDate}" type="date" />
+                                </span>
+                                <span style="width: 106pt; display: inline-block;">
+                                    <label for="installationFee">Installation Fee $ </label>
+                                    <apex:outputText value="{!installationFee}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="installationFee" value="{!installationFee}" size="7" required="true" />
+                                </span>
+                                <span style="width: 123pt; display: inline-block;">
+                                    <label for="arrivalWindow"> Arrival Window: </label>
+                                    <apex:outputText value="{!arrivalWindow}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="arrivalWindow" value="{!arrivalWindow}" size="12" />
+                                </span>
+                                <span id="radio-container" class="s6">
+                                    <apex:selectRadio id="am-pm" value="{!arrivalWindowAmOrPm}" html-class="apex-radio-button" layout="lineDirection" rendered="{!NOT(isPdfMode)}">
+                                        <apex:selectOptions value="{!timeOptions}" />
+                                    </apex:selectRadio>
+                                    <apex:outputText value="{!arrivalWindowAmOrPm}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                </span>
+
+                            </div>
+                            <p class="s6 header-sub-text">
+                                The above pricing does not include taxes and surcharges.
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Section A -->
+                    <tr class="section-title-table-row">
+                        <td class="section-title-data-cell" colspan="2">
+                            <p class="s7 section-header-text">
+                                Section A: Customer Information (Must be filled out completely) PLEASE PRINT
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class="section-a-table-row-one">
+                        <td class="section-a-table-data-cell-one" colspan="2">
+                            <div class="s3" style="display: block; text-align: left; line-height: 14pt; max-width: 575pt; margin-top:1pt;">
+                                <!-- Two fields per row -->
+                                <span class="section-a-input-spacing" style="width: 240pt;">
+                                    <label for="btnPortIn">BTN/Port-In: </label>
+                                    <apex:outputText value="{!btnPortIn}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="btnPortIn" value="{!btnPortIn}" size="37" required="true" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 308pt;">
+                                    <label for="customerContactAddress">Customer contact email address: </label>
+                                    <apex:outputText value="{!customerContactAddress}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="customerContactAddress" value="{!customerContactAddress}" size="36" required="true" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 266pt;">
+                                    <label for="firstName">First Name: </label>
+                                    <apex:outputText value="{!firstName}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="firstName" value="{!firstName}" size="42" required="true" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 285pt;">
+                                    <label for="lastName">Last Name: </label>
+                                    <apex:outputText value="{!lastName}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="lastName" value="{!lastName}" size="45" required="true" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 337pt;">
+                                    <label for="preferredContactNumber">Preferred Contact # for date of activation (call/text): </label>
+                                    <apex:outputText value="{!preferredContactNumber}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="preferredContactNumber" value="{!preferredContactNumber}" size="25" required="true" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 223pt;">
+                                    <label for="alternateContactNumber">Alternate Contact #: </label>
+                                    <apex:outputText value="{!alternateContactNumber}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="alternateContactNumber" value="{!alternateContactNumber}" size="25" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 419pt;">
+                                    <label for="address">Address: </label>
+                                    <apex:outputText value="{!address}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="address" value="{!address}" size="72" required="true" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 140pt;">
+                                    <label for="apt">Apt: </label>
+                                    <apex:outputText value="{!apt}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="apt" value="{!apt}" size="20" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 288pt;">
+                                    <label for="city">City: </label>
+                                    <apex:outputText value="{!city}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="city" value="{!city}" size="50" required="true" />
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 126pt; padding-left: 1pt;">
+                                    <label for="state">State:</label>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:outputText value="{!state}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:selectList value="{!state}" size="1" required="true">
+                                            <apex:selectOptions value="{!stateOptions}" />
+                                        </apex:selectList>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="section-a-input-spacing" style="width: 123pt;">
+                                    <label for="zip">Zip: </label>
+                                    <apex:outputText value="{!zip}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:inputText id="zip" value="{!zip}" size="20" required="true" />
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="section-a-table-row-two">
+                        <td class="section-a-table-data-cell-two">
+                            <div class="s3" style="text-align: left;">
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="techWillContact" value="{!techWillContact}" />
+                                        <label for="techWillContact">Tech will contact you on the day of installation</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="techWillContactImage" url="{!IF(techWillContact, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="techWillContactImage">Tech will contact you on the day of installation</label>
+                                    </apex:outputPanel>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="section-a-table-data-cell-three">
+                            <p class="s8 section-a-frontier-disclaimer">
+                                Frontier may use the number provided above to make autodialed or prerecorded calls to me about sales promotions and/or my
+                                services
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class="section-a-table-row-three">
+                        <td colspan="2">
+                            <div class="s3" style="padding-top: 3pt; padding-left: 4pt; text-indent: 0pt; text-align: left; ">
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="existingCustomerChange" value="{!existingCustomerChange}" />
+                                        <label for="existingCustomerChange">Existing Customer - Change</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="existingCustomerChangeImage" url="{!IF(existingCustomerChange, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="existingCustomerChangeImage">Existing Customer - Change</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="m2m" value="{!m2m}" />
+                                        <label for="m2m">M2M</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="m2mImage" url="{!IF(m2m, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="m2mImage">M2M</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="oneYearTerm" value="{!oneYearTerm}" />
+                                        <label for="oneYearTerm">1 Year Term</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="oneYearTermImage" url="{!IF(oneYearTerm, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="oneYearTermImage">1 Year Term</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="lowIncomeOfferEnrolled" value="{!lowIncomeOfferEnrolled}" />
+                                        <label for="lowIncomeOfferEnrolled">Low Income Offer Enrolled</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="lowIncomeOfferEnrolledImage" url="{!IF(lowIncomeOfferEnrolled, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="lowIncomeOfferEnrolledImage">Low Income Offer Enrolled</label>
+                                    </apex:outputPanel>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="section-title-table-row">
+                        <td class="section-title-data-cell" colspan="2">
+                            <p class="s7 section-header-text" style="display: inline-block; margin-right:80pt;">
+                                Section B: Internet
+                            </p>
+                            <p class="s7 section-header-text" style="display: inline-block">
+                                You may review additional internet service performance details at frontier.com/internetdisclosures
+                            </p>
+                        </td>
+
+                    </tr>
+                    <tr class="section-b-table-row-one">
+                        <td class="section-b-table-data-cell-one" colspan="1">
+                            <div class="s3" style="text-align: left; max-width: 286pt;">
+                                <p class="s12" style="margin: 3pt;">Frontier Fiber Internet</p>
+                                <div style="height: 46pt;">
+                                    <span class="section-b-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="fiber100" value="{!fiber100}" />
+                                            <label for="fiber100">Fiber 100</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="fiber100Image" url="{!IF(fiber100, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="fiber100Image">Fiber 100</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="fiber200" value="{!fiber200}" />
+                                            <label for="fiber200">Fiber 200</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="fiber200Image" url="{!IF(fiber200, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="fiber200Image">Fiber 200</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="fiber500" value="{!fiber500}" />
+                                            <label for="fiber500">Fiber 500</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="fiber500Image" url="{!IF(fiber500, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="fiber500Image">Fiber 500</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="fiber1Gig" value="{!fiber1Gig}" />
+                                            <label for="fiber1Gig">Fiber 1 Gig</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="fiber1GigImage" url="{!IF(fiber1Gig, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="fiber1GigImage">Fiber 1 Gig</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="fiber2Gig" value="{!fiber2Gig}" />
+                                            <label for="fiber2Gig">Fiber 2 Gig</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="fiber2GigImage" url="{!IF(fiber2Gig, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="fiber2GigImage">Fiber 2 Gig</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="fiber5Gig" value="{!fiber5Gig}" />
+                                            <label for="fiber5Gig">Fiber 5 Gig</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="fiber5GigImage" url="{!IF(fiber5Gig, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="fiber5GigImage">Fiber 5 Gig</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="fiber7Gig" value="{!fiber7Gig}" />
+                                            <label for="fiber7Gig">Fiber 7 Gig</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="fiber7GigImage" url="{!IF(fiber7Gig, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="fiber7GigImage">Fiber 7 Gig</label>
+                                        </apex:outputPanel>
+                                    </span>
+                                </div>
+                                <p class="s6" style="padding-left: 4pt; padding-right: 81pt; text-indent: 0pt; text-align: left; width: 200pt;">
+                                    For 200, 500, 1 Gig, 5 Gig, and 7 Gig, $100 prorated early termination fee applies if cancelled months 1-12.
+                                </p>
+                            </div>
+                        </td>
+                        <td colspan="1">
+                            <div class="s9" style="text-align: left; max-width: 287.5pt; height:79pt;">
+                                <span class="section-b-input-spacing" style="margin-top 2pt;">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="frontierInternet" value="{!frontierInternet}" />
+                                        <label for="frontierInternet">
+                                            <span class="s12">Frontier Internet</span>
+                                        </label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="frontierInternetImage" url="{!IF(frontierInternet, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="frontierInternetImage">
+                                            <span class="s12">Frontier Internet</span>
+                                        </label>
+                                    </apex:outputPanel>
+                                </span>
+
+                                <p style="padding-top: 2pt; text-indent: 0pt; text-align: left;">
+                                    <br />
+                                </p>
+                                <p class="s12" style="padding-left: 16pt; text-indent: 0pt; text-align: left;">
+                                    Streaming capabilities
+                                </p>
+                                <p class="s15" style="padding-left: 16pt; text-indent: 0pt; text-align: left;">
+                                    Your address qualifies for the following streaming capabilities:
+                                </p>
+
+                                <div class="s3" style="padding-left: 4pt; max-width: 287.5pt;">
+                                    <span class="section-b-two-input-spacing">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}" style="font-size:x-small;">
+                                            <apex:inputCheckbox id="checkEmailBankSocial" value="{!checkEmailBankSocial}" />
+                                            <label for="checkEmailBankSocial">Check email, bank online, scroll through social media</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}" style="font-size:x-small;">
+                                            <apex:image html-name="checkEmailBankSocialImage" url="{!IF(checkEmailBankSocial, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="checkEmailBankSocialImage">Check email, bank online, scroll through social media</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-two-input-spacing" style="font-size:x-small;">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="streamMoviesGames" value="{!streamMoviesGames}" />
+                                            <label for="streamMoviesGames">Stream your favorite movies and TV shows, or play games online</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="streamMoviesGamesImage" url="{!IF(streamMoviesGames, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="streamMoviesGamesImage">Stream your favorite movies and TV shows, or play games online</label>
+                                        </apex:outputPanel>
+                                    </span>
+
+                                    <span class="section-b-two-input-spacing" style="font-size:x-small;">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="streamMultiDevices4K" value="{!streamMultiDevices4K}" />
+                                            <label for="streamMultiDevices4K">Watch streaming video on multiple devices, plus stream incredible 4K video</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="streamMultiDevices4KImage" url="{!IF(streamMultiDevices4K, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="streamMultiDevices4KImage">Watch streaming video on multiple devices, plus stream incredible 4K video</label>
+                                        </apex:outputPanel>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Section C -->
+                    <tr class="section-title-table-row">
+                        <td class="section-title-data-cell" colspan="2">
+                            <p class="s7" style="padding-top: 3pt; padding-left: 4pt; text-indent: 0pt; text-align: left; ">
+                                Section C: Additional Services
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class="section-c-table-row-one">
+                        <td colspan="2">
+                            <div class="s3" style="text-align: left;">
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="youTubeTvBaseEnglish" value="{!youTubeTvBaseEnglish}" />
+                                        <label for="youTubeTvBaseEnglish">YouTube TV Base (English)</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="youTubeTvBaseEnglishImage" url="{!IF(youTubeTvBaseEnglish, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="youTubeTvBaseEnglishImage">YouTube TV Base (English)</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="youTubeTvSpanish" value="{!youTubeTvSpanish}" />
+                                        <label for="youTubeTvSpanish">YouTube TV Spanish</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="youTubeTvSpanishImage" url="{!IF(youTubeTvSpanish, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="youTubeTvSpanishImage">YouTube TV Spanish</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="googleChromeDevice" value="{!googleChromeDevice}" />
+                                        <label for="googleChromeDevice"> Google Chrome Device – Qty:</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="googleChromeDeviceImage" url="{!IF(googleChromeDevice, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="googleChromeDeviceImage"> Google Chrome Device – Qty:</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="apex-input-spacing">
+                                    <apex:outputText value="{!googleChromeDeviceQuantity}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:input id="googleChromeDeviceQuantity" value="{!googleChromeDeviceQuantity}" type="number" size="2" style="width: 30pt;"
+                                    />
+                                </span>
+                            </div>
+
+                            <p class="s6" style="padding-left: 2pt; padding-bottom: 2pt; text-align: left;">
+                                See YouTube TV Terms of Service on reverse.*
+                            </p>
+                        </td>
+                    </tr>
+                    <!--   Section D -->
+                    <tr class="section-title-table-row">
+                        <td class="section-title-data-cell" style="width:286pt;" colspan="1">
+                            <p class="s7" style="padding-top: 3pt; padding-left: 4pt; text-indent: 0pt; text-align: left;">
+                                Section D: Phone Services
+                            </p>
+                        </td>
+                        <td class="section-title-data-cell" style="width:286pt;" bgcolor="#FF0037" colspan="1">
+                            <p class="s16" style="text-indent: 0pt; text-align: left;">
+                                Additional regulatory and access fees may apply.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class="section-d-table-data-row-one">
+                        <td style="width: 286pt;">
+                            <div class="s3" style="max-width: 287.5pt; margin-top:2pt;">
+                                <span class="section-d-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="unlimitedDigitalVoice" value="{!unlimitedDigitalVoice}" />
+                                        <label for="unlimitedDigitalVoice">Unlimited Digital Voice</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="unlimitedDigitalVoiceImage" url="{!IF(unlimitedDigitalVoice, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="unlimitedDigitalVoiceImage">Unlimited Digital Voice</label>
+                                    </apex:outputPanel>
+                                </span>
+
+                                <span class="section-d-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="unlimitedVoice" value="{!unlimitedVoice}" />
+                                        <label for="unlimitedVoice">Unlimited Voice</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="unlimitedVoiceImage" url="{!IF(unlimitedVoice, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="unlimitedVoiceImage">Unlimited Voice</label>
+                                    </apex:outputPanel>
+                                </span>
+
+                                <span class="section-d-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="residentialUnlimitedVoiceServiceStandalone" value="{!residentialUnlimitedVoiceServiceStandalone}"
+                                        />
+                                        <label for="residentialUnlimitedVoiceServiceStandalone">Residential Unlimited Voice Service (Standalone)</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="residentialUnlimitedVoiceServiceStandaloneImage" url="{!IF(residentialUnlimitedVoiceServiceStandalone, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="residentialUnlimitedVoiceServiceStandaloneImage">Residential Unlimited Voice Service (Standalone)</label>
+                                    </apex:outputPanel>
+                                </span>
+
+                                <span class="section-d-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="portInCheckbox" value="{!portInCheckbox}" />
+                                        <label for="portInCheckbox">Port In #</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="portInCheckboxImage" url="{!IF(portInCheckbox, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="portInCheckboxImage">Port In #</label>
+                                    </apex:outputPanel>
+                                    <apex:outputText value="{!portInNumberField}" rendered="{!isPdfMode}" style="margin-left: 4pt;" styleClass="field-highlighting"
+                                    />
+                                    <apex:input id="portInNumberField" value="{!portInNumberField}" type="text" size="30" style="margin-left: 4pt;" />
+                                </span>
+                            </div>
+                        </td>
+                        <td style="width: 286pt; vertical-align: middle;">
+                            <div class="s3" style="width: 216pt;">
+                                <span class="apex-input-spacing">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+
+                                        <apex:inputCheckbox id="emergency911ServiceRLNCheckbox" value="{!emergency911ServiceRLNCheckbox}" />
+                                        <label for="emergency911ServiceRLNCheckbox">Emergency 911 Service Record Locator Number (RLN#):</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="emergency911ServiceRLNCheckboxImage" url="{!IF(emergency911ServiceRLNCheckbox, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="emergency911ServiceRLNCheckboxImage">Emergency 911 Service Record Locator Number (RLN#):</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="apex-input-spacing">
+                                    <apex:outputText value="{!emergency911ServiceRLN}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <apex:input id="emergency911ServiceRLN" value="{!emergency911ServiceRLN}" type="text" size="30" />
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="section-d-table-data-row-two">
+                        <td style="width: 287.5pt;" colspan="1">
+                            <p class="s3" style=" padding-left: 12pt; text-indent: 0pt; line-height: 6pt; text-align: left; ">
+                                <span class="apex-input-spacing">
+                                    <label for="accountNumber">Account #</label>
+                                    <apex:outputText value="{!accountNumber}" rendered="{!isPdfMode}" style="margin-left:4pt;" styleClass="field-highlighting"
+                                    />
+                                    <apex:input id="accountNumber" value="{!accountNumber}" type="text" size="35" style="margin-left:4pt;" />
+                                </span>
+                            </p>
+                        </td>
+                        <td style="width: 287.5pt;" class="data-cell-border-top data-cell-border-left" colspan="1">
+                            <div class="s17" style="padding-left: 16pt; text-indent: 0pt; text-align: left;">
+                                <span class="section-d-checkboxes">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="listedCheckbox" value="{!listedCheckbox}" />
+                                        <label for="listedCheckbox">Listed</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="listedCheckboxImage" url="{!IF(listedCheckbox, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="listedCheckboxImage">Listed</label>
+                                    </apex:outputPanel>
+                                </span>
+
+                                <span class="section-d-checkboxes" style="padding-right: 20pt; width:58pt;">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="nonPublishedCheckbox" value="{!nonPublishedCheckbox}" />
+                                        <label for="nonPublishedCheckbox">Non-Published</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="nonPublishedCheckboxImage" url="{!IF(nonPublishedCheckbox, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="nonPublishedCheckboxImage">Non-Published</label>
+                                    </apex:outputPanel>
+                                </span>
+
+                                <span class="section-d-checkboxes">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="nonListedCheckbox" value="{!nonListedCheckbox}" />
+                                        <label for="nonListedCheckbox">Non-listed</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="nonListedCheckboxImage" url="{!IF(nonListedCheckbox, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="nonListedCheckboxImage">Non-listed</label>
+                                    </apex:outputPanel>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Section E -->
+                    <tr class="section-title-table-row">
+                        <td class="section-title-data-cell" colspan="2">
+                            <p class="s7 section-header-text">
+                                Section E: Value-Added Services and Equipment
+                            </p>
+                        </td>
+                    </tr>
+                    <tr class="section-e-data-row-one">
+                        <td style="width: 575pt;" colspan="2">
+                            <div style="display: inline-block; vertical-align: top; max-width: 244pt; margin-top:2pt;">
+                                <span class="section-e-input-spacing s3">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="totalShield" value="{!totalShield}" />
+                                        <label for="totalShield">Total Shield</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="totalShieldImage" url="{!IF(totalShield, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="totalShieldImage">Total Shield</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="section-e-input-spacing s3">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="myPremiumTechPro" value="{!myPremiumTechPro}" />
+                                        <label for="myPremiumTechPro">My Premium Tech Pro</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="myPremiumTechProImage" url="{!IF(myPremiumTechPro, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="myPremiumTechProImage">My Premium Tech Pro</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="section-e-input-spacing s3">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="identityProtection" value="{!identityProtection}" />
+                                        <label for="identityProtection">Identity Protection</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="identityProtectionImage" url="{!IF(identityProtection, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="identityProtectionImage">Identity Protection</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="section-e-input-spacing s3">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="wholeHomeWiFi" value="{!wholeHomeWiFi}" />
+                                        <label for="wholeHomeWiFi">Whole-Home Wi-Fi</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="wholeHomeWiFiImage" url="{!IF(wholeHomeWiFi, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="wholeHomeWiFiImage">Whole-Home Wi-Fi</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <span class="section-e-input-spacing s3">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="identityProtectionFamilyAddon" value="{!identityProtectionFamilyAddon}" />
+                                        <label for="identityProtectionFamilyAddon">Identity Protection Family Add-On</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="identityProtectionFamilyAddonImage" url="{!IF(identityProtectionFamilyAddon, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="identityProtectionFamilyAddonImage">Identity Protection Family Add-On</label>
+                                    </apex:outputPanel>
+                                </span>
+                                <p class="s21" style="width: 120pt; display:inline-block; margin-top:4pt;">Frontier Secure activation instructions will come to your contact email.</p>
+                            </div>
+                            <div style="display: inline-block; vertical-align: top; max-width: 105pt; margin-top:2pt;">
+                                <span class="section-e-input-spacing s3" style="width: 80pt;">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="eeroSecure" value="{!eeroSecure}" />
+                                        <label for="eeroSecure">eero Secure</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="eeroSecureImage" url="{!IF(eeroSecure, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="eeroSecureImage">eero Secure</label>
+                                    </apex:outputPanel>
+                                </span>
+
+                                <span class="section-e-input-spacing s3" style="width: 90pt;">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputCheckbox id="eeroSecureExtender" value="{!eeroSecureExtender}" />
+                                        <label for="eeroSecureExtender">eero Extender(s): Qty:</label>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!isPdfMode}">
+                                        <apex:image html-name="eeroSecureExtenderImage" url="{!IF(eeroSecureExtender, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                        />
+                                        <label style="display: inline;" for="eeroSecureExtenderImage">eero Extender(s): Qty:</label>
+                                    </apex:outputPanel>
+
+                                    <span>
+                                        <apex:outputText value="{!eeroSecureExtenderQuantity}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                        <apex:input id="eeroSecureExtenderQuantity" value="{!eeroSecureExtenderQuantity}" type="number" size="2" style="width: 30pt;"
+                                        />
+                                    </span>
+                                </span>
+                            </div>
+                            <div style="display: inline-block; vertical-align: top; width: 211pt;">
+                                <p class="s21" style="margin-top: 3pt; text-align: left;">
+                                    eero max speeds are derived from IEEE specifications. Coverage varies based on normal use and building conditions. Actual
+                                    range and performance can vary. See https://eero.com/legal for more details. ©2023 Amazon.com,
+                                    Inc. or its affiliates. eero and all related marks are trademarks of Amazon.com, Inc.
+                                    or its affiliates. Amazon.com c/o eero LLC, 660 3rd St., San Francisco, CA.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="section-title-table-row">
+                        <td class="section-title-data-cell" colspan="2">
+                            <p class="s7 section-header-text">
+                                Section F: Customer Confirmation
+                            </p>
+                        </td>
+                    </tr>
+                    <tr style="height: 64pt">
+                        <td style="width: 575pt;" colspan="2">
+                            <p class="s27" style=" padding-top: 1pt; padding-left: 10pt; text-indent: 0pt; line-height: 106%;
+                                        text-align: left; ">
+                                This order, pricing and promotions as quoted are contingent upon final review of your account. By signing this form you are
+                                acknowledging and agreeing to the Terms &amp; Conditions on the back of this form. Some products
+                                may require an Equifax
+                                <span class="s28 ">® </span>credit check to determine eligibility. All services are subject to applicable taxes
+                                and surcharges.
+                            </p>
+                            <p class="s29 " style=" padding-left: 10pt; padding-right: 16pt; text-indent: 0pt; text-align:
+                                    left; ">
+                                You, the buyer, may cancel this transaction at any time prior to midnight of the third business day after the date of this
+                                transaction. See the attached notice of cancellation form for an explanation of this right.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="data-cell-border-top" style="height: 73pt;" colspan="2">
+                            <apex:outputPanel styleClass="section-f-format">
+                                <div style="display: inline-block; vertical-align: top; width: 105pt;">
+                                    <span class="apex-input-spacing s21">Notes/Summary:</span>
+                                    <div style="margin-left: 2pt;" class="s3">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="paperlessBilling" value="{!paperlessBilling}" />
+                                            <label for="paperlessBilling">Paperless Billing</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="paperlessBillingImage" url="{!IF(paperlessBilling, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="paperlessBillingImage">Paperless Billing</label>
+                                        </apex:outputPanel>
+                                    </div>
+                                    <div style="margin-left: 2pt;" class="s3">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="paperBillFeeRequired" value="{!paperBillFeeRequired}" />
+                                            <label for="paperBillFeeRequired">Paper Bill - fee required</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="paperBillFeeRequiredImage" url="{!IF(paperBillFeeRequired, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="paperBillFeeRequiredImage">Paper Bill - fee required</label>
+                                        </apex:outputPanel>
+                                    </div>
+                                    <div style="margin-left: 2pt;" class="s3">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="paperBillNoFee" value="{!paperBillNoFee}" />
+                                            <label for="paperBillNoFee">Paper Bill - no fee</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="paperBillNoFeeImage" url="{!IF(paperBillNoFee, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="paperBillNoFeeImage">Paper Bill - no fee</label>
+                                        </apex:outputPanel>
+                                    </div>
+                                    <div style="margin-left: 2pt;" class="s3">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="autoPayEnrolled" value="{!autoPayEnrolled}" />
+                                            <label for="autoPayEnrolled">Auto Pay Enrolled</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="autoPayEnrolledImage" url="{!IF(autoPayEnrolled, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="autoPayEnrolledImage">Auto Pay Enrolled</label>
+                                        </apex:outputPanel>
+                                    </div>
+                                    <div style="margin-left: 2pt;" class="s3">
+                                        <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                            <apex:inputCheckbox id="specialOfferDetails" value="{!specialOfferDetails}" />
+                                            <label for="specialOfferDetails">Special Offer Details:</label>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!isPdfMode}">
+                                            <apex:image html-name="specialOfferDetailsImage" url="{!IF(specialOfferDetails, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                            />
+                                            <label style="display: inline;" for="specialOfferDetailsImage">Special Offer Details:</label>
+                                        </apex:outputPanel>
+                                    </div>
+                                </div>
+
+                                <div style="display: inline-block; vertical-align: top; width: 292pt; height: 60pt; margin-top: 2pt;">
+                                    <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                        <apex:inputTextarea id="notesField" value="{!notesField}" cols="65" rows="6" />
+                                    </apex:outputPanel>
+                                    <apex:outputText value="{!notesField}" rendered="{!isPdfMode}" styleClass="s3 field-highlighting" style="display: inline-block; vertical-align: top; width: 292pt; height: 60pt; margin-top: 2pt;"
+                                    />
+                                </div>
+
+                                <div style="display: inline-block; vertical-align: top; width: 160pt; height: 60pt; margin-top: 3pt;" class="s12">
+                                    <div style="display: inline-block; align-items: center; margin-bottom: 4pt;">
+                                        Payment Made:
+                                        <span id="radio-container" style="display: inline-block; margin-left: 4pt; vertical-align: middle; font-size:7pt;">
+                                            <apex:selectRadio id="paymentMade" value="{!paymentMade}" layout="lineDirection" rendered="{!NOT(isPdfMode)}">
+                                                <apex:selectOptions value="{!paymentMadeOptions}" rendered="{!NOT(isPdfMode)}" />
+                                            </apex:selectRadio>
+                                            <apex:outputText value="{!paymentMade}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                        </span>
+                                    </div>
+                                    <apex:outputText value="{!paymentMade}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                    <div style="margin-bottom: 2pt;">
+                                        <label for="paymentAmount">
+                                            Payment Amount: $
+                                        </label>
+                                        <apex:outputText value="{!paymentAmount}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                        <apex:inputText id="paymentAmount" value="{!paymentAmount}" size="12" />
+                                    </div>
+                                    <div>
+                                        <label for="confirmationNumber">
+                                            Confirmation#:
+                                        </label>
+                                        <apex:outputText value="{!confirmationNumber}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                        <apex:inputText id="confirmationNumber" value="{!confirmationNumber}" size="13" />
+                                    </div>
+                                </div>
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                </table>
+                <table class="internal-use-table">
+                    <tr style="height: 18pt">
+                        <td style=" width: 427pt;
+                                    border-left-style: solid; border-left-width: 1pt; border-left-color: #231f20; border-bottom-style:
+                                    solid; border-bottom-width: 1pt; border-bottom-color: #231f20; border-right-style: solid;
+                                    border-right-width: 1pt; border-right-color: #231f20; ">
+                            <span class="apex-input-spacing s3">
+                                <apex:outputPanel rendered="{!NOT(isPdfMode)}">
+                                    <apex:inputCheckbox id="contactConsent" value="{!contactConsent}" />
+                                    <label for="contactConsent" class="s3">I understand Frontier will contact me via email and my preferred contact number prior
+                                        to activation.
+                                    </label>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!isPdfMode}">
+                                    <apex:image html-name="contactConsentImage" url="{!IF(contactConsent, URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_true.png'), URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/checkbox_false.png'))}"
+                                    />
+                                    <label style="display: inline;" for="contactConsentImage" class="s3">I understand Frontier will contact me via email and my preferred contact number prior
+                                        to activation.
+                                    </label>
+                                </apex:outputPanel>
+                            </span>
+                        </td>
+                        <td style=" width: 148pt;
+                                    border-left-style: solid; border-left-width: 1pt; border-left-color: #231f20;" colspan="1"
+                            rowspan="4">
+                            <div class="submit-button">
+                                <apex:commandButton value="Submit Form" action="{!renderPDFComplete}" rerender="form" />
+                            </div>
+                            <apex:image html-name="frontierImage" url="{!URLFOR($Resource.CSAFormPageResources, 'CSAFormPageResources/images/frontierLogo.png')}"
+                            />
+
+                        </td>
+                    </tr>
+                    <tr style="height: 39pt;">
+                        <td style="width: 427pt; border: 1pt solid #231f20; padding-left:2pt; padding-top:2pt;">
+                            <div class="s3" style="display: inline-block; width: 275pt;">
+                                <label for="customerPrintedName">Customer Printed Name: </label>
+                                <apex:outputText value="{!customerPrintedName}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:inputText id="customerPrintedName" value="{!customerPrintedName}" size="34" />
+                            </div>
+                            <div class="s3" style="display: inline-block; width: 138pt;">
+                                <label for="customerSignatureDate">Date: </label>
+                                <apex:outputText value="{!customerSignatureDate}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:input id="customerSignatureDate" value="{!customerSignatureDate}" type="date" />
+                            </div>
+                            <div class="s3" style="display: inline-block; width: 259pt;">
+                                <label for="customerSignature">Customer Signature: </label>
+                                <apex:outputText value="{!customerSignature}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:inputText id="customerSignature" value="{!customerSignature}" size="34" />
+                            </div>
+                            <div class="s3" style="display: inline-block; width: 165pt;">
+                                <label for="customerSignatureTime">Time: </label>
+                                <apex:outputText value="{!customerSignatureTime}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:inputText id="customerSignatureTime" value="{!customerSignatureTime}" size="14" />
+                                <span class="s6" style="display: inline-block;margin-top: 2pt; height:10pt;">
+                                    <apex:selectRadio id="customerSignatureTimeAmOrPm" value="{!customerSignatureTimeAmOrPm}" layout="lineDirection" rendered="NOT({!isPdfMode})">
+                                        <apex:selectOptions value="{!timeOptions}" />
+                                    </apex:selectRadio>
+                                    <apex:outputText value="{!customerSignatureTimeAmOrPm}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="section-title-table-row">
+                        <td style=" width: 427pt; border-top-style: solid; border-top-width: 1pt; border-top-color: #231f20;
+                                    border-left-style: solid; border-left-width: 1pt; border-left-color: #231f20; border-bottom-style:
+                                    solid; border-bottom-width: 1pt; border-bottom-color: #231f20; border-right-style: solid;
+                                    border-right-width: 1pt; border-right-color: #231f20; " colspan="1" bgcolor="#FF0037 ">
+                            <p class="s7 section-header-text">
+                                INTERNAL USE ONLY (PLEASE PRINT)
+                            </p>
+                        </td>
+                    </tr>
+                    <tr style="height: 55pt;">
+                        <td class="s3" style="width: 455pt; border: 1pt solid #231f20; padding-left:2pt; ">
+                            <div style="display: inline-block; width: 440pt; margin-top: 2pt;">
+                                <label for="salesPartnerCRISId">Sales Partner/CRIS ID: </label>
+                                <apex:outputText value="{!salesPartnerCRISId}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:inputText id="salesPartnerCRISId" value="{!salesPartnerCRISId}" size="37" />
+                            </div>
+                            <div style="display: inline-block; width: 440pt; margin-top: 2pt;">
+                                <label for="agentName">Agent Name: </label>
+                                <apex:outputText value="{!agentName}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:inputText id="agentName" value="{!agentName}" size="45" />
+                            </div>
+                            <div style="display: inline-block; width: 155pt; margin-top: 2pt;">
+                                <label for="orderDate">Order Date: </label>
+                                <apex:outputText value="{!orderDate}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:input id="orderDate" value="{!orderDate}" type="date" />
+                            </div>
+                            <div style="display: inline-block; width: 110pt; margin-top: 2pt;">
+                                <label for="orderNumber">Order #: </label>
+                                <apex:outputText value="{!orderNumber}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:inputText id="orderNumber" value="{!orderNumber}" size="12" />
+                            </div>
+                            <div style="display: inline-block; width: 172pt; margin-top: 2pt;">
+                                <label for="scheduleDueDate">Schedule Due Date: </label>
+                                <apex:outputText value="{!scheduleDueDate}" rendered="{!isPdfMode}" styleClass="field-highlighting" />
+                                <apex:input id="scheduleDueDate" value="{!scheduleDueDate}" type="date" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <table class="terms-table" style="margin-bottom: 25pt; page-two-sizing">
+                    <tr>
+                        <td colspan="2" style="padding-top: 6pt; padding-bottom: 6pt; text-align: left;">
+                            <h1>
+                                Residential Fiber Internet, Frontier
+                                <span class="h3">®</span> Internet (“Frontier Internet”) and Digital Phone Services Terms and Conditions
+                            </h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 427pt; vertical-align: top; padding-right: 10px;">
+
+                            <ol id="l1">
+                                <li class="list-format-class" data-list-text="1. ">
+                                    <h2 style="text-align: left ">
+                                        FRONTIER SERVICES
+                                    </h2>
+                                    <p style="text-align: left ">
+                                        This document is a legally binding Agreement and describes the terms and conditions under which Frontier Communications and
+                                        its affiliates (“Frontier’’ or “We’’) will provide “You” as the customer with the
+                                        services identified on this Sales Order (“Service’’). Some Services are provided
+                                        pursuant to applicable tariffs or service catalogs. Any conflict between these terms
+                                        and conditions and the tariff will be resolved in accordance with the tariff terms.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="2. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        TERM COMMITMENTS AND RENEWAL
+                                    </h2>
+                                    <p style="text-align: left ">
+                                        You understand and agree that You must continue to purchase the Services for a minimum term to receive Frontier’s discounted
+                                        rates and/or any “free’’ or promotional offer. If You previously subscribed to other
+                                        Frontier services that were subject to a term commitment that expires prior to the
+                                        term commitment for the Services identified on this Sales Order, the longer term
+                                    </p>
+                                    <p style="text-align: left ">
+                                        commitment identified on this Sale Order form will apply to the other Frontier services previously under a term commitment.
+                                        lf We terminate your Service due to any breach of these terms and conditions by You,
+                                        You will remain liable for the termination charges under this agreement. If
+                                    </p>
+                                    <p style=" text-align: left ">
+                                        You terminate during the minimum term for any reason, other than breach by Frontier, You will remain liable for the termination
+                                        charges under this Agreement. The term commitment under this Agreement will automatically
+                                        renew at the end of the term unless You notify Frontier or We
+                                    </p>
+                                    <p style=" text-align: left ">
+                                        notify You of termination before the term commitment period ends. If You do not renew your term commitment, additional and/or
+                                        different service and equipment charges may apply.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="3. ">
+                                    <h2 style="  text-indent: -6pt; text-align: left; ">
+                                        SERVICE CHARGES AND PAYMENTS
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        Unless otherwise prohibited by law or tariff, your rates for Service are governed by this Agreement with Frontier. The applicable
+                                        recurring charges for the Service are identified on this Sales Order.
+                                    </p>
+                                    <p style=" text-align: left ">
+                                        Additional activation, installation, set-up and equipment charges may apply. Additional equipment charges of up to $10.00
+                                        per month will also apply for Frontier Internet Service during the term of this Agreement.
+                                        You agree that Frontier, in its sole discretion, may continue to provide and charge
+                                        You for Service, including Frontier Internet Service, if You terminate, port or otherwise
+                                        discontinue your basic telephone service and/or other services with Frontier. If
+                                        You have ordered Frontier’s Digital Phone Service with unlimited United States voice
+                                        service, additional charges apply for calls outside the United States. Unlimited
+                                        usage is limited to direct-dialed, voice calls from the primary telephone line. If
+                                        You use substantially more than the representative average residential usage (3,000
+                                        minutes), You may be required to select another Frontier long distance plan or cancel
+                                        the unlimited United States voice long distance service. Payment in full for Services
+                                        is due no later than the due date indicated on your bill. You are responsible for
+                                        paying any taxes, surcharges,
+                                    </p>
+                                    <p style="text-align: left ">
+                                        fees and assessments imposed from time to time in connection with these Services. We may accept late payments, partial payments,
+                                        or any payments marked as being “payment in full” or as being settlement of any dispute
+                                        without losing any of our rights under this agreement. You agree to pay costs and
+                                        fees we incur to collect any unpaid balance from You including attorney’s fees. A
+                                        reasonable handling charge, not less than $10.00, will be assessed for all checks
+                                        returned for insufficient funds, closed account or any other insufficiency or discrepancy.
+                                        Interest at the rate of 1.5% per month (unless a lower rate is prescribed by law,
+                                        in which event at the highest rate allowed by law) may be applied to any unpaid amount
+                                        commencing 20 days after the statement
+                                    </p>
+                                    <p style=" text-align: justify ">
+                                        dale. This late payment fee will be in addition to and not in lieu of any other remedies we may have hereunder or under the
+                                        law. If We do not receive notice of a payment dispute within 90 days after your receipt
+                                        of a bill, the bill will not be subject to further challenge.
+                                    </p>
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        Tennessee customers:
+                                        <span class="p ">This offer contains telecommunications services that are also available separately.
+                                            Should you desire to purchase only the telecommunications services included in
+                                            this offer, without additional products or services, you may purchase those telecommunications
+                                        </span>
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        <a href="http://www.frontier.com/ " class="a " target="_blank ">services individually at prices posted on </a>www.frontier.com or filed with the
+                                        Tennessee Regulatory Authority.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="4. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        EQUIPMENT AND SECURITY
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        Frontier Internet Service is subject to availability and technical line qualification. Activation options vary and charges
+                                        may apply. All Frontier Internet equipment provided by or installed on our behalf
+                                        of Frontier remains the property of Frontier. You must return all equipment in the
+                                        same condition as when provided, normal wear and use excepted, upon termination of
+                                        Service. Failure to do so will result in a charge as identified in Frontier’s then
+                                        current schedule of equipment charges.
+                                    </p>
+                                    <p style=" text-align: left ">
+                                        You agree to pay such charge whether such equipment is lost (through theft or otherwise) or destroyed. You are responsible
+                                        for the security of your computer, hardware, software applications, data and files.
+                                        Frontier shall have no liability for any damage or loss to your computer, hardware,
+                                        software applications, data and files. We make no representation or warranty that
+                                        any software
+                                    </p>
+                                    <p style=" text-align: left ">
+                                        or content installed on your computer(s) or downloaded with the Service does not contain a virus or other harmful feature
+                                        and it is your sole responsibility to take appropriate precautions to protect any
+                                        computer or other hardware of yours from damage to its software, files or data. We
+                                        make no representation or warranty regarding the actual speed of Frontier Internet
+                                        or other
+                                    </p>
+                                    <p style=" text-align: left ">
+                                        Services. FRONTIER MAKES NO WARRANTY REGARDING THE SERVICES AND DISCLAIMS ANY IMPLIED WARRANTY, INCLUDING ANY WARRANTIES
+                                        OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="5. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        LIMITATION OF LIABILITY AND INDEMNITY
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        We will not be liable for interruptions in Services caused by failure of your hardware or software, failure of communications
+                                        services, power outages, or other interruptions not within the complete control of
+                                        Frontier, including, but not limited to acts of God or natural disasters. FRONTIER’S
+                                        LIABILITY REGARDING YOUR USE OF SERVICES OR EQUIPMENT, OR THE FAILURE OF OR INABILITY
+                                        TO USE THE SERVICES OR EQUIPMENT, IS LIMITED TO THE CHARGES YOU INCUR FOR SERVICES
+                                        DURING THE AFFECTED PERIOD. THIS MEANS WE ARE NOT LIABLE FOR ANY INCIDENTAL OR CONSEQUENTIAL
+                                        DAMAGES (SUCH AS LOST PROFITS OR LOST BUSINESS OPPORTUNITIES), PUNITIVE OR EXEMPLARY
+                                        DAMAGES, OR ATTORNEY’S FEES. You agree
+                                    </p>
+                                    <p style=" text-align: justify ">
+                                        Frontier will not be liable or responsible for any third-party claims or damages that arise from your use or another person’s
+                                        use of the Services or Internet access, further, You agree to idemnify
+                                    </p>
+                                    <p style=" text-align: justify ">
+                                        and reimburse us for all costs and expenses related to the defense of any such claims, including attorney’s fees. This provision
+                                        will continue to apply after the Agreement ends.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="6. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        ACCEPTABLE USE AND TERMINATION
+                                    </h2>
+                                    <p style="text-align: left ">
+                                        You agree not to use or to allow others to use the Service, for illegal or inappropriate activities. You agree to comply
+                                        with Frontier’s Acceptable Use Policy (“AUP’’), which is posted at www.frontier.
+                                        com/policies/residential_aup/ and which Frontier may modify at any time. You acknowledge
+                                        that Frontier may limit the maximum size and/or frequency of any data, materials
+                                        or email messages that may be downloaded, uploaded, sent from, stored or received
+                                        using the Frontier Internet Service. Frontier reserves the right, with or without
+                                        notice, to restrict Service bandwidth,
+                                    </p>
+                                    <p style="text-indent: 0pt; text-align: left ">
+                                        <br />
+                                    </p>
+                                </li>
+                            </ol>
+                        </td>
+                        <td style="width: 427pt; vertical-align: top;">
+                            <ol id="l3">
+                                <p style="text-align: left padding-top: 4pt;">
+                                    disconnect use or cancel Service, or where Frontier’s systems permit impose additional usage charges, if the Company determines,
+                                    in its sole discretion, that your use of the Service utilizes or may require excessive
+                                    network facilities or capacity. We may discontinue or terminate Service: (1) if You do
+                                    not honor any provision of this Agreement (including payment obligations to Frontier
+                                    for these or any other services); (2) if You use the Service in a manner that adversely
+                                    affects service to other customers or harasses our customers or employees; {3) if You
+                                    or others use the Service to engage in fraud or unlawful conduct or are suspected of
+                                    doing so; or (4) any regulatory agency, legislative body or court restricts or otherwise
+                                    prevents Frontier from furnishing Service. If we
+                                </p>
+                                <p style="  line-height: 7pt; text-align: left; ">
+                                    do not remedy any ongoing breach of the terms and conditions in this Agreement within thirty
+                                </p>
+                                <p style="text-align: left ">
+                                    (30) days after Frontier’s receipt of written notice from You of such breach, you may terminate the Service, which is your
+                                    exclusive remedy for a breach by Frontier.
+                                </p>
+
+                                <li class="list-format-class" data-list-text="7. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        GENERAL TERMS
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        You agree to the following general terms:
+                                    </p>
+                                    <ol id="l2">
+                                        <li class="list-format-class" data-list-text="a.) ">
+                                            <p style=" text-align: left ">
+                                                No Waiver - No waiver of any breach of this Agreement will be deemed a waiver of any future breach;
+                                            </p>
+                                        </li>
+                                        <li class="list-format-class" data-list-text="b.) ">
+                                            <p style="text-align: left ">
+                                                Severability - If any part of the Agreement is held invalid or unenforceable, the remainder of this Agreement will remain
+                                                in force;
+                                            </p>
+                                        </li>
+                                        <li class="list-format-class" data-list-text="c.) ">
+                                            <p style="text-align: left ">
+                                                Governing Law -This agreement will be governed by the laws of the State where the Service is provided, without regard to
+                                                its choice of law rules;
+                                            </p>
+                                        </li>
+                                        <li class="list-format-class" data-list-text="d.) ">
+                                            <p style=" text-align: left ">
+                                                No Third Party Rights - This Agreement shall not provide any third party with a remedy, claim or right of reimbursement;
+                                            </p>
+                                        </li>
+                                        <li class="list-format-class" data-list-text="e.) ">
+                                            <p style=" text-align: left ">
+                                                Assignment - We may assign this Agreement to another entity without any advance consent from or notice to You. You may not
+                                                assign this Agreement without Frontier’s consent.
+                                            </p>
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li class="list-format-class" data-list-text="8. ">
+                                    <h2 style=" padding-top: 4pt; text-align: left; ">
+                                        RIGHT TO MAKE CHANGES
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        UNLESS OTHERWlSE PROHlBITED BY LAW, FRONTIER MAY CHANGE THE TERMS AND CONDITIONS OF THIS AGREEMENT AT ANY TIME BY GIVING
+                                        YOU 30 DAYS NOTICE BY BILL MESSAGE, E-MAIL OR OTHER NOTICE, INCLUDING POSTING NOTICE
+                                        OF SUCH CHANGES ON THE FRONTIER WEBSITE.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="9. ">
+                                    <h2 style=" padding-top: 4pt; text-align: left; ">
+                                        ENTIRE AGREEMENT
+                                    </h2>
+                                    <p style="text-align: left ">
+                                        These terms and conditions together with the Sales Order are the entire agreement between You and Frontier, which may only
+                                        be amended as described above. These terms and conditions
+                                    </p>
+                                    <p style="text-align: left ">
+                                        supersede any inconsistent or additional. promises made to You by any of our employees or agent. By signing this Sales Order
+                                        You acknowledge that You have read and understand, and agree to be bound by the terms
+                                        and conditions.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="10. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        SAFETY NOTICE REGARDING 911 DIALING/Battery Backup/Medical Alert LIMITATIONS FOR NEW RESIDENTIAL CUSTOMERS
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        Some monitored medical alert or home security systems may not be compatible with Frontier’s Digital Voice Service, and they
+                                        may not be able to communicate with monitoring stations during a power outage. You
+                                        will need to check with your provider if you have concerns. Frontier’s Digital Voice
+                                        service requires electrical power to function. In the event of a power outage, you
+                                        will not be able to make or receive calls, including calls to 911, unless you have
+                                        a functioning backup battery or an alternative means, such as a cellphone. You must
+                                        affirmatively acknowledge that you understand the federal requirement on how 911
+                                        works on Frontier’s Digital Voice. Battery backup devices for your Digital Voice
+                                        Equipment are offered for sale. The backup battery, or a combination of battery backup
+                                        devices, can provide up to 24 hours of backup power, to keep your Frontier’s Digital
+                                        Voice working in the event of a power outage, allowing you to continue to make emergency
+                                        calls. However, the battery backup unit will not provide backup power to your broadband/TV
+                                        services or telephone equipment that requires commercial power to operate.
+                                    </p>
+                                    <p style=" text-align: left ">
+                                        Depending on the type of battery backup devices offered, they come with different levels of warranty, but you will be responsible
+                                        for maintaining the battery backup device and replacing it or the batteries as necessary.
+                                        For more information, please see frontier.com/batterybackup.
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="11. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        FCC NET NEUTRALITY INFORMATION LINKS
+                                    </h2>
+                                    <p style=" text-align: left ">
+                                        frontier.com/shop/internet/aggdisclosure frontier.com/es/shop/internet/aggdisclosure
+                                    </p>
+                                </li>
+                                <li class="list-format-class" data-list-text="12. ">
+                                    <h2 style=" padding-top: 4pt;  text-align: left; ">
+                                        ARBITRATION
+                                    </h2>
+                                </li>
+                            </ol>
+                            <p style=" text-align: left ">
+                                This document incorporates the complete Arbitration Provision terms and conditions at https:// frontier.com/~/media/corporate/terms/general-arbitration-provision.ashx?la=en
+                                as an integral part of the Agreement.
+                            </p>
+                            <p style="text-indent: 0pt; text-align: left ">
+                                <br />
+                            </p>
+                            <h2 style=" text-align: left ">
+                                *YouTube TV Terms of Service:
+                            </h2>
+                            <p style=" text-align: left ">
+                                For Frontier internet customers who are new to YouTube TV. This YouTube TV discount is only open to participants in the United
+                                States who have received the offer from Frontier on and after March 13, 2023. Promotional
+                                offer only available to users who are not current YouTube TV subscribers, have not been YouTube
+                                TV subscribers or participated in a YouTube TV trial before. If eligible: Frontier Internet
+                                customers will receive the standard free trial, and then
+                            </p>
+                            <p style=" text-align: left ">
+                                a discount of $10 per month for 12 months on the standard subscription price; or Frontier Internet with current Frontier
+                                TV or Fiber TV will receive the standard free trial, and then a discount of $15 per month
+                                for 12 months on the standard subscription price offered by
+                            </p>
+                            <p style=" text-align: left ">
+                                YouTube TV. Standard subscription price is subject to change. You will not be charged until the trial period expires. You
+                                can cancel your standard trial at no charge at any time before the trial is over. You can
+                                also cancel your YouTube TV paid membership at any time. You will continue
+                            </p>
+                            <p style=" text-align: left ">
+                                to receive access to YouTube TV until the end of your YouTube TV billing period, but refunds and credits are not issued for
+                                partial billing periods. Offer valid for one redemption of YouTube TV discount per eligible
+                                Frontier account. Eligible participants must use the activation link provided by Frontier
+                                and complete activation through Google to claim offer. Offer requires a Google account. Promotional
+                                value of offer is non-transferable, not for resale, non-redeemable for cash, and non-refundable.
+                                Must be 18 years or older. Free trial, offers, or promotional offers available only for YouTube
+                                TV Base Plan. Equipment, installation and other service charges, taxes and fees extra. Frontier
+                                Internet account required. Offer and billing subject to Frontier Terms and Conditions. Frontier
+                                reserves the right to change or cancel the offer at any time and for any reason. YouTube
+                                Paid Service Terms of Service also apply.
+                            </p>
+                            <p style="text-indent: 0pt; text-align: left ">
+                                <br />
+                            </p>
+                            <p style=" text-align: left ">
+                                All trademarks and service marks are the property of their respective owners.
+                            </p>
+                            <p style=" padding-top: 4pt;  text-align: left; ">
+                                ©2024 Frontier Communications Parent, Inc. All Rights Reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </apex:outputPanel>
+
+            <!-- Submission Success Message, only visible when submitted is true -->
+            <apex:outputPanel id="submit-screen" layout="block" rendered="{!submitted}" styleClass="submit-screen">
+                <apex:outputText value="{!submittedMessage}" styleClass="submitted-message" />
+            </apex:outputPanel>
+        </apex:form>
+    </body>
+
+    </html>
+
+</apex:page>

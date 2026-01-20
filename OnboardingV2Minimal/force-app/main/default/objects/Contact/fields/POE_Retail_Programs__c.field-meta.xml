@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>POE_Retail_Programs__c</fullName>
+    <externalId>false</externalId>
+    <label>Retail Programs</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>EarthLink</fullName>
+                <default>false</default>
+                <label>EarthLink</label>
+            </value>
+            <value>
+                <fullName>Windstream</fullName>
+                <default>false</default>
+                <label>Windstream</label>
+            </value>
+            <value>
+                <fullName>Altice</fullName>
+                <default>false</default>
+                <label>Optimum</label>
+            </value>
+            <value>
+                <fullName>Frontier</fullName>
+                <default>false</default>
+                <label>Frontier</label>
+            </value>
+            <value>
+                <fullName>Spectrum API</fullName>
+                <default>false</default>
+                <label>Spectrum</label>
+            </value>
+            <value>
+                <fullName>Brightspeed</fullName>
+                <default>false</default>
+                <label>Brightspeed</label>
+            </value>
+            <value>
+                <fullName>DirecTV</fullName>
+                <default>false</default>
+                <label>DIRECTV</label>
+            </value>
+            <value>
+                <fullName>Charter/Spectrum</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Spectrum DEPRECATED</label>
+            </value>
+            <value>
+                <fullName>Viasat</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Viasat</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+    <masterLabel>Onboarding Resume Panel</masterLabel>
+    <description>Shows progress and allows users to resume incomplete onboarding</description>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage">
+            <property name="recordId" type="String" label="Onboarding Record ID" description="Onboarding__c record ID (automatically set on record pages)" required="true"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

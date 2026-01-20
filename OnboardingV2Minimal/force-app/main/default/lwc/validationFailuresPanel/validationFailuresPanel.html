@@ -1,0 +1,36 @@
+<template>
+    <lightning-card>
+        <div class="slds-p-horizontal_small slds-p-vertical_small">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="6">
+                    <lightning-combobox
+                        label="Date Range"
+                        value={dateRange}
+                        options={dateRangeOptions}
+                        onchange={handleDateRangeChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="6">
+                    <lightning-combobox
+                        label="Validation Type"
+                        value={validationType}
+                        options={validationTypeOptions}
+                        onchange={handleValidationTypeChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" class="slds-m-top_small">
+                    <lightning-datatable
+                        key-field="id"
+                        data={failures}
+                        columns={columns}
+                        hide-checkbox-column
+                        show-row-number-column>
+                    </lightning-datatable>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+    </lightning-card>
+</template>

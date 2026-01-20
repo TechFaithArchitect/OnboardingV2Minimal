@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Earthlink_Welcome_Email_Data_Fields</fullName>
+    <active>false</active>
+    <description>Alerts users that when data is missing in fields that are used to populate info into the welcome email.</description>
+    <errorConditionFormula>AND(
+ISPICKVAL(Application_Status__c, &quot;Setup Complete&quot;),
+RecordType.Name = &quot;EarthLink&quot;,
+
+OR(
+ISBLANK(AOE_Order_Entry_Login__c),
+ISBLANK(AOE_Temporary_Password__c),
+ISBLANK(Partner_Portal_User_Name__c),
+ISBLANK(Partner_Portal_Temporary_Password__c)))</errorConditionFormula>
+    <errorMessage>Please fill in the AOE and Partner Portal info before saving record.</errorMessage>
+</ValidationRule>

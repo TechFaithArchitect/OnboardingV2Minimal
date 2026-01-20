@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vendor_Program_Group__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Associates the rules engine to a specific vendor program group.</description>
+    <externalId>false</externalId>
+    <label>Vendor Program Group</label>
+    <referenceTo>Vendor_Program_Group__c</referenceTo>
+    <relationshipLabel>Onboarding Status Rules Engines</relationshipLabel>
+    <relationshipName>Onboarding_Status_Rules_Engines</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

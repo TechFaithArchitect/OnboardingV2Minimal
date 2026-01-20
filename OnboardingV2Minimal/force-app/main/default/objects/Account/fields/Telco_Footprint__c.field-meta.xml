@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Telco_Footprint__c</fullName>
+    <externalId>false</externalId>
+    <label>Telco Footprint</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>ATT</fullName>
+                <default>false</default>
+                <label>ATT</label>
+            </value>
+            <value>
+                <fullName>CenturyLink</fullName>
+                <default>false</default>
+                <label>CenturyLink</label>
+            </value>
+            <value>
+                <fullName>Frontier</fullName>
+                <default>false</default>
+                <label>Frontier</label>
+            </value>
+            <value>
+                <fullName>Windstream</fullName>
+                <default>false</default>
+                <label>Windstream</label>
+            </value>
+            <value>
+                <fullName>Viasat</fullName>
+                <default>false</default>
+                <label>Viasat</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>5</visibleLines>
+</CustomField>

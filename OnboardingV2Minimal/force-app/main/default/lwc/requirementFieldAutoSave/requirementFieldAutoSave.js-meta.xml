@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+    <masterLabel>Requirement Field Auto Save</masterLabel>
+    <description>Auto-saves field values every 30 seconds and on blur/unmount</description>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage">
+            <property name="requirementFieldValueId" type="String" label="Requirement Field Value ID" description="Existing Requirement_Field_Value__c record ID (optional)"/>
+            <property name="requirementFieldId" type="String" label="Requirement Field ID" description="Requirement_Field__c record ID" required="true"/>
+            <property name="requirementRecordId" type="String" label="Onboarding Requirement ID" description="Onboarding_Requirement__c record ID" required="true"/>
+            <property name="fieldApiName" type="String" label="Field API Name" description="API name of the field" required="true"/>
+            <property name="fieldType" type="String" label="Field Type" description="Input type (text, email, tel, etc.)" default="text"/>
+            <property name="isEncrypted" type="Boolean" label="Is Encrypted" description="Whether to use encrypted value field" default="false"/>
+            <property name="autoSaveInterval" type="Integer" label="Auto Save Interval (ms)" description="Milliseconds between auto-saves" default="30000"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

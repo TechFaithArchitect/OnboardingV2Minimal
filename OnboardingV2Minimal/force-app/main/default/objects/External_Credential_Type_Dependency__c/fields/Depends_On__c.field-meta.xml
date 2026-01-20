@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Depends_On__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>The ECC type it depends on</description>
+    <externalId>false</externalId>
+    <label>Depends On</label>
+    <referenceTo>External_Contact_Credential_Type__c</referenceTo>
+    <relationshipLabel>External Credential Type Dependencies (Depends On)</relationshipLabel>
+    <relationshipName>External_Credential_Type_Dependencies1</relationshipName>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

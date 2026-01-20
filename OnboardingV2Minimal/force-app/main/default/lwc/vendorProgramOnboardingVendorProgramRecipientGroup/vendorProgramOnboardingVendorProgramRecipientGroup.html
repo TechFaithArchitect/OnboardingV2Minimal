@@ -1,0 +1,64 @@
+<template>
+  <lightning-card title={cardTitle}>
+    <div class="slds-p-around_medium">
+      <div class="slds-box slds-box_x-small slds-theme_info slds-m-bottom_small" style="padding: 0.5rem;">
+        <div class="slds-media">
+          <div class="slds-media__figure">
+            <lightning-icon icon-name="utility:info" size="xx-small" alternative-text="Info"></lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <p class="slds-text-body_small slds-m-bottom_none">
+              <strong>Recipient Group:</strong> Defines who receives communications for this vendor program. 
+              <strong>Best Practice:</strong> Create groups like "Vendor Program Managers" or "Onboarding Coordinators". You'll add members next.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <lightning-input
+        label="Search Recipient Groups"
+        type="text"
+        onchange={handleSearchChange}
+        placeholder="Enter at least 2 characters">
+      </lightning-input>
+
+      <template if:true={recipientGroups}>
+        <lightning-combobox
+          label="Select Existing Group"
+          options={recipientGroupOptions}
+          value={selectedRecipientGroupId}
+          onchange={handleRecipientGroupSelect}>
+        </lightning-combobox>
+        <lightning-button
+          class="slds-m-top_small"
+          variant="brand"
+          label="Link Selected Group"
+          onclick={handleLinkExisting}
+          disabled={nextDisabled}>
+        </lightning-button>
+      </template>
+
+      <hr class="slds-m-vertical_medium"/>
+
+      <lightning-input
+        label="New Recipient Group Name"
+        type="text"
+        value={newRecipientGroupName}
+        onchange={handleNewRecipientGroupNameChange}>
+      </lightning-input>
+      <lightning-button
+        class="slds-m-top_small"
+        variant="brand"
+        label="Create and Link New Group"
+        onclick={handleCreateAndLink}
+        disabled={nextDisabled}>
+      </lightning-button>
+
+      <template if:true={isLoading}>
+        <div class="slds-m-top_medium">
+          <lightning-spinner size="small"></lightning-spinner>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

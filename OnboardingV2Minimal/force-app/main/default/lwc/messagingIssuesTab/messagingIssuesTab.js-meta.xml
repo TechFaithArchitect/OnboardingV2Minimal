@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+    </targets>
+    <masterLabel>Messaging Issues Tab</masterLabel>
+    <description>Displays messaging failures from Follow_Up_Queue__c with retry and dismiss capabilities</description>
+</LightningComponentBundle>

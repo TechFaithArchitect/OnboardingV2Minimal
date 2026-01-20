@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DTV_App_Created_Date__c</fullName>
+    <description>Date the App was created in the DTV system. All applications received prior to the 07/2014 conversion date will have 07/30/2014.</description>
+    <externalId>false</externalId>
+    <label>DTV Application Created Date</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

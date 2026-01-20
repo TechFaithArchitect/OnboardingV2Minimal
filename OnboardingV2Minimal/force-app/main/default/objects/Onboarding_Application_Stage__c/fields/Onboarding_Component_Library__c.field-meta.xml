@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Onboarding_Component_Library__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Drives which LWC/Flow to render</description>
+    <externalId>false</externalId>
+    <label>Component</label>
+    <referenceTo>Onboarding_Component_Library__c</referenceTo>
+    <relationshipLabel>Onboarding Application Stages</relationshipLabel>
+    <relationshipName>Onboarding_Application_Stages</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

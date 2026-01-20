@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Traditional_Tactics__c</fullName>
+    <externalId>false</externalId>
+    <label>Traditional Tactics</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Direct mail</fullName>
+                <default>false</default>
+                <label>Direct mail</label>
+            </value>
+            <value>
+                <fullName>Print</fullName>
+                <default>false</default>
+                <label>Print</label>
+            </value>
+            <value>
+                <fullName>Radio/TV</fullName>
+                <default>false</default>
+                <label>Radio/TV</label>
+            </value>
+            <value>
+                <fullName>Outdoor Signage</fullName>
+                <default>false</default>
+                <label>Outdoor Signage</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

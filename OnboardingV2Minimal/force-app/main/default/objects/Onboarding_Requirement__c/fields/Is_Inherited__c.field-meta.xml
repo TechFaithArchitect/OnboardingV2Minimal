@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Inherited__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indicates the requirement was inherited from a parent program/group rather than directly assigned.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Set to true if copied directly from Vendor Program-Side Definition</inlineHelpText>
+    <label>Is Inherited</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

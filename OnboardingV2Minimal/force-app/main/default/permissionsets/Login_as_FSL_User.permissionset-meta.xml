@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>This permission set enables the assigned users to log in to the FSL community as any user. (PVFSL-115)</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Login as FSL User</label>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ManagePartners</name>
+    </userPermissions>
+</PermissionSet>

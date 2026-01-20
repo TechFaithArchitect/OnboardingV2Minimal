@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Update_Records__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Used by Admins when needing to force updates to trigger flows to run.</description>
+    <externalId>false</externalId>
+    <label>Update Records</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

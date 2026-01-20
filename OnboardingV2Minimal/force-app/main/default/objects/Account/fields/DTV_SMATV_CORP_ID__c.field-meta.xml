@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DTV_SMATV_CORP_ID__c</fullName>
+    <description>Enter the DTV SMATV Corp ID if the dealer has this account type.</description>
+    <externalId>false</externalId>
+    <label>* DTV-L&amp;I CORP ID</label>
+    <length>50</length>
+    <required>false</required>
+    <trackFeedHistory>true</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

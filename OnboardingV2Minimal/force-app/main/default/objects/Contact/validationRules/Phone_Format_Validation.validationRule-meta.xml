@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Phone_Format_Validation</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND( 
+  OR(
+    ISNEW(),
+    ISCHANGED( MobilePhone )
+  ),
+  NOT( IsPersonAccount ),
+  NOT( ISBLANK ( MobilePhone )), 
+  NOT( 
+    REGEX( MobilePhone, $CustomMetadata.POE_Chuzo_Regular_Expressions__mdt.Mobile_Phone_Format_RegEx.RegEx__c )
+  ),
+ Account.RecordType.Name = &apos;Dealer&apos;
+)</errorConditionFormula>
+    <errorDisplayField>MobilePhone</errorDisplayField>
+    <errorMessage>Please enter a Phone Number with the exact format +1 XXXXXXXXXX. (including the space after the +1 and the following 3 digits being the area code)</errorMessage>
+</ValidationRule>

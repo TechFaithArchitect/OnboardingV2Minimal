@@ -1,0 +1,49 @@
+<template>
+    <template if:true={hasActivities}>
+        <ul class="slds-timeline">
+            <template for:each={processedActivities} for:item="activity">
+                <li key={activity.Id} class="slds-timeline__item">
+                    <div class="slds-timeline__marker_container">
+                        <span class="slds-timeline__marker slds-timeline__marker_task">
+                            <lightning-icon icon-name={activity.iconName} size="x-small" class={activity.activityClass}></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-timeline__item_details">
+                        <div class="slds-media slds-timeline__media">
+                            <div class="slds-media__figure">
+                                <div class="slds-timeline__actions">
+                                    <div class="slds-timeline__date">
+                                        <span class="slds-text-body_small">{activity.timeAgo}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-timeline__content">
+                                    <p class="slds-text-body_small">
+                                        <a href="javascript:void(0);" 
+                                           data-id={activity.Id}
+                                           onclick={handleActivityClick}
+                                           class="slds-text-link">
+                                            {activity.summary}
+                                        </a>
+                                    </p>
+                                    <template if:true={activity.CreatedByName}>
+                                        <p class="slds-text-body_small slds-text-color_weak">
+                                            by {activity.CreatedByName}
+                                        </p>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </template>
+        </ul>
+    </template>
+    <template if:false={hasActivities}>
+        <div class="slds-text-align_center slds-p-around_medium">
+            <p class="slds-text-body_regular">No recent activity found.</p>
+        </div>
+    </template>
+</template>
+

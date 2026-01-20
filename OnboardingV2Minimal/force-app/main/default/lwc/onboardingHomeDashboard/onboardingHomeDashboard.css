@@ -1,0 +1,83 @@
+.dashboard-card {
+    min-height: 100px;
+    padding: var(--lwc-spacingMedium, 1rem);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card .slds-text-heading_large {
+    font-weight: bold;
+    color: var(--lwc-colorTextDefault, #080707);
+}
+
+/* Tabbed layout styles */
+.tab-content {
+    padding: var(--lwc-spacingMedium, 1rem);
+}
+
+/* Responsive grid for main content */
+@media (max-width: 768px) {
+    .slds-grid .slds-col {
+        width: 100% !important;
+    }
+}
+
+/* Vendor Hierarchy Tree Grid Styling */
+.vendor-hierarchy-container {
+    margin-top: var(--lwc-spacingMedium, 1rem);
+}
+
+.vendor-row {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.program-row {
+    font-weight: 400;
+    font-size: 0.875rem;
+    padding-left: 2rem;
+}
+
+/* Larger modal for vendor program tree grid */
+.vendor-program-modal-large {
+    max-width: 90vw !important;
+    width: 90vw !important;
+    max-height: 90vh !important;
+}
+
+.vendor-program-modal-large .slds-modal__content {
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+}
+
+/* Admin card styles */
+.admin-card {
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .slds-grid .slds-col {
+        width: 100% !important;
+    }
+    
+    .tab-content {
+        padding: var(--lwc-spacingSmall, 0.5rem);
+    }
+}
+

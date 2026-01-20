@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Charter_Welcome_Email_Data_Fields</fullName>
+    <active>false</active>
+    <description>Alerts users that when data is missing in fields that are used to populate info into the welcome email.</description>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(Welcome_Email_Sent__c)),
+ISPICKVAL(Application_Status__c, &quot;Setup Complete&quot;),
+RecordType.Name = &quot;Charter&quot;,
+ISBLANK( Order_Entry_User_ID__c ),
+ISBLANK( Order_Entry_Passcode__c ))</errorConditionFormula>
+    <errorMessage>Please ensure the following fields are filled in before saving the record:
+
+Order Entry User ID and Passcode</errorMessage>
+</ValidationRule>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Prod_PV_Setting</label>
+    <protected>false</protected>
+    <values>
+        <field>Client_ID__c</field>
+        <value xsi:type="xsd:string">3MVG9yZ.WNe6byQDVRKaYWy6XFfQAys_O9MueTjRiZnWKMz3LOqonrTpzh2dHhVOCGpZURLp6EjH.j65oo5ph</value>
+    </values>
+    <values>
+        <field>Client_Secret__c</field>
+        <value xsi:type="xsd:string">428728E6442628CD20EE673833C70374E09C43157CF53C5C1523A3DA27C9735E</value>
+    </values>
+    <values>
+        <field>Grant_Type__c</field>
+        <value xsi:type="xsd:string">password</value>
+    </values>
+    <values>
+        <field>Login_URL__c</field>
+        <value xsi:type="xsd:string">https://login.salesforce.com/services/oauth2/token</value>
+    </values>
+    <values>
+        <field>PV_URL_Patch__c</field>
+        <value xsi:type="xsd:string">https://perfectvision.my.salesforce.com/services/data/v53.0/composite/sobjects</value>
+    </values>
+    <values>
+        <field>PV_URL__c</field>
+        <value xsi:type="xsd:string">https://perfectvision.lightning.force.com/services/data/v53.0/query/</value>
+    </values>
+    <values>
+        <field>Password__c</field>
+        <value xsi:type="xsd:string">Nimacloud.1</value>
+    </values>
+    <values>
+        <field>Username__c</field>
+        <value xsi:type="xsd:string">perfectvision@nimacloud.com</value>
+    </values>
+</CustomMetadata>

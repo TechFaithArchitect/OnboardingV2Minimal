@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Collection__c</fullName>
+    <externalId>false</externalId>
+    <label>Discuss Lead Collection</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Click-to-call</fullName>
+                <default>false</default>
+                <label>Click-to-call</label>
+            </value>
+            <value>
+                <fullName>Forms</fullName>
+                <default>false</default>
+                <label>Forms</label>
+            </value>
+            <value>
+                <fullName>Messenger</fullName>
+                <default>false</default>
+                <label>Messenger</label>
+            </value>
+            <value>
+                <fullName>Chuzo</fullName>
+                <default>false</default>
+                <label>Chuzo</label>
+            </value>
+            <value>
+                <fullName>WhatsApp</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>WhatsApp</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

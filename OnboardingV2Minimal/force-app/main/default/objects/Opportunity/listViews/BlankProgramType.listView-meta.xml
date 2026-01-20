@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BlankProgramType</fullName>
+    <columns>OPPORTUNITY.NAME</columns>
+    <columns>OPPORTUNITY.CREATED_DATE</columns>
+    <columns>Program_Type__c</columns>
+    <columns>ACCOUNT.NAME</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Program_Type__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>Blank Program Type</label>
+    <sharedTo>
+        <role>Administrator</role>
+    </sharedTo>
+</ListView>

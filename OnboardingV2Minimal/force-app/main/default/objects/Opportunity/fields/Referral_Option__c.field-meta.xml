@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Referral_Option__c</fullName>
+    <description>[PER-4994]</description>
+    <externalId>false</externalId>
+    <label>Referral Option</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Referred by friend or family</fullName>
+                <default>false</default>
+                <label>Referred by friend or family</label>
+            </value>
+            <value>
+                <fullName>Social Media (Facebook, Instagram)</fullName>
+                <default>false</default>
+                <label>Social Media (Facebook, Instagram)</label>
+            </value>
+            <value>
+                <fullName>Email Newsletter</fullName>
+                <default>false</default>
+                <label>Email Newsletter</label>
+            </value>
+            <value>
+                <fullName>Search Engine</fullName>
+                <default>false</default>
+                <label>Search Engine</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

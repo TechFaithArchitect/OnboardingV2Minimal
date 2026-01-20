@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Onboarding_Requirement_Set__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>Lookup to the onboarding requirement set grouped under this vendor program set.</description>
+    <externalId>false</externalId>
+    <label>Onboarding Requirement Set</label>
+    <referenceTo>Onboarding_Requirement_Set__c</referenceTo>
+    <relationshipLabel>Vendor Program Requirement Sets</relationshipLabel>
+    <relationshipName>Vendor_Program_Requirement_Sets</relationshipName>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

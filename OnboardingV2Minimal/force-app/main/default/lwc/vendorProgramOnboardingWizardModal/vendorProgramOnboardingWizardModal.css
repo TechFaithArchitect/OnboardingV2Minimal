@@ -1,0 +1,13 @@
+/* Larger modal for tree grid selection */
+.slds-modal_large .slds-modal__container {
+    width: 90vw;
+    max-width: 90vw;
+    height: 90vh;
+    max-height: 90vh;
+}
+
+.slds-modal__content {
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
+}
+
