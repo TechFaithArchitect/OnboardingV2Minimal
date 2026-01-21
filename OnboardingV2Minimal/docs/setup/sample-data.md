@@ -259,7 +259,16 @@ To remove sample data:
 
 ```apex
 // Delete in reverse order of creation
-delete [SELECT Id FROM Onboarding_Status_Rule__c WHERE Parent_Rule__r.Name LIKE 'Sample%'];
+// Parent rule name is resolved via subquery on Onboarding_Status_Rule__c
+delete [
+  SELECT Id
+  FROM Onboarding_Status_Rule__c
+  WHERE Parent_Rule__c IN (
+    SELECT Id
+    FROM Onboarding_Status_Rule__c
+    WHERE Name LIKE 'Sample%'
+  )
+];
 delete [SELECT Id FROM Onboarding_Status_Rules_Engine__c WHERE Name LIKE 'Sample%'];
 delete [SELECT Id FROM Vendor_Program_Group_Member__c WHERE Name = 'Sample Group Member'];
 delete [SELECT Id FROM Vendor_Customization__c WHERE Name = 'Sample Vendor Program'];
@@ -283,4 +292,3 @@ delete [SELECT Id FROM Onboarding_Component_Library__c WHERE Name LIKE 'Vendor%'
 - [Installation Guide](./installation.md)
 - [Configuration Guide](./configuration.md)
 - [Getting Started](../user-guides/getting-started.md)
-

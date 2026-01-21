@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Chuzo_Manual_File_URL__c</fullName>
-    <description>URL to populate the ‘Need Help?’ hyperlink in the Chuzo application. (PER-2248)</description>
-    <label>Chuzo Manual - File URL</label>
-    <required>false</required>
-    <trackTrending>false</trackTrending>
-    <type>Url</type>
-</CustomField>

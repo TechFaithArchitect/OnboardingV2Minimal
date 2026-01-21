@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>DTV_FTC_Project__c</fullName>
-    <defaultValue>false</defaultValue>
-    <description>[PER-4934]</description>
-    <label>DTV FTC Project</label>
-    <trackTrending>false</trackTrending>
-    <type>Checkbox</type>
-</CustomField>

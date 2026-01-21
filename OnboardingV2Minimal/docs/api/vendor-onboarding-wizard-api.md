@@ -4,7 +4,7 @@ This document provides a comprehensive API reference for all Apex methods used b
 
 ## Controller: VendorOnboardingWizardController
 
-**Location:** `force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls`
+**Location:** `force-app/main/default/classes/VendorOnboardingWizardController.cls`
 
 **Security:** `with sharing`
 
@@ -262,7 +262,7 @@ public static List<Vendor_Program_Group_Member__c> getHistoricalGroupMembers(Id 
 
 **Returns:** `List<Vendor_Program_Group_Member__c>` - List of historical group members with related data
 
-**Includes:** `Vendor_Program_Group__r.Label__c`, `Inherited_Program_Requirement_Group__r.Name`
+**Includes:** `Vendor_Program_Group_Member__c.Vendor_Program_Group__r.Label__c`, `Vendor_Program_Group_Member__c.Inherited_Program_Requirement_Group__r.Name`
 
 **Usage:** Used by `vendorProgramOnboardingRequirementGroupLinking` component.
 
@@ -481,7 +481,7 @@ public static List<Recipient_Group_Member__c> getRecipientGroupMembers(Id recipi
 
 **Returns:** `List<Recipient_Group_Member__c>` - List of members with related user data
 
-**Includes:** `Recipient_User__r.Name`, `Recipient_User__r.Email`
+**Includes:** `Recipient_Group_Member__c.Recipient_User__r.Name`, `Recipient_Group_Member__c.Recipient_User__r.Email`
 
 **Usage:** Used by `vendorProgramOnboardingRecipientGroup` component.
 
@@ -608,7 +608,7 @@ All service methods delegate to the repository layer and add business logic (def
 
 ## Repository Layer: VendorOnboardingWizardRepository
 
-**Location:** `force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls`
+**Location:** `force-app/main/default/classes/VendorOnboardingWizardRepository.cls`
 
 **Security:** `with sharing`
 

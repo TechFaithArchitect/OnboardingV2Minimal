@@ -828,7 +828,7 @@
     <formulas>
         <name>userEmailWithSufix</name>
         <dataType>String</dataType>
-        <expression>{!Get_Contact.Email} + {!$Setup.Chuzo_Settings__c.Create_Rep_Flow_Email_Suffix__c}</expression>
+        <expression>{!Get_Contact.Email}</expression>
     </formulas>
     <interviewLabel>Create Representative User {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create Representative User</label>
@@ -1676,10 +1676,7 @@
                                         &lt;strong&gt;Username:&lt;/strong&gt;
                                         {!userEmailWithSufix}
                                       &lt;/p&gt;
-                                      &lt;a
-                                        href=&quot;{!$Setup.Chuzo_Settings__c.Create_Rep_Flow_Reset_Password_URL__c}&quot;
-                                        &gt;Click here to set up your password&lt;/a
-                                      &gt;&lt;br /&gt;
+                                      Contact your administrator to set up your password.&lt;br /&gt;
                                       &lt;br /&gt;
                                       Once you have reset your password, your
                                       Chuzo setup is complete! Please
@@ -2300,10 +2297,7 @@
                                         &lt;strong&gt;Username:&lt;/strong&gt;
                                         {!userEmailWithSufix}
                                       &lt;/p&gt;
-                                      &lt;a
-                                        href=&quot;{!$Setup.Chuzo_Settings__c.Create_Rep_Flow_Reset_Password_URL__c}&quot;
-                                        &gt;Click here to set up your password&lt;/a
-                                      &gt;&lt;br /&gt;
+                                      Contact your administrator to set up your password.&lt;br /&gt;
                                       &lt;br /&gt;
                                       Once you have reset your password, your
                                       Chuzo setup is complete! Please

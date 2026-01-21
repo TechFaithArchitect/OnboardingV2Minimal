@@ -8,8 +8,8 @@
 ## Remaining EmailComm-Named Classes
 These are unrelated to the email log and only handle territory role sync:
 
-- `force-app/main/default/classes/helpers/EmailCommTerritoryRoleHelper.cls`
-- `force-app/main/default/classes/jobs/EmailCommTerritoryRoleSyncJob.cls`
+- `force-app/main/default/classes/EmailCommTerritoryRoleHelper.cls`
+- `force-app/main/default/classes/EmailCommTerritoryRoleSyncJob.cls`
 - `force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger`
 - Tests: `EmailCommTerritoryRoleHelperTest`, `EmailCommTerritoryRoleSyncJobTest`
 

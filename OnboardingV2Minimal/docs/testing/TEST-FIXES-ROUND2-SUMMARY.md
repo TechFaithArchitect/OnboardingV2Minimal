@@ -60,7 +60,7 @@
 **Errors:**
 - `testGetBlockedOnboardingIdsWithDeniedStatus` - AssertException: Should identify denied onboarding
 - `testGetBlockingReasonsWit` - DmlException: Insert failed
-- `testIsAtRiskWithOldOnboar` - SObjectException: Field is not writeable: Onboarding__c.LastMod
+- `testIsAtRiskWithOldOnboar` - SObjectException: Field is not writeable: Onboarding__c.LastModifiedDate
 
 **Fixes:**
 - Updated blocking detection service to check for "Denied" status
@@ -84,11 +84,11 @@
 
 ## Files Modified
 
-1. `force-app/main/default/classes/services/OnboardingAppActivationServiceTest.cls`
-2. `force-app/main/default/classes/orchestrators/OnboardingAppVendorProgramReqOrchTest.cls`
-3. `force-app/main/default/classes/services/OnboardingAppVendorProgramReqSvcTest.cls`
-4. `force-app/main/default/classes/test/OnboardingBlockingDetectionServiceTest.cls`
-5. `force-app/main/default/classes/services/OnboardingBlockingDetectionService.cls`
+1. `force-app/main/default/classes/OnboardingAppActivationServiceTest.cls`
+2. `force-app/main/default/classes/OnboardingAppVendorProgramReqOrchTest.cls`
+3. `force-app/main/default/classes/OnboardingAppVendorProgramReqSvcTest.cls`
+4. `force-app/main/default/classes/OnboardingBlockingDetectionServiceTest.cls`
+5. `force-app/main/default/classes/OnboardingBlockingDetectionService.cls`
 
 ## Next Steps
 
@@ -98,4 +98,3 @@
    - Validation rules that might prevent insert
    - Field-level security settings
 3. Monitor for any additional test failures
-

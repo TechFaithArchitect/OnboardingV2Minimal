@@ -1,8 +1,3 @@
-
-## 13. Create docs/setup/configuration.md
-
-Create `docs/setup/configuration.md`:
-rkdown
 # Configuration Guide
 
 ## Overview
@@ -213,6 +208,6 @@ Data operations via flows
 
 ## Related Documentation
 
-- [Architecture Overview](./overview.md)
-- [Data Model](./data-model.md)
-- [Flows](../processes/flows.md)
+- [Architecture Overview](../architecture/overview.md)
+- [Data Model](../architecture/data-model.md)
+- [Flows](../components/flows.md)

@@ -4,7 +4,7 @@
 
 ### FollowUpFatigueService
 
-**Location:** `force-app/main/default/classes/services/FollowUpFatigueService.cls`
+**Location:** `force-app/main/default/classes/FollowUpFatigueService.cls`
 
 **Purpose:** Handles follow-up fatigue and suppression logic so dealers are not over-contacted.
 
@@ -17,7 +17,7 @@
 
 ### FollowUpExecutionService
 
-**Location:** `force-app/main/default/classes/services/FollowUpExecutionService.cls`
+**Location:** `force-app/main/default/classes/FollowUpExecutionService.cls`
 
 **Purpose:** Service for executing follow-up actions (SMS, Email, etc.). Handles retry logic and integrates with Salesforce Messaging API and Twilio.
 
@@ -35,7 +35,6 @@
   - Handles email sending via Salesforce
 
 - `markFollowUpFailed(Id followUpQueueId, String reason)` - Marks follow-up as failed with reason
-- `markFollowUpSuccessful(Id followUpQueueId)` - Marks follow-up as successful
 - `retryFailedFollowUps(List<Id> followUpQueueIds)` - Retries failed follow-ups
 
 **Provider Configuration:**
@@ -57,7 +56,7 @@ Used by follow-up processing flows and scheduled jobs to send SMS and email foll
 
 ### FollowUpMessagingService
 
-**Location:** `force-app/main/default/classes/services/FollowUpMessagingService.cls`
+**Location:** `force-app/main/default/classes/FollowUpMessagingService.cls`
 
 **Purpose:** Service for messaging operations including contact retrieval and message sending.
 
@@ -71,7 +70,7 @@ Used by `FollowUpExecutionService` for messaging operations.
 
 ### FollowUpDetectionService
 
-**Location:** `force-app/main/default/classes/services/FollowUpDetectionService.cls`
+**Location:** `force-app/main/default/classes/FollowUpDetectionService.cls`
 
 **Purpose:** Service for detecting when follow-ups are needed based on requirement status and rules.
 
@@ -86,7 +85,7 @@ Used to automatically detect and queue follow-ups based on requirement status ch
 
 ### RequirementFieldValidationService
 
-**Location:** `force-app/main/default/classes/services/RequirementFieldValidationService.cls`
+**Location:** `force-app/main/default/classes/RequirementFieldValidationService.cls`
 
 **Purpose:** Validates Requirement_Field_Value\_\_c records using metadata-driven rules. Supports required checks, format validation, and cross-field validation.
 
@@ -96,9 +95,8 @@ Used to automatically detect and queue follow-ups based on requirement status ch
   - Updates validation status, error message, and last validated timestamp
   - Returns `List<ValidationResult>` with validation results
 
-- `validate(Set<Id> fieldValueIds)` - Pure evaluation helper (no DML)
-  - Useful for LWC/Flow preview or tests
-  - Returns validation results without updating records
+- `evaluateFieldValue(Requirement_Field_Value__c fieldValue, Requirement_Field__c requirementField, Map<String, Requirement_Field_Validation_Rule__mdt> rulesByApi)` - Pure evaluation helper (no DML)
+- `evaluateSingle(String requirementFieldApiName, String value)` - Convenience evaluation by field API name (no DML)
 
 **Validation Types:**
 
@@ -124,7 +122,7 @@ Used by `RequirementFieldValueController` and validation flows to validate requi
 
 ### OnboardingEligibilityService
 
-**Location:** `force-app/main/default/classes/services/OnboardingEligibilityService.cls`
+**Location:** `force-app/main/default/classes/OnboardingEligibilityService.cls`
 
 **Purpose:** Service for determining vendor eligibility for onboarding by Account. Encapsulates vendor/program filtering so controllers avoid unpackaged dependencies.
 
@@ -162,6 +160,8 @@ Used by `OnboardingHomeDashboardController` to determine which accounts can star
 - `getProcessDetails(Id processId)` - Returns process details
 - `saveProgress(Id processId, Id vendorProgramId, Id stageId)` - Upserts progress record and creates stage completion log (uses upsert for progress, insert for completion)
 - `getProgress(Id vendorProgramId, Id processId)` - Retrieves saved progress
+- `canStartStage(Id targetStageId, Id vendorProgramId, Id processId)` - Exposes dependency validation to LWC components
+- `getStageDependencies(Id targetStageId, Id vendorProgramId, Id processId)` - Gets dependency information for display
 - `getProcessIdForVendorProgram(Id vendorProgramId)` - Resolves process ID for a vendor program
 - `getUserFacingStage(String technicalStatus)` - Maps Vendor Program technical status to user-friendly stage
   - ⚠️ **ONLY for Vendor_Customization**c.Status**c** - NOT for Onboarding**c.Onboarding_Status**c
@@ -233,7 +233,7 @@ Used by status evaluation engine, rules management UI (`OnboardingStatusRulesEng
 
 ### OnboardingStatusEvaluator
 
-**Location:** `force-app/main/default/classes/services/OnboardingStatusEvaluator.cls`
+**Location:** `force-app/main/default/classes/OnboardingStatusEvaluator.cls`
 
 **Purpose:** Evaluates onboarding status based on rules engine configuration.
 
@@ -289,7 +289,7 @@ Supports logical operators and requirement status checks.
 
 ### OnboardingAccessService
 
-**Location:** `force-app/main/default/classes/services/OnboardingAccessService.cls`
+**Location:** `force-app/main/default/classes/OnboardingAccessService.cls`
 
 **Purpose:** Service for resolving "ownership" and visibility for Onboarding**c records. Encapsulates all ownership and view-filter logic, including handling Territory_Assignments**c.
 
@@ -322,7 +322,7 @@ Used by `OnboardingHomeDashboardController` and `OnboardingRepository` for owner
 
 ### OnboardingDashboardFilterService
 
-**Location:** `force-app/main/default/classes/services/OnboardingDashboardFilterService.cls`
+**Location:** `force-app/main/default/classes/OnboardingDashboardFilterService.cls`
 
 **Purpose:** Centralizes filter logic and date range calculations for the dashboard.
 
@@ -331,7 +331,6 @@ Used by `OnboardingHomeDashboardController` and `OnboardingRepository` for owner
 - `getDateRangeFilter(String timeFilter)` - Converts time filter to Date range
 - `getViewFilterClause(String viewFilter, Id currentUserId)` - Builds WHERE clause for view filter
 - `buildFilterClause(String timeFilter, List<Id> vendorIds, List<Id> programIds, String viewFilter)` - Builds complete WHERE clause with all filters
-- `buildLastModifiedFilterClause(String timeFilter, List<Id> vendorIds, List<Id> programIds, String viewFilter)` - Builds WHERE clause for LastModifiedDate filters
 
 **Time Filters:**
 
@@ -345,7 +344,7 @@ Used by `OnboardingHomeDashboardController` for filter logic.
 
 ### OnboardingBlockingDetectionService
 
-**Location:** `force-app/main/default/classes/services/OnboardingBlockingDetectionService.cls`
+**Location:** `force-app/main/default/classes/OnboardingBlockingDetectionService.cls`
 
 **Purpose:** Detects blocked/at-risk onboarding records.
 
@@ -354,13 +353,11 @@ Used by `OnboardingHomeDashboardController` for filter logic.
 - `getBlockedOnboardingIds(List<Id> onboardingIds)` - Returns IDs of blocked onboarding records
 - `getBlockingReasons(Id onboardingId)` - Returns list of blocking reasons
 - `isAtRisk(Id onboardingId, Integer daysThreshold)` - Checks if onboarding is at risk
-- `getBlockingInfoBulk(List<Id> onboardingIds)` - Gets blocking info for multiple records (returns Map<Id, BlockingInfo>)
 
 **Blocking Detection:**
 
-- Uses `OnboardingStatusEvaluator` to check requirement status
-- Uses `OnboardingStageDependencyService` to check stage dependencies
-- Combines both sources for comprehensive blocking detection
+- Checks for Denied status and incomplete requirements
+- Includes placeholders for `OnboardingStatusEvaluator` and `OnboardingStageDependencyService` integration (not active)
 
 **Usage:**
 Used by `OnboardingHomeDashboardController` for identifying blocked/at-risk records.
@@ -369,7 +366,7 @@ Used by `OnboardingHomeDashboardController` for identifying blocked/at-risk reco
 
 ### RequirementFieldValueController
 
-**Location:** `force-app/main/default/classes/controllers/RequirementFieldValueController.cls`
+**Location:** `force-app/main/default/classes/RequirementFieldValueController.cls`
 
 **Purpose:** Saves requirement field values (plain or encrypted) and updates the related `Onboarding_Requirement__c` status.
 
@@ -379,7 +376,7 @@ Used by `OnboardingHomeDashboardController` for identifying blocked/at-risk reco
 
 ### OnboardingHomeDashboardController
 
-**Location:** `force-app/main/default/classes/controllers/OnboardingHomeDashboardController.cls`
+**Location:** `force-app/main/default/classes/OnboardingHomeDashboardController.cls`
 
 **Purpose:** Controller for the onboarding home dashboard LWC component. Provides methods for retrieving dashboard data including active onboarding records, summary statistics, eligible accounts, and recent activity.
 
@@ -615,7 +612,7 @@ Used by `onboardingStatusRuleList` and related LWC components.
 
 ### OnboardingAppECCService
 
-**Location:** `force-app/main/default/classes/services/OnboardingAppECCService.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppECCService.cls`
 
 **Purpose:** Service for External Contact Credential (ECC) management with direct LWC integration.
 
@@ -637,7 +634,7 @@ Called directly by `onboardingAppVendorProgramECCManager` LWC component.
 
 ### OnboardingAppActivationService
 
-**Location:** `force-app/main/default/classes/services/OnboardingAppActivationService.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppActivationService.cls`
 
 **Purpose:** Service for activating versioned records (vendor programs, etc.) with direct LWC integration.
 
@@ -652,7 +649,7 @@ Called directly by `onboardingAppHeaderBar` LWC component.
 
 ### TwilioSettingsController
 
-**Location:** `force-app/main/default/classes/controllers/TwilioSettingsController.cls`
+**Location:** `force-app/main/default/classes/TwilioSettingsController.cls`
 
 **Purpose:** Controller for Twilio SMS provider configuration management.
 
@@ -674,7 +671,7 @@ Used by `twilioSettings` LWC component for Twilio SMS provider administration.
 
 ### OnboardingStageDependencyController
 
-**Location:** `force-app/main/default/classes/controllers/OnboardingStageDependencyController.cls`
+**Location:** `force-app/main/default/classes/OnboardingStageDependencyController.cls`
 
 **Purpose:** Controller for onboarding stage dependency visualization and management.
 
@@ -698,7 +695,7 @@ Used by `onboardingStageDependencyViewer` LWC component for visualizing stage de
 
 ### OnboardingAdminDashboardController
 
-**Location:** `force-app/main/default/classes/controllers/OnboardingAdminDashboardController.cls`
+**Location:** `force-app/main/default/classes/OnboardingAdminDashboardController.cls`
 
 **Purpose:** Controller for the onboarding admin dashboard. Provides system health metrics, validation failures, messaging issues, and monitoring data.
 
@@ -780,14 +777,14 @@ Used by `onboardingStageDependencyViewer` LWC component for visualizing stage de
 
 - `OnboardingMetricsRepository` - For metrics data access
 - `Validation_Failure__c` - Validation failure object
-- `Messaging_Issue__c` - Messaging issue object (or similar)
+- `Follow_Up_Queue__c` - Messaging failure source for follow-up errors
 
 **Usage:**
 Used by `onboardingAdminDashboard`, `validationFailuresPanel`, `validationFailuresTab`, `messagingIssuesPanel`, `messagingIssuesTab`, and `adobeSyncFailuresTab` LWC components.
 
 ### VendorOnboardingWizardController
 
-**Location:** `force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls`
+**Location:** `force-app/main/default/classes/VendorOnboardingWizardController.cls`
 
 **Purpose:** Primary controller for the Vendor Program Onboarding Wizard. Exposes all Apex methods needed by wizard components.
 
@@ -805,7 +802,6 @@ Used by `onboardingAdminDashboard`, `validationFailuresPanel`, `validationFailur
 - `getRecentVendorPrograms(Integer limitCount)` - Gets recent vendor programs
 - `getRetailOptionPicklistValues()` - Gets Retail Option picklist values (cacheable)
 - `getBusinessVerticalPicklistValues()` - Gets Business Vertical picklist values (cacheable)
-- `getVendorProgramLabel(Id vendorProgramId)` - Gets Vendor Program Label
 
 #### Requirement Set Management
 
@@ -865,529 +861,6 @@ Used by all Vendor Program Onboarding Wizard LWC components.
 
 **Note:** The `VendorOnboardingWizardService` facade has been removed. The controller now calls consolidated domain services directly.
 
-### Consolidated Domain Services
-
-The following domain services have been created by consolidating related services:
-
-- **VendorDomainService** - Consolidates VendorService, VendorProgramService, VendorProgramGroupService
-- **RequirementDomainService** - Consolidates VendorProgramRequirementService, VendorProgramRequirementGroupService
-- **CommunicationDomainService** - Consolidates CommunicationTemplateService, RecipientGroupService
-- **OnboardingRequirementSetService** - Requirement Set operations (unchanged)
-- **StatusRulesEngineService** - Status Rules Engine operations (unchanged)
-
-**Key Methods:** See individual domain service documentation below.
-
-#### Vendor Operations
-
-- `searchVendors(String vendorName)` - Searches vendors
-- `createVendor(Vendor__c vendor)` - Creates vendor (sets Active\_\_c = false)
-
-#### Vendor Program Operations
-
-- `searchVendorPrograms(String vendorProgramName)` - Searches vendor programs
-- `createVendorProgram(Vendor_Customization__c vendorProgram, Id vendorId)` - Creates draft vendor program (Status**c = 'Draft', Active**c = false)
-- `getRecentVendorPrograms(Integer limitCount)` - Gets recent vendor programs
-
-#### Requirement Set Operations
-
-- `searchOnboardingRequirementSets(String searchText, Id vendorProgramId)` - Searches requirement sets
-- `linkRequirementSetToVendorProgram(Id requirementSetId, Id vendorProgramId)` - Links requirement set to vendor program
-- `createRequirementSetFromExisting(Id existingRequirementSetId, Id vendorProgramId, String vendorProgramLabel)` - Creates new requirement set with naming convention
-- `getTemplatesForRequirementSet(Id requirementSetId)` - Gets templates for requirement set
-- `createRequirementFromTemplate(Id templateId, Id vendorProgramId)` - Creates requirement from template
-
-#### Requirement Group Operations
-
-- `getHistoricalGroupMembers(Id requirementSetId)` - Gets historical group members
-- `createRequirementGroupComponents(Id vendorProgramId, Id requirementSetId, Boolean useHistorical)` - Creates and links all requirement group components with naming conventions
-
-#### Status Rules Engine Operations
-
-- `getHistoricalStatusRulesEngines(Id requirementSetId)` - Gets historical status rules engines
-- `searchStatusRulesEngines(String onboardingStatusRulesEngine)` - Searches status rules engines
-- `createOnboardingStatusRulesEngine(Onboarding_Status_Rules_Engine__c onboardingStatusRulesEngine)` - Creates status rules engine with defaults
-
-#### Recipient Group Operations
-
-- `searchRecipientGroups(String recipientGroupName)` - Searches recipient groups
-- `createRecipientGroup(Recipient_Group__c recipientGroup)` - Creates recipient group with defaults
-- `createRecipientGroupMember(Recipient_Group_Member__c recipientGroupMember)` - Creates recipient group member with defaults
-- `getRecipientGroupsForVendorProgram(Id vendorProgramId)` - Gets recipient groups for vendor program
-- `getRecipientGroupMembers(Id recipientGroupId)` - Gets members for recipient group
-- `createVendorProgramRecipientGroupWithTemplate(Id vendorProgramId, Id recipientGroupId, Id communicationTemplateId, String triggerCondition)` - Creates link with template and condition
-
-#### Component Library
-
-- `syncComponentLibrary()` - Syncs component library with all wizard components
-
-**Naming Conventions:**
-
-- Requirement Set: `"Vendor Program Label - Onboarding Set"`
-- Vendor Program Group: `"Vendor Program Label - Vendor Program Group"`
-- Requirement Group: `"Vendor Program Label - Requirement Group"`
-
-**Default Values:**
-
-- New vendors: `Active__c = false`
-- New vendor programs: `Status__c = 'Draft'`, `Active__c = false`
-- New requirement sets: `Status__c = 'Draft'`
-- New recipient groups: `Group_Type__c = 'User'`, `Is_Active__c = true`
-- New recipient group members: `Member_Type__c = 'User'`, `Recipient_Type__c = 'To'`
-
-**Dependencies:**
-
-- `VendorOnboardingWizardRepository` - Data access layer
-
-**Security:**
-
-- Uses `with sharing` to respect sharing rules
-
-## Vendor Onboarding Wizard Repository Layer
-
-### VendorOnboardingWizardRepository
-
-**Location:** `force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls`
-
-**Purpose:** Data access layer for Vendor Program Onboarding Wizard operations. Handles all SOQL queries and DML operations.
-
-**Key Methods:**
-
-#### Vendor Operations
-
-- `searchVendors(String vendorName)` - SOQL query for vendors
-- `insertVendor(Vendor__c vendor)` - DML insert for vendor
-
-#### Vendor Program Operations
-
-- `searchVendorPrograms(String vendorProgramName)` - SOQL query for vendor programs
-- `insertVendorProgram(Vendor_Customization__c vendorProgram)` - DML insert for vendor program
-- `getRecentVendorPrograms(Integer limitCount)` - SOQL query for recent vendor programs
-- `getVendorProgramLabel(Id vendorProgramId)` - Gets Label**c from Vendor_Customization**c
-
-#### Requirement Set Operations
-
-- `searchOnboardingRequirementSets(String searchText, Id vendorProgramId)` - SOQL query for requirement sets
-- `linkRequirementSetToVendorProgram(Id requirementSetId, Id vendorProgramId)` - DML update to link requirement set
-- `getRequirementSetWithTemplates(Id requirementSetId)` - Gets requirement set with child templates
-- `getRequirementTemplate(Id templateId)` - Gets single template record
-- `insertOnboardingRequirementSet(Onboarding_Requirement_Set__c requirementSet)` - DML insert for requirement set
-- `insertVendorProgramRequirement(Vendor_Program_Requirement__c requirement)` - DML insert for requirement
-
-#### Requirement Group Operations
-
-- `getHistoricalGroupMembers(Id requirementSetId)` - Gets historical group members with related data
-- `insertVendorProgramGroup(Vendor_Program_Group__c group)` - DML insert for vendor program group
-- `insertVendorProgramRequirementGroup(Vendor_Program_Requirement_Group__c group)` - DML insert for requirement group
-- `insertVendorProgramGroupMember(Vendor_Program_Group_Member__c member)` - DML insert for group member
-
-#### Status Rules Engine Operations
-
-- `getHistoricalStatusRulesEngines(Id requirementSetId)` - Gets historical engines with related data
-- `searchStatusRulesEngines(String onboardingStatusRulesEngine)` - SOQL query for status rules engines
-- `insertOnboardingStatusRulesEngine(Onboarding_Status_Rules_Engine__c engine)` - DML insert for status rules engine
-
-#### Recipient Group Operations
-
-- `searchRecipientGroups(String recipientGroupName)` - SOQL query for recipient groups
-- `insertRecipientGroup(Recipient_Group__c group)` - DML insert for recipient group
-- `insertRecipientGroupMember(Recipient_Group_Member__c member)` - DML insert for recipient group member
-- `getRecipientGroupsForVendorProgram(Id vendorProgramId)` - Gets recipient groups for vendor program
-- `getRecipientGroupMembers(Id recipientGroupId)` - Gets members for recipient group
-- `insertVendorProgramRecipientGroupLink(Id vendorProgramId, Id recipientGroupId)` - DML insert for vendor program recipient group link
-
-#### Communication Template Operations
-
-- `getCommunicationTemplates()` - SOQL query for communication templates
-
-#### User Operations
-
-- `getAssignableUsers()` - SOQL query for assignable users
-
-**Query Patterns:**
-
-- Uses `LIKE` with wildcards for search operations
-- Includes related object fields via relationship queries (e.g., `Recipient_Group__r.Name`)
-- Applies limits to prevent large result sets
-- Uses `ORDER BY` for consistent sorting
-
-**DML Patterns:**
-
-- Single record inserts for new records
-- Updates for linking operations
-- No bulk operations (handled by service layer if needed)
-
-**Security:**
-
-- Uses `with sharing` to respect sharing rules
-- All queries respect field-level security
-
-**Error Handling:**
-
-- Repository methods throw exceptions that are caught by service layer
-- Service layer provides user-friendly error messages
-
-**Dependencies:**
-
-- `OnboardingAppActivationOrchestrator` - Orchestrates activation process
-
-### OnboardingAppECCService
-
-**Location:** `force-app/main/default/classes/services/OnboardingAppECCService.cls`
-
-**Purpose:** Service for External Contact Credential (ECC) management with direct LWC integration.
-
-**Key Methods:**
-
-- `getRequiredCredentials(Id vendorProgramId)` - @AuraEnabled method, returns required credentials for a vendor program (cacheable)
-- `getAvailableCredentialTypes()` - @AuraEnabled method, returns all available credential types (cacheable)
-- `createCredentialType(String name)` - @AuraEnabled method, creates a new credential type
-- `linkCredentialTypeToRequiredCredential(Id requiredCredentialId, Id credentialTypeId)` - @AuraEnabled method, links a credential type to a required credential
-
-**Usage:**
-Called directly by `onboardingAppVendorProgramECCManager` LWC component.
-
-**Dependencies:**
-
-- `OnboardingAppECCRepository` - Data access layer
-
-**Note:** The `OnboardingAppECCController` has been removed. LWC components now call the service directly.
-
-## Orchestrators (Legacy)
-
-**Note:** Most orchestrators have been consolidated into services. Only complex multi-domain workflows may still use orchestrators.
-
-**Location:** `force-app/main/default/classes/orchestrators/OnboardingAppVendorProgramReqOrch.cls`
-
-**Purpose:** Orchestrates vendor program requirement operations.
-
-## Services
-
-### OnboardingAppActivationService
-
-**Location:** `force-app/main/default/classes/services/OnboardingAppActivationService.cls`
-
-**Purpose:** Generic activation service that handles activation for any object type with versioning support.
-
-**Key Methods:**
-
-- `activateRecord(String objectApiName, Id recordId)` - Activates a record with validation
-
-**Activation Flow:**
-
-1. Executes activation rules from `OnboardingAppRuleRegistry.getActivationRulesForObject()`
-2. Prevents re-activation (checks if already active)
-3. Deactivates sibling versions if versioning is supported
-4. Sets record to active status
-
-**Guards Implemented:**
-
-- ✅ Executes activation rules before activation
-- ✅ Prevents re-activation
-- ✅ Handles versioning (deactivates siblings)
-- ✅ Supports both `Active__c` and `Is_Active__c` fields
-
-### VendorProgramActivationService
-
-**Location:** `force-app/main/default/classes/services/VendorProgramActivationService.cls`
-
-**Purpose:** Specialized activation service for `Vendor_Customization__c` records.
-
-**Key Methods:**
-
-- `activate(Id recordId)` - Activates a vendor program record
-- `activateBulk(Set<Id> recordIds)` - Activates multiple vendor programs in bulk
-
-**Activation Flow:**
-
-1. Executes activation rules from `OnboardingAppRuleRegistry.getActivationRulesForObject('Vendor_Customization__c')`
-2. Prevents re-activation (checks if already active)
-3. Deactivates sibling versions
-4. Sets record to active status
-5. Executes post-activation hooks
-
-**Guards Implemented:**
-
-- ✅ Executes activation rules before activation
-- ✅ Prevents re-activation
-- ✅ Handles versioning (deactivates siblings)
-- ✅ Supports bulk activation for better performance
-
-### OnboardingAppECCService
-
-**Location:** `force-app/main/default/classes/OnboardingAppECCService.cls`
-
-**Purpose:** Service for External Contact Credential (ECC) operations. Provides business logic for managing required credentials and credential types.
-
-**Key Methods:**
-
-- `getRequiredCredentials(Id vendorProgramId)` - Gets required credentials for a vendor program
-- `getAvailableCredentialTypes()` - Gets all available credential types
-- `createCredentialType(String name)` - Creates a new credential type
-- `linkCredentialTypeToRequiredCredential(Id requiredCredentialId, Id credentialTypeId)` - Links a credential type to a required credential
-
-**Usage:**
-Used by `OnboardingAppECCController` for ECC management operations.
-
-### Consolidated Domain Services
-
-**Note:** The `VendorOnboardingWizardService` facade has been removed. The following consolidated domain services are now used directly:
-
-#### VendorDomainService
-
-**Location:** `force-app/main/default/classes/services/VendorDomainService.cls`
-
-**Purpose:** Consolidated service for Vendor, VendorProgram, and VendorProgramGroup operations. Replaces VendorService, VendorProgramService, and VendorProgramGroupService.
-
-**Key Methods:**
-
-**Vendor Operations:**
-
-- `searchVendors(String vendorName)` - Searches for vendors by name (delegates to repository)
-- `createVendor(Vendor__c vendor)` - Creates a new vendor record. Sets `Active__c = false` to save as draft before inserting via repository
-
-**Vendor Program Operations:**
-
-- `searchVendorPrograms(String vendorProgramName)` - Searches for vendor programs by name
-- `createVendorProgram(Vendor_Customization__c vendorProgram, Id vendorId)` - Creates a new vendor program. Sets `Vendor__c`, `Active__c = false`, and `Status__c = 'Draft'` before inserting
-- `finalizeVendorProgram(Id vendorProgramId, Id vendorId, Id vendorProgramGroupId, Id vendorProgramRequirementGroupId)` - Links vendor program to vendor, program group, and requirement group. This is the final step in the vendor program setup wizard
-
-**Vendor Program Group Operations:**
-
-- `searchVendorProgramGroups(String vendorProgramGroupName)` - Searches for vendor program groups by name
-- `createVendorProgramGroup(Vendor_Program_Group__c vendorProgramGroup)` - Creates a new vendor program group
-
-**Vendor Program Requirement Group Operations:**
-
-- `searchVendorProgramRequirementGroups(String requirementGroupName)` - Searches for requirement groups by name
-- `createVendorProgramRequirementGroup(Vendor_Program_Requirement_Group__c vendorProgramRequirementGroup)` - Creates a new requirement group
-
-**Vendor Program Requirement Operations:**
-
-- `searchVendorProgramRequirements(String vendorProgramRequirements)` - Searches for vendor program requirements by name
-- `createVendorProgramRequirement(Vendor_Program_Requirement__c vendorProgramRequirement)` - Creates a new vendor program requirement
-
-**Onboarding Status Rules Engine Operations:**
-
-- `searchStatusRulesEngines(String onboardingStatusRulesEngine)` - Searches for status rules engines by name
-- `createOnboardingStatusRulesEngine(Onboarding_Status_Rules_Engine__c onboardingStatusRulesEngine)` - Creates a new status rules engine
-
-**Onboarding Status Rules Operations:**
-
-- `createStatusRule(Onboarding_Status_Rule__c rule)` - Creates a new status rule
-- `searchStatusRules(String nameSearchText)` - Searches for status rules by name
-
-**Communication Templates Operations:**
-
-- `getCommunicationTemplates()` - Retrieves all communication templates (ordered by Name, limit 100)
-- `linkCommunicationTemplateToVendorProgram(Id vendorProgramId, Id templateId)` - Links a communication template to a vendor program
-
-**Onboarding Requirement Set Operations:**
-
-- `createOnboardingRequirementSet(Onboarding_Requirement_Set__c requirementSet)` - Creates a new requirement set. Sets `Status__c = 'Draft'` before inserting
-- `getOnboardingRequirementSets()` - Retrieves all requirement sets (ordered by CreatedDate DESC, limit 100)
-
-**Onboarding Requirement Templates Operations:**
-
-- `createOnboardingRequirementTemplate(Vendor_Program_Onboarding_Req_Template__c template)` - Creates a new requirement template
-- `getRequirementTemplatesForSet(Id requirementSetId)` - Gets all templates for a specific requirement set
-- `assignTemplatesToRequirementGroup(Id requirementGroupId, List<Id> templateIds)` - Assigns multiple templates to a requirement group by updating the `Category_Group__c` field
-
-**Recipient Groups Operations:**
-
-- `searchRecipientGroups(String recipientGroupName)` - Searches for recipient groups by name
-- `createRecipientGroup(Recipient_Group__c recipientGroup)` - Creates a new recipient group
-- `createRecipientGroupMember(Recipient_Group_Member__c recipientGroupMember)` - Creates a recipient group member
-
-**Vendor Program Recipient Groups Operations:**
-
-- `searchVendorProgramRecipientGroups(String vprgName)` - Searches for vendor program recipient groups by name
-- `createVendorProgramRecipientGroupLink(Id vendorProgramId, Id recipientGroupId)` - Creates a link between vendor program and recipient group. Sets `Status__c = 'Draft'` on the link record
-
-**Miscellaneous Operations:**
-
-- `getTerritoryRoleAssignments()` - Gets all territory role assignments (ordered by Name)
-- `getAssignableUsers()` - Gets all active users (ordered by Name)
-- `getPublicGroups()` - Gets all public groups (ordered by Name)
-
-**Usage:**
-Used by `VendorOnboardingWizardController` and wizard LWC components for vendor onboarding setup workflows. All methods delegate to `VendorOnboardingWizardRepository` for data access operations.
-
-### VendorOnboardingWizardController
-
-**Location:** `force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls`
-
-**Purpose:** Controller for vendor onboarding wizard LWC components. Provides AuraEnabled methods for vendor, vendor program, groups, requirement sets, recipient groups, status rules, and communication templates operations. Coordinates multiple consolidated domain services.
-
-**Key Methods:**
-
-**Vendor Operations:**
-
-- `searchVendors(String vendorNameSearchText)` - Searches vendors by name. Cacheable method that delegates to service layer
-- `createVendor(Vendor__c vendor)` - Creates a vendor record. Delegates to service which sets vendor as draft before creating
-
-**Vendor Program Operations:**
-
-- `searchVendorPrograms(String vendorProgramNameSearchText)` - Searches vendor programs by name. Cacheable method
-- `createVendorProgram(Vendor_Customization__c vendorProgram, Id vendorId)` - Creates a vendor program linked to a vendor. Delegates to service which sets status to 'Draft' and active to false
-- `finalizeVendorProgram(Id vendorProgramId, Id vendorId, Id vendorProgramGroupId, Id vendorProgramRequirementGroupId)` - Finalizes vendor program setup by linking it to vendor, program group, and requirement group. This is called from the final step of the wizard
-
-**Vendor Program Group Operations:**
-
-- `searchVendorProgramGroups(String vendorProgramGroupNameSearchText)` - Searches vendor program groups by name. Cacheable method
-- `createVendorProgramGroup(Vendor_Program_Group__c vendorProgramGroup)` - Creates a vendor program group. **Note:** Service layer now validates that `Label__c` and `Logic_Type__c` are provided (no auto-filling). Throws exception if missing.
-
-**Vendor Program Requirement Group Operations:**
-
-- `searchVendorProgramRequirementGroups(String requirementGroupNameSearchText)` - Searches requirement groups by name. Cacheable method
-- `createVendorProgramRequirementGroup(Vendor_Program_Requirement_Group__c vendorProgramRequirementGroup)` - Creates a requirement group
-
-**Vendor Program Requirement Operations:**
-
-- `searchVendorProgramRequirements(String vendorProgramRequirements)` - Searches vendor program requirements by name. Cacheable method
-- `createVendorProgramRequirement(Vendor_Program_Requirement__c vendorProgramRequirement)` - Creates a vendor program requirement
-
-**Onboarding Status Rules Engine Operations:**
-
-- `searchStatusRulesEngines(String nameSearchText)` - Searches status rules engines by name. Cacheable method
-- `createOnboardingStatusRulesEngine(Onboarding_Status_Rules_Engine__c onboardingStatusRulesEngine)` - Creates a status rules engine
-
-**Onboarding Status Rules Operations:**
-
-- `createStatusRule(Onboarding_Status_Rule__c rule)` - Creates a status rule
-- `searchStatusRules(String nameSearchText)` - Searches status rules by name. Cacheable method
-
-**Communication Templates Operations:**
-
-- `getCommunicationTemplates()` - Gets all communication templates. Cacheable method
-- `linkCommunicationTemplateToVendorProgram(Id vendorProgramId, Id templateId)` - Links a communication template to a vendor program
-
-**Onboarding Requirement Set Operations:**
-
-- `createOnboardingRequirementSet(Onboarding_Requirement_Set__c requirementSet)` - Creates a requirement set. Service sets status to 'Draft'
-- `getOnboardingRequirementSets()` - Gets all requirement sets. Cacheable method
-
-**Onboarding Requirement Templates Operations:**
-
-- `createOnboardingRequirementTemplate(Vendor_Program_Onboarding_Req_Template__c template)` - Creates a requirement template
-- `getRequirementTemplatesForSet(Id requirementSetId)` - Gets templates for a specific requirement set. Cacheable method
-- `assignTemplatesToRequirementGroup(Id requirementGroupId, List<Id> templateIds)` - Assigns multiple templates to a requirement group
-
-**Recipient Groups Operations:**
-
-- `searchRecipientGroups(String recipientGroupNameSearchText)` - Searches recipient groups by name. Cacheable method
-- `createRecipientGroup(Recipient_Group__c recipientGroup)` - Creates a recipient group
-- `createRecipientGroupMember(Recipient_Group_Member__c recipientGroupMember)` - Creates a recipient group member
-
-**Vendor Program Recipient Groups Operations:**
-
-- `searchVendorProgramRecipientGroups(String vprgNameSearchText)` - Searches vendor program recipient groups by name. Cacheable method
-- `createVendorProgramRecipientGroupLink(Id vendorProgramId, Id recipientGroupId)` - Creates a link between vendor program and recipient group. Service sets status to 'Draft'
-
-**Miscellaneous Operations:**
-
-- `getTerritoryRoleAssignments()` - Gets all territory role assignments. Cacheable method
-- `getAssignableUsers()` - Gets all active users. Cacheable method
-- `getPublicGroups()` - Gets all public groups. Cacheable method
-
-**Picklist Value Methods (New):**
-These methods provide picklist values for form dropdowns in the wizard, ensuring users see the correct options from Salesforce. All are cacheable for performance.
-
-- `getLogicTypePicklistValues()` - Returns picklist values for `Logic_Type__c` on `Vendor_Program_Group__c`. Returns list of maps with 'label' and 'value' keys
-- `getStatusPicklistValues()` - Returns picklist values for `Status__c` on `Vendor_Program_Requirement_Group__c`
-- `getGroupTypePicklistValues()` - Returns picklist values for `Group_Type__c` on `Recipient_Group__c`
-- `getEvaluationLogicPicklistValues()` - Returns picklist values for `Evaluation_Logic__c` on `Onboarding_Status_Rules_Engine__c` (ALL, ANY, CUSTOM)
-- `getRequiredStatusPicklistValues()` - Returns picklist values for `Required_Status__c` on `Onboarding_Status_Rules_Engine__c`
-- `getTargetOnboardingStatusPicklistValues()` - Returns picklist values for `Target_Onboarding_Status__c` on `Onboarding_Status_Rules_Engine__c`
-- `getPicklistValues(String objectName, String fieldName, List<String> fallbackValues)` - Private helper method that dynamically fetches picklist values from Salesforce schema. Includes fallback values if schema describe fails
-
-**Validation Changes:**
-
-- All create methods now use `ValidationHelper` for consistent input validation
-- `createVendorProgramGroup()` - Validates that `Label__c` and `Logic_Type__c` are provided using `ValidationHelper.requireFieldForObject()`
-
-**Usage:**
-Used by vendor onboarding wizard LWC components for multi-step vendor setup workflows. All search methods are cacheable for better performance. All create/finalize methods are not cacheable as they perform DML operations. Picklist methods enable dynamic form dropdowns with proper Salesforce values.
-
-### VendorOnboardingWizardRepository
-
-**Location:** `force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls`
-
-**Purpose:** Repository for vendor onboarding wizard data access operations. Handles all database queries and DML for vendor onboarding entities. This is the data access layer that performs all SOQL queries and DML operations.
-
-**Key Methods:**
-
-**Vendor Operations:**
-
-- `searchVendors(String vendorName)` - Queries vendors by name using LIKE pattern (`'%' + vendorName + '%'`). Returns `Id` and `Name` fields, limit 10
-- `insertVendor(Vendor__c vendor)` - Inserts a vendor record and returns the new record ID
-
-**Vendor Program Operations:**
-
-- `searchVendorPrograms(String vendorProgramName)` - Queries `Vendor_Customization__c` records by name using LIKE pattern. Returns `Id` and `Name` fields, limit 10
-- `insertVendorProgram(Vendor_Customization__c vendorProgram)` - Inserts a vendor program record and returns the new record ID
-- `linkVendorProgramToGroups(Id vendorProgramId, Id vendorId, Id vendorProgramGroupId, Id vendorProgramRequirementGroupId)` - Updates a vendor program record to link it to vendor, program group, and requirement group. Queries the vendor program first, then updates the lookup fields
-
-**Vendor Program Group Operations:**
-
-- `searchVendorProgramGroups(String vendorProgramGroupName)` - Queries `Vendor_Program_Group__c` records by name using LIKE pattern. Returns `Id` and `Name` fields, limit 10
-- `insertVendorProgramGroup(Vendor_Program_Group__c vendorProgramGroup)` - Inserts a vendor program group record and returns the new record ID
-
-**Vendor Program Requirement Group Operations:**
-
-- `searchVendorProgramRequirementGroups(String requirementGroupName)` - Queries `Vendor_Program_Requirement_Group__c` records by name using LIKE pattern. Returns `Id` and `Name` fields, limit 10
-- `insertVendorProgramRequirementGroup(Vendor_Program_Requirement_Group__c vendorProgramRequirementGroup)` - Inserts a requirement group record and returns the new record ID
-
-**Vendor Program Requirement Operations:**
-
-- `searchVendorProgramRequirements(String vendorProgramRequirements)` - Queries `Vendor_Program_Requirement__c` records by name using LIKE pattern. Returns `Id`, `Name`, `Vendor_Program__c` (lookup to `Vendor_Customization__c`), `Inherited_From_Group__c`, `Requirement_Group_Member__c`, and `Requirement_Template__c` fields, limit 10
-- `insertVendorProgramRequirement(Vendor_Program_Requirement__c vendorProgramRequirement)` - Inserts a vendor program requirement record and returns the new record ID
-
-**Onboarding Status Rules Engine Operations:**
-
-- `searchStatusRulesEngines(String nameSearchText)` - Queries `Onboarding_Status_Rules_Engine__c` records by name using LIKE pattern. Returns `Id`, `Name`, `Requirement_Group__c`, and `Vendor_Program_Group__c` fields, limit 10
-- `insertOnboardingStatusRulesEngine(Onboarding_Status_Rules_Engine__c onboardingStatusRulesEngine)` - Inserts a status rules engine record and returns the new record ID
-
-**Onboarding Status Rules Operations:**
-
-- `insertStatusRule(Onboarding_Status_Rule__c rule)` - Inserts a status rule record and returns the new record ID
-- `searchStatusRules(String nameSearchText)` - Queries `Onboarding_Status_Rule__c` records by name using LIKE pattern. Returns `Id`, `Name`, `Parent_Rule__c`, and `Requirement__c` fields, limit 10
-
-**Communication Templates Operations:**
-
-- `fetchCommunicationTemplates()` - Queries all `Communication_Template__c` records. Returns `Id` and `Name` fields, ordered by Name, limit 100
-- `linkCommunicationTemplate(Id vendorProgramId, Id templateId)` - Updates a communication template to link it to a vendor program. Queries the template first, then updates the `Vendor_Program__c` field (lookup to `Vendor_Customization__c`)
-
-**Onboarding Requirement Set Operations:**
-
-- `insertOnboardingRequirementSet(Onboarding_Requirement_Set__c requirementSet)` - Inserts a requirement set record and returns the new record ID
-- `fetchOnboardingRequirementSets()` - Queries all `Onboarding_Requirement_Set__c` records. Returns `Id`, `Name`, and `Status__c` fields, ordered by CreatedDate DESC, limit 100
-
-**Onboarding Requirement Templates Operations:**
-
-- `insertOnboardingRequirementTemplate(Vendor_Program_Onboarding_Req_Template__c template)` - Inserts a requirement template record and returns the new record ID
-- `fetchOnboardingRequirementTemplates(Id requirementSetId)` - Queries `Vendor_Program_Onboarding_Req_Template__c` records filtered by `Onboarding_Requirement_Set__c`. Returns `Id`, `Name`, and `Requirement_Type__c` fields
-- `assignRequirementTemplatesToRequirementGroup(Id requirementGroupId, List<Id> templateIds)` - Updates multiple requirement templates to assign them to a requirement group. Queries templates by IDs, then updates the `Category_Group__c` field on each template
-
-**Recipient Groups Operations:**
-
-- `searchRecipientGroups(String recipientGroupName)` - Queries `Recipient_Group__c` records by name using LIKE pattern. Returns `Id` and `Name` fields, limit 10
-- `insertRecipientGroup(Recipient_Group__c recipientGroup)` - Inserts a recipient group record and returns the new record ID
-- `insertRecipientGroupMember(Recipient_Group_Member__c recipientGroupMember)` - Inserts a recipient group member record and returns the new record ID
-
-**Vendor Program Recipient Groups Operations:**
-
-- `searchVendorProgramRecipientGroups(String vprgName)` - Queries `Vendor_Program_Recipient_Group__c` records by name using LIKE pattern. Returns `Id` and `Name` fields, limit 10
-- `insertVendorProgramRecipientGroupLink(Id vendorProgramId, Id recipientGroupId)` - Creates and inserts a new `Vendor_Program_Recipient_Group__c` record linking a vendor program to a recipient group. Sets `Vendor_Program__c` (lookup to `Vendor_Customization__c`), `Recipient_Group__c`, and `Status__c = 'Draft'` on the new record
-
-**Miscellaneous Operations:**
-
-- `getTerritoryRoleAssignments()` - Queries all `Territory_Role_Assignment__c` records. Returns `Id`, `Name`, and `Role__c` fields, ordered by Name
-- `getAssignableUsers()` - Queries all active `User` records (`IsActive = true`). Returns `Id` and `Name` fields, ordered by Name
-- `getPublicGroups()` - Queries all `Group` records. Returns `Id` and `Name` fields, ordered by Name
-
-**Usage:**
-Used by `VendorOnboardingWizardService` for all data access operations. All methods use `with sharing` to enforce sharing rules.
-
 ## Handlers
 
 ### OnboardingAppRuleEngineHandler
@@ -1398,13 +871,13 @@ Used by `VendorOnboardingWizardService` for all data access operations. All meth
 
 ### OnboardingAppVendorProgramReqHdlr
 
-**Location:** `force-app/main/default/classes/handlers/OnboardingAppVendorProgramReqHdlr.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppVendorProgramReqHdlr.cls`
 
 **Purpose:** Handler for vendor program requirement events.
 
 ### OnboardingStatusTrackerHandler
 
-**Location:** `force-app/main/default/classes/handlers/OnboardingStatusTrackerHandler.cls`
+**Location:** `force-app/main/default/classes/OnboardingStatusTrackerHandler.cls`
 
 **Purpose:** Tracks onboarding status changes.
 
@@ -1412,7 +885,7 @@ Used by `VendorOnboardingWizardService` for all data access operations. All meth
 
 ### OnboardingAppRuleRegistry
 
-**Location:** `force-app/main/default/classes/rules/OnboardingAppRuleRegistry.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppRuleRegistry.cls`
 
 **Purpose:** Central registry of validation rules and activation rules for onboarding application objects.
 
@@ -1454,7 +927,7 @@ Used by `VendorOnboardingWizardService` for all data access operations. All meth
 
 ### OnboardingAppActivationRule
 
-**Location:** `force-app/main/default/classes/rules/OnboardingAppActivationRule.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppActivationRule.cls`
 
 **Purpose:** Interface for activation rules that run during activation (not on save).
 
@@ -1486,7 +959,7 @@ Used by `VendorOnboardingWizardService` for all data access operations. All meth
 
 ### OnboardingAppActivationAction
 
-**Location:** `force-app/main/default/classes/actions/OnboardingAppActivationAction.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppActivationAction.cls`
 
 **Purpose:** Action class for activating records.
 
@@ -1509,7 +982,7 @@ Repository classes follow the pattern `*Repo.cls` or `*Repository.cls` and handl
 
 ### FollowUpRuleRepository
 
-**Location:** `force-app/main/default/classes/repository/FollowUpRuleRepository.cls`
+**Location:** `force-app/main/default/classes/FollowUpRuleRepository.cls`
 
 **Purpose:** Centralizes data access for fatigue suppression logic.
 
@@ -1522,7 +995,7 @@ Repository classes follow the pattern `*Repo.cls` or `*Repository.cls` and handl
 
 ### OnboardingMetricsRepository
 
-**Location:** `force-app/main/default/classes/repository/OnboardingMetricsRepository.cls`
+**Location:** `force-app/main/default/classes/OnboardingMetricsRepository.cls`
 
 **Purpose:** Encapsulates dashboard metric queries and validation failure retrieval.
 
@@ -1533,7 +1006,7 @@ Repository classes follow the pattern `*Repo.cls` or `*Repository.cls` and handl
 
 ### OnboardingRepository
 
-**Location:** `force-app/main/default/classes/repository/OnboardingRepository.cls`
+**Location:** `force-app/main/default/classes/OnboardingRepository.cls`
 
 **Purpose:** Repository layer for Onboarding\_\_c data access operations. Centralizes all SOQL queries for onboarding records.
 
@@ -1591,7 +1064,7 @@ Used by `OnboardingAppECCService` for all ECC data access operations.
 
 ### RequirementFieldValueRepository
 
-**Location:** `force-app/main/default/classes/repository/RequirementFieldValueRepository.cls`
+**Location:** `force-app/main/default/classes/RequirementFieldValueRepository.cls`
 
 **Purpose:** Repository for Requirement_Field_Value\_\_c data access operations. Centralizes all SOQL queries for requirement field values following the repository pattern.
 
@@ -1611,10 +1084,9 @@ Used by `OnboardingAppECCService` for all ECC data access operations.
   - Includes requirement and field names for display
   - Returns `List<Requirement_Field_Value__c>`
 
-- `getFieldValuesForCrossFieldValidation(Id requirementId, Set<String> fieldApiNames)` - Gets field values for cross-field validation
-  - Gets all field values for the same onboarding requirement (siblings)
-  - Filters by field API names
-  - Returns `List<Requirement_Field_Value__c>`
+- `getSiblingFieldValues(Id fieldValueId)` - Gets field values for the same onboarding requirement (siblings)
+- `getPendingFieldValues(Integer limitCount)` - Gets pending field values for async validation
+- `getInvalidFieldValueCount(Id onboardingId)` - Counts invalid field values for onboarding
 
 **Query Patterns:**
 
@@ -1627,7 +1099,7 @@ Used by `RequirementFieldValidationService` and `RequirementFieldValueController
 
 ### OnboardingRulesRepository
 
-**Location:** `force-app/main/default/classes/repository/OnboardingRulesRepository.cls`
+**Location:** `force-app/main/default/classes/OnboardingRulesRepository.cls`
 
 **Purpose:** Repository for Onboarding_Status_Rule**c and Onboarding**c data access operations. Centralizes queries for status rules and onboarding records with requirements.
 
@@ -1665,7 +1137,7 @@ Used by `OnboardingRulesService` and `OnboardingStatusRulesEngineController` for
 
 ### VendorCustomizationRepository
 
-**Location:** `force-app/main/default/classes/repository/VendorCustomizationRepository.cls`
+**Location:** `force-app/main/default/classes/VendorCustomizationRepository.cls`
 
 **Purpose:** Repository for Vendor_Customization\_\_c data access operations. Handles queries for vendor program records.
 
@@ -1696,7 +1168,7 @@ Used by `VendorProgramActivationService`, `OnboardingEligibilityService`, and ot
 
 ### OnboardingApplicationRepository
 
-**Location:** `force-app/main/default/classes/repository/OnboardingApplicationRepository.cls`
+**Location:** `force-app/main/default/classes/OnboardingApplicationRepository.cls`
 
 **Purpose:** Repository for Onboarding_Application_Process**c, Onboarding_Application_Stage**c, and Onboarding_Application_Progress\_\_c data access operations.
 
@@ -1739,7 +1211,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### VendorDomainService
 
-**Location:** `force-app/main/default/classes/services/VendorDomainService.cls`
+**Location:** `force-app/main/default/classes/VendorDomainService.cls`
 
 **Purpose:** Consolidated service for Vendor, VendorProgram, and VendorProgramGroup operations. Replaces VendorService, VendorProgramService, and VendorProgramGroupService.
 
@@ -1773,7 +1245,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### RequirementDomainService
 
-**Location:** `force-app/main/default/classes/services/RequirementDomainService.cls`
+**Location:** `force-app/main/default/classes/RequirementDomainService.cls`
 
 **Purpose:** Consolidated service for VendorProgramRequirement and VendorProgramRequirementGroup operations. Replaces VendorProgramRequirementService and VendorProgramRequirementGroupService.
 
@@ -1803,7 +1275,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### OnboardingRequirementSetService
 
-**Location:** `force-app/main/default/classes/services/OnboardingRequirementSetService.cls`
+**Location:** `force-app/main/default/classes/OnboardingRequirementSetService.cls`
 
 **Purpose:** Service for Onboarding Requirement Set and Template domain operations.
 
@@ -1836,7 +1308,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### RecipientGroupService
 
-**Location:** `force-app/main/default/classes/services/RecipientGroupService.cls`
+**Location:** `force-app/main/default/classes/RecipientGroupService.cls`
 
 **Purpose:** Service for Recipient Group domain operations.
 
@@ -1859,7 +1331,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### StatusRulesEngineService
 
-**Location:** `force-app/main/default/classes/services/StatusRulesEngineService.cls`
+**Location:** `force-app/main/default/classes/StatusRulesEngineService.cls`
 
 **Purpose:** Service for Status Rules Engine and Status Rule domain operations.
 
@@ -1878,7 +1350,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### CommunicationTemplateService
 
-**Location:** `force-app/main/default/classes/services/CommunicationTemplateService.cls`
+**Location:** `force-app/main/default/classes/CommunicationTemplateService.cls`
 
 **Purpose:** Service for Communication Template domain operations.
 
@@ -1896,7 +1368,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### ValidationHelper
 
-**Location:** `force-app/main/default/classes/util/ValidationHelper.cls`
+**Location:** `force-app/main/default/classes/ValidationHelper.cls`
 
 **Purpose:** Centralized validation utility class. Provides static methods for input validation across services and orchestrators.
 
@@ -1914,7 +1386,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### DefaultValueHelper
 
-**Location:** `force-app/main/default/classes/util/DefaultValueHelper.cls`
+**Location:** `force-app/main/default/classes/DefaultValueHelper.cls`
 
 **Purpose:** Centralized default value assignment utility class. Provides static methods to apply default values to various SObject records.
 
@@ -1932,7 +1404,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### PicklistHelper
 
-**Location:** `force-app/main/default/classes/util/PicklistHelper.cls`
+**Location:** `force-app/main/default/classes/PicklistHelper.cls`
 
 **Purpose:** Utility class for retrieving picklist values. Eliminates code duplication and provides consistent picklist handling.
 
@@ -1946,7 +1418,7 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### StageCompletionConfig
 
-**Location:** `force-app/main/default/classes/util/StageCompletionConfig.cls`
+**Location:** `force-app/main/default/classes/StageCompletionConfig.cls`
 
 **Purpose:** Configuration for stage completion logic. Centralizes component name checks to follow Open/Closed Principle.
 
@@ -1959,31 +1431,31 @@ The Vendor Onboarding Wizard service layer has been consolidated into domain-spe
 
 ### FLSCheckUtil
 
-**Location:** `force-app/main/default/classes/util/FLSCheckUtil.cls`
+**Location:** `force-app/main/default/classes/FLSCheckUtil.cls`
 
 **Purpose:** Bulk-safe field-level security checks (`isReadable`, `isUpdateable`, `isCreateable`).
 
 ### CustomMetadataUtil
 
-**Location:** `force-app/main/default/classes/util/CustomMetadataUtil.cls`
+**Location:** `force-app/main/default/classes/CustomMetadataUtil.cls`
 
 **Purpose:** Cached custom metadata lookup by DeveloperName with `clearCache` helper.
 
 ### LoggingUtil
 
-**Location:** `force-app/main/default/classes/util/LoggingUtil.cls`
+**Location:** `force-app/main/default/classes/LoggingUtil.cls`
 
 **Purpose:** Centralized logging helpers with consistent `[Onboarding]` prefix.
 
 ### OnboardingTestDataFactory
 
-**Location:** `force-app/main/default/classes/util/OnboardingTestDataFactory.cls`
+**Location:** `force-app/main/default/classes/OnboardingTestDataFactory.cls`
 
 **Purpose:** Opinionated factory for onboarding test contexts (account, vendor, program, onboarding, requirement, requirement field).
 
 ### VendorProgramStatusMapper
 
-**Location:** `force-app/main/default/classes/util/VendorProgramStatusMapper.cls`
+**Location:** `force-app/main/default/classes/VendorProgramStatusMapper.cls`
 
 **Purpose:** Maps Vendor Program technical statuses to user-friendly stages for display in the front end.
 
@@ -2070,7 +1542,7 @@ classes/
 
 ### OnboardingStageDependencyRepository
 
-**Location:** `force-app/main/default/classes/repository/OnboardingStageDependencyRepository.cls`
+**Location:** `force-app/main/default/classes/OnboardingStageDependencyRepository.cls`
 
 **Purpose:** Repository layer for Onboarding Stage Dependency queries and data access.
 
@@ -2091,7 +1563,7 @@ classes/
 
 ### OnboardingStageDependencyService
 
-**Location:** `force-app/main/default/classes/services/OnboardingStageDependencyService.cls`
+**Location:** `force-app/main/default/classes/OnboardingStageDependencyService.cls`
 
 **Purpose:** Service layer for Onboarding Stage Dependency validation. Checks if stages can be started based on dependency rules.
 
@@ -2120,24 +1592,10 @@ classes/
 
 **Usage:** Used by `OnboardingApplicationService.saveProgress()` to validate dependencies before allowing stage progression.
 
-### OnboardingApplicationService Updates
-
-**New Methods:**
-
-- `canStartStage(Id targetStageId, Id vendorProgramId, Id processId)` - Exposes dependency validation to LWC components
-- `getStageDependencies(Id targetStageId, Id vendorProgramId, Id processId)` - Gets dependency information for display
-
-**Updated Methods:**
-
-- `saveProgress()` - Now validates dependencies before saving progress. Throws `AuraHandledException` if dependencies are not met.
-
-**Integration:** The `onboardingFlowEngine` LWC component calls `canStartStage()` before allowing navigation to the next stage.
-
 ## Related Documentation
 
 - [LWC Components](./lwc-components.md)
 - [API Reference](../api/apex-api.md)
 - [Architecture Overview](../architecture/overview.md)
 - [Apex Patterns](../architecture/apex-patterns.md) - Architectural patterns and conventions
-- [Pattern Violations](../reports/architecture/pattern-violations.md) - Identified violations and fixes (historical report)
 - [Stage Dependency Management](../processes/stage-dependency-management.md) - **NEW** - Complete guide to stage dependencies

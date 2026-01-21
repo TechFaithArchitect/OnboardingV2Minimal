@@ -10,7 +10,7 @@ This document outlines the refactoring changes needed to align the Onboarding Co
 
 **Before (Blueprint):**
 
-- Introduced `Enrollment__c` and `Enrollment_Requirement__c` objects
+- Proposed enrollment objects (not present in this repo)
 - Parallel deduplication logic at enrollment level
 
 **After (Aligned):**
@@ -63,7 +63,7 @@ This document outlines the refactoring changes needed to align the Onboarding Co
 
 ### Due Date Override Controller
 
-**New File:** `force-app/main/default/classes/controllers/OnboardingRequirementDueDateController.cls`
+**New File:** `force-app/main/default/classes/OnboardingRequirementDueDateController.cls`
 
 **Purpose:**
 

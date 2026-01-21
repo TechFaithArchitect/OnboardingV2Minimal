@@ -6,7 +6,7 @@ This document summarizes the test classes created and updated to improve code co
 ## New Test Classes Created
 
 ### 1. ZipCodeTerritoryAssignmentTest.cls (0% → 100%)
-**Location:** `force-app/main/default/classes/repository/ZipCodeTerritoryAssignmentTest.cls`
+**Location:** `force-app/main/default/classes/ZipCodeTerritoryAssignmentTest.cls`
 
 **Coverage:**
 - Constructor with all parameters
@@ -16,7 +16,7 @@ This document summarizes the test classes created and updated to improve code co
 **Status:** ✅ Complete
 
 ### 2. VendorProgramStatusMapperTest.cls (10% → 100%)
-**Location:** `force-app/main/default/classes/util/VendorProgramStatusMapperTest.cls`
+**Location:** `force-app/main/default/classes/VendorProgramStatusMapperTest.cls`
 
 **Coverage:**
 - `getUserFacingStage` for admin users (returns technical status)
@@ -31,7 +31,7 @@ This document summarizes the test classes created and updated to improve code co
 **Status:** ✅ Complete
 
 ### 3. VendorProgramRequirementServiceTest.cls (9% → 100%)
-**Location:** `force-app/main/default/classes/services/VendorProgramRequirementServiceTest.cls`
+**Location:** `force-app/main/default/classes/VendorProgramRequirementServiceTest.cls`
 
 **Coverage:**
 - `searchVendorProgramRequirements`
@@ -45,7 +45,7 @@ This document summarizes the test classes created and updated to improve code co
 **Status:** ✅ Complete
 
 ### 4. AllLinkedEngineMustBeActiveRuleTest.cls (0% → 100%)
-**Location:** `force-app/main/default/classes/rules/AllLinkedEngineMustBeActiveRuleTest.cls`
+**Location:** `force-app/main/default/classes/AllLinkedEngineMustBeActiveRuleTest.cls`
 
 **Coverage:**
 - Active parent engine (should pass)
@@ -57,7 +57,7 @@ This document summarizes the test classes created and updated to improve code co
 **Status:** ✅ Complete
 
 ### 5. AllChildRequirementsMustBeActiveRuleTest.cls (0% → 100%)
-**Location:** `force-app/main/default/classes/rules/AllChildRequirementsMustBeActiveRuleTest.cls`
+**Location:** `force-app/main/default/classes/AllChildRequirementsMustBeActiveRuleTest.cls`
 
 **Coverage:**
 - All active requirements (should pass)
@@ -69,7 +69,7 @@ This document summarizes the test classes created and updated to improve code co
 **Status:** ✅ Complete
 
 ### 6. AllTemplatesInReqSetMustBeActiveRuleTest.cls (0% → 100%)
-**Location:** `force-app/main/default/classes/rules/AllTemplatesInReqSetMustBeActiveRuleTest.cls`
+**Location:** `force-app/main/default/classes/AllTemplatesInReqSetMustBeActiveRuleTest.cls`
 
 **Coverage:**
 - All active templates (should pass)
@@ -82,7 +82,7 @@ This document summarizes the test classes created and updated to improve code co
 **Status:** ✅ Complete
 
 ### 7. AllStatusRuleGroupMustBeActiveRuleTest.cls (0% → 100%)
-**Location:** `force-app/main/default/classes/rules/AllStatusRuleGroupMustBeActiveRuleTest.cls`
+**Location:** `force-app/main/default/classes/AllStatusRuleGroupMustBeActiveRuleTest.cls`
 
 **Coverage:**
 - All active groups (should pass)
@@ -95,7 +95,7 @@ This document summarizes the test classes created and updated to improve code co
 **Status:** ✅ Complete
 
 ### 8. RecipientGroupEmailRequestDTOTest.cls (0% → 100%)
-**Location:** `force-app/main/default/classes/dto/RecipientGroupEmailRequestDTOTest.cls`
+**Location:** `force-app/main/default/classes/RecipientGroupEmailRequestDTOTest.cls`
 
 **Coverage:**
 - DTO instantiation
@@ -161,14 +161,14 @@ This document summarizes the test classes created and updated to improve code co
 ## Files Created
 
 ### Test Classes
-1. `force-app/main/default/classes/repository/ZipCodeTerritoryAssignmentTest.cls`
-2. `force-app/main/default/classes/util/VendorProgramStatusMapperTest.cls`
-3. `force-app/main/default/classes/services/VendorProgramRequirementServiceTest.cls`
-4. `force-app/main/default/classes/rules/AllLinkedEngineMustBeActiveRuleTest.cls`
-5. `force-app/main/default/classes/rules/AllChildRequirementsMustBeActiveRuleTest.cls`
-6. `force-app/main/default/classes/rules/AllTemplatesInReqSetMustBeActiveRuleTest.cls`
-7. `force-app/main/default/classes/rules/AllStatusRuleGroupMustBeActiveRuleTest.cls`
-8. `force-app/main/default/classes/dto/RecipientGroupEmailRequestDTOTest.cls`
+1. `force-app/main/default/classes/ZipCodeTerritoryAssignmentTest.cls`
+2. `force-app/main/default/classes/VendorProgramStatusMapperTest.cls`
+3. `force-app/main/default/classes/VendorProgramRequirementServiceTest.cls`
+4. `force-app/main/default/classes/AllLinkedEngineMustBeActiveRuleTest.cls`
+5. `force-app/main/default/classes/AllChildRequirementsMustBeActiveRuleTest.cls`
+6. `force-app/main/default/classes/AllTemplatesInReqSetMustBeActiveRuleTest.cls`
+7. `force-app/main/default/classes/AllStatusRuleGroupMustBeActiveRuleTest.cls`
+8. `force-app/main/default/classes/RecipientGroupEmailRequestDTOTest.cls`
 
 ### Metadata Files
 All test classes have corresponding `.cls-meta.xml` files created with:

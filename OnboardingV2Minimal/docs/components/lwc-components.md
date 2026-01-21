@@ -664,7 +664,20 @@ All components follow a consistent pattern and are dynamically rendered by `onbo
 
 ### vendorProgramOnboardingVendor
 
-**Purpose:** Stage component for selecting/creating a vendor.
+**Location:** `force-app/main/default/lwc/vendorProgramOnboardingVendor/`
+
+**Purpose:** Stage component for searching existing vendors or creating a new vendor, then advancing to the next step.
+
+**Key Features:**
+
+- Debounced vendor search (min 2 characters)
+- Creates a vendor if no match is found and immediately advances
+- Dispatches `next` with the selected/created vendor ID
+
+**Dependencies:**
+
+- `VendorOnboardingWizardController.searchVendors()`
+- `VendorOnboardingWizardController.createVendor()`
 
 **Context:**
 
@@ -925,7 +938,27 @@ All components follow a consistent pattern and are dynamically rendered by `onbo
 
 ### vendorProgramOnboardingVendorProgramRecipientGroup
 
-**Purpose:** Stage component for assigning a recipient group.
+**Location:** `force-app/main/default/lwc/vendorProgramOnboardingVendorProgramRecipientGroup/`
+
+**Purpose:** Stage component for linking a recipient group to a vendor program (search existing or create new).
+
+**API:**
+
+- `@api vendorProgramId` - Vendor program ID to link
+- `@api stepNumber` - Step number for display
+
+**Key Features:**
+
+- Search recipient groups (min 2 characters)
+- Link an existing group to the vendor program
+- Create a new group and link it immediately
+- Dispatches `next` with `vendorProgramRecipientGroupId`
+
+**Dependencies:**
+
+- `VendorOnboardingWizardController.searchRecipientGroups()`
+- `VendorOnboardingWizardController.createRecipientGroup()`
+- `VendorOnboardingWizardController.createVendorProgramRecipientGroupLink()`
 
 ### vendorProgramOnboardingRecipientGroup
 
@@ -1893,19 +1926,19 @@ Add to a Vendor Program record page:
 
 ### onboardingOrderStatusViewer
 
-**Location:** `force-app/unpackaged/lwc/onboardingOrderStatusViewer/`
+**Location:** `force-app/main/default/lwc/onboardingOrderStatusViewer/`
 
 **Purpose:** Displays order status for onboarding records.
 
 ### onboardingStatusRuleForm
 
-**Location:** `force-app/unpackaged/lwc/onboardingStatusRuleForm/`
+**Location:** `force-app/main/default/lwc/onboardingStatusRuleForm/`
 
 **Purpose:** Form for creating/editing status rules.
 
 ### onboardingECC
 
-**Location:** `force-app/unpackaged/lwc/onboardingECC/`
+**Location:** `force-app/main/default/lwc/onboardingECC/`
 
 **Purpose:** External Contact Credential management component.
 
@@ -2870,13 +2903,13 @@ onboardingApplicationFlow
 Location: force-app/main/default/lwc/onboardingApplicationFlow/
 Purpose: Generic onboarding application flow component.
 onboardingOrderStatusViewer
-Location: force-app/unpackaged/lwc/onboardingOrderStatusViewer/
+Location: force-app/main/default/lwc/onboardingOrderStatusViewer/
 Purpose: Displays order status for onboarding records.
 onboardingStatusRuleForm
-Location: force-app/unpackaged/lwc/onboardingStatusRuleForm/
+Location: force-app/main/default/lwc/onboardingStatusRuleForm/
 Purpose: Form for creating/editing status rules.
 onboardingECC
-Location: force-app/unpackaged/lwc/onboardingECC/
+Location: force-app/main/default/lwc/onboardingECC/
 Purpose: External Contact Credential management component.
 Component Communication
 Event Flow
@@ -3019,7 +3052,7 @@ Used by `onboardingStatusRuleList` LWC.
 
 ### OnboardingAppActivationService
 
-**Location:** `force-app/main/default/classes/services/OnboardingAppActivationService.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppActivationService.cls`
 
 **Purpose:** Service for activation actions with direct LWC integration (consolidated from controller and orchestrator).
 
@@ -3053,13 +3086,13 @@ Used by `onboardingStatusRuleList` LWC.
 
 ### OnboardingAppVendorProgramReqHdlr
 
-**Location:** `force-app/main/default/classes/handlers/OnboardingAppVendorProgramReqHdlr.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppVendorProgramReqHdlr.cls`
 
 **Purpose:** Handler for vendor program requirement events.
 
 ### OnboardingStatusTrackerHandler
 
-**Location:** `force-app/main/default/classes/handlers/OnboardingStatusTrackerHandler.cls`
+**Location:** `force-app/main/default/classes/OnboardingStatusTrackerHandler.cls`
 
 **Purpose:** Tracks onboarding status changes.
 
@@ -3105,7 +3138,7 @@ Used by `onboardingStatusRuleList` LWC.
 
 ### OnboardingAppActivationAction
 
-**Location:** `force-app/main/default/classes/actions/OnboardingAppActivationAction.cls`
+**Location:** `force-app/main/default/classes/OnboardingAppActivationAction.cls`
 
 **Purpose:** Action class for activating records.
 
@@ -3120,27 +3153,47 @@ Used by `onboardingStatusRuleList` LWC.
 
 ## Repositories
 
-Repository classes follow the pattern `*Repo.cls` and handle data access operations:
+Repository classes live in `force-app/main/default/classes` and use the `*Repository.cls` suffix.
+Examples:
 
-- `OnboardingAppVendorProgramReqRepo` - Vendor program requirement data access
+- `OnboardingApplicationRepository`
+- `OnboardingMetricsRepository`
+- `OnboardingRepository`
+- `OnboardingRulesRepository`
+- `OnboardingStageDependencyRepository`
+- `VendorCustomizationRepository`
+- `VendorOnboardingWizardRepository`
+- `FollowUpRuleRepository`
+- `RequirementFieldValueRepository`
+- `OnboardingAppECCRepository`
 
 ## DTOs (Data Transfer Objects)
 
-DTO classes in `dto/` package provide structured data transfer:
+DTOs are defined as inner classes in services/controllers to shape responses for LWC and Flow.
+Common DTOs include:
 
-- Various DTO classes for data transfer between layers
+- `OnboardingApplicationService.RequirementDTO`
+- `OnboardingHomeDashboardController.OnboardingDTO`
+- `OnboardingStageDependencyService.StageDependencyValidationDTO`
+- `VendorOnboardingWizardController.ContactRoleDTO`
 
 ## Helpers
 
-Helper classes in `helpers/` package provide utility functions:
+Helper classes live alongside other Apex classes in `force-app/main/default/classes`.
+Examples:
 
-- Various helper classes for common operations
+- `DefaultValueHelper`
+- `EmailCommTerritoryRoleHelper`
+- `PicklistHelper`
+- `ValidationHelper`
 
 ## Jobs
 
-Scheduled and batch job classes in `jobs/` package:
+Scheduled and batch job classes live alongside other Apex classes.
+Examples:
 
-- Various job classes for background processing
+- `EmailCommTerritoryRoleSyncJob`
+- `EmailTemplateSyncJob`
 
 ## Test Classes
 
@@ -3156,341 +3209,46 @@ Test classes follow naming convention `*Test.cls`:
 
 ## Class Organization
 
-Context Object
+### Context Object
+
 Stage components receive a context object:
 
+```json
 {
-vendorProgramId: String,
-stageId: String
-}ss logic in service classes 2. **Controllers**: Thin controllers that delegate to services 3. **Orchestrators**: Coordinate multiple services 4. **Repositories**: Data access abstraction 5. **Sharing**: Use `with sharing` for security 6. **Error Handling**: Proper exception handling 7. **Testing**: Comprehensive test coverage
+  "vendorProgramId": "Id",
+  "stageId": "Id"
+}
+```
 
-## Related Documentation
+### Layering Guidelines
 
-- [LWC Components](./lwc-components.md)
-- [API Reference](../api/apex-api.md)
-- [Architecture Overview](../architecture/overview.md)
+- Services handle core logic and DML.
+- Controllers are thin and delegate to services.
+- Orchestrators coordinate multiple services.
+- Repositories encapsulate data access.
+- Use `with sharing` for security.
+- Apply defensive error handling.
+- Maintain comprehensive test coverage.
 
-Navigation Events
+## Navigation Events
+
 Stage components fire custom events:
-next - Request to advance to next stage
-back - Request to return to previous stage
-Best Practices
-Stage Components: Should be self-contained and handle their own data operations
-Error Handling: All components should handle errors gracefully
-Loading States: Show loading indicators during async operations
-Progress Persistence: Stage components should trigger progress saves
-Event Communication: Use custom events for parent-child communication
-Related Documentation
-Onboarding Process Flow
-Application Flow Engine
-Apex Classes
 
-## 6. Create docs/components/apex-classes.md
-
-Create `docs/components/apex-classes.md`:
-
-# Apex Classes
-
-## Service Layer
-
-### OnboardingApplicationService
-
-**Location:** `force-app/main/default/classes/OnboardingApplicationService.cls`
-
-**Purpose:** Core service for managing onboarding application processes, stages, and progress.
-
-**Key Methods:**
-
-- `getStagesForProcess(Id processId)` - Returns stages for a process, ordered by display order
-- `getProcessDetails(Id processId)` - Returns process details
-- `saveProgress(Id processId, Id vendorProgramId, Id stageId)` - Saves progress and logs stage completion
-- `getProgress(Id vendorProgramId, Id processId)` - Retrieves saved progress
-- `getProcessIdForVendorProgram(Id vendorProgramId)` - Resolves process ID for a vendor program
-
-**Usage:**
-Primary service used by `onboardingFlowEngine` LWC component.
-
-### OnboardingRulesService
-
-**Location:** `force-app/main/default/classes/OnboardingRulesService.cls`
-
-**Purpose:** Service for managing onboarding status rules and requirements.
-
-**Key Methods:**
-
-- `getRulesEngineRecords(Id engineId)` - Returns rules for a rules engine
-- `createOrUpdateRule(Onboarding_Status_Rule__c rule)` - Creates or updates a rule
-- `deleteRule(Id ruleId)` - Deletes a rule
-- `getRequirementsByVPR(Id onboardingId)` - Returns requirements mapped by Vendor Program Requirement ID
-- `getVendorProgramId(Id onboardingId)` - Gets vendor program ID from onboarding
-- `getVendorProgramGroupIds(Id vendorProgramId)` - Gets group IDs for a vendor program
-- `getRulesForGroups(List<Id> groupIds)` - Gets rules for vendor program groups
-
-**Usage:**
-Used by status evaluation engine and rules management UI.
-
-### OnboardingStatusEvaluator
-
-**Location:** `force-app/main/default/classes/OnboardingStatusEvaluator.cls`
-
-**Purpose:** Evaluates onboarding status based on rules engine configuration.
-
-**Key Methods:**
-
-- `evaluateAndApplyStatus(Onboarding__c onboarding)` - Evaluates rules and updates onboarding status
-
-**Flow:**
-
-1. Gets requirements for onboarding
-2. Gets vendor program ID
-3. Gets vendor program group IDs
-4. Gets rules for groups
-5. Evaluates each rule
-6. Updates onboarding status when rule passes
-
-**Usage:**
-Called from flows when onboarding records change.
-
-### OnboardingRuleEvaluator
-
-**Location:** `force-app/main/default/classes/OnboardingRuleEvaluator.cls`
-
-**Purpose:** Evaluates individual rules against requirement statuses.
-
-**Key Methods:**
-
-- `evaluateRule(Onboarding_Status_Rules_Engine__c rule, Map<Id, Onboarding_Requirement__c> reqByVPR)` - Evaluates a rule
-
-**Logic:**
-
-- Supports AND, OR, and Custom evaluation logic
-- Uses `OnboardingExpressionEngine` for custom expressions
-
-### OnboardingExpressionEngine
-
-**Location:** `force-app/main/default/classes/OnboardingExpressionEngine.cls`
-
-**Purpose:** Parses and evaluates custom expression logic for rules.
-
-**Key Methods:**
-
-- `evaluate(String expression, Map<Id, Onboarding_Requirement__c> reqByVPR)` - Evaluates a custom expression
-
-**Expression Syntax:**
-Supports logical operators and requirement status checks.
-
-## Controllers
-
-### OnboardingRequirementsPanelController
-
-**Location:** `force-app/main/default/classes/OnboardingRequirementsPanelController.cls`
-
-**Purpose:** Controller for the onboarding requirements panel LWC.
-
-**Key Methods:**
-
-- `getRequirements(Id onboardingId)` - Returns requirements for an onboarding
-- `updateRequirementStatuses(List<Onboarding_Requirement__c> updates)` - Updates requirement statuses
-- `runRuleEvaluation(Id onboardingId)` - Triggers status re-evaluation
-
-**Usage:**
-Used by `onboardingRequirementsPanel` LWC.
-
-### OnboardingStatusRulesEngineController
-
-**Location:** `force-app/main/default/classes/OnboardingStatusRulesEngineController.cls`
-
-**Purpose:** Controller for the status rules engine management UI.
-
-**Key Methods:**
-
-- `getVendorProgramGroups()` - Returns vendor program groups for picklist
-- `getRequirementGroups()` - Returns requirement groups for picklist
-- `getRules(Id vendorProgramGroupId, Id requirementGroupId)` - Returns rules for selected groups
-- `saveRules(List<Onboarding_Status_Rule__c> rules)` - Saves rule changes
-
-**Usage:**
-Used by `onboardingStatusRulesEngine` LWC.
-
-### OnboardingStatusRuleController
-
-**Location:** `force-app/main/default/classes/OnboardingStatusRuleController.cls`
-
-**Purpose:** Controller for status rule list component.
-
-**Key Methods:**
-
-- `getRules(Id vendorProgramGroupId)` - Returns rules for a vendor program group
-
-**Usage:**
-Used by `onboardingStatusRuleList` LWC.
-
-### OnboardingAppActivationService
-
-**Location:** `force-app/main/default/classes/services/OnboardingAppActivationService.cls`
-
-**Purpose:** Service for activation actions with direct LWC integration (consolidated from controller and orchestrator).
-
-**Key Methods:**
-
-- `activate(Id recordId, String objectApiName)` - @AuraEnabled method for direct LWC calls
-- Activation logic for various object types
-
-**Note:** The `OnboardingAppActivationController` and `OnboardingAppActivationOrchestrator` have been consolidated into this service.
-
-## Services (Consolidated)
-
-**Note:** Most orchestrators have been consolidated into services. Services now expose @AuraEnabled methods for direct LWC integration.
-
-### Consolidated Domain Services
-
-**VendorDomainService** - Vendor, VendorProgram, VendorProgramGroup operations
-**RequirementDomainService** - VendorProgramRequirement, VendorProgramRequirementGroup operations
-**CommunicationDomainService** - CommunicationTemplate, RecipientGroup operations
-**VendorOnboardingService** - Vendor eligibility and onboarding logic
-
-**Note:** The `VendorOnboardingWizardService` facade has been removed. Controllers now call domain services directly.
-
-## Handlers
-
-### OnboardingAppRuleEngineHandler
-
-**Location:** `force-app/main/default/classes/OnboardingAppRuleEngineHandler.cls`
-
-**Purpose:** Handler for rule engine events and triggers.
-
-### OnboardingAppVendorProgramReqHdlr
-
-**Location:** `force-app/main/default/classes/handlers/OnboardingAppVendorProgramReqHdlr.cls`
-
-**Purpose:** Handler for vendor program requirement events.
-
-### OnboardingStatusTrackerHandler
-
-**Location:** `force-app/main/default/classes/handlers/OnboardingStatusTrackerHandler.cls`
-
-**Purpose:** Tracks onboarding status changes.
-
-## Validation Rules
-
-### OnboardingAppRuleRegistry
-
-**Location:** `force-app/main/default/classes/OnboardingAppRuleRegistry.cls`
-
-**Purpose:** Central registry of validation rules for onboarding application objects.
-
-**Key Methods:**
-
-- `getRules()` - Returns map of object API names to validation rule lists
-
-**Registered Rules:**
-
-- `Vendor_Program_Recipient_Group__c`:
-  - `RequireParentVersionOnActivationRule`
-  - `OnlyOneActiveRecGrpPerPrgrmRule`
-  - `RecipientAndProgramMustBeActiveRule`
-  - `PreventDupRecGrpAssignmentRule`
-
-### OnboardingAppValidationRule
-
-**Location:** `force-app/main/default/classes/OnboardingAppValidationRule.cls`
-
-**Purpose:** Interface for validation rules.
-
-**Key Methods:**
-
-- `validate(SObject record)` - Validates a record
-- `getErrorMessage()` - Returns error message
-
-### Rule Implementations
-
-- **RequireParentVersionOnActivationRule** - Requires parent version on activation
-- **OnlyOneActiveRecGrpPerPrgrmRule** - Ensures only one active recipient group per program
-- **RecipientAndProgramMustBeActiveRule** - Validates recipient and program are active
-- **PreventDupRecGrpAssignmentRule** - Prevents duplicate recipient group assignments
-
-## Actions
-
-### OnboardingAppActivationAction
-
-**Location:** `force-app/main/default/classes/actions/OnboardingAppActivationAction.cls`
-
-**Purpose:** Action class for activating records.
-
-**Key Methods:**
-
-- `activate(List<Request> requestList)` - Activates multiple records
-
-**Request Class:**
-
-- `recordId` - Record ID to activate
-- `objectApiName` - Object API name
-
-## Repositories
-
-Repository classes follow the pattern `*Repo.cls` and handle data access operations:
-
-- `OnboardingAppVendorProgramReqRepo` - Vendor program requirement data access
-
-## DTOs (Data Transfer Objects)
-
-DTO classes in `dto/` package provide structured data transfer:
-
-- Various DTO classes for data transfer between layers
-
-## Helpers
-
-Helper classes in `helpers/` package provide utility functions:
-
-- Various helper classes for common operations
-
-## Jobs
-
-Scheduled and batch job classes in `jobs/` package:
-
-- Various job classes for background processing
-
-## Test Classes
-
-Test classes follow naming convention `*Test.cls`:
-
-- `OnboardingRulesServiceTest`
-- `OnboardingStatusEvaluatorTest`
-- `OnlyOneActiveRecGrpPerPrgrmRuleTest`
-- `PreventDupRecGrpAssignmentRuleTest`
-- `RecipientAndProgramMustBeActiveRuleTest`
-- `RequireParentVersionOnActivationRuleTest`
-- And many more...
-
-## Class Organization
-
-classes/
-├── actions/ # Action classes
-├── controllers/ # LWC controllers
-├── dto/ # Data transfer objects
-├── handlers/ # Event/trigger handlers
-├── helpers/ # Utility helpers
-├── jobs/ # Scheduled/batch jobs
-├── orchestrators/ # Orchestration logic
-├── repository/ # Data access layer
-├── resolver/ # Resolution logic
-├── services/ # Business logic services
-├── test/ # Test data factories
-├── util/ # Utilities
-└── wrappers/ # Wrapper classes
+- `next` - Request to advance to next stage
+- `back` - Request to return to previous stage
 
 ## Best Practices
 
-1. **Service Layer**: Business logic in service classes
-2. **Controllers**: Thin controllers that delegate to services
-3. **Orchestrators**: Coordinate multiple services
-4. **Repositories**: Data access abstraction
-5. **Sharing**: Use `with sharing` for security
-6. **Error Handling**: Proper exception handling
-7. **Testing**: Comprehensive test coverage
+- Stage components are self-contained and handle their own data operations.
+- Handle errors gracefully with user-friendly messaging.
+- Show loading states during async operations.
+- Persist progress after stage completion.
+- Use custom events for parent-child communication.
 
 ## Related Documentation
 
-- [LWC Components](./lwc-components.md)
+- [Onboarding Process](../processes/onboarding-process.md)
+- [Application Flow Engine](../processes/application-flow-engine.md)
+- [Apex Classes](./apex-classes.md)
 - [API Reference](../api/apex-api.md)
 - [Architecture Overview](../architecture/overview.md)

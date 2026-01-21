@@ -1022,19 +1022,18 @@
         <name>DCC_Reminder_Template</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>Reminder: Your installation for {!$Record.Vendor__c} is scheduled for {!FormattedStartDate}, but we still need your pre-installation survey completed.
-Please submit it now to avoid delays: {!$Setup.FSL_Settings__c.DCC_Typeform_URL__c}{!$Record.Id}
-For more info, visit: {!$Setup.FSL_Settings__c.DCC_Support_URL__c}</text>
+Please submit it now to avoid delays. Survey link pending.
+For more info, contact support.</text>
     </textTemplates>
     <textTemplates>
         <name>DCC_SMS_Template</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>Hello {!$Record.Contact.FirstName} {!$Record.Contact.LastName}, we are Direct Connect Connections, your installation partner for {!$Record.Vendor__c}. We have received your order and scheduled your installation for {!FormattedStartDate}.
 
-Before your appointment, please complete this pre-installation survey:
-{!$Setup.FSL_Settings__c.DCC_Typeform_URL__c}{!$Record.Id}
+Before your appointment, please complete this pre-installation survey. Survey link pending.
 
 
-For assistance, please visit {!$Setup.FSL_Settings__c.DCC_Support_URL__c}</text>
+For assistance, please contact support.</text>
     </textTemplates>
     <textTemplates>
         <name>Email_Notification_Body</name>

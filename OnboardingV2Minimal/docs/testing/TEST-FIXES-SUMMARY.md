@@ -109,10 +109,10 @@ All identified test failures have been addressed:
 
 ## Files Modified
 
-1. `force-app/main/default/classes/test/AVOTriggerHandlerTest.cls`
-2. `force-app/main/default/classes/handlers/RequirementSetTriggerHandler.cls`
-3. `force-app/main/default/classes/test/FollowUpProcessorSchedulerTest.cls`
-4. `force-app/main/default/classes/jobs/EmailCommTerritoryRoleSyncJobTest.cls`
-5. `force-app/main/default/classes/jobs/EmailCommTerritoryRoleSyncJob.cls`
-6. `force-app/main/default/classes/test/FollowUpDetectionServiceTest.cls`
+1. `force-app/main/default/classes/AVOTriggerHandlerTest.cls`
+2. `force-app/main/default/classes/RequirementSetTriggerHandler.cls`
+3. `force-app/main/default/classes/FollowUpProcessorSchedulerTest.cls`
+4. `force-app/main/default/classes/EmailCommTerritoryRoleSyncJobTest.cls`
+5. `force-app/main/default/classes/EmailCommTerritoryRoleSyncJob.cls`
+6. `force-app/main/default/classes/FollowUpDetectionServiceTest.cls`
 

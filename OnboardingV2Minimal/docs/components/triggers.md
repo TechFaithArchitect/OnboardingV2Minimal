@@ -15,7 +15,7 @@ All triggers follow the handler pattern:
 
 ### EnforceSingleTargetProgramPerGroup
 
-**Location:** `force-app/unpackaged/triggers/EnforceSingleTargetProgramPerGroup.trigger`
+**Location:** `force-app/main/default/triggers/EnforceSingleTargetProgramPerGroup.trigger`
 
 **Object:** Vendor_Program_Group__c
 
@@ -23,11 +23,67 @@ All triggers follow the handler pattern:
 
 **Purpose:** Ensures only one target program per group.
 
-**Handler:** Logic implemented directly in trigger (consider refactoring to handler)
+**Handler:** `EnforceSingleTargetProgramPerGroupTriggerHandler.beforeInsertOrUpdate(...)`
 
-**Logic:**
-- Validates that only one target program is assigned per group
-- Prevents duplicate target program assignments
+### OnboardingRequirementTrigger
+
+**Location:** `force-app/main/default/triggers/OnboardingRequirementTrigger.trigger`
+
+**Object:** Onboarding_Requirement__c
+
+**Events:** After Insert, After Update
+
+**Purpose:** Detects status changes and evaluates follow-up rules.
+
+**Handler:** `OnboardingRequirementTriggerHandler.handleAfterSave(...)`
+
+### RequirementFieldValueTrigger
+
+**Location:** `force-app/main/default/triggers/RequirementFieldValueTrigger.trigger`
+
+**Object:** Requirement_Field_Value__c
+
+**Events:** After Insert, After Update
+
+**Purpose:** Enqueues async validation for cross-field and external validation types.
+
+**Handler:** `RequirementFieldValueTriggerHandler.handleAfterSave(...)`
+
+### TerritoryAssignmentsTrigger
+
+**Location:** `force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger`
+
+**Object:** Territory_Assignments__c
+
+**Events:** After Insert, After Update
+
+**Purpose:** Syncs communication territory roles for assigned users.
+
+**Handler:** `EmailCommTerritoryRoleHelper.syncRoles(...)`
+
+### VendorProgramGroupMemberTrigger
+
+**Location:** `force-app/main/default/triggers/VendorProgramGroupMemberTrigger.trigger`
+
+**Object:** Vendor_Program_Group_Member__c
+
+**Events:** Before Insert, Before Update
+
+**Purpose:** Applies onboarding rule engine logic for group member changes.
+
+**Handler:** `OnboardingAppRuleEngineHandler.apply(...)`
+
+### VersioningTrigger
+
+**Location:** `force-app/main/default/triggers/VersioningTrigger.trigger`
+
+**Object:** Vendor_Customization__c
+
+**Events:** Before Insert, Before Update, After Insert
+
+**Purpose:** Applies versioning logic and post-insert updates for vendor programs.
+
+**Handler:** `VersioningTriggerHandler.run(...)`, `VersioningTriggerHandler.afterInsert(...)`
 
 ## Best Practices
 
@@ -60,11 +116,3 @@ trigger ExampleTrigger on Object__c (before insert, before update) {
 
 - [Apex Classes](./apex-classes.md)
 - [Architecture Overview](../architecture/overview.md)
-
-Bulkification
-Always process collections, not single records
-Use maps for efficient lookups
-Minimize SOQL queries in loops
-Related Documentation
-Apex Classes
-Architecture Overview

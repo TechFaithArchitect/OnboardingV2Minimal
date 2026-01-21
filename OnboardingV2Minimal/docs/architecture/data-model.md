@@ -620,5 +620,4 @@ Activation rules execute during the activation process (not on save) and prevent
 - [Architecture Overview](./overview.md) - Design patterns and system architecture
 - [Custom Objects Details](../objects/custom-objects.md) - Detailed object field definitions
 - [Onboarding Process Flow](../processes/onboarding-process.md) - Process workflows
-- [Activation Guards Analysis](../reports/security/activation-guards-analysis.md) - Detailed analysis of activation guard classes and rules (historical report)
 - [Apex Classes](../components/apex-classes.md) - Apex class documentation including activation services

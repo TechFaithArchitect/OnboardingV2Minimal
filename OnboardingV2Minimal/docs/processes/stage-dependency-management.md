@@ -25,7 +25,7 @@ The "Campaign Member" object - individual required stages within a dependency ru
 
 **Key Fields:**
 
-- `Dependency__c` - Master-Detail to Onboarding_Application_Stage_Dependency\_\_c
+- `Stage_Dependency__c` - Master-Detail to Onboarding_Application_Stage_Dependency\_\_c
 - `Required_Stage__c` - The stage that must be completed
 - `Required__c` - Whether this specific member is required
 
@@ -143,7 +143,7 @@ Dependencies met?
    - Set `Required__c` to true
 
 2. Create `Onboarding_App_Stage_Dependency_Member__c` records:
-   - Set `Dependency__c` to the dependency rule created above
+   - Set `Stage_Dependency__c` to the dependency rule created above
    - Set `Required_Stage__c` to each stage that must be completed
    - Set `Required__c` to true for each member
 

@@ -205,7 +205,4 @@ When updating sharing rules:
 
 ## Related Documentation
 
-- [OWD Configuration Guide](../reports/Phase_0_OWD_Configuration_Guide.md)
-- [Sharing Rules Setup Guide](../reports/Phase_0_Sharing_Rules_Setup_Guide.md)
-- [Field-Level Security Documentation](./field-level-security.md) (to be created)
-
+- Field-Level Security Documentation (to be created)

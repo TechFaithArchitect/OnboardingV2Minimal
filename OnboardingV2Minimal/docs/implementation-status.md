@@ -71,8 +71,8 @@
 ### 6. EmailComm Cleanup ✅
 - ✅ Removed EmailComm send/log stack and Email_Communication_Log__c metadata
 - ⚠️ Remaining EmailComm-named territory role sync items for future review:
-  - `force-app/main/default/classes/helpers/EmailCommTerritoryRoleHelper.cls`
-  - `force-app/main/default/classes/jobs/EmailCommTerritoryRoleSyncJob.cls`
+  - `force-app/main/default/classes/EmailCommTerritoryRoleHelper.cls`
+  - `force-app/main/default/classes/EmailCommTerritoryRoleSyncJob.cls`
   - `force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger`
   - Tests: `EmailCommTerritoryRoleHelperTest`, `EmailCommTerritoryRoleSyncJobTest`
 

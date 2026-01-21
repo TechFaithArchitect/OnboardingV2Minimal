@@ -41,7 +41,6 @@ This performs a dry-run validation to catch issues before deployment.
 
 This script:
 - Deploys main/default metadata
-- Deploys unpackaged metadata
 - Provides clear success/failure feedback
 
 #### 5. Run Tests
@@ -85,11 +84,6 @@ sf org login web --alias myorg
 **Deploy main/default:**
 ```bash
 sf project deploy start --source-dir force-app/main/default --target-org myorg
-```
-
-**Deploy unpackaged:**
-```bash
-sf project deploy start --source-dir force-app/unpackaged --target-org myorg
 ```
 
 #### 4. Run Tests

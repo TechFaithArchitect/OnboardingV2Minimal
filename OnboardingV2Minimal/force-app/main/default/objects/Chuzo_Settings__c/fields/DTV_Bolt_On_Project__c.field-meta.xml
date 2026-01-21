@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>DTV_Bolt_On_Project__c</fullName>
-    <defaultValue>false</defaultValue>
-    <description>[PER-5261] Bolt On Project</description>
-    <label>DTV Bolt On Project</label>
-    <trackTrending>false</trackTrending>
-    <type>Checkbox</type>
-</CustomField>

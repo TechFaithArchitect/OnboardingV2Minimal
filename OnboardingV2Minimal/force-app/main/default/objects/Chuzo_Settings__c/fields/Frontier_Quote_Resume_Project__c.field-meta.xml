@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Frontier_Quote_Resume_Project__c</fullName>
-    <defaultValue>false</defaultValue>
-    <description>Frontier Quote Resume development flag [PER-1203]</description>
-    <label>Frontier Quote Resume Project</label>
-    <trackTrending>false</trackTrending>
-    <type>Checkbox</type>
-</CustomField>

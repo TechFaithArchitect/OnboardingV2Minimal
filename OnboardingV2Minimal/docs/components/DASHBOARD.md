@@ -136,7 +136,7 @@ The component uses `CreatedById` instead of `OwnerId` because:
 
 Deploy the Apex controller and LWC component:
 ```bash
-sfdx force:source:deploy -p force-app/main/default/classes/controllers/OnboardingHomeDashboardController.cls
+sfdx force:source:deploy -p force-app/main/default/classes/OnboardingHomeDashboardController.cls
 sfdx force:source:deploy -p force-app/main/default/lwc/onboardingHomeDashboard
 ```
 
@@ -188,7 +188,7 @@ Simply navigate to the Home page where the component is added. Data loads automa
 
 ### Apex Controller
 
-**File:** `force-app/main/default/classes/controllers/OnboardingHomeDashboardController.cls`
+**File:** `force-app/main/default/classes/OnboardingHomeDashboardController.cls`
 
 **Key Methods:**
 - `getMyActiveOnboarding(timeFilter, vendorIds, programIds, viewFilter)` - Returns active onboarding with filters

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>DTV_Popup_Project__c</fullName>
-    <defaultValue>false</defaultValue>
-    <description>Flag that triggers DTV Via Satellite Restriction check based on Zip Code [PER-5336]</description>
-    <label>DTV Popup Project</label>
-    <trackTrending>false</trackTrending>
-    <type>Checkbox</type>
-</CustomField>

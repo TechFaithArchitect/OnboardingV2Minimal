@@ -2,6 +2,8 @@
 
 Welcome to the Onboarding V2 documentation. This documentation provides comprehensive information about the onboarding system architecture, components, processes, and usage.
 
+**Flow status:** Flow implementations are being redesigned for V2 and will be rebuilt around the updated object model. Flow documentation will be refreshed after the redesign.
+
 ## Terminology
 
 - Dealer: Account record participating in onboarding.
@@ -19,7 +21,7 @@ Welcome to the Onboarding V2 documentation. This documentation provides comprehe
 - [Layered Architecture](./architecture/layers.md) - Application, Business Logic, and Domain layers
 - [Apex Patterns](./architecture/apex-patterns.md) - Apex architectural patterns and conventions
 - [Data Model](./architecture/data-model.md) - Custom objects, relationships, and data flow
-- [Variable Library](../VARIABLE_LIBRARY.md) - Variable naming conventions and standards for consistent code
+- [Variable Library](./VARIABLE_LIBRARY.md) - Variable naming conventions and standards for consistent code
 
 ### Components
 - [Lightning Web Components](./components/lwc-components.md) - UI components and their usage
@@ -65,18 +67,3 @@ Welcome to the Onboarding V2 documentation. This documentation provides comprehe
 ### API Reference
 - [Apex API](./api/apex-api.md) - Apex class API documentation
 - [Vendor Onboarding Wizard API](./api/vendor-onboarding-wizard-api.md) - Complete API reference for Vendor Program Onboarding Wizard methods
-
-## 📊 Reports & Historical Documentation
-
-For historical reports, changelogs, optimization summaries, and one-off documentation, see the [Reports Directory](./reports/README.md).
-
-Key reports include:
-- [Architecture Summary](./reports/architecture/ARCHITECTURE-SUMMARY.md) - Complete architecture overview with patterns
-- [Code Quality Review Summary](./reports/architecture/code-quality-review-summary.md) - SOLID principles compliance review
-- [Pattern Violations](./reports/architecture/pattern-violations.md) - Historical pattern violations and fixes
-- [Quick Reference Guide](./reports/QUICK-REFERENCE.md) - Quick reference for flow, context passing, and key methods
-
-## 🔍 Additional Resources
-
-- [Main README](../README.md)
-- [Existing Documentation](../Onboarding_Application_Documentation.txt)

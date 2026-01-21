@@ -8,6 +8,8 @@ The onboarding system follows a three-layer architecture pattern that separates 
 2. **Business Logic Layer** - Business rules and coordination
 3. **Domain Layer** - Data operations and domain logic
 
+**Note:** Flow implementations are being redesigned for V2. Flow names and references in this document are provisional and will be updated after the redesign.
+
 ## Layer Responsibilities
 
 ### Application Layer
@@ -141,7 +143,7 @@ The onboarding system follows a three-layer architecture pattern that separates 
 
 - `DOMAIN_Onboarding_SFL_CREATE_Order_and_Assign_Product_to_Order`
 - `DOMAIN_Onboarding_SFL_UPDATE_Onboarding_Record`
-- `DOMAIN_Onboarding_SFL_GET_Records`
+- `DOMAIN_Onboarding_SFL_Get_Records`
 - `DOMAIN_Onboarding_SFL_Send_Email_Notification`
 - `DOMAIN_External_Contact_Credential_SFL_CREATE_Contact_Training_Assignment_Record`
 - `DOMAIN_External_Contact_Credential_RCD_Before_Save_Flow_to_Prevent_Duplicates`
@@ -310,4 +312,4 @@ public with sharing class OnboardingAppECCRepository {
 - [Architecture Overview](./overview.md)
 - [Data Model](./data-model.md)
 - [Apex Patterns](./apex-patterns.md) - Detailed Apex class patterns
-- [Flows](../processes/flows.md)
+- [Flows](../components/flows.md)

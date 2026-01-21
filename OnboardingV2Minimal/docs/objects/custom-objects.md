@@ -343,7 +343,8 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 **Key Fields:**
 - `Name` (Text) - Component name
 - `Component_API_Name__c` (Text) - LWC component API name
-- `Description__c` (Text) - Component description
+- `Component_Type__c` (Picklist) - Component type/category
+- `Active__c` (Checkbox) - Active flag
 
 **Relationships:**
 - Referenced by Onboarding_Application_Stage__c
@@ -409,7 +410,7 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 
 **Key Fields:**
 - `Name` (Auto Number) - Auto-generated member identifier
-- `Dependency__c` (Master-Detail to Onboarding_Application_Stage_Dependency__c) - Parent dependency rule
+- `Stage_Dependency__c` (Master-Detail to Onboarding_Application_Stage_Dependency__c) - Parent dependency rule
 - `Required_Stage__c` (Lookup to Onboarding_Application_Stage__c) - The stage that must be completed
 - `Required__c` (Checkbox) - Whether this specific member is required (allows optional dependencies)
 
@@ -435,7 +436,9 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 **Key Fields:**
 - `Name` (Text) - Requirement name
 - `Training_System__c` (Lookup) - Training system
-- `Active__c` (Checkbox) - Active status
+- `Training_Type__c` (Picklist) - Training type
+- `Is_Required__c` (Checkbox) - Required flag
+- `Vendor_Customization__c` (Lookup) - Vendor program
 
 **Relationships:**
 - References Training_System__c
@@ -447,12 +450,12 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 **Key Fields:**
 - `Name` (Text) - Assignment name
 - `Contact__c` (Lookup) - Assigned contact
-- `Training_Requirement__c` (Lookup) - Training requirement
+- `Vendor_Training_Requirement__c` (Lookup) - Training requirement
 - `Status__c` (Picklist) - Assignment status
 
 **Relationships:**
 - Belongs to Contact
-- References Training_Requirement__c
+- References Training_Requirement__c (via `Vendor_Training_Requirement__c`)
 
 ### Training_System__c
 
@@ -486,9 +489,9 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 
 **Key Fields:**
 - `Name` (Text) - Credential name
-- `Contact__c` (Lookup) - Contact
+- `POE_Contact__c` (Lookup) - Contact
 - `External_Contact_Credential_Type__c` (Lookup) - Credential type
-- `Status__c` (Picklist) - Credential status
+- `POE_Process_Status__c` (Picklist) - Credential status
 - `Unique_Key__c` (Text) - Unique identifier (auto-generated)
 
 **Relationships:**
@@ -503,8 +506,9 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 
 **Key Fields:**
 - `Name` (Text) - Requirement name
-- `Credential_Type__c` (Lookup) - Required credential type
-- `Active__c` (Checkbox) - Active status
+- `External_Contact_Credential_Type__c` (Lookup) - Required credential type
+- `Is_Required__c` (Checkbox) - Required flag
+- `Vendor_Customization__c` (Lookup) - Vendor program
 
 **Relationships:**
 - References External_Contact_Credential_Type__c
@@ -514,11 +518,11 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 **Purpose**: Links required credentials to vendor programs.
 
 **Key Fields:**
-- `Vendor_Program__c` (Lookup to `Vendor_Customization__c`) - Vendor program
+- `External_Contact_Credential__c` (Lookup) - External contact credential
 - `Required_Credential__c` (Lookup) - Required credential
 
 **Relationships:**
-- References Vendor_Customization__c (via `Vendor_Program__c`)
+- References External_Contact_Credential__c
 - References Required_Credential__c
 
 ### External_Credential_Type_Dependency__c
@@ -527,7 +531,7 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 
 **Key Fields:**
 - `Credential_Type__c` (Lookup) - Credential type
-- `Dependent_Credential_Type__c` (Lookup) - Dependent credential type
+- `Depends_On__c` (Lookup) - Dependent credential type
 
 **Relationships:**
 - References External_Contact_Credential_Type__c (self-referential)
@@ -540,7 +544,7 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 
 **Key Fields:**
 - `Name` (Text) - Group name
-- `Active__c` (Checkbox) - Active status
+- `Is_Active__c` (Checkbox) - Active status
 
 **Relationships:**
 - Has many ECC_Field_Configuration_Group_Mapping__c
@@ -552,9 +556,9 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 **Key Fields:**
 - `Name` (Text) - Configuration name
 - `Field_API_Name__c` (Text) - Salesforce field API name
-- `Display_Label__c` (Text) - Display label
+- `Field_Label__c` (Text) - Display label
 - `Required__c` (Checkbox) - Whether field is required
-- `Display_Order__c` (Number) - Order in form
+- `Sort_Order__c` (Number) - Order in form
 
 **Relationships:**
 - Referenced by ECC_Field_Configuration_Group_Mapping__c
@@ -565,11 +569,12 @@ External overrides are audited in `Onboarding_External_Override_Log__c`.
 
 **Key Fields:**
 - `ECC_Field_Configuration_Group__c` (Lookup) - Configuration group
-- `ECC_Field_Display_Configuration__c` (Lookup) - Field configuration
+- `Vendor_Program__c` (Lookup) - Vendor program
+- `Vendor_Program_Name__c` (Text) - Vendor program name
 
 **Relationships:**
 - Belongs to ECC_Field_Configuration_Group__c
-- References ECC_Field_Display_Configuration__c
+- References Vendor_Program__c
 
 ## Related Documentation
 
