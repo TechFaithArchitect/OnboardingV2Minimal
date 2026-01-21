@@ -4,7 +4,6 @@
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
     <description>If checked, indicates that a renewal notification message would be sent on the renewal notification date.</description>
-    <externalId>false</externalId>
     <label>Send Renewal Notification</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

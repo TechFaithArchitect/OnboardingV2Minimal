@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>The order from which this contract was created</description>
-    <externalId>false</externalId>
     <label>Order</label>
     <referenceTo>Order</referenceTo>
     <relationshipLabel>Contracts</relationshipLabel>

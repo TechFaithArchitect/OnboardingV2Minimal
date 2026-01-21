@@ -3,7 +3,6 @@
     <fullName>Vendor_Program_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Associates the rules engine to a specific vendor program group.</description>
-    <externalId>false</externalId>
     <label>Vendor Program Group</label>
     <referenceTo>Vendor_Program_Group__c</referenceTo>
     <relationshipLabel>Onboarding Status Rules Engines</relationshipLabel>

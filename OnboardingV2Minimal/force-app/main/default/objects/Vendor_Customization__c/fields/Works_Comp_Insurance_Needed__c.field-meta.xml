@@ -3,7 +3,6 @@
     <fullName>Works_Comp_Insurance_Needed__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates workers’ compensation coverage is required for this program.</description>
-    <externalId>false</externalId>
     <label>Work&apos;s Comp Insurance Needed</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

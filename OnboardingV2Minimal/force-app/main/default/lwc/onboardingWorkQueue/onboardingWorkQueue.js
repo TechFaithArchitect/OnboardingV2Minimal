@@ -287,4 +287,3 @@ export default class OnboardingWorkQueue extends LightningElement {
         );
     }
 }
-

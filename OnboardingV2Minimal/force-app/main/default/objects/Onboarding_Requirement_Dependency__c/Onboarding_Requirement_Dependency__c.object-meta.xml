@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Defines prerequisite relationships between Onboarding_Requirement__c records, ensuring certain requirements must be completed before others can be started or approved. Example: A dependency might specify that &quot;Insurance Certificate&quot; requirement (Onboarding_Requirement__c) cannot be approved until the &quot;Business License&quot; requirement (Dependent_Requirement__c) has status &quot;Approved&quot;. This enforces business rules where one requirement logically depends on another. Dependencies are evaluated during status updates and can block requirement progression, ensuring data integrity and proper workflow sequencing. Used by validation logic and status evaluation to enforce prerequisite completion.</description>
+    <description>Junction object to represent dependency relationships between onboarding requirements (e.g., Requirement A blocks Requirement B).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Onboarding Requirement Dependencies</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

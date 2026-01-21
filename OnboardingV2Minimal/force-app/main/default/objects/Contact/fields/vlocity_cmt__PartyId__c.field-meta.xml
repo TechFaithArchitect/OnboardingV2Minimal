@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>One-to-One relationship to Party Object</description>
-    <externalId>false</externalId>
     <label>Party</label>
     <referenceTo>vlocity_cmt__Party__c</referenceTo>
     <relationshipLabel>Contacts</relationshipLabel>

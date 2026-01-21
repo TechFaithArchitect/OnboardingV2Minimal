@@ -3,7 +3,6 @@
     <fullName>POE_Terms_and_Conditions_Accepted__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Used by Terms &amp; Conditions public page and POETermsAndConditionsController to store user T&amp;C confirmation. (PER-3261)</description>
-    <externalId>false</externalId>
     <label>Terms and Conditions Accepted</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

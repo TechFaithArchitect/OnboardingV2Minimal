@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Individual required stage within an Onboarding_Application_Stage_Dependency__c dependency rule. Acts as the &quot;Campaign Member&quot; in the Campaign/Campaign Member pattern, allowing multiple prerequisite stages to be specified per dependency. Example: A dependency rule &quot;Requirement Setup Requires Vendor Selection&quot; might have two members: (1) Required_Stage__c=&quot;Select Vendor&quot; (Stage 1) and (2) Required_Stage__c=&quot;Select Vendor Program&quot; (Stage 2). The parent dependency&apos;s Logic_Type__c determines how members are evaluated (ALL requires all members complete, ANY requires at least one). Multiple members enable complex prerequisite chains where a stage might require completion of several earlier stages before it becomes accessible.</description>
+    <description>Defines member stages participating in onboarding stage dependency rules.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -163,7 +162,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Onboarding App Stage Dependency Members</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

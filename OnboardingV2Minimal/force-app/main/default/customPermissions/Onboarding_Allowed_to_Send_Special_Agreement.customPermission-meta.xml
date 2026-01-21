@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>This Permission Set Allows Users to Send the Chuzo Agreement without personal Guarantee during onboarding.</description>
+    <isLicensed>false</isLicensed>
+    <label>Onboarding Allowed to Send Special Agreement</label>
+</CustomPermission>

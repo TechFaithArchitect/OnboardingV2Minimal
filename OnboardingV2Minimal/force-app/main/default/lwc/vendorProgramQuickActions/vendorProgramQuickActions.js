@@ -401,4 +401,3 @@ export default class VendorProgramQuickActions extends NavigationMixin(Lightning
         this.dispatchEvent(evt);
     }
 }
-

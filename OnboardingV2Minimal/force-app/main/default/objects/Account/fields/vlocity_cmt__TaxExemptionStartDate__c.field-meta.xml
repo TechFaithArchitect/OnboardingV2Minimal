@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__TaxExemptionStartDate__c</fullName>
     <deprecated>false</deprecated>
     <description>The date from which tax exemption is valid.</description>
-    <externalId>false</externalId>
     <label>Tax Exemption Start</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

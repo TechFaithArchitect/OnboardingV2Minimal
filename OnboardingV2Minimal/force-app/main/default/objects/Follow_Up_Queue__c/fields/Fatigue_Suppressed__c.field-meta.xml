@@ -3,7 +3,6 @@
     <fullName>Fatigue_Suppressed__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates the follow-up is paused due to fatigue or suppression window.</description>
-    <externalId>false</externalId>
     <label>Fatigue Suppressed</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

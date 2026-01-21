@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>ID of the premises at which this customer may need services. Part of the service address definition of a customer or service account.</description>
-    <externalId>false</externalId>
     <label>Premises</label>
     <referenceTo>vlocity_cmt__Premises__c</referenceTo>
     <relationshipLabel>Accounts</relationshipLabel>

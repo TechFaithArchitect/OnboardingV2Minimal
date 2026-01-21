@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Availability_Period__c</fullName>
+    <description>When assigning a new work order that has the “Assign to Dealer Immediately“ checked, the assignment process will search for availability in the next x days [PVFSL-190]</description>
+    <externalId>false</externalId>
+    <label>Availability Period</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

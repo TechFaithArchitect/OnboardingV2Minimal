@@ -3,7 +3,6 @@
     <fullName>Chuzo_Member__c</fullName>
     <defaultValue>false</defaultValue>
     <description>This field indicates if this user is member of Chuzo community, and it’s maintained by POE_UpdateUserCommunityMembership [PER-3218].</description>
-    <externalId>false</externalId>
     <label>Chuzo Member</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

@@ -3,7 +3,6 @@
     <fullName>Onboarding_Application_Process__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Process definition the completed stage belongs to.</description>
-    <externalId>false</externalId>
     <label>Onboarding Application Process</label>
     <referenceTo>Onboarding_Application_Process__c</referenceTo>
     <relationshipLabel>Onboarding Application Stage Completion</relationshipLabel>

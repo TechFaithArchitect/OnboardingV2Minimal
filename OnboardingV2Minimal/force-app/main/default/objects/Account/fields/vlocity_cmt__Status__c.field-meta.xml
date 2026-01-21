@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__Status__c</fullName>
     <deprecated>false</deprecated>
     <description>The status of the customer&apos;s account such as active, inactive, suspended, pending or expired.</description>
-    <externalId>false</externalId>
     <label>Status</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Metadata for individual requirement fields within Onboarding_Requirement__c records. Defines field properties (API name, data type, required flag, display order), grouping via Requirement_Field_Group__c, and links to Requirement_Field_Validation_Rule__mdt for validation. Example: A Requirement_Field record for &quot;Insurance Policy Number&quot; might have Field_API_Name__c=&quot;Policy_Number__c&quot;, Data_Type__c=&quot;Text&quot;, Required__c=true, and link to a validation rule that enforces a 10-digit format. When users fill in requirement data, values are stored in Requirement_Field_Value__c records, and validation rules automatically check the format, creating Validation_Failure__c records if validation fails.</description>
+    <description>Metadata for individual requirement fields; captures API name, data type, required flag, grouping, and validation linkage.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Requirement Fields</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

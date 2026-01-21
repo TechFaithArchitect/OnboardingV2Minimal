@@ -264,4 +264,3 @@ export default class AdobeSyncFailuresTab extends NavigationMixin(LightningEleme
         }));
     }
 }
-

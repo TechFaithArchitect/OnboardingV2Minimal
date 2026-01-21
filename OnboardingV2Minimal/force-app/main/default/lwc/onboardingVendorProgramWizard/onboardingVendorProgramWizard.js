@@ -768,5 +768,3 @@ export default class OnboardingVendorProgramWizard extends LightningElement {
         this.isProceedingWithVendorProgram = false;
     }
 }
-
-

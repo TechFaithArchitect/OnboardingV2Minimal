@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Warranty_Period__c</fullName>
+    <description>Number of days for the warranty period. This is used to display if an order is under the warranty period or not. (PVFSL-53)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Number of days for the warranty period. This is used to display if an order is under the warranty period or not.</inlineHelpText>
+    <label>Warranty Period</label>
+    <precision>8</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

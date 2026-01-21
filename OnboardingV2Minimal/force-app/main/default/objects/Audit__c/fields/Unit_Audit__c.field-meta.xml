@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Audit__c</fullName>
+    <defaultValue>1</defaultValue>
+    <description>Used ONLY in Reporting - For each Account it will default to &quot;1&quot; for the purpose of Summing Accounts. This can be done organically within Salesforce except when you the Report is attempting to Sum TWO Objects (# of Accounts AND # of Contacts) of which &quot;Record Count&quot; only allows ONE to be Summed.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Used ONLY in Reporting - For each Account it will default to &quot;1&quot; for the purpose of Summing Accounts. When the Report is attempting to Sum TWO Objects (# of Accounts AND # of Contacts) of which &quot;Record Count&quot; only allows ONE to be Summed.</inlineHelpText>
+    <label>Unit (Audit)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

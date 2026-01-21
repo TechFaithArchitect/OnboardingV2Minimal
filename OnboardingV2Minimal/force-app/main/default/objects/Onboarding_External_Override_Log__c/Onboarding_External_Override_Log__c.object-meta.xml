@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Audit log for external override operations on Onboarding__c records when External_Override_Enabled__c is set to true. Tracks who/what system requested the override, the reason, correlation IDs, and status changes. Example: When an external system (via API) sets External_Override_Enabled__c=true on an Onboarding record with reason &quot;Manual status change required by compliance team&quot;, an Override_Log record is created with Override_Action__c=&quot;ENABLED&quot;, Override_Source__c=&quot;External API&quot;, and Processed_By__c identifying the user/system. When the override is removed, another log entry is created with Override_Action__c=&quot;DISABLED&quot; showing the status was restored to the previous value.</description>
+    <description>Audit log for external override operations on Onboarding__c (source, reason, request, status changes).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Onboarding External Override Logs</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

@@ -3,7 +3,6 @@
     <fullName>Onboarding_Application_Stage__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Specific stage that was completed.</description>
-    <externalId>false</externalId>
     <label>Onboarding Application Stage</label>
     <referenceTo>Onboarding_Application_Stage__c</referenceTo>
     <relationshipLabel>Onboarding Application Stage Completion</relationshipLabel>

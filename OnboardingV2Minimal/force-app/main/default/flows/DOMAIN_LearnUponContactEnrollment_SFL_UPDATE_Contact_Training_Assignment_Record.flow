@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>LearnUponContactEnrollment_Status_is_Complete_OR_Passed</name>
         <label>LearnUponContactEnrollment Status is Complete OR Passed</label>

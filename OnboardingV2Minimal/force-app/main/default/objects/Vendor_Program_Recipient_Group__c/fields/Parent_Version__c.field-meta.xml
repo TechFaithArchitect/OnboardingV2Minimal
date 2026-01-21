@@ -3,7 +3,6 @@
     <fullName>Parent_Version__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Links all versions back to the &quot;original&quot; version (or root parent)</description>
-    <externalId>false</externalId>
     <label>Related Group Version</label>
     <referenceTo>Vendor_Program_Recipient_Group__c</referenceTo>
     <relationshipLabel>Vendor Program Recipient Groups</relationshipLabel>

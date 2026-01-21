@@ -3,7 +3,6 @@
     <fullName>POE_FraudObservation__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Flag that indicates when an opportunity was flagged for Security Reasons.</description>
-    <externalId>false</externalId>
     <label>Fraud Observation Flag</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

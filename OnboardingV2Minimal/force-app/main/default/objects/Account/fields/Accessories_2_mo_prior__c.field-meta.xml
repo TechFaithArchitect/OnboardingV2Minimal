@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Accessories_2_mo_prior__c</fullName>
-    <externalId>false</externalId>
     <label>* Accessory Sales 2 Mo. Prior</label>
     <precision>9</precision>
     <required>false</required>

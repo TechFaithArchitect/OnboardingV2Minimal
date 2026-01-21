@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Validation_Type__c</fullName>
     <description>Type of validation (Format check, Cross-field validation, External service validation)</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Validation Type</label>
     <required>true</required>

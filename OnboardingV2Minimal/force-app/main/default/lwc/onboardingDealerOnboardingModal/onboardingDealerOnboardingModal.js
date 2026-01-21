@@ -38,5 +38,3 @@ export default class OnboardingDealerOnboardingModal extends LightningElement {
         this.dispatchEvent(new CustomEvent('close'));
     }
 }
-
-

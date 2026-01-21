@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__CustomerOfBrand__c</fullName>
     <deprecated>false</deprecated>
     <description>A brand or other legal entity of the energy/utility company.</description>
-    <externalId>false</externalId>
     <label>Customer Of</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

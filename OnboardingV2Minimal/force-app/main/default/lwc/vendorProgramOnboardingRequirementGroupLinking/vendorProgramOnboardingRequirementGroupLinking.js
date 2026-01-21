@@ -110,4 +110,3 @@ export default class VendorProgramOnboardingRequirementGroupLinking extends Ligh
     return `Step ${step}: Create and Link Requirement Group Components`;
   }
 }
-

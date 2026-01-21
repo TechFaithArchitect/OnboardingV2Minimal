@@ -91,6 +91,7 @@ Onboarding Status: {!OnboardingRecord.Onboarding_Status__c}</stringValue>
         <offset>0</offset>
     </actionCalls>
     <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <constants>
         <name>NeededDepositAddressListConstant</name>
         <dataType>String</dataType>

@@ -586,4 +586,3 @@ export default class VendorProgramOnboardingStatusRulesEngine extends Onboarding
     }
   }
 }
-

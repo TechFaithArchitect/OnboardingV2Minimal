@@ -3,7 +3,6 @@
     <fullName>DTV_Communication_Consent__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates that the user agreed to receive Marketing or Communications from DTV</description>
-    <externalId>false</externalId>
     <label>DTV Communication Consent</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

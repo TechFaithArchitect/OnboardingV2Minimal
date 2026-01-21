@@ -3,7 +3,6 @@
     <fullName>Action_Plan_Template__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Default action plan template tied to this program customization.</description>
-    <externalId>false</externalId>
     <label>Action Plan Template</label>
     <referenceTo>ActionPlanTemplate</referenceTo>
     <relationshipName>Vendor_Customizations</relationshipName>

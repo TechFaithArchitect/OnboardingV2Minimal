@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>VZW_Interview__c</fullName>
     <defaultValue>&quot;Incomplete&quot;</defaultValue>
-    <externalId>false</externalId>
     <label>VZW Interview</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

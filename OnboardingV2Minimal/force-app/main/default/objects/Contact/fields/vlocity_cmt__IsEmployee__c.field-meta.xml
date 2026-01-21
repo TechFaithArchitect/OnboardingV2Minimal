@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__IsEmployee__c</fullName>
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
-    <externalId>false</externalId>
     <label>Employee</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

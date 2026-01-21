@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Recipient_User__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <inlineHelpText>Used only when Member Type is &quot;User.&quot; Leave blank for all other member types.</inlineHelpText>
     <label>Recipient User</label>
     <referenceTo>User</referenceTo>

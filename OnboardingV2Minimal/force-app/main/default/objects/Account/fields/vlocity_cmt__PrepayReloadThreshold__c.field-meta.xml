@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__PrepayReloadThreshold__c</fullName>
     <deprecated>false</deprecated>
     <description>An automatic payment will be processed when the account balance reaches this amount</description>
-    <externalId>false</externalId>
     <label>Prepay Reload Threshold</label>
     <precision>18</precision>
     <required>false</required>

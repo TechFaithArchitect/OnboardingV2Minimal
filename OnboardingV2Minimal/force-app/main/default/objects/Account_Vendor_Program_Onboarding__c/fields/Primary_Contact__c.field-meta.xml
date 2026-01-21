@@ -3,7 +3,6 @@
     <fullName>Primary_Contact__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Designated primary contact for this onboarding engagement.</description>
-    <externalId>false</externalId>
     <label>Primary Contact</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Onboarding Engagements</relationshipLabel>

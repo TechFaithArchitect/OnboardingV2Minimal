@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__ValidationMessage__c</fullName>
     <deprecated>false</deprecated>
     <description>Message from last validation run</description>
-    <externalId>false</externalId>
     <inlineHelpText>Message from last validation run</inlineHelpText>
     <label>Validation Message</label>
     <length>32768</length>

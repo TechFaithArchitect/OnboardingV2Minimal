@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Referral_Option__c</fullName>
     <description>[PER-4994]</description>
-    <externalId>false</externalId>
     <label>Referral Option</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

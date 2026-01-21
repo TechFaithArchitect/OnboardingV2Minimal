@@ -34,6 +34,10 @@
                 <behavior>Edit</behavior>
                 <field>Default_Requirement_Group__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Rule_Key__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

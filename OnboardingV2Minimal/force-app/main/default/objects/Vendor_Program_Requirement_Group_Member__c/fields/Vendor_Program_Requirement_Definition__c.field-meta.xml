@@ -3,7 +3,6 @@
     <fullName>Vendor_Program_Requirement_Definition__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Requirement</description>
-    <externalId>false</externalId>
     <label>Vendor Program Requirement Definition</label>
     <referenceTo>Vendor_Program_Onboarding_Req_Template__c</referenceTo>
     <relationshipLabel>Vendor Program Requirement Group Members</relationshipLabel>

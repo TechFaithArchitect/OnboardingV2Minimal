@@ -3,7 +3,6 @@
     <fullName>Optimum_Only__c</fullName>
     <defaultValue>false</defaultValue>
     <description>When enabled, this checkbox automatically restricts Chuzo user interface experience site tabs to the Optimum Buyflow only. [PER-4389]</description>
-    <externalId>false</externalId>
     <label>Optimum Only</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

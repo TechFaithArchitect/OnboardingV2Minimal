@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>The quote from which this contract was created</description>
-    <externalId>false</externalId>
     <label>Quote</label>
     <referenceTo>Quote</referenceTo>
     <relationshipLabel>Contracts</relationshipLabel>

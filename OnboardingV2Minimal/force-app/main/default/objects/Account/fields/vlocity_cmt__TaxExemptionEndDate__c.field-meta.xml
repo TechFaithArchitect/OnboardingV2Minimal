@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__TaxExemptionEndDate__c</fullName>
     <deprecated>false</deprecated>
     <description>The date until which the tax exemption is valid.</description>
-    <externalId>false</externalId>
     <label>Tax Exemption End</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

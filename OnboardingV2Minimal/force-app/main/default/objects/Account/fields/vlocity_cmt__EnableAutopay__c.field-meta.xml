@@ -4,7 +4,6 @@
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
     <description>Indicates whether the customer has opted in to automatic payment. Part of the billing profile of a customer or billing account.</description>
-    <externalId>false</externalId>
     <label>Enable Autopay</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>Are_We_Sending_Documents</name>
         <label>Are We Sending Documents</label>
@@ -129,6 +130,8 @@
             <name>Create_Action_Plan</name>
             <actionName>Action_Plan_Subflow_Create_Action_Plan</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <entryConditions>
                 <conditionType>EntryCondition</conditionType>
@@ -172,12 +175,15 @@
             <label>Create Action Plan</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
         <stageSteps>
             <name>Create_Related_Onboarding_Record</name>
             <actionName>Onboarding_Subflow_Create_Related_Onboarding_Records</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <entryConditions>
                 <conditionType>EntryCondition</conditionType>
@@ -251,6 +257,7 @@
             <label>Create Related Onboarding Record</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
         <stageSteps>
@@ -258,6 +265,8 @@
             <name>Update_ActionPlan_Line_Tasks_WhatId</name>
             <actionName>Onboarding_Subflow_Update_Action_Plan_Items_WhatId</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <entryConditions>
                 <conditionType>EntryCondition</conditionType>
@@ -277,6 +286,7 @@
             <label>Update ActionPlan Line Tasks WhatId</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>
@@ -293,6 +303,8 @@
             <name>Create_Adobe_Agreement</name>
             <actionName>Send_NDA_Contract</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -340,6 +352,7 @@
             <label>Create Adobe Agreement</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>
@@ -353,6 +366,8 @@
             <name>Created_Related_Onboarding_Record</name>
             <actionName>Onboarding_Subflow_Create_Related_Onboarding_Records</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -454,6 +469,7 @@
             <label>Created Related Onboarding Record</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>
@@ -467,6 +483,8 @@
             <name>Create_Training_Assignment_Record</name>
             <actionName>DOM_Onboarding_SFL_CREATE_Training_Assignment_Records</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -478,12 +496,15 @@
             <label>Create Training Assignment Record</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
         <stageSteps>
             <name>Create_External_Contact_Credential_Records</name>
             <actionName>DOMAIN_Onboarding_SFL_CREATE_External_Contact_Credentials</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <entryConditions>
                 <conditionType>EntryCondition</conditionType>
@@ -509,12 +530,15 @@
             <label>Create External Contact Credential Records</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
         <stageSteps>
             <name>Create_Link_Between_ECC_and_Required_Credentials</name>
             <actionName>DOMAIN_External_Contact_Credential_SFL_CREATE_Required_External_Contact_Credenti</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <entryConditions>
                 <conditionType>EntryCondition</conditionType>
@@ -546,6 +570,7 @@
             <label>Create Link Between ECC and Required Credentials</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>
@@ -559,6 +584,8 @@
             <name>Update_Onboarding_Records</name>
             <actionName>Opportunity_Subflow_Update_Onboarding_Records</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -570,6 +597,7 @@
             <label>Update Onboarding Records</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>
@@ -586,6 +614,8 @@
             <name>Get_Territory_Assignment</name>
             <actionName>Onboarding_Get_Territory_Assignments</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -597,12 +627,15 @@
             <label>Get Territory Assignment</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
         <stageSteps>
             <name>Add_Opportunity_Contacts_to_Opportunity</name>
             <actionName>Opportunity_Subflow_Assign_Opportunity_Contacts</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <entryConditions>
                 <conditionType>EntryCondition</conditionType>
@@ -622,12 +655,15 @@
             <label>Add Opportunity Contacts to Opportunity</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
         <stageSteps>
             <name>Create_Contract</name>
             <actionName>Contract_Creation_Subflow</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <entryConditions>
                 <conditionType>EntryCondition</conditionType>
@@ -701,6 +737,7 @@
             <label>Create Contract</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>
@@ -717,6 +754,8 @@
             <name>Get_Contracts_from_Opportunity</name>
             <actionName>DOM_Opportunity_SFL_GET_All_Related_Contract_Records</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -728,6 +767,7 @@
             <label>Get Contracts from Opportunity</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>

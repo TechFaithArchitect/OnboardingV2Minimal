@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Programs_In_Order__c</fullName>
+    <description>Contains a sorted, semicolon separated list of the programs that will be shown in the Self Service landing page for this referral code. (PER-5694)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Contains a sorted, semicolon separated list of the programs that will be shown in the Self Service landing page for this referral code.</inlineHelpText>
+    <label>Programs In Order</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

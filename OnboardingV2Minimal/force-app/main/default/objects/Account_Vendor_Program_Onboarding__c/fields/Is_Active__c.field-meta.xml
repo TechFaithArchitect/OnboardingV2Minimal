@@ -3,8 +3,8 @@
     <fullName>Is_Active__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Indicates the engagement is currently active/in-flight.</description>
-    <externalId>false</externalId>
     <label>Is Active</label>
+    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>
 </CustomField>

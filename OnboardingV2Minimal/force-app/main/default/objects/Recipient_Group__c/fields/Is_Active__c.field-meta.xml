@@ -3,7 +3,6 @@
     <fullName>Is_Active__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Allows groups to be disabled</description>
-    <externalId>false</externalId>
     <label>Is Active</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

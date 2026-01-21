@@ -3,7 +3,6 @@
     <fullName>Active__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Controls whether this group membership is currently in effect.</description>
-    <externalId>false</externalId>
     <label>Active</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

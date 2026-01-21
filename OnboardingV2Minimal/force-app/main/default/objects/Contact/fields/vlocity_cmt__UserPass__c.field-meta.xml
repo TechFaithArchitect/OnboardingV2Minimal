@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>vlocity_cmt__UserPass__c</fullName>
     <deprecated>false</deprecated>
-    <externalId>false</externalId>
     <label>UserPass</label>
     <length>50</length>
     <maskChar>asterisk</maskChar>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MSP_Approval</fullName>
+    <columns>NAME</columns>
+    <columns>Customer_ID__c</columns>
+    <columns>Stage__c</columns>
+    <columns>Total_Amount__c</columns>
+    <columns>Account_Name__c</columns>
+    <columns>Carrier__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Stage__c</field>
+        <operation>equals</operation>
+        <value>MSP Approval</value>
+    </filters>
+    <label>MSP - MSP Approval</label>
+    <sharedTo>
+        <group>MSP_Team</group>
+    </sharedTo>
+</ListView>

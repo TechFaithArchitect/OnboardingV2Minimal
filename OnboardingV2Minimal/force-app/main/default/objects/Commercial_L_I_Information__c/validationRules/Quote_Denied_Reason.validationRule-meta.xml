@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quote_Denied_Reason</fullName>
+    <active>false</active>
+    <description>This field will be used to explain why a quote was denied by the dealer</description>
+    <errorConditionFormula>ISPICKVAL(  Status__c  ,&quot;QUOTE DENIED&quot;)&amp;&amp;( Quote_Denied_Reason__c =&quot;&quot;)</errorConditionFormula>
+    <errorDisplayField>Quote_Denied_Reason__c</errorDisplayField>
+    <errorMessage>If Closed &quot;Quote Denied&quot; a reason for the denial must be input into the Quote Denied Reason field.</errorMessage>
+</ValidationRule>

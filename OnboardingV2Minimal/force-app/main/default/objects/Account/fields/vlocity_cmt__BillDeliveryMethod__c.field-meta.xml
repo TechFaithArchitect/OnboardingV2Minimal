@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__BillDeliveryMethod__c</fullName>
     <deprecated>false</deprecated>
     <description>Chosen method to receive bills with values such as Paper Billing, eMail and Electronic Statements Online. Part of the billing profile of a customer or billing account.</description>
-    <externalId>false</externalId>
     <label>Bill Delivery Method</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

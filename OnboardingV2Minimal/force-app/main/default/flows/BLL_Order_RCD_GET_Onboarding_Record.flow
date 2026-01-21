@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <description>Business Logic Layer - Order Object - Record - GET - Onboarding Record</description>
     <environments>Default</environments>
     <interviewLabel>BLL - Order - RCD - GET - Onboarding Record {!$Flow.CurrentDateTime}</interviewLabel>

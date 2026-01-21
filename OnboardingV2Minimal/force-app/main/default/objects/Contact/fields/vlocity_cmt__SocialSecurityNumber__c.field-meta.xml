@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__SocialSecurityNumber__c</fullName>
     <deprecated>false</deprecated>
     <description>An 11-character encrypted text field useful for storing the tax identifier of this individual.</description>
-    <externalId>false</externalId>
     <label>Social Security Number</label>
     <length>11</length>
     <maskChar>X</maskChar>

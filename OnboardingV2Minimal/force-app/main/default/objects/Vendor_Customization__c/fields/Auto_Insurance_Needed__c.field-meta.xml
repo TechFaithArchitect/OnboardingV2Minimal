@@ -3,7 +3,6 @@
     <fullName>Auto_Insurance_Needed__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates this program requires auto insurance verification.</description>
-    <externalId>false</externalId>
     <label>Auto Insurance Needed</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

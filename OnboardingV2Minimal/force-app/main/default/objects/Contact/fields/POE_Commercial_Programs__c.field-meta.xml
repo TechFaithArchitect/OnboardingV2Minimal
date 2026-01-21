@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>POE_Commercial_Programs__c</fullName>
     <description>Enable the credentials component for the selected programs. (PER-2126)</description>
-    <externalId>false</externalId>
     <inlineHelpText>Enable the credentials component for the selected programs.</inlineHelpText>
     <label>Non-Chuzo Programs</label>
     <required>false</required>
@@ -42,6 +41,11 @@
                 <fullName>Xfinity</fullName>
                 <default>false</default>
                 <label>Xfinity</label>
+            </value>
+            <value>
+                <fullName>Verizon Fios D2D</fullName>
+                <default>false</default>
+                <label>Verizon Fios D2D</label>
             </value>
             <value>
                 <fullName>Telogix</fullName>

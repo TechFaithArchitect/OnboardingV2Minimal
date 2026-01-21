@@ -3,7 +3,6 @@
     <fullName>Onboarding_Requirement__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>The requirement that is dependent on another</description>
-    <externalId>false</externalId>
     <label>Onboarding Requirement</label>
     <referenceTo>Onboarding_Requirement__c</referenceTo>
     <relationshipLabel>Onboarding Requirement Dependencies</relationshipLabel>

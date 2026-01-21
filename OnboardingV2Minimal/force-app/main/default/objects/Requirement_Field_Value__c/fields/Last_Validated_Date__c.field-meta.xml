@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Last_Validated_Date__c</fullName>
     <description>Timestamp of the most recent validation for this field value.</description>
-    <externalId>false</externalId>
     <label>Last Validated Date</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

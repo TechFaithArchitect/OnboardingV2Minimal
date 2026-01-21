@@ -3,7 +3,6 @@
     <fullName>Requirement_Field_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Lookup to the field group for UI grouping and batch validation.</description>
-    <externalId>false</externalId>
     <label>Requirement Field Group</label>
     <referenceTo>Requirement_Field_Group__c</referenceTo>
     <relationshipLabel>Requirement Fields</relationshipLabel>

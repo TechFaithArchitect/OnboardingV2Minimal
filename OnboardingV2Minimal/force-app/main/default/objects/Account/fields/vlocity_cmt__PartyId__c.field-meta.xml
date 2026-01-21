@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>The identity of the party who is the customer or prospect of this account.</description>
-    <externalId>false</externalId>
     <label>Party</label>
     <referenceTo>vlocity_cmt__Party__c</referenceTo>
     <relationshipLabel>Accounts</relationshipLabel>

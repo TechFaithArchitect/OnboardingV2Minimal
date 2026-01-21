@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quoted_By__c</fullName>
+    <label>Quoted By</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>AT&amp;T</fullName>
+                <default>false</default>
+                <label>AT&amp;T</label>
+            </value>
+            <value>
+                <fullName>Amanda Falls</fullName>
+                <default>false</default>
+                <label>Amanda Falls</label>
+            </value>
+            <value>
+                <fullName>Brandon Porter</fullName>
+                <default>false</default>
+                <label>Brandon Porter</label>
+            </value>
+            <value>
+                <fullName>Chris Hildebrand</fullName>
+                <default>false</default>
+                <label>Chris Hildebrand</label>
+            </value>
+            <value>
+                <fullName>DaVita</fullName>
+                <default>false</default>
+                <label>DaVita</label>
+            </value>
+            <value>
+                <fullName>Denice Schacht</fullName>
+                <default>false</default>
+                <label>Denice Schacht</label>
+            </value>
+            <value>
+                <fullName>FMC</fullName>
+                <default>false</default>
+                <label>FMC</label>
+            </value>
+            <value>
+                <fullName>Mike Sharlon</fullName>
+                <default>false</default>
+                <label>Mike Sharlon</label>
+            </value>
+            <value>
+                <fullName>Reggie Donley</fullName>
+                <default>false</default>
+                <label>Reggie Donley</label>
+            </value>
+            <value>
+                <fullName>USR</fullName>
+                <default>false</default>
+                <label>USR</label>
+            </value>
+            <value>
+                <fullName>Steve Shockman</fullName>
+                <default>false</default>
+                <label>Steve Shockman</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

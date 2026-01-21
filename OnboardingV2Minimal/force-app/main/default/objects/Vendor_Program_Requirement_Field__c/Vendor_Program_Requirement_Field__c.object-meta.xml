@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Defines a specific field within a Vendor_Program_Requirement__c template, specifying the field label, data type, validation rules, required flag, and display properties. Example: A Vendor_Program_Requirement_Field for &quot;Insurance Policy Number&quot; might have Field_Label__c=&quot;Policy Number&quot;, Data_Type__c=&quot;Text&quot;, Required__c=true, Max_Length__c=20, and reference a validation rule that enforces a 10-digit format. When vendors complete requirements, these field definitions guide the UI form rendering, and entered values are stored in Vendor_Program_Requirement_Field_Value__c records. Fields can be grouped via Vendor_Program_Requirement_Group_Field__c for logical organization.</description>
+    <description>Defines a field in a vendor program requirement template (label, type, rules).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Vendor Program Requirement Fields</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

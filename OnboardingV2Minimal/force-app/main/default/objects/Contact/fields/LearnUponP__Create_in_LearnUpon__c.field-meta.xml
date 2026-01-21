@@ -3,7 +3,6 @@
     <fullName>LearnUponP__Create_in_LearnUpon__c</fullName>
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
-    <externalId>false</externalId>
     <label>Create in LearnUpon</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>true</trackHistory>

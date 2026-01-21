@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__AutoRenewObjectCreation__c</fullName>
     <deprecated>false</deprecated>
     <description>The object that is created as part of a renewal initiation. Object could be Opportunity, Quote or Order</description>
-    <externalId>false</externalId>
     <label>Renewal Notification Object</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

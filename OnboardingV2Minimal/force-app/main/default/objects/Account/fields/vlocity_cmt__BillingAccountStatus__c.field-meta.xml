@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__BillingAccountStatus__c</fullName>
     <deprecated>false</deprecated>
     <description>Indicates the status of the customer billing account.</description>
-    <externalId>false</externalId>
     <label>Billing Account Status</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

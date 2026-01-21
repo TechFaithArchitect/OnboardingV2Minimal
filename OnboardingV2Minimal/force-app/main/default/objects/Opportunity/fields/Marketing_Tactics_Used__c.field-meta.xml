@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Marketing_Tactics_Used__c</fullName>
-    <externalId>false</externalId>
     <inlineHelpText>Please be as detailed as possible.  Do not use single word descriptions.  
 
 Example:  Web marketing will need the web address as well as if they plan to do organic search or paid search.  

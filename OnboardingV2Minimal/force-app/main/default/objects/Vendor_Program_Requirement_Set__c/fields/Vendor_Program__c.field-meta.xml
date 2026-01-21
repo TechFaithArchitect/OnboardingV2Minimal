@@ -3,7 +3,6 @@
     <fullName>Vendor_Program__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Parent vendor program this requirement set applies to.</description>
-    <externalId>false</externalId>
     <label>Vendor Program</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>Vendor Program Requirement Sets</relationshipLabel>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Stores the actual value entered by users for a Requirement_Field__c within an Onboarding_Requirement__c, along with validation status and error messages. Links requirement fields to their captured data and tracks validation results. Example: When a user fills in the &quot;Insurance Policy Number&quot; field (Requirement_Field__c) for an onboarding requirement, a Requirement_Field_Value record is created with the entered value (e.g., &quot;POL-1234567890&quot;). If validation fails (e.g., policy number format is invalid), Validation_Status__c is set to &quot;Failed&quot; and Error_Message__c contains the validation error. Once corrected and re-validated, Validation_Status__c becomes &quot;Passed&quot;. These values are used by status evaluation and reporting to track requirement completion.</description>
+    <description>Captured value and validation status/error for a Requirement_Field__c tied to an onboarding requirement.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Requirement Field Values</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

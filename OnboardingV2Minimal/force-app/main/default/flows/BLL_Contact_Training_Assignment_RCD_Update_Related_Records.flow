@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <description>Business Logic Layer - Contact Training Assignment Object - Record Trigger - Update Related Records</description>
     <environments>Default</environments>
     <interviewLabel>BLL - Contact Training Assignment - RCD - Update Related Records {!$Flow.CurrentDateTime}</interviewLabel>
@@ -18,6 +19,8 @@
             <name>Get_Onboarding_Records</name>
             <actionName>DOMAIN_Onboarding_SFL_Get_Records</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -29,6 +32,7 @@
             <label>Get Onboarding Records</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>
@@ -42,6 +46,8 @@
             <name>Update_Onboarding_Record_Flow</name>
             <actionName>DOMAIN_Onboarding_SFL_Update_Onboarding_Record_s_Training_Status</actionName>
             <actionType>stepBackground</actionType>
+            <canAssigneeEdit>false</canAssigneeEdit>
+            <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
@@ -62,6 +68,7 @@
             <label>Update Onboarding Record Flow</label>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
+            <shouldLock>false</shouldLock>
             <stepSubtype>BackgroundStep</stepSubtype>
         </stageSteps>
     </orchestratedStages>

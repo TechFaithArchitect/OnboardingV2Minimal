@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -128,8 +128,7 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <comment
-    >Action override created by Lightning App Builder during activation.</comment>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Dealer_Insurance_Record_Page</content>
         <formFactor>Small</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
@@ -137,8 +136,7 @@
     </actionOverrides>
     <actionOverrides>
         <actionName>View</actionName>
-        <comment
-    >Action override created by Lightning App Builder during activation.</comment>
+        <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Dealer_Insurance_Record_Page</content>
         <formFactor>Large</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
@@ -151,8 +149,6 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Tracks insurance information for a dealer (Account) as part of onboarding requirements. Stores insurance policy details, carriers, expiration dates, and coverage types. Example: When Account &quot;ABC Medical Supply&quot; provides their General Liability Insurance certificate during onboarding for Vendor Program &quot;Healthcare Provider Program&quot;, a Dealer_Insurance__c record might be created with Insurance_Type__c=&quot;General Liability&quot;, Insurance_Carrier__c=&quot;Standard Insurance Co.&quot;, Policy_Number__c=&quot;POL-1234567890&quot;, and Expiration_Date__c set to the policy end date. The record links to the Account and can be referenced by Onboarding_Requirement__c records to verify insurance requirements are met. Related Dealer_Insurance_Detail__c records may store additional policy details or coverage specifics required by vendor programs.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -172,7 +168,7 @@
     </nameField>
     <pluralLabel>Dealer Insurances</pluralLabel>
     <recordTypeTrackHistory>false</recordTypeTrackHistory>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

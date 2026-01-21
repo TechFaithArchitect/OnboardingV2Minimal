@@ -3,7 +3,6 @@
     <fullName>Is_Target__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Marks the target program in the group (versus prerequisite/inherited programs).</description>
-    <externalId>false</externalId>
     <label>Is Target</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Tracks pending and failed onboarding follow-up communications (SMS/Email/In-App) with status tracking, retry attempts, next attempt scheduling, and error details. Records are created by Follow_Up_Rule__mdt metadata when trigger conditions are met. Example: When an onboarding requirement remains &quot;Incomplete&quot; for 7 days, a Follow_Up_Queue record is created with Follow_Up_Type__c=&quot;Email&quot; and Status__c=&quot;Pending&quot;. The system attempts to send on Next_Attempt_Date__c, and if it fails, increments Attempt_Count__c and reschedules based on escalation rules. Failed attempts can be manually retried by admins via the messagingIssuesTab component.</description>
+    <description>Tracks pending/failed onboarding follow-ups (SMS/Email) with status, attempts, next attempt date, and error details.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Follow Up Queues</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

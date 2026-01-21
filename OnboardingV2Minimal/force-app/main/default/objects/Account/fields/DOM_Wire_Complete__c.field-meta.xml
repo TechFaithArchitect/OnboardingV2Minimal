@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>DOM_Wire_Complete__c</fullName>
     <defaultValue>false</defaultValue>
-    <externalId>false</externalId>
     <label>DOM/Wire Complete</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

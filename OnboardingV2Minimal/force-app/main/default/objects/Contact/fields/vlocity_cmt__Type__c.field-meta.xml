@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__Type__c</fullName>
     <deprecated>false</deprecated>
     <description>The type of individual. Most useful for partner employees tracked as contacts.</description>
-    <externalId>false</externalId>
     <label>Type</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__vCustomerPriority__c</fullName>
     <deprecated>false</deprecated>
     <description>A ranking of the priority of this customer to your business expressed in marketing terms such as High, Medium or Low.</description>
-    <externalId>false</externalId>
     <label>Customer Priority</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

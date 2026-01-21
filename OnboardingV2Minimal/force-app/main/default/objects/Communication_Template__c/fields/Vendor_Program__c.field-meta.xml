@@ -3,7 +3,6 @@
     <fullName>Vendor_Program__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Vendor program associated to this communication template (for scoping templates).</description>
-    <externalId>false</externalId>
     <label>Vendor Program</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipName>Onboarding_Communication_Templates</relationshipName>

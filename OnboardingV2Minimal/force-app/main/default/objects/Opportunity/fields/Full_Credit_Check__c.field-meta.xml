@@ -3,7 +3,6 @@
     <fullName>Full_Credit_Check__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates if a Full Credit Check was performed [PER-5715]</description>
-    <externalId>false</externalId>
     <label>Full Credit Check</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

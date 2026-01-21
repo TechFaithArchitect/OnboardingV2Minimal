@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Third_Date_Contacted__c</fullName>
     <description>Captures the third date of contact with the person account.</description>
-    <externalId>false</externalId>
     <label>Third Date Contacted</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

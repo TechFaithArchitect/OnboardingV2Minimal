@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Defines dependency rules between onboarding application stages using a Campaign/Campaign Member pattern for flexible dependency management. Specifies that a Target_Stage__c requires certain Required_Stage__c stages (defined via Onboarding_App_Stage_Dependency_Member__c) to be completed before it can be started. Example: A dependency named &quot;Requirement Setup Requires Vendor Selection&quot; might have Target_Stage__c=&quot;Select Requirement Set&quot; (Stage 3) and Logic_Type__c=&quot;ALL&quot;, with members requiring completion of &quot;Select Vendor&quot; (Stage 1) and &quot;Select Vendor Program&quot; (Stage 2). The flow engine prevents users from accessing Stage 3 until both Stage 1 and 2 are completed. This pattern persists even when stage orders change, unlike simple sequence-based dependencies.</description>
+    <description>Represents dependency rules between onboarding application stages (e.g., stage Y requires stage X).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Onboarding Application Stage Dependency</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Points to the contract from which this opportunity was created</description>
-    <externalId>false</externalId>
     <label>Originating Contract</label>
     <referenceTo>Contract</referenceTo>
     <relationshipLabel>Opportunities</relationshipLabel>

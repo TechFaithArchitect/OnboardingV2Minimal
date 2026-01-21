@@ -20,4 +20,3 @@
 .metric-card.error {
     border-left: 4px solid #c23934;  /* Error red - no SLDS border token available */
 }
-

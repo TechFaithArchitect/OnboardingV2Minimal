@@ -3,7 +3,6 @@
     <fullName>Frontier_Video__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Flag that lets user sell video [PER-5137]</description>
-    <externalId>false</externalId>
     <label>Frontier Video</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

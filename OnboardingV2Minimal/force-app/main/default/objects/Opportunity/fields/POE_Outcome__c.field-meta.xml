@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>POE_Outcome__c</fullName>
     <description>This field stores de outcome for the disposition</description>
-    <externalId>false</externalId>
     <label>Outcome</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

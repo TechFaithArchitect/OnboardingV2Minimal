@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description
-  >Custom metadata defining follow-up rules for automated onboarding communications (SMS/Email/In-App). Each rule specifies trigger conditions, communication channel/template, delay schedules, escalation steps, and fatigue controls. Example: A Follow_Up_Rule with DeveloperName=&quot;Requirement_Incomplete_7_Days&quot; might have Follow_Up_Type__c=&quot;Email&quot;, Trigger_Condition__c=&quot;Onboarding_Requirement__c.Status__c = &apos;Incomplete&apos; AND Days_Since_Created__c >= 7&quot;, Initial_Delay_Days__c=7, and Escalation_Schedule__c JSON defining retry at days 14, 21, and 30. When trigger conditions are met, the system creates Follow_Up_Queue__c records that are processed by scheduled jobs. Rules can specify fatigue limits (Max_Attempts_Per_Window__c) to prevent over-messaging and can be suppressed during holidays via Follow_Up_Suppression__mdt.</description>
+    <description>Defines follow-up rules for automated messaging/escalation.</description>
     <label>Follow Up Rule</label>
     <pluralLabel>Follow Up Rules</pluralLabel>
     <visibility>Public</visibility>

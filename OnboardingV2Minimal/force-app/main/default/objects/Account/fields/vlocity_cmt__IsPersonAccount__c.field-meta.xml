@@ -4,7 +4,6 @@
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
     <description>DEPRECATED: Vlocity uses the standard IsPersonAccount field instead.</description>
-    <externalId>false</externalId>
     <label>Is Person Account</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

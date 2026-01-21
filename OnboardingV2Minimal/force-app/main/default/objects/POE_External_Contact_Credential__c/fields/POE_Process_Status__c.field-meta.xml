@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>POE_Process_Status__c</fullName>
     <description>(PER-2126)</description>
-    <externalId>false</externalId>
     <label>Process Status</label>
     <required>false</required>
     <trackHistory>true</trackHistory>

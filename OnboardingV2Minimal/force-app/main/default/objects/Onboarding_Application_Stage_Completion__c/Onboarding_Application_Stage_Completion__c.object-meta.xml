@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Audit log record created when a user completes a stage in an Onboarding_Application_Process__c. Tracks who completed the stage, when it was completed, and which process/stage combination. Enables queryable completion history and supports multi-stage resumption. Example: When a user completes Stage 2 &quot;Select Vendor Program&quot; in the &quot;Vendor Program Onboarding&quot; process, an Onboarding_Application_Stage_Completion record is created with Completed_By__c set to the current user, Completed_Date__c set to now(), and references to the specific process and stage. This audit trail allows admins to track user progress, identify bottlenecks, and enables the system to determine which stages have been completed when users resume workflows.</description>
+    <description>This makes the completion auditable, queryable, and supports multi-stage reentry/resumption.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Onboarding Application Stage Completion</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

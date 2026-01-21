@@ -3,7 +3,6 @@
     <fullName>General_Liability_Insurance_Needed__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates general liability insurance is required for this program.</description>
-    <externalId>false</externalId>
     <label>General Liability Insurance Needed</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

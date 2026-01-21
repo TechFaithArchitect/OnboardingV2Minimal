@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Logs validation failures when Requirement_Field__c values fail validation rules defined in Requirement_Field_Validation_Rule__mdt. Captures the rule name, error message, validated field/requirement context, and retry tracking. Example: When a user enters an invalid insurance policy number format in a requirement field, a Validation_Failure record is created with Rule_Name__c=&quot;Insurance Policy Format&quot;, Message__c=&quot;Policy number must be 10 digits&quot;, and Requirement_Field__c pointing to the field that failed. Admins can view these in validationFailuresTab, retry validation, and dismiss resolved failures. Failures are automatically retried when field values are corrected.</description>
+    <description>Logs onboarding validation failures with rule name, message, correlation IDs, and retry context.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -163,7 +162,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Validation Failure</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

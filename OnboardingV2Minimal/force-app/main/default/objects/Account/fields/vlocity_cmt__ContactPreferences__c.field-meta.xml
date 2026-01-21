@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__ContactPreferences__c</fullName>
     <deprecated>false</deprecated>
     <description>The preferred method (or methods) of communications to the parties of this account such as mail, email or phone.</description>
-    <externalId>false</externalId>
     <label>Contact Preferences</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

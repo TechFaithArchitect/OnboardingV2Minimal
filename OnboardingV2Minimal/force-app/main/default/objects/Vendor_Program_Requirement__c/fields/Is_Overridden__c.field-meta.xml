@@ -3,7 +3,6 @@
     <fullName>Is_Overridden__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Admin manually modified this requirement</description>
-    <externalId>false</externalId>
     <label>Is Overridden</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

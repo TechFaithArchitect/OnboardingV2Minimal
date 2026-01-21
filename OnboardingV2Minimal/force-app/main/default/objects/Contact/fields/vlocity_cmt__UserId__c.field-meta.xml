@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__UserId__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
-    <externalId>false</externalId>
     <label>UserId</label>
     <referenceTo>User</referenceTo>
     <relationshipName>Contacts</relationshipName>

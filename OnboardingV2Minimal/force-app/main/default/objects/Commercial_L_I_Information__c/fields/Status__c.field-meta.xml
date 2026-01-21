@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Quote Requested</fullName>
+                <default>true</default>
+                <label>Quote Requested</label>
+            </value>
+            <value>
+                <fullName>Quote Sent</fullName>
+                <default>false</default>
+                <label>Quote Sent</label>
+            </value>
+            <value>
+                <fullName>Quote Approved</fullName>
+                <default>false</default>
+                <label>Quote Approved</label>
+            </value>
+            <value>
+                <fullName>Quote Denied</fullName>
+                <default>false</default>
+                <label>Quote Denied</label>
+            </value>
+            <value>
+                <fullName>Pending Build</fullName>
+                <default>false</default>
+                <label>Pending Build</label>
+            </value>
+            <value>
+                <fullName>Order Shipped</fullName>
+                <default>false</default>
+                <label>Order Shipped</label>
+            </value>
+            <value>
+                <fullName>Parts Only Shipped</fullName>
+                <default>false</default>
+                <label>Parts Only Shipped</label>
+            </value>
+            <value>
+                <fullName>Quote Expired</fullName>
+                <default>false</default>
+                <label>Quote Expired</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Individual rule condition within an Onboarding_Status_Rules_Engine__c that checks if a specific Vendor_Program_Requirement__c has an expected status. Multiple rules are evaluated together based on the parent engine&apos;s Evaluation_Logic__c (ALL/ANY/CUSTOM). Example: A rule might check that the &quot;Insurance Certificate&quot; requirement has status &quot;Approved&quot; before allowing the onboarding to progress to &quot;Pending Initial Review&quot;. Rules are evaluated in Sequence__c order and can short-circuit based on the engine&apos;s logic type.</description>
+    <description>Individual condition row within a status rules engine to drive onboarding status changes.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Onboarding Status Rules</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

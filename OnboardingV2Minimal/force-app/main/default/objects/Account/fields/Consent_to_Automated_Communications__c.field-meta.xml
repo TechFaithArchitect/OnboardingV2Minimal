@@ -3,7 +3,6 @@
     <fullName>Consent_to_Automated_Communications__c</fullName>
     <defaultValue>false</defaultValue>
     <description>PER-3836</description>
-    <externalId>false</externalId>
     <label>Consent to Automated Communications</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

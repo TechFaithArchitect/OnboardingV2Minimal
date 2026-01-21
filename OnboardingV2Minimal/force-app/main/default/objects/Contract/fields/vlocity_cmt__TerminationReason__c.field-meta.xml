@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__TerminationReason__c</fullName>
     <deprecated>false</deprecated>
     <description>The reason this contract was terminated</description>
-    <externalId>false</externalId>
     <label>Termination Reason</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

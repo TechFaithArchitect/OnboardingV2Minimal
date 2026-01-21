@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Opportunity_Paperwork_Status__c</fullName>
     <description>This is the paperwork status for the various program opportunities for an account.</description>
-    <externalId>false</externalId>
     <label>Opportunity Paperwork Status</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

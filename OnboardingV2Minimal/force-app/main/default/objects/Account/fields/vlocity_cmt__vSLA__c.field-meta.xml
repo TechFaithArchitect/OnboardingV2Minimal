@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__vSLA__c</fullName>
     <deprecated>false</deprecated>
     <description>The service level agreement for this account which defines the level of service provided to the account with values such as gold, silver or bronze. The values are entirely customizable.</description>
-    <externalId>false</externalId>
     <label>SLA</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

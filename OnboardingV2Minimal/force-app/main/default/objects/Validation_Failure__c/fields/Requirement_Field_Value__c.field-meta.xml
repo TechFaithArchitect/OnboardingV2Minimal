@@ -3,7 +3,6 @@
     <fullName>Requirement_Field_Value__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Reference to the field value that failed validation.</description>
-    <externalId>false</externalId>
     <label>Requirement Field Value</label>
     <referenceTo>Requirement_Field_Value__c</referenceTo>
     <relationshipLabel>Validation Failure</relationshipLabel>

@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__BillFrequency__c</fullName>
     <deprecated>false</deprecated>
     <description>The frequency at which bills are generated such as Monthly, Quarterly or Weekly. Part of the billing profile of a customer or billing account.</description>
-    <externalId>false</externalId>
     <label>Bill Frequency</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

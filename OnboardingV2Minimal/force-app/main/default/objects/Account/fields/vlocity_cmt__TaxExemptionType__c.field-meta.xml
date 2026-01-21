@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__TaxExemptionType__c</fullName>
     <deprecated>false</deprecated>
     <description>Type of tax exemption the account is eligible for.</description>
-    <externalId>false</externalId>
     <label>Tax Exemption</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -3,7 +3,6 @@
     <fullName>Required__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Indicates if this stage is mandatory in the dependency chain.</description>
-    <externalId>false</externalId>
     <label>Required</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

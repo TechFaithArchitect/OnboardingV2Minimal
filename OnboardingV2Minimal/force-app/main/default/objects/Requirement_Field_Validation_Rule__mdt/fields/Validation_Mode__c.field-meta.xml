@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Validation_Mode__c</fullName>
     <description>Mode of the validation rule (Active = enforced, Test = test mode, Disabled = not active)</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Validation Mode</label>
     <required>true</required>

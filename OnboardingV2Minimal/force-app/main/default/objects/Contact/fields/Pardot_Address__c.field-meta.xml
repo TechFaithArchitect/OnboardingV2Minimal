@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Pardot_Address__c</fullName>
     <description>This field is used by Pardot to send communication emails [PER-3195]</description>
-    <externalId>false</externalId>
     <label>Pardot Address</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__Active__c</fullName>
     <deprecated>false</deprecated>
     <description>Picklist that indicates whether the account is active or not. Shipped values are Yes and No. Additional active (or inactive) states can be added to the picklist as desired. For example, Suspended.</description>
-    <externalId>false</externalId>
     <label>Active</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

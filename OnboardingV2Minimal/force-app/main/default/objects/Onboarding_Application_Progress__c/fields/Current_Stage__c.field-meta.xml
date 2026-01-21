@@ -3,7 +3,6 @@
     <fullName>Current_Stage__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Progress indicator</description>
-    <externalId>false</externalId>
     <label>Current Stage</label>
     <referenceTo>Onboarding_Application_Stage__c</referenceTo>
     <relationshipLabel>Onboarding Application Progress</relationshipLabel>

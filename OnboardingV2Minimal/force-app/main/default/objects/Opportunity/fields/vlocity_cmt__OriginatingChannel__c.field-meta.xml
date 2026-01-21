@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__OriginatingChannel__c</fullName>
     <deprecated>false</deprecated>
     <description>Channel can be used to drive Eligibility/Compatibility/Recommendations/Pricing/Other implementations, e.g. Certain Product Bundles are only available on the Web or Call Center channel but not via the Retail and Dealer channels OR A product may have a different price when sold via the Web than sold via the Retail channel, etc.</description>
-    <externalId>false</externalId>
     <label>Originating Channel</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

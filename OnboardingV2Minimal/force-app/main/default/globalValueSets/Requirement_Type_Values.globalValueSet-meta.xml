@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Status</fullName>
+        <default>false</default>
+        <label>Status</label>
+    </customValue>
+    <customValue>
+        <fullName>File Upload</fullName>
+        <default>false</default>
+        <label>File Upload</label>
+    </customValue>
+    <customValue>
+        <fullName>Confirmation</fullName>
+        <default>false</default>
+        <label>Confirmation</label>
+    </customValue>
+    <customValue>
+        <fullName>Date</fullName>
+        <default>false</default>
+        <label>Date</label>
+    </customValue>
+    <masterLabel>Requirement Type Values</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

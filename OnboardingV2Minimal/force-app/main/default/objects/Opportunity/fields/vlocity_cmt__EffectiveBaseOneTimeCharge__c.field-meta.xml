@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__EffectiveBaseOneTimeCharge__c</fullName>
     <deprecated>false</deprecated>
     <description>Roll up of the one-time charges of the opportunity products before applying adjustments.</description>
-    <externalId>false</externalId>
     <label>Effective Total: Base One Time Charges</label>
     <precision>18</precision>
     <required>false</required>

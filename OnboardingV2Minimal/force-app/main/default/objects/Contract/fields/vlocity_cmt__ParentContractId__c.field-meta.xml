@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Specifies parent contract of this contract. This contract is considered a sub-contract of the parent contract</description>
-    <externalId>false</externalId>
     <label>Parent Contract</label>
     <referenceTo>Contract</referenceTo>
     <relationshipLabel>Sub Contract</relationshipLabel>

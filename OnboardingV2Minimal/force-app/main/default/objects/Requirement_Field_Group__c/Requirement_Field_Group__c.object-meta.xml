@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,6 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Logical grouping of Requirement_Field__c records for UI display organization and batch validation operations. Groups help organize related fields within an Onboarding_Requirement__c for better user experience and allow validation to run across multiple fields together. Example: A Requirement_Field_Group named &quot;Insurance Information&quot; might contain fields for Policy Number, Policy Expiry Date, and Insurance Carrier Name. When displaying requirement forms, fields in the same group are shown together in a collapsible section. Validation rules can also reference groups to enforce cross-field validation (e.g., ensuring Policy Expiry Date is after Policy Start Date for all fields in the Insurance Information group).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Requirement Field Groups</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

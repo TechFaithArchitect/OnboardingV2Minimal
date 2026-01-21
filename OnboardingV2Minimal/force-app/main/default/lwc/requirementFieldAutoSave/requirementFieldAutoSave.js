@@ -144,4 +144,3 @@ export default class RequirementFieldAutoSave extends LightningElement {
         return this.isSaving ? 'slds-icon-text-default' : 'slds-icon-text-success';
     }
 }
-

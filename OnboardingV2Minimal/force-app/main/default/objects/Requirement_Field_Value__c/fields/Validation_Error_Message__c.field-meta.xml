@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Validation_Error_Message__c</fullName>
     <description>Latest validation error message for this field value.</description>
-    <externalId>false</externalId>
     <label>Validation Error Message</label>
     <length>32768</length>
     <trackTrending>false</trackTrending>

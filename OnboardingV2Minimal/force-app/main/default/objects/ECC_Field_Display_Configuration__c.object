@@ -143,7 +143,11 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Defines how individual fields are displayed in ECC (External Contact Credential) forms, specifying field API names, display labels, required flags, visibility, and display order. Fields are organized into ECC_Field_Configuration_Group__c via ECC_Field_Configuration_Group_Mapping__c. Example: An ECC_Field_Display_Configuration record might have Field_API_Name__c=&quot;Policy_Number__c&quot;, Display_Label__c=&quot;Policy Number&quot;, Required__c=true, Visible__c=true, and Display_Order__c=1. When rendering an ECC form for a specific configuration group, the system queries these configurations, orders them by Display_Order__c, and renders fields with the specified labels, validation rules, and visibility settings. This enables metadata-driven form generation without hardcoding field configurations.</description>
+    <description>Defines how individual fields are displayed in ECC (External Contact Credential) forms, specifying field API names, display labels, required flags, visibility, and display order. Fields are organized into ECC_Field_Configuration_Group__c via ECC_Field_Configuration_Group_Mapping__c. 
+
+Example: An ECC_Field_Display_Configuration record might have Field_API_Name__c=&quot;Policy_Number__c&quot;, Display_Label__c=&quot;Policy Number&quot;, Required__c=true, Visible__c=true, and Display_Order__c=1. 
+
+When rendering an ECC form for a specific configuration group, the system queries these configurations, orders them by Display_Order__c, and renders fields with the specified labels, validation rules, and visibility settings. This enables metadata-driven form generation without hardcoding field configurations.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>

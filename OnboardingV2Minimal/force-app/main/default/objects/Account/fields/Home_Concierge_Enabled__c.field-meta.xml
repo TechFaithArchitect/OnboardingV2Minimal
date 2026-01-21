@@ -3,7 +3,6 @@
     <fullName>Home_Concierge_Enabled__c</fullName>
     <defaultValue>false</defaultValue>
     <description>This checkbox enables Home Concierge for Chuzo users PER-[4314]</description>
-    <externalId>false</externalId>
     <label>Home Concierge</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

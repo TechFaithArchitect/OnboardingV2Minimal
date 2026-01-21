@@ -3,7 +3,6 @@
     <fullName>Self_Install_Allowed__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates if the user can have Self Install for Frontier [PER-5882}</description>
-    <externalId>false</externalId>
     <label>Frontier Self Install Allowed</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

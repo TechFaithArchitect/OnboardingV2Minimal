@@ -3,7 +3,6 @@
     <fullName>Required_Program__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Program/customization that is required for this group member.</description>
-    <externalId>false</externalId>
     <label>Required Program</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>Vendor Program Group Members</relationshipLabel>

@@ -87,8 +87,25 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Required_Credential__c</fieldItem>
-                <identifier>RecordRequired_Credential__cField</identifier>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.External_Course_Code__c</fieldItem>
+                <identifier>RecordExternal_Course_Code__cField</identifier>
+                <visibilityRule>
+                    <booleanFilter>1 OR 2</booleanFilter>
+                    <criteria>
+                        <leftValue>{!Record.Training_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>External</rightValue>
+                    </criteria>
+                    <criteria>
+                        <leftValue>{!Record.Training_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>None</rightValue>
+                    </criteria>
+                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-2e367ea6-c119-4ec1-8d3a-b49685c2a8f1</name>
@@ -146,29 +163,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.External_Course_Name__c</fieldItem>
                 <identifier>RecordExternal_Course_Name__cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Training_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>External</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Training_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>None</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.External_Course_Code__c</fieldItem>
-                <identifier>RecordExternal_Course_Code__cField</identifier>
                 <visibilityRule>
                     <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
@@ -350,6 +344,10 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Tabs</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>tabs</name>
                     <value>maintabs</value>

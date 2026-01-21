@@ -441,4 +441,3 @@ export default class VendorProgramOnboardingRequirementSetOrCreate extends Light
     return `Step ${step}: Select Requirement Set or Create Requirements`;
   }
 }
-

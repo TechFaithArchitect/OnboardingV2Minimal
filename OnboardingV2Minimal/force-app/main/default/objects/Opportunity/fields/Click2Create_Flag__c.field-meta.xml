@@ -3,7 +3,6 @@
     <fullName>Click2Create_Flag__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates that the Opportunity was created through Click2Create on Maps.</description>
-    <externalId>false</externalId>
     <label>Click2Create Flag</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

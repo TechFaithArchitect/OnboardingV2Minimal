@@ -3,7 +3,6 @@
     <fullName>MFA__c</fullName>
     <defaultValue>&quot;Email&quot;</defaultValue>
     <description>Determines authentication method for users related to the account (PER-2847)</description>
-    <externalId>false</externalId>
     <label>MFA</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

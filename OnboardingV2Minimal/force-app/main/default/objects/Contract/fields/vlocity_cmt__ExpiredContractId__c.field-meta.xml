@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Specifies the expired contract which this contact now replaces. This contract is considered an replacement of the expired contract</description>
-    <externalId>false</externalId>
     <label>Expired Contract</label>
     <referenceTo>Contract</referenceTo>
     <relationshipLabel>Replacement Contract</relationshipLabel>

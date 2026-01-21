@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__CustomerSentiment__c</fullName>
     <deprecated>false</deprecated>
     <description>Latest guess at this person&apos;s sentiment towards the deploying company with values such as Promoter, Satisfied, Neutral, Dissastisfied, Disgruntled.</description>
-    <externalId>false</externalId>
     <label>Customer Sentiment</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

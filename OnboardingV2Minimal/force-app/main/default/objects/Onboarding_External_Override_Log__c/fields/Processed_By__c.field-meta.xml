@@ -3,7 +3,6 @@
     <fullName>Processed_By__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>User who processed the override log entry.</description>
-    <externalId>false</externalId>
     <label>Processed By</label>
     <referenceTo>User</referenceTo>
     <relationshipName>Onboarding_External_Override_Logs</relationshipName>

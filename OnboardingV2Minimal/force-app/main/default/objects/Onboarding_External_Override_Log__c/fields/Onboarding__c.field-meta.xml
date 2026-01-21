@@ -3,7 +3,6 @@
     <fullName>Onboarding__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Onboarding record impacted by this override.</description>
-    <externalId>false</externalId>
     <label>Onboarding</label>
     <referenceTo>Onboarding__c</referenceTo>
     <relationshipLabel>Onboarding External Override Logs</relationshipLabel>

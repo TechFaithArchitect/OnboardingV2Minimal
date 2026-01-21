@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>First_Date_Contacted__c</fullName>
     <description>Captures the date when the person account was first contacted regarding an opportunity or service.</description>
-    <externalId>false</externalId>
     <label>First Date Contacted</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

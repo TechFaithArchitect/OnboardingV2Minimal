@@ -3,7 +3,6 @@
     <fullName>Required__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates if this requirement field must be provided.</description>
-    <externalId>false</externalId>
     <label>Required</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

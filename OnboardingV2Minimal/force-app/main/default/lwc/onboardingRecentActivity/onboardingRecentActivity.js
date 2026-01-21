@@ -90,4 +90,3 @@ export default class OnboardingRecentActivity extends LightningElement {
         }
     }
 }
-

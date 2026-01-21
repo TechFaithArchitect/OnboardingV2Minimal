@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Connected_Solutions_with_PV_Name</fullName>
+    <fields>Name</fields>
+    <fields>PV_Connected_Solutions_Record__c</fields>
+    <label>Connected Solutions with PV Name</label>
+</CompactLayout>

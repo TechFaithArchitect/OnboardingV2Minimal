@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Encrypted_Value__c</fullName>
     <description>Encrypted storage for sensitive field values (e.g., SSN).</description>
-    <externalId>false</externalId>
     <label>Encrypted Value</label>
     <length>175</length>
     <maskChar>X</maskChar>

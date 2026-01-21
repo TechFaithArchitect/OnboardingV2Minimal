@@ -3,7 +3,6 @@
     <fullName>Clone_From_Vendor_Program__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Source program customization to clone from when creating a new version.</description>
-    <externalId>false</externalId>
     <label>Clone From Vendor Program</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>Vendor Programs (Clone From Vendor Program)</relationshipLabel>

@@ -3,7 +3,6 @@
     <fullName>Created_by_VPN_User__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates that the opportunity was created by a user with an active VPN during login. (PER-5307)</description>
-    <externalId>false</externalId>
     <inlineHelpText>Indicates that the opportunity was created by a user with an active VPN during login.</inlineHelpText>
     <label>Created by VPN User</label>
     <trackFeedHistory>false</trackFeedHistory>

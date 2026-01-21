@@ -3,7 +3,6 @@
     <fullName>Default_For_Program_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Optional reverse mapping; lets you see if this group is set as a default for a specific Vendor Program Group.</description>
-    <externalId>false</externalId>
     <label>Default For Program Group</label>
     <referenceTo>Vendor_Program_Group__c</referenceTo>
     <relationshipLabel>Vendor Program Requirement Groups</relationshipLabel>

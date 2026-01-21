@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Windstream_Vendor_Id__c</fullName>
+    <description>Vendor ID for WST Payment Portal [PER-3695]</description>
+    <externalId>false</externalId>
+    <label>Windstream Vendor Id</label>
+    <length>4</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

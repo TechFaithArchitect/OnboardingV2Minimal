@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__Status__c</fullName>
     <deprecated>false</deprecated>
     <description>Status of this Contact such as active, inactive, expired or pending. Values can be customized by the deploying company. Custom logic should also set the IsActive__c field correspondingly; e.g. inactive, expired and pending may all translate to IsActive__c = False.</description>
-    <externalId>false</externalId>
     <label>Status</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

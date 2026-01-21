@@ -3,7 +3,6 @@
     <fullName>Certificate_Holder_Needed__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Marks if a certificate holder is required for insurance documents.</description>
-    <externalId>false</externalId>
     <label>Certificate Holder Needed</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

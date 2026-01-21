@@ -33,6 +33,7 @@
         <offset>0</offset>
     </actionCalls>
     <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>LearnUpon_User_Id_Available</name>
         <label>LearnUpon User Id Available</label>

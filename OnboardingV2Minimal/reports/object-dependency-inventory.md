@@ -1,0 +1,1243 @@
+# Object Dependency Inventory
+
+Objects scanned: 50
+Files scanned: 1210
+Files with object references: 427
+
+## Objects With No References (outside object definitions)
+- Vendor_Program_Requirement_Field_Value__c
+- Vendor_Program_Requirement_Field__c
+- Vendor_Program_Requirement_Group_Field__c
+
+## Objects -> Files
+- Account_Vendor_Program_Onboarding__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/handlers/AVOTriggerHandler.cls
+  - force-app/main/default/classes/test/AVOTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/OnboardingPrimaryContactTest.cls
+  - force-app/main/default/classes/test/TestAVOFactory.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/triggers/AccountVendorProgramOnboardingTrigger.trigger
+- Communication_Template__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/dto/EmailTemplateDTO.cls
+  - force-app/main/default/classes/orchestrators/EmailTemplateSyncOrchestratorTest.cls
+  - force-app/main/default/classes/orchestrators/OnboardingAppActivationOrchestratorTest.cls
+  - force-app/main/default/classes/repository/CommunicationTemplateRepository.cls
+  - force-app/main/default/classes/repository/CommunicationTemplateRepositoryTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/services/CommunicationDomainService.cls
+  - force-app/main/default/classes/services/EmailSyncDomainService.cls
+  - force-app/main/default/classes/services/EmailTemplateSyncServiceTest.cls
+  - force-app/main/default/classes/services/FollowUpExecutionService.cls
+  - force-app/main/default/classes/test/TestCommTemplateFactory.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/classes/test/TestEmailContextFactory.cls
+  - force-app/main/default/layouts/Communication_Template__c-Onboarding Communication Template Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/objects/Communication_Template__c/Communication_Template__c.object-meta.xml
+  - force-app/main/default/objects/Email_Template_Catalog__mdt/Email_Template_Catalog__mdt.object-meta.xml
+  - force-app/main/default/objects/OrgWideEmail__c/OrgWideEmail__c.object-meta.xml
+  - force-app/main/default/objects/Org_Wide_Email__mdt/Org_Wide_Email__mdt.object-meta.xml
+  - force-app/main/default/objects/Recipient_Group__c/Recipient_Group__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Recipient_Group__c/Vendor_Program_Recipient_Group__c.object-meta.xml
+- Dealer_Insurance_Detail__c:
+  - force-app/main/default/layouts/Dealer_Insurance_Detail__c-Dealer Insurance Status Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding__c-Onboarding Layout.layout-meta.xml
+  - force-app/main/default/objects/Dealer_Insurance__c/Dealer_Insurance__c.object-meta.xml
+- Dealer_Insurance__c:
+  - force-app/main/default/layouts/Account-Account Services Layout.layout-meta.xml
+  - force-app/main/default/layouts/Account-Standard User Layout.layout-meta.xml
+  - force-app/main/default/layouts/Account-System Admin Layout.layout-meta.xml
+  - force-app/main/default/layouts/Dealer_Insurance_Detail__c-Dealer Insurance Status Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding__c-Onboarding Layout.layout-meta.xml
+  - force-app/main/default/objects/Dealer_Insurance_Detail__c/Dealer_Insurance_Detail__c.object-meta.xml
+  - force-app/main/default/objects/Dealer_Insurance__c/Dealer_Insurance__c.object-meta.xml
+  - force-app/main/default/permissionsets/Acct_Services_Onboarding_Team.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Finance.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Onboarding_Account_Services.permissionset-meta.xml
+- Email_Template_Catalog__mdt:
+  - force-app/main/default/classes/orchestrators/EmailTemplateSyncOrchestratorTest.cls
+  - force-app/main/default/classes/repository/EmailCatalogCMDTRepository.cls
+  - force-app/main/default/classes/services/EmailSyncDomainService.cls
+  - force-app/main/default/classes/services/EmailTemplateSyncServiceTest.cls
+- Error_Alert__e:
+  - force-app/main/default/objects/Error_Alert__e/Error_Alert__e.object-meta.xml
+  - force-app/main/default/triggers/ErrorAlertTrigger.trigger
+- FollowUpRetryTrigger__e:
+  - force-app/main/default/classes/handlers/FollowUpQueueTriggerHandler.cls
+  - force-app/main/default/classes/handlers/FollowUpRetryHandler.cls
+  - force-app/main/default/objects/FollowUpRetryTrigger__e/FollowUpRetryTrigger__e.object-meta.xml
+  - force-app/main/default/triggers/FollowUpRetryTrigger.trigger
+- Follow_Up_Queue__c:
+  - force-app/main/default/classes/controllers/OnboardingAdminDashboardController.cls
+  - force-app/main/default/classes/handlers/FollowUpQueueTriggerHandler.cls
+  - force-app/main/default/classes/jobs/FollowUpProcessorBatchScheduler.cls
+  - force-app/main/default/classes/jobs/FollowUpProcessorScheduler.cls
+  - force-app/main/default/classes/repository/FollowUpRuleRepository.cls
+  - force-app/main/default/classes/repository/OnboardingMetricsRepository.cls
+  - force-app/main/default/classes/services/FollowUpDetectionService.cls
+  - force-app/main/default/classes/services/FollowUpExecutionService.cls
+  - force-app/main/default/classes/services/FollowUpFatigueService.cls
+  - force-app/main/default/classes/services/FollowUpProcessor.cls
+  - force-app/main/default/classes/test/FollowUpDetectionServiceTest.cls
+  - force-app/main/default/classes/test/FollowUpExecutionServiceTest.cls
+  - force-app/main/default/classes/test/FollowUpFatigueServiceTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorBatchSchedulerTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorSchedulerTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorTest.cls
+  - force-app/main/default/classes/test/OnboardingRequirementTriggerHandlerTest.cls
+  - force-app/main/default/layouts/Onboarding_Requirement__c-Onboarding Requirement Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding__c-Onboarding Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingAdminToolsPanel/onboardingAdminToolsPanel.js
+  - force-app/main/default/objects/FollowUpRetryTrigger__e/FollowUpRetryTrigger__e.object-meta.xml
+  - force-app/main/default/objects/Follow_Up_Rule__mdt/Follow_Up_Rule__mdt.object-meta.xml
+  - force-app/main/default/triggers/FollowUpQueueTrigger.trigger
+- Follow_Up_Rule__mdt:
+  - force-app/main/default/classes/repository/FollowUpRuleRepository.cls
+  - force-app/main/default/classes/services/FollowUpDetectionService.cls
+  - force-app/main/default/classes/services/FollowUpExecutionService.cls
+  - force-app/main/default/classes/services/FollowUpFatigueService.cls
+  - force-app/main/default/classes/services/FollowUpProcessor.cls
+  - force-app/main/default/classes/test/FollowUpDetectionServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingRequirementTriggerHandlerTest.cls
+  - force-app/main/default/objects/Communication_Template__c/Communication_Template__c.object-meta.xml
+  - force-app/main/default/objects/Follow_Up_Queue__c/Follow_Up_Queue__c.object-meta.xml
+  - force-app/main/default/objects/Twilio_Configuration__mdt/Twilio_Configuration__mdt.object-meta.xml
+- Follow_Up_Suppression__mdt:
+  - force-app/main/default/classes/repository/FollowUpRuleRepository.cls
+  - force-app/main/default/classes/services/FollowUpFatigueService.cls
+  - force-app/main/default/objects/Follow_Up_Rule__mdt/Follow_Up_Rule__mdt.object-meta.xml
+- Onboarding_App_Stage_Dependency_Member__c:
+  - force-app/main/default/classes/controllers/OnboardingStageDependencyController.cls
+  - force-app/main/default/classes/services/OnboardingStageDependencyService.cls
+  - force-app/main/default/classes/test/TestOnboardingStageDependencyFactory.cls
+  - force-app/main/default/layouts/Onboarding_Application_Stage_Dependency__c-Onboarding Application Stage Dependency Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Stage__c-Onboarding Application Stage Layout.layout-meta.xml
+  - force-app/main/default/objects/Onboarding_Application_Stage_Dependency__c/Onboarding_Application_Stage_Dependency__c.object-meta.xml
+- Onboarding_Application_Process__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepository.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepositoryTest.cls
+  - force-app/main/default/classes/repository/OnboardingHealthRepository.cls
+  - force-app/main/default/classes/repository/OnboardingStageDependencyRepository.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingHealthService.cls
+  - force-app/main/default/classes/test/OnboardingHealthServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingStageDependencyControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingStageDependencyServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingStageDependencyFactory.cls
+  - force-app/main/default/layouts/Onboarding_Application_Process__c-Onboarding Application Process Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Progress__c-Onboarding Application Progress Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Stage_Completion__c-Onboarding Application Stage Completion Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Stage__c-Onboarding Application Stage Layout.layout-meta.xml
+  - force-app/main/default/lwc/vendorProgramOnboardingFlow/vendorProgramOnboardingFlow.html
+  - force-app/main/default/objects/Onboarding_Application_Process__c/Onboarding_Application_Process__c.object-meta.xml
+  - force-app/main/default/objects/Onboarding_Application_Stage_Completion__c/Onboarding_Application_Stage_Completion__c.object-meta.xml
+- Onboarding_Application_Progress__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepository.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepositoryTest.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationServiceTest.cls
+  - force-app/main/default/layouts/Onboarding_Application_Process__c-Onboarding Application Process Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Stage__c-Onboarding Application Stage Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/objects/Onboarding_Application_Process__c/Onboarding_Application_Process__c.object-meta.xml
+- Onboarding_Application_Stage_Completion__c:
+  - force-app/main/default/classes/repository/OnboardingApplicationRepository.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepositoryTest.cls
+  - force-app/main/default/classes/repository/OnboardingStageDependencyRepository.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingStageDependencyFactory.cls
+  - force-app/main/default/layouts/Onboarding_Application_Process__c-Onboarding Application Process Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Stage__c-Onboarding Application Stage Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+- Onboarding_Application_Stage_Dependency__c:
+  - force-app/main/default/classes/controllers/OnboardingStageDependencyController.cls
+  - force-app/main/default/classes/repository/OnboardingStageDependencyRepository.cls
+  - force-app/main/default/classes/services/OnboardingStageDependencyService.cls
+  - force-app/main/default/classes/test/OnboardingStageDependencyServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingStageDependencyFactory.cls
+  - force-app/main/default/layouts/Onboarding_Application_Stage__c-Onboarding Application Stage Layout.layout-meta.xml
+  - force-app/main/default/objects/Onboarding_App_Stage_Dependency_Member__c/Onboarding_App_Stage_Dependency_Member__c.object-meta.xml
+- Onboarding_Application_Stage__c:
+  - force-app/main/default/classes/controllers/OnboardingStageDependencyController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepository.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepositoryTest.cls
+  - force-app/main/default/classes/repository/OnboardingHealthRepository.cls
+  - force-app/main/default/classes/repository/OnboardingStageDependencyRepository.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingHealthService.cls
+  - force-app/main/default/classes/test/OnboardingHealthServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingStageDependencyControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingStageDependencyServiceTest.cls
+  - force-app/main/default/classes/test/TestOnboardingStageDependencyFactory.cls
+  - force-app/main/default/layouts/Onboarding_Application_Process__c-Onboarding Application Process Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Stage_Completion__c-Onboarding Application Stage Completion Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Application_Stage__c-Onboarding Application Stage Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Component_Library__c-Onboarding Component Library Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingFlowEngine/onboardingFlowEngine.js
+  - force-app/main/default/objects/Onboarding_Application_Process__c/Onboarding_Application_Process__c.object-meta.xml
+  - force-app/main/default/objects/Onboarding_Component_Library__c/Onboarding_Component_Library__c.object-meta.xml
+- Onboarding_Component_Library__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/services/OnboardingHealthService.cls
+  - force-app/main/default/classes/test/OnboardingHealthServiceTest.cls
+  - force-app/main/default/layouts/Onboarding_Application_Stage__c-Onboarding Application Stage Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Component_Library__c-Onboarding Component Library Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingHomeDashboard/onboardingHomeDashboard.html
+  - force-app/main/default/lwc/onboardingStageRenderer/onboardingStageRenderer.html
+  - force-app/main/default/objects/Onboarding_Application_Process__c/Onboarding_Application_Process__c.object-meta.xml
+- Onboarding_External_Override_Log__c:
+  - force-app/main/default/classes/controllers/OnboardingAdminDashboardController.cls
+  - force-app/main/default/classes/controllers/OverrideAuditController.cls
+  - force-app/main/default/classes/repository/OnboardingMetricsRepository.cls
+  - force-app/main/default/classes/services/OnboardingOverrideAuditService.cls
+  - force-app/main/default/classes/test/OnboardingExternalOverrideServiceTest.cls
+  - force-app/main/default/layouts/Onboarding__c-Onboarding Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingAdminToolsPanel/onboardingAdminToolsPanel.js
+- Onboarding_Requirement_Dependency__c:
+  - force-app/main/default/classes/test/TestOnboardingReqDependencyFactory.cls
+  - force-app/main/default/layouts/Onboarding_Requirement__c-Onboarding Requirement Layout.layout-meta.xml
+- Onboarding_Requirement_Set__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/handlers/RequirementSetTriggerHandler.cls
+  - force-app/main/default/classes/handlers/RequirementTemplateTriggerHandler.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/rules/AllRequirementSetMustBeActiveRule.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/RequirementSetTemplateService.cls
+  - force-app/main/default/classes/services/VendorProgramRequirementSetService.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingRequirementSetFactory.cls
+  - force-app/main/default/classes/test/TestVdrPrgrmOnboardingReqTemplateFactory.cls
+  - force-app/main/default/classes/util/DefaultValueHelper.cls
+  - force-app/main/default/layouts/Onboarding_Requirement_Set__c-Onboarding Requirement Set Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Set_Template__c-Requirement Set Template Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Onboarding_Req_Template__c-Vendor Program Requirement Definition Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Set__c-Vendor Program Requirement Set Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingAppRequirementSetupWizard/onboardingAppRequirementSetupWizard.js
+  - force-app/main/default/lwc/vendorProgramOnboardingReqTemplate/vendorProgramOnboardingReqTemplate.js
+  - force-app/main/default/lwc/vendorProgramOnboardingRequirementSetOrCreate/vendorProgramOnboardingRequirementSetOrCreate.js
+  - force-app/main/default/objects/Requirement_Set_Template__c/Requirement_Set_Template__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Set__c/Vendor_Program_Requirement_Set__c.object-meta.xml
+  - force-app/main/default/triggers/OnboardingRequirementSetTrigger.trigger
+- Onboarding_Requirement__c:
+  - force-app/main/default/classes/controllers/OnboardingHomeDashboardController.cls
+  - force-app/main/default/classes/controllers/OnboardingReqDueDateControllerTest.cls
+  - force-app/main/default/classes/controllers/OnboardingRequirementDueDateController.cls
+  - force-app/main/default/classes/controllers/OnboardingRequirementsPanelCtlrTest.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineController.cls
+  - force-app/main/default/classes/controllers/RequirementFieldValueController.cls
+  - force-app/main/default/classes/handlers/AVOTriggerHandler.cls
+  - force-app/main/default/classes/handlers/OnboardingRequirementTriggerHandler.cls
+  - force-app/main/default/classes/jobs/FollowUpProcessorBatchScheduler.cls
+  - force-app/main/default/classes/jobs/FollowUpProcessorScheduler.cls
+  - force-app/main/default/classes/jobs/OnboardingCleanupScheduler.cls
+  - force-app/main/default/classes/repository/FollowUpRuleRepository.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepository.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepositoryTest.cls
+  - force-app/main/default/classes/repository/RequirementFieldValueRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/services/FollowUpDetectionService.cls
+  - force-app/main/default/classes/services/FollowUpFatigueService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingBlockingDetectionService.cls
+  - force-app/main/default/classes/services/OnboardingRequirementService.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluator.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluatorTest.cls
+  - force-app/main/default/classes/services/OnboardingRulesService.cls
+  - force-app/main/default/classes/services/OnboardingRulesServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluator.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluatorTest.cls
+  - force-app/main/default/classes/services/RequirementFieldAsyncValidator.cls
+  - force-app/main/default/classes/test/AVOTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/FollowUpDetectionServiceTest.cls
+  - force-app/main/default/classes/test/FollowUpFatigueServiceTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorBatchSchedulerTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorSchedulerTest.cls
+  - force-app/main/default/classes/test/OnboardingBlockingDetectionServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingRequirementTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/OnboardingStatusRulesEngineCntlrTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueControllerTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueRepositoryTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/classes/test/TestOnboardingReqDependencyFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingRequirementFactory.cls
+  - force-app/main/default/classes/test/TestRequirementFieldValueFactory.cls
+  - force-app/main/default/classes/util/OnboardingTestDataFactory.cls
+  - force-app/main/default/layouts/Follow_Up_Queue__c-Follow Up Queue Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Requirement_Dependency__c-Onboarding Requirement Dependency Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Requirement__c-Onboarding Requirement Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding__c-Onboarding Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field_Value__c-Requirement Field Value Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement__c-Vendor Program Requirement Layout.layout-meta.xml
+  - force-app/main/default/objects/Dealer_Insurance__c/Dealer_Insurance__c.object-meta.xml
+  - force-app/main/default/objects/Follow_Up_Rule__mdt/Follow_Up_Rule__mdt.object-meta.xml
+  - force-app/main/default/objects/Onboarding_Requirement_Dependency__c/Onboarding_Requirement_Dependency__c.object-meta.xml
+  - force-app/main/default/objects/Onboarding_Requirement__c/Onboarding_Requirement__c.object-meta.xml
+  - force-app/main/default/objects/Requirement_Field_Group__c/Requirement_Field_Group__c.object-meta.xml
+  - force-app/main/default/objects/Requirement_Field_Value__c/Requirement_Field_Value__c.object-meta.xml
+  - force-app/main/default/objects/Requirement_Field__c/Requirement_Field__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Field_Value__c/Vendor_Program_Requirement_Field_Value__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement__c/Vendor_Program_Requirement__c.object-meta.xml
+  - force-app/main/default/triggers/OnboardingRequirementTrigger.trigger
+- Onboarding_Status_Rule__c:
+  - force-app/main/default/classes/controllers/OnboardingStatusRuleController.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRuleControllerTest.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepository.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepositoryTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/rules/AllLinkedEngineMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/AllLinkedEngineMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/AllStatusRulesMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/OnboardingAppRuleRegistry.cls
+  - force-app/main/default/classes/rules/OnboardingAppRuleRegistryTest.cls
+  - force-app/main/default/classes/services/OnboardingAppActivationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluator.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluatorTest.cls
+  - force-app/main/default/classes/services/OnboardingRulesService.cls
+  - force-app/main/default/classes/services/OnboardingRulesServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluator.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluatorTest.cls
+  - force-app/main/default/classes/services/StatusRulesEngineService.cls
+  - force-app/main/default/classes/test/OnboardingStatusRulesEngineCntlrTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/classes/test/TestOnboardingRulesFactory.cls
+  - force-app/main/default/layouts/Onboarding_Status_Rule__c-Onboarding Status Rule Layout.layout-meta.xml
+  - force-app/main/default/layouts/Onboarding_Status_Rules_Engine__c-Onboarding Status Rules Engine Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement__c-Vendor Program Requirement Layout.layout-meta.xml
+- Onboarding_Status_Rules_Engine__c:
+  - force-app/main/default/classes/controllers/OnboardingRequirementsPanelController.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRuleController.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRuleControllerTest.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineController.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineCtlrTest.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepository.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepositoryTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/rules/AllLinkedEngineMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/AllStatusRuleGroupMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/AllStatusRuleGroupMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/OnboardingAppRuleRegistry.cls
+  - force-app/main/default/classes/rules/OnboardingAppRuleRegistryTest.cls
+  - force-app/main/default/classes/services/OnboardingAppActivationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluator.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluatorTest.cls
+  - force-app/main/default/classes/services/OnboardingRulesService.cls
+  - force-app/main/default/classes/services/OnboardingRulesServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluator.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluatorTest.cls
+  - force-app/main/default/classes/services/StatusRulesEngineService.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingStatusRulesEngineCntlrTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/classes/test/TestOnboardingRulesEngineFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingRulesFactory.cls
+  - force-app/main/default/classes/util/DefaultValueHelper.cls
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group__c-Vendor Program Requirement Group Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingStatusRuleForm/onboardingStatusRuleForm.html
+  - force-app/main/default/objects/Onboarding_Status_Rule__c/Onboarding_Status_Rule__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Group__c/Vendor_Program_Requirement_Group__c.object-meta.xml
+- Opportunity:
+  - force-app/main/default/classes/controllers/OnboardingOrderControllerTest.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingPrimaryContactTest.cls
+  - force-app/main/default/classes/util/DefaultValueHelper.cls
+  - force-app/main/default/labels/CustomLabels.labels-meta.xml
+  - force-app/main/default/layouts/Account-Account Layout.layout-meta.xml
+  - force-app/main/default/layouts/Account-Dealer Account For External Users.layout-meta.xml
+  - force-app/main/default/layouts/Account-Owner Layout.layout-meta.xml
+  - force-app/main/default/layouts/Account-PV_Manager.layout-meta.xml
+  - force-app/main/default/layouts/Contract-MDP Program.layout-meta.xml
+  - force-app/main/default/layouts/Opportunity-Chuzo Layout.layout-meta.xml
+  - force-app/main/default/layouts/Opportunity-ISG Page Layout - General.layout-meta.xml
+  - force-app/main/default/layouts/Opportunity-Infrastructure Opportunity.layout-meta.xml
+  - force-app/main/default/layouts/Opportunity-Opportunity Layout.layout-meta.xml
+  - force-app/main/default/layouts/Opportunity-PV Customer Service.layout-meta.xml
+  - force-app/main/default/layouts/Opportunity-PV_Manager.layout-meta.xml
+  - force-app/main/default/layouts/Opportunity-Program Opportunity Layout.layout-meta.xml
+  - force-app/main/default/layouts/OpportunityContactRole-Opportunity Contact Role Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor__c-Vendor Layout.layout-meta.xml
+  - force-app/main/default/lwc/accountProgramOnboardingModal/accountProgramOnboardingModal.html
+  - force-app/main/default/lwc/accountProgramOnboardingModal/accountProgramOnboardingModal.js
+  - force-app/main/default/objects/Account_Vendor_Program_Onboarding__c/Account_Vendor_Program_Onboarding__c.object-meta.xml
+  - force-app/main/default/permissionsets/Agent.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Buyflow_Access.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Chuzo_Agent_Residential.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Chuzo_Partner.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Clicker_Event.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Clicker_Phone_Sales.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Clicker_Retail.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Disposition_Access.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Disposition_Community_Access.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Lead_Management.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Migration_Admin.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Onboarding_Account_Services.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Other_Order.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Owner_Permission_Set.permissionset-meta.xml
+  - force-app/main/default/permissionsets/POE_PVManager_Reports_Object_Access.permissionset-meta.xml
+  - force-app/main/default/permissionsets/PV_Customer_Service.permissionset-meta.xml
+  - force-app/main/default/permissionsets/PV_Manager.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Program_Sales_Training_Communication.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Standard_User.permissionset-meta.xml
+  - force-app/main/default/permissionsets/sfdcInternalInt__sfdc_a360.permissionset-meta.xml
+  - force-app/main/default/profiles/%23FS Dispatcher %28Partner Community%29.profile-meta.xml
+  - force-app/main/default/profiles/%23FS Dispatcher.profile-meta.xml
+  - force-app/main/default/profiles/%23FS Service Resource %28Partner Community%29.profile-meta.xml
+  - force-app/main/default/profiles/%23FS Service Resource.profile-meta.xml
+  - force-app/main/default/profiles/Analytics Cloud Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Analytics Cloud Security User.profile-meta.xml
+  - force-app/main/default/profiles/Anypoint Integration.profile-meta.xml
+  - force-app/main/default/profiles/B2BMA Integration User.profile-meta.xml
+  - force-app/main/default/profiles/CPQ Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Chatter External User.profile-meta.xml
+  - force-app/main/default/profiles/Chatter Free User.profile-meta.xml
+  - force-app/main/default/profiles/Chatter Moderator User.profile-meta.xml
+  - force-app/main/default/profiles/Customer Community Plus User.profile-meta.xml
+  - force-app/main/default/profiles/DEPRECATED - FSL Chuzo Standard User.profile-meta.xml
+  - force-app/main/default/profiles/Einstein Agent User.profile-meta.xml
+  - force-app/main/default/profiles/End User.profile-meta.xml
+  - force-app/main/default/profiles/Executive Sponsor.profile-meta.xml
+  - force-app/main/default/profiles/External Apps Login User.profile-meta.xml
+  - force-app/main/default/profiles/External Partner - DCC.profile-meta.xml
+  - force-app/main/default/profiles/FSL Chuzo Standard User.profile-meta.xml
+  - force-app/main/default/profiles/Field Service Optimization.profile-meta.xml
+  - force-app/main/default/profiles/Field Service Profile.profile-meta.xml
+  - force-app/main/default/profiles/Guest License User.profile-meta.xml
+  - force-app/main/default/profiles/Identity User.profile-meta.xml
+  - force-app/main/default/profiles/Infrastructure User.profile-meta.xml
+  - force-app/main/default/profiles/Legacy System Administrator.profile-meta.xml
+  - force-app/main/default/profiles/MarketingProfile.profile-meta.xml
+  - force-app/main/default/profiles/Minimum Access - API Only Integrations.profile-meta.xml
+  - force-app/main/default/profiles/Minimum Access - Salesforce.profile-meta.xml
+  - force-app/main/default/profiles/National Account User.profile-meta.xml
+  - force-app/main/default/profiles/Onboarding Profile.profile-meta.xml
+  - force-app/main/default/profiles/Owner Profile.profile-meta.xml
+  - force-app/main/default/profiles/PV Dispatcher.profile-meta.xml
+  - force-app/main/default/profiles/PV Partner Portal Profile.profile-meta.xml
+  - force-app/main/default/profiles/Partner Community User.profile-meta.xml
+  - force-app/main/default/profiles/Partner.profile-meta.xml
+  - force-app/main/default/profiles/Phone Sales Profile.profile-meta.xml
+  - force-app/main/default/profiles/QA Auditor.profile-meta.xml
+  - force-app/main/default/profiles/Read Only.profile-meta.xml
+  - force-app/main/default/profiles/Residential Profile.profile-meta.xml
+  - force-app/main/default/profiles/Sales Insights Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Salesforce API Only System Integrations.profile-meta.xml
+  - force-app/main/default/profiles/SalesforceIQ Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Self Service Profile.profile-meta.xml
+  - force-app/main/default/profiles/SolutionManager.profile-meta.xml
+  - force-app/main/default/profiles/Support %26 Cases Profile.profile-meta.xml
+  - force-app/main/default/profiles/TMO User.profile-meta.xml
+  - force-app/main/default/profiles/Warehouse.profile-meta.xml
+  - force-app/main/default/profiles/exactly user.profile-meta.xml
+  - force-app/main/default/triggers/OpportunityTrigger.trigger
+- OpportunityContactRole:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+- OrgWideEmail__c:
+  - force-app/main/default/classes/dto/OrgWideEmailDTO.cls
+  - force-app/main/default/classes/dto/OrgWideEmailDTOTest.cls
+  - force-app/main/default/classes/repository/OrgWideEmailRepository.cls
+  - force-app/main/default/classes/repository/OrgWideEmailRepositoryTest.cls
+  - force-app/main/default/classes/services/EmailSyncDomainService.cls
+  - force-app/main/default/classes/services/EmailSyncDomainServiceTest.cls
+  - force-app/main/default/objects/Org_Wide_Email__mdt/Org_Wide_Email__mdt.object-meta.xml
+- Org_Wide_Email__mdt:
+  - force-app/main/default/classes/orchestrators/OrgWideEmailSyncOrchestratorTest.cls
+  - force-app/main/default/classes/repository/OrgWideEmailCMDTRepository.cls
+  - force-app/main/default/classes/repository/OrgWideEmailCMDTRepositoryTest.cls
+  - force-app/main/default/objects/OrgWideEmail__c/OrgWideEmail__c.object-meta.xml
+- Recipient_Group_Member__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolver.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolverTest.cls
+  - force-app/main/default/classes/services/CommunicationDomainService.cls
+  - force-app/main/default/classes/services/RecipientGroupEmailServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestRecipientGroupMemberFactory.cls
+  - force-app/main/default/classes/util/DefaultValueHelper.cls
+  - force-app/main/default/layouts/Recipient_Group__c-Recipient Group Layout.layout-meta.xml
+  - force-app/main/default/objects/Recipient_Group__c/Recipient_Group__c.object-meta.xml
+- Recipient_Group__c:
+  - force-app/main/default/classes/actions/RecipientGroupEmailActionTest.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/orchestrators/RecipientGroupEmailOrchestratorTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolver.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolverTest.cls
+  - force-app/main/default/classes/rules/NoDuplicateRecipientGroupAssignmentRule.cls
+  - force-app/main/default/classes/rules/OnlyOneActiveRecGrpPerPrgrmRuleTest.cls
+  - force-app/main/default/classes/rules/PreventDupRecGrpAssignmentRule.cls
+  - force-app/main/default/classes/rules/PreventDupRecGrpAssignmentRuleTest.cls
+  - force-app/main/default/classes/rules/RecipientAndProgramMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/RecipientAndProgramMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/RequireParentVersionOnActivationRuleTest.cls
+  - force-app/main/default/classes/services/CommunicationDomainService.cls
+  - force-app/main/default/classes/services/RecipientGroupEmailServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestRecipientGroupFactory.cls
+  - force-app/main/default/classes/test/TestRecipientGroupMemberFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramRecipientGroupFactory.cls
+  - force-app/main/default/classes/util/DefaultValueHelper.cls
+  - force-app/main/default/layouts/Recipient_Group_Member__c-Recipient Group Member Layout.layout-meta.xml
+  - force-app/main/default/layouts/Recipient_Group__c-Recipient Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Recipient_Group__c-Vendor Program Recipient Group Layout.layout-meta.xml
+  - force-app/main/default/lwc/vendorProgramOnboardingCommunicationTemplate/vendorProgramOnboardingCommunicationTemplate.js
+  - force-app/main/default/lwc/vendorProgramOnboardingRecipientGroup/vendorProgramOnboardingRecipientGroup.js
+  - force-app/main/default/lwc/vendorProgramOnboardingRecipientGroupMembers/vendorProgramOnboardingRecipientGroupMembers.js
+  - force-app/main/default/objects/Recipient_Group_Member__c/Recipient_Group_Member__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Recipient_Group__c/Vendor_Program_Recipient_Group__c.object-meta.xml
+- Requirement_Field_Group__c:
+  - force-app/main/default/classes/repository/RequirementFieldValueRepository.cls
+  - force-app/main/default/classes/test/RequirementFieldValueRepositoryTest.cls
+  - force-app/main/default/classes/test/TestRequirementFieldFactory.cls
+  - force-app/main/default/layouts/Requirement_Field_Group__c-Requirement Field Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field__c-Requirement Field Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement__c-Vendor Program Requirement Layout.layout-meta.xml
+  - force-app/main/default/objects/Requirement_Field__c/Requirement_Field__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Group_Field__c/Vendor_Program_Requirement_Group_Field__c.object-meta.xml
+- Requirement_Field_Validation_Rule__mdt:
+  - force-app/main/default/classes/controllers/ValidationRuleBuilderController.cls
+  - force-app/main/default/classes/services/RequirementFieldAsyncValidator.cls
+  - force-app/main/default/classes/services/RequirementFieldExternalValidator.cls
+  - force-app/main/default/classes/services/RequirementFieldValidationService.cls
+  - force-app/main/default/classes/test/RequirementFieldValidationServiceTest.cls
+  - force-app/main/default/objects/Requirement_Field__c/Requirement_Field__c.object-meta.xml
+  - force-app/main/default/objects/Validation_Failure__c/Validation_Failure__c.object-meta.xml
+- Requirement_Field_Value__c:
+  - force-app/main/default/classes/actions/RequirementFieldValidationAction.cls
+  - force-app/main/default/classes/controllers/OnboardingRequirementsPanelController.cls
+  - force-app/main/default/classes/controllers/OnboardingRequirementsPanelCtlrTest.cls
+  - force-app/main/default/classes/controllers/RequirementFieldValueController.cls
+  - force-app/main/default/classes/handlers/RequirementFieldValueTriggerHandler.cls
+  - force-app/main/default/classes/repository/RequirementFieldValueRepository.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/RequirementFieldAsyncValidator.cls
+  - force-app/main/default/classes/services/RequirementFieldExternalValidator.cls
+  - force-app/main/default/classes/services/RequirementFieldValidationService.cls
+  - force-app/main/default/classes/services/RequirementValidationLogger.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/RequirementFieldAsyncValidatorTest.cls
+  - force-app/main/default/classes/test/RequirementFieldExternalValidatorTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValidationActionTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValidationServiceTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueControllerTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueRepositoryTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/RequirementValidationLoggerTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestRequirementFieldValueFactory.cls
+  - force-app/main/default/layouts/Onboarding_Requirement__c-Onboarding Requirement Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field_Value__c-Requirement Field Value Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field__c-Requirement Field Layout.layout-meta.xml
+  - force-app/main/default/layouts/Validation_Failure__c-Validation Failure Layout.layout-meta.xml
+  - force-app/main/default/objects/Requirement_Field_Validation_Rule__mdt/Requirement_Field_Validation_Rule__mdt.object-meta.xml
+  - force-app/main/default/objects/Requirement_Field__c/Requirement_Field__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Field_Value__c/Vendor_Program_Requirement_Field_Value__c.object-meta.xml
+  - force-app/main/default/triggers/RequirementFieldValueTrigger.trigger
+- Requirement_Field__c:
+  - force-app/main/default/classes/controllers/OnboardingAdminDashboardController.cls
+  - force-app/main/default/classes/controllers/OnboardingRequirementsPanelCtlrTest.cls
+  - force-app/main/default/classes/controllers/RequirementFieldValueController.cls
+  - force-app/main/default/classes/controllers/ValidationRuleBuilderController.cls
+  - force-app/main/default/classes/handlers/RequirementFieldValueTriggerHandler.cls
+  - force-app/main/default/classes/repository/OnboardingMetricsRepository.cls
+  - force-app/main/default/classes/repository/RequirementFieldValueRepository.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/RequirementFieldValidationService.cls
+  - force-app/main/default/classes/services/RequirementValidationLogger.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/RequirementFieldAsyncValidatorTest.cls
+  - force-app/main/default/classes/test/RequirementFieldExternalValidatorTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValidationActionTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValidationServiceTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueControllerTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueRepositoryTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/RequirementValidationLoggerTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestRequirementFieldFactory.cls
+  - force-app/main/default/classes/test/TestRequirementFieldValueFactory.cls
+  - force-app/main/default/classes/util/OnboardingTestDataFactory.cls
+  - force-app/main/default/layouts/Requirement_Field_Group__c-Requirement Field Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field_Validation_Rule__mdt-Requirement Field Validation Rule Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field_Value__c-Requirement Field Value Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field__c-Requirement Field Layout.layout-meta.xml
+  - force-app/main/default/layouts/Validation_Failure__c-Validation Failure Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement__c-Vendor Program Requirement Layout.layout-meta.xml
+  - force-app/main/default/objects/Requirement_Field_Group__c/Requirement_Field_Group__c.object-meta.xml
+  - force-app/main/default/objects/Requirement_Field_Validation_Rule__mdt/Requirement_Field_Validation_Rule__mdt.object-meta.xml
+  - force-app/main/default/objects/Requirement_Field_Value__c/Requirement_Field_Value__c.object-meta.xml
+  - force-app/main/default/objects/Validation_Failure__c/Validation_Failure__c.object-meta.xml
+- Requirement_Set_Template__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/handlers/RequirementTemplateTriggerHandler.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/rules/AllRequirementSetMustBeActiveRule.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/RequirementSetTemplateService.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestVdrPrgrmOnboardingReqTemplateFactory.cls
+  - force-app/main/default/layouts/Onboarding_Requirement_Set__c-Onboarding Requirement Set Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Onboarding_Req_Template__c-Vendor Program Requirement Definition Layout.layout-meta.xml
+- Sync_Log__c:
+  - force-app/main/default/classes/controllers/EmailTemplateSyncControllerTest.cls
+  - force-app/main/default/classes/controllers/OrgWideEmailSyncControllerTest.cls
+  - force-app/main/default/classes/helpers/UtilitiesSyncLogHelper.cls
+  - force-app/main/default/classes/helpers/UtilitiesSyncLogHelperTest.cls
+  - force-app/main/default/classes/orchestrators/EmailTemplateSyncOrchestratorTest.cls
+  - force-app/main/default/classes/orchestrators/OrgWideEmailSyncOrchestratorTest.cls
+  - force-app/main/default/classes/services/EmailSyncDomainService.cls
+- Territory_Assignments__c:
+  - force-app/main/default/classes/helpers/EmailCommTerritoryRoleHelper.cls
+  - force-app/main/default/classes/helpers/EmailCommTerritoryRoleHelperTest.cls
+  - force-app/main/default/classes/jobs/EmailCommTerritoryRoleSyncJob.cls
+  - force-app/main/default/classes/jobs/EmailCommTerritoryRoleSyncJobTest.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolverTest.cls
+  - force-app/main/default/classes/services/RecipientGroupEmailServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/layouts/Onboarding__c-Onboarding Layout.layout-meta.xml
+  - force-app/main/default/layouts/Territory_Assignments__c-Infrastructure Layout.layout-meta.xml
+  - force-app/main/default/layouts/Territory_Assignments__c-Program Acquisitions Layout.layout-meta.xml
+  - force-app/main/default/objects/Territory_Assignments__c/Territory_Assignments__c.object-meta.xml
+  - force-app/main/default/objects/Territory_Role_Assignment__c/Territory_Role_Assignment__c.object-meta.xml
+  - force-app/main/default/permissionsets/Acct_Services_Onboarding_Team.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Migration_Admin.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Onboarding_Account_Services.permissionset-meta.xml
+  - force-app/main/default/profiles/%23FS Dispatcher %28Partner Community%29.profile-meta.xml
+  - force-app/main/default/profiles/%23FS Dispatcher.profile-meta.xml
+  - force-app/main/default/profiles/%23FS Service Resource %28Partner Community%29.profile-meta.xml
+  - force-app/main/default/profiles/%23FS Service Resource.profile-meta.xml
+  - force-app/main/default/profiles/Analytics Cloud Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Analytics Cloud Security User.profile-meta.xml
+  - force-app/main/default/profiles/Anypoint Integration.profile-meta.xml
+  - force-app/main/default/profiles/B2BMA Integration User.profile-meta.xml
+  - force-app/main/default/profiles/CPQ Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Chatter External User.profile-meta.xml
+  - force-app/main/default/profiles/Chatter Free User.profile-meta.xml
+  - force-app/main/default/profiles/Chatter Moderator User.profile-meta.xml
+  - force-app/main/default/profiles/Customer Community Plus User.profile-meta.xml
+  - force-app/main/default/profiles/DEPRECATED - FSL Chuzo Standard User.profile-meta.xml
+  - force-app/main/default/profiles/Einstein Agent User.profile-meta.xml
+  - force-app/main/default/profiles/End User.profile-meta.xml
+  - force-app/main/default/profiles/Executive Sponsor.profile-meta.xml
+  - force-app/main/default/profiles/External Apps Login User.profile-meta.xml
+  - force-app/main/default/profiles/External Partner - DCC.profile-meta.xml
+  - force-app/main/default/profiles/FSL Chuzo Standard User.profile-meta.xml
+  - force-app/main/default/profiles/Field Service Optimization.profile-meta.xml
+  - force-app/main/default/profiles/Field Service Profile.profile-meta.xml
+  - force-app/main/default/profiles/Guest License User.profile-meta.xml
+  - force-app/main/default/profiles/Identity User.profile-meta.xml
+  - force-app/main/default/profiles/Infrastructure User.profile-meta.xml
+  - force-app/main/default/profiles/Legacy System Administrator.profile-meta.xml
+  - force-app/main/default/profiles/MarketingProfile.profile-meta.xml
+  - force-app/main/default/profiles/Minimum Access - API Only Integrations.profile-meta.xml
+  - force-app/main/default/profiles/Minimum Access - Salesforce.profile-meta.xml
+  - force-app/main/default/profiles/National Account User.profile-meta.xml
+  - force-app/main/default/profiles/Onboarding Profile.profile-meta.xml
+  - force-app/main/default/profiles/Owner Profile.profile-meta.xml
+  - force-app/main/default/profiles/PV Dispatcher.profile-meta.xml
+  - force-app/main/default/profiles/PV Partner Portal Profile.profile-meta.xml
+  - force-app/main/default/profiles/Partner Community User.profile-meta.xml
+  - force-app/main/default/profiles/Partner.profile-meta.xml
+  - force-app/main/default/profiles/Phone Sales Profile.profile-meta.xml
+  - force-app/main/default/profiles/QA Auditor.profile-meta.xml
+  - force-app/main/default/profiles/Read Only.profile-meta.xml
+  - force-app/main/default/profiles/Residential Profile.profile-meta.xml
+  - force-app/main/default/profiles/Sales Insights Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Salesforce API Only System Integrations.profile-meta.xml
+  - force-app/main/default/profiles/SalesforceIQ Integration User.profile-meta.xml
+  - force-app/main/default/profiles/Self Service Profile.profile-meta.xml
+  - force-app/main/default/profiles/SolutionManager.profile-meta.xml
+  - force-app/main/default/profiles/Support %26 Cases Profile.profile-meta.xml
+  - force-app/main/default/profiles/TMO User.profile-meta.xml
+  - force-app/main/default/profiles/Warehouse.profile-meta.xml
+  - force-app/main/default/profiles/exactly user.profile-meta.xml
+  - force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger
+- Territory_Role_Assignment__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/helpers/EmailCommTerritoryRoleHelper.cls
+  - force-app/main/default/classes/helpers/EmailCommTerritoryRoleHelperTest.cls
+  - force-app/main/default/classes/jobs/EmailCommTerritoryRoleSyncJobTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolver.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolverTest.cls
+  - force-app/main/default/classes/services/RecipientGroupEmailServiceTest.cls
+  - force-app/main/default/layouts/Territory_Assignments__c-Infrastructure Layout.layout-meta.xml
+  - force-app/main/default/layouts/Territory_Assignments__c-Program Acquisitions Layout.layout-meta.xml
+  - force-app/main/default/lwc/vendorProgramOnboardingRecipientGroupMembers/vendorProgramOnboardingRecipientGroupMembers.js
+  - force-app/main/default/objects/Territory_Assignments__c/Territory_Assignments__c.object-meta.xml
+- Twilio_Configuration__mdt:
+  - force-app/main/default/classes/controllers/TwilioSettingsController.cls
+  - force-app/main/default/classes/services/FollowUpExecutionService.cls
+  - force-app/main/default/classes/strategies/TwilioSMSProvider.cls
+- Validation_Failure__c:
+  - force-app/main/default/classes/controllers/OnboardingAdminDashboardController.cls
+  - force-app/main/default/classes/repository/OnboardingMetricsRepository.cls
+  - force-app/main/default/classes/services/RequirementValidationLogger.cls
+  - force-app/main/default/classes/test/RequirementValidationLoggerTest.cls
+  - force-app/main/default/layouts/Requirement_Field_Value__c-Requirement Field Value Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingAdminToolsPanel/onboardingAdminToolsPanel.js
+  - force-app/main/default/objects/Requirement_Field_Validation_Rule__mdt/Requirement_Field_Validation_Rule__mdt.object-meta.xml
+  - force-app/main/default/objects/Requirement_Field__c/Requirement_Field__c.object-meta.xml
+- Vendor_Program_Group__c:
+  - force-app/main/default/classes/controllers/OnboardingStatusRuleControllerTest.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineController.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineCtlrTest.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/handlers/VendorProgramGrpMmbrTrgHndlrTest.cls
+  - force-app/main/default/classes/handlers/VersioningTriggerHandlerTest.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepository.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepositoryTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/rules/AllStatusRuleGroupMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/OnlyOneTargetProgramInGroupRule.cls
+  - force-app/main/default/classes/rules/OnlyOneTargetProgramInGroupRuleTest.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/OnboardingRulesService.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluator.cls
+  - force-app/main/default/classes/services/VendorDomainService.cls
+  - force-app/main/default/classes/services/VendorPrerequisiteEvaluator.cls
+  - force-app/main/default/classes/services/VendorPrerequisiteEvaluatorTest.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingStatusRulesEngineCntlrTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryUtil.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/classes/test/TestOnboardingRulesEngineFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramGroupFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramGroupMemberFactory.cls
+  - force-app/main/default/classes/util/PicklistHelper.cls
+  - force-app/main/default/layouts/Onboarding_Status_Rules_Engine__c-Onboarding Status Rules Engine Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group__c-Vendor Program Requirement Group Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingStatusRuleForm/onboardingStatusRuleForm.html
+  - force-app/main/default/lwc/vendorProgramQuickActions/vendorProgramQuickActions.js
+  - force-app/main/default/objects/Onboarding_Status_Rules_Engine__c/Onboarding_Status_Rules_Engine__c.object-meta.xml
+  - force-app/main/default/triggers/EnforceSingleTargetProgramPerGroup.trigger
+- Vendor_Program_Onboarding_Req_Template__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/handlers/RequirementTemplateTriggerHandler.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/rules/AllTemplatesInGroupMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/AllTemplatesInReqSetMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluatorTest.cls
+  - force-app/main/default/classes/services/RequirementDomainService.cls
+  - force-app/main/default/classes/services/RequirementSetTemplateService.cls
+  - force-app/main/default/classes/services/VendorProgramRequirementServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestVdrPrgrmOnboardingReqTemplateFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramRequirementFactory.cls
+  - force-app/main/default/layouts/Onboarding_Requirement_Set__c-Onboarding Requirement Set Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Onboarding_Req_Template__c-Vendor Program Requirement Definition Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group__c-Vendor Program Requirement Group Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingAppRequirementSetupWizard/onboardingAppRequirementSetupWizard.js
+  - force-app/main/default/lwc/vendorProgramOnboardingVendorProgramRequirements/vendorProgramOnboardingVendorProgramRequirements.js
+  - force-app/main/default/objects/Requirement_Set_Template__c/Requirement_Set_Template__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Group_Member__c/Vendor_Program_Requirement_Group_Member__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement__c/Vendor_Program_Requirement__c.object-meta.xml
+  - force-app/main/default/triggers/VendorProgramOnboardingReqTemplateTrigger.trigger
+- Vendor_Program_Recipient_Group__c:
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolver.cls
+  - force-app/main/default/classes/rules/NoDuplicateRecipientGroupAssignmentRule.cls
+  - force-app/main/default/classes/rules/OnboardingAppRuleRegistry.cls
+  - force-app/main/default/classes/rules/OnboardingAppRuleRegistryTest.cls
+  - force-app/main/default/classes/rules/OnlyOneActiveRecGrpPerPrgrmRule.cls
+  - force-app/main/default/classes/rules/OnlyOneActiveRecGrpPerPrgrmRuleTest.cls
+  - force-app/main/default/classes/rules/PreventDupRecGrpAssignmentRule.cls
+  - force-app/main/default/classes/rules/PreventDupRecGrpAssignmentRuleTest.cls
+  - force-app/main/default/classes/rules/RecipientAndProgramMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/RecipientAndProgramMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/RequireParentVersionOnActivationRule.cls
+  - force-app/main/default/classes/rules/RequireParentVersionOnActivationRuleTest.cls
+  - force-app/main/default/classes/services/CommunicationDomainService.cls
+  - force-app/main/default/classes/services/RecipientGroupEmailServiceTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramRecipientGroupFactory.cls
+  - force-app/main/default/layouts/Recipient_Group__c-Recipient Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Recipient_Group__c-Vendor Program Recipient Group Layout.layout-meta.xml
+  - force-app/main/default/lwc/vendorProgramOnboardingRecipientGroupMembers/vendorProgramOnboardingRecipientGroupMembers.js
+  - force-app/main/default/objects/Communication_Template__c/Communication_Template__c.object-meta.xml
+  - force-app/main/default/objects/Email_Template_Catalog__mdt/Email_Template_Catalog__mdt.object-meta.xml
+  - force-app/main/default/objects/Recipient_Group_Member__c/Recipient_Group_Member__c.object-meta.xml
+  - force-app/main/default/objects/Recipient_Group__c/Recipient_Group__c.object-meta.xml
+  - force-app/main/default/triggers/VendorProgramRecipientGroupTrigger.trigger
+- Vendor_Program_Requirement_Field_Value__c:
+  - force-app/main/default/objects/Vendor_Program_Requirement_Field__c/Vendor_Program_Requirement_Field__c.object-meta.xml
+- Vendor_Program_Requirement_Field__c:
+  - force-app/main/default/objects/Vendor_Program_Requirement_Field_Value__c/Vendor_Program_Requirement_Field_Value__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Group_Field__c/Vendor_Program_Requirement_Group_Field__c.object-meta.xml
+- Vendor_Program_Requirement_Group_Field__c:
+  - force-app/main/default/objects/Vendor_Program_Requirement_Field__c/Vendor_Program_Requirement_Field__c.object-meta.xml
+- Vendor_Program_Requirement_Group_Member__c:
+  - force-app/main/default/layouts/Vendor_Program_Onboarding_Req_Template__c-Vendor Program Requirement Definition Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group__c-Vendor Program Requirement Group Layout.layout-meta.xml
+  - force-app/main/default/lwc/vendorProgramOnboardingVendorProgramRequirements/vendorProgramOnboardingVendorProgramRequirements.js
+- Vendor_Program_Requirement_Group__c:
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineController.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineCtlrTest.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/handlers/VendorProgramGrpMmbrTrgHndlrTest.cls
+  - force-app/main/default/classes/handlers/VendorProgramReqGroupTriggerHandler.cls
+  - force-app/main/default/classes/handlers/VendorProgramReqGroupTriggerHandlerTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/rules/AllRequirementGroupsMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/AllStatusRuleGroupMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/OnlyOneTargetProgramInGroupRuleTest.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/RequirementDomainService.cls
+  - force-app/main/default/classes/services/VendorProgramRequirementServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingStatusRulesEngineCntlrTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingRulesEngineFactory.cls
+  - force-app/main/default/classes/test/TestVdrPrgrmOnboardingReqTemplateFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramGroupFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramGroupMemberFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramRequirementGroupFactory.cls
+  - force-app/main/default/classes/util/DefaultValueHelper.cls
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group_Member__c-Vendor Program Requirement Group Member Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group__c-Vendor Program Requirement Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor__c-Vendor Layout.layout-meta.xml
+  - force-app/main/default/lwc/vendorProgramOnboardingVendorProgramRequirements/vendorProgramOnboardingVendorProgramRequirements.js
+  - force-app/main/default/lwc/vendorProgramQuickActions/vendorProgramQuickActions.js
+  - force-app/main/default/objects/Vendor_Program_Requirement_Group_Member__c/Vendor_Program_Requirement_Group_Member__c.object-meta.xml
+  - force-app/main/default/triggers/VendorProgramRequirementGroupTrigger.trigger
+- Vendor_Program_Requirement_Set__c:
+  - force-app/main/default/classes/handlers/RequirementSetTriggerHandler.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/VendorProgramRequirementSetService.cls
+  - force-app/main/default/classes/test/TestOnboardingRequirementSetFactory.cls
+  - force-app/main/default/layouts/Onboarding_Requirement_Set__c-Onboarding Requirement Set Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/objects/Requirement_Set_Template__c/Requirement_Set_Template__c.object-meta.xml
+  - force-app/main/default/triggers/VendorProgramRequirementSetTrigger.trigger
+- Vendor_Program_Requirement__c:
+  - force-app/main/default/classes/controllers/OnboardingHomeDashboardController.cls
+  - force-app/main/default/classes/controllers/OnboardingRequirementsPanelCtlrTest.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRuleControllerTest.cls
+  - force-app/main/default/classes/controllers/OnboardingStatusRulesEngineController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/rules/AllChildRequirementsMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/AllChildRequirementsMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/AllLinkedEngineMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/AllTemplatesInReqSetMustBeActiveRule.cls
+  - force-app/main/default/classes/rules/AllTemplatesInReqSetMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/services/FollowUpDetectionService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingRequirementSetService.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluatorTest.cls
+  - force-app/main/default/classes/services/OnboardingRulesService.cls
+  - force-app/main/default/classes/services/OnboardingStatusEvaluatorTest.cls
+  - force-app/main/default/classes/services/RequirementDomainService.cls
+  - force-app/main/default/classes/services/VendorProgramRequirementServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingBlockingDetectionServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingStatusRulesEngineCntlrTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueRepositoryTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryUtil.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/classes/test/TestOnboardingReqDependencyFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingRequirementFactory.cls
+  - force-app/main/default/classes/test/TestOnboardingRulesFactory.cls
+  - force-app/main/default/classes/test/TestRequirementFieldFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramRequirementFactory.cls
+  - force-app/main/default/classes/util/OnboardingTestDataFactory.cls
+  - force-app/main/default/classes/util/ValidationHelper.cls
+  - force-app/main/default/layouts/Onboarding_Requirement__c-Onboarding Requirement Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field_Group__c-Requirement Field Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Requirement_Field__c-Requirement Field Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Onboarding_Req_Template__c-Vendor Program Requirement Definition Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group_Member__c-Vendor Program Requirement Group Member Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group__c-Vendor Program Requirement Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement__c-Vendor Program Requirement Layout.layout-meta.xml
+  - force-app/main/default/objects/Onboarding_Requirement__c/Onboarding_Requirement__c.object-meta.xml
+  - force-app/main/default/objects/Onboarding_Status_Rule__c/Onboarding_Status_Rule__c.object-meta.xml
+  - force-app/main/default/objects/Requirement_Set_Template__c/Requirement_Set_Template__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Field_Value__c/Vendor_Program_Requirement_Field_Value__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Field__c/Vendor_Program_Requirement_Field__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Group_Field__c/Vendor_Program_Requirement_Group_Field__c.object-meta.xml
+  - force-app/main/default/objects/Vendor_Program_Requirement_Group_Member__c/Vendor_Program_Requirement_Group_Member__c.object-meta.xml
+- Vendor__c:
+  - force-app/main/default/classes/actions/OnboardingAppActivationActionTest.cls
+  - force-app/main/default/classes/actions/RecipientGroupEmailActionTest.cls
+  - force-app/main/default/classes/controllers/OnboardingAppECCControllerTest.cls
+  - force-app/main/default/classes/controllers/OnboardingAppVendorProgramReqCtlrTest.cls
+  - force-app/main/default/classes/controllers/OnboardingHomeDashboardController.cls
+  - force-app/main/default/classes/controllers/OnboardingRequirementsPanelCtlrTest.cls
+  - force-app/main/default/classes/controllers/VendorFilterControllerTest.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingControllerTest.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardController.cls
+  - force-app/main/default/classes/controllers/VendorOnboardingWizardControllerTest.cls
+  - force-app/main/default/classes/handlers/OnboardingAppVendorProgramReqHdlrTest.cls
+  - force-app/main/default/classes/handlers/VendorProgramGrpMmbrTrgHndlrTest.cls
+  - force-app/main/default/classes/handlers/VendorProgramTriggerHandlerTest.cls
+  - force-app/main/default/classes/handlers/VersioningTriggerHandlerTest.cls
+  - force-app/main/default/classes/orchestrators/OnboardingAppActivationOrchestratorTest.cls
+  - force-app/main/default/classes/orchestrators/OnboardingAppVendorProgramReqOrchTest.cls
+  - force-app/main/default/classes/orchestrators/RecipientGroupEmailOrchestratorTest.cls
+  - force-app/main/default/classes/repository/OnboardingAppActivationRepositoryTest.cls
+  - force-app/main/default/classes/repository/OnboardingAppECCRepositoryTest.cls
+  - force-app/main/default/classes/repository/OnboardingAppVendorProgramReqRepoTest.cls
+  - force-app/main/default/classes/repository/OnboardingApplicationRepositoryTest.cls
+  - force-app/main/default/classes/repository/OnboardingRepository.cls
+  - force-app/main/default/classes/repository/OnboardingRepositoryTest.cls
+  - force-app/main/default/classes/repository/OnboardingRulesRepositoryTest.cls
+  - force-app/main/default/classes/repository/VendorCustomizationRepository.cls
+  - force-app/main/default/classes/repository/VendorCustomizationRepositoryTest.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepository.cls
+  - force-app/main/default/classes/repository/VendorOnboardingWizardRepositoryTest.cls
+  - force-app/main/default/classes/resolver/RecipientGroupResolverTest.cls
+  - force-app/main/default/classes/rules/AllChildRequirementsMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/AllTemplatesInReqSetMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/OnlyOneActiveRecGrpPerPrgrmRuleTest.cls
+  - force-app/main/default/classes/rules/OnlyOneTargetProgramInGroupRuleTest.cls
+  - force-app/main/default/classes/rules/PreventDupRecGrpAssignmentRuleTest.cls
+  - force-app/main/default/classes/rules/RecipientAndProgramMustBeActiveRuleTest.cls
+  - force-app/main/default/classes/rules/RequireParentVersionOnActivationRuleTest.cls
+  - force-app/main/default/classes/services/OnboardingAppActivationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingAppECCServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingAppVendorProgramReqSvcTest.cls
+  - force-app/main/default/classes/services/OnboardingApplicationService.cls
+  - force-app/main/default/classes/services/OnboardingApplicationServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingDashboardFilterService.cls
+  - force-app/main/default/classes/services/OnboardingEligibilityService.cls
+  - force-app/main/default/classes/services/OnboardingEligibilityServiceTest.cls
+  - force-app/main/default/classes/services/OnboardingRuleEvaluatorTest.cls
+  - force-app/main/default/classes/services/RecipientGroupEmailServiceTest.cls
+  - force-app/main/default/classes/services/VendorDomainService.cls
+  - force-app/main/default/classes/services/VendorOnboardingFlowAdapterTest.cls
+  - force-app/main/default/classes/services/VendorOnboardingJsonAdapterTest.cls
+  - force-app/main/default/classes/services/VendorOnboardingLWCAdapterTest.cls
+  - force-app/main/default/classes/services/VendorOnboardingService.cls
+  - force-app/main/default/classes/services/VendorPrerequisiteEvaluatorTest.cls
+  - force-app/main/default/classes/services/VendorProgramActivationServiceTest.cls
+  - force-app/main/default/classes/services/VendorProgramRequirementServiceTest.cls
+  - force-app/main/default/classes/test/AVOTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/FollowUpDetectionServiceTest.cls
+  - force-app/main/default/classes/test/FollowUpExecutionServiceTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorBatchSchedulerTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorSchedulerTest.cls
+  - force-app/main/default/classes/test/FollowUpProcessorTest.cls
+  - force-app/main/default/classes/test/OnboardingBlockingDetectionServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingDashboardFilterServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingExternalOverrideServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingHomeDashboardControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingPrimaryContactTest.cls
+  - force-app/main/default/classes/test/OnboardingReqPanelControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingRequirementTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/OnboardingStageDependencyControllerTest.cls
+  - force-app/main/default/classes/test/OnboardingStageDependencyServiceTest.cls
+  - force-app/main/default/classes/test/OnboardingStatusRulesEngineCntlrTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueRepositoryTest.cls
+  - force-app/main/default/classes/test/RequirementFieldValueTriggerHandlerTest.cls
+  - force-app/main/default/classes/test/TestDataFactory.cls
+  - force-app/main/default/classes/test/TestDataFactoryWrapper.cls
+  - force-app/main/default/classes/test/TestEmailContextFactory.cls
+  - force-app/main/default/classes/test/TestVendorFactory.cls
+  - force-app/main/default/classes/test/TestVendorProgramFactory.cls
+  - force-app/main/default/classes/test/TestWorkFactory.cls
+  - force-app/main/default/classes/util/DefaultValueHelper.cls
+  - force-app/main/default/classes/util/OnboardingTestDataFactory.cls
+  - force-app/main/default/layouts/Onboarding__c-Onboarding Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Customization__c-Vendor Customization Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor_Program_Requirement_Group__c-Vendor Program Requirement Group Layout.layout-meta.xml
+  - force-app/main/default/layouts/Vendor__c-Vendor Layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-DCC External Work Order page layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-FSL QA Auditor Layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-MDU Page Layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-SR WO Layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-Viasat WO Read Only.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-WO Dispatcher Layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-WO TMO Layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkOrder-Work Order Layout.layout-meta.xml
+  - force-app/main/default/layouts/WorkType-Work Type Layout.layout-meta.xml
+  - force-app/main/default/lwc/onboardingFlowEngine/onboardingFlowEngine.js
+  - force-app/main/default/permissionsets/DCC_Dispatcher.permissionset-meta.xml
+  - force-app/main/default/permissionsets/DCC_Service_Resource.permissionset-meta.xml
+  - force-app/main/default/permissionsets/FSL_Community_Dispatcher_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Finance_Funding_Operations_Service_Appts.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Finance_Funding_Operations_Work_Orders.permissionset-meta.xml
+  - force-app/main/default/permissionsets/ISG_Admin_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/ISG_Manager_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Onboarding_Account_Services.permissionset-meta.xml
+  - force-app/main/default/permissionsets/PV_Admin_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/PV_Salesforce_Dispatcher_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/PV_TMO_User_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/PV_Technician_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/QA_Audit_edit_access.permissionset-meta.xml
+  - force-app/main/default/permissionsets/QA_Audit_view_access.permissionset-meta.xml
+  - force-app/main/default/permissionsets/QA_Auditor_Permissions.permissionset-meta.xml
+  - force-app/main/default/permissionsets/TMO_User_Dispatch_Permission.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Work_Order_Object_Administration.permissionset-meta.xml
+  - force-app/main/default/permissionsets/Xactly_User.permissionset-meta.xml
+
+## Classes -> Objects
+- AVOTriggerHandler: Account_Vendor_Program_Onboarding__c, Onboarding_Requirement__c
+- AVOTriggerHandlerTest: Account_Vendor_Program_Onboarding__c, Onboarding_Requirement__c, Vendor__c
+- AllChildRequirementsMustBeActiveRule: Vendor_Program_Requirement__c
+- AllChildRequirementsMustBeActiveRuleTest: Vendor_Program_Requirement__c, Vendor__c
+- AllLinkedEngineMustBeActiveRule: Onboarding_Status_Rule__c
+- AllLinkedEngineMustBeActiveRuleTest: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Requirement__c
+- AllRequirementGroupsMustBeActiveRule: Vendor_Program_Requirement_Group__c
+- AllRequirementSetMustBeActiveRule: Onboarding_Requirement_Set__c, Requirement_Set_Template__c
+- AllStatusRuleGroupMustBeActiveRule: Onboarding_Status_Rules_Engine__c
+- AllStatusRuleGroupMustBeActiveRuleTest: Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c
+- AllStatusRulesMustBeActiveRule: Onboarding_Status_Rule__c
+- AllTemplatesInGroupMustBeActiveRule: Vendor_Program_Onboarding_Req_Template__c
+- AllTemplatesInReqSetMustBeActiveRule: Vendor_Program_Requirement__c
+- AllTemplatesInReqSetMustBeActiveRuleTest: Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Requirement__c, Vendor__c
+- CommunicationDomainService: Communication_Template__c, Recipient_Group_Member__c, Recipient_Group__c, Vendor_Program_Recipient_Group__c
+- CommunicationTemplateRepository: Communication_Template__c
+- CommunicationTemplateRepositoryTest: Communication_Template__c
+- DefaultValueHelper: Onboarding_Requirement_Set__c, Onboarding_Status_Rules_Engine__c, Opportunity, Recipient_Group_Member__c, Recipient_Group__c, Vendor_Program_Requirement_Group__c, Vendor__c
+- EmailCatalogCMDTRepository: Email_Template_Catalog__mdt
+- EmailCommTerritoryRoleHelper: Territory_Assignments__c, Territory_Role_Assignment__c
+- EmailCommTerritoryRoleHelperTest: Territory_Assignments__c, Territory_Role_Assignment__c
+- EmailCommTerritoryRoleSyncJob: Territory_Assignments__c
+- EmailCommTerritoryRoleSyncJobTest: Territory_Assignments__c, Territory_Role_Assignment__c
+- EmailSyncDomainService: Communication_Template__c, Email_Template_Catalog__mdt, OrgWideEmail__c, Sync_Log__c
+- EmailSyncDomainServiceTest: OrgWideEmail__c
+- EmailTemplateDTO: Communication_Template__c
+- EmailTemplateSyncControllerTest: Sync_Log__c
+- EmailTemplateSyncOrchestratorTest: Communication_Template__c, Email_Template_Catalog__mdt, Sync_Log__c
+- EmailTemplateSyncServiceTest: Communication_Template__c, Email_Template_Catalog__mdt
+- FollowUpDetectionService: Follow_Up_Queue__c, Follow_Up_Rule__mdt, Onboarding_Requirement__c, Vendor_Program_Requirement__c
+- FollowUpDetectionServiceTest: Follow_Up_Queue__c, Follow_Up_Rule__mdt, Onboarding_Requirement__c, Vendor__c
+- FollowUpExecutionService: Communication_Template__c, Follow_Up_Queue__c, Follow_Up_Rule__mdt, Twilio_Configuration__mdt
+- FollowUpExecutionServiceTest: Follow_Up_Queue__c, Vendor__c
+- FollowUpFatigueService: Follow_Up_Queue__c, Follow_Up_Rule__mdt, Follow_Up_Suppression__mdt, Onboarding_Requirement__c
+- FollowUpFatigueServiceTest: Follow_Up_Queue__c, Onboarding_Requirement__c
+- FollowUpProcessor: Follow_Up_Queue__c, Follow_Up_Rule__mdt
+- FollowUpProcessorBatchScheduler: Follow_Up_Queue__c, Onboarding_Requirement__c
+- FollowUpProcessorBatchSchedulerTest: Follow_Up_Queue__c, Onboarding_Requirement__c, Vendor__c
+- FollowUpProcessorScheduler: Follow_Up_Queue__c, Onboarding_Requirement__c
+- FollowUpProcessorSchedulerTest: Follow_Up_Queue__c, Onboarding_Requirement__c, Vendor__c
+- FollowUpProcessorTest: Follow_Up_Queue__c, Vendor__c
+- FollowUpQueueTriggerHandler: FollowUpRetryTrigger__e, Follow_Up_Queue__c
+- FollowUpRetryHandler: FollowUpRetryTrigger__e
+- FollowUpRuleRepository: Follow_Up_Queue__c, Follow_Up_Rule__mdt, Follow_Up_Suppression__mdt, Onboarding_Requirement__c
+- NoDuplicateRecipientGroupAssignmentRule: Recipient_Group__c, Vendor_Program_Recipient_Group__c
+- OnboardingAdminDashboardController: Follow_Up_Queue__c, Onboarding_External_Override_Log__c, Requirement_Field__c, Validation_Failure__c
+- OnboardingAppActivationActionTest: Vendor__c
+- OnboardingAppActivationOrchestratorTest: Communication_Template__c, Vendor__c
+- OnboardingAppActivationRepositoryTest: Vendor__c
+- OnboardingAppActivationServiceTest: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor__c
+- OnboardingAppECCControllerTest: Vendor__c
+- OnboardingAppECCRepositoryTest: Vendor__c
+- OnboardingAppECCServiceTest: Vendor__c
+- OnboardingAppRuleRegistry: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Recipient_Group__c
+- OnboardingAppRuleRegistryTest: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Recipient_Group__c
+- OnboardingAppVendorProgramReqCtlrTest: Vendor__c
+- OnboardingAppVendorProgramReqHdlrTest: Vendor__c
+- OnboardingAppVendorProgramReqOrchTest: Vendor__c
+- OnboardingAppVendorProgramReqRepoTest: Vendor__c
+- OnboardingAppVendorProgramReqSvcTest: Vendor__c
+- OnboardingApplicationRepository: Onboarding_Application_Process__c, Onboarding_Application_Progress__c, Onboarding_Application_Stage_Completion__c, Onboarding_Application_Stage__c, Onboarding_Component_Library__c
+- OnboardingApplicationRepositoryTest: Onboarding_Application_Process__c, Onboarding_Application_Progress__c, Onboarding_Application_Stage_Completion__c, Onboarding_Application_Stage__c, Vendor__c
+- OnboardingApplicationService: Onboarding_Application_Process__c, Onboarding_Application_Progress__c, Onboarding_Application_Stage_Completion__c, Onboarding_Application_Stage__c, Onboarding_Requirement__c, Requirement_Field_Value__c, Requirement_Field__c, Vendor__c
+- OnboardingApplicationServiceTest: Onboarding_Application_Process__c, Onboarding_Application_Progress__c, Onboarding_Application_Stage_Completion__c, Onboarding_Application_Stage__c, Onboarding_Requirement__c, Vendor_Program_Requirement__c, Vendor__c
+- OnboardingBlockingDetectionService: Onboarding_Requirement__c
+- OnboardingBlockingDetectionServiceTest: Onboarding_Requirement__c, Vendor_Program_Requirement__c, Vendor__c
+- OnboardingCleanupScheduler: Onboarding_Requirement__c
+- OnboardingDashboardFilterService: Vendor__c
+- OnboardingDashboardFilterServiceTest: Vendor__c
+- OnboardingEligibilityService: Vendor__c
+- OnboardingEligibilityServiceTest: Vendor__c
+- OnboardingExternalOverrideServiceTest: Onboarding_External_Override_Log__c, Vendor__c
+- OnboardingHealthRepository: Onboarding_Application_Process__c, Onboarding_Application_Stage__c
+- OnboardingHealthService: Onboarding_Application_Process__c, Onboarding_Application_Stage__c, Onboarding_Component_Library__c
+- OnboardingHealthServiceTest: Onboarding_Application_Process__c, Onboarding_Application_Stage__c, Onboarding_Component_Library__c
+- OnboardingHomeDashboardController: Onboarding_Requirement__c, Vendor_Program_Requirement__c, Vendor__c
+- OnboardingHomeDashboardControllerTest: Vendor__c
+- OnboardingMetricsRepository: Follow_Up_Queue__c, Onboarding_External_Override_Log__c, Requirement_Field__c, Validation_Failure__c
+- OnboardingOrderControllerTest: Opportunity
+- OnboardingOverrideAuditService: Onboarding_External_Override_Log__c
+- OnboardingPrimaryContactTest: Account_Vendor_Program_Onboarding__c, Opportunity, Vendor__c
+- OnboardingRepository: Vendor__c
+- OnboardingRepositoryTest: Vendor__c
+- OnboardingReqDueDateControllerTest: Onboarding_Requirement__c
+- OnboardingReqPanelControllerTest: Onboarding_Requirement__c, Onboarding_Status_Rules_Engine__c, Requirement_Field_Value__c, Requirement_Field__c, Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c, Vendor__c
+- OnboardingRequirementDueDateController: Onboarding_Requirement__c
+- OnboardingRequirementService: Onboarding_Requirement__c
+- OnboardingRequirementSetService: Onboarding_Requirement_Set__c, Onboarding_Status_Rules_Engine__c, Requirement_Set_Template__c, Vendor_Program_Group__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement_Set__c, Vendor_Program_Requirement__c
+- OnboardingRequirementTriggerHandler: Onboarding_Requirement__c
+- OnboardingRequirementTriggerHandlerTest: Follow_Up_Queue__c, Follow_Up_Rule__mdt, Onboarding_Requirement__c, Vendor__c
+- OnboardingRequirementsPanelController: Onboarding_Status_Rules_Engine__c, Requirement_Field_Value__c
+- OnboardingRequirementsPanelCtlrTest: Onboarding_Requirement__c, Requirement_Field_Value__c, Requirement_Field__c, Vendor_Program_Requirement__c, Vendor__c
+- OnboardingRuleEvaluator: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c
+- OnboardingRuleEvaluatorTest: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Requirement__c, Vendor__c
+- OnboardingRulesRepository: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement__c
+- OnboardingRulesRepositoryTest: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor__c
+- OnboardingRulesService: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement__c
+- OnboardingRulesServiceTest: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c
+- OnboardingStageDependencyController: Onboarding_App_Stage_Dependency_Member__c, Onboarding_Application_Stage_Dependency__c, Onboarding_Application_Stage__c
+- OnboardingStageDependencyControllerTest: Onboarding_Application_Process__c, Onboarding_Application_Stage__c, Vendor__c
+- OnboardingStageDependencyRepository: Onboarding_Application_Process__c, Onboarding_Application_Stage_Completion__c, Onboarding_Application_Stage_Dependency__c, Onboarding_Application_Stage__c
+- OnboardingStageDependencyService: Onboarding_App_Stage_Dependency_Member__c, Onboarding_Application_Stage_Dependency__c
+- OnboardingStageDependencyServiceTest: Onboarding_Application_Process__c, Onboarding_Application_Stage_Dependency__c, Onboarding_Application_Stage__c, Vendor__c
+- OnboardingStatusEvaluator: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c
+- OnboardingStatusEvaluatorTest: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Requirement__c
+- OnboardingStatusRuleController: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c
+- OnboardingStatusRuleControllerTest: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement__c
+- OnboardingStatusRulesEngineCntlrTest: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c, Vendor__c
+- OnboardingStatusRulesEngineController: Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c
+- OnboardingStatusRulesEngineCtlrTest: Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c
+- OnboardingTestDataFactory: Onboarding_Requirement__c, Requirement_Field__c, Vendor_Program_Requirement__c, Vendor__c
+- OnlyOneActiveRecGrpPerPrgrmRule: Vendor_Program_Recipient_Group__c
+- OnlyOneActiveRecGrpPerPrgrmRuleTest: Recipient_Group__c, Vendor_Program_Recipient_Group__c, Vendor__c
+- OnlyOneTargetProgramInGroupRule: Vendor_Program_Group__c
+- OnlyOneTargetProgramInGroupRuleTest: Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c, Vendor__c
+- OrgWideEmailCMDTRepository: Org_Wide_Email__mdt
+- OrgWideEmailCMDTRepositoryTest: Org_Wide_Email__mdt
+- OrgWideEmailDTO: OrgWideEmail__c
+- OrgWideEmailDTOTest: OrgWideEmail__c
+- OrgWideEmailRepository: OrgWideEmail__c
+- OrgWideEmailRepositoryTest: OrgWideEmail__c
+- OrgWideEmailSyncControllerTest: Sync_Log__c
+- OrgWideEmailSyncOrchestratorTest: Org_Wide_Email__mdt, Sync_Log__c
+- OverrideAuditController: Onboarding_External_Override_Log__c
+- PicklistHelper: Vendor_Program_Group__c
+- PreventDupRecGrpAssignmentRule: Recipient_Group__c, Vendor_Program_Recipient_Group__c
+- PreventDupRecGrpAssignmentRuleTest: Recipient_Group__c, Vendor_Program_Recipient_Group__c, Vendor__c
+- RecipientAndProgramMustBeActiveRule: Recipient_Group__c, Vendor_Program_Recipient_Group__c
+- RecipientAndProgramMustBeActiveRuleTest: Recipient_Group__c, Vendor_Program_Recipient_Group__c, Vendor__c
+- RecipientGroupEmailActionTest: Recipient_Group__c, Vendor__c
+- RecipientGroupEmailOrchestratorTest: Recipient_Group__c, Vendor__c
+- RecipientGroupEmailServiceTest: Recipient_Group_Member__c, Recipient_Group__c, Territory_Assignments__c, Territory_Role_Assignment__c, Vendor_Program_Recipient_Group__c, Vendor__c
+- RecipientGroupResolver: Recipient_Group_Member__c, Recipient_Group__c, Territory_Role_Assignment__c, Vendor_Program_Recipient_Group__c
+- RecipientGroupResolverTest: Recipient_Group_Member__c, Recipient_Group__c, Territory_Assignments__c, Territory_Role_Assignment__c, Vendor__c
+- RequireParentVersionOnActivationRule: Vendor_Program_Recipient_Group__c
+- RequireParentVersionOnActivationRuleTest: Recipient_Group__c, Vendor_Program_Recipient_Group__c, Vendor__c
+- RequirementDomainService: Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c
+- RequirementFieldAsyncValidator: Onboarding_Requirement__c, Requirement_Field_Validation_Rule__mdt, Requirement_Field_Value__c
+- RequirementFieldAsyncValidatorTest: Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldExternalValidator: Requirement_Field_Validation_Rule__mdt, Requirement_Field_Value__c
+- RequirementFieldExternalValidatorTest: Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValidationAction: Requirement_Field_Value__c
+- RequirementFieldValidationActionTest: Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValidationService: Requirement_Field_Validation_Rule__mdt, Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValidationServiceTest: Requirement_Field_Validation_Rule__mdt, Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValueController: Onboarding_Requirement__c, Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValueControllerTest: Onboarding_Requirement__c, Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValueRepository: Onboarding_Requirement__c, Requirement_Field_Group__c, Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValueRepositoryTest: Onboarding_Requirement__c, Requirement_Field_Group__c, Requirement_Field_Value__c, Requirement_Field__c, Vendor_Program_Requirement__c, Vendor__c
+- RequirementFieldValueTriggerHandler: Requirement_Field_Value__c, Requirement_Field__c
+- RequirementFieldValueTriggerHandlerTest: Onboarding_Requirement__c, Requirement_Field_Value__c, Requirement_Field__c, Vendor_Program_Requirement__c, Vendor__c
+- RequirementSetTemplateService: Onboarding_Requirement_Set__c, Requirement_Set_Template__c, Vendor_Program_Onboarding_Req_Template__c
+- RequirementSetTriggerHandler: Onboarding_Requirement_Set__c, Vendor_Program_Requirement_Set__c
+- RequirementTemplateTriggerHandler: Onboarding_Requirement_Set__c, Requirement_Set_Template__c, Vendor_Program_Onboarding_Req_Template__c
+- RequirementValidationLogger: Requirement_Field_Value__c, Requirement_Field__c, Validation_Failure__c
+- RequirementValidationLoggerTest: Requirement_Field_Value__c, Requirement_Field__c, Validation_Failure__c
+- StatusRulesEngineService: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c
+- TestAVOFactory: Account_Vendor_Program_Onboarding__c
+- TestCommTemplateFactory: Communication_Template__c
+- TestDataFactory: Account_Vendor_Program_Onboarding__c, Communication_Template__c, Onboarding_Application_Process__c, Onboarding_Application_Stage_Completion__c, Onboarding_Application_Stage_Dependency__c, Onboarding_Requirement_Set__c, Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Recipient_Group_Member__c, Recipient_Group__c, Requirement_Field_Value__c, Requirement_Field__c, Requirement_Set_Template__c, Territory_Assignments__c, Vendor_Program_Group__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Recipient_Group__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c, Vendor__c
+- TestDataFactoryUtil: Vendor_Program_Group__c, Vendor_Program_Requirement__c
+- TestDataFactoryWrapper: Communication_Template__c, Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Territory_Assignments__c, Vendor_Program_Group__c, Vendor_Program_Requirement__c, Vendor__c
+- TestEmailContextFactory: Communication_Template__c, Vendor__c
+- TestOnboardingReqDependencyFactory: Onboarding_Requirement_Dependency__c, Onboarding_Requirement__c, Vendor_Program_Requirement__c
+- TestOnboardingRequirementFactory: Onboarding_Requirement__c, Vendor_Program_Requirement__c
+- TestOnboardingRequirementSetFactory: Onboarding_Requirement_Set__c, Vendor_Program_Requirement_Set__c
+- TestOnboardingRulesEngineFactory: Onboarding_Status_Rules_Engine__c, Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c
+- TestOnboardingRulesFactory: Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Vendor_Program_Requirement__c
+- TestOnboardingStageDependencyFactory: Onboarding_App_Stage_Dependency_Member__c, Onboarding_Application_Process__c, Onboarding_Application_Stage_Completion__c, Onboarding_Application_Stage_Dependency__c, Onboarding_Application_Stage__c
+- TestRecipientGroupFactory: Recipient_Group__c
+- TestRecipientGroupMemberFactory: Recipient_Group_Member__c, Recipient_Group__c
+- TestRequirementFieldFactory: Requirement_Field_Group__c, Requirement_Field__c, Vendor_Program_Requirement__c
+- TestRequirementFieldValueFactory: Onboarding_Requirement__c, Requirement_Field_Value__c, Requirement_Field__c
+- TestVdrPrgrmOnboardingReqTemplateFactory: Onboarding_Requirement_Set__c, Requirement_Set_Template__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Requirement_Group__c
+- TestVendorFactory: Vendor__c
+- TestVendorProgramFactory: Vendor__c
+- TestVendorProgramGroupFactory: Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c
+- TestVendorProgramGroupMemberFactory: Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c
+- TestVendorProgramRecipientGroupFactory: Recipient_Group__c, Vendor_Program_Recipient_Group__c
+- TestVendorProgramRequirementFactory: Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Requirement__c
+- TestVendorProgramRequirementGroupFactory: Vendor_Program_Requirement_Group__c
+- TestWorkFactory: Vendor__c
+- TwilioSMSProvider: Twilio_Configuration__mdt
+- TwilioSettingsController: Twilio_Configuration__mdt
+- UtilitiesSyncLogHelper: Sync_Log__c
+- UtilitiesSyncLogHelperTest: Sync_Log__c
+- ValidationHelper: Vendor_Program_Requirement__c
+- ValidationRuleBuilderController: Requirement_Field_Validation_Rule__mdt, Requirement_Field__c
+- VendorCustomizationRepository: Vendor__c
+- VendorCustomizationRepositoryTest: Vendor__c
+- VendorDomainService: Vendor_Program_Group__c, Vendor__c
+- VendorFilterControllerTest: Vendor__c
+- VendorOnboardingControllerTest: Vendor__c
+- VendorOnboardingFlowAdapterTest: Vendor__c
+- VendorOnboardingJsonAdapterTest: Vendor__c
+- VendorOnboardingLWCAdapterTest: Vendor__c
+- VendorOnboardingService: Vendor__c
+- VendorOnboardingWizardController: Account_Vendor_Program_Onboarding__c, Communication_Template__c, Onboarding_Application_Process__c, Onboarding_Application_Progress__c, Onboarding_Application_Stage__c, Onboarding_Component_Library__c, Onboarding_Requirement_Set__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Opportunity, OpportunityContactRole, Recipient_Group_Member__c, Recipient_Group__c, Requirement_Set_Template__c, Territory_Role_Assignment__c, Vendor_Program_Group__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Recipient_Group__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c, Vendor__c
+- VendorOnboardingWizardControllerTest: Communication_Template__c, Onboarding_Requirement_Set__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Opportunity, OpportunityContactRole, Recipient_Group_Member__c, Recipient_Group__c, Territory_Role_Assignment__c, Vendor_Program_Group__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Recipient_Group__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c, Vendor__c
+- VendorOnboardingWizardRepository: Communication_Template__c, Onboarding_Component_Library__c, Onboarding_Requirement_Set__c, Onboarding_Requirement__c, Onboarding_Status_Rule__c, Onboarding_Status_Rules_Engine__c, Recipient_Group_Member__c, Recipient_Group__c, Requirement_Set_Template__c, Territory_Role_Assignment__c, Vendor_Program_Group__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Recipient_Group__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement_Set__c, Vendor_Program_Requirement__c, Vendor__c
+- VendorOnboardingWizardRepositoryTest: Onboarding_Component_Library__c, Onboarding_Requirement_Set__c, Onboarding_Status_Rule__c, Recipient_Group__c, Vendor_Program_Group__c, Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Recipient_Group__c, Vendor_Program_Requirement_Group__c, Vendor__c
+- VendorPrerequisiteEvaluator: Vendor_Program_Group__c
+- VendorPrerequisiteEvaluatorTest: Vendor_Program_Group__c, Vendor__c
+- VendorProgramActivationServiceTest: Vendor__c
+- VendorProgramGrpMmbrTrgHndlrTest: Vendor_Program_Group__c, Vendor_Program_Requirement_Group__c, Vendor__c
+- VendorProgramReqGroupTriggerHandler: Vendor_Program_Requirement_Group__c
+- VendorProgramReqGroupTriggerHandlerTest: Vendor_Program_Requirement_Group__c
+- VendorProgramRequirementServiceTest: Vendor_Program_Onboarding_Req_Template__c, Vendor_Program_Requirement_Group__c, Vendor_Program_Requirement__c, Vendor__c
+- VendorProgramRequirementSetService: Onboarding_Requirement_Set__c, Vendor_Program_Requirement_Set__c
+- VendorProgramTriggerHandlerTest: Vendor__c
+- VersioningTriggerHandlerTest: Vendor_Program_Group__c, Vendor__c

@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__SLA__c</fullName>
     <deprecated>false</deprecated>
     <description>DEPRECATED. Use vSLA.</description>
-    <externalId>false</externalId>
     <label>SLA</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

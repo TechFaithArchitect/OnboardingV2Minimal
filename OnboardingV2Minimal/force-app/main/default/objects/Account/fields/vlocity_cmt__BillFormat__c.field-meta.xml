@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__BillFormat__c</fullName>
     <deprecated>false</deprecated>
     <description>Specifies if customer recieves a detailed or summary bill</description>
-    <externalId>false</externalId>
     <label>Bill Format</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -3,7 +3,6 @@
     <fullName>Active__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Controls whether this requirement set version can be used.</description>
-    <externalId>false</externalId>
     <label>Active</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

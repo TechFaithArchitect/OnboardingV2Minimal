@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__AnnualIncome__c</fullName>
     <deprecated>false</deprecated>
     <description>Contact&apos;s Annual Income</description>
-    <externalId>false</externalId>
     <label>Annual Income</label>
     <precision>18</precision>
     <required>false</required>

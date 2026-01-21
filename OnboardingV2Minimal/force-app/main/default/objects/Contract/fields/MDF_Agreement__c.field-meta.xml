@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>MDF_Agreement__c</fullName>
     <defaultValue>&quot;Not Started&quot;</defaultValue>
-    <externalId>false</externalId>
     <label>MDF Agreement</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

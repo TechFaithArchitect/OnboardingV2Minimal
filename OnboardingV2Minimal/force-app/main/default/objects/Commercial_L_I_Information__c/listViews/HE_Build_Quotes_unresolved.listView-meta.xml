@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>HE_Build_Quotes_unresolved</fullName>
+    <columns>Region__c</columns>
+    <columns>Territory__c</columns>
+    <columns>NAME</columns>
+    <columns>Account__c</columns>
+    <columns>Date_Written__c</columns>
+    <columns>Status__c</columns>
+    <columns>Order_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Quarter_Year_Quoted__c</field>
+        <operation>equals</operation>
+        <value>Q1 2014,Q2 2014,Q3 2014,Q4 2014,Q1 2013,Q2 2013,Q3 2013,Q4 2013</value>
+    </filters>
+    <filters>
+        <field>Status__c</field>
+        <operation>notEqual</operation>
+        <value>Quote Denied,Order Shipped,Parts Only Shipped</value>
+    </filters>
+    <filters>
+        <field>Region__c</field>
+        <operation>contains</operation>
+        <value>west,north,south,central</value>
+    </filters>
+    <label>HE Build Quotes Unresolved</label>
+</ListView>

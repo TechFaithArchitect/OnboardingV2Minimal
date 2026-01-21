@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__Jurisdiction2__c</fullName>
     <deprecated>false</deprecated>
     <description>Grouping of accounts by attributes and used to drive accounting processes, business logic, and validation rules.</description>
-    <externalId>false</externalId>
     <label>Account Jurisdiction 2</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -3,7 +3,6 @@
     <fullName>Documents_Ready__c</fullName>
     <defaultValue>false</defaultValue>
     <description>This field stores if the opportunity is ready to have documents sent</description>
-    <externalId>false</externalId>
     <label>Documents Ready</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

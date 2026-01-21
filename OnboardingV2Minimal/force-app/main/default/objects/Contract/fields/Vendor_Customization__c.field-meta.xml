@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Vendor_Customization__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Vendor Customization</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>Contracts</relationshipLabel>

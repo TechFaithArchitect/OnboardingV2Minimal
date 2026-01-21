@@ -3,7 +3,6 @@
     <fullName>Inherited_From_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Points to the program requirement group that contributed this requirement (for audit/traceability).</description>
-    <externalId>false</externalId>
     <label>Inherited From Group</label>
     <referenceTo>Vendor_Program_Requirement_Group__c</referenceTo>
     <relationshipName>Inherited_From_Groups</relationshipName>

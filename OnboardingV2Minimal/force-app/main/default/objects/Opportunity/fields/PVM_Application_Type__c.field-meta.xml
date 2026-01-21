@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>PVM_Application_Type__c</fullName>
     <description>Application type for PVM customer</description>
-    <externalId>false</externalId>
     <inlineHelpText>This selection will determine the paperwork needed to be submitted.</inlineHelpText>
     <label>PV Application Type</label>
     <required>false</required>

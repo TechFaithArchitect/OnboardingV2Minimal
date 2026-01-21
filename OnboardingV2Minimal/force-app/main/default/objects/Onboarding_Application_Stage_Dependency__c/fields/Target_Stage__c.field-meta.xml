@@ -3,7 +3,6 @@
     <fullName>Target_Stage__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Stage whose start/completion is gated by the dependency.</description>
-    <externalId>false</externalId>
     <label>Target Stage</label>
     <referenceTo>Onboarding_Application_Stage__c</referenceTo>
     <relationshipLabel>Onboarding Application Stage Dependency</relationshipLabel>

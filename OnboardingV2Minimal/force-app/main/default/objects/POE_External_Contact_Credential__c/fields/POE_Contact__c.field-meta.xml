@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>POE_Contact__c</fullName>
     <description>Contact for the credentials. (PER-2126)</description>
-    <externalId>false</externalId>
     <inlineHelpText>Contact for the credentials.</inlineHelpText>
     <label>Contact</label>
     <referenceTo>Contact</referenceTo>

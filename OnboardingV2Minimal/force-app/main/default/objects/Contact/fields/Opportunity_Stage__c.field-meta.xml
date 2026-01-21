@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Opportunity_Stage__c</fullName>
     <description>Indicates the current stage of the opportunity related to the person account.</description>
-    <externalId>false</externalId>
     <label>Opportunity Stage</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

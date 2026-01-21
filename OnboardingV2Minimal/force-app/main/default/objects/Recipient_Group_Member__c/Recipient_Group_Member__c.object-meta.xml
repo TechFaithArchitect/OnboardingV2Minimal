@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Defines an individual User or Contact&apos;s membership in a Recipient_Group__c. Members inherit the usage and visibility permissions tied to the group and are included in all group-level communication and access operations. Example: A Recipient Group named &quot;Healthcare Program Administrators&quot; might have three Recipient_Group_Member records: (1) Member_Type__c=&quot;User&quot; with Recipient_User__c pointing to User &quot;Jane Admin&quot;, (2) another User member for &quot;John Manager&quot;, and (3) a Contact member for external admin contact. When the recipient group is used in Vendor_Program_Recipient_Group__c for communication, all members receive the communication. Member_Type__c determines whether the member is a User (Recipient_User__c) or Contact, and Recipient_Type__c specifies their role (e.g., Primary, Secondary, CC).</description>
+    <description>Defines an individual User or Contact&apos;s membership in a Recipient Group. Members inherit the usage and visibility permissions tied to the group and are included in all group-level operations.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Recipient Group Members</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

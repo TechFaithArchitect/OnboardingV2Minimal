@@ -4,7 +4,6 @@
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
     <description>Checked if this contract is a frame contract or a pricing agreement</description>
-    <externalId>false</externalId>
     <label>Is Frame Contract</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

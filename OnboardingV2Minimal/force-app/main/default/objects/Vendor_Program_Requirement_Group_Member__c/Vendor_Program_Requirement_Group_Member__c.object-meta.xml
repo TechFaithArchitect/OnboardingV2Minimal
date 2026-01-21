@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Junction record linking a Vendor_Program_Requirement_Group__c to a Vendor_Program_Onboarding_Req_Template__c (requirement template). Defines which templates belong to a requirement group and their display order. Example: A &quot;Documentation Requirements&quot; group might have three members: (1) NDA Template with Sequence__c=1, (2) Insurance Certificate Template with Sequence__c=2, and (3) Business License Template with Sequence__c=3. When this group is used by a Vendor Program, all three templates create Vendor_Program_Requirement__c records. The Sequence__c field controls the display order, and Is_Required__c marks whether a template is mandatory for the group.</description>
+    <description>The junction between a Requirement Group and a Requirement Definition.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Vendor Program Requirement Group Members</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

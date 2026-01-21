@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Current_Provider_s_Cost__c</fullName>
     <description>Records the cost associated with the current service provider(s).</description>
-    <externalId>false</externalId>
     <label>Current Provider(s) Cost</label>
     <precision>18</precision>
     <required>false</required>

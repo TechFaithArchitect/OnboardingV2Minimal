@@ -3,7 +3,6 @@
     <fullName>typeform__Typeform_Form_Mapping__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
-    <externalId>false</externalId>
     <label>Typeform Form Mapping</label>
     <referenceTo>typeform__Form_Mapping__c</referenceTo>
     <relationshipLabel>Accounts</relationshipLabel>

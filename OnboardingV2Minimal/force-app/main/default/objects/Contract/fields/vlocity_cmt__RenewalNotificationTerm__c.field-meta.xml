@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__RenewalNotificationTerm__c</fullName>
     <deprecated>false</deprecated>
     <description>The unit of measure for renewal notification period (days or months)</description>
-    <externalId>false</externalId>
     <label>Renewal Notification Term</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

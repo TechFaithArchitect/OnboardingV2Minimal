@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Price list used by contracts</description>
-    <externalId>false</externalId>
     <label>Price List</label>
     <referenceTo>vlocity_cmt__PriceList__c</referenceTo>
     <relationshipLabel>Contracts</relationshipLabel>

@@ -3,7 +3,6 @@
     <fullName>Required_Stage__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Stage that must be completed (or one of) for the dependency to pass.</description>
-    <externalId>false</externalId>
     <label>Required Stage</label>
     <referenceTo>Onboarding_Application_Stage__c</referenceTo>
     <relationshipLabel>Onboarding Application Stage Dependency (Required Stage)</relationshipLabel>

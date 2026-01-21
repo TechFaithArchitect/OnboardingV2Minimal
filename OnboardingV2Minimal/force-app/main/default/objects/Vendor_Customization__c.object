@@ -149,7 +149,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>Vendor_Program_Highlights</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Versioned vendor program customization/configuration chosen during onboarding. Each record represents a specific vendor program variant (e.g., &quot;Healthcare Provider Program v2&quot;) with its own requirement sets, status evaluation rules, and onboarding flow configuration. Child versions inherit configurations from parent versions via Previous_Version__c, enabling change management and rollback. Example: Vendor Program &quot;Medicare Provider Program v3&quot; might have Vendor__c=&quot;Acme Healthcare&quot;, Vendor_Program_Group__c=&quot;Healthcare Programs&quot;, and link to requirement sets for &quot;Standard Healthcare Requirements&quot; and &quot;Medicare-Specific Requirements&quot;. When dealers select this program in the onboarding wizard, it creates Onboarding__c records with this Vendor_Customization__c reference. The program&apos;s status rules evaluate requirement completion and automatically update onboarding status. Programs go through Draft → Active → Deprecated lifecycle, with only Active programs available for selection.</description>
+    <description>Versioned vendor program configuration chosen during onboarding (child versions inherit from parent versions; drives requirement sets, status rules, and wizard selection).</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>

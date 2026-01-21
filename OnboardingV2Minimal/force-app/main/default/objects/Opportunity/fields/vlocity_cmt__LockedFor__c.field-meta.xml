@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__LockedFor__c</fullName>
     <deprecated>false</deprecated>
     <description>This stores the reason for doing lock on the opportunity.</description>
-    <externalId>false</externalId>
     <inlineHelpText>This stores the reason for doing lock on the opportunity.</inlineHelpText>
     <label>Locked For</label>
     <required>false</required>

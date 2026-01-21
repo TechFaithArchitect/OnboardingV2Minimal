@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description
-  >Custom metadata catalog of Salesforce Email Templates synchronized via EmailTemplateSyncService for use in onboarding communications. Mirrors EmailTemplate records from Salesforce, providing a read-only reference for Communication_Template__c records and ensuring templates are available for onboarding email communications. Example: An Email_Template_Catalog metadata record might have DeveloperName__c=&quot;Onboarding_Requirement_Complete&quot;, Folder_Name__c=&quot;Onboarding&quot;, and Communication_Type__c=&quot;Email&quot;. The sync process (EmailTemplateSyncService) runs nightly or manually to keep this catalog synchronized with source EmailTemplate records. This enables Communication_Template__c to reference templates without querying EmailTemplate directly, improving performance and ensuring consistency. Templates are linked to Vendor Programs through Vendor_Program_Recipient_Group__c associations for automated communication workflows.</description>
-    <label>Email Template Catalog</label>
-    <pluralLabel>Email Template Catalogs</pluralLabel>
-    <visibility>Public</visibility>
-</CustomObject>

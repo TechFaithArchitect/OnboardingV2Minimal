@@ -3,7 +3,6 @@
     <fullName>Is_Archived__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Soft delete flag to hide retired field values.</description>
-    <externalId>false</externalId>
     <label>Is Archived</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

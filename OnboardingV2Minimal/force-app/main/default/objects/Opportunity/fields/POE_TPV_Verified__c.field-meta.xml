@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>POE_TPV_Verified__c</fullName>
     <defaultValue>false</defaultValue>
-    <externalId>false</externalId>
     <label>TPV Verified</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

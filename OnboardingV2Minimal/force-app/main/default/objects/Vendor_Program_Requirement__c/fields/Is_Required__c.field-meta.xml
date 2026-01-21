@@ -3,7 +3,6 @@
     <fullName>Is_Required__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Whether this must be completed</description>
-    <externalId>false</externalId>
     <label>Is Required</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>PVM_Paperwork_Completed__c</fullName>
     <description>What PVM paperwork has been completed?</description>
-    <externalId>false</externalId>
     <inlineHelpText>What PVM paperwork has been completed?</inlineHelpText>
     <label>PV Paperwork Completed</label>
     <required>false</required>

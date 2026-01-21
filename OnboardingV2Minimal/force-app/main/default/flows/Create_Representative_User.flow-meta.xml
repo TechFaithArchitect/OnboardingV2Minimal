@@ -1,0 +1,3007 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Error</name>
+        <label>Error</label>
+        <locationX>1722</locationX>
+        <locationY>2462</locationY>
+        <actionName>c:showToast</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>message</name>
+            <value>
+                <stringValue>Please review the information and try again.</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>type</name>
+            <value>
+                <stringValue>error</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>c:showToast</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Blind_Copy_to_Owner</name>
+        <label>Send Blind Copy to Owner</label>
+        <locationX>1106</locationX>
+        <locationY>3410</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Sucess</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>Get_Account.POE_Dealer_Office_Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Congratulations on Becoming an Authorized Agent</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>agentbodytemplate</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_to_Existing_Agent</name>
+        <label>Send Email to Existing Agent</label>
+        <locationX>1238</locationX>
+        <locationY>3194</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Check_Owner_Email</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>{!Get_Contact.Email}, customeronboarding@perfect-vision.com, customerservice@perfect-vision.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Congratulations on Becoming an Authorized Agent</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>agentbodytemplate</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_to_Owner</name>
+        <label>Send Email to Owner</label>
+        <locationX>842</locationX>
+        <locationY>2978</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Sucess</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <stringValue>{!Get_Contact.Email}, customeronboarding@perfect-vision.com, customerservice@perfect-vision.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>New Representative Created</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>bodytemplate</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Sucess</name>
+        <label>Sucess</label>
+        <locationX>1117</locationX>
+        <locationY>3770</locationY>
+        <actionName>c:showToast</actionName>
+        <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>message</name>
+            <value>
+                <stringValue>Successfully Activated Representative</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>type</name>
+            <value>
+                <stringValue>success</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>c:showToast</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <apiVersion>55.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Create_User_Values</name>
+        <label>Assign Create User Values</label>
+        <locationX>649</locationX>
+        <locationY>1622</locationY>
+        <assignmentItems>
+            <assignToReference>userVariable.Username</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>userEmailWithSufix</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_User</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_NEW_User_ID</name>
+        <label>Assign NEW User ID</label>
+        <locationX>649</locationX>
+        <locationY>1946</locationY>
+        <assignmentItems>
+            <assignToReference>userId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_User_Created.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Subflow_Assign_Chuzo_Permission_Sets_By_Representative_Type_Flow_1</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Phone_Sales_Sale_Channel</name>
+        <label>Assign Phone Sales Sale Channel</label>
+        <locationX>847</locationX>
+        <locationY>1322</locationY>
+        <assignmentItems>
+            <assignToReference>userVariable.POE_Sale_Channel__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Phone Sales</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Create_User</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Residential_Sale_Channel</name>
+        <label>Assign Residential Sale Channel</label>
+        <locationX>583</locationX>
+        <locationY>1322</locationY>
+        <assignmentItems>
+            <assignToReference>userVariable.POE_Sale_Channel__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Agent</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Create_User</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_User_Id</name>
+        <label>Assign User Id</label>
+        <locationX>1045</locationX>
+        <locationY>1622</locationY>
+        <assignmentItems>
+            <assignToReference>userId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_User.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>User_Is_Inactive</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_User_Variable</name>
+        <label>Assign User Variable</label>
+        <locationX>847</locationX>
+        <locationY>1106</locationY>
+        <assignmentItems>
+            <assignToReference>userVariable.AccountId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.Account.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.Email</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.FirstName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.FirstName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.LastName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.LastName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.Country</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.MailingCountry</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.Phone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.Phone</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.MobilePhone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Contact.MobilePhone</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.TimeZoneSidKey</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>America/Chicago</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.EmailEncodingKey</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>UTF-8</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.LocaleSidKey</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>en_US</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.LanguageLocaleKey</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>en_US</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.ContactId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.Alias</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>ContactAlias</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.CommunityNickname</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>nickNameFromEmail</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.ProfileId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_FSL_Chuzo_SU_Profile.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>userVariable.UserRoleId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_User_Role_To_Assign.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_User_Type</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Account_Has_FSL_Dates_Enabled</name>
+        <label>Account Has FSL Dates Enabled</label>
+        <locationX>1117</locationX>
+        <locationY>2462</locationY>
+        <defaultConnector>
+            <targetReference>Agent_or_Owner</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FSL Dates Disabled</defaultConnectorLabel>
+        <rules>
+            <name>FSL_Dates_Enabled</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account.POE_FSL_Dates_Enabled__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_FSL_Dates_PS_Group</targetReference>
+            </connector>
+            <label>FSL Dates Enabled</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Agent_or_Owner</name>
+        <label>Agent or Owner?</label>
+        <locationX>1117</locationX>
+        <locationY>2870</locationY>
+        <defaultConnector>
+            <targetReference>Is_Existing_Agent</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Agent</defaultConnectorLabel>
+        <rules>
+            <name>Owner</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Functional_Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Office Manager</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_to_Owner</targetReference>
+            </connector>
+            <label>Owner</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Assignment_Error</name>
+        <label>Assignment Error</label>
+        <locationX>847</locationX>
+        <locationY>2246</locationY>
+        <defaultConnector>
+            <targetReference>Get_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Error_on_Assignment</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Subflow_Assign_Chuzo_Permission_Sets_By_Representative_Type_Flow_1.success</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>License_Erro</targetReference>
+            </connector>
+            <label>Error on Assignment</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Fields</name>
+        <label>Check Fields</label>
+        <locationX>580</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <targetReference>Get_FSL_Chuzo_SU_Profile</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>All Fields Completed</defaultConnectorLabel>
+        <rules>
+            <name>On_Boarding_Process</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_RO_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>More Information Needed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_RO_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Onboarding In Progress</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Agent_On_Boarding_Status_Error</targetReference>
+            </connector>
+            <label>On Boarding Process</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Owner_Email</name>
+        <label>Check Owner Email</label>
+        <locationX>1238</locationX>
+        <locationY>3302</locationY>
+        <defaultConnector>
+            <targetReference>Sucess</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Owner Email Blank</defaultConnectorLabel>
+        <rules>
+            <name>Owner_Email_Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Account.POE_Dealer_Office_Email__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Blind_Copy_to_Owner</targetReference>
+            </connector>
+            <label>Owner Email Available</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_User</name>
+        <label>Check User</label>
+        <locationX>1150</locationX>
+        <locationY>674</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Exists_User</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Contact.Chuzo_Member__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>screenExists</targetReference>
+            </connector>
+            <label>User is Chuzo Member</label>
+        </rules>
+        <rules>
+            <name>Does_not_exist_or_Is_not_Chuzo_Member</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User.Contact.Chuzo_Member__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Fields</targetReference>
+            </connector>
+            <label>Does not exist or Is not Chuzo Member</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_User_Type</name>
+        <label>Check User Type</label>
+        <locationX>847</locationX>
+        <locationY>1214</locationY>
+        <defaultConnector>
+            <targetReference>Is_Create_User</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Is_Retail_D2D_Event</name>
+            <conditionLogic>(1 OR 2 OR 3) AND 4</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Representative_Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Retail</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Representative_Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Door To Door</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Representative_Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Event</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Functional_Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Office Representative</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Residential_Sale_Channel</targetReference>
+            </connector>
+            <label>Is Retail - D2D - Event</label>
+        </rules>
+        <rules>
+            <name>Is_Phone_Sales</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Representative_Type__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Phone Sales</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Functional_Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Office Representative</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Phone_Sales_Sale_Channel</targetReference>
+            </connector>
+            <label>Is Phone Sales</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Contact_has_valid_email</name>
+        <label>Contact has valid email ?</label>
+        <locationX>2503</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>Contact_Has_No_Email_Error_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Has_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contact.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contact.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>invalidContactEmailRegexFormula</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Has_Functional_Role</targetReference>
+            </connector>
+            <label>Has Email</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Has_Functional_Role</name>
+        <label>Has Functional Role</label>
+        <locationX>1964</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>No_functional_screen_error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Functional_Role__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_User</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Create_User</name>
+        <label>Is Create User ?</label>
+        <locationX>847</locationX>
+        <locationY>1514</locationY>
+        <defaultConnector>
+            <targetReference>Assign_User_Id</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Create_Chuzo_User</name>
+            <conditionLogic>1 OR (2 AND (3 OR 4 ) AND (5 OR 6 OR 7))</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Contact.FSL_Member__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Contact.Resource_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dispatcher</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Contact.Resource_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Dispatcher and Technician</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Contact.POE_Functional_Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Office Manager</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Contact.POE_Functional_Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sales Manager</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_User.Contact.POE_Functional_Role__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Team Lead</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_User_Values</targetReference>
+            </connector>
+            <label>Create Chuzo User</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Existing_Agent</name>
+        <label>Is Existing Agent</label>
+        <locationX>1392</locationX>
+        <locationY>2978</locationY>
+        <defaultConnector>
+            <targetReference>Sucess</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Existing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contact.POE_Existing_Agent_Flag__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Existing_Agent_Template</targetReference>
+            </connector>
+            <label>Existing</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>User_Is_Inactive</name>
+        <label>User Is Inactive ?</label>
+        <locationX>1045</locationX>
+        <locationY>1730</locationY>
+        <defaultConnector>
+            <targetReference>Subflow_Assign_Chuzo_Permission_Sets_By_Representative_Type_Flow_1</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Inactive</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_User.Id</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>userId</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Activate_User</targetReference>
+            </connector>
+            <label>Inactive</label>
+        </rules>
+    </decisions>
+    <description>This flow creates the representative user when Activate Representative button is clicked</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>ContactAlias</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!Get_Contact.FirstName},4) &amp; LEFT({!Get_Contact.LastName},4)</expression>
+    </formulas>
+    <formulas>
+        <name>invalidContactEmailRegexFormula</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT(REGEX({!Get_Contact.Email}, &quot;^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$&quot;))</expression>
+    </formulas>
+    <formulas>
+        <name>nickNameFromEmail</name>
+        <dataType>String</dataType>
+        <expression>LEFT(LEFT({!Get_Contact.Email},(FIND(&apos;@&apos;, {!Get_Contact.Email}) - 1)) + &apos;-&apos;+ TEXT((TODAY())) + TRIM(RIGHT({!Get_Contact.Id}, LEN({!Get_Contact.Id})-3 )),40)</expression>
+    </formulas>
+    <formulas>
+        <name>permisionSetAssignmentSuccess</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT (
+{!permissionSetAssignmentSubflowError} )</expression>
+    </formulas>
+    <formulas>
+        <name>portalRoleToAssign</name>
+        <dataType>String</dataType>
+        <expression>If ( NOT(ISPICKVAL({!Get_Contact.POE_Functional_Role__c}, &quot;Office Representative&quot;)), &quot;Manager&quot;, &quot;Worker&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>userEmailWithSufix</name>
+        <dataType>String</dataType>
+        <expression>{!Get_Contact.Email} + {!$Setup.Chuzo_Settings__c.Create_Rep_Flow_Email_Suffix__c}</expression>
+    </formulas>
+    <interviewLabel>Create Representative User {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create Representative User</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordCreates>
+        <name>Assign_FSL_Dates_PS_Group</name>
+        <label>Assign FSL Dates PS Group</label>
+        <locationX>985</locationX>
+        <locationY>2678</locationY>
+        <connector>
+            <targetReference>Agent_or_Owner</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AssigneeId</field>
+            <value>
+                <elementReference>userId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PermissionSetGroupId</field>
+            <value>
+                <elementReference>Get_FSL_Dates_PS_Group.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>PermissionSetAssignment</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_User</name>
+        <label>Create User</label>
+        <locationX>649</locationX>
+        <locationY>1730</locationY>
+        <connector>
+            <targetReference>Get_User_Created</targetReference>
+        </connector>
+        <inputReference>userVariable</inputReference>
+    </recordCreates>
+    <recordLookups>
+        <description>This flow gets the account assigned to the contact</description>
+        <name>Get_Account</name>
+        <label>Get Account</label>
+        <locationX>1117</locationX>
+        <locationY>2354</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Account_Has_FSL_Dates_Enabled</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Contact.Account.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Contact</name>
+        <label>Get Contact</label>
+        <locationX>2503</locationX>
+        <locationY>242</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Contact_has_valid_email</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Existing_Agent_Template</name>
+        <label>Get Existing Agent Template</label>
+        <locationX>1238</locationX>
+        <locationY>3086</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Email_to_Existing_Agent</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>PV_HTML_Welcome_Email_Template_Existing_Agent</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>EmailTemplate</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_FSL_Chuzo_SU_Profile</name>
+        <label>Get FSL Chuzo SU Profile</label>
+        <locationX>847</locationX>
+        <locationY>890</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_User_Role_To_Assign</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>External Partner – General</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Profile</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_FSL_Dates_PS_Group</name>
+        <label>Get FSL Dates PS Group</label>
+        <locationX>985</locationX>
+        <locationY>2570</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_FSL_Dates_PS_Group</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>FSL_Dates</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>PermissionSetGroup</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_User</name>
+        <label>Get User</label>
+        <locationX>1150</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Check_User</targetReference>
+        </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ContactId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Contact.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_User_Created</name>
+        <label>Get User Created</label>
+        <locationX>649</locationX>
+        <locationY>1838</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_NEW_User_ID</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Email</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>userVariable.Email</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_User_Role_To_Assign</name>
+        <label>Get User Role To Assign</label>
+        <locationX>847</locationX>
+        <locationY>998</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_User_Variable</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>PortalAccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Contact.AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>PortalRole</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>portalRoleToAssign</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>UserRole</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Activate_User</name>
+        <label>Activate User</label>
+        <locationX>913</locationX>
+        <locationY>1838</locationY>
+        <connector>
+            <targetReference>Subflow_Assign_Chuzo_Permission_Sets_By_Representative_Type_Flow_1</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>userId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>IsActive</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>User</object>
+    </recordUpdates>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <screens>
+        <name>Agent_On_Boarding_Status_Error</name>
+        <label>Agent On Boarding Status Error</label>
+        <locationX>314</locationX>
+        <locationY>890</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>ErrorMessageStatus</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 14px;&quot;&gt;The agent can&apos;t be activated since the On Boarding Status is {!Get_Contact.POE_RO_Status__c}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>Contact_Has_No_Email_Error_Screen</name>
+        <label>Contact Has No Email Error Screen</label>
+        <locationX>3042</locationX>
+        <locationY>458</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </connector>
+        <fields>
+            <name>Copy_1_of_ErrorMessageStatus</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 14px;&quot;&gt;Contact needs an email address t&lt;/strong&gt;&lt;b style=&quot;background-color: var(--slds-g-color-neutral-base-100, var(--lwc-colorBackgroundInput,rgb(255, 255, 255))); font-size: 14px;&quot;&gt;o be activated.&lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>License_Erro</name>
+        <label>License Erro</label>
+        <locationX>578</locationX>
+        <locationY>2354</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Error</targetReference>
+        </connector>
+        <fields>
+            <name>MessageNoLicenses</name>
+            <fieldText>&lt;p&gt;{!permissionSetAssignmentError}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>No_functional_screen_error</name>
+        <label>No functional screen error</label>
+        <locationX>2778</locationX>
+        <locationY>566</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>noFunctionalRoleError</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;color: rgb(0, 0, 0); font-size: 16px;&quot;&gt;Contact Functional Role is required for agent activation&lt;/strong&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;﻿&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-size: 16px;&quot;&gt;﻿&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>screen1</name>
+        <label>screen1</label>
+        <locationX>2503</locationX>
+        <locationY>134</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_Contact</targetReference>
+        </connector>
+        <fields>
+            <name>screen1_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>screen1_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>message</name>
+                    <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;Please click the Activate button to proceed&lt;/span&gt;&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Activate</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>screenExists</name>
+        <label>screenExists</label>
+        <locationX>50</locationX>
+        <locationY>782</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>screenExists_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>screenExists_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>text2</name>
+                    <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;{!Get_User.Contact.Name} is an existing Chuzo Member.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;strong style=&quot;font-size: 16px;&quot;&gt;Username: {!Get_User.Username}&lt;/strong&gt;&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>top</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Okay</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <start>
+        <locationX>2377</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>screen1</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <subflows>
+        <name>Subflow_Assign_Chuzo_Permission_Sets_By_Representative_Type_Flow_1</name>
+        <label>Subflow - Assign Chuzo Permission Sets By Representative Type Flow 1</label>
+        <locationX>847</locationX>
+        <locationY>2138</locationY>
+        <connector>
+            <targetReference>Assignment_Error</targetReference>
+        </connector>
+        <flowName>Subflow_Assign_Chuzo_Permission_Sets_By_Representative_Type</flowName>
+        <inputAssignments>
+            <name>userId</name>
+            <value>
+                <elementReference>userId</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <textTemplates>
+        <name>agentbodytemplate</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+
+    &lt;!-- Facebook sharing information tags --&gt;
+    &lt;meta property=&quot;og:title&quot; content=&quot;%%subject%%&quot; /&gt;
+
+    &lt;title&gt;%%subject%%&lt;/title&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+      body {
+        font-family: arial;
+      }
+      .articlelink a {
+        font-family: Arial;
+        color: darkblue;
+        font-size: 12px;
+        text-decoration: none;
+      }
+      .articlelink a:hover {
+        text-decoration: underline;
+      }
+
+      .footerlink a {
+        font-family: Arial;
+        color: white;
+        font-size: 13px;
+        text-decoration: none;
+      }
+      .footerlink a:hover {
+        text-decoration: underline;
+      }
+
+      .title {
+        font-family: arial;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 22px;
+        margin-bottom: 8px;
+        color: #202020;
+      }
+
+      .info {
+        font-family: arial;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 21px;
+        color: #505050;
+      }
+
+      .clickhere {
+        font-family: arial;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 16px;
+        margin-top: 16px;
+      }
+
+      .tablebr {
+        padding: 15px;
+      }
+
+      .headerbr {
+        margin-top: 0px;
+      }
+      .copyblock {
+        margin-left: 15px;
+      }
+
+      #outlook a {
+        padding: 0;
+      }
+      .body {
+        width: 100% !important;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Arial;
+        line-height: 18px;
+        font-size: 13px;
+      }
+      .ExternalClass {
+        width: 100%;
+      }
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+        line-height: 100%;
+      }
+      img {
+        outline: none;
+        text-decoration: none;
+        -ms-interpolation-mode: bicubic;
+      }
+      a img {
+        border: none;
+      }
+      p {
+        margin: 1em 0;
+      }
+      table td {
+        border-collapse: collapse;
+      }
+      /* hide unsubscribe from forwards*/
+      blockquote .original-only,
+      .WordSection1 .original-only {
+        display: none !important;
+      }
+      h1 {
+        color: #202020;
+        display: block;
+        font-family: Arial !important;
+        font-size: 27px;
+        font-weight: bold;
+        line-height: 29px;
+        margin-top: 0;
+        margin-right: 0;
+        margin-bottom: 10px;
+        margin-left: 0;
+        text-align: left;
+      }
+      h2 {
+        color: #202020;
+        font-size: 19px;
+        line-height: 22px;
+        font-family: Arial !important;
+      }
+      h4 {
+        color: #202020;
+        display: block;
+        font-family: Arial !important;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 24px;
+        margin-top: 0;
+        margin-right: 0;
+        margin-bottom: 5px;
+        margin-left: 0;
+        text-align: left;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body
+    leftmargin=&quot;0&quot;
+    marginwidth=&quot;0&quot;
+    topmargin=&quot;0&quot;
+    marginheight=&quot;0&quot;
+    offset=&quot;0&quot;
+    style=&quot;
+      -webkit-text-size-adjust: none;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+      width: 100%;
+    &quot;
+  &gt;
+    &lt;center&gt;
+      &lt;table
+        border=&quot;0&quot;
+        cellpadding=&quot;0&quot;
+        cellspacing=&quot;0&quot;
+        height=&quot;100%&quot;
+        id=&quot;backgroundTable&quot;
+        style=&quot;
+          margin: 0;
+          padding: 0;
+          background-color: #fafafa;
+          height: 100%;
+          width: 100%;
+        &quot;
+        width=&quot;100%&quot;
+      &gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;
+            &lt;td align=&quot;center&quot; style=&quot;border-collapse: collapse&quot; valign=&quot;top&quot;&gt;
+              &lt;!-- // Begin Template Preheader \ --&gt;
+              &lt;table
+                border=&quot;0&quot;
+                cellpadding=&quot;10&quot;
+                cellspacing=&quot;0&quot;
+                id=&quot;templatePreheader&quot;
+                style=&quot;background-color: #fafafa&quot;
+                width=&quot;600&quot;
+              &gt;
+                &lt;tbody&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      class=&quot;preheaderContent&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Module: Standard Preheader  --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;10&quot;
+                        cellspacing=&quot;0&quot;
+                        width=&quot;100%&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td
+                              style=&quot;border-collapse: collapse&quot;
+                              valign=&quot;top&quot;
+                            &gt;&lt;/td&gt;
+                            &lt;td
+                              style=&quot;border-collapse: collapse&quot;
+                              valign=&quot;top&quot;
+                              width=&quot;190&quot;
+                            &gt;
+                              &amp;nbsp;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;!-- // End Module: Standard Preheader  --&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+              &lt;!-- // End Template Preheader \ --&gt;
+
+              &lt;table
+                border=&quot;0&quot;
+                cellpadding=&quot;0&quot;
+                cellspacing=&quot;0&quot;
+                id=&quot;templateContainer&quot;
+                style=&quot;border: 1px solid #dddddd; background-color: #ffffff&quot;
+                width=&quot;600&quot;
+              &gt;
+                &lt;tbody&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      align=&quot;center&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Template Header \ --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;0&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateHeader&quot;
+                        style=&quot;background-color: #ffffff; border-bottom: 0&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr style=&quot;&quot;&gt;
+                            &lt;td
+                              class=&quot;headerContent&quot;
+                              pardot-region=&quot;header_image&quot;
+                              style=&quot;
+                                border-collapse: collapse;
+                                color: #202020;
+                                font-family: Arial;
+                                padding: 0;
+                                text-align: center;
+                                vertical-align: middle;
+                              &quot;
+                            &gt;
+                              &lt;!-- // Begin Module: Standard Header Image \ --&gt;&lt;img
+                                src=&quot;https://perfectvoice.perfect-vision.com/eblasts/chuzo/images/PV-chuzo-bnr2.jpg&quot;
+                                alt=&quot;PerfectVision&quot;
+                                width=&quot;100%&quot;
+                                id=&quot;headerImage&quot;
+                                style=&quot;width: 600px; display: block&quot;
+                              /&gt;
+                              &lt;!-- // End Module: Standard Header Image \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;table
+                        align=&quot;center&quot;
+                        border=&quot;0&quot;
+                        cellpadding=&quot;3&quot;
+                        cellspacing=&quot;3&quot;
+                        style=&quot;
+                          font-family: arial;
+                          font-size: 16px;
+                          line-height: 1.3;
+                        &quot;
+                        width=&quot;550&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td&gt;
+                              &lt;br /&gt;
+
+                              &lt;h4
+                                style=&quot;text-align: center; font-family: arial&quot;
+                              &gt;
+                                Congratulations on &lt;br /&gt;
+                                Becoming an Authorized Agent
+                              &lt;/h4&gt;
+                              &lt;br /&gt;
+
+                              &lt;h4
+                                style=&quot;
+                                  font-size: 45px;
+                                  text-align: center;
+                                  font-family: arial;
+                                &quot;
+                              &gt;
+                                Start Selling Now
+                              &lt;/h4&gt;
+
+                              &lt;hr style=&quot;margin: 30px 0px 0px 0px&quot; /&gt;
+                              &lt;table
+                                width=&quot;550&quot;
+                                border=&quot;0&quot;
+                                cellspacing=&quot;5&quot;
+                                cellpadding=&quot;5&quot;
+                              &gt;
+                                &lt;tbody&gt;
+                                  &lt;tr&gt;
+                                    &lt;td&gt;
+                                      &lt;div&gt;
+                                        &lt;img
+                                          alt=&quot;PerfectVision&quot;
+                                          border=&quot;0&quot;
+                                          height=&quot;150&quot;
+                                          src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/order-entry-ico.jpg&quot;
+                                          width=&quot;150&quot;
+                                        /&gt;
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                    &lt;td&gt;
+                                      &lt;h2 style=&quot;font-family: Arial&quot;&gt;
+                                        Let&apos;s Get Started
+                                      &lt;/h2&gt;
+
+                                      &lt;p&gt;
+                                        &lt;strong&gt;Username:&lt;/strong&gt;
+                                        {!userEmailWithSufix}
+                                      &lt;/p&gt;
+                                      &lt;a
+                                        href=&quot;{!$Setup.Chuzo_Settings__c.Create_Rep_Flow_Reset_Password_URL__c}&quot;
+                                        &gt;Click here to set up your password&lt;/a
+                                      &gt;&lt;br /&gt;
+                                      &lt;br /&gt;
+                                      Once you have reset your password, your
+                                      Chuzo setup is complete! Please
+                                      &lt;a
+                                        href=&quot;https://chuzo.force.com/poe&quot;
+                                        target=&quot;_blank&quot;
+                                        &gt;click here&lt;/a
+                                      &gt;
+                                      to start selling!
+                                      &lt;hr style=&quot;margin: 30px 0px&quot; /&gt;
+                                      &lt;h2 style=&quot;font-family: Arial&quot;&gt;
+                                        Getting Started with Chuzo
+                                      &lt;/h2&gt;
+                                      &lt;ul type=&quot;disc&quot;&gt;
+                                        &lt;li&gt;
+                                          Make sure to turn on geolocation
+                                        &lt;/li&gt;
+                                        &lt;li&gt;
+                                          Turn off any ad blockers and allow
+                                          pop-ups for the site
+                                        &lt;/li&gt;
+                                        &lt;li&gt;
+                                          Add
+                                          &lt;a
+                                            href=&quot;mailto:noreply@salesforce.com&quot;
+                                            &gt;noreply@salesforce.com&lt;/a
+                                          &gt;
+                                          to your email safe sender list
+                                        &lt;/li&gt;
+                                        &lt;li&gt;
+                                          Chuzo seems to work best in Microsoft
+                                          Edge and Google Chrome. Please avoid
+                                          using Safari
+                                        &lt;/li&gt;
+                                      &lt;/ul&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+                                &lt;/tbody&gt;
+                              &lt;/table&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;0&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateHeader2&quot;
+                        style=&quot;background-color: #ffffff; border-bottom: 0&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr style=&quot;&quot;&gt;
+                            &lt;td
+                              class=&quot;headerContent&quot;
+                              pardot-region=&quot;header_image&quot;
+                              style=&quot;
+                                border-collapse: collapse;
+                                color: #202020;
+                                font-family: Arial;
+                                font-size: 34px;
+                                font-weight: bold;
+                                line-height: 34px;
+                                padding: 0;
+                                text-align: center;
+                                vertical-align: middle;
+                              &quot;
+                            &gt;
+                              &lt;!-- // Begin Module: Standard Header Image \ --&gt;&lt;!-- // End Module: Standard Header Image \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      align=&quot;center&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Template Body \ --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;0&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateBody&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td
+                              class=&quot;bodyContent&quot;
+                              style=&quot;
+                                border-collapse: collapse;
+                                background-color: #ffffff;
+                              &quot;
+                              valign=&quot;top&quot;
+                            &gt;
+                              &lt;!-- // End Module: Left Image with Content \ --&gt;&lt;!-- // Begin Module: Right Image with Content \ --&gt;&lt;!-- // End Module: Right Image with Content \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;!-- // End Template Body \ --&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      align=&quot;center&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Template Footer \ --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;10&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateFooter&quot;
+                        style=&quot;background-color: #ffffff; border-top: 0&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td
+                              class=&quot;footerContent&quot;
+                              style=&quot;border-collapse: collapse&quot;
+                              valign=&quot;top&quot;
+                            &gt;
+                              &lt;!-- // Begin Module: Standard Footer \ --&gt;
+                              &lt;table
+                                border=&quot;0&quot;
+                                cellpadding=&quot;10&quot;
+                                cellspacing=&quot;0&quot;
+                                width=&quot;100%&quot;
+                              &gt;
+                                &lt;tbody&gt;
+                                  &lt;tr pardot-removable=&quot;&quot;&gt;
+                                    &lt;td
+                                      colspan=&quot;2&quot;
+                                      id=&quot;social&quot;
+                                      style=&quot;
+                                        border-collapse: collapse;
+                                        background-color: #fafafa;
+                                        border: 0;
+                                      &quot;
+                                      valign=&quot;middle&quot;
+                                    &gt;
+                                      &lt;div
+                                        pardot-region=&quot;std_social&quot;
+                                        style=&quot;
+                                          color: #707070;
+                                          font-family: Arial;
+                                          font-size: 12px;
+                                          line-height: 15px;
+                                          text-align: center;
+                                        &quot;
+                                      &gt;
+                                        &lt;a
+                                          href=&quot;https://go.perfect-vision.com/l/1014532/2023-02-01/252i&quot;
+                                          style=&quot;
+                                            -webkit-text-size-adjust: 100%;
+                                            -ms-text-size-adjust: 100%;
+                                            font-weight: normal;
+                                            color: #606060;
+                                          &quot;
+                                          target=&quot;_blank&quot;
+                                          &gt;Follow on X&lt;/a
+                                        &gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a
+                                          href=&quot;https://go.perfect-vision.com/l/1014532/2023-02-01/255i&quot;
+                                          style=&quot;
+                                            -webkit-text-size-adjust: 100%;
+                                            -ms-text-size-adjust: 100%;
+                                            font-weight: normal;
+                                            color: #606060;
+                                          &quot;
+                                          target=&quot;_blank&quot;
+                                          &gt;Friend on Facebook&lt;/a
+                                        &gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a
+                                          href=&quot;https://go.perfect-vision.com/l/1014532/2023-02-01/258i&quot;
+                                          style=&quot;
+                                            -webkit-text-size-adjust: 100%;
+                                            -ms-text-size-adjust: 100%;
+                                            font-weight: normal;
+                                            color: #606060;
+                                          &quot;
+                                          target=&quot;_blank&quot;
+                                          &gt;Connect on LinkedIn
+                                        &lt;/a&gt;
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+                                  &lt;tr&gt;
+                                    &lt;td
+                                      style=&quot;border-collapse: collapse&quot;
+                                      valign=&quot;top&quot;
+                                      width=&quot;350&quot;
+                                    &gt;
+                                      &lt;div
+                                        pardot-region=&quot;std_footer&quot;
+                                        style=&quot;
+                                          color: #707070;
+                                          font-family: Arial;
+                                          font-size: 12px;
+                                          line-height: 15px;
+                                          text-align: left;
+                                        &quot;
+                                      &gt;
+                                        &lt;em
+                                          &gt;Copyright © 2025, All rights
+                                          reserved.&lt;/em
+                                        &gt;&lt;br /&gt;
+                                        &lt;br /&gt;
+                                        &lt;strong&gt;Our mailing address is:&lt;/strong
+                                        &gt;&lt;br /&gt;
+                                        &lt;br /&gt;
+                                        PerfectVision&lt;br /&gt;
+                                        16101 La Grande Dr.&lt;br /&gt;
+                                        Little Rock, AR 72223
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                    &lt;td
+                                      style=&quot;border-collapse: collapse&quot;
+                                      valign=&quot;top&quot;
+                                      width=&quot;190&quot;
+                                    &gt;
+                                      &lt;div
+                                        pardot-region=&quot;std_footer_alt&quot;
+                                        style=&quot;
+                                          color: #707070;
+                                          font-family: Arial;
+                                          font-size: 12px;
+                                          line-height: 15px;
+                                          text-align: left;
+                                        &quot;
+                                      &gt;
+                                        &lt;a href=&quot;http://www.perfect-vision.com&quot;
+                                          &gt;&lt;img
+                                            src=&quot;https://perfectvoice.perfect-vision.com/images/static/pv-logo-foot.jpg&quot;
+                                            alt=&quot;PerfectVision&quot;
+                                            width=&quot;200&quot;
+                                            height=&quot;96&quot;
+                                        /&gt;&lt;/a&gt;
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+                                &lt;/tbody&gt;
+                              &lt;/table&gt;
+                              &lt;!-- // End Module: Standard Footer \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;!-- // End Template Footer \ --&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/center&gt;
+    &lt;!--
+          This email was originally designed by the wonderful folks at MailChimp and remixed by Pardot.
+          It is licensed under CC BY-SA 3.0
+        --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <description>Backup of agentBodyTemplate&apos;s value before the changes from PER-3151</description>
+        <name>agentBodyTemplateBackup</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;    &lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;table class=&quot;ql-table-blob&quot; border=&quot;0&quot; id=&quot;backgroundTable&quot; style=&quot;margin: 0;padding: 0;background-color: #FAFAFA;height: 100%;width: 100%;&quot; width=&quot;100%&quot;&gt;&lt;tbody style=&quot;white-space: pre;&quot;&gt;    &lt;tr style=&quot;white-space: pre;&quot;&gt;        &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot; align=&quot;center&quot;&gt;&lt;br&gt;        &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table width=&quot;600&quot; style=&quot;background-color: rgb(250, 250, 250); white-space: pre;&quot; id=&quot;templatePreheader&quot; cellspacing=&quot;0&quot; cellpadding=&quot;10&quot; border=&quot;0&quot;&gt;            &lt;tbody style=&quot;white-space: pre;&quot;&gt;                &lt;tr style=&quot;white-space: pre;&quot;&gt;                    &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot; class=&quot;preheaderContent&quot;&gt;&lt;br&gt;                    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table style=&quot;white-space: pre;&quot; width=&quot;100%&quot; cellspacing=&quot;0&quot; cellpadding=&quot;10&quot; border=&quot;0&quot;&gt;                        &lt;tbody style=&quot;white-space: pre;&quot;&gt;                            &lt;tr style=&quot;white-space: pre;&quot;&gt;                                &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse;&quot;&gt;&amp;nbsp;&lt;/td&gt;                                &lt;td width=&quot;190&quot; valign=&quot;top&quot; style=&quot;border-collapse: collapse;&quot;&gt;&amp;nbsp;&lt;/td&gt;                            &lt;/tr&gt;                        &lt;/tbody&gt;                    &lt;/table&gt;&lt;br&gt;                    &lt;/td&gt;                &lt;/tr&gt;            &lt;/tbody&gt;        &lt;/table&gt;&lt;br&gt;        &lt;br&gt;&lt;br&gt;        &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table width=&quot;600&quot; style=&quot;border: 1px solid rgb(221, 221, 221); background-color: rgb(255, 255, 255); white-space: pre;&quot; id=&quot;templateContainer&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; border=&quot;0&quot;&gt;            &lt;tbody style=&quot;white-space: pre;&quot;&gt;                &lt;tr style=&quot;white-space: pre;&quot;&gt;                    &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot; align=&quot;center&quot;&gt;&lt;br&gt;                    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table width=&quot;600&quot; style=&quot;background-color: rgb(255, 255, 255); border-bottom: 0px; white-space: pre;&quot; id=&quot;templateHeader&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; border=&quot;0&quot;&gt;                        &lt;tbody style=&quot;white-space: pre;&quot;&gt;                            &lt;tr style=&quot;white-space: pre;&quot;&gt;                                &lt;td style=&quot;border-collapse: collapse;color: #202020;font-family: Arial; padding: 0;text-align: center;vertical-align: middle;&quot; class=&quot;headerContent&quot;&gt;&lt;img style=&quot;max-width: 600px; -ms-interpolation-mode: bicubic; height: auto; outline: none; text-decoration: none; border: 0; display: block&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/Chuzo/images/PV-Chuzo-bnr.jpg&quot; id=&quot;headerImage&quot; alt=&quot;PerfectVision&quot;&gt; &lt;/td&gt;                            &lt;/tr&gt;                        &lt;/tbody&gt;                    &lt;/table&gt;&lt;br&gt;                    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table width=&quot;550&quot; style=&quot;font-family: arial; font-size: 14px; line-height: 18px; white-space: pre;&quot; cellspacing=&quot;3&quot; cellpadding=&quot;3&quot; border=&quot;0&quot; align=&quot;center&quot;&gt;                        &lt;tbody style=&quot;white-space: pre;&quot;&gt;                            &lt;tr style=&quot;white-space: pre;&quot;&gt;                                &lt;td style=&quot;white-space: pre;&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;                              &lt;h4 style=&quot;text-align: center;font-family: arial&quot;&gt;Congratulations, You Now Have Access to Place Orders Via Chuzo Order Entry!&lt;/h4&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;                                  &lt;h4 style=&quot;font-size: 45px; text-align:center; font-family: arial&quot;&gt;Start Selling Now&lt;/h4&gt;&lt;br&gt;                                &lt;br&gt;                                 &lt;hr style=&quot;margin:30px 0px 0px 0px&quot;&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table style=&quot;white-space: pre;&quot; cellpadding=&quot;5&quot; cellspacing=&quot;5&quot; border=&quot;0&quot; width=&quot;550&quot;&gt;                                  &lt;tbody style=&quot;white-space: pre;&quot;&gt;                                &lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td&gt;&lt;div&gt;&lt;img width=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/order-entry-ico.jpg&quot; height=&quot;150&quot; border=&quot;0&quot; alt=&quot;PerfectVision&quot;&gt;&lt;/div&gt;&lt;/td&gt;                                      &lt;td style=&quot;white-space: pre;&quot;&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Let&apos;s Get Started&lt;/h2&gt;&lt;br&gt;                                      &lt;ul&gt;&lt;li&gt; &lt;a href=&quot;https://chuzo.force.com/poe&quot;&gt;Click Here to Access Chuzo Order Entry Portal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;                                      &lt;br&gt;                                          &lt;strong&gt;Login Information&lt;/strong&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;{!$Api.Partner_Server_URL_560}&quot;&gt;Click here to set up your password&lt;/a&gt;&lt;br&gt;                                        &lt;p&gt;Username: {!userEmailWithSufix}&lt;/p&gt;&lt;br&gt;&lt;/td&gt;                                    &lt;/tr&gt;                                                                    &lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;                                    &lt;/tr&gt;&lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td&gt;&lt;div&gt;&lt;img width=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/ac-ico.jpg&quot; height=&quot;150&quot; border=&quot;0&quot; alt=&quot;PerfectVision&quot;&gt;&lt;/div&gt;&lt;/td&gt;                                      &lt;td style=&quot;white-space: pre;&quot;&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Resources&lt;/h2&gt;&lt;br&gt;                                        PerfectVision offer resources that will keep your dealership up-to-date on  the products, promotions and important communications from our partners.&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;strong&gt;Note:&lt;/strong&gt; You must be signed in to the PerfectVision Website to  view the Partner Resources pages. &lt;br&gt;                                        &lt;br&gt;                                            &lt;ul&gt;&lt;li&gt;&lt;a href=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/Chuzo/pdf/Chuzo-Who-to-Call.pdf&quot;&gt;Who to Call&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/Chuzo/pdf/How-to-Navigate-Chuzo.pdf&quot;&gt;How to Navigate Chuzo&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;br&gt;                                    &lt;/td&gt;                                    &lt;/tr&gt; &lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;                                    &lt;/tr&gt;                                                                   &lt;/tbody&gt;                                &lt;/table&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;h1 style=&quot;margin-bottom: 8px; line-height: 20px; font-family: Arial&quot; span=&quot;&quot;&gt;Your Support Team&lt;/h1&gt;&lt;br&gt;We have dedicated team members that cover all 50 states that support your business. &lt;a href=&quot;https://www.perfect-vision.com/Company/FindRep.aspx&quot;&gt;Find Your Rep.&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table style=&quot;white-space: pre;&quot; cellpadding=&quot;5&quot; cellspacing=&quot;5&quot; border=&quot;0&quot; width=&quot;550&quot;&gt;                                  &lt;tbody style=&quot;white-space: pre;&quot;&gt;                                                                      &lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td&gt;&lt;div&gt;&lt;img width=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/shipping-ico.jpg&quot; height=&quot;150&quot; border=&quot;0&quot; alt=&quot;PerfectVision&quot;&gt;&lt;/div&gt;&lt;/td&gt;                                        &lt;td style=&quot;white-space: pre;&quot;&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Customer Service&lt;/h2&gt;&lt;br&gt;                                        &lt;strong style=&quot;white-space: pre;&quot;&gt;800.205.8620 ext. 2655&lt;br&gt;&lt;br&gt;                                        &lt;/strong&gt;&lt;a href=&quot;mailto:CustomerService@perfect-vision.com&quot;&gt;CustomerService@perfect-vision.com&lt;/a&gt;&lt;br&gt;                                        &lt;ul&gt;&lt;li&gt;General Request or Escalations&lt;/li&gt;&lt;li&gt;Product Returns&lt;/li&gt;&lt;li&gt;Shipment Discrepancies&lt;/li&gt;&lt;li&gt;Website Support&lt;/li&gt;&lt;li&gt;Insurance / Resale Document&lt;/li&gt;&lt;li&gt;Reporting &amp;amp; Order Support&lt;/li&gt;&lt;/ul&gt;&lt;/td&gt;                                    &lt;/tr&gt; &lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;                                    &lt;/tr&gt;&lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td&gt;&lt;div&gt;&lt;img width=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/ce-ico.jpg&quot; height=&quot;150&quot; border=&quot;0&quot; alt=&quot;PerfectVision&quot;&gt;&lt;/div&gt;&lt;/td&gt;                                      &lt;td style=&quot;white-space: pre;&quot;&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Commission Escalations&lt;/h2&gt;&lt;br&gt;                                        &lt;strong style=&quot;white-space: pre;&quot;&gt;800.205.8620 ext. 2140&lt;br&gt;&lt;br&gt;                                        &lt;/strong&gt;&lt;a href=&quot;mailto:CommissionEscalations@perfect-vision.com&quot;&gt;CommissionEscalations@perfect-vision.com&lt;/a&gt;&lt;br&gt;                                        &lt;ul&gt;&lt;li&gt;Commission Support&lt;/li&gt;&lt;li&gt;Incentive Pay Questions&lt;/li&gt;&lt;li&gt;Incorrect Payment&lt;/li&gt;&lt;li&gt;Order Status Dispute&lt;/li&gt;&lt;/ul&gt;&lt;/td&gt;                                    &lt;/tr&gt; &lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;                                    &lt;/tr&gt;                                    &lt;tr style=&quot;white-space: pre;&quot;&gt;                                      &lt;td&gt;&lt;div&gt;&lt;img width=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/marketing-ico.jpg&quot; height=&quot;150&quot; border=&quot;0&quot; alt=&quot;PerfectVision&quot;&gt;&lt;/div&gt;&lt;/td&gt;                                        &lt;td style=&quot;white-space: pre;&quot;&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Marketing&lt;/h2&gt;&lt;br&gt;                                        &lt;strong&gt;800.205.8620 ext. 2611&lt;/strong&gt;&lt;a style=&quot;white-space: pre;&quot; href=&quot;mailto:PVMarketing@perfect-vision.com&quot;&gt;&lt;br&gt;&lt;br&gt;                                        PVMarketing@perfect-vision.com&lt;/a&gt;&lt;br&gt;&lt;br&gt;                                        &lt;br&gt;                                   &lt;br&gt;                                        &lt;ul&gt;&lt;li style=&quot;white-space: pre;&quot;&gt;General       Marketing Assistance&lt;/li&gt;&lt;li style=&quot;white-space: pre;&quot;&gt;Building       Ads&lt;/li&gt;&lt;li style=&quot;white-space: pre;&quot;&gt;Ordering       or Placing Pre-approved Ads&lt;/li&gt;&lt;li style=&quot;white-space: pre;&quot;&gt;Marketing       Consulting&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://www.perfect-vision.com/DealerResources/TechnicalDocumentWindow.aspx?docID=1553&amp;amp;docTitle=MarketingGuidelines&amp;amp;groupCode=FRNT&quot;&gt;Marketing Guidelines&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/td&gt;                                    &lt;/tr&gt;                                                                                                                                          &lt;/tbody&gt;                                &lt;/table&gt; &lt;hr style=&quot;margin:30px 0px 30px 0px&quot;&gt;&lt;h1 style=&quot;font-family: Arial&quot;&gt;PerfectVision Website Training Resources&lt;/h1&gt;&lt;br&gt;Click here for the &lt;a href=&quot;https://www.perfect-vision.com/DealerResources/Training/TrainingSchedule.aspx&quot;&gt;Training Calendar&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;div&gt;&lt;img alt=&quot;Training Calendar&quot; style=&quot;display:block&quot; height=&quot;360&quot; width=&quot;550&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/training-calendar2.jpg&quot;&gt;&lt;/div&gt;&lt;br&gt;&lt;br&gt;&lt;hr style=&quot;margin:30px 0px 30px 0px&quot;&gt;&lt;br&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;How Was Your Onboarding Experience? &lt;br&gt;&lt;br&gt;&lt;/h2&gt;&lt;br&gt;Tell us how we did by filling out a &lt;a href=&quot;https://forms.gle/P3J5JrJubyVS4NfE8&quot;&gt;brief survey&lt;/a&gt; about your onboarding experience.&lt;br&gt;&lt;br&gt;&lt;br&gt;                               &lt;br&gt;&lt;/td&gt;                            &lt;/tr&gt;                        &lt;/tbody&gt;                    &lt;/table&gt;&lt;br&gt;                &lt;br&gt;&lt;br&gt;                    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table width=&quot;600&quot; style=&quot;background-color: rgb(255, 255, 255); border-bottom: 0px; white-space: pre;&quot; id=&quot;templateHeader2&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; border=&quot;0&quot;&gt;                        &lt;tbody style=&quot;white-space: pre;&quot;&gt;                            &lt;tr style=&quot;white-space: pre;&quot;&gt;                                &lt;td style=&quot;border-collapse: collapse;color: #202020;font-family: Arial;font-size: 34px;font-weight: bold;line-height: 34px;padding: 0;text-align: center;vertical-align: middle;&quot; class=&quot;headerContent&quot;&gt;&lt;/td&gt;                            &lt;/tr&gt;                        &lt;/tbody&gt;                    &lt;/table&gt;&lt;br&gt;                    &lt;/td&gt;                &lt;/tr&gt;                &lt;tr style=&quot;white-space: pre;&quot;&gt;                    &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot; align=&quot;center&quot;&gt;&lt;br&gt;                    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table style=&quot;white-space: pre;&quot; width=&quot;600&quot; id=&quot;templateBody&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; border=&quot;0&quot;&gt;                        &lt;tbody style=&quot;white-space: pre;&quot;&gt;                            &lt;tr style=&quot;white-space: pre;&quot;&gt;                                &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse;background-color: #FFFFFF;&quot; class=&quot;bodyContent&quot;&gt;&lt;/td&gt;                            &lt;/tr&gt;                        &lt;/tbody&gt;                    &lt;/table&gt;&lt;br&gt;                    &lt;/td&gt;                &lt;/tr&gt;                &lt;tr style=&quot;white-space: pre;&quot;&gt;                    &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot; align=&quot;center&quot;&gt;&lt;br&gt;                    &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table width=&quot;600&quot; style=&quot;background-color: rgb(255, 255, 255); border-top: 0px; white-space: pre;&quot; id=&quot;templateFooter&quot; cellspacing=&quot;0&quot; cellpadding=&quot;10&quot; border=&quot;0&quot;&gt;                        &lt;tbody style=&quot;white-space: pre;&quot;&gt;                            &lt;tr style=&quot;white-space: pre;&quot;&gt;                                &lt;td valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot; class=&quot;footerContent&quot;&gt;&lt;br&gt;                                &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table style=&quot;white-space: pre;&quot; width=&quot;100%&quot; cellspacing=&quot;0&quot; cellpadding=&quot;10&quot; border=&quot;0&quot;&gt;                                    &lt;tbody style=&quot;white-space: pre;&quot;&gt;                                        &lt;tr style=&quot;white-space: pre;&quot;&gt;                                            &lt;td valign=&quot;middle&quot; style=&quot;border-collapse: collapse; background-color: rgb(250, 250, 250); border: 0px; white-space: pre;&quot; id=&quot;social&quot; colspan=&quot;2&quot;&gt;&lt;br&gt;                                            &lt;div style=&quot;color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: center;&quot;&gt;&lt;a style=&quot;-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;&quot; href=&quot;https://twitter.com/PerfectVision79&quot;&gt;Follow on Twitter&lt;/a&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a style=&quot;-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;&quot; href=&quot;https://www.facebook.com/PVBetterSolutions/&quot;&gt;Friend on Facebook&lt;/a&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a style=&quot;-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;&quot; href=&quot;https://www.linkedin.com/company/pvbettersolutions/&quot;&gt;Connect on LinkedIn &lt;/a&gt;&lt;/div&gt;&lt;br&gt;                                            &lt;/td&gt;                                        &lt;/tr&gt;                                        &lt;tr style=&quot;white-space: pre;&quot;&gt;                                            &lt;td width=&quot;350&quot; valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot;&gt;&lt;br&gt;                                            &lt;div style=&quot;color: rgb(112, 112, 112); font-family: Arial; font-size: 12px; line-height: 15px; text-align: left; white-space: pre;&quot;&gt;&lt;em&gt;Copyright © 2021, All rights reserved.&lt;/em&gt;&lt;br&gt;&lt;br&gt;                                            &lt;br&gt;&lt;br&gt;                                            &lt;strong&gt;Our mailing address is:&lt;/strong&gt;&lt;br&gt;&lt;br&gt;                                            &lt;br&gt;&lt;br&gt;                                            PerfectVision&lt;br&gt;&lt;br&gt;                                            16101 La Grande Drive&lt;br&gt;&lt;br&gt;                                            Little Rock, 72223&lt;br&gt;&lt;br&gt;                                            United States&lt;/div&gt;&lt;br&gt;                                            &lt;/td&gt;                                            &lt;td width=&quot;190&quot; valign=&quot;top&quot; style=&quot;border-collapse: collapse; white-space: pre;&quot;&gt;&lt;br&gt;                                            &lt;div style=&quot;color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: left;&quot;&gt;&lt;a href=&quot;http://www.perfect-vision.com&quot;&gt;&lt;img width=&quot;200&quot; src=&quot;https://perfectvoice.perfect-vision.com/images/static/pv-logo-foot.jpg&quot; height=&quot;96&quot; alt=&quot;PerfectVision&quot;&gt;&lt;/a&gt;&lt;/div&gt;&lt;br&gt;                                            &lt;/td&gt;                                        &lt;/tr&gt;                                        &lt;tr style=&quot;white-space: pre;&quot;&gt;                                            &lt;td valign=&quot;middle&quot; style=&quot;border-collapse: collapse;background-color: #FFFFFF;border: 0;&quot; id=&quot;utility&quot; colspan=&quot;2&quot;&gt;&amp;nbsp;&lt;/td&gt;                                        &lt;/tr&gt;                                    &lt;/tbody&gt;                                &lt;/table&gt;&lt;br&gt;                                &lt;/td&gt;                            &lt;/tr&gt;                        &lt;/tbody&gt;                    &lt;/table&gt;&lt;br&gt;                    &lt;/td&gt;                &lt;/tr&gt;            &lt;/tbody&gt;        &lt;/table&gt;&lt;br&gt;        &lt;/td&gt;    &lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>bodytemplate</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+
+    &lt;!-- Facebook sharing information tags --&gt;
+    &lt;meta property=&quot;og:title&quot; content=&quot;%%subject%%&quot; /&gt;
+
+    &lt;title&gt;%%subject%%&lt;/title&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+      body {
+        font-family: arial;
+      }
+      .articlelink a {
+        font-family: Arial;
+        color: darkblue;
+        font-size: 12px;
+        text-decoration: none;
+      }
+      .articlelink a:hover {
+        text-decoration: underline;
+      }
+
+      .footerlink a {
+        font-family: Arial;
+        color: white;
+        font-size: 13px;
+        text-decoration: none;
+      }
+      .footerlink a:hover {
+        text-decoration: underline;
+      }
+
+      .title {
+        font-family: arial;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 22px;
+        margin-bottom: 8px;
+        color: #202020;
+      }
+
+      .info {
+        font-family: arial;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 21px;
+        color: #505050;
+      }
+
+      .clickhere {
+        font-family: arial;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 16px;
+        margin-top: 16px;
+      }
+
+      .tablebr {
+        padding: 15px;
+      }
+
+      .headerbr {
+        margin-top: 0px;
+      }
+      .copyblock {
+        margin-left: 15px;
+      }
+
+      #outlook a {
+        padding: 0;
+      }
+      .body {
+        width: 100% !important;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: Arial;
+        line-height: 18px;
+        font-size: 13px;
+      }
+      .ExternalClass {
+        width: 100%;
+      }
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+        line-height: 100%;
+      }
+      img {
+        outline: none;
+        text-decoration: none;
+        -ms-interpolation-mode: bicubic;
+      }
+      a img {
+        border: none;
+      }
+      p {
+        margin: 1em 0;
+      }
+      table td {
+        border-collapse: collapse;
+      }
+      /* hide unsubscribe from forwards*/
+      blockquote .original-only,
+      .WordSection1 .original-only {
+        display: none !important;
+      }
+      h1 {
+        color: #202020;
+        display: block;
+        font-family: Arial !important;
+        font-size: 27px;
+        font-weight: bold;
+        line-height: 29px;
+        margin-top: 0;
+        margin-right: 0;
+        margin-bottom: 10px;
+        margin-left: 0;
+        text-align: left;
+      }
+      h2 {
+        color: #202020;
+        font-size: 19px;
+        line-height: 22px;
+        font-family: Arial !important;
+      }
+      h4 {
+        color: #202020;
+        display: block;
+        font-family: Arial !important;
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 24px;
+        margin-top: 0;
+        margin-right: 0;
+        margin-bottom: 5px;
+        margin-left: 0;
+        text-align: left;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body
+    leftmargin=&quot;0&quot;
+    marginwidth=&quot;0&quot;
+    topmargin=&quot;0&quot;
+    marginheight=&quot;0&quot;
+    offset=&quot;0&quot;
+    style=&quot;
+      -webkit-text-size-adjust: none;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+      width: 100%;
+    &quot;
+  &gt;
+    &lt;center&gt;
+      &lt;table
+        border=&quot;0&quot;
+        cellpadding=&quot;0&quot;
+        cellspacing=&quot;0&quot;
+        height=&quot;100%&quot;
+        id=&quot;backgroundTable&quot;
+        style=&quot;
+          margin: 0;
+          padding: 0;
+          background-color: #fafafa;
+          height: 100%;
+          width: 100%;
+        &quot;
+        width=&quot;100%&quot;
+      &gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;
+            &lt;td align=&quot;center&quot; style=&quot;border-collapse: collapse&quot; valign=&quot;top&quot;&gt;
+              &lt;!-- // Begin Template Preheader \ --&gt;
+              &lt;table
+                border=&quot;0&quot;
+                cellpadding=&quot;10&quot;
+                cellspacing=&quot;0&quot;
+                id=&quot;templatePreheader&quot;
+                style=&quot;background-color: #fafafa&quot;
+                width=&quot;600&quot;
+              &gt;
+                &lt;tbody&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      class=&quot;preheaderContent&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Module: Standard Preheader  --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;10&quot;
+                        cellspacing=&quot;0&quot;
+                        width=&quot;100%&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td
+                              style=&quot;border-collapse: collapse&quot;
+                              valign=&quot;top&quot;
+                            &gt;&lt;/td&gt;
+                            &lt;td
+                              style=&quot;border-collapse: collapse&quot;
+                              valign=&quot;top&quot;
+                              width=&quot;190&quot;
+                            &gt;
+                              &amp;nbsp;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;!-- // End Module: Standard Preheader  --&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+              &lt;!-- // End Template Preheader \ --&gt;
+
+              &lt;table
+                border=&quot;0&quot;
+                cellpadding=&quot;0&quot;
+                cellspacing=&quot;0&quot;
+                id=&quot;templateContainer&quot;
+                style=&quot;border: 1px solid #dddddd; background-color: #ffffff&quot;
+                width=&quot;600&quot;
+              &gt;
+                &lt;tbody&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      align=&quot;center&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Template Header \ --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;0&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateHeader&quot;
+                        style=&quot;background-color: #ffffff; border-bottom: 0&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr style=&quot;&quot;&gt;
+                            &lt;td
+                              class=&quot;headerContent&quot;
+                              pardot-region=&quot;header_image&quot;
+                              style=&quot;
+                                border-collapse: collapse;
+                                color: #202020;
+                                font-family: Arial;
+                                padding: 0;
+                                text-align: center;
+                                vertical-align: middle;
+                              &quot;
+                            &gt;
+                              &lt;!-- // Begin Module: Standard Header Image \ --&gt;&lt;img
+                                src=&quot;https://perfectvoice.perfect-vision.com/eblasts/chuzo/images/PV-chuzo-bnr2.jpg&quot;
+                                alt=&quot;PerfectVision&quot;
+                                width=&quot;100%&quot;
+                                id=&quot;headerImage&quot;
+                                style=&quot;width: 600px; display: block&quot;
+                              /&gt;
+                              &lt;!-- // End Module: Standard Header Image \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;table
+                        align=&quot;center&quot;
+                        border=&quot;0&quot;
+                        cellpadding=&quot;3&quot;
+                        cellspacing=&quot;3&quot;
+                        style=&quot;
+                          font-family: arial;
+                          font-size: 16px;
+                          line-height: 1.3;
+                        &quot;
+                        width=&quot;550&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td&gt;
+                              &lt;br /&gt;
+
+                              &lt;h4
+                                style=&quot;text-align: center; font-family: arial&quot;
+                              &gt;
+                                Congratulations on &lt;br /&gt;
+                                Becoming an Authorized Agent
+                              &lt;/h4&gt;
+                              &lt;br /&gt;
+
+                              &lt;h4
+                                style=&quot;
+                                  font-size: 45px;
+                                  text-align: center;
+                                  font-family: arial;
+                                &quot;
+                              &gt;
+                                Start Selling Now
+                              &lt;/h4&gt;
+
+                              &lt;hr style=&quot;margin: 30px 0px 0px 0px&quot; /&gt;
+                              &lt;table
+                                width=&quot;550&quot;
+                                border=&quot;0&quot;
+                                cellspacing=&quot;5&quot;
+                                cellpadding=&quot;5&quot;
+                              &gt;
+                                &lt;tbody&gt;
+                                  &lt;tr&gt;
+                                    &lt;td&gt;
+                                      &lt;div&gt;
+                                        &lt;img
+                                          alt=&quot;PerfectVision&quot;
+                                          border=&quot;0&quot;
+                                          height=&quot;150&quot;
+                                          src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/order-entry-ico.jpg&quot;
+                                          width=&quot;150&quot;
+                                        /&gt;
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                    &lt;td&gt;
+                                      &lt;h2 style=&quot;font-family: Arial&quot;&gt;
+                                        Let&apos;s Get Started
+                                      &lt;/h2&gt;
+
+                                      &lt;p&gt;
+                                        &lt;strong&gt;Username:&lt;/strong&gt;
+                                        {!userEmailWithSufix}
+                                      &lt;/p&gt;
+                                      &lt;a
+                                        href=&quot;{!$Setup.Chuzo_Settings__c.Create_Rep_Flow_Reset_Password_URL__c}&quot;
+                                        &gt;Click here to set up your password&lt;/a
+                                      &gt;&lt;br /&gt;
+                                      &lt;br /&gt;
+                                      Once you have reset your password, your
+                                      Chuzo setup is complete! Please
+                                      &lt;a
+                                        href=&quot;https://chuzo.force.com/poe&quot;
+                                        target=&quot;_blank&quot;
+                                        &gt;click here&lt;/a
+                                      &gt;
+                                      to start selling!
+                                      &lt;hr style=&quot;margin: 30px 0px&quot; /&gt;
+                                      &lt;h2 style=&quot;font-family: Arial&quot;&gt;
+                                        Getting Started with Chuzo
+                                      &lt;/h2&gt;
+                                      &lt;ul type=&quot;disc&quot;&gt;
+                                        &lt;li&gt;
+                                          Make sure to turn on geolocation
+                                        &lt;/li&gt;
+                                        &lt;li&gt;
+                                          Turn off any ad blockers and allow
+                                          pop-ups for the site
+                                        &lt;/li&gt;
+                                        &lt;li&gt;
+                                          Add
+                                          &lt;a
+                                            href=&quot;mailto:noreply@salesforce.com&quot;
+                                            &gt;noreply@salesforce.com&lt;/a
+                                          &gt;
+                                          to your email safe sender list
+                                        &lt;/li&gt;
+                                        &lt;li&gt;
+                                          Chuzo seems to work best in Microsoft
+                                          Edge and Google Chrome. Please avoid
+                                          using Safari
+                                        &lt;/li&gt;
+                                      &lt;/ul&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+
+                                  &lt;tr&gt;
+                                    &lt;td colspan=&quot;2&quot;&gt;
+                                      &lt;hr style=&quot;margin: 10px 0px&quot; /&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+                                &lt;/tbody&gt;
+                              &lt;/table&gt;
+                              &lt;h1
+                                span
+                                style=&quot;
+                                  margin-bottom: 8px;
+                                  line-height: 1.3;
+                                  font-family: Arial;
+                                  text-align: center;
+                                &quot;
+                              &gt;
+                                Your Support Team
+                              &lt;/h1&gt;
+                              &lt;p&gt;
+                                For assistance please reach out to Chuzo Support
+                                or submit a case in Chuzo. To learn how to
+                                submit a case,
+                                &lt;a
+                                  href=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/chuzo/pdf/Chuzo-How-to-Create-a-Case.pdf&quot;
+                                  target=&quot;_blank&quot;
+                                  &gt;click here&lt;/a
+                                &gt;.
+                              &lt;/p&gt;
+
+                              &lt;table
+                                width=&quot;550&quot;
+                                border=&quot;0&quot;
+                                cellspacing=&quot;5&quot;
+                                cellpadding=&quot;5&quot;
+                              &gt;
+                                &lt;tbody&gt;
+                                  &lt;tr&gt;
+                                    &lt;td width=&quot;151&quot;&gt;
+                                      &lt;div&gt;
+                                        &lt;img
+                                          alt=&quot;PerfectVision&quot;
+                                          border=&quot;0&quot;
+                                          height=&quot;150&quot;
+                                          src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/shipping-ico.jpg&quot;
+                                          width=&quot;150&quot;
+                                        /&gt;
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                    &lt;td width=&quot;364&quot;&gt;
+                                      &lt;h2 style=&quot;font-family: Arial&quot;&gt;
+                                        Chuzo Support
+                                      &lt;/h2&gt;
+                                      &lt;a
+                                        href=&quot;mailto:Chuzosupport@perfect-vision.com&quot;
+                                        &gt;ChuzoSupport@perfect-vision.com&lt;/a
+                                      &gt;
+                                      &lt;ul type=&quot;circle&quot;&gt;
+                                        &lt;li&gt;Order Entry Down&lt;/li&gt;
+                                        &lt;li&gt;Error Messages&lt;/li&gt;
+                                        &lt;li&gt;Technical Errors&lt;/li&gt;
+                                      &lt;/ul&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+                                &lt;/tbody&gt;
+                              &lt;/table&gt;
+
+                              &lt;hr style=&quot;margin: 30px 0px 30px 0px&quot; /&gt;
+                              &lt;h2 style=&quot;font-family: Arial&quot;&gt;
+                                How Was Your Onboarding Experience? &lt;br /&gt;
+                              &lt;/h2&gt;
+                              Tell us how we did by filling out a
+                              &lt;a
+                                href=&quot;https://forms.gle/P3J5JrJubyVS4NfE8&quot;
+                                target=&quot;_blank&quot;
+                                &gt;brief survey&lt;/a
+                              &gt;
+                              about your onboarding experience.&lt;br /&gt;
+                              &lt;br /&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;0&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateHeader2&quot;
+                        style=&quot;background-color: #ffffff; border-bottom: 0&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr style=&quot;&quot;&gt;
+                            &lt;td
+                              class=&quot;headerContent&quot;
+                              pardot-region=&quot;header_image&quot;
+                              style=&quot;
+                                border-collapse: collapse;
+                                color: #202020;
+                                font-family: Arial;
+                                font-size: 34px;
+                                font-weight: bold;
+                                line-height: 34px;
+                                padding: 0;
+                                text-align: center;
+                                vertical-align: middle;
+                              &quot;
+                            &gt;
+                              &lt;!-- // Begin Module: Standard Header Image \ --&gt;&lt;!-- // End Module: Standard Header Image \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      align=&quot;center&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Template Body \ --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;0&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateBody&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td
+                              class=&quot;bodyContent&quot;
+                              style=&quot;
+                                border-collapse: collapse;
+                                background-color: #ffffff;
+                              &quot;
+                              valign=&quot;top&quot;
+                            &gt;
+                              &lt;!-- // End Module: Left Image with Content \ --&gt;&lt;!-- // Begin Module: Right Image with Content \ --&gt;&lt;!-- // End Module: Right Image with Content \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;!-- // End Template Body \ --&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                    &lt;td
+                      align=&quot;center&quot;
+                      style=&quot;border-collapse: collapse&quot;
+                      valign=&quot;top&quot;
+                    &gt;
+                      &lt;!-- // Begin Template Footer \ --&gt;
+                      &lt;table
+                        border=&quot;0&quot;
+                        cellpadding=&quot;10&quot;
+                        cellspacing=&quot;0&quot;
+                        id=&quot;templateFooter&quot;
+                        style=&quot;background-color: #ffffff; border-top: 0&quot;
+                        width=&quot;600&quot;
+                      &gt;
+                        &lt;tbody&gt;
+                          &lt;tr&gt;
+                            &lt;td
+                              class=&quot;footerContent&quot;
+                              style=&quot;border-collapse: collapse&quot;
+                              valign=&quot;top&quot;
+                            &gt;
+                              &lt;!-- // Begin Module: Standard Footer \ --&gt;
+                              &lt;table
+                                border=&quot;0&quot;
+                                cellpadding=&quot;10&quot;
+                                cellspacing=&quot;0&quot;
+                                width=&quot;100%&quot;
+                              &gt;
+                                &lt;tbody&gt;
+                                  &lt;tr pardot-removable=&quot;&quot;&gt;
+                                    &lt;td
+                                      colspan=&quot;2&quot;
+                                      id=&quot;social&quot;
+                                      style=&quot;
+                                        border-collapse: collapse;
+                                        background-color: #fafafa;
+                                        border: 0;
+                                      &quot;
+                                      valign=&quot;middle&quot;
+                                    &gt;
+                                      &lt;div
+                                        pardot-region=&quot;std_social&quot;
+                                        style=&quot;
+                                          color: #707070;
+                                          font-family: Arial;
+                                          font-size: 12px;
+                                          line-height: 15px;
+                                          text-align: center;
+                                        &quot;
+                                      &gt;
+                                        &lt;a
+                                          href=&quot;https://go.perfect-vision.com/l/1014532/2023-02-01/252i&quot;
+                                          style=&quot;
+                                            -webkit-text-size-adjust: 100%;
+                                            -ms-text-size-adjust: 100%;
+                                            font-weight: normal;
+                                            color: #606060;
+                                          &quot;
+                                          target=&quot;_blank&quot;
+                                          &gt;Follow on X&lt;/a
+                                        &gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a
+                                          href=&quot;https://go.perfect-vision.com/l/1014532/2023-02-01/255i&quot;
+                                          style=&quot;
+                                            -webkit-text-size-adjust: 100%;
+                                            -ms-text-size-adjust: 100%;
+                                            font-weight: normal;
+                                            color: #606060;
+                                          &quot;
+                                          target=&quot;_blank&quot;
+                                          &gt;Friend on Facebook&lt;/a
+                                        &gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a
+                                          href=&quot;https://go.perfect-vision.com/l/1014532/2023-02-01/258i&quot;
+                                          style=&quot;
+                                            -webkit-text-size-adjust: 100%;
+                                            -ms-text-size-adjust: 100%;
+                                            font-weight: normal;
+                                            color: #606060;
+                                          &quot;
+                                          target=&quot;_blank&quot;
+                                          &gt;Connect on LinkedIn
+                                        &lt;/a&gt;
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+                                  &lt;tr&gt;
+                                    &lt;td
+                                      style=&quot;border-collapse: collapse&quot;
+                                      valign=&quot;top&quot;
+                                      width=&quot;350&quot;
+                                    &gt;
+                                      &lt;div
+                                        pardot-region=&quot;std_footer&quot;
+                                        style=&quot;
+                                          color: #707070;
+                                          font-family: Arial;
+                                          font-size: 12px;
+                                          line-height: 15px;
+                                          text-align: left;
+                                        &quot;
+                                      &gt;
+                                        &lt;em
+                                          &gt;Copyright © 2025, All rights
+                                          reserved.&lt;/em
+                                        &gt;&lt;br /&gt;
+                                        &lt;br /&gt;
+                                        &lt;strong&gt;Our mailing address is:&lt;/strong
+                                        &gt;&lt;br /&gt;
+                                        &lt;br /&gt;
+                                        PerfectVision&lt;br /&gt;
+                                        16101 La Grande Dr.&lt;br /&gt;
+                                        Little Rock, AR 72223
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                    &lt;td
+                                      style=&quot;border-collapse: collapse&quot;
+                                      valign=&quot;top&quot;
+                                      width=&quot;190&quot;
+                                    &gt;
+                                      &lt;div
+                                        pardot-region=&quot;std_footer_alt&quot;
+                                        style=&quot;
+                                          color: #707070;
+                                          font-family: Arial;
+                                          font-size: 12px;
+                                          line-height: 15px;
+                                          text-align: left;
+                                        &quot;
+                                      &gt;
+                                        &lt;a href=&quot;http://www.perfect-vision.com&quot;
+                                          &gt;&lt;img
+                                            src=&quot;https://perfectvoice.perfect-vision.com/images/static/pv-logo-foot.jpg&quot;
+                                            alt=&quot;PerfectVision&quot;
+                                            width=&quot;200&quot;
+                                            height=&quot;96&quot;
+                                        /&gt;&lt;/a&gt;
+                                      &lt;/div&gt;
+                                    &lt;/td&gt;
+                                  &lt;/tr&gt;
+                                &lt;/tbody&gt;
+                              &lt;/table&gt;
+                              &lt;!-- // End Module: Standard Footer \ --&gt;
+                            &lt;/td&gt;
+                          &lt;/tr&gt;
+                        &lt;/tbody&gt;
+                      &lt;/table&gt;
+                      &lt;!-- // End Template Footer \ --&gt;
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                &lt;/tbody&gt;
+              &lt;/table&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/center&gt;
+    &lt;!--
+          This email was originally designed by the wonderful folks at MailChimp and remixed by Pardot.
+          It is licensed under CC BY-SA 3.0
+        --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <description>Backup of bodytemplate&apos;s value before the changes from PER-3151</description>
+        <name>bodyTemplateBackup</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>&lt;head&gt;
+        &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;/&gt;
+        
+        &lt;!-- Facebook sharing information tags --&gt;
+        &lt;meta property=&quot;og:title&quot; content=&quot;%%subject%%&quot;&gt;
+        
+        &lt;title&gt;%%subject%%&lt;/title&gt;
+		&lt;style type=&quot;text/css&quot;&gt;
+	
+	body {font-family: arial}
+		.articlelink a { font-family: Arial; color: darkblue; font-size: 12px; text-decoration: none;}
+	.articlelink a:hover {text-decoration: underline;}
+	
+	.footerlink a { font-family: Arial; color: white; font-size: 13px; text-decoration: none;}
+	.footerlink a:hover {text-decoration: underline;}
+	
+.title  {font-family:arial; font-size:22px; font-weight: bold; line-height: 22px; margin-bottom: 8px; color: #202020}
+	
+	.info { font-family:arial; font-size: 14px; font-weight: normal; line-height: 21px; color: #505050}
+	
+	.clickhere {font-family:arial;font-size: 12px; font-weight: normal; line-height: 16px; margin-top:16px}
+	
+	.tablebr {padding: 15px;}
+	
+	.headerbr {margin-top:0px}
+	.copyblock {margin-left: 15px}
+	
+
+	
+	#outlook a {
+              padding: 0;
+          }
+          .body{
+              width: 100% !important;
+              -webkit-text-size-adjust: 100%;
+              -ms-text-size-adjust: 100%;
+              margin: 0;
+              padding: 0;
+			  font-family: Arial;
+			  line-height: 18px;
+			  font-size: 13px;
+          }
+          .ExternalClass {
+              width:100%;
+          }
+          .ExternalClass,
+          .ExternalClass p,
+          .ExternalClass span,
+          .ExternalClass font,
+          .ExternalClass td,
+          .ExternalClass div {
+              line-height: 100%;
+          }
+          img {
+              outline: none;
+              text-decoration: none;
+              -ms-interpolation-mode: bicubic;
+          }
+          a img {
+              border: none;
+          }
+          p {
+              margin: 1em 0;
+          }
+          table td {
+              border-collapse: collapse;
+          }
+          /* hide unsubscribe from forwards*/
+          blockquote .original-only, .WordSection1 .original-only {
+            display: none !important;
+          }
+			h1 { color: #202020;display: block;font-family: Arial !important; font-size: 27px;font-weight: bold;line-height: 29px;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: left;}
+			h2 {color: #202020; font-size: 19px; line-height: 22px; font-family: Arial !important;}
+	h4 {color: #202020;display: block;font-family: Arial !important;font-size: 22px;font-weight: bold;line-height: 24px;margin-top: 0;margin-right: 0;margin-bottom: 5px;margin-left: 0;text-align: left;}
+	
+	&lt;/style&gt;
+	
+	&lt;/head&gt;
+    &lt;body leftmargin=&quot;0&quot; marginwidth=&quot;0&quot; topmargin=&quot;0&quot; marginheight=&quot;0&quot; offset=&quot;0&quot; style=&quot;-webkit-text-size-adjust: none;margin: 0;padding: 0;background-color: #FAFAFA;width: 100%;&quot;&gt;
+&lt;center&gt;
+&lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; height=&quot;100%&quot; id=&quot;backgroundTable&quot; style=&quot;margin: 0;padding: 0;background-color: #FAFAFA;height: 100%;width: 100%;&quot; width=&quot;100%&quot;&gt;
+	&lt;tbody&gt;
+		&lt;tr&gt;
+			&lt;td align=&quot;center&quot; style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot;&gt;&lt;!-- // Begin Template Preheader \ --&gt;
+			&lt;table border=&quot;0&quot; cellpadding=&quot;10&quot; cellspacing=&quot;0&quot; id=&quot;templatePreheader&quot; style=&quot;background-color: #FAFAFA;&quot; width=&quot;600&quot;&gt;
+				&lt;tbody&gt;
+					&lt;tr&gt;
+						&lt;td class=&quot;preheaderContent&quot; style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot;&gt;&lt;!-- // Begin Module: Standard Preheader  --&gt;
+						&lt;table border=&quot;0&quot; cellpadding=&quot;10&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+							&lt;tbody&gt;
+								&lt;tr&gt;
+									&lt;td style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot;&gt;&amp;nbsp;&lt;/td&gt;
+									&lt;td style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot; width=&quot;190&quot;&gt;&amp;nbsp;&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/tbody&gt;
+						&lt;/table&gt;
+						&lt;!-- // End Module: Standard Preheader  --&gt;&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/tbody&gt;
+			&lt;/table&gt;
+			&lt;!-- // End Template Preheader \ --&gt;
+
+			&lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; id=&quot;templateContainer&quot; style=&quot;border: 1px solid #DDDDDD;background-color: #FFFFFF;&quot; width=&quot;600&quot;&gt;
+				&lt;tbody&gt;
+					&lt;tr&gt;
+						&lt;td align=&quot;center&quot; style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot;&gt;&lt;!-- // Begin Template Header \ --&gt;
+						&lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; id=&quot;templateHeader&quot; style=&quot;background-color: #FFFFFF;border-bottom: 0;&quot; width=&quot;600&quot;&gt;
+							&lt;tbody&gt;
+								&lt;tr style=&quot;&quot;&gt;
+									&lt;td class=&quot;headerContent&quot; pardot-region=&quot;header_image&quot; style=&quot;border-collapse: collapse;color: #202020;font-family: Arial; padding: 0;text-align: center;vertical-align: middle;&quot;&gt;&lt;!-- // Begin Module: Standard Header Image \ --&gt;&lt;img alt=&quot;PerfectVision&quot; id=&quot;headerImage&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/Chuzo/images/PV-Chuzo-bnr.jpg&quot; style=&quot;max-width: 600px; -ms-interpolation-mode: bicubic; height: auto; outline: none; text-decoration: none; border: 0; display: block&quot;&gt; &lt;!-- // End Module: Standard Header Image \ --&gt;&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/tbody&gt;
+						&lt;/table&gt;
+						&lt;table align=&quot;center&quot; border=&quot;0&quot; cellpadding=&quot;3&quot; cellspacing=&quot;3&quot; style=&quot;font-family: arial; font-size: 14px; line-height: 18px&quot;  width=&quot;550&quot;&gt;
+							&lt;tbody&gt;
+								&lt;tr&gt;
+									&lt;td&gt;&lt;br /&gt;
+
+								  &lt;h4 style=&quot;text-align: center;font-family: arial&quot;&gt;Congratulations, You Now Have Access to Place Orders Via Chuzo Order Entry!&lt;/h4&gt;
+&lt;br /&gt;
+
+									  &lt;h4 style=&quot;font-size: 45px; text-align:center; font-family: arial&quot;&gt;Start Selling Now&lt;/h4&gt;
+									
+									 &lt;hr style=&quot;margin:30px 0px 0px 0px&quot;&gt;&lt;table width=&quot;550&quot; border=&quot;0&quot; cellspacing=&quot;5&quot; cellpadding=&quot;5&quot;&gt;
+                                      &lt;tbody&gt;
+                                    &lt;tr&gt;
+                                          &lt;td&gt;&lt;div&gt;&lt;img alt=&quot;PerfectVision&quot; border=&quot;0&quot; height=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/order-entry-ico.jpg&quot; width=&quot;150&quot;&gt;&lt;/div&gt;&lt;/td&gt;
+                                          &lt;td&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Let&apos;s Get Started&lt;/h2&gt;
+                                          &lt;ul&gt;
+                                            &lt;li&gt; &lt;a href=&quot;https://chuzo.force.com/poe&quot; target=&quot;_blank&quot;&gt;Click Here to Access Chuzo Order Entry Portal&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
+                                          
+                                              &lt;strong&gt;Login Information&lt;/strong&gt;&lt;br /&gt;
+ 
+&lt;a href={!$Api.Partner_Server_URL_560}&gt;Click here to set up your password&lt;/a&gt;
+                                            &lt;p&gt;Username: {!userEmailWithSufix}&lt;/p&gt;
+
+
+&lt;/td&gt;
+                                        &lt;/tr&gt;
+                                      
+                                      &lt;tr&gt;
+                                          &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;
+                                        &lt;/tr&gt;&lt;tr&gt;
+                                          &lt;td&gt;&lt;div&gt;&lt;img alt=&quot;PerfectVision&quot; border=&quot;0&quot; height=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/ac-ico.jpg&quot; width=&quot;150&quot;&gt;&lt;/div&gt;&lt;/td&gt;
+										  &lt;td&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Resources&lt;/h2&gt;
+                                            PerfectVision offer resources that will keep your dealership up-to-date on  the products, promotions and important communications from our partners.&lt;br /&gt;&lt;br /&gt;
+ &lt;strong&gt;Note:&lt;/strong&gt; You must be signed in to the PerfectVision Website to  view the Partner Resources pages. 
+                                            &lt;br /&gt;                                            &lt;ul type=&quot;disc&quot;&gt;
+                                      
+											 &lt;li&gt;&lt;a href=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/Chuzo/pdf/Chuzo-Who-to-Call.pdf&quot; target=&quot;_blank&quot;&gt;Who to Call&lt;/a&gt;&lt;/li&gt; 
+											&lt;li&gt;&lt;a href=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/Chuzo/pdf/How-to-Navigate-Chuzo.pdf&quot; target=&quot;_blank&quot;&gt;How to Navigate Chuzo&lt;/a&gt;&lt;/li&gt;
+                                         &lt;/ul&gt;
+                                        &lt;/td&gt;
+                                        &lt;/tr&gt; &lt;tr&gt;
+                                          &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;
+                                        &lt;/tr&gt; 
+                                      
+                                    &lt;/tbody&gt;
+                                    &lt;/table&gt;
+&lt;br /&gt;
+
+&lt;h1 span style=&quot;margin-bottom: 8px; line-height: 20px; font-family: Arial&quot;&gt;Your Support Team&lt;/h1&gt;
+We have dedicated team members that cover all 50 states that support your business. &lt;a href=&quot;https://www.perfect-vision.com/Company/FindRep.aspx&quot; target=&quot;_blank&quot;&gt;Find Your Rep.&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+
+&lt;table width=&quot;550&quot; border=&quot;0&quot; cellspacing=&quot;5&quot; cellpadding=&quot;5&quot;&gt;
+                                      &lt;tbody&gt;
+                                      
+                                        &lt;tr&gt;
+                                          &lt;td&gt;&lt;div&gt;&lt;img alt=&quot;PerfectVision&quot; border=&quot;0&quot; height=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/shipping-ico.jpg&quot; width=&quot;150&quot;&gt;&lt;/div&gt;&lt;/td&gt;
+											&lt;td&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Customer Service&lt;/h2&gt;
+                                            &lt;strong&gt;800.205.8620 ext. 2655&lt;br /&gt;
+                                            &lt;/strong&gt;&lt;a href=&quot;mailto:CustomerService@perfect-vision.com&quot;&gt;CustomerService@perfect-vision.com&lt;/a&gt;
+                                            &lt;ul type=&quot;circle&quot;&gt;
+                                              &lt;li&gt;General Request or Escalations&lt;/li&gt;
+                                              &lt;li&gt;Product Returns&lt;/li&gt;
+                                              &lt;li&gt;Shipment Discrepancies&lt;/li&gt;
+&lt;li&gt;Website Support&lt;/li&gt;
+&lt;li&gt;Insurance / Resale Document&lt;/li&gt;
+&lt;li&gt;Reporting &amp;amp; Order Support&lt;/li&gt;
+                                          &lt;/ul&gt;&lt;/td&gt;
+                                        &lt;/tr&gt; &lt;tr&gt;
+                                          &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;
+                                        &lt;/tr&gt;&lt;tr&gt;
+                                          &lt;td&gt;&lt;div&gt;&lt;img alt=&quot;PerfectVision&quot; border=&quot;0&quot; height=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/ce-ico.jpg&quot; width=&quot;150&quot;&gt;&lt;/div&gt;&lt;/td&gt;
+										  &lt;td&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Commission Escalations&lt;/h2&gt;
+                                            &lt;strong&gt;800.205.8620 ext. 2140&lt;br /&gt;
+                                            &lt;/strong&gt;&lt;a href=&quot;mailto:CommissionEscalations@perfect-vision.com&quot;&gt;CommissionEscalations@perfect-vision.com&lt;/a&gt;
+                                            &lt;ul type=&quot;circle&quot;&gt;
+                                              &lt;li&gt;Commission Support&lt;/li&gt;
+                                              &lt;li&gt;Incentive Pay Questions&lt;/li&gt;
+												 &lt;li&gt;Incorrect Payment&lt;/li&gt;
+												 &lt;li&gt;Order Status Dispute&lt;/li&gt;
+                                          &lt;/ul&gt;&lt;/td&gt;
+                                        &lt;/tr&gt; &lt;tr&gt;
+                                          &lt;td colspan=&quot;2&quot;&gt;&lt;hr style=&quot;margin:10px 0px&quot;&gt;&lt;/td&gt;
+                                        &lt;/tr&gt;
+                                        &lt;tr&gt;
+                                          &lt;td&gt;&lt;div&gt;&lt;img alt=&quot;PerfectVision&quot; border=&quot;0&quot; height=&quot;150&quot; src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/marketing-ico.jpg&quot; width=&quot;150&quot;&gt;&lt;/div&gt;&lt;/td&gt;
+											&lt;td&gt;&lt;h2 style=&quot;font-family: Arial&quot;&gt;Marketing&lt;/h2&gt;
+                                            &lt;strong&gt;800.205.8620 ext. 2611&lt;/strong&gt;&lt;a href=&quot;mailto:PVMarketing@perfect-vision.com&quot;&gt;&lt;br /&gt;
+                                            PVMarketing@perfect-vision.com&lt;/a&gt;&lt;br /&gt;
+                                            
+                                       
+                                            &lt;ul type=&quot;circle&quot;&gt;
+                                              &lt;li&gt;General       Marketing Assistance&lt;/li&gt;
+                                              &lt;li&gt;Building       Ads&lt;/li&gt;
+                                              &lt;li&gt;Ordering       or Placing Pre-approved Ads&lt;/li&gt;
+                                             
+                                              &lt;li&gt;Marketing       Consulting&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;https://www.perfect-vision.com/DealerResources/TechnicalDocumentWindow.aspx?docID=1553&amp;amp;docTitle=MarketingGuidelines&amp;amp;groupCode=FRNT&quot; target=&quot;_blank&quot;&gt;Marketing Guidelines&lt;/a&gt;&lt;/li&gt;
+                                          &lt;/ul&gt;&lt;/td&gt;
+                                        &lt;/tr&gt;
+                                       
+                                     
+                                        
+                                      &lt;/tbody&gt;
+                                    &lt;/table&gt; &lt;hr style=&quot;margin:30px 0px 30px 0px&quot;&gt;&lt;h1 style=&quot;font-family: Arial&quot;&gt;PerfectVision Website Training Resources&lt;/h1&gt;
+Click here for the &lt;a href=&quot;https://www.perfect-vision.com/DealerResources/Training/TrainingSchedule.aspx&quot; target=&quot;_blank&quot;&gt;Training Calendar&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;div&gt;&lt;img src=&quot;https://perfectvoice.perfect-vision.com/eblasts/temp/images/training-calendar2.jpg&quot; width=&quot;550&quot; height=&quot;360&quot; style=&quot;display:block&quot; alt=&quot;Training Calendar&quot;&gt;&lt;/div&gt;&lt;br /&gt;
+   &lt;hr style=&quot;margin:30px 0px 30px 0px&quot;&gt;
+&lt;h2 style=&quot;font-family: Arial&quot;&gt;How Was Your Onboarding Experience? &lt;br /&gt;
+&lt;/h2&gt;
+Tell us how we did by filling out a &lt;a href=&quot;https://forms.gle/P3J5JrJubyVS4NfE8&quot; target=&quot;_blank&quot;&gt;brief survey&lt;/a&gt; about your onboarding experience.&lt;br /&gt;
+&lt;br /&gt;                               
+&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/tbody&gt;
+						&lt;/table&gt;
+					
+
+						&lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; id=&quot;templateHeader2&quot; style=&quot;background-color: #FFFFFF;border-bottom: 0;&quot; width=&quot;600&quot;&gt;
+							&lt;tbody&gt;
+								&lt;tr style=&quot;&quot;&gt;
+									&lt;td class=&quot;headerContent&quot; pardot-region=&quot;header_image&quot; style=&quot;border-collapse: collapse;color: #202020;font-family: Arial;font-size: 34px;font-weight: bold;line-height: 34px;padding: 0;text-align: center;vertical-align: middle;&quot;&gt;&lt;!-- // Begin Module: Standard Header Image \ --&gt;&lt;!-- // End Module: Standard Header Image \ --&gt;&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/tbody&gt;
+						&lt;/table&gt;
+						&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;
+						&lt;td align=&quot;center&quot; style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot;&gt;&lt;!-- // Begin Template Body \ --&gt;
+						&lt;table border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; id=&quot;templateBody&quot; width=&quot;600&quot;&gt;
+							&lt;tbody&gt;
+								&lt;tr&gt;
+									&lt;td class=&quot;bodyContent&quot; style=&quot;border-collapse: collapse;background-color: #FFFFFF;&quot; valign=&quot;top&quot;&gt;&lt;!-- // End Module: Left Image with Content \ --&gt;&lt;!-- // Begin Module: Right Image with Content \ --&gt;&lt;!-- // End Module: Right Image with Content \ --&gt;&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/tbody&gt;
+						&lt;/table&gt;
+						&lt;!-- // End Template Body \ --&gt;&lt;/td&gt;
+					&lt;/tr&gt;
+					&lt;tr&gt;
+						&lt;td align=&quot;center&quot; style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot;&gt;&lt;!-- // Begin Template Footer \ --&gt;
+						&lt;table border=&quot;0&quot; cellpadding=&quot;10&quot; cellspacing=&quot;0&quot; id=&quot;templateFooter&quot; style=&quot;background-color: #FFFFFF;border-top: 0;&quot; width=&quot;600&quot;&gt;
+							&lt;tbody&gt;
+								&lt;tr&gt;
+									&lt;td class=&quot;footerContent&quot; style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot;&gt;&lt;!-- // Begin Module: Standard Footer \ --&gt;
+									&lt;table border=&quot;0&quot; cellpadding=&quot;10&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+										&lt;tbody&gt;
+											&lt;tr pardot-removable=&quot;&quot; style=&quot;&quot;&gt;
+												&lt;td colspan=&quot;2&quot; id=&quot;social&quot; style=&quot;border-collapse: collapse;background-color: #FAFAFA;border: 0;&quot; valign=&quot;middle&quot;&gt;
+												&lt;div pardot-region=&quot;std_social&quot; style=&quot;color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: center;&quot;&gt;&lt;a href=&quot;https://twitter.com/PerfectVision79&quot; style=&quot;-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;&quot; target=&quot;_blank&quot;&gt;Follow on Twitter&lt;/a&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://www.facebook.com/PVBetterSolutions/&quot; style=&quot;-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;&quot; target=&quot;_blank&quot;&gt;Friend on Facebook&lt;/a&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;https://www.linkedin.com/company/pvbettersolutions/&quot; style=&quot;-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;  font-weight: normal; color: #606060;&quot; target=&quot;_blank&quot;&gt;Connect on LinkedIn &lt;/a&gt;&lt;/div&gt;
+												&lt;/td&gt;
+											&lt;/tr&gt;
+											&lt;tr&gt;
+												&lt;td style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot; width=&quot;350&quot;&gt;
+												&lt;div pardot-region=&quot;std_footer&quot; style=&quot;color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: left;&quot;&gt;&lt;em&gt;Copyright © 2021, All rights reserved.&lt;/em&gt;&lt;br&gt;
+												&lt;br&gt;
+												&lt;strong&gt;Our mailing address is:&lt;/strong&gt;&lt;br&gt;
+												&lt;br&gt;
+												PerfectVision&lt;br&gt;
+												16101 La Grande Drive&lt;br&gt;
+												Little Rock, 72223&lt;br&gt;
+												United States&lt;/div&gt;
+												&lt;/td&gt;
+												&lt;td style=&quot;border-collapse: collapse;&quot; valign=&quot;top&quot; width=&quot;190&quot;&gt;
+												&lt;div pardot-region=&quot;std_footer_alt&quot; style=&quot;color: #707070;font-family: Arial;font-size: 12px;line-height: 15px;text-align: left;&quot;&gt;&lt;a href=&quot;http://www.perfect-vision.com&quot;&gt;&lt;img alt=&quot;PerfectVision&quot; height=&quot;96&quot; src=&quot;https://perfectvoice.perfect-vision.com/images/static/pv-logo-foot.jpg&quot; width=&quot;200&quot;&gt;&lt;/a&gt;&lt;/div&gt;
+												&lt;/td&gt;
+											&lt;/tr&gt;
+											&lt;tr&gt;
+												&lt;td colspan=&quot;2&quot; id=&quot;utility&quot; style=&quot;border-collapse: collapse;background-color: #FFFFFF;border: 0;&quot; valign=&quot;middle&quot;&gt;&amp;nbsp;&lt;/td&gt;
+											&lt;/tr&gt;
+										&lt;/tbody&gt;
+									&lt;/table&gt;
+									&lt;!-- // End Module: Standard Footer \ --&gt;&lt;/td&gt;
+								&lt;/tr&gt;
+							&lt;/tbody&gt;
+						&lt;/table&gt;
+						&lt;!-- // End Template Footer \ --&gt;&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/tbody&gt;
+			&lt;/table&gt;
+			&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/center&gt;
+&lt;!--
+          This email was originally designed by the wonderful folks at MailChimp and remixed by Pardot.
+          It is licensed under CC BY-SA 3.0
+        --&gt;
+&lt;/body&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>tem</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;{!agentbodytemplate}&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>permissionSetAssignmentError</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>permissionSetAssignmentSubflowError</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>userId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>userVariable</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>User</objectType>
+    </variables>
+</Flow>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SMO_Discuss_Social_Media_Business_Page__c</fullName>
-    <externalId>false</externalId>
     <label>SMO- Discuss Social Media Business Page</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

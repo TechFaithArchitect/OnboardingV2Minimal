@@ -3,7 +3,6 @@
     <fullName>Previous_Version__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Links to the prior version of this program customization (for version chains).</description>
-    <externalId>false</externalId>
     <label>Previous Version</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>Vendor Programs</relationshipLabel>

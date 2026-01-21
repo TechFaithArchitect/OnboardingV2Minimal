@@ -250,4 +250,3 @@ export default class ValidationRuleBuilder extends LightningElement {
         }));
     }
 }
-

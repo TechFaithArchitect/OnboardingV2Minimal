@@ -3,7 +3,6 @@
     <fullName>Associated_Agreement_Template__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Agreement template tied to this vendor program customization.</description>
-    <externalId>false</externalId>
     <label>Associated Agreement Template</label>
     <referenceTo>echosign_dev1__Agreement_Template__c</referenceTo>
     <relationshipName>Vendor_Customizations</relationshipName>

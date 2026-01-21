@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Redirection_Enabled_Partners__c</fullName>
+    <description>Comma-separated list of partners that have the redirection feature enabled for Self Service.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Comma-separated list of partners that have the redirection feature enabled for Self Service.</inlineHelpText>
+    <label>Redirection Enabled Partners</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

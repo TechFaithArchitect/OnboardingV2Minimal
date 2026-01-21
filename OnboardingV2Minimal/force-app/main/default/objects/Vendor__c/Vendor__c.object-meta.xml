@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Master list of all vendor companies/partners we work with in the onboarding system. Vendors are linked to Vendor Programs (Vendor_Customization__c) which define specific program configurations. Example: A Vendor record for &quot;Acme Corp&quot; might have multiple Vendor Programs like &quot;Acme Residential Program&quot; and &quot;Acme Commercial Program&quot;, each with different requirements and onboarding flows.</description>
+    <description>This is a full list of every vendor we work with</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Vendors</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

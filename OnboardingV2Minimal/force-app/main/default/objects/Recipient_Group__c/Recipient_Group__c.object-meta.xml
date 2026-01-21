@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Represents a reusable collection of Users or Contacts grouped for targeting onboarding communications, access permissions, or configuration purposes. Each Recipient Group contains Recipient_Group_Member__c records and can be linked to Vendor Programs via Vendor_Program_Recipient_Group__c with versioned associations. Example: A Recipient Group named &quot;Healthcare Program Administrators&quot; with Group_Type__c=&quot;User&quot; might contain User members who receive email notifications when healthcare vendor onboarding requirements are completed. The group is linked to Vendor Programs through Vendor_Program_Recipient_Group__c, which specifies which Communication_Template__c to use and when to trigger (via Filter_Logic__c).</description>
+    <description>Represents a reusable collection of Users or Contacts grouped for targeting communication, access, or configuration purposes. Each Recipient Group can be linked to one or more business contexts (e.g., Vendor Programs) through versioned associations.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Recipient Group</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

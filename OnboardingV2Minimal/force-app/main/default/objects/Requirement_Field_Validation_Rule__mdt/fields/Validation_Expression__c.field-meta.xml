@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Validation_Expression__c</fullName>
     <description>The validation expression (e.g., REGEX formula, logical expression)</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Validation Expression</label>
     <length>32768</length>

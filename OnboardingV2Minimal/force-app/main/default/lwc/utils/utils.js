@@ -63,4 +63,3 @@ export function handleError(component, error, defaultMessage, debugMode = false)
     console.error('Error in', component.constructor.name, ':', error);
   }
 }
-

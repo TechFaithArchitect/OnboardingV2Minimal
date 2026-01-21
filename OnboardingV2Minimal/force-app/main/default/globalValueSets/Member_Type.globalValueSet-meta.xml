@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>User</fullName>
+        <default>false</default>
+        <label>User</label>
+    </customValue>
+    <customValue>
+        <fullName>Role Assignment</fullName>
+        <default>false</default>
+        <label>Role Assignment</label>
+    </customValue>
+    <customValue>
+        <fullName>Group</fullName>
+        <default>false</default>
+        <label>Group</label>
+    </customValue>
+    <customValue>
+        <fullName>Queue</fullName>
+        <default>false</default>
+        <label>Queue</label>
+    </customValue>
+    <customValue>
+        <fullName>Territory Role Assignment</fullName>
+        <default>false</default>
+        <label>Territory Role Assignment</label>
+    </customValue>
+    <description>This is the member type for recipients of emails in the onboarding app.</description>
+    <masterLabel>Member Type</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

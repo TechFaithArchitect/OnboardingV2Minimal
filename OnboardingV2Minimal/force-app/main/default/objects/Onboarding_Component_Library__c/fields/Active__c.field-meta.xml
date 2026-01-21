@@ -3,7 +3,6 @@
     <fullName>Active__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Marks the component as available for use in onboarding stages.</description>
-    <externalId>false</externalId>
     <label>Active</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Paperwork_Completed1__c</fullName>
     <description>What paperwork has been completed?</description>
-    <externalId>false</externalId>
     <inlineHelpText>What paperwork has been completed?</inlineHelpText>
     <label>Paperwork Completed</label>
     <required>false</required>

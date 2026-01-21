@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Onboarding_Requirement__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Onboarding Requirement</label>
     <referenceTo>Onboarding_Requirement__c</referenceTo>
     <relationshipLabel>Follow Up Queues</relationshipLabel>

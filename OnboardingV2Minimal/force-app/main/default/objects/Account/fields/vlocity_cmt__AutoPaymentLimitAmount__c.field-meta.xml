@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__AutoPaymentLimitAmount__c</fullName>
     <deprecated>false</deprecated>
     <description>The upper amount on which an automatic payment should be processed for a given account</description>
-    <externalId>false</externalId>
     <label>Auto Payment Limit</label>
     <precision>18</precision>
     <required>false</required>

@@ -3,7 +3,6 @@
     <fullName>DTV_MSOS__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Check this box if the dealer has a DTV-MSOS account</description>
-    <externalId>false</externalId>
     <label>* DTV-MSOS</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

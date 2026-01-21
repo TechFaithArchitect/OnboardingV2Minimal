@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__SumOfNonStandardSection__c</fullName>
     <deprecated>false</deprecated>
     <description>DEPRECATED.</description>
-    <externalId>false</externalId>
     <label>Sum of Non Standard Document</label>
     <summarizedField>vlocity_cmt__ContractVersion__c.vlocity_cmt__CountOfNonStandardSection__c</summarizedField>
     <summaryFilterItems>

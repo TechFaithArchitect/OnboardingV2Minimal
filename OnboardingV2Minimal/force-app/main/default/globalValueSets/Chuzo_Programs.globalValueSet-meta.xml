@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Brightspeed</fullName>
+        <default>false</default>
+        <label>Brightspeed</label>
+    </customValue>
+    <customValue>
+        <fullName>DirecTV</fullName>
+        <default>false</default>
+        <label>DIRECTV</label>
+    </customValue>
+    <customValue>
+        <fullName>EarthLink</fullName>
+        <default>false</default>
+        <label>EarthLink</label>
+    </customValue>
+    <customValue>
+        <fullName>Frontier</fullName>
+        <default>false</default>
+        <label>Frontier</label>
+    </customValue>
+    <customValue>
+        <fullName>Altice</fullName>
+        <default>false</default>
+        <label>Optimum</label>
+    </customValue>
+    <customValue>
+        <fullName>Perfect Home Solutions</fullName>
+        <default>false</default>
+        <label>Perfect Home Solutions</label>
+    </customValue>
+    <customValue>
+        <fullName>Charter/Spectrum</fullName>
+        <default>false</default>
+        <label>Spectrum</label>
+    </customValue>
+    <customValue>
+        <fullName>Windstream</fullName>
+        <default>false</default>
+        <label>Windstream</label>
+    </customValue>
+    <customValue>
+        <fullName>Viasat</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Viasat</label>
+    </customValue>
+    <description>Programs used by Chuzo.</description>
+    <masterLabel>Chuzo Programs</masterLabel>
+    <sorted>true</sorted>
+</GlobalValueSet>

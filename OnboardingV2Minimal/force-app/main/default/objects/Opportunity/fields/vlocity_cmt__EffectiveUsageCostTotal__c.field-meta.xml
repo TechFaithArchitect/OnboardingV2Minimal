@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__EffectiveUsageCostTotal__c</fullName>
     <deprecated>false</deprecated>
     <description>Effective Usage Cost Total</description>
-    <externalId>false</externalId>
     <label>Usage Cost Total</label>
     <precision>18</precision>
     <required>false</required>

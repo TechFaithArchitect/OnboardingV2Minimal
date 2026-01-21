@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Catalog of training platforms/systems (e.g., LearnUpon, Vendor Portal, Manual Entry) used for training delivery and status tracking. Referenced by Training_Requirement__c records to determine how training completion status is integrated (internal API sync, external credential sync, or manual entry). Example: A Training_System record named &quot;LearnUpon&quot; with Active__c=true might be configured for API integration, allowing automatic syncing of training completion status from LearnUpon. Another system named &quot;Vendor Portal&quot; might require manual status updates. When Training_Requirement records reference these systems, the onboarding process knows whether to query external APIs, check credential records, or rely on manual updates to track training completion for Training_Assignment__c records.</description>
+    <description>Catalog of training platforms (e.g., LearnUpon, Vendor Portal, Manual Entry). Referenced by Vendor Training Programs to determine how training status is integrated (internal API, external credential sync, or manual entry).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>

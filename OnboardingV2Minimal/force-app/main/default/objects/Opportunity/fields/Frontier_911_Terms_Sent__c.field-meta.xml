@@ -3,7 +3,6 @@
     <fullName>Frontier_911_Terms_Sent__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Flag that indicates the e-911 term was sent in a Frontier&apos;s portability order [PER-5800]</description>
-    <externalId>false</externalId>
     <label>Frontier 911 Terms Sent</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

@@ -149,7 +149,9 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Logical grouping of ECC_Field_Display_Configuration__c records for organizing related fields that should be displayed together in ECC forms. Groups are linked to field configurations via ECC_Field_Configuration_Group_Mapping__c junction records. Example: An ECC_Field_Configuration_Group named &quot;Insurance Information&quot; with Is_Active__c=true might contain field configurations for Policy Number, Policy Expiry Date, Insurance Carrier, and Coverage Amount. When rendering an ECC form, the system queries the group and all its mapped field configurations to build the form layout. This enables reusable field groups that can be applied consistently across different credential or onboarding contexts, improving maintainability and ensuring consistent data capture.</description>
+    <description>Logical grouping of ECC_Field_Display_Configuration__c records for organizing related fields that should be displayed together in ECC forms. Groups are linked to field configurations via ECC_Field_Configuration_Group_Mapping__c junction records. Example: An ECC_Field_Configuration_Group named &quot;Insurance Information&quot; with &quot;Is_Active__c=true&quot; might contain field configurations for Policy Number, Policy Expiry Date, Insurance Carrier, and Coverage Amount. 
+
+When rendering an ECC form, the system queries the group and all its mapped field configurations to build the form layout. This enables reusable field groups that can be applied consistently across different credential or onboarding contexts, improving maintainability and ensuring consistent data capture.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>

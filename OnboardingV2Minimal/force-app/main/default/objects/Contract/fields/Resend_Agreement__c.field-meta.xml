@@ -3,7 +3,6 @@
     <fullName>Resend_Agreement__c</fullName>
     <defaultValue>false</defaultValue>
     <description>This field is used to determine if a resend on the screenflow is needed or not.</description>
-    <externalId>false</externalId>
     <inlineHelpText>This field is used to determine if a resend on the screenflow is needed or not. If Checked, resending adobe agreements will happen. If Unchecked, a new adobe agreement will be generated.</inlineHelpText>
     <label>Resend Agreement</label>
     <trackFeedHistory>false</trackFeedHistory>

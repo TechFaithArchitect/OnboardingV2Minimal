@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Escalation_Schedule__c</fullName>
     <description>JSON array for escalation cadence (days/type/template).</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Escalation Schedule</label>
     <length>32768</length>

@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__CustomerClass__c</fullName>
     <deprecated>false</deprecated>
     <description>Grouping of accounts by attributes and used to drive accounting processes, business logic, and validation rules (i.e. residential, SMB, C&amp;I, etc.)</description>
-    <externalId>false</externalId>
     <label>Customer Class</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

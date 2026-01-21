@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>For consumer accounts where the customer is a person, this field identifies the person who is considered the customer. If the Salesforce Person Accounts feature is used, this field is optional, but would logically point to the contact record built into the Person Account.</description>
-    <externalId>false</externalId>
     <label>Person Contact Id</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Person Accounts</relationshipLabel>

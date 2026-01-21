@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__BillCycle__c</fullName>
     <deprecated>false</deprecated>
     <description>Grouping that controls when a bill is produced.</description>
-    <externalId>false</externalId>
     <label>Bill Cycle</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

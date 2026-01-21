@@ -3,7 +3,6 @@
     <fullName>Required_Stage__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Stage that is required as part of the dependency definition.</description>
-    <externalId>false</externalId>
     <label>Required Stage</label>
     <referenceTo>Onboarding_Application_Stage__c</referenceTo>
     <relationshipLabel>Onboarding App Stage Dependency Members</relationshipLabel>

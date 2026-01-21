@@ -3,7 +3,6 @@
     <fullName>POE_SMS_Opt_In__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates that a Chuzo customer has consented to receiving text messages. (PER-2673)</description>
-    <externalId>false</externalId>
     <label>SMS Opt In</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

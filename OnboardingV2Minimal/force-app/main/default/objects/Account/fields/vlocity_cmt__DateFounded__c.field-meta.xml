@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__DateFounded__c</fullName>
     <deprecated>false</deprecated>
     <description>For accounts that are companies, the date when the company was founded.</description>
-    <externalId>false</externalId>
     <label>Date Founded</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

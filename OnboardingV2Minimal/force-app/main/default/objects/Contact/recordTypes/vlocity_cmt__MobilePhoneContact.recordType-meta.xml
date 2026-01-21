@@ -311,6 +311,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Verizon Fios D2D</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Verizon Residential</fullName>
             <default>false</default>
         </values>

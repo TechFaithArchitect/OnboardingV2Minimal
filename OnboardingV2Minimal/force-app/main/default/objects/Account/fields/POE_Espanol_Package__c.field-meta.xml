@@ -3,7 +3,6 @@
     <fullName>POE_Espanol_Package__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates if the Dealer is able to sell packages in Español or not.</description>
-    <externalId>false</externalId>
     <label>Español Package</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

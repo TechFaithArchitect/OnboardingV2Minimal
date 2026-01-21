@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>LearnUponP__LU_Field_1__c</fullName>
     <deprecated>false</deprecated>
-    <externalId>false</externalId>
     <label>LU Field 1</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

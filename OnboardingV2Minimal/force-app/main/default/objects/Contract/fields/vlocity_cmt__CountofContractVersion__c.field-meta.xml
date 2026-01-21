@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__CountofContractVersion__c</fullName>
     <deprecated>false</deprecated>
     <description>The number of document versions that have been created for this contract</description>
-    <externalId>false</externalId>
     <label>Count of Contract Document</label>
     <summaryForeignKey>vlocity_cmt__ContractVersion__c.vlocity_cmt__ContractId__c</summaryForeignKey>
     <summaryOperation>count</summaryOperation>

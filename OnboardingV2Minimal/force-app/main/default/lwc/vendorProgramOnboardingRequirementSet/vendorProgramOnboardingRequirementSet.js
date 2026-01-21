@@ -419,4 +419,3 @@ export default class VendorProgramOnboardingRequirementSet extends OnboardingSte
     }
   }
 }
-

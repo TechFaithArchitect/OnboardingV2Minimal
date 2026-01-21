@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Stores the actual value entered for a Vendor_Program_Requirement_Field__c within a Vendor_Program_Requirement__c context. Captures user-entered data for requirement fields at the program template level. Example: When configuring a Vendor Program requirement template for &quot;Insurance Certificate&quot;, a Vendor_Program_Requirement_Field_Value might store the default insurance carrier name (e.g., &quot;Standard Insurance Co.&quot;) that will be pre-populated when dealers complete this requirement. These values serve as defaults or reference data for the program template, and when individual Onboarding_Requirement__c records are created from the template, Requirement_Field_Value__c records are created for dealer-specific data entry.</description>
+    <description>Value captured for a program requirement field (per program template).</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Vendor Program Requirement Field Values</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

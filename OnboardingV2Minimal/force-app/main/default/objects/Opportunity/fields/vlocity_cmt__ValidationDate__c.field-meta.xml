@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__ValidationDate__c</fullName>
     <deprecated>false</deprecated>
     <description>Date when the validation was last run</description>
-    <externalId>false</externalId>
     <inlineHelpText>Last validation date</inlineHelpText>
     <label>Validation Date</label>
     <required>false</required>

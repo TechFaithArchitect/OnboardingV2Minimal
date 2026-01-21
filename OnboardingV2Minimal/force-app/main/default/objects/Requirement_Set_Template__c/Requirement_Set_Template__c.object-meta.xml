@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Junction record linking an Onboarding_Requirement_Set__c to a Vendor_Program_Onboarding_Req_Template__c, defining which templates are included in a requirement set. Example: The requirement set &quot;Standard Healthcare Provider Requirements&quot; might have three Requirement_Set_Template junction records linking it to: (1) Medical License template, (2) Insurance Certificate template, and (3) DEA Registration template. When this requirement set is linked to a Vendor Program via Vendor_Program_Requirement_Set__c, all three templates automatically create Vendor_Program_Requirement__c records for that program. This enables reusable requirement bundles that can be consistently applied across multiple vendor programs.</description>
+    <description>Template library of requirement sets that can be reused across vendor programs.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -163,7 +162,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Requirement Set Templates</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

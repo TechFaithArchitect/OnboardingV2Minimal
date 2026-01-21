@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Sales_Approval__c</fullName>
     <defaultValue>&quot;Pending&quot;</defaultValue>
-    <externalId>false</externalId>
     <label>Sales Approval</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

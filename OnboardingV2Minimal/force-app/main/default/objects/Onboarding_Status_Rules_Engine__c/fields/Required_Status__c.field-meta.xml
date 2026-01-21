@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Required_Status__c</fullName>
     <description>Status value that must already be set before this engine is evaluated or applied.</description>
-    <externalId>false</externalId>
     <label>Required Status</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

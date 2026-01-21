@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>ID of the saved payment method (credit card, bank account, etc.) chosen for automatic payment. Part of the billing profile of a customer or billing account.</description>
-    <externalId>false</externalId>
     <label>Auto Payment Method</label>
     <lookupFilter>
         <active>true</active>

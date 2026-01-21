@@ -3,7 +3,6 @@
     <fullName>Allow_Skip__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Allows this stage to be skipped when conditions are met (or by admin override).</description>
-    <externalId>false</externalId>
     <label>Allow Skip</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

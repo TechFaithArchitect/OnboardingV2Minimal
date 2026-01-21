@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>On_Probation__c</fullName>
     <defaultValue>false</defaultValue>
-    <externalId>false</externalId>
     <label>On Probation - DTV only</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

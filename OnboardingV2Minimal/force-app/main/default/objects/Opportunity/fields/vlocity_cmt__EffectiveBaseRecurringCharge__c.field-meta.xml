@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__EffectiveBaseRecurringCharge__c</fullName>
     <deprecated>false</deprecated>
     <description>Roll up of the recurring charges of the opportunity products before applying adjustments.</description>
-    <externalId>false</externalId>
     <label>Effective Total: Base Recurring Charges</label>
     <precision>18</precision>
     <required>false</required>

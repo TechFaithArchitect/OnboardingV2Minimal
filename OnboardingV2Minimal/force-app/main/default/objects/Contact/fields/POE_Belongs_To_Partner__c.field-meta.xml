@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>POE_Belongs_To_Partner__c</fullName>
-    <externalId>false</externalId>
     <formula>IF(Account.RecordType.Name == &quot;Dealer&quot;, true, false)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Belongs To Partner</label>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,6 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Territory assignment records that define geographic or organizational territories for routing onboarding processes, communications, and access control. Territories are linked to Territory_Role_Assignment__c records that assign users with specific roles (like Account Manager, Recruiter) to territories. Example: A Territory_Assignments__c record for &quot;Northeast Region&quot; might have Territory_Role_Assignment records linking User &quot;John Manager&quot; with Role__c=&quot;Account Manager&quot; and Primary__c=true. When onboarding communications or processes need to route to the appropriate territory owner, the system queries Territory_Assignments__c and its related Territory_Role_Assignment records to determine recipients. This enables territory-based onboarding workflow routing and ensures dealers are managed by the correct regional teams.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +160,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Territory Assignments</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>Read</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

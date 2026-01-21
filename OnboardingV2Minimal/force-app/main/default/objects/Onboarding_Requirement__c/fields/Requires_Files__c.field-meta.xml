@@ -3,8 +3,8 @@
     <fullName>Requires_Files__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates supporting files must be uploaded before the requirement can be completed.</description>
-    <externalId>false</externalId>
     <label>Requires Files</label>
+    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>
 </CustomField>

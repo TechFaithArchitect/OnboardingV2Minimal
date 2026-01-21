@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__RenewalStartDate__c</fullName>
     <deprecated>false</deprecated>
     <description>Date on which a renewal notification is created, along with the specified renewal notification object. Calculated based on the contract end date, and the renewal notification term and renewal notification period values</description>
-    <externalId>false</externalId>
     <label>Renewal Notification Date</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__NetWorth__c</fullName>
     <deprecated>false</deprecated>
     <description>The estimated net worth of this customer. Primarily relevant to financial services organizations using Vlocity, but may also be relevant for credit checks.</description>
-    <externalId>false</externalId>
     <label>Net Worth</label>
     <precision>18</precision>
     <required>false</required>

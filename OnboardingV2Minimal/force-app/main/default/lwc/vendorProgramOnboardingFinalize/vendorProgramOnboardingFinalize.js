@@ -49,4 +49,3 @@ export default class VendorProgramOnboardingFinalize extends NavigationMixin(Onb
 
 
 }
-

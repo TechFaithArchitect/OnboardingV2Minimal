@@ -3,7 +3,6 @@
     <fullName>ECC_Field_Configuration_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Parent config group</description>
-    <externalId>false</externalId>
     <label>ECC Field Configuration Group</label>
     <referenceTo>ECC_Field_Configuration_Group__c</referenceTo>
     <relationshipLabel>ECC Field Display Configurations</relationshipLabel>

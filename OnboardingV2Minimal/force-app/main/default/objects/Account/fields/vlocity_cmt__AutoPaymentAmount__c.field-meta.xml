@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__AutoPaymentAmount__c</fullName>
     <deprecated>false</deprecated>
     <description>Amount to be automatically paid each billing cycle if not the full amount owed. Part of the billing profile of a customer or billing account.</description>
-    <externalId>false</externalId>
     <label>Auto Payment Amount</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

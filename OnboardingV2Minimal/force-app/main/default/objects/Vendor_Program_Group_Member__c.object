@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Junction record linking a Vendor Program (Vendor_Customization__c) to a Vendor_Program_Group__c, supporting versioned history and inheritance. Enables programs to belong to groups for sharing requirement sets, status rules, and stage dependencies. Example: Vendor Program &quot;Medicare Provider Program v3&quot; might be linked to Vendor_Program_Group__c=&quot;Healthcare Programs&quot; via a Vendor_Program_Group_Member record with Is_Target__c=true. If the group uses inheritance (Logic_Type__c), the member can specify Inherited_Program_Requirement_Group__c to inherit requirement groups from parent programs in the group. Active__c controls whether the membership is currently in effect, allowing historical tracking while disabling inactive associations. This enables flexible program grouping where multiple related programs share common configurations.</description>
+    <description>Links a Vendor Program (Vendor_Customization__c) to a Vendor Program Group; supports historical versioning and inheritance of requirement groups.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>

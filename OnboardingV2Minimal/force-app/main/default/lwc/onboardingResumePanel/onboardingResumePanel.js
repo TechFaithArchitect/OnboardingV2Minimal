@@ -87,4 +87,3 @@ export default class OnboardingResumePanel extends NavigationMixin(LightningElem
         }));
     }
 }
-

@@ -3,7 +3,6 @@
     <fullName>Vendor_Program_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>To link the Program to its Group (organizational grouping). Required for inheritance.</description>
-    <externalId>false</externalId>
     <label>Vendor Program Group</label>
     <referenceTo>Vendor_Program_Group__c</referenceTo>
     <relationshipLabel>Vendor Programs</relationshipLabel>

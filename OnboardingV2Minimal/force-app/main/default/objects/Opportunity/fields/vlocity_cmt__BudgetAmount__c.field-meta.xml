@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__BudgetAmount__c</fullName>
     <deprecated>false</deprecated>
     <description>The budget amount which the customer says they cannot spend above.</description>
-    <externalId>false</externalId>
     <label>Budget Amount</label>
     <precision>18</precision>
     <required>false</required>

@@ -3,7 +3,6 @@
     <fullName>Vendor_Program_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Parent program group this member belongs to.</description>
-    <externalId>false</externalId>
     <label>Vendor Program Group</label>
     <referenceTo>Vendor_Program_Group__c</referenceTo>
     <relationshipLabel>Vendor Program Group Members</relationshipLabel>

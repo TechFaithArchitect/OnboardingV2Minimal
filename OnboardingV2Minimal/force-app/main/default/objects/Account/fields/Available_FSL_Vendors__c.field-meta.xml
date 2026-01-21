@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Available_FSL_Vendors__c</fullName>
     <description>This field shows which vendors the dealer can work with in FSL. (PVFSL-181)</description>
-    <externalId>false</externalId>
     <inlineHelpText>This field shows which vendors the dealer can work with in FSL.</inlineHelpText>
     <label>Available FSL Vendors</label>
     <required>false</required>

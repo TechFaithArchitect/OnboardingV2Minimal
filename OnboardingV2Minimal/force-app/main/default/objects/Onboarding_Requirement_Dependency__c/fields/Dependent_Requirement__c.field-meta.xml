@@ -3,7 +3,6 @@
     <fullName>Dependent_Requirement__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>The requirement that must be completed first</description>
-    <externalId>false</externalId>
     <label>Dependent Requirement</label>
     <referenceTo>Onboarding_Requirement__c</referenceTo>
     <relationshipLabel>Onboarding Requirement Dependencies (Dependent Requirement)</relationshipLabel>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sales_Stage__c</fullName>
+    <label>Sales Stage</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>System Design - P10</fullName>
+                <default>true</default>
+                <label>System Design - PV</label>
+            </value>
+            <value>
+                <fullName>Design Review - DIRECTV</fullName>
+                <default>false</default>
+                <label>Design Review - DIRECTV</label>
+            </value>
+            <value>
+                <fullName>Agreement Negotiation - Dealer</fullName>
+                <default>false</default>
+                <label>Agreement Negotiation - Dealer</label>
+            </value>
+            <value>
+                <fullName>Agreement Review - DIRECTV</fullName>
+                <default>false</default>
+                <label>Agreement Review - DIRECTV</label>
+            </value>
+            <value>
+                <fullName>Account Creation - DIRECTV</fullName>
+                <default>false</default>
+                <label>Account Creation - DIRECTV</label>
+            </value>
+            <value>
+                <fullName>Equipment Ship Request - P10</fullName>
+                <default>false</default>
+                <label>Equipment Ship Request - PV</label>
+            </value>
+            <value>
+                <fullName>Shipped / Build Out</fullName>
+                <default>false</default>
+                <label>Shipped / Build Out</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Recipient_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Recipient Group</label>
     <referenceTo>Recipient_Group__c</referenceTo>
     <relationshipLabel>Recipient Group Members</relationshipLabel>

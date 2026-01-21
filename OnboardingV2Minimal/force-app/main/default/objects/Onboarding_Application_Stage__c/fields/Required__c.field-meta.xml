@@ -3,7 +3,6 @@
     <fullName>Required__c</fullName>
     <defaultValue>true</defaultValue>
     <description>Allows user to skip current step if unchecked</description>
-    <externalId>false</externalId>
     <inlineHelpText>Leave checked unless this current step is optional</inlineHelpText>
     <label>Required</label>
     <trackHistory>false</trackHistory>

@@ -3,7 +3,6 @@
     <fullName>Requirement_Template__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Reference to the requirement template tied to this set template.</description>
-    <externalId>false</externalId>
     <label>Requirement Template</label>
     <referenceTo>Vendor_Program_Onboarding_Req_Template__c</referenceTo>
     <relationshipLabel>Requirement Set Templates</relationshipLabel>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Provides full access to the Referral Code object. [PER-3701]</description>
-    <hasActivationRequired>false</hasActivationRequired>
-    <label>Referral Codes Admin</label>
-    </PermissionSet>

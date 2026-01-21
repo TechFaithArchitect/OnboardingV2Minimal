@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Dealer-specific instance of each required task (document upload, status confirmation, training completion, etc.) created from a Vendor_Program_Requirement__c template. Each Onboarding__c record has many Onboarding_Requirement__c records that track individual requirement completion status. Example: When Account &quot;ABC Dealer&quot; starts onboarding for Vendor Program &quot;Healthcare Provider Program&quot;, the system creates Onboarding_Requirement records for each requirement template (e.g., &quot;Insurance Certificate&quot;, &quot;NDA Signed&quot;). As the dealer completes each requirement, the Status__c field is updated (Not Started → Incomplete → Complete → Approved), and status rules evaluate these to automatically update the parent Onboarding__c status.</description>
+    <description>Dealer-specific instance of each required task (status, file, etc.)</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -159,10 +158,11 @@
     <nameField>
         <displayFormat>OBR-{00000}</displayFormat>
         <label>Onboarding Requirement Number</label>
+        <trackHistory>false</trackHistory>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Onboarding Requirements</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

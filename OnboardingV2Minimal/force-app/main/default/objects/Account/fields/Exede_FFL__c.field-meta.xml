@@ -3,7 +3,6 @@
     <fullName>Exede_FFL__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Check this box if the dealer is an Exede Fulfillment Dealer</description>
-    <externalId>false</externalId>
     <label>* Viasat FFL</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

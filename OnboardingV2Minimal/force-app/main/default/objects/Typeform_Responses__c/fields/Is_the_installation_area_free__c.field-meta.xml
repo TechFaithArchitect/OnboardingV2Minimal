@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_the_installation_area_free__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Is the installation area free from ongoing construction or remodeling?</inlineHelpText>
+    <label>Is The Installation Area Free?</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

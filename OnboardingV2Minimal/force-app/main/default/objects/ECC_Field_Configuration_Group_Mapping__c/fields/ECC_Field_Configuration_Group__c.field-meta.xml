@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ECC_Field_Configuration_Group__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
-    <externalId>false</externalId>
     <label>ECC Field Configuration Group</label>
     <referenceTo>ECC_Field_Configuration_Group__c</referenceTo>
     <relationshipLabel>ECC Field Configuration Group Mappings</relationshipLabel>

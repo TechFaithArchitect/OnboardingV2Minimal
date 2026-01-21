@@ -3,7 +3,6 @@
     <fullName>Next_Stage__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Optional pointer for branching to the next stage when this one completes.</description>
-    <externalId>false</externalId>
     <label>Next Stage</label>
     <referenceTo>Onboarding_Application_Stage__c</referenceTo>
     <relationshipLabel>Onboarding Application Stages</relationshipLabel>

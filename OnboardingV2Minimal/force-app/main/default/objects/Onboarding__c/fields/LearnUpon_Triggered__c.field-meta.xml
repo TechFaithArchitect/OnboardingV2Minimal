@@ -3,7 +3,6 @@
     <fullName>LearnUpon_Triggered__c</fullName>
     <defaultValue>false</defaultValue>
     <description>If this record box is checked, LearnUpon has been triggered for this onboarding record.</description>
-    <externalId>false</externalId>
     <inlineHelpText>This box should be automatically checked when the Contract Status is set to &quot;In Approval Process&quot;. Do not select this box unless it&apos;s absolutely necessary.</inlineHelpText>
     <label>LearnUpon Triggered</label>
     <trackFeedHistory>false</trackFeedHistory>

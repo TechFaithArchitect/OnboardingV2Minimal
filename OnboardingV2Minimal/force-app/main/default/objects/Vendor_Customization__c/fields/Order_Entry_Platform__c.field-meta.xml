@@ -3,7 +3,6 @@
     <fullName>Order_Entry_Platform__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Order entry platform used by this program (drives integration/fulfillment flows).</description>
-    <externalId>false</externalId>
     <label>Order Entry Platform</label>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>

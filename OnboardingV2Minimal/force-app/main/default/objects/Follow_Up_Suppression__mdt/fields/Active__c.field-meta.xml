@@ -3,7 +3,6 @@
     <fullName>Active__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Marks suppression as active.</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Active</label>
     <type>Checkbox</type>

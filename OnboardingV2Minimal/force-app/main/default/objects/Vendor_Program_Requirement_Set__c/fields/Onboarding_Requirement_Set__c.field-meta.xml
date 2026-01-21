@@ -3,7 +3,6 @@
     <fullName>Onboarding_Requirement_Set__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Lookup to the onboarding requirement set grouped under this vendor program set.</description>
-    <externalId>false</externalId>
     <label>Onboarding Requirement Set</label>
     <referenceTo>Onboarding_Requirement_Set__c</referenceTo>
     <relationshipLabel>Vendor Program Requirement Sets</relationshipLabel>

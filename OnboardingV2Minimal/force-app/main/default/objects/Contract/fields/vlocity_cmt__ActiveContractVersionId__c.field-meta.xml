@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Stores the version identifier of the active contract document of this contract</description>
-    <externalId>false</externalId>
     <label>Active Contract Document</label>
     <referenceTo>vlocity_cmt__ContractVersion__c</referenceTo>
     <relationshipLabel>Contracts</relationshipLabel>

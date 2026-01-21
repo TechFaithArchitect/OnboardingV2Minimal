@@ -160,6 +160,48 @@
                 </visibilityRule>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.External_Override_Date__c</fieldItem>
+                <identifier>RecordExternal_Override_Date__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.External_Override_Enabled__c</fieldItem>
+                <identifier>RecordExternal_Override_Enabled__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.External_Override_Programs__c</fieldItem>
+                <identifier>RecordExternal_Override_Programs__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.External_Override_Reason__c</fieldItem>
+                <identifier>RecordExternal_Override_Reason__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.External_Override_Request_ID__c</fieldItem>
+                <identifier>RecordExternal_Override_Request_ID__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.External_Override_Source__c</fieldItem>
+                <identifier>RecordExternal_Override_Source__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Previous_Status_Before_Override__c</fieldItem>
+                <identifier>RecordPrevious_Status_Before_Override__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-34bc6ae8-5779-43df-a802-05ac8843b27d</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -748,7 +790,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Credit_Check_Status__c</fieldItem>
+                <fieldItem>Record.Credit_Check__c</fieldItem>
                 <identifier>RecordCredit_Check__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -758,7 +800,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Background_Check_Status__c</fieldItem>
+                <fieldItem>Record.Background_Check__c</fieldItem>
                 <identifier>RecordBackground_Check__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -768,7 +810,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Compliance_Status__c</fieldItem>
+                <fieldItem>Record.Compliance__c</fieldItem>
                 <identifier>RecordDealer_Compliance__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -778,7 +820,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Clearing_House_Status__c</fieldItem>
+                <fieldItem>Record.Clearing_House__c</fieldItem>
                 <identifier>RecordClearing_House__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -788,7 +830,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Drivers_Licenses_Status__c</fieldItem>
+                <fieldItem>Record.Drivers_License__c</fieldItem>
                 <identifier>RecordDrivers_License__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -798,7 +840,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Labor_Form_Status__c</fieldItem>
+                <fieldItem>Record.Labor_Form__c</fieldItem>
                 <identifier>RecordLabor_Form__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -808,7 +850,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Business_License_Status__c</fieldItem>
+                <fieldItem>Record.Business_License__c</fieldItem>
                 <identifier>RecordBusiness_License__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -828,7 +870,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Chuzo_Agreement_Status__c</fieldItem>
+                <fieldItem>Record.Chuzo_Agreement__c</fieldItem>
                 <identifier>RecordChuzo_Agreement__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -848,7 +890,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Interview_Status__c</fieldItem>
+                <fieldItem>Record.Interview__c</fieldItem>
                 <identifier>RecordInterview__cField</identifier>
                 <visibilityRule>
                     <criteria>
@@ -869,7 +911,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Personal_Guarantee_Status__c</fieldItem>
+                <fieldItem>Record.Personal_Guarantee__c</fieldItem>
                 <identifier>RecordPersonal_Guarantee__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -879,7 +921,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Net_Terms_Status__c</fieldItem>
+                <fieldItem>Record.Net_Terms__c</fieldItem>
                 <identifier>RecordNet_Terms__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -899,7 +941,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.ERP_Setup_Status__c</fieldItem>
+                <fieldItem>Record.ERP_Setup__c</fieldItem>
                 <identifier>RecordERP_Setup__cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -909,7 +951,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Vendor_Order_Entry_Setup_Status__c</fieldItem>
+                <fieldItem>Record.Vendor_Order_Entry_Platform__c</fieldItem>
                 <identifier>RecordVendor_Order_Entry_Platform__cField</identifier>
                 <visibilityRule>
                     <booleanFilter>1 OR 2</booleanFilter>
@@ -1538,6 +1580,10 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Tabs</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>tabs</name>
                     <value>maintabs</value>
                 </componentInstanceProperties>
@@ -1710,6 +1756,10 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Tabs</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>tabs</name>
                     <value>Facet-c808c263-64fe-4dd3-9aff-c970a417b8a4</value>

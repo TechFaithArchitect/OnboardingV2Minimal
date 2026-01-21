@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Specifies the original contract from which this contact was created. This contract is considered an amendment of the original contract</description>
-    <externalId>false</externalId>
     <label>Original Contract</label>
     <referenceTo>Contract</referenceTo>
     <relationshipLabel>Amendment Contracts</relationshipLabel>

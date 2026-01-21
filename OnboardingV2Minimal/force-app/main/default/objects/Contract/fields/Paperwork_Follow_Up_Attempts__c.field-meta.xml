@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Paperwork_Follow_Up_Attempts__c</fullName>
-    <externalId>false</externalId>
     <label>Paperwork Follow Up Attempts</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

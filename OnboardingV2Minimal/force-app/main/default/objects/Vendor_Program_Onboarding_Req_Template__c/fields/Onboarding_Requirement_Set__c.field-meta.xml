@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Onboarding_Requirement_Set__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Onboarding Requirement Set Deprecated</label>
     <referenceTo>Onboarding_Requirement_Set__c</referenceTo>
     <relationshipLabel>Vendor Program Onboarding Req Templates</relationshipLabel>

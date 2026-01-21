@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Shifts_First_Day_of_the_Week__c</fullName>
+    <description>First day of the week, every week, the process that creates shifts will run on this day. (0 = Sunday, 1 = Monday, 2 = Tuesday, etc) (PVFSL-132)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>First day of the week, every week, the process that creates shifts will run on this day. (0 = Sunday, 1 = Monday, 2 = Tuesday, etc)</inlineHelpText>
+    <label>Shifts First Day of the Week</label>
+    <precision>1</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

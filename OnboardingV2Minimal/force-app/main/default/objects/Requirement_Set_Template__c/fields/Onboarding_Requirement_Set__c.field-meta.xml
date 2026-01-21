@@ -3,7 +3,6 @@
     <fullName>Onboarding_Requirement_Set__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Lookup to the onboarding requirement set that this template references.</description>
-    <externalId>false</externalId>
     <label>Onboarding Requirement Set</label>
     <referenceTo>Onboarding_Requirement_Set__c</referenceTo>
     <relationshipLabel>Requirement Set Templates</relationshipLabel>

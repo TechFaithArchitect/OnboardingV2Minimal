@@ -112,4 +112,3 @@ export default class OnboardingFilterChips extends LightningElement {
         return this.programFilter && this.programFilter.length > 0 ? this.programFilter[0] : '';
     }
 }
-

@@ -3,7 +3,6 @@
     <fullName>Vendor_Program__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Vendor program context for the completed stage.</description>
-    <externalId>false</externalId>
     <label>Vendor Program</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>Onboarding Application Stage Completion</relationshipLabel>

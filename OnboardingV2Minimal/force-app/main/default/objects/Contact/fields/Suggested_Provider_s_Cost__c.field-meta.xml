@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Suggested_Provider_s_Cost__c</fullName>
     <description>Records the estimated or quoted cost from the suggested provider.</description>
-    <externalId>false</externalId>
     <label>Suggested Provider(s) Cost</label>
     <precision>18</precision>
     <required>false</required>

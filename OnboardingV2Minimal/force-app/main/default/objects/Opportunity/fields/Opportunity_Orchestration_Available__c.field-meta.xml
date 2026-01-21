@@ -3,7 +3,6 @@
     <fullName>Opportunity_Orchestration_Available__c</fullName>
     <defaultValue>false</defaultValue>
     <description>This field is used to run the flow orchestrator upon creation. If this flag is not checked at time of creation or updating, the opportunity flow orchestrator will not run.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Check this box to run the opportunity flow orchestration.</inlineHelpText>
     <label>Opportunity Orchestration Available</label>
     <trackFeedHistory>false</trackFeedHistory>

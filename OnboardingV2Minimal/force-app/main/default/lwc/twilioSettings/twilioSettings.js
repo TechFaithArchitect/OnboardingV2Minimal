@@ -142,4 +142,3 @@ export default class TwilioSettings extends LightningElement {
         return error && error.message ? error.message : 'Unknown error';
     }
 }
-

@@ -143,7 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Logical grouping of vendor program configurations that share requirement sets, rules, and stage dependencies; used by the onboarding wizard for selection and inheritance. Example: A Vendor_Program_Group named &quot;Healthcare Programs&quot; with Active__c=true and Logic_Type__c=&quot;ALL&quot; might contain multiple Vendor Programs (via Vendor_Program_Group_Member__c) like &quot;Medicare Provider Program&quot; and &quot;Medicaid Provider Program&quot;. All programs in this group can share the same Onboarding_Status_Rules_Engine__c rules and Onboarding_Requirement_Set__c bundles. When a dealer selects a program from this group in the onboarding wizard, they benefit from the shared configurations. Logic_Type__c controls inheritance behavior (ALL/ANY), and Parent_Group__c enables hierarchical grouping for complex program relationships.</description>
+    <description>Logical grouping of vendor program configurations that share requirement sets, rules, and stage dependencies; used by the onboarding wizard for selection and inheritance.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>

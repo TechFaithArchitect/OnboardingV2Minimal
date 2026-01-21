@@ -3,7 +3,6 @@
     <fullName>Requirement_Group_Member__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Optional inherited group member</description>
-    <externalId>false</externalId>
     <label>Requirement Group Member</label>
     <referenceTo>Vendor_Program_Requirement_Group_Member__c</referenceTo>
     <relationshipLabel>Vendor Program Requirements</relationshipLabel>

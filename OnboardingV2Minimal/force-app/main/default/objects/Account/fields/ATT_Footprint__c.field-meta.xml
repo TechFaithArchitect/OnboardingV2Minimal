@@ -3,7 +3,6 @@
     <fullName>ATT_Footprint__c</fullName>
     <defaultValue>false</defaultValue>
     <description>denotes when a dealer is in an AT&amp;T footprint area</description>
-    <externalId>false</externalId>
     <label>* ATT Footprint</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

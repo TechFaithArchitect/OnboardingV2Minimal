@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__TerminateDate__c</fullName>
     <deprecated>false</deprecated>
     <description>Date this contract was terminated</description>
-    <externalId>false</externalId>
     <label>Terminate Date</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

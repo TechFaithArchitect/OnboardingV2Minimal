@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__StateOfIssuance__c</fullName>
     <deprecated>false</deprecated>
     <description>Used with Driver&apos;s License Number. Identifies the state or country that issued the specified driver&apos;s license number.</description>
-    <externalId>false</externalId>
     <label>State of Issuance</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

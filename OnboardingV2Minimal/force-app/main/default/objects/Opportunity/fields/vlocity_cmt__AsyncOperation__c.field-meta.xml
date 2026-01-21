@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__AsyncOperation__c</fullName>
     <deprecated>false</deprecated>
     <description>This stores the asynchronous operation name for which this opportunity is locked.</description>
-    <externalId>false</externalId>
     <inlineHelpText>This stores the asynchronous operation name for which this opportunity is locked.</inlineHelpText>
     <label>Async Operation</label>
     <required>false</required>

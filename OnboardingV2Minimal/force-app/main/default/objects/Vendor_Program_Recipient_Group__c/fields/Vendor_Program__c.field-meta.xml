@@ -3,7 +3,6 @@
     <fullName>Vendor_Program__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>The Vendor Program this applies to</description>
-    <externalId>false</externalId>
     <label>Vendor Program</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>Vendor Program Recipient Groups</relationshipLabel>

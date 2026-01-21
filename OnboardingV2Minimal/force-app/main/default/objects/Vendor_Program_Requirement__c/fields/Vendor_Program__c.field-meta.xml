@@ -3,7 +3,6 @@
     <fullName>Vendor_Program__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>The owning program</description>
-    <externalId>false</externalId>
     <label>Vendor Program</label>
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipName>Vendor_Program_Requirements</relationshipName>

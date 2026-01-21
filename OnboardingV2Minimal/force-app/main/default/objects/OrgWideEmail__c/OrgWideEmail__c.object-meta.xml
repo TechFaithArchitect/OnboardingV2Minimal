@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Read-only cache of org-wide email addresses (OrgWideEmailAddress) synchronized via OrgWideEmailSyncService so onboarding communications and Vendor Program setup can reference valid From addresses. Synced nightly or manually, and mirrored to Org_Wide_Email__mdt custom metadata. Example: An OrgWideEmail record with Email_Address__c=&quot;onboarding@company.com&quot; and Developer_Name__c=&quot;Onboarding_Support&quot; can be referenced by Communication_Template__c records or Vendor Program configuration to ensure emails are sent from a valid org-wide address. This prevents email send failures and ensures consistent branding. The sync process (OrgWideEmailSyncService) keeps this object and the custom metadata in sync with the source OrgWideEmailAddress records.</description>
+    <description>Read-only cache of org-wide email addresses synchronized via Apex so onboarding/Vendor Program setup can reference a valid From address.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Org Wide Emails</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

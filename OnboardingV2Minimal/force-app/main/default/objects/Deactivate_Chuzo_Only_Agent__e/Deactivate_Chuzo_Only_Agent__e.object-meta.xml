@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Used to deactivate an User from Deactivate_Chuzo_Agent flow [PER-3665].</description>
+    <eventType>HighVolume</eventType>
+    <label>Deactivate Chuzo-Only Agent</label>
+    <pluralLabel>Deactivate Chuzo-Only Agents</pluralLabel>
+    <publishBehavior>PublishImmediately</publishBehavior>
+</CustomObject>

@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__IsNonStandard__c</fullName>
     <deprecated>false</deprecated>
     <description>If checked, specifies that this contract is a non-standard contract. A non-standard contract is one that deviates from its contract template</description>
-    <externalId>false</externalId>
     <formula>if( vlocity_cmt__ActiveContractVersionId__r.vlocity_cmt__CountOfNonStandardSection__c &gt;0, true, false)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Non Standard</label>

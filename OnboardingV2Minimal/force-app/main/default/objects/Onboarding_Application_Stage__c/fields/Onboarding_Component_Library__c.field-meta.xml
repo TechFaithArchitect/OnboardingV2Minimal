@@ -3,7 +3,6 @@
     <fullName>Onboarding_Component_Library__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Drives which LWC/Flow to render</description>
-    <externalId>false</externalId>
     <label>Component</label>
     <referenceTo>Onboarding_Component_Library__c</referenceTo>
     <relationshipLabel>Onboarding Application Stages</relationshipLabel>

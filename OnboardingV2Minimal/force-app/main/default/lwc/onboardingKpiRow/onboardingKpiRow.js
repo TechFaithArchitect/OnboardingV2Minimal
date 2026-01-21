@@ -90,4 +90,3 @@ export default class OnboardingKpiRow extends LightningElement {
         );
     }
 }
-

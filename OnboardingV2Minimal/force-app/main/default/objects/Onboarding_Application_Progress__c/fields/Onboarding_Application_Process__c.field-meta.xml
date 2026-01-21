@@ -3,7 +3,6 @@
     <fullName>Onboarding_Application_Process__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Which onboarding process this progress record is executing.</description>
-    <externalId>false</externalId>
     <label>Process</label>
     <referenceTo>Onboarding_Application_Process__c</referenceTo>
     <relationshipLabel>Onboarding Application Progress</relationshipLabel>

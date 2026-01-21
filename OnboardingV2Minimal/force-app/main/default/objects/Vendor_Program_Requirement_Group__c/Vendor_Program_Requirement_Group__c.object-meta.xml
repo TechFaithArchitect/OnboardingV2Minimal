@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Categorizes requirement templates into logical groups that can be reused across multiple vendor programs. Groups organize related requirements (like all insurance-related documents) and can be referenced by Onboarding_Status_Rules_Engine__c for status evaluation. Example: A &quot;Documentation Requirements&quot; group might contain templates for NDA, Insurance Certificate, and Business License. This group can then be assigned to multiple Vendor Programs, and status rules can evaluate all requirements in the group together using ALL/ANY logic.</description>
+    <description>This groups together multiple definitions and can be assigned to multiple vendor programs.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Vendor Program Requirement Groups</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

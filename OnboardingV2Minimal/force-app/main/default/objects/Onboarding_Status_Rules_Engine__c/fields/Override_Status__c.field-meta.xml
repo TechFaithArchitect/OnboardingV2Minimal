@@ -3,7 +3,6 @@
     <fullName>Override_Status__c</fullName>
     <defaultValue>false</defaultValue>
     <description>If populated, forces onboarding status to this value when the engine evaluates as true.</description>
-    <externalId>false</externalId>
     <label>Override Status</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

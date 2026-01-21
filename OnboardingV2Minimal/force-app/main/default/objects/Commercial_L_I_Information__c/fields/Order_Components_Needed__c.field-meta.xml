@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Components_Needed__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( !INCLUDES(Order_Components_Completed__c , &quot;Verified Ship To&quot;), &quot;Verified Ship To&quot; &amp;BR() , null) &amp;
+IF( !INCLUDES(Order_Components_Completed__c , &quot;Payment Information&quot;), &quot;Payment Information&quot; &amp;BR() , null)&amp;
+IF( !INCLUDES(Order_Components_Completed__c , &quot;Final BOM&quot;), &quot;Final BOM&quot; &amp;BR() , null) &amp;
+IF( !INCLUDES(Order_Components_Completed__c , &quot;Parts to Arrive from Vendor&quot;), &quot;Parts to Arrive from Vendor&quot; &amp;BR() , null) &amp;
+IF( !INCLUDES(Order_Components_Completed__c , &quot;Parts to be Transferred P10&quot;), &quot;Parts to be Transferred PV&quot; &amp;BR() , null) &amp;
+IF( !INCLUDES(Order_Components_Completed__c , &quot;Parts to be Released&quot;), &quot;Parts to be Released&quot; &amp;BR() , null) &amp;
+IF( !INCLUDES(Order_Components_Completed__c , &quot;Alorica to Complete&quot;), &quot;Alorica to Complete&quot; &amp;BR() , null)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Order Components Needed</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

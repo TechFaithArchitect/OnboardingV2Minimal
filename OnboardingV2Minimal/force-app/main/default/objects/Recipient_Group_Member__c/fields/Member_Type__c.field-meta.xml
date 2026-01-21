@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Member_Type__c</fullName>
     <description>This field allows us to separate the user type we are selecting to be a part of the group. If it&apos;s an individual user, a group of users, a queue of users, or a Territory Role Assignment.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Select the type of member this record represents — an individual User or a Territory Role Assignment. This controls which field below must be populated.</inlineHelpText>
     <label>Member Type</label>
     <required>false</required>

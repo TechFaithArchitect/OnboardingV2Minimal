@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__ValidationStatus__c</fullName>
     <deprecated>false</deprecated>
     <description>Validation Status</description>
-    <externalId>false</externalId>
     <inlineHelpText>If an opportunity has been validated, it will show the status Passed or Failed. If no validation has been run yet, it will show Not yet run.</inlineHelpText>
     <label>Validation Status</label>
     <required>false</required>

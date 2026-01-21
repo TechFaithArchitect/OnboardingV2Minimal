@@ -3,7 +3,6 @@
     <fullName>Previous_Version__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Reference to the prior version of this rule for audit/version tracking.</description>
-    <externalId>false</externalId>
     <label>Previous Version</label>
     <referenceTo>Onboarding_Status_Rule__c</referenceTo>
     <relationshipLabel>Onboarding Status Rules</relationshipLabel>

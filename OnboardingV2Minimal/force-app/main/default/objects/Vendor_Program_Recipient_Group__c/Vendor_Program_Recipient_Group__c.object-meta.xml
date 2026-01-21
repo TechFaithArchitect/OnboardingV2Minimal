@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Versioned association between a Vendor Program (Vendor_Customization__c) and a Recipient_Group__c, defining which recipients receive communications for that program and when. Each record specifies the Communication_Template__c to use, Filter_Logic__c trigger conditions, Send_Order__c for sequencing, and versioning for change management. Example: Vendor Program &quot;Healthcare Provider Program&quot; might have a Vendor_Program_Recipient_Group linking to &quot;Healthcare Administrators&quot; recipient group, using Communication_Template__c=&quot;Requirement Complete Notification&quot; with Filter_Logic__c=&quot;Onboarding_Status__c = &apos;Pending Review&apos;&quot;. When the filter condition is met, all members of the recipient group receive the communication. Versioning allows updating recipient groups without breaking existing associations, and Status__c controls active/inactive state.</description>
+    <description>Represents the versioned association between a Vendor Program and a Recipient Group. Each record defines a specific configuration of a Recipient Group applied to a Vendor Program, with support for versioning, status tracking (e.g., Draft, Active), and validation to ensure proper activation dependencies.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Vendor Program Recipient Groups</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

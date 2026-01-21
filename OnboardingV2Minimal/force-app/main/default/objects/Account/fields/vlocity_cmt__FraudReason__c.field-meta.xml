@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__FraudReason__c</fullName>
     <deprecated>false</deprecated>
     <description>Captures the reason of the account being fraud.</description>
-    <externalId>false</externalId>
     <label>Fraud Reason</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Account_Classification__c</fullName>
+    <description>Describes which account the quote should be written under.</description>
+    <label>Account Classification</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Commercial</fullName>
+                <default>false</default>
+                <label>Commercial</label>
+            </value>
+            <value>
+                <fullName>SMATV</fullName>
+                <default>false</default>
+                <label>SMATV</label>
+            </value>
+            <value>
+                <fullName>MDU</fullName>
+                <default>false</default>
+                <label>MDU</label>
+            </value>
+            <value>
+                <fullName>ACC</fullName>
+                <default>false</default>
+                <label>ACC</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

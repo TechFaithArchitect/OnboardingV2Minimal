@@ -4,7 +4,6 @@
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
     <description>Whether this customer agrees to be listed in the communication company&apos;s directory (such as a telephone directory).</description>
-    <externalId>false</externalId>
     <label>Directory Listed</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

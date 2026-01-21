@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__CLTV__c</fullName>
     <deprecated>false</deprecated>
     <description>CLTV or customer lifetime value is a monetary amount indicating the total value of this customer since the beginning of the customer&apos;s relationship with your organization.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Customer Lifetime Value</inlineHelpText>
     <label>CLTV</label>
     <precision>18</precision>

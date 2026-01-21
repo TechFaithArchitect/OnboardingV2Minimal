@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Frame contract linked to this opportunity</description>
-    <externalId>false</externalId>
     <label>Frame Contract</label>
     <referenceTo>Contract</referenceTo>
     <relationshipLabel>Opportunities</relationshipLabel>

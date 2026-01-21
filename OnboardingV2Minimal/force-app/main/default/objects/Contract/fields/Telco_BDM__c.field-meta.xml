@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Telco_BDM__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Telco BDM</label>
     <referenceTo>User</referenceTo>
     <relationshipName>ContractsCO5</relationshipName>

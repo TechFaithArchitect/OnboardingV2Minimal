@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Create_Rep_Flow_Email_Suffix__c</fullName>
+    <description>The environment name for the current environment as an email suffix (e.g. &quot;.poedev&quot;, &quot;.poeqa&quot;, &quot;.poe&quot;).</description>
+    <externalId>false</externalId>
+    <label>Create Rep Flow Email Suffix</label>
+    <length>20</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

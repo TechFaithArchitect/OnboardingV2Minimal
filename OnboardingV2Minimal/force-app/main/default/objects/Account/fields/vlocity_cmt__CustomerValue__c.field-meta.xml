@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__CustomerValue__c</fullName>
     <deprecated>false</deprecated>
     <description>A ranking of the value of this customer to your business expressed in marketing terms such as Gold, Silver, Bronze, Diamond, Platinum.</description>
-    <externalId>false</externalId>
     <label>Customer Value</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

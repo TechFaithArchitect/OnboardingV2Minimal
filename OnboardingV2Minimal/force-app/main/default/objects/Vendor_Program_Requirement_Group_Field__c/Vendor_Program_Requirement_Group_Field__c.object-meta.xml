@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Groups Vendor_Program_Requirement_Field__c records together for UI display organization and batch validation within a Vendor_Program_Requirement__c. Similar to Requirement_Field_Group__c but scoped to vendor program requirements. Example: A Vendor_Program_Requirement_Group_Field named &quot;Insurance Information&quot; might contain fields for Policy Number, Policy Expiry Date, and Insurance Carrier Name. When displaying requirement forms for vendors, fields in the same group are shown together in a collapsible section. This improves UX by organizing related fields and allows validation rules to reference groups for cross-field validation (e.g., ensuring Policy Expiry Date is after Policy Start Date).</description>
+    <description>Groups program requirement fields for display/logic within a program template.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -162,7 +161,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Vendor Program Requirement Group Fields</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>This indicates if an opportunity is locked by a user.</description>
-    <externalId>false</externalId>
     <inlineHelpText>This indicates if an opportunity is locked by a user.</inlineHelpText>
     <label>Locked By User</label>
     <referenceTo>User</referenceTo>

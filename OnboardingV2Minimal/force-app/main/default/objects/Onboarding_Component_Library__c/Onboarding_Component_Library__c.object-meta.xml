@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Admin-editable library catalog of Lightning Web Components that can be used in onboarding stages. Maps component API names to metadata for the onboarding flow engine. Example: A library entry might have Name=&quot;Select Vendor&quot; with Component_API_Name__c=&quot;c-vendor-program-onboarding-vendor&quot; and Description__c=&quot;Component for selecting or creating a vendor&quot;. When an Onboarding_Application_Stage__c references this library entry via lookup, the flow engine dynamically instantiates the component. This allows admins to manage available stage components without code changes. Components must be deployed as LWC in the org and registered here before they can be used in processes.</description>
+    <description>Admin-editable library of valid components that can be used in onboarding stages.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Onboarding Component Libraries</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

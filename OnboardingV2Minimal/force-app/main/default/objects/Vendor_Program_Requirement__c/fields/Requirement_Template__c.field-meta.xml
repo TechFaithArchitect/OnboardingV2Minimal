@@ -3,7 +3,6 @@
     <fullName>Requirement_Template__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Base requirement template</description>
-    <externalId>false</externalId>
     <label>Requirement Template</label>
     <referenceTo>Vendor_Program_Onboarding_Req_Template__c</referenceTo>
     <relationshipLabel>Vendor Program Requirements</relationshipLabel>

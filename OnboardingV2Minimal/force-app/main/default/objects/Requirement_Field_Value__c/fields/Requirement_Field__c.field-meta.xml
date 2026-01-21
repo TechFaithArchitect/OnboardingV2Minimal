@@ -3,7 +3,6 @@
     <fullName>Requirement_Field__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Lookup to the requirement field metadata this value corresponds to.</description>
-    <externalId>false</externalId>
     <label>Requirement Field</label>
     <referenceTo>Requirement_Field__c</referenceTo>
     <relationshipLabel>Requirement Field Values</relationshipLabel>

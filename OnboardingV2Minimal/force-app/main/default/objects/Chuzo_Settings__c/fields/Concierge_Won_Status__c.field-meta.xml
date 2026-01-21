@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Concierge_Won_Status__c</fullName>
+    <description>Concierge Status when the Lead is Closed Won [PER-</description>
+    <externalId>false</externalId>
+    <label>Concierge Won Status</label>
+    <length>80</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

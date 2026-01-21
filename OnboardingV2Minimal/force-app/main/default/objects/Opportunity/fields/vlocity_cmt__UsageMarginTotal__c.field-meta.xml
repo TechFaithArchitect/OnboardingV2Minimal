@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__UsageMarginTotal__c</fullName>
     <deprecated>false</deprecated>
     <description>Usage Margin Total</description>
-    <externalId>false</externalId>
     <label>Usage Margin Total</label>
     <precision>18</precision>
     <required>false</required>

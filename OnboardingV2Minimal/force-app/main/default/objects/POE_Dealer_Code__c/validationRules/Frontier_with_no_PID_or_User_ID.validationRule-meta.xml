@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Frontier_with_no_PID_or_User_ID</fullName>
+    <active>true</active>
+    <description>A Frontier dealer code must have the PID and the User ID entered.</description>
+    <errorConditionFormula>AND(TEXT(POE_Provider__c) == &apos;FRONTIER&apos;, OR(ISBLANK(POE_Dealer_Code__c), ISBLANK(Frontier_PID__c)))</errorConditionFormula>
+    <errorMessage>Dealer Code (User ID) and PID fields are required for Frontier.</errorMessage>
+</ValidationRule>

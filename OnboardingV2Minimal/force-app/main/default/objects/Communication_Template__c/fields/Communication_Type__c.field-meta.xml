@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Communication_Type__c</fullName>
     <description>Type of communication this template supports (Email or SMS).</description>
-    <externalId>false</externalId>
     <label>Communication Type</label>
     <required>false</required>
     <trackTrending>false</trackTrending>

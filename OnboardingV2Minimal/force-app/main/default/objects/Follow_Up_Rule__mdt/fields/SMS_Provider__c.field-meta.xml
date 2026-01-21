@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>SMS_Provider__c</fullName>
     <description>Select SMS provider for this rule. If not specified, defaults based on Messaging Channel presence.</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>SMS Provider</label>
     <required>false</required>

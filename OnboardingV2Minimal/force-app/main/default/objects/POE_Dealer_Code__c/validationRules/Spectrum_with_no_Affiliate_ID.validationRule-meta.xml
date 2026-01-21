@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Spectrum_with_no_Affiliate_ID</fullName>
+    <active>true</active>
+    <description>Validation rule to enforce that if the provider selected is Spectrum, it must have an affiliate ID value [PER-3531]</description>
+    <errorConditionFormula>AND(TEXT(POE_Provider__c) == &apos;Charter/Spectrum&apos;, 
+OR (ISBLANK(POE_Affiliate_Id__c),ISBLANK( Spectrum_Sales_Id__c )))</errorConditionFormula>
+    <errorMessage>The Spectrum Dealer Codes must have an Affiliate ID and a Sales ID value</errorMessage>
+</ValidationRule>

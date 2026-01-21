@@ -3,7 +3,6 @@
     <fullName>Fatigue_Suppression_Enabled__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Enables fatigue suppression logic for this rule.</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Fatigue Suppression Enabled</label>
     <type>Checkbox</type>

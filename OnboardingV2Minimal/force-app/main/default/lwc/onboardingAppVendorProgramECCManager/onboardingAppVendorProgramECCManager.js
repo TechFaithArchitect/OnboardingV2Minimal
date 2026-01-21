@@ -1,10 +1,10 @@
-import { LightningElement, api, track } from "lwc";
-import getRequiredCredentials from "@salesforce/apex/OnboardingAppECCService.getRequiredCredentials";
-import getAvailableCredentialTypes from "@salesforce/apex/OnboardingAppECCService.getAvailableCredentialTypes";
-import createCredentialType from "@salesforce/apex/OnboardingAppECCService.createCredentialType";
-import linkCredentialTypeToRequiredCredential from "@salesforce/apex/OnboardingAppECCService.linkCredentialTypeToRequiredCredential";
+import { LightningElement, api, track } from 'lwc';
+import getRequiredCredentials from '@salesforce/apex/OnboardingAppECCController.getRequiredCredentials';
+import getAvailableCredentialTypes from '@salesforce/apex/OnboardingAppECCController.getAvailableCredentialTypes';
+import createCredentialType from '@salesforce/apex/OnboardingAppECCController.createCredentialType';
+import linkCredentialTypeToRequiredCredential from '@salesforce/apex/OnboardingAppECCController.linkCredentialTypeToRequiredCredential';
 
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class OnboardingAppVendorProgramECCManager extends LightningElement {
   @api recordId; // Vendor_Customization__c Id
@@ -15,25 +15,25 @@ export default class OnboardingAppVendorProgramECCManager extends LightningEleme
   @track selectedCredentialTypeId = null;
 
   @track showModal = false;
-  @track newCredentialTypeName = "";
+  @track newCredentialTypeName = '';
 
   columns = [
     {
-      label: "Required Credential",
-      fieldName: "Name"
+      label: 'Required Credential',
+      fieldName: 'Name'
     },
     {
-      label: "Linked Credential Type",
-      fieldName: "External_Contact_Credential_Type__r.Name",
-      type: "text"
+      label: 'Linked Credential Type',
+      fieldName: 'External_Contact_Credential_Type__r.Name',
+      type: 'text'
     },
     {
-      type: "button",
-      label: "Manage",
+      type: 'button',
+      label: 'Manage',
       typeAttributes: {
-        label: "Manage",
-        name: "manage",
-        variant: "base"
+        label: 'Manage',
+        name: 'manage',
+        variant: 'base'
       }
     }
   ];
@@ -48,22 +48,18 @@ export default class OnboardingAppVendorProgramECCManager extends LightningEleme
         getRequiredCredentials({ vendorProgramId: this.recordId }),
         getAvailableCredentialTypes()
       ]);
-
+      
       this.requiredCredentials = credentials;
-      this.credentialTypeOptions = types.map((t) => ({
-        label: t.Name,
-        value: t.Id
-      }));
+      this.credentialTypeOptions = types.map(t => ({ label: t.Name, value: t.Id }));
     } catch (error) {
-      this.showError("Error loading data", error);
+      this.showError('Error loading data', error);
     }
   }
 
   handleRowAction(event) {
-    if (event.detail.action.name === "manage") {
+    if (event.detail.action.name === 'manage') {
       this.selectedRequiredCredentialId = event.detail.row.Id;
-      this.selectedCredentialTypeId =
-        event.detail.row.External_Contact_Credential_Type__c || null;
+      this.selectedCredentialTypeId = event.detail.row.External_Contact_Credential_Type__c || null;
     }
   }
 
@@ -77,15 +73,15 @@ export default class OnboardingAppVendorProgramECCManager extends LightningEleme
         requiredCredentialId: this.selectedRequiredCredentialId,
         credentialTypeId: this.selectedCredentialTypeId
       });
-      this.showToast("Credential Type Linked");
+      this.showToast('Credential Type Linked');
       this.loadData();
     } catch (error) {
-      this.showError("Linking failed", error);
+      this.showError('Linking failed', error);
     }
   }
 
   handleShowModal() {
-    this.newCredentialTypeName = "";
+    this.newCredentialTypeName = '';
     this.showModal = true;
   }
 
@@ -100,33 +96,29 @@ export default class OnboardingAppVendorProgramECCManager extends LightningEleme
   async handleCreateCredentialType() {
     try {
       // Use a default sort order (can be improved to calculate max sort order)
-      const result = await createCredentialType({
+      const result = await createCredentialType({ 
         name: this.newCredentialTypeName,
         sortOrder: 1,
         vendorCustomizationId: this.recordId
       });
       this.selectedCredentialTypeId = result.Id;
-      this.showToast("New Credential Type Created");
+      this.showToast('New Credential Type Created');
       this.handleCloseModal();
       this.loadData();
     } catch (error) {
-      this.showError("Creation failed", error);
+      this.showError('Creation failed', error);
     }
   }
 
   showToast(message) {
-    this.dispatchEvent(
-      new ShowToastEvent({ title: "Success", message, variant: "success" })
-    );
+    this.dispatchEvent(new ShowToastEvent({ title: 'Success', message, variant: 'success' }));
   }
 
   showError(title, error) {
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title,
-        message: error.body?.message || error.message || "An error occurred",
-        variant: "error"
-      })
-    );
+    this.dispatchEvent(new ShowToastEvent({
+      title,
+      message: error.body?.message || error.message || 'An error occurred',
+      variant: 'error'
+    }));
   }
 }

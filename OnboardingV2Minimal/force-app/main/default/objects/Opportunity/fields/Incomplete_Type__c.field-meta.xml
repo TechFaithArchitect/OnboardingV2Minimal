@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Incomplete_Type__c</fullName>
     <description>Status type for incomplete application. Used when the Opportunity Paperwork Status equals any of the Incomplete options.</description>
-    <externalId>false</externalId>
     <inlineHelpText>Status type for incomplete application. Used when the Opportunity Paperwork Status equals any of the Incomplete options.</inlineHelpText>
     <label>Incomplete Type</label>
     <required>false</required>

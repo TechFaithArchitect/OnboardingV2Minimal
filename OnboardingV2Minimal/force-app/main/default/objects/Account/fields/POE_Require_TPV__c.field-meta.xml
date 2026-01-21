@@ -3,7 +3,6 @@
     <fullName>POE_Require_TPV__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Flags the account so that Representatives require TPV on the buyflows.</description>
-    <externalId>false</externalId>
     <label>Require TPV</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

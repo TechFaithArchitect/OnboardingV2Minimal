@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__ExpirationReason__c</fullName>
     <deprecated>false</deprecated>
     <description>Reason why they contract expired</description>
-    <externalId>false</externalId>
     <label>Expiration Reason</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

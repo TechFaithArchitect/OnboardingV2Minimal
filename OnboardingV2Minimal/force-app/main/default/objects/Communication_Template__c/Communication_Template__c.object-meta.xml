@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
@@ -143,8 +143,7 @@
     <allowInChatterGroups>false</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description
-  >Unified template registry for onboarding communications (Email/SMS/In-App) with channel-specific template IDs and message bodies. Templates are synced from Salesforce Email Templates (for Email) and can reference Twilio Messaging Templates (for SMS). All fields are read-only and synced nightly via EmailTemplateSyncService or manually. Example: A Communication_Template__c with Communication_Type__c=&quot;Email&quot; and Email_Template_Id__c=&quot;00X000000000123&quot; might be used by a Follow_Up_Rule__mdt to send reminder emails when onboarding requirements are incomplete. Templates are linked to Vendor Programs via Vendor_Program_Recipient_Group__c associations.</description>
+    <description>Stores and mirrors the system classic email templates for use with onboarding. All fields are read only and is synced nightly or by a manual sync.</description>
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
@@ -161,7 +160,7 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Communication Templates</pluralLabel>
-    <searchLayouts />
+    <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

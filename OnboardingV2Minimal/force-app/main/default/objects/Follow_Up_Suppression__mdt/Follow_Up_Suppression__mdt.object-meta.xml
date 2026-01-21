@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description
-  >Custom metadata defining suppression windows for follow-up communications to prevent sending during holidays, fatigue periods, or system maintenance. Supports multiple suppression types (Holiday, Fatigue, Manual, System) with optional timezone awareness. Example: A Follow_Up_Suppression with Suppression_Type__c=&quot;Holiday&quot;, Start_Date__c=&quot;2024-12-24&quot;, End_Date__c=&quot;2024-12-26&quot;, and Timezone_Aware__c=true might suppress all follow-ups during the Christmas holiday period. Another suppression might use Suppression_Type__c=&quot;Fatigue&quot; with Fatigue_Rule_Reference__c=&quot;Requirement_Incomplete_7_Days&quot; to prevent sending if a recipient has already received the maximum allowed messages in the fatigue window. The follow-up execution service checks active suppressions before sending communications.</description>
     <label>Follow Up Suppression</label>
     <pluralLabel>Follow Up Suppressions</pluralLabel>
     <visibility>Public</visibility>

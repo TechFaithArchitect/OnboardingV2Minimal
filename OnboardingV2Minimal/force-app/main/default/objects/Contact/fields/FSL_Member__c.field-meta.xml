@@ -3,7 +3,6 @@
     <fullName>FSL_Member__c</fullName>
     <defaultValue>false</defaultValue>
     <description>This field indicates if this user is member of FSL community, and it’s maintained by POE_UpdateUserCommunityMembership [PER-3218].</description>
-    <externalId>false</externalId>
     <label>FSL Member</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

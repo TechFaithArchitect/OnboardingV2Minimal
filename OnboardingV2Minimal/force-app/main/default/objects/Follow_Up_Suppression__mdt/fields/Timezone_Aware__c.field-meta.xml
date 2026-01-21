@@ -3,7 +3,6 @@
     <fullName>Timezone_Aware__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Respect dealer timezone when applying suppression window.</description>
-    <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
     <label>Timezone Aware</label>
     <type>Checkbox</type>

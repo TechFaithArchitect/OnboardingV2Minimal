@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>Employer</description>
-    <externalId>false</externalId>
     <label>Employer</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>Employees</relationshipLabel>

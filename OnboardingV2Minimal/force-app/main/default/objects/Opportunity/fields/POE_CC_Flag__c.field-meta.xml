@@ -3,7 +3,6 @@
     <fullName>POE_CC_Flag__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indicates if the opportunity was flagged for a Cross Credit fraud rule.</description>
-    <externalId>false</externalId>
     <label>Cross Credit Flag</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

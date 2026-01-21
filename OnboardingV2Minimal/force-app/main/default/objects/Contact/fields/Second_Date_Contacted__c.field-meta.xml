@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Second_Date_Contacted__c</fullName>
     <description>Records the second follow-up contact date with the person account.</description>
-    <externalId>false</externalId>
     <label>Second Date Contacted</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -3,7 +3,6 @@
     <fullName>DTV_MSOC__c</fullName>
     <defaultValue>false</defaultValue>
     <description>If checked, the dealer has a MSOC account.</description>
-    <externalId>false</externalId>
     <label>* DTV-MSOC</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

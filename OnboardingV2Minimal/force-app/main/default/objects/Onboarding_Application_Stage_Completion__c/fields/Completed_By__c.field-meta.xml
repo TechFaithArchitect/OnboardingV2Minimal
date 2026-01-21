@@ -3,7 +3,6 @@
     <fullName>Completed_By__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>User who completed the stage.</description>
-    <externalId>false</externalId>
     <label>Completed By</label>
     <referenceTo>User</referenceTo>
     <relationshipName>Onboarding_Application_Stage_Completion</relationshipName>

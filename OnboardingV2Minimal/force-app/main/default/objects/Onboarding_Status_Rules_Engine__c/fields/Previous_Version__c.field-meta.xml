@@ -3,7 +3,6 @@
     <fullName>Previous_Version__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Links to the prior version of this rules engine (for version chains).</description>
-    <externalId>false</externalId>
     <label>Previous Version</label>
     <referenceTo>Onboarding_Status_Rules_Engine__c</referenceTo>
     <relationshipLabel>Onboarding Status Rules Engines</relationshipLabel>

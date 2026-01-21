@@ -3,7 +3,6 @@
     <fullName>Required__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Flag for validation (optional)</description>
-    <externalId>false</externalId>
     <label>Required</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>

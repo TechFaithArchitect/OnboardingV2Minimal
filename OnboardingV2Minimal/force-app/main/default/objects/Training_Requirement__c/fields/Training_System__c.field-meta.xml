@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Training_System__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <externalId>false</externalId>
     <label>Training System</label>
     <referenceTo>Training_System__c</referenceTo>
     <relationshipName>Vendor_Training_Requirements</relationshipName>

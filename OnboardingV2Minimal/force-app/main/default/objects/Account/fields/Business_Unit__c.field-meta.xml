@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Business_Unit__c</fullName>
     <description>Field used to identify PV dealers vs non pv dealers. (Like DCC)</description>
-    <externalId>false</externalId>
     <label>Business Unit</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

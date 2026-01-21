@@ -4,7 +4,6 @@
     <defaultValue>false</defaultValue>
     <deprecated>false</deprecated>
     <description>Whether this customer is a company that participates in foreign exchange transactions in the course of doing business. Primarily relevant to financial services organizations using Vlocity, but may also be relevant for credit checks.</description>
-    <externalId>false</externalId>
     <label>Foreign Exchange</label>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>

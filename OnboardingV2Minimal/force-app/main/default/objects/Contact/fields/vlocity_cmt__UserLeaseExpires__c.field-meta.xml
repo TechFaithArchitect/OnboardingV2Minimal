@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__UserLeaseExpires__c</fullName>
     <deprecated>false</deprecated>
     <description>The time that the users lease token was issued.</description>
-    <externalId>false</externalId>
     <label>UserLeaseExpiration</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -4,7 +4,6 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <deprecated>false</deprecated>
     <description>ID of the primary person to contact for anything related to this account. For consumers, the primary contact is often the same as the person who is the consumer but need not be. For example, the consumer&apos;s assistant or spouse may be identified as the desired primary contact.</description>
-    <externalId>false</externalId>
     <label>Contact</label>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Accounts</relationshipLabel>

@@ -3,7 +3,6 @@
     <fullName>Recipient_Group__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Group of recipients (dynamic/static)</description>
-    <externalId>false</externalId>
     <label>Recipient Group</label>
     <referenceTo>Recipient_Group__c</referenceTo>
     <relationshipLabel>Vendor Program Recipient Groups</relationshipLabel>

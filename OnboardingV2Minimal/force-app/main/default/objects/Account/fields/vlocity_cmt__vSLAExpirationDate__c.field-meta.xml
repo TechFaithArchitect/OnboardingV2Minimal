@@ -3,7 +3,6 @@
     <fullName>vlocity_cmt__vSLAExpirationDate__c</fullName>
     <deprecated>false</deprecated>
     <description>The expiration date of the current service level agreement.</description>
-    <externalId>false</externalId>
     <label>SLA Expiration Date</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

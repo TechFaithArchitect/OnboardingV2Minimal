@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>MTD_Accessory_Sales__c</fullName>
-    <externalId>false</externalId>
     <inlineHelpText>Includes Accessory and Commercial Accessory</inlineHelpText>
     <label>* Accessory Sales MTD</label>
     <precision>12</precision>

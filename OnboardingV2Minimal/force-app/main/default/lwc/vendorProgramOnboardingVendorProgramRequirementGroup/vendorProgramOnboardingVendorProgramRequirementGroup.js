@@ -311,4 +311,3 @@ export default class VendorProgramOnboardingVendorProgramRequirementGroup extend
     });
   }
 }
-

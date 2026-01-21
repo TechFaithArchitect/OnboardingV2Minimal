@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>UID_T_Mobile_Process_Status__c</fullName>
-    <externalId>false</externalId>
     <label>UID T-Mobile Process Status</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

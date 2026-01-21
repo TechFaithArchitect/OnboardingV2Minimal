@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Referral_Account_Missing_ShopLink_Info</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  NOT(ISBLANK(Referral_Account__c)),
+  Referral_Account__r.RecordType.DeveloperName = &quot;POE_Dealer&quot;,
+  OR(
+    ISBLANK(Referral_Account__r.ShopLink_Email__c),
+    ISBLANK(Referral_Account__r.ShopLink_Programs__c)
+  )
+)</errorConditionFormula>
+    <errorMessage>Referral Account of type Dealer must have both ShopLink Email and ShopLink Programs filled in.</errorMessage>
+</ValidationRule>

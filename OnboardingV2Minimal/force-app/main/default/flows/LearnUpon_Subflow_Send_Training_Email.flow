@@ -29,25 +29,25 @@
         <label>Send Training Welcome Email</label>
         <locationX>176</locationX>
         <locationY>242</locationY>
-        <actionName>emailSimple</actionName>
-        <actionType>emailSimple</actionType>
+        <actionName>EmailCommSendAction</actionName>
+        <actionType>apex</actionType>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
-            <name>emailAddresses</name>
+            <name>accountId</name>
+            <value>
+                <elementReference>OnboardingRecord.Account__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ccEmailAddresses</name>
             <value>
                 <elementReference>ccAddressList</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>senderType</name>
+            <name>contactId</name>
             <value>
-                <stringValue>OrgWideEmailAddress</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>senderAddress</name>
-            <value>
-                <elementReference>OrgWideEmailRecord.Email_Address__c</elementReference>
+                <elementReference>OnboardingRecord.Opportunity__r.Selected_Opportunity_Contact__c</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -57,28 +57,29 @@
             </value>
         </inputParameters>
         <inputParameters>
-            <name>recipientId</name>
-            <value>
-                <elementReference>OnboardingRecord.Opportunity__r.Selected_Opportunity_Contact__c</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>relatedRecordId</name>
+            <name>onboardingId</name>
             <value>
                 <elementReference>OnboardingRecord.Id</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
-            <name>logEmailOnSend</name>
+            <name>orgWideEmailAddressId</name>
             <value>
-                <booleanValue>true</booleanValue>
+                <elementReference>OrgWideEmailRecord.OrgWideEmailAddressId__c</elementReference>
             </value>
         </inputParameters>
-
-        <nameSegment>emailSimple</nameSegment>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>OrgWide</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>EmailCommSendAction</nameSegment>
         <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <environments>Default</environments>
     <interviewLabel>LearnUpon - Subflow - Send Contract {!$Flow.CurrentDateTime}</interviewLabel>
     <label>LearnUpon - Subflow - Send Training Email</label>
