@@ -19,8 +19,7 @@ See [User Journey Summary](./user-journey-summary.md) for the end-to-end flow.
 
 ### Rule Structure
 
-- **Vendor Program Group**: Links rules to specific vendor program groups
-- **Requirement Group**: Links rules to specific requirement groups
+- **Vendor Program Group**: Links rules to specific vendor program groups (when applicable)
 - **Target Status**: Status to apply when rule conditions are met
 - **Evaluation Logic**: How to combine rule conditions
 - **Override Status**: Force the target status without evaluating requirements
@@ -30,9 +29,8 @@ See [User Journey Summary](./user-journey-summary.md) for the end-to-end flow.
 ### From Status Rules Engine Component
 
 1. Navigate to the page containing the **Status Rules Engine** component
-2. Select a **Vendor Program Group**
-3. Select a **Requirement Group**
-4. Click **Load Rules** to view existing rules
+2. Select a **Vendor Program Group** (if prompted)
+3. Click **Load Rules** to view existing rules
 
 ### From Custom Objects
 
@@ -49,8 +47,7 @@ See [User Journey Summary](./user-journey-summary.md) for the end-to-end flow.
 2. Click **New**
 3. Fill in required fields:
    - **Name**: Descriptive name (e.g., "Approval Rules for Standard Programs")
-   - **Vendor Program Group**: Select the program group
-   - **Requirement Group**: Select the requirement group
+   - **Vendor Program Group**: Select the program group (if applicable)
    - **Target Onboarding Status**: Status to set (e.g., "Approved")
    - **Override Status** (optional): Force the target status without evaluating requirements
    - **Rule Evaluation Order** (optional): Sequence for evaluation within the program group
@@ -124,9 +121,8 @@ This should be reserved for exceptional cases where a Dealer should pass even wh
 
 ### Using Status Rules Engine Component
 
-1. **Select Groups**:
-   - Choose Vendor Program Group
-   - Choose Requirement Group
+1. **Select Group**:
+   - Choose Vendor Program Group (if applicable)
    - Click **Load Rules**
 
 2. **View Rules**:
@@ -202,7 +198,7 @@ This should be reserved for exceptional cases where a Dealer should pass even wh
 - [ ] Rule conditions are correctly configured
 - [ ] Evaluation logic matches requirements
 - [ ] Target status is correct
-- [ ] Rules are linked to correct groups
+- [ ] Rules are linked to the correct Vendor Program Group (if applicable)
 - [ ] Test with actual requirement updates
 
 ## Best Practices
@@ -212,7 +208,7 @@ This should be reserved for exceptional cases where a Dealer should pass even wh
 3. **Test Thoroughly**: Test rules with various requirement combinations
 4. **Document Logic**: Add descriptions explaining rule purpose
 5. **Start Simple**: Begin with ALL or ANY before using CUSTOM
-6. **One Target Per Group**: Avoid multiple rules engines with same target for same groups
+6. **One Target Per Group**: Avoid multiple rules engines with the same target for the same vendor program group
 
 ## Troubleshooting
 
@@ -220,7 +216,6 @@ This should be reserved for exceptional cases where a Dealer should pass even wh
 
 **Solutions**:
 - Verify rules engine is active
-- Check that requirement groups match
 - Ensure vendor program groups match
 - Verify rule conditions are correct
 - Check that requirements exist and are linked
@@ -237,8 +232,8 @@ This should be reserved for exceptional cases where a Dealer should pass even wh
 ### Issue: Rules Not Appearing
 
 **Solutions**:
-- Verify groups are selected correctly
-- Check that rules engines exist for selected groups
+- Verify vendor program group selection is correct
+- Check that rules engines exist for the selected vendor program group
 - Ensure you have read permissions
 - Try refreshing the component
 - Check that rules are not filtered out
@@ -249,4 +244,3 @@ This should be reserved for exceptional cases where a Dealer should pass even wh
 - [Managing Requirements](./managing-requirements.md)
 - [Status Evaluation](../processes/status-evaluation.md)
 - [Configuration Guide](../setup/configuration.md)
-

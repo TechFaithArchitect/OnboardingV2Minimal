@@ -72,7 +72,7 @@ The onboarding system follows a three-layer architecture pattern that separates 
 **Key Consolidated Domain Services:**
 
 - `VendorDomainService` - Vendor, VendorProgram, VendorProgramGroup operations
-- `RequirementDomainService` - VendorProgramRequirement, VendorProgramRequirementGroup operations
+- `RequirementDomainService` - VendorProgramRequirement operations
 - `CommunicationDomainService` - CommunicationTemplate, RecipientGroup operations
 - `VendorOnboardingService` - Vendor eligibility and onboarding logic (with LWC/Flow adapters)
 - `EmailSyncDomainService` - Email template and org-wide email synchronization
@@ -87,7 +87,6 @@ The onboarding system follows a three-layer architecture pattern that separates 
 - `OnboardingAccessService` - Ownership and view filter resolution
 - `OnboardingDashboardFilterService` - Dashboard filter logic
 - `OnboardingBlockingDetectionService` - Blocking and at-risk detection
-- `OnboardingRequirementSetService` - Requirement Set operations
 - `StatusRulesEngineService` - Status Rules Engine operations
 
 **Utility Classes:**

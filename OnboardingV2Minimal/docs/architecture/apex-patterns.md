@@ -460,17 +460,16 @@ public with sharing class OnboardingAppActivationService {
 
 ### Registry Pattern
 
-Validation rules are registered in a central registry:
+Validation rules are registered in a central registry. MVP V2 trims legacy recipient-group rules; the registry only includes objects still enforced by custom validation.
 
 ```apex
 public class OnboardingAppRuleRegistry {
   public static Map<String, List<OnboardingAppValidationRule>> getRules() {
     Map<String, List<OnboardingAppValidationRule>> rules = new Map<String, List<OnboardingAppValidationRule>>();
     rules.put(
-      'Vendor_Program_Recipient_Group__c',
+      'Vendor_Program_Group_Member__c',
       new List<OnboardingAppValidationRule>{
-        new RequireParentVersionOnActivationRule(),
-        new OnlyOneActiveRecGrpPerPrgrmRule()
+        new OnlyOneTargetProgramInGroupRule()
       }
     );
     return rules;
@@ -514,10 +513,7 @@ The following classes are in the root directory but should be moved:
    - `OnboardingAppRuleEngineHandler.cls`
 
 5. **Validation Rules** (should be in `rules/` or `validation/`):
-   - `RequireParentVersionOnActivationRule.cls`
-   - `OnlyOneActiveRecGrpPerPrgrmRule.cls`
-   - `RecipientAndProgramMustBeActiveRule.cls`
-   - `PreventDupRecGrpAssignmentRule.cls`
+   - `OnlyOneTargetProgramInGroupRule.cls`
    - `NoDuplicateRecipientGroupAssignmentRule.cls`
 
 ### Simplified Architecture Notes

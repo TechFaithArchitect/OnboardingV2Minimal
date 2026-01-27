@@ -25,35 +25,10 @@
             <div class="slds-grid slds-gutter slds-m-bottom_medium">
                 <div class="slds-col slds-size_1-of-1">
                     <lightning-button 
-                        label="Start Onboarding Vendor Program" 
-                        variant="brand" 
-                        icon-name="utility:add"
-                        onclick={handleStartVendorProgramOnboarding}
-                        class="slds-m-right_small">
-                    </lightning-button>
-                    <lightning-button 
                         label="Start Dealer Onboarding" 
                         variant="brand" 
                         icon-name="utility:user"
                         onclick={handleStartDealerOnboarding}
-                        class="slds-m-right_small">
-                    </lightning-button>
-                    <lightning-button 
-                        label="Sync Component Library" 
-                        variant="neutral" 
-                        icon-name="utility:sync"
-                        onclick={handleSyncComponentLibrary}
-                        disabled={isSyncingComponentLibrary}
-                        title="Populates Onboarding_Component_Library__c with all 14 wizard components"
-                        class="slds-m-right_small">
-                    </lightning-button>
-                    <lightning-button 
-                        label="Initialize Default Process" 
-                        variant="neutral" 
-                        icon-name="utility:flow"
-                        onclick={handleInitializeDefaultProcess}
-                        disabled={isInitializingProcess}
-                        title="Creates the default 'Vendor Program Onboarding' process with all 14 stages if it doesn't exist"
                         class="slds-m-right_small">
                     </lightning-button>
                     <lightning-button 
@@ -112,8 +87,7 @@
                         <lightning-tab label="Vendor Programs" value="programs">
                             <c-onboarding-vendor-program-grid
                                 programs={vendorPrograms}
-                                onviewprogram={handleViewProgram}
-                                onlaunchwizard={handleLaunchWizard}>
+                                onviewprogram={handleViewProgram}>
                             </c-onboarding-vendor-program-grid>
                         </lightning-tab>
 
@@ -201,28 +175,11 @@
     </lightning-card>
 
     <!-- Vendor Program Onboarding Modal -->
-    <template if:true={showVendorProgramModal}>
-        <c-onboarding-vendor-program-wizard
-            onclose={handleVendorProgramModalClose}
-            onlaunchwizard={handleVendorProgramWizardLaunch}>
-        </c-onboarding-vendor-program-wizard>
-    </template>
-
-    <!-- Start Onboarding Modal -->
     <template if:true={showStartModal}>
         <c-onboarding-dealer-onboarding-modal
             eligible-accounts={eligibleAccounts}
             onstart={handleDealerOnboardingStart}
             onclose={handleDealerOnboardingClose}>
         </c-onboarding-dealer-onboarding-modal>
-    </template>
-
-    <!-- Vendor Program Onboarding Wizard Modal -->
-    <template if:true={showWizardModal}>
-        <c-vendor-program-onboarding-wizard-modal
-            vendor-program-id={wizardVendorProgramId}
-            onclose={handleCloseWizardModal}
-            oncomplete={handleWizardComplete}>
-        </c-vendor-program-onboarding-wizard-modal>
     </template>
 </template>

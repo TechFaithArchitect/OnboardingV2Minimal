@@ -68,10 +68,6 @@ for (Communication_Template__c communicationTemplate : templates) {
     // ...
 }
 
-for (Recipient_Group_Member__c recipientGroupMember : members) {
-    // ...
-}
-
 // ❌ INCORRECT
 for (Onboarding_Requirement__c req : requirements) {
 for (Vendor_Program_Requirement__c r : createdRequirements) {
@@ -142,10 +138,6 @@ public static Id createStatusRule(Onboarding_Status_Rule__c onboardingStatusRule
     // ...
 }
 
-public static void applyRecipientGroupMemberDefaults(Recipient_Group_Member__c recipientGroupMember) {
-    // ...
-}
-
 // ❌ INCORRECT
 public static void updateRecord(Vendor_Customization__c record) {
 public static Id createStatusRule(Onboarding_Status_Rule__c rule) {
@@ -197,14 +189,12 @@ Map<String, Communication_Template__c> result = ...;
 // ✅ CORRECT
 Onboarding__c onboardingRecord = [SELECT ...];
 Vendor_Customization__c vendorProgram = programs.get(recipientGroupAssignment.Vendor_Program__c);
-Requirement_Field_Value__c fieldValueRecord = newRecords[0];
 Communication_Template__c communicationTemplate = existing.get(key);
 Onboarding_Requirement__c onboardingRequirement = scope[0];
 
 // ❌ INCORRECT
 Onboarding__c ob = [SELECT ...];
 Vendor_Customization__c prog = programs.get(...);
-Requirement_Field_Value__c rec = newRecords[0];
 Communication_Template__c template = existing.get(key);
 ```
 
@@ -264,7 +254,7 @@ for (Communication_Template__c communicationTemplate : [SELECT ...]) {
     templateMap.put(communicationTemplate.DeveloperName, communicationTemplate);
 }
 
-for (Vendor_Program_Onboarding_Req_Template__c requirementTemplate : templates) {
+for (Onboarding_Requirement__c onboardingRequirement : onboardingRequirements) {
     // ...
 }
 
@@ -274,28 +264,11 @@ for (Database.SaveResult saveResult : saveResults) {
 
 // ❌ INCORRECT
 for (Communication_Template__c rec : [SELECT ...]) {
-for (Vendor_Program_Onboarding_Req_Template__c template : templates) {
+for (Onboarding_Requirement__c req : onboardingRequirements) {
 for (Database.SaveResult r : results) {
 ```
 
 ## Service Layer Variables
-
-### Request/Response Variables
-```apex
-// ✅ CORRECT
-for (RecipientGroupEmailRequestDTO emailRequest : requests) {
-    List<String> emails = RecipientGroupEmailOrchestrator.getEmails(emailRequest.vendorProgramId);
-    emailResultDTOList.add(new RecipientGroupEmailResultDTO(emails));
-}
-
-for (Request validationRequest : requests) {
-    ValidationResult validationResult = validate(validationRequest);
-}
-
-// ❌ INCORRECT
-for (RecipientGroupEmailRequestDTO req : requests) {
-for (Request r : requests) {
-```
 
 ### Processing Variables
 ```apex
@@ -318,10 +291,6 @@ for (SObject sObjectRecord : newList) {
     Id parentVersionId = (Id) sObjectRecord.get('Previous_Version__c');
 }
 
-for (Requirement_Field_Value__c fieldValueRecord : newRecords) {
-    // ...
-}
-
 for (Account accountRecord : newList) {
     Account oldAccountRecord = oldMap.get(accountRecord.Id);
 }
@@ -332,7 +301,6 @@ for (AggregateResult aggregateResult : Database.query(q)) {
 
 // ❌ INCORRECT
 for (SObject record : newList) {
-for (Requirement_Field_Value__c rec : newRecords) {
 for (Account acc : newList) {
 for (AggregateResult ar : Database.query(q)) {
 ```
@@ -387,12 +355,10 @@ for (EmailTemplateDTO dto : templates) {
 // ✅ CORRECT
 Onboarding_Requirement__c onboardingRequirement = ...;
 Vendor_Program_Requirement__c vendorProgramRequirement = ...;
-Vendor_Program_Onboarding_Req_Template__c requirementTemplate = ...;
 
 // ❌ INCORRECT
 Onboarding_Requirement__c req = ...;
 Vendor_Program_Requirement__c r = ...;
-Vendor_Program_Onboarding_Req_Template__c template = ...;
 ```
 
 ### Vendor Program Variables

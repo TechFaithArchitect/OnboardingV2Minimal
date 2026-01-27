@@ -27,7 +27,7 @@ The codebase has been simplified to reduce complexity and improve maintainabilit
 ### 4. Domain Services Consolidated
 
 - **VendorDomainService**: Consolidates VendorService, VendorProgramService, VendorProgramGroupService
-- **RequirementDomainService**: Consolidates VendorProgramRequirementService, VendorProgramRequirementGroupService
+- **RequirementDomainService**: Consolidates VendorProgramRequirementService
 - **CommunicationDomainService**: Consolidates CommunicationTemplateService, RecipientGroupService
 - **VendorOnboardingService**: Consolidates 6 adapter/service classes
 - **EmailSyncDomainService**: Consolidates EmailTemplateSyncService, OrgWideEmailSyncService
@@ -53,7 +53,6 @@ The codebase has been simplified to reduce complexity and improve maintainabilit
 - ❌ `VendorProgramService` → Use `VendorDomainService`
 - ❌ `VendorProgramGroupService` → Use `VendorDomainService`
 - ❌ `VendorProgramRequirementService` → Use `RequirementDomainService`
-- ❌ `VendorProgramRequirementGroupService` → Use `RequirementDomainService`
 - ❌ `CommunicationTemplateService` → Use `CommunicationDomainService`
 - ❌ `RecipientGroupService` → Use `CommunicationDomainService`
 - ❌ `EmailTemplateSyncService` → Use `EmailSyncDomainService`

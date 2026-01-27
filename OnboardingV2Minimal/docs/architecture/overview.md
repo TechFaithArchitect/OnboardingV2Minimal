@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Onboarding V2 system is a comprehensive, metadata-driven onboarding framework built on Salesforce. It provides a flexible, configurable solution for managing vendor program onboarding processes with full auditability, progress tracking, and dynamic flow rendering.
+The Onboarding V2 system is a focused, rules-driven onboarding workflow built on Salesforce. It provides a configurable solution for managing dealer onboarding against vendor program requirements and status rules, with auditability and override controls.
 
 ## Business Goals and User Roles
 
@@ -11,7 +11,7 @@ Onboarding V2 manages the lifecycle of onboarding a Dealer (Account) into a spec
 ### Internal User Roles
 
 - Program Specialists (Sales): Internal sales selling a program to a Dealer (Account); initiate onboarding from Accounts and Opportunities, ensure Account Contacts and roles are set, and link Dealers to Vendor Programs.
-- Program Managers: Internal owners selling us to Vendors so we can offer their Vendor Program; configure vendor program requirements, requirement groups, rules engines, and stage dependencies; manage versioned program changes.
+- Program Managers: Internal owners selling us to Vendors so we can offer their Vendor Program; configure vendor program requirements and rules engines; manage versioned program changes.
 - Onboarding Managers (Account Services): Drive requirement completion with Dealers, update requirement statuses, and monitor progress to completion.
 - Compliance Managers: Maintain compliance-related requirements and rule changes effective on specific dates; audit status and requirement changes.
 - Finance Managers: Configure contracts/agreements and payment structures; ensure program requirements reflect new agreements and dealers are updated.
@@ -44,18 +44,15 @@ The system follows a **layered architecture pattern** with three main layers:
 
 The Application Layer handles user interactions and orchestrates business processes:
 
-- **Lightning Web Components (LWC)**: Dynamic UI components for onboarding flows
+- **Lightning Web Components (LWC)**: Focused UI components for onboarding workflows
 - **Salesforce Flows**: High-level process automation (e.g., `APP_Onboarding.flow`)
 - **Record Pages**: Lightning pages that host onboarding components
 
 **Key Components:**
 
 - `onboardingHomeDashboard` - Central home page dashboard for onboarding overview
-- `onboardingFlowEngine` - Main flow controller
-- `onboardingStageRenderer` - Dynamic component renderer
-- `vendorProgramOnboardingFlow` - Vendor-specific wrapper
+- `accountProgramOnboardingModal` - Entry point for creating onboarding from Account
 - `onboardingRequirementsPanel` - Requirements management UI
-- `onboardingStatusRulesEngine` - Rules configuration UI
 
 ### Service Layer
 
@@ -70,14 +67,12 @@ The Service Layer contains consolidated domain services with business logic and 
 **Key Consolidated Domain Services:**
 
 - `VendorDomainService` - Vendor, VendorProgram, VendorProgramGroup operations
-- `RequirementDomainService` - VendorProgramRequirement, VendorProgramRequirementGroup operations
-- `CommunicationDomainService` - CommunicationTemplate, RecipientGroup operations
-- `VendorOnboardingService` - Vendor eligibility and onboarding logic
-- `EmailSyncDomainService` - Email template and org-wide email synchronization
+- `RequirementDomainService` - VendorProgramRequirement operations
+- `CommunicationDomainService` - CommunicationTemplate operations
+- `StatusRulesEngineService` - Status rules engine operations
 
 **Key Business Logic Services:**
 
-- `OnboardingApplicationService` - Process and stage management
 - `OnboardingRulesService` - Rules engine data access
 - `OnboardingStatusEvaluator` - Status evaluation logic
 - `OnboardingAppActivationService` - Activation workflow (with @AuraEnabled)
@@ -97,15 +92,13 @@ The Domain Layer handles data operations and domain-specific logic:
 
 ## Key Design Patterns
 
-### 1. Metadata-Driven Configuration
+### 1. Rules-Driven Configuration
 
-The system uses Custom Objects to define onboarding processes dynamically:
+The system uses Custom Objects to define onboarding evaluation dynamically:
 
-- `Onboarding_Application_Process__c` - Defines reusable onboarding flows
-- `Onboarding_Application_Stage__c` - Defines stages within a process
-- `Onboarding_Component_Library__c` - Maps LWC components to metadata
-- `Onboarding_Application_Progress__c` - Tracks user progress
-- `Onboarding_Application_Stage_Completion__c` - Audit log of completed stages
+- `Vendor_Program_Requirement__c` - Requirements on vendor programs
+- `Onboarding_Status_Rules_Engine__c` - Rules engine definitions
+- `Onboarding_Status_Rule__c` - Individual rule conditions
 
 ### 2. Rules Engine Pattern
 
@@ -139,9 +132,8 @@ The system uses the **Campaign/Campaign Member** pattern (similar to Salesforce 
 Vendor_Program_Group__c (Parent)    Vendor_Program_Group_Member__c (Junction)
 ├─ Name                              ├─ Vendor_Program_Group__c (lookup)
 ├─ Active__c                         ├─ Required_Program__c (lookup to Vendor_Customization__c)
-├─ Status__c                         ├─ Inherited_Program_Requirement_Group__c (lookup)
-└─ Previous_Version__c               ├─ Is_Target__c (member attribute)
-                                     └─ Active__c (member attribute)
+├─ Status__c                         ├─ Is_Target__c (member attribute)
+└─ Previous_Version__c               └─ Active__c (member attribute)
 ```
 
 **Benefits:**
@@ -154,8 +146,6 @@ Vendor_Program_Group__c (Parent)    Vendor_Program_Group_Member__c (Junction)
 **Objects Using This Pattern:**
 
 - `Vendor_Program_Group__c` / `Vendor_Program_Group_Member__c`
-- `Vendor_Program_Requirement_Group__c` / `Vendor_Program_Requirement_Group_Member__c`
-- `Recipient_Group__c` / `Recipient_Group_Member__c`
 
 ### 5. Versioning Pattern
 
@@ -181,8 +171,6 @@ The system implements versioning to support collaborative, multi-user workflows 
 **Objects Supporting Versioning:**
 
 - `Vendor_Customization__c` (Vendor Programs)
-- `Vendor_Program_Recipient_Group__c`
-- `Vendor_Program_Onboarding_Req_Template__c`
 - Other objects with `Status__c`, `Previous_Version__c`, `Active__c` fields
 
 **Use Case:**
@@ -190,7 +178,7 @@ Multiple users can work on different parts of onboarding simultaneously:
 
 - User A creates a Draft vendor program
 - User B adds requirements to the Draft
-- User C configures recipient groups
+- User C configures requirements and rules
 - When ready, the Draft is activated, becoming the Active version
 - Previous Active version is automatically deactivated
 
@@ -210,53 +198,20 @@ Business logic is organized into consolidated domain services:
 - Services delegate to repositories for all data access
 - Thin orchestrator and facade layers have been eliminated
 
-### 7. Base Class Pattern (LWC)
-
-The Vendor Program Onboarding Wizard uses a base class pattern to eliminate code duplication:
-
-- **Base Class**: `onboardingStepBase` - Provides common functionality for all step components
-- **Inheritance**: All 14 wizard step components extend `OnboardingStepBase`
-- **Benefits**:
-  - Eliminates ~700+ lines of duplicate code
-  - Standardizes navigation, validation, and event handling
-  - Ensures consistency across all steps
-  - Makes adding new steps easier
-
-**Key Features:**
-
-- Footer navigation event handling
-- Validation state dispatching
-- Toast notification utility
-- Dynamic card title generation
-- Standardized event dispatching
-
-**Required Overrides:**
-
-- `get canProceed()` - Validation state
-- `proceedToNext()` - Next navigation with data
-- `stepName` - Step name for card title
 
 ## Data Flow
 
-### Onboarding Flow Execution
+### Onboarding Creation Flow
 
 User Action
 ↓
-vendorProgramOnboardingFlow (LWC)
+accountProgramOnboardingModal (LWC)
 ↓
-OnboardingApplicationService.getProcessIdForVendorProgram()
+VendorDomainService + RequirementDomainService
 ↓
-onboardingFlowEngine (LWC)
+Onboarding__c + Onboarding_Requirement__c created
 ↓
-OnboardingApplicationService.getStagesForProcess()
-↓
-onboardingStageRenderer (LWC) - Dynamically renders stage components
-↓
-Stage-specific LWC (e.g., vendorProgramOnboardingVendor)
-↓
-VendorDomainService.searchVendors() - Direct service call
-↓
-OnboardingApplicationService.saveProgress() - Persists progress
+onboardingHomeDashboard / onboardingRequirementsPanel surfaces progress
 
 ### Status Evaluation Flow
 

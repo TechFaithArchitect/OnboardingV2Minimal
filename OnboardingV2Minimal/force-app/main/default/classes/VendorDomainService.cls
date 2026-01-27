@@ -188,15 +188,13 @@ public with sharing class VendorDomainService {
      * @param vendorProgramId The vendor program ID
      * @param vendorId The vendor ID
      * @param vendorProgramGroupId The vendor program group ID
-     * @param vendorProgramRequirementGroupId The requirement group ID
      * @throws AuraHandledException if required IDs are null
      */
     @AuraEnabled
     public static void finalizeVendorProgram(
         Id vendorProgramId, 
         Id vendorId, 
-        Id vendorProgramGroupId, 
-        Id vendorProgramRequirementGroupId
+        Id vendorProgramGroupId
     ) {
         ValidationHelper.requireId(vendorProgramId, 'Vendor Program ID');
         ValidationHelper.requireId(vendorId, 'Vendor ID');
@@ -204,8 +202,7 @@ public with sharing class VendorDomainService {
         VendorOnboardingWizardRepository.linkVendorProgramToGroups(
             vendorProgramId,
             vendorId,
-            vendorProgramGroupId,
-            vendorProgramRequirementGroupId
+            vendorProgramGroupId
         );
     }
     
@@ -219,18 +216,6 @@ public with sharing class VendorDomainService {
     public static Id getVendorProgramGroupForVendorProgram(Id vendorProgramId) {
         ValidationHelper.requireId(vendorProgramId, 'Vendor Program ID');
         return VendorOnboardingWizardRepository.getVendorProgramGroupForVendorProgram(vendorProgramId);
-    }
-    
-    /**
-     * Gets the requirement group ID for a vendor program
-     * @param vendorProgramId The vendor program ID
-     * @return The requirement group ID, or null if not found
-     * @throws AuraHandledException if vendorProgramId is null
-     */
-    @AuraEnabled(cacheable=true)
-    public static Id getVendorProgramRequirementGroupForVendorProgram(Id vendorProgramId) {
-        ValidationHelper.requireId(vendorProgramId, 'Vendor Program ID');
-        return VendorOnboardingWizardRepository.getVendorProgramRequirementGroupForVendorProgram(vendorProgramId);
     }
     
     // ============================================

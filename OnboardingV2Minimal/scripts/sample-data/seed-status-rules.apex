@@ -6,7 +6,6 @@
  * 
  * Prerequisites:
  * - Vendor Program Group must exist
- * - Vendor Program Requirement Group must exist
  * - Vendor Program Requirements must exist (or create them first)
  * 
  * Usage:
@@ -42,29 +41,7 @@ if (existingGroups.isEmpty()) {
     System.debug('Using existing program group: ' + programGroup.Id);
 }
 
-// Step 2: Get Requirement Group (or create if doesn't exist)
-Vendor_Program_Requirement_Group__c requirementGroup;
-List<Vendor_Program_Requirement_Group__c> existingReqGroups = [
-    SELECT Id, Name 
-    FROM Vendor_Program_Requirement_Group__c 
-    WHERE Name = 'Sample Requirement Group' 
-    LIMIT 1
-];
-
-if (existingReqGroups.isEmpty()) {
-    requirementGroup = new Vendor_Program_Requirement_Group__c(
-        Name = 'Sample Requirement Group',
-        Status__c = 'Active',
-        Active__c = true
-    );
-    insert requirementGroup;
-    System.debug('Created requirement group: ' + requirementGroup.Id);
-} else {
-    requirementGroup = existingReqGroups[0];
-    System.debug('Using existing requirement group: ' + requirementGroup.Id);
-}
-
-// Step 3: Get or Create Vendor Program Requirements
+// Step 2: Get or Create Vendor Program Requirements
 List<Vendor_Program_Requirement__c> requirements = [
     SELECT Id, Name 
     FROM Vendor_Program_Requirement__c 
@@ -108,11 +85,10 @@ if (requirements.isEmpty()) {
     System.debug('Using existing requirements: ' + requirements.size());
 }
 
-// Step 4: Create Rules Engine with ALL Logic
+// Step 3: Create Rules Engine with ALL Logic
 Onboarding_Status_Rules_Engine__c rulesEngineAll = new Onboarding_Status_Rules_Engine__c(
     Name = 'Sample Rules Engine - ALL Logic',
     Vendor_Program_Group__c = programGroup.Id,
-    Requirement_Group__c = requirementGroup.Id,
     Target_Onboarding_Status__c = 'Approved',
     Evaluation_Logic__c = 'ALL',
     Active__c = true
@@ -120,7 +96,7 @@ Onboarding_Status_Rules_Engine__c rulesEngineAll = new Onboarding_Status_Rules_E
 insert rulesEngineAll;
 System.debug('Created rules engine (ALL): ' + rulesEngineAll.Id);
 
-// Step 5: Create Rules for ALL Logic Engine
+// Step 4: Create Rules for ALL Logic Engine
 List<Onboarding_Status_Rule__c> rulesAll = new List<Onboarding_Status_Rule__c>{
     new Onboarding_Status_Rule__c(
         Name = 'Rule 1 - Requirement 1 Complete',
@@ -140,11 +116,10 @@ List<Onboarding_Status_Rule__c> rulesAll = new List<Onboarding_Status_Rule__c>{
 insert rulesAll;
 System.debug('Created ' + rulesAll.size() + ' rules for ALL logic engine');
 
-// Step 6: Create Rules Engine with ANY Logic
+// Step 5: Create Rules Engine with ANY Logic
 Onboarding_Status_Rules_Engine__c rulesEngineAny = new Onboarding_Status_Rules_Engine__c(
     Name = 'Sample Rules Engine - ANY Logic',
     Vendor_Program_Group__c = programGroup.Id,
-    Requirement_Group__c = requirementGroup.Id,
     Target_Onboarding_Status__c = 'In Process',
     Evaluation_Logic__c = 'ANY',
     Active__c = true
@@ -152,7 +127,7 @@ Onboarding_Status_Rules_Engine__c rulesEngineAny = new Onboarding_Status_Rules_E
 insert rulesEngineAny;
 System.debug('Created rules engine (ANY): ' + rulesEngineAny.Id);
 
-// Step 7: Create Rules for ANY Logic Engine
+// Step 6: Create Rules for ANY Logic Engine
 List<Onboarding_Status_Rule__c> rulesAny = new List<Onboarding_Status_Rule__c>{
     new Onboarding_Status_Rule__c(
         Name = 'Rule 1 - Requirement 1 or 2 Complete',
@@ -172,11 +147,10 @@ List<Onboarding_Status_Rule__c> rulesAny = new List<Onboarding_Status_Rule__c>{
 insert rulesAny;
 System.debug('Created ' + rulesAny.size() + ' rules for ANY logic engine');
 
-// Step 8: Create Rules Engine with CUSTOM Logic
+// Step 7: Create Rules Engine with CUSTOM Logic
 Onboarding_Status_Rules_Engine__c rulesEngineCustom = new Onboarding_Status_Rules_Engine__c(
     Name = 'Sample Rules Engine - CUSTOM Logic',
     Vendor_Program_Group__c = programGroup.Id,
-    Requirement_Group__c = requirementGroup.Id,
     Target_Onboarding_Status__c = 'Ready for Review',
     Evaluation_Logic__c = 'CUSTOM',
     Custom_Evaluation_Logic__c = '(1 AND 2) OR 3',
@@ -185,7 +159,7 @@ Onboarding_Status_Rules_Engine__c rulesEngineCustom = new Onboarding_Status_Rule
 insert rulesEngineCustom;
 System.debug('Created rules engine (CUSTOM): ' + rulesEngineCustom.Id);
 
-// Step 9: Create Rules for CUSTOM Logic Engine
+// Step 8: Create Rules for CUSTOM Logic Engine
 List<Onboarding_Status_Rule__c> rulesCustom = new List<Onboarding_Status_Rule__c>{
     new Onboarding_Status_Rule__c(
         Name = 'Rule 1 - Requirement 1',
@@ -217,4 +191,3 @@ System.debug('Rules Engine (ALL) ID: ' + rulesEngineAll.Id);
 System.debug('Rules Engine (ANY) ID: ' + rulesEngineAny.Id);
 System.debug('Rules Engine (CUSTOM) ID: ' + rulesEngineCustom.Id);
 System.debug('Total Rules Created: ' + (rulesAll.size() + rulesAny.size() + rulesCustom.size()));
-

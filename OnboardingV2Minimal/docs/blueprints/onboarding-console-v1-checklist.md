@@ -48,10 +48,6 @@ Milestone 2 — Apex Services (Invocable + Services)
 Milestone 3 — LWC (Experience page + Internal app)
 Dealer Experience page LWCs
 
-- [x] lwc/progressHeader
-  - [x] Inputs: progressPercent, riskBadge, activePrograms[]
-  - [x] Renders SLA/risk badges
-  - [x] Jest tests
 - [x] lwc/requirementChecklist
   - [x] Apex wire to fetch grouped stages/requirements (OnboardingRequirementsPanelController.getRequirements)
   - [x] Renders by stage with status, due date, risk
@@ -77,13 +73,6 @@ Onboarding Rep (Lightning App)
   - [x] Calls OverrideRequirementDueDate (via new controller)
   - [x] Jest tests
 
-Program Manager (Lightning App)
-
-- [x] lwc/programSetupWizardContainer
-  - [x] Hosts Screen Flow and runs ValidateProgramSetup
-  - [x] Shows validation summary panel
-  - [x] Jest tests
-
 Milestone 4 — Flows
 
 - [x] Dealer Enrollment Flow (Screen Flow)
@@ -94,9 +83,6 @@ Milestone 4 — Flows
 - [x] Rep Override Due Date Flow (optional if not using LWC form)
   - [x] Validates permissions and reason
   - [x] Invokes OnboardingRequirementDueDateController.updateDueDate
-- [x] Program Setup Wizard Flow
-  - [x] Basics -> Eligibility -> Requirements (from templates) -> Stage/SLAs -> Review -> Activate
-  - [x] Validate step using existing validation services
 
 Milestone 5 — Pages, Navigation, and Permissions
 

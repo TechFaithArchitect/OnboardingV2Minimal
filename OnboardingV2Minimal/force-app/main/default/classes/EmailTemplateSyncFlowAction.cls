@@ -12,7 +12,7 @@ public with sharing class EmailTemplateSyncFlowAction {
         List<Result> syncResultList = new List<Result>();
         Boolean isManual = !requests.isEmpty() && requests[0].runAsManual;
 
-        EmailSyncDomainService.runEmailTemplateSync(isManual);
+        EmailTemplateSyncOrchestrator.run(isManual);
 
         Result syncResult = new Result();
         syncResult.message = 'Sync completed manually.';

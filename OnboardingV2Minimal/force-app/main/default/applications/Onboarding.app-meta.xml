@@ -23,30 +23,13 @@
     <tabs>standard-Contract</tabs>
     <tabs>echosign_dev1__SIGN_Agreement__c</tabs>
     <tabs>Vendor_Program_Requirement__c</tabs>
-    <tabs>Vendor_Program_Requirement_Group__c</tabs>
-    <tabs>Vendor_Program_Requirement_Group_Member__c</tabs>
-    <tabs>Vendor_Program_Onboarding_Req_Template__c</tabs>
     <tabs>Onboarding_Requirement__c</tabs>
     <tabs>Communication_Template__c</tabs>
-    <tabs>Sync_Log__c</tabs>
     <tabs>Email_Communication_Log__c</tabs>
-    <tabs>Recipient_Group__c</tabs>
-    <tabs>Recipient_Group_Member__c</tabs>
     <tabs>Territory_Role_Assignment__c</tabs>
-    <tabs>Onboarding_Requirement_Set__c</tabs>
-    <tabs>Onboarding_Requirement_Dependency__c</tabs>
     <tabs>Onboarding_Status_Rules_Engine__c</tabs>
     <tabs>Onboarding_Status_Rule__c</tabs>
-    <tabs>Onboarding_Application_Process__c</tabs>
-    <tabs>Onboarding_Application_Stage__c</tabs>
-    <tabs>Onboarding_Application_Progress__c</tabs>
-    <tabs>Onboarding_Component_Library__c</tabs>
-    <tabs>Onboarding_Application_Stage_Completion__c</tabs>
-    <tabs>Onboarding_Application_Stage_Dependency__c</tabs>
-    <tabs>Onboarding_App_Stage_Dependency_Member__c</tabs>
     <tabs>Required_Credential__c</tabs>
-    <tabs>Requirement_Set_Template__c</tabs>
-    <tabs>Validation_Failure__c</tabs>
     <tabs>Onboarding_Next_Step_Override__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Onboarding_UtilityBar</utilityBar>
@@ -58,34 +41,7 @@
             <tab>Email_Communication_Log__c</tab>
         </mappings>
         <mappings>
-            <tab>Onboarding_App_Stage_Dependency_Member__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Application_Process__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Application_Progress__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Application_Stage_Completion__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Application_Stage_Dependency__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Application_Stage__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Component_Library__c</tab>
-        </mappings>
-        <mappings>
             <tab>Onboarding_Next_Step_Override__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Requirement_Dependency__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Requirement_Set__c</tab>
         </mappings>
         <mappings>
             <tab>Onboarding_Requirement__c</tab>
@@ -101,37 +57,13 @@
             <tab>Onboarding__c</tab>
         </mappings>
         <mappings>
-            <tab>Recipient_Group_Member__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Recipient_Group__c</tab>
-        </mappings>
-        <mappings>
             <tab>Required_Credential__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Requirement_Set_Template__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Sync_Log__c</tab>
         </mappings>
         <mappings>
             <tab>Territory_Role_Assignment__c</tab>
         </mappings>
         <mappings>
-            <tab>Validation_Failure__c</tab>
-        </mappings>
-        <mappings>
             <tab>Vendor_Customization__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Vendor_Program_Onboarding_Req_Template__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Vendor_Program_Requirement_Group_Member__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Vendor_Program_Requirement_Group__c</tab>
         </mappings>
         <mappings>
             <tab>Vendor_Program_Requirement__c</tab>

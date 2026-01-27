@@ -70,27 +70,17 @@ Vendor_Program_Group__c programGroup = new Vendor_Program_Group__c(
 insert programGroup;
 System.debug('Created vendor program group: ' + programGroup.Id);
 
-// Step 4: Create Vendor Program Requirement Group
-Vendor_Program_Requirement_Group__c requirementGroup = new Vendor_Program_Requirement_Group__c(
-    Name = 'Sample Requirement Group',
-    Status__c = 'Active',
-    Active__c = true
-);
-insert requirementGroup;
-System.debug('Created requirement group: ' + requirementGroup.Id);
-
-// Step 5: Create Vendor Customization (Vendor Program)
+// Step 4: Create Vendor Customization (Vendor Program)
 Vendor_Customization__c vendorProgram = new Vendor_Customization__c(
     Name = 'Sample Vendor Program',
     Vendor__c = vendor.Id,
     Vendor_Program_Group__c = programGroup.Id,
-    Vendor_Program_Requirement_Group__c = requirementGroup.Id,
     Active__c = true
 );
 insert vendorProgram;
 System.debug('Created vendor program: ' + vendorProgram.Id);
 
-// Step 6: Create Vendor Program Group Member
+// Step 5: Create Vendor Program Group Member
 Vendor_Program_Group_Member__c groupMember = new Vendor_Program_Group_Member__c(
     Name = 'Sample Group Member',
     Vendor_Program_Group__c = programGroup.Id,
@@ -101,28 +91,8 @@ Vendor_Program_Group_Member__c groupMember = new Vendor_Program_Group_Member__c(
 insert groupMember;
 System.debug('Created group member: ' + groupMember.Id);
 
-// Step 7: Link to Onboarding Process (if process exists)
-List<Onboarding_Application_Process__c> processes = [
-    SELECT Id, Name 
-    FROM Onboarding_Application_Process__c 
-    WHERE Active__c = true 
-    LIMIT 1
-];
-
-if (!processes.isEmpty()) {
-    Onboarding_Application_Progress__c progress = new Onboarding_Application_Progress__c(
-        Onboarding_Application_Process__c = processes[0].Id,
-        Vendor_Program__c = vendorProgram.Id,
-        Current_Stage__c = null
-    );
-    insert progress;
-    System.debug('Linked vendor program to onboarding process: ' + processes[0].Name);
-}
-
 System.debug('✓ Vendor program setup complete!');
 System.debug('Vendor Account ID: ' + vendorAccount.Id);
 System.debug('Vendor ID: ' + vendor.Id);
 System.debug('Vendor Program ID: ' + vendorProgram.Id);
 System.debug('Program Group ID: ' + programGroup.Id);
-System.debug('Requirement Group ID: ' + requirementGroup.Id);
-

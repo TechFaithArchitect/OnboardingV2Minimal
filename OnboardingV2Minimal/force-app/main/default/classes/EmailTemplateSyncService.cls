@@ -42,13 +42,11 @@ public with sharing class EmailTemplateSyncService {
                 Communication_Template__c existing = existingComms.get(emailTemplateDTO.developerName);
                 if (emailTemplateDTO.hasChanges(existing)) {
                     Communication_Template__c updated = emailTemplateDTO.toSObject(existing);
-                    updated.Sync_Job__c = jobId;
                     communicationTemplatesToUpdate.add(updated);
                     summary.updatedCount++;
                 }
             } else {
                 Communication_Template__c newRec = emailTemplateDTO.toSObject();
-                newRec.Sync_Job__c = jobId;
                 communicationTemplatesToInsert.add(newRec);
                 summary.insertedCount++;
             }

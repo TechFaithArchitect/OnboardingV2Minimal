@@ -21,12 +21,15 @@ For each LWC component used in stages:
 - `vendorProgramOnboardingVendorProgramSearchOrCreate`
 - `vendorProgramOnboardingVendorProgramCreate`
 - `vendorProgramOnboardingVendorProgramGroup`
-- `vendorProgramOnboardingVendorProgramRequirementGroup`
 - `vendorProgramOnboardingVendorProgramRecipientGroup`
 - `vendorProgramOnboardingRecipientGroup`
 - `vendorProgramOnboardingRecipientGroupMembers`
 - `vendorProgramOnboardingRequiredCredentials`
 - `vendorProgramOnboardingTrainingRequirements`
+- `vendorProgramOnboardingStatusRulesEngine`
+- `vendorProgramOnboardingStatusRuleBuilder`
+- `vendorProgramOnboardingCommunicationTemplate`
+- `vendorProgramOnboardingFinalize`
 
 ### Step 2: Create Onboarding Process
 
@@ -50,13 +53,12 @@ For each LWC component used in stages:
 **Example Stage Configuration:**
 1. Stage 1: Vendor Selection (Order: 1)
 2. Stage 2: Program Search/Create (Order: 2)
-3. Stage 3: Program Group Assignment (Order: 3)
-4. Stage 4: Requirement Group Assignment (Order: 4)
-5. Stage 5: Recipient Group Assignment (Order: 5)
-6. Stage 6: Recipient Group Configuration (Order: 6)
-7. Stage 7: Add Members (Order: 7)
-8. Stage 8: Required Credentials (Order: 8)
-9. Stage 9: Training Requirements (Order: 9)
+3. Stage 3: Required Credentials (Order: 3)
+4. Stage 4: Training Requirements (Order: 4)
+5. Stage 5: Status Rules Engine (Order: 5)
+6. Stage 6: Recipient Groups (Order: 6)
+7. Stage 7: Communication Template (Order: 7)
+8. Stage 8: Finalize (Order: 8)
 
 ### Step 4: Assign Process to Vendor Program
 

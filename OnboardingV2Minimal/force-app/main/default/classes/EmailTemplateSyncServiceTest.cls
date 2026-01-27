@@ -29,7 +29,7 @@ private class EmailTemplateSyncServiceTest {
         EmailCatalogCMDTRepository.setMockCatalogs(new Map<String, Email_Template_Catalog__mdt>());
 
         Test.startTest();
-        EmailSyncDomainService service = new EmailSyncDomainService();
+        EmailTemplateSyncService service = new EmailTemplateSyncService();
         EmailSyncSummaryDTO summary = service.syncAllTemplates(null);
         Test.stopTest();
 
@@ -45,7 +45,7 @@ private class EmailTemplateSyncServiceTest {
         EmailCatalogCMDTRepository.setMockCatalogs(new Map<String, Email_Template_Catalog__mdt>());
 
         Test.startTest();
-        EmailSyncDomainService service = new EmailSyncDomainService();
+        EmailTemplateSyncService service = new EmailTemplateSyncService();
         EmailSyncSummaryDTO summary = service.syncAllTemplates(null);
         Test.stopTest();
 

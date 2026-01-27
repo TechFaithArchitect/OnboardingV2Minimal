@@ -52,25 +52,6 @@
             </lightning-button>
         </template>
 
-        <template if:true={invalidFields.length}>
-            <div class="slds-box slds-m-top_medium">
-                <p class="slds-text-heading_small slds-m-bottom_small">Fields Needing Correction</p>
-                <template for:each={invalidFields} for:item="inv">
-                    <div key={inv.fieldValueId} class="slds-m-bottom_x-small">
-                        <strong>{inv.requirementName} • {inv.fieldName}</strong>
-                        <div class="slds-text-color_error">{inv.message}</div>
-                        <div class="slds-text-color_weak slds-text-body_small">{inv.status}</div>
-                    </div>
-                </template>
-                <lightning-button
-                    variant="neutral"
-                    label="Re-run Validation"
-                    onclick={rerunSelected}
-                    class="slds-m-top_small">
-                </lightning-button>
-            </div>
-        </template>
-
         <template if:false={requirements}>
             <p class="slds-p-around_medium">Loading requirements...</p>
         </template>

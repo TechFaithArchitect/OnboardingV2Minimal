@@ -55,7 +55,6 @@
 ### 5. Testing ✅ (Apex Tests)
 - ✅ Created `FollowUpExecutionServiceTest.cls`:
   - Tests SMS follow-up sending
-  - Tests email follow-up sending
   - Tests mark as failed functionality
   - Tests retry failed follow-ups
   - Tests error handling
@@ -165,4 +164,3 @@
 3. Create flexipage for Twilio Settings component
 4. End-to-end testing of Twilio SMS sending
 5. Documentation updates if needed
-

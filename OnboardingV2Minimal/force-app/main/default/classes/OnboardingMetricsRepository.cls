@@ -4,8 +4,7 @@
  */
 public with sharing class OnboardingMetricsRepository {
   public static Integer getValidationFailureCount(DateTime since) {
-    // Placeholder until Validation_Failure__c is available
-    // SELECT COUNT() FROM Validation_Failure__c WHERE CreatedDate >= :since AND Status__c = 'Failed'
+    // MVP does not persist validation failure logs.
     return 0;
   }
 
@@ -24,7 +23,7 @@ public with sharing class OnboardingMetricsRepository {
   }
 
   public static Integer getWebhookFailureCount(DateTime since) {
-    // Placeholder until AdobeSyncFailure__c exists
+    // MVP does not persist webhook failure logs.
     return 0;
   }
 
@@ -56,30 +55,4 @@ public with sharing class OnboardingMetricsRepository {
     return 0;
   }
 
-  public static List<Validation_Failure__c> getValidationFailures(
-    DateTime startDate,
-    Map<String, Object> filters
-  ) {
-    // Guard in case object is not yet deployed
-    try {
-      String validationType = filters != null
-        ? (String) filters.get('validationType')
-        : null;
-      String query =
-        'SELECT Id, Name, Rule_Name__c, Requirement_Field__c, Validation_Result__c, ' +
-        'Message__c, Validated_On__c, CreatedDate, CreatedBy.Name ' +
-        'FROM Validation_Failure__c ' +
-        'WHERE CreatedDate >= :startDate ';
-
-      if (String.isNotBlank(validationType)) {
-        query += 'AND Validation_Type__c = :validationType ';
-      }
-
-      query += 'ORDER BY CreatedDate DESC LIMIT 1000';
-      return Database.query(query);
-    } catch (Exception ex) {
-      System.debug('Error querying validation failures: ' + ex.getMessage());
-      return new List<Validation_Failure__c>();
-    }
-  }
 }

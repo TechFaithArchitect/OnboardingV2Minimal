@@ -20,10 +20,9 @@ Successfully removed the **VendorOnboardingWizardService** facade (975 lines) by
 Added `@AuraEnabled` annotations to domain service methods that were previously called via the facade:
 
 - **VendorService**: `searchVendors()`, `createVendor()`, `getVendorsWithPrograms()`, `searchVendorsWithPrograms()`
-- **VendorProgramService**: `searchVendorPrograms()`, `searchVendorProgramsForAccount()`, `getRecentVendorPrograms()`, `createVendorProgram()`, `finalizeVendorProgram()`, `getVendorProgramGroupForVendorProgram()`, `getVendorProgramRequirementGroupForVendorProgram()`
+- **VendorProgramService**: `searchVendorPrograms()`, `searchVendorProgramsForAccount()`, `getRecentVendorPrograms()`, `createVendorProgram()`, `finalizeVendorProgram()`, `getVendorProgramGroupForVendorProgram()`
 - **VendorProgramGroupService**: `searchVendorProgramGroups()`, `getAllVendorProgramGroups()`, `createVendorProgramGroup()`
-- **VendorProgramRequirementGroupService**: `searchVendorProgramRequirementGroups()`, `getAllVendorProgramRequirementGroups()`, `createVendorProgramRequirementGroup()`
-- **VendorProgramRequirementService**: `searchVendorProgramRequirements()`, `createVendorProgramRequirement()`, `bulkCreateRequirementsFromTemplates()`, `updateRequirementSequences()`, `getRecentVendorProgramRequirements()`, `getRequirementsByGroup()`, `deleteVendorProgramRequirement()`
+- **VendorProgramRequirementService**: `searchVendorProgramRequirements()`, `createVendorProgramRequirement()`, `updateRequirementSequences()`, `getRecentVendorProgramRequirements()`, `deleteVendorProgramRequirement()`
 - **StatusRulesEngineService**: `searchStatusRulesEngines()`, `getStatusRulesEngineById()`, `createOnboardingStatusRulesEngine()`, `createStatusRule()`, `searchStatusRules()`
 - **CommunicationTemplateService**: `getCommunicationTemplates()`, `linkCommunicationTemplateToVendorProgram()`
 - **RecipientGroupService**: All methods (search, create, get methods)
@@ -60,12 +59,11 @@ Added `@AuraEnabled` annotations to domain service methods that were previously 
 
 ## Files Updated
 
-### Services (8 files)
+### Services (7 files)
 
 - `VendorService.cls`
 - `VendorProgramService.cls`
 - `VendorProgramGroupService.cls`
-- `VendorProgramRequirementGroupService.cls`
 - `VendorProgramRequirementService.cls`
 - `StatusRulesEngineService.cls`
 - `CommunicationTemplateService.cls`
@@ -76,9 +74,6 @@ Added `@AuraEnabled` annotations to domain service methods that were previously 
 - `VendorOnboardingWizardController.cls` (~50+ methods updated)
 - `OnboardingHomeDashboardController.cls` (2 methods updated)
 
-### Test Classes (2 files)
-
-- `VendorOnboardingWizardControllerTest.cls` (DTO references updated)
 - `OnboardingPrimaryContactTest.cls` (method call updated)
 
 **Total Files Updated**: 12 files

@@ -26,10 +26,6 @@
                 <behavior>Edit</behavior>
                 <field>Is_Target__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Inherited_Program_Requirement_Group__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

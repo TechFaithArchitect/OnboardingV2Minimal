@@ -223,23 +223,6 @@ public with sharing class OnboardingStatusEvaluator {
   private static Set<String> collectMappedFieldApiNames(
     List<Onboarding_Status_Rules_Engine__c> rulesEngines
   ) {
-    Set<String> fieldApiNames = new Set<String>();
-    if (rulesEngines == null || rulesEngines.isEmpty()) {
-      return fieldApiNames;
-    }
-    for (Onboarding_Status_Rules_Engine__c engine : rulesEngines) {
-      if (engine.Onboarding_Status_Rules__r == null) {
-        continue;
-      }
-      for (Onboarding_Status_Rule__c rule : engine.Onboarding_Status_Rules__r) {
-        String fieldApiName = rule.Requirement__r
-          ?.Requirement_Template__r
-          ?.Onboarding_Status_Field_API_Name__c;
-        if (String.isNotBlank(fieldApiName)) {
-          fieldApiNames.add(fieldApiName);
-        }
-      }
-    }
-    return fieldApiNames;
+    return new Set<String>();
   }
 }

@@ -95,7 +95,7 @@ Handles Vendor**c, Vendor_Customization**c, Vendor_Program_Group\_\_c
 
 ### 2. RequirementDomainService (217 lines)
 
-Handles Vendor_Program_Requirement**c, Vendor_Program_Requirement_Group**c
+Handles Vendor_Program_Requirement__c
 
 - 9 methods + 1 inner class
 - All requirement-related operations consolidated
@@ -228,7 +228,7 @@ Handles email template and org-wide email synchronization
 
 ### Potential Additional Consolidations
 
-1. **Onboarding Domain Services**: Could consolidate OnboardingApplicationService, OnboardingRequirementService, OnboardingRequirementSetService
+1. **Onboarding Domain Services**: Could consolidate OnboardingApplicationService and OnboardingRequirementService
 2. **Follow-Up Services**: Could consolidate FollowUpDetectionService, FollowUpExecutionService, FollowUpFatigueService, FollowUpMessagingService
 3. **Requirement Validation Services**: Could consolidate RequirementFieldAsyncValidator, RequirementFieldExternalValidator, RequirementFieldValidationService
 4. **DTO Simplification**: Review and simplify DTO layer (22 DTOs → 10-15)

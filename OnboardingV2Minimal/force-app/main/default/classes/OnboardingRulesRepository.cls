@@ -13,8 +13,7 @@ public with sharing class OnboardingRulesRepository {
         Requirement__c,
         Expected_Status__c,
         Parent_Rule__c,
-        Requirement__r.Name,
-        Requirement__r.Requirement_Template__r.Requirement_Label__c
+        Requirement__r.Name
       FROM Onboarding_Status_Rule__c
       WHERE Parent_Rule__c = :engineId
       ORDER BY Rule_Number__c ASC NULLS LAST, CreatedDate DESC
@@ -73,10 +72,7 @@ public with sharing class OnboardingRulesRepository {
           SELECT
             Id,
             Status__c,
-            Vendor_Program_Requirement__c,
-            Vendor_Program_Requirement__r.Requirement_Template__c,
-            Vendor_Program_Requirement__r.Requirement_Template__r.Onboarding_Status_Field_API_Name__c,
-            Vendor_Program_Requirement__r.Requirement_Template__r.Onboarding_Status_Value_When_Complete__c
+            Vendor_Program_Requirement__c
           FROM Onboarding_Requirements__r
           WHERE Vendor_Program_Requirement__c != NULL
         )
@@ -111,10 +107,7 @@ public with sharing class OnboardingRulesRepository {
             Rule_Number__c,
             Requirement__c,
             Expected_Status__c,
-            Requirement__r.Name,
-            Requirement__r.Requirement_Template__c,
-            Requirement__r.Requirement_Template__r.Onboarding_Status_Field_API_Name__c,
-            Requirement__r.Requirement_Template__r.Onboarding_Status_Value_When_Complete__c
+            Requirement__r.Name
           FROM Onboarding_Status_Rules__r
         )
       FROM Onboarding_Status_Rules_Engine__c
@@ -135,10 +128,7 @@ public with sharing class OnboardingRulesRepository {
         Status__c,
         Completed__c,
         Vendor_Program_Requirement__c,
-        Onboarding__c,
-        Vendor_Program_Requirement__r.Requirement_Template__c,
-        Vendor_Program_Requirement__r.Requirement_Template__r.Onboarding_Status_Field_API_Name__c,
-        Vendor_Program_Requirement__r.Requirement_Template__r.Onboarding_Status_Value_When_Complete__c
+        Onboarding__c
       FROM Onboarding_Requirement__c
       WHERE Onboarding__c IN :onboardingIds
     ];
@@ -293,35 +283,6 @@ public with sharing class OnboardingRulesRepository {
       SELECT Vendor_Program_Group__c
       FROM Vendor_Program_Group_Member__c
       WHERE Required_Program__c = :vendorProgramId
-    ];
-  }
-
-  /**
-   * Fetches rules engines by vendor program group and requirement group
-   * @param vendorProgramGroupId Vendor Program Group ID
-   * @param requirementGroupId Requirement Group ID
-   * @return List of rules engines
-   */
-  public static List<Onboarding_Status_Rules_Engine__c> fetchRulesEnginesByGroups(
-    Id vendorProgramGroupId,
-    Id requirementGroupId
-  ) {
-    if (vendorProgramGroupId == null || requirementGroupId == null) {
-      return new List<Onboarding_Status_Rules_Engine__c>();
-    }
-    return [
-      SELECT
-        Id,
-        Name,
-        Required_Status__c,
-        Target_Onboarding_Status__c,
-        Evaluation_Logic__c,
-        Custom_Evaluation_Logic__c
-      FROM Onboarding_Status_Rules_Engine__c
-      WHERE
-        Vendor_Program_Group__c = :vendorProgramGroupId
-        AND Requirement_Group__c = :requirementGroupId
-      ORDER BY Name
     ];
   }
 

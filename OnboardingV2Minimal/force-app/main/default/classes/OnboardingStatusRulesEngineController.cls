@@ -1,12 +1,10 @@
 public with sharing class OnboardingStatusRulesEngineController {
   @AuraEnabled(cacheable=true)
   public static List<Onboarding_Status_Rules_Engine__c> getRules(
-    Id vendorProgramGroupId,
-    Id requirementGroupId
+    Id vendorProgramGroupId
   ) {
-    return OnboardingRulesService.getRulesEngines(
-      vendorProgramGroupId,
-      requirementGroupId
+    return OnboardingRulesService.getRulesEnginesByVendorProgramGroup(
+      vendorProgramGroupId
     );
   }
 
@@ -30,25 +28,6 @@ public with sharing class OnboardingStatusRulesEngineController {
         new Map<String, String>{
           'value' => vendorProgramGroup.Id,
           'label' => vendorProgramGroup.Name
-        }
-      );
-    }
-    return options;
-  }
-
-  @AuraEnabled(cacheable=true)
-  public static List<Map<String, String>> getRequirementGroups() {
-    List<Map<String, String>> options = new List<Map<String, String>>();
-    for (Vendor_Program_Requirement_Group__c vendorProgramRequirementGroup : [
-      SELECT Id, Name
-      FROM Vendor_Program_Requirement_Group__c
-      ORDER BY Name
-      LIMIT 1000
-    ]) {
-      options.add(
-        new Map<String, String>{
-          'value' => vendorProgramRequirementGroup.Id,
-          'label' => vendorProgramRequirementGroup.Name
         }
       );
     }
@@ -367,23 +346,6 @@ public with sharing class OnboardingStatusRulesEngineController {
   private static Set<String> collectMappedFieldApiNames(
     List<Onboarding_Status_Rules_Engine__c> rulesEngines
   ) {
-    Set<String> fieldApiNames = new Set<String>();
-    if (rulesEngines == null || rulesEngines.isEmpty()) {
-      return fieldApiNames;
-    }
-    for (Onboarding_Status_Rules_Engine__c engine : rulesEngines) {
-      if (engine.Onboarding_Status_Rules__r == null) {
-        continue;
-      }
-      for (Onboarding_Status_Rule__c rule : engine.Onboarding_Status_Rules__r) {
-        String fieldApiName = rule.Requirement__r
-          ?.Requirement_Template__r
-          ?.Onboarding_Status_Field_API_Name__c;
-        if (String.isNotBlank(fieldApiName)) {
-          fieldApiNames.add(fieldApiName);
-        }
-      }
-    }
-    return fieldApiNames;
+    return new Set<String>();
   }
 }

@@ -186,16 +186,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Vendor_Program_Requirement_Group__c</fieldItem>
-                <identifier>RecordVendor_Program_Requirement_Group__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Version__c</fieldItem>
                 <identifier>RecordVersion__cField</identifier>
             </fieldInstance>
@@ -258,16 +248,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Vendor_Program_Group__c</fieldItem>
                 <identifier>RecordVendor_Program_Group__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Inherited_Requirement_Group__c</fieldItem>
-                <identifier>RecordInherited_Requirement_Group__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>

@@ -37,18 +37,6 @@ All triggers follow the handler pattern:
 
 **Handler:** `OnboardingRequirementTriggerHandler.handleAfterSave(...)`
 
-### RequirementFieldValueTrigger
-
-**Location:** `force-app/main/default/triggers/RequirementFieldValueTrigger.trigger`
-
-**Object:** Requirement_Field_Value__c
-
-**Events:** After Insert, After Update
-
-**Purpose:** Enqueues async validation for cross-field and external validation types.
-
-**Handler:** `RequirementFieldValueTriggerHandler.handleAfterSave(...)`
-
 ### TerritoryAssignmentsTrigger
 
 **Location:** `force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger`

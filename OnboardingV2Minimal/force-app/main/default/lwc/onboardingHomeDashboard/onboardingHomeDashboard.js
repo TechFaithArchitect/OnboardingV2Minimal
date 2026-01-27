@@ -1,7 +1,6 @@
 import { LightningElement, wire, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { extractErrorMessage } from 'c/utils';
 import hasAdminPermission from '@salesforce/customPermission/OnboardingAppAdmin';
 import getMyActiveOnboarding from '@salesforce/apex/OnboardingHomeDashboardController.getMyActiveOnboarding';
 import getOnboardingSummary from '@salesforce/apex/OnboardingHomeDashboardController.getOnboardingSummary';
@@ -10,8 +9,6 @@ import getRecentActivity from '@salesforce/apex/OnboardingHomeDashboardControlle
 import getVendorProgramMetrics from '@salesforce/apex/OnboardingHomeDashboardController.getVendorProgramMetrics';
 import getBlockedOnboardingCount from '@salesforce/apex/OnboardingHomeDashboardController.getBlockedOnboardingCount';
 import getTeamOnboarding from '@salesforce/apex/OnboardingHomeDashboardController.getTeamOnboarding';
-import syncComponentLibrary from '@salesforce/apex/VendorOnboardingWizardController.syncComponentLibrary';
-import initializeDefaultProcess from '@salesforce/apex/VendorOnboardingWizardController.initializeDefaultProcess';
 
 export default class OnboardingHomeDashboard extends NavigationMixin(LightningElement) {
     // Filter state
@@ -41,19 +38,6 @@ export default class OnboardingHomeDashboard extends NavigationMixin(LightningEl
     
     @track isLoading = true;
     @track showStartModal = false;
-    
-    // Vendor Program Wizard Modal (selection & kickoff)
-    @track showVendorProgramModal = false;
-    @track isSyncingComponentLibrary = false;
-
-    // Wizard Modal
-    @track showWizardModal = false;
-    @track wizardVendorProgramId = null;
-    @track isInitializingProcess = false;
-    
-    // Prevent duplicate actions for async admin actions
-    @track isProceedingWithVendor = false;
-    @track isProceedingWithVendorProgram = false;
 
     // Column definitions for active onboarding table
     activeOnboardingColumns = [
@@ -241,18 +225,6 @@ export default class OnboardingHomeDashboard extends NavigationMixin(LightningEl
         }
     }
 
-    async runWithGuard(flagPropertyName, asyncCallback) {
-        if (this[flagPropertyName]) {
-            return;
-        }
-        try {
-            this[flagPropertyName] = true;
-            await asyncCallback();
-        } finally {
-            this[flagPropertyName] = false;
-        }
-    }
-
     // Getters for summary cards (kept for backward compatibility if needed)
     get notStartedCount() {
         return this.summary['Not Started'] || 0;
@@ -341,12 +313,6 @@ export default class OnboardingHomeDashboard extends NavigationMixin(LightningEl
         this.navigateToRecord(programId);
     }
 
-    handleLaunchWizard(event) {
-        const programId = event.detail.programId;
-        this.wizardVendorProgramId = programId;
-        this.showWizardModal = true;
-    }
-
     // Role-based visibility
     get showTeamTab() {
         return this.filters.view === 'MY_TEAM' || this.filters.view === 'ORG_WIDE';
@@ -422,65 +388,6 @@ export default class OnboardingHomeDashboard extends NavigationMixin(LightningEl
         this.showStartModal = true;
     }
 
-    // Handle start vendor program onboarding button
-    handleStartVendorProgramOnboarding() {
-        // Open the selection wizard modal; the child component will handle flow kickoff
-        this.showVendorProgramModal = true;
-    }
-
-    // Close vendor program selection wizard
-    handleVendorProgramModalClose() {
-        this.showVendorProgramModal = false;
-    }
-
-    // Handle events from vendor program selection wizard to launch the main onboarding wizard
-    handleVendorProgramWizardLaunch(event) {
-        const vendorProgramId = event.detail && event.detail.vendorProgramId;
-        if (!vendorProgramId) {
-            return;
-        }
-        this.wizardVendorProgramId = vendorProgramId;
-        this.showWizardModal = true;
-    }
-
-    // Open wizard in modal (screenflow-like experience)
-    openWizardModal(vendorProgramId) {
-        this.wizardVendorProgramId = vendorProgramId;
-        this.showWizardModal = true;
-    }
-
-    // Close wizard modal
-    handleCloseWizardModal() {
-        this.showWizardModal = false;
-        this.wizardVendorProgramId = null;
-        // Refresh dashboard to show updated data
-        this.handleRefresh();
-    }
-
-    // Handle wizard completion
-    handleWizardComplete(event) {
-        const vendorProgramId = event.detail?.vendorProgramId;
-        // Final step of the wizard already shows a success toast and navigates
-        // to the Vendor Program record. Here we just close the modal and refresh
-        // the dashboard so it reflects any new/updated vendor program data.
-        this.handleCloseWizardModal();
-    }
-
-    // Navigate to vendor program record page (fallback/alternative)
-    navigateToVendorProgram(vendorProgramId) {
-        this[NavigationMixin.Navigate]({
-            type: 'standard__recordPage',
-            attributes: {
-                recordId: vendorProgramId,
-                actionName: 'view'
-            },
-            state: {
-                c__vendorProgramId: vendorProgramId,
-                c__startWizard: 'true'
-            }
-        });
-    }
-
     // Dealer onboarding modal events
     handleDealerOnboardingStart(event) {
         const accountId = event.detail && event.detail.accountId;
@@ -513,33 +420,5 @@ export default class OnboardingHomeDashboard extends NavigationMixin(LightningEl
         setTimeout(() => {
             this.isLoading = false;
         }, 1000);
-    }
-
-    // Sync Component Library
-    async handleSyncComponentLibrary() {
-        await this.runWithGuard('isSyncingComponentLibrary', async () => {
-            try {
-                const message = await syncComponentLibrary();
-                this.showToast('Success', message, 'success');
-            } catch (error) {
-                this.showToast('Error', extractErrorMessage(error, 'Failed to sync Component Library.'), 'error');
-            }
-        });
-    }
-
-    // Initialize default Vendor Program Onboarding process
-    async handleInitializeDefaultProcess() {
-        await this.runWithGuard('isInitializingProcess', async () => {
-            try {
-                const message = await initializeDefaultProcess();
-                this.showToast('Success', message, 'success');
-                // Refresh the page after a short delay to ensure process is available
-                setTimeout(() => {
-                    this.handleRefresh();
-                }, 1000);
-            } catch (error) {
-                this.showToast('Error', extractErrorMessage(error, 'Failed to initialize default process.'), 'error');
-            }
-        });
     }
 }

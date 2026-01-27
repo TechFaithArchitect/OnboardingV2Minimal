@@ -2,14 +2,12 @@ import { LightningElement, track } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { extractErrorMessage } from "c/utils";
 import getVendorProgramGroups from "@salesforce/apex/OnboardingStatusRulesEngineController.getVendorProgramGroups";
-import getRequirementGroups from "@salesforce/apex/OnboardingStatusRulesEngineController.getRequirementGroups";
 import getRules from "@salesforce/apex/OnboardingStatusRulesEngineController.getRules";
 import saveRules from "@salesforce/apex/OnboardingStatusRulesEngineController.saveRules";
 import getOnboardingOptions from "@salesforce/apex/OnboardingStatusRulesEngineController.getOnboardingOptions";
 
 export default class OnboardingStatusRulesEngine extends LightningElement {
   @track vendorProgramGroupOptions = [];
-  @track requirementGroupOptions = [];
   @track onboardingOptions = [];
   @track rules = [];
   @track draftValues = [];
@@ -17,7 +15,6 @@ export default class OnboardingStatusRulesEngine extends LightningElement {
   @track selectedOnboardingId = null;
 
   selectedVendorProgramGroup;
-  selectedRequirementGroup;
 
   columns = [
     { label: "Name", fieldName: "Name", editable: false },
@@ -47,12 +44,10 @@ export default class OnboardingStatusRulesEngine extends LightningElement {
   connectedCallback() {
     Promise.all([
       getVendorProgramGroups(),
-      getRequirementGroups(),
       getOnboardingOptions({ limitCount: 50 })
     ])
-      .then(([vendorGroups, requirementGroups, onboardingOpts]) => {
+      .then(([vendorGroups, onboardingOpts]) => {
         this.vendorProgramGroupOptions = vendorGroups;
-        this.requirementGroupOptions = requirementGroups;
         this.onboardingOptions = onboardingOpts || [];
       })
       .catch((error) => {
@@ -68,15 +63,11 @@ export default class OnboardingStatusRulesEngine extends LightningElement {
     this.selectedVendorProgramGroup = event.detail.value;
   }
 
-  handleRequirementGroupChange(event) {
-    this.selectedRequirementGroup = event.detail.value;
-  }
-
   async loadRules() {
-    if (!this.selectedVendorProgramGroup || !this.selectedRequirementGroup) {
+    if (!this.selectedVendorProgramGroup) {
       this.showToast(
         "Selection Required",
-        "Please select both a Vendor Program Group and a Requirement Group before loading rules.",
+        "Please select a Vendor Program Group before loading rules.",
         "warning"
       );
       return;
@@ -84,8 +75,7 @@ export default class OnboardingStatusRulesEngine extends LightningElement {
 
     try {
       const result = await getRules({
-        vendorProgramGroupId: this.selectedVendorProgramGroup,
-        requirementGroupId: this.selectedRequirementGroup
+        vendorProgramGroupId: this.selectedVendorProgramGroup
       });
       this.rules = result || [];
       this.draftValues = [];

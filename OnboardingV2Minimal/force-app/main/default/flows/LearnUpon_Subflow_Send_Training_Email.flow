@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Get_Emails_from_Vendor_Program_Recipients</name>
-        <label>Get Emails from Vendor Program Recipients</label>
-        <locationX>176</locationX>
-        <locationY>134</locationY>
-        <actionName>RecipientGroupEmailAction</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Send_Training_Welcome_Email</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>vendorProgramId</name>
-            <value>
-                <elementReference>OnboardingRecord.Vendor_Customization__c</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>RecipientGroupEmailAction</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>ccAddressList</assignToReference>
-            <name>emailAddresses</name>
-        </outputParameters>
-    </actionCalls>
-    <actionCalls>
         <name>Send_Training_Welcome_Email</name>
         <label>Send Training Welcome Email</label>
         <locationX>176</locationX>
@@ -36,12 +12,6 @@
             <name>accountId</name>
             <value>
                 <elementReference>OnboardingRecord.Account__c</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>ccEmailAddresses</name>
-            <value>
-                <elementReference>ccAddressList</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -65,7 +35,7 @@
         <inputParameters>
             <name>orgWideEmailAddressId</name>
             <value>
-                <elementReference>OrgWideEmailRecord.OrgWideEmailAddressId__c</elementReference>
+                <elementReference>OrgWideEmailAddressId</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -106,15 +76,15 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Emails_from_Vendor_Program_Recipients</targetReference>
+            <targetReference>Send_Training_Welcome_Email</targetReference>
         </connector>
     </start>
     <status>Active</status>
     <variables>
-        <name>ccAddressList</name>
+        <name>OrgWideEmailAddressId</name>
         <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
@@ -132,13 +102,5 @@
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding__c</objectType>
-    </variables>
-    <variables>
-        <name>OrgWideEmailRecord</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-        <objectType>OrgWideEmail__c</objectType>
     </variables>
 </Flow>

@@ -21,15 +21,12 @@ This document lists all test classes in the OnboardingV2 project and provides co
 - `OnboardingStatusRuleControllerTest`
 - `OnboardingStatusRulesEngineCtlrTest`
 - `OrgWideEmailSyncControllerTest`
-- `VendorOnboardingWizardControllerTest`
 - `EmailTemplateSyncControllerTest`
 
 #### Services
 
-- `VendorOnboardingWizardServiceTest` - **Removed** (facade service eliminated, tests moved to domain service tests)
 - `OnboardingAppECCServiceTest`
 - `VendorDomainServiceTest` - Tests consolidated Vendor/VendorProgram/VendorProgramGroup operations
-- `RequirementDomainServiceTest` - Tests consolidated Requirement/RequirementGroup operations
 - `CommunicationDomainServiceTest` - Tests consolidated CommunicationTemplate/RecipientGroup operations
 - `OnboardingEligibilityServiceTest`
 - `OnboardingRulesServiceTest`

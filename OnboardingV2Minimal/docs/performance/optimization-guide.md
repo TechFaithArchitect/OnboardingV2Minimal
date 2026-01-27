@@ -307,19 +307,15 @@ public class OnboardingStatusEvaluationBatch implements Database.Batchable<SObje
 
 For frequently accessed, rarely changing data:
 
-```apex
-@AuraEnabled(cacheable=true)
-public static List<Onboarding_Component_Library__c> getComponentLibrary() {
-    // Already cached via @AuraEnabled(cacheable=true)
-}
-```
+- Picklist values (rules engine logic/status picklists)
+- Vendor program group lookups
 
 #### 2. Optimize LWC Data Loading
 
 **Current**: Sequential wire adapters
 
 **Potential Optimization**:
-- Use Promise.all() for parallel loading (already implemented in onboardingFlowEngine)
+- Use Promise.all() for parallel loading
 - Reduce number of wire adapters
 - Combine related queries
 
@@ -459,4 +455,3 @@ When reviewing code for performance:
 - [Apex Classes](../components/apex-classes.md)
 - [Status Evaluation](../processes/status-evaluation.md)
 - [Troubleshooting](../user-guides/troubleshooting.md)
-

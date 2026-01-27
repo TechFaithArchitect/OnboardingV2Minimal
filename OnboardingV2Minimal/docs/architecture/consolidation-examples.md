@@ -266,17 +266,12 @@ public class EmailTemplateSyncController implements Schedulable {
 ```apex
 public class EmailTemplateSyncOrchestrator {
   public static void run(Boolean isManual) {
-    Sync_Log__c logRec = UtilitiesSyncLogHelper.createLogRecord(
-      'Email Template Sync',
-      isManual
-    );
     try {
       EmailSyncSummaryDTO summary = EmailTemplateSyncService.syncAllTemplates(
-        logRec.Id
+        null
       );
-      UtilitiesSyncLogHelper.updateLogRecord(logRec.Id, summary);
     } catch (Exception ex) {
-      UtilitiesSyncLogHelper.markFailed(logRec.Id, ex);
+      System.debug('Sync failed: ' + ex.getMessage());
     }
   }
 }
@@ -303,15 +298,10 @@ public class EmailTemplateSyncService implements Schedulable {
   }
 
   public static void run(Boolean isManual) {
-    Sync_Log__c logRec = UtilitiesSyncLogHelper.createLogRecord(
-      'Email Template Sync',
-      isManual
-    );
     try {
-      EmailSyncSummaryDTO summary = syncAllTemplates(logRec.Id);
-      UtilitiesSyncLogHelper.updateLogRecord(logRec.Id, summary);
+      EmailSyncSummaryDTO summary = syncAllTemplates(null);
     } catch (Exception ex) {
-      UtilitiesSyncLogHelper.markFailed(logRec.Id, ex);
+      System.debug('Sync failed: ' + ex.getMessage());
     }
   }
 

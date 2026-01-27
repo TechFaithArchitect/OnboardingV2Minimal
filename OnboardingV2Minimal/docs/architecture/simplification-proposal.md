@@ -125,7 +125,7 @@ public class OnboardingAppActivationService {
 
 - Group related domain services:
   - **VendorDomainService**: Vendor, VendorProgram, VendorProgramGroup
-  - **RequirementDomainService**: VendorProgramRequirement, OnboardingRequirement, RequirementSet
+  - **RequirementDomainService**: VendorProgramRequirement
   - **OnboardingDomainService**: OnboardingApplication, OnboardingStatus, OnboardingRules
   - **CommunicationDomainService**: CommunicationTemplate, RecipientGroup, EmailTemplate
 

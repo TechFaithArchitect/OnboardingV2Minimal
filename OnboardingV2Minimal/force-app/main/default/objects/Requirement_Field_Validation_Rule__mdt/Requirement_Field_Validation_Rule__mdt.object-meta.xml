@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Stores validation rules for requirement fields. Used by the Validation Rule Builder to configure field-level validation without code deployments.</description>
-    <label>Requirement Field Validation Rule</label>
-    <pluralLabel>Requirement Field Validation Rules</pluralLabel>
-    <visibility>Public</visibility>
-</CustomObject>

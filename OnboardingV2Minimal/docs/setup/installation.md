@@ -111,25 +111,18 @@ Create required custom metadata records:
 - Global Value Sets
 - Custom Labels
 
-### 2. Create Onboarding Processes
-
-1. Create `Onboarding_Component_Library__c` records for each LWC component
-2. Create `Onboarding_Application_Process__c` record
-3. Create `Onboarding_Application_Stage__c` records
-4. Link stages to process and components
-
-### 3. Configure Status Rules
+### 2. Configure Status Rules
 
 1. Create `Vendor_Program_Group__c` records
 2. Create `Onboarding_Status_Rules_Engine__c` records
 3. Create `Onboarding_Status_Rule__c` records
 4. Link rules to engines
 
-### 4. Set Up Record Pages
+### 3. Set Up Record Pages
 
 Add components to Lightning record pages:
-- **Vendor Program Page**: Add `vendorProgramOnboardingFlow`
-- **Onboarding Page**: Add `onboardingRequirementsPanel`
+- **Account Page**: Add `accountProgramOnboardingModal`
+- **Onboarding Page**: Add `onboardingHomeDashboard` and `onboardingRequirementsPanel`
 
 ## Verification
 
@@ -141,10 +134,10 @@ Add components to Lightning record pages:
 
 ### Test Onboarding Flow
 
-1. Create a Vendor Program
-2. Assign an onboarding process
-3. Navigate to Vendor Program record page
-4. Verify onboarding flow appears and functions
+1. Open an Account
+2. Launch `accountProgramOnboardingModal`
+3. Create an onboarding for a Vendor Program
+4. Verify requirements and status update logic
 
 ### Test Status Evaluation
 

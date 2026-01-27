@@ -3,7 +3,7 @@ trigger EnforceSingleTargetProgramPerGroup on Vendor_Program_Group__c(
   before update
 ) {
   // Thin trigger delegating to handler for bulkified logic
-  EnforceSingleTargetProgramPerGroupTriggerHandler.beforeInsertOrUpdate(
+  EnforceTargetProgramPerGroupHandler.beforeInsertOrUpdate(
     Trigger.new,
     Trigger.oldMap
   );

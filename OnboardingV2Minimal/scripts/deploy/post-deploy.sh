@@ -63,7 +63,7 @@ echo ""
 echo -e "${YELLOW}Step 3: Verifying Custom Objects...${NC}"
 echo "  Checking key custom objects..."
 
-OBJECTS=("Onboarding__c" "Vendor_Program__c" "Onboarding_Application_Process__c" "Onboarding_Status_Rules_Engine__c")
+OBJECTS=("Onboarding__c" "Vendor__c" "Vendor_Customization__c" "Vendor_Program_Requirement__c" "Onboarding_Status_Rules_Engine__c" "Onboarding_Status_Rule__c" "Communication_Template__c" "Account_Vendor_Program_Onboarding__c")
 for OBJ in "${OBJECTS[@]}"; do
     if sf data query --query "SELECT COUNT() FROM $OBJ" --target-org "$ORG_ALIAS" --json 2>/dev/null | grep -q "records"; then
         echo -e "    ${GREEN}✓${NC} $OBJ exists"
@@ -94,7 +94,7 @@ echo -e "${YELLOW}Step 5: Verifying LWC Components...${NC}"
 LWC_COUNT=$(find force-app/main/default/lwc -type d -mindepth 1 -maxdepth 1 2>/dev/null | wc -l | tr -d ' ')
 echo "  LWC Components Deployed: $LWC_COUNT"
 
-KEY_COMPONENTS=("vendorProgramOnboardingFlow" "onboardingFlowEngine" "onboardingRequirementsPanel")
+KEY_COMPONENTS=("accountProgramOnboardingModal" "onboardingHomeDashboard" "onboardingRequirementsPanel" "onboardingStatusRulesManager" "twilioSettings")
 for COMP in "${KEY_COMPONENTS[@]}"; do
     if [ -d "force-app/main/default/lwc/$COMP" ]; then
         echo -e "    ${GREEN}✓${NC} $COMP exists"
@@ -107,14 +107,12 @@ echo ""
 # Step 6: Configuration Reminders
 echo -e "${YELLOW}Step 6: Configuration Reminders...${NC}"
 echo "  The following must be configured manually:"
-echo "    1. Create Onboarding_Component_Library__c records for each LWC component"
-echo "    2. Create Onboarding_Application_Process__c record"
-echo "    3. Create Onboarding_Application_Stage__c records"
-echo "    4. Link stages to process and components"
-echo "    5. Create Vendor_Program_Group__c records"
-echo "    6. Create Onboarding_Status_Rules_Engine__c records"
-echo "    7. Create Onboarding_Status_Rule__c records"
-echo "    8. Add components to Lightning record pages"
+echo "    1. Create Vendor Programs and Requirements"
+echo "    2. Create Onboarding_Status_Rules_Engine__c records"
+echo "    3. Create Onboarding_Status_Rule__c records"
+echo "    4. Create Communication_Template__c records (if used)"
+echo "    5. Configure Twilio settings and Follow_Up_Queue__c workflows"
+echo "    6. Add LWC components to Lightning record pages"
 echo ""
 echo "  See docs/setup/configuration.md for detailed instructions"
 echo ""
@@ -125,9 +123,8 @@ echo -e "${GREEN}========================================${NC}"
 echo ""
 echo "Next steps:"
 echo "  1. Assign permission sets to users"
-echo "  2. Configure onboarding processes (see docs/setup/configuration.md)"
-echo "  3. Set up status rules"
-echo "  4. Add components to Lightning pages"
+echo "  2. Configure status rules (see docs/setup/configuration.md)"
+echo "  3. Add components to Lightning pages"
+echo "  4. Configure Twilio SMS settings"
 echo "  5. Run sample data scripts if needed (see docs/setup/sample-data.md)"
 echo ""
-

@@ -2,8 +2,8 @@
 
 ## Summary
 - EmailComm send/log stack removed (actions, DTOs, helpers, log object)
-- Follow-up emails now send directly in `FollowUpExecutionService` via `Messaging.sendEmail`
-- Flows use standard `emailSimple` actions instead of EmailComm invocable actions
+- Follow-up emails are handled by Flow send email actions (no Apex email sending)
+- Flows use native Send Email actions instead of EmailComm invocable actions
 
 ## Remaining EmailComm-Named Classes
 These are unrelated to the email log and only handle territory role sync:

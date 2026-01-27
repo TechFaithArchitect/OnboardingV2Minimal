@@ -15,9 +15,7 @@ public with sharing class OnboardingAdminDashboardController {
     DateTime last24h = DateTime.now().addHours(-24);
     DateTime last48h = DateTime.now().addHours(-48);
 
-    // Count validation failures in last 24h
-    // Note: Validation_Failure__c object will be created in Phase 1
-    // For now, return 0 or query from existing failure tracking
+    // MVP does not persist validation failure logs.
     metrics.validationFailures24h = OnboardingMetricsRepository.getValidationFailureCount(
       last24h
     );
@@ -34,7 +32,6 @@ public with sharing class OnboardingAdminDashboardController {
       OnboardingMetricsRepository.getMessageFailureCount(last48h);
 
     // Webhook failures (last 24 hours)
-    // Note: AdobeSyncFailure__c will be created in Phase 3
     metrics.webhookFailures24h = OnboardingMetricsRepository.getWebhookFailureCount(
       last24h
     );
@@ -59,47 +56,6 @@ public with sharing class OnboardingAdminDashboardController {
     );
 
     return metrics;
-  }
-
-  /**
-   * Get validation failures with filtering and grouping
-   * Note: Validation_Failure__c object will be created in Phase 1
-   * @param groupBy Grouping option: 'rule', 'user', or 'requirement'
-   * @param filters Map of filter criteria
-   * @return List of ValidationFailureDTO records
-   */
-  @AuraEnabled(cacheable=false)
-  public static List<ValidationFailureDTO> getValidationFailures(
-    String groupBy,
-    Map<String, Object> filters
-  ) {
-    List<ValidationFailureDTO> failures = new List<ValidationFailureDTO>();
-
-    DateTime startDate = getStartDateForFilter(
-      (String) filters.get('dateRange')
-    );
-
-    List<Validation_Failure__c> validationFailures = OnboardingMetricsRepository.getValidationFailures(
-      startDate,
-      filters
-    );
-    for (Validation_Failure__c failure : validationFailures) {
-      failures.add(new ValidationFailureDTO(failure));
-    }
-
-    return failures;
-  }
-
-  /**
-   * Retry validation for a specific failure
-   * @param failureId Validation_Failure__c record ID
-   * @return Success message
-   */
-  @AuraEnabled
-  public static String retryValidation(Id failureId) {
-    // TODO: Implement retry logic when Validation_Failure__c is created
-    // This will trigger re-validation of the field value
-    return 'Retry initiated (to be implemented in Phase 1)';
   }
 
   /**
@@ -138,48 +94,6 @@ public with sharing class OnboardingAdminDashboardController {
     public Integer activeFollowUpQueues = 0;
     @AuraEnabled
     public Integer overrideOperations7d = 0;
-  }
-
-  /**
-   * DTO for validation failure records
-   */
-  public class ValidationFailureDTO {
-    @AuraEnabled
-    public String id;
-    @AuraEnabled
-    public String name;
-    @AuraEnabled
-    public String ruleName;
-    @AuraEnabled
-    public String requirementFieldApiName;
-    @AuraEnabled
-    public String validationResult;
-    @AuraEnabled
-    public String message;
-    @AuraEnabled
-    public String createdBy;
-    @AuraEnabled
-    public DateTime createdDate;
-    @AuraEnabled
-    public DateTime validatedOn;
-
-    public ValidationFailureDTO() {
-      // Default constructor for AuraEnabled
-    }
-
-    public ValidationFailureDTO(Validation_Failure__c failure) {
-      this.id = failure.Id;
-      this.name = failure.Name;
-      this.ruleName = failure.Rule_Name__c;
-      this.requirementFieldApiName = failure.Requirement_Field__c;
-      this.validationResult = failure.Validation_Result__c;
-      this.message = failure.Message__c;
-      this.createdBy = failure.CreatedBy != null
-        ? failure.CreatedBy.Name
-        : null;
-      this.createdDate = failure.CreatedDate;
-      this.validatedOn = failure.Validated_On__c;
-    }
   }
 
   /**
@@ -248,6 +162,13 @@ public with sharing class OnboardingAdminDashboardController {
         LIMIT 1
       ];
 
+      if (issue.Follow_Up_Type__c == 'Email') {
+        issue.Status__c = 'Failed';
+        issue.Error_Message__c = 'Email follow-ups are handled by Flow.';
+        update issue;
+        return 'Email follow-ups are handled by Flow.';
+      }
+
       // Mark as pending retry and attempt immediately
       issue.Status__c = 'Pending Retry';
       issue.Attempt_Count__c =
@@ -257,8 +178,6 @@ public with sharing class OnboardingAdminDashboardController {
       // Execute based on type
       if (issue.Follow_Up_Type__c == 'SMS') {
         FollowUpExecutionService.sendSMSFollowUp(issue.Id);
-      } else if (issue.Follow_Up_Type__c == 'Email') {
-        FollowUpExecutionService.sendEmailFollowUp(issue.Id);
       } else {
         // Unknown type; leave in Pending Retry
       }

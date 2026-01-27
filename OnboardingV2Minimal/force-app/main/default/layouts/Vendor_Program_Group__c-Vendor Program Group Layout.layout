@@ -32,10 +32,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Default_Requirement_Group__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Rule_Key__c</field>
             </layoutItems>
         </layoutColumns>
@@ -90,10 +86,6 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Vendor_Customization__c.Vendor_Program_Group__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Vendor_Program_Requirement_Group__c.Default_For_Program_Group__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>

@@ -1,8 +1,8 @@
 import { LightningElement, api, track } from 'lwc';
-import getRequiredCredentials from '@salesforce/apex/OnboardingAppECCController.getRequiredCredentials';
-import getAvailableCredentialTypes from '@salesforce/apex/OnboardingAppECCController.getAvailableCredentialTypes';
-import createCredentialType from '@salesforce/apex/OnboardingAppECCController.createCredentialType';
-import linkCredentialTypeToRequiredCredential from '@salesforce/apex/OnboardingAppECCController.linkCredentialTypeToRequiredCredential';
+import getRequiredCredentials from '@salesforce/apex/OnboardingAppECCService.getRequiredCredentials';
+import getAvailableCredentialTypes from '@salesforce/apex/OnboardingAppECCService.getAvailableCredentialTypes';
+import createCredentialType from '@salesforce/apex/OnboardingAppECCService.createCredentialType';
+import linkCredentialTypeToRequiredCredential from '@salesforce/apex/OnboardingAppECCService.linkCredentialTypeToRequiredCredential';
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -96,10 +96,13 @@ export default class OnboardingAppVendorProgramECCManager extends LightningEleme
   async handleCreateCredentialType() {
     try {
       // Use a default sort order (can be improved to calculate max sort order)
-      const result = await createCredentialType({ 
-        name: this.newCredentialTypeName,
-        sortOrder: 1,
-        vendorCustomizationId: this.recordId
+      const result = await createCredentialType({
+        credentialTypeInput: {
+          Name: this.newCredentialTypeName,
+          Sort_Order__c: 1,
+          Vendor_Customization__c: this.recordId,
+          Active__c: true
+        }
       });
       this.selectedCredentialTypeId = result.Id;
       this.showToast('New Credential Type Created');

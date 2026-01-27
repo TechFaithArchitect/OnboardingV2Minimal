@@ -1,10 +1,8 @@
 import { createElement } from '@lwc/engine-dom';
 import OnboardingRequirementsPanel from 'c/onboardingRequirementsPanel';
 import getRequirements from '@salesforce/apex/OnboardingRequirementsPanelController.getRequirements';
-import getInvalidFieldValues from '@salesforce/apex/OnboardingRequirementsPanelController.getInvalidFieldValues';
 import updateRequirementStatuses from '@salesforce/apex/OnboardingRequirementsPanelController.updateRequirementStatuses';
 import runRuleEvaluation from '@salesforce/apex/OnboardingRequirementsPanelController.runRuleEvaluation';
-import rerunValidation from '@salesforce/apex/OnboardingRequirementsPanelController.rerunValidation';
 import getActiveRulesVersion from '@salesforce/apex/OnboardingRequirementsPanelController.getActiveRulesVersion';
 import refreshAndReevaluate from '@salesforce/apex/OnboardingRequirementsPanelController.refreshAndReevaluate';
 
@@ -15,22 +13,12 @@ jest.mock(
     { virtual: true }
 );
 jest.mock(
-    '@salesforce/apex/OnboardingRequirementsPanelController.getInvalidFieldValues',
-    () => ({ default: jest.fn() }),
-    { virtual: true }
-);
-jest.mock(
     '@salesforce/apex/OnboardingRequirementsPanelController.updateRequirementStatuses',
     () => ({ default: jest.fn() }),
     { virtual: true }
 );
 jest.mock(
     '@salesforce/apex/OnboardingRequirementsPanelController.runRuleEvaluation',
-    () => ({ default: jest.fn() }),
-    { virtual: true }
-);
-jest.mock(
-    '@salesforce/apex/OnboardingRequirementsPanelController.rerunValidation',
     () => ({ default: jest.fn() }),
     { virtual: true }
 );
@@ -78,17 +66,6 @@ describe('c-onboarding-requirements-panel', () => {
         }
     ];
 
-    const mockInvalids = [
-        {
-            fieldValueId: 'a0Z000000000001AAA',
-            requirementName: 'Requirement 1',
-            fieldName: 'Email',
-            fieldApiName: 'Email__c',
-            status: 'Invalid',
-            message: 'Invalid email'
-        }
-    ];
-
     it('renders component with recordId', () => {
         const element = createElement('c-onboarding-requirements-panel', {
             is: OnboardingRequirementsPanel
@@ -101,7 +78,6 @@ describe('c-onboarding-requirements-panel', () => {
 
     it('loads requirements on connectedCallback', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue(mockInvalids);
 
         const element = createElement('c-onboarding-requirements-panel', {
             is: OnboardingRequirementsPanel
@@ -114,12 +90,10 @@ describe('c-onboarding-requirements-panel', () => {
 
         // Test through public API - verify Apex methods were called
         expect(getRequirements).toHaveBeenCalledWith({ onboardingId: 'a0X000000000000AAA' });
-        expect(getInvalidFieldValues).toHaveBeenCalledWith({ onboardingId: 'a0X000000000000AAA' });
     });
 
     it('updates requirement status on change', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue([]);
 
         const element = createElement('c-onboarding-requirements-panel', {
             is: OnboardingRequirementsPanel
@@ -150,10 +124,8 @@ describe('c-onboarding-requirements-panel', () => {
 
     it('submits requirements and runs rule evaluation', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue([]);
         updateRequirementStatuses.mockResolvedValue();
         runRuleEvaluation.mockResolvedValue();
-        rerunValidation.mockResolvedValue();
 
         const element = createElement('c-onboarding-requirements-panel', {
             is: OnboardingRequirementsPanel
@@ -181,7 +153,6 @@ describe('c-onboarding-requirements-panel', () => {
 
     it('handles errors during submit', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue([]);
         updateRequirementStatuses.mockRejectedValue(new Error('Update failed'));
 
         const element = createElement('c-onboarding-requirements-panel', {
@@ -210,7 +181,6 @@ describe('c-onboarding-requirements-panel', () => {
 
     it('has correct status options', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue([]);
 
         const element = createElement('c-onboarding-requirements-panel', {
             is: OnboardingRequirementsPanel
@@ -231,39 +201,8 @@ describe('c-onboarding-requirements-panel', () => {
         expect(statusField.options[4].value).toBe('Denied');
     });
 
-    it('reruns validation for invalid fields', async () => {
-        getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue(mockInvalids);
-        rerunValidation.mockResolvedValue();
-
-        const element = createElement('c-onboarding-requirements-panel', {
-            is: OnboardingRequirementsPanel
-        });
-        element.recordId = 'a0X000000000000AAA';
-        document.body.appendChild(element);
-
-        await Promise.resolve();
-        await Promise.resolve();
-
-        element.invalidFields = mockInvalids;
-        await Promise.resolve();
-
-        const buttons = element.shadowRoot?.querySelectorAll('lightning-button') || [];
-        const rerunButton = buttons.length > 1 ? buttons[1] : null;
-        expect(rerunButton).not.toBeNull();
-        rerunButton.click();
-
-        await Promise.resolve();
-        await Promise.resolve();
-
-        expect(rerunValidation).toHaveBeenCalledWith({
-            fieldValueIds: ['a0Z000000000001AAA']
-        });
-    });
-
     it('loads rules version on connectedCallback', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue([]);
         getActiveRulesVersion.mockResolvedValue({
             lastModifiedDate: '2024-01-01T00:00:00.000Z',
             engineIds: ['a0X000000000001AAA']
@@ -286,7 +225,6 @@ describe('c-onboarding-requirements-panel', () => {
 
     it('shows banner when rules version changes', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue([]);
         getActiveRulesVersion
             .mockResolvedValueOnce({
                 lastModifiedDate: '2024-01-01T00:00:00.000Z',
@@ -325,7 +263,6 @@ describe('c-onboarding-requirements-panel', () => {
 
     it('refreshes rules and re-evaluates when refresh button is clicked', async () => {
         getRequirements.mockResolvedValue(mockRequirements);
-        getInvalidFieldValues.mockResolvedValue([]);
         getActiveRulesVersion.mockResolvedValue({
             lastModifiedDate: '2024-01-02T00:00:00.000Z',
             engineIds: ['a0X000000000001AAA']

@@ -52,7 +52,6 @@ npm test
 
 ```bash
 # Run specific component tests
-npm test -- --testPathPattern=progressHeader
 ```
 
 #### Watching Tests During Development
@@ -85,7 +84,7 @@ sf project deploy start --target-org myorg
 Ensure all required components are deployed:
 
 - Apex controllers: `OnboardingRequirementsPanelController`, `OnboardingRequirementDueDateController`
-- LWC components: `progressHeader`, `requirementChecklist`, `requirementFormPanel`, `nextBestActionsPanel`, `repDealerQueue`, `programSetupWizardContainer`
+- LWC components: `requirementChecklist`, `requirementFormPanel`, `nextBestActionsPanel`, `repDealerQueue`
 - Required objects: `Onboarding_Requirement__c`, `Onboarding__c`, `Vendor_Program__c`
 
 ### 3. Test Key Functionality
@@ -105,12 +104,6 @@ Ensure all required components are deployed:
 1. Access the Onboarding Rep Lightning App
 2. Verify the Dealer Queue displays properly
 3. Test the due date override functionality using the new controller
-
-#### Test Program Manager Functions
-
-1. Access the Program Manager Lightning App
-2. Verify the Program Setup Wizard Container works
-3. Test the validation flow
 
 ## Component-Specific Testing
 
@@ -138,12 +131,6 @@ Ensure all required components are deployed:
 - Test with valid user ID
 - Verify dealer list display
 - Test row actions for due date overrides
-
-### programSetupWizardContainer Component
-
-- Test with valid program ID
-- Verify wizard flow navigation
-- Test validation summary panel
 
 ## Troubleshooting Common Issues
 

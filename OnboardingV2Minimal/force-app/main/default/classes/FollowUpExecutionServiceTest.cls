@@ -59,21 +59,6 @@ private class FollowUpExecutionServiceTest {
     }
     
     @IsTest
-    static void testSendEmailFollowUp() {
-        Follow_Up_Queue__c fq = [SELECT Id FROM Follow_Up_Queue__c LIMIT 1];
-        fq.Follow_Up_Type__c = 'Email';
-        update fq;
-        
-        Test.startTest();
-        FollowUpExecutionService.sendEmailFollowUp(fq.Id);
-        Test.stopTest();
-        
-        Follow_Up_Queue__c updated = [SELECT Status__c FROM Follow_Up_Queue__c WHERE Id = :fq.Id];
-        // Status depends on email send result - may be Sent or Failed
-        System.assert(updated.Status__c == 'Sent' || updated.Status__c == 'Failed');
-    }
-    
-    @IsTest
     static void testMarkFollowUpFailed() {
         Follow_Up_Queue__c fq = [SELECT Id, Status__c, Consecutive_Failures__c FROM Follow_Up_Queue__c LIMIT 1];
         

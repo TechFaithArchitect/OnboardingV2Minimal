@@ -100,17 +100,6 @@ public with sharing class OnboardingRulesService {
     }
 
     /**
-     * Gets rules engines by vendor program group and requirement group
-     * @param vendorProgramGroupId Vendor Program Group ID
-     * @param requirementGroupId Requirement Group ID
-     * @return List of rules engines
-     */
-    @AuraEnabled(cacheable=true)
-    public static List<Onboarding_Status_Rules_Engine__c> getRulesEngines(Id vendorProgramGroupId, Id requirementGroupId) {
-        return OnboardingRulesRepository.fetchRulesEnginesByGroups(vendorProgramGroupId, requirementGroupId);
-    }
-
-    /**
      * Gets rules engines by vendor program group only
      * @param vendorProgramGroupId Vendor Program Group ID
      * @return List of rules engines

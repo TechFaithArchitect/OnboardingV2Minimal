@@ -2,17 +2,14 @@ import { LightningElement, api, track, wire } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { extractErrorMessage } from "c/utils";
 import getRequirements from "@salesforce/apex/OnboardingRequirementsPanelController.getRequirements";
-import getInvalidFieldValues from "@salesforce/apex/OnboardingRequirementsPanelController.getInvalidFieldValues";
 import updateRequirementStatuses from "@salesforce/apex/OnboardingRequirementsPanelController.updateRequirementStatuses";
 import runRuleEvaluation from "@salesforce/apex/OnboardingRequirementsPanelController.runRuleEvaluation";
-import rerunValidation from "@salesforce/apex/OnboardingRequirementsPanelController.rerunValidation";
 import getActiveRulesVersion from "@salesforce/apex/OnboardingRequirementsPanelController.getActiveRulesVersion";
 import refreshAndReevaluate from "@salesforce/apex/OnboardingRequirementsPanelController.refreshAndReevaluate";
 
 export default class OnboardingRequirementsPanel extends LightningElement {
   @api recordId; // Set automatically on a Record Page
   @track requirements = [];
-  @track invalidFields = [];
   @track loading = true;
   @track rulesVersionOnLoad = null;
   @track currentRulesVersion = null;
@@ -46,14 +43,10 @@ export default class OnboardingRequirementsPanel extends LightningElement {
   async loadData() {
     this.loading = true;
     try {
-      const [requirements, invalidFieldValues] = await Promise.all([
-        getRequirements({ onboardingId: this.recordId }),
-        getInvalidFieldValues({ onboardingId: this.recordId })
-      ]);
+      const requirements = await getRequirements({ onboardingId: this.recordId });
       this.requirements = (requirements || []).map((requirement) => ({
         ...requirement
       }));
-      this.invalidFields = invalidFieldValues || [];
     } catch (error) {
       this.showToast(
         "Error",
@@ -61,7 +54,6 @@ export default class OnboardingRequirementsPanel extends LightningElement {
         "error"
       );
       this.requirements = [];
-      this.invalidFields = [];
     } finally {
       this.loading = false;
     }
@@ -161,31 +153,6 @@ export default class OnboardingRequirementsPanel extends LightningElement {
         extractErrorMessage(
           error,
           "An error occurred while processing requirements."
-        ),
-        "error"
-      );
-    }
-  }
-
-  async rerunSelected() {
-    const ids = (this.invalidFields || []).map((f) => f.fieldValueId);
-    if (!ids.length) {
-      return;
-    }
-    try {
-      await rerunValidation({ fieldValueIds: ids });
-      await this.loadData();
-      this.showToast(
-        "Success",
-        "Validation re-run for invalid fields.",
-        "success"
-      );
-    } catch (error) {
-      this.showToast(
-        "Error",
-        extractErrorMessage(
-          error,
-          "An error occurred while re-running validation."
         ),
         "error"
       );

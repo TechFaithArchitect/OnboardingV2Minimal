@@ -1,6 +1,6 @@
 /**
- * Service for executing follow-up actions (SMS, Email, etc.)
- * Handles retry logic and integrates with Salesforce Messaging API
+ * Service for executing follow-up actions (SMS)
+ * Handles retry logic and integrates with SMS provider strategies
  */
 public with sharing class FollowUpExecutionService {
 
@@ -100,72 +100,6 @@ public with sharing class FollowUpExecutionService {
     }
 
     /**
-     * Send email follow-up
-     * @param followUpQueueId Follow_Up_Queue__c record ID
-     */
-    public static void sendEmailFollowUp(Id followUpQueueId) {
-        if (followUpQueueId == null) {
-            throw new IllegalArgumentException('Follow-up queue ID is required');
-        }
-
-        Follow_Up_Queue__c followUp = [
-            SELECT Id, Onboarding__c, Onboarding__r.Account__c,
-                   Follow_Up_Type__c, Status__c, Follow_Up_Rule__c
-            FROM Follow_Up_Queue__c
-            WHERE Id = :followUpQueueId
-            LIMIT 1
-        ];
-
-        Follow_Up_Rule__mdt followUpRule = getRuleByDeveloperName(followUp.Follow_Up_Rule__c);
-        Communication_Template__c commTemplate = getCommTemplate(followUpRule);
-
-        Contact dealerContact = FollowUpMessagingService.getPrimaryContact(followUp.Onboarding__r.Account__c);
-        if (dealerContact == null || String.isBlank(dealerContact.Email)) {
-            markFollowUpFailed(followUpQueueId, 'No contact email available for onboarding account');
-            return;
-        }
-
-        // Build email from communication template
-        String emailTemplateId = commTemplate != null ? commTemplate.Email_Template_Id__c : null;
-        if (String.isBlank(emailTemplateId)) {
-            markFollowUpFailed(followUpQueueId, 'No email template configured for follow-up');
-            return;
-        }
-
-        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-        mail.setSaveAsActivity(true);
-        mail.setTemplateId(emailTemplateId);
-        mail.setTargetObjectId(dealerContact.Id);
-        mail.setWhatId(followUp.Onboarding__c);
-        mail.setUseSignature(false);
-
-        try {
-            Messaging.SendEmailResult[] emailResults = Messaging.sendEmail(
-                new Messaging.SingleEmailMessage[] { mail }
-            );
-            if (emailResults == null || emailResults.isEmpty() || !emailResults[0].isSuccess()) {
-                String errorMsg = (emailResults != null && !emailResults.isEmpty() && emailResults[0].getErrors().size() > 0)
-                    ? emailResults[0].getErrors()[0].getMessage()
-                    : 'Unknown error';
-                markFollowUpFailed(followUpQueueId, 'Email send failed: ' + errorMsg);
-                return;
-            }
-        } catch (Exception ex) {
-            markFollowUpFailed(followUpQueueId, 'Email send failed: ' + ex.getMessage());
-            return;
-        }
-
-        // Update follow-up on success
-        followUp.Status__c = 'Sent';
-        followUp.Last_Attempt_Date__c = DateTime.now();
-        followUp.Attempt_Count__c = (followUp.Attempt_Count__c == null ? 0 : followUp.Attempt_Count__c) + 1;
-        followUp.Consecutive_Failures__c = 0;
-        update followUp;
-
-        FollowUpFatigueService.updateAttemptTracking(followUpQueueId, true);
-    }
-
-    /**
      * Retry failed follow-ups
      * Called by FollowUpRetryHandler when Platform Event is received
      * @param followUpQueueIds List of Follow_Up_Queue__c record IDs to retry
@@ -192,7 +126,7 @@ public with sharing class FollowUpExecutionService {
                 if (fq.Follow_Up_Type__c == 'SMS') {
                     sendSMSFollowUp(fq.Id);
                 } else if (fq.Follow_Up_Type__c == 'Email') {
-                    sendEmailFollowUp(fq.Id);
+                    markFollowUpFailed(fq.Id, 'Email follow-ups are handled by Flow.');
                 } else {
                     markFollowUpFailed(fq.Id, 'Unknown follow-up type: ' + fq.Follow_Up_Type__c);
                 }

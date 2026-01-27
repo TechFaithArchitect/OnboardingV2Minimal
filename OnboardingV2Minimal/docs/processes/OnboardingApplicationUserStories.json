@@ -49,7 +49,7 @@
       },
       {
         "summary": "Configure Onboarding Requirements",
-        "description": "As a Program Manager, I want to define requirement sets and associate them with vendor programs, so that onboarding tasks are tailored to program needs."
+        "description": "As a Program Manager, I want to define requirements and associate them with vendor programs, so that onboarding tasks are tailored to program needs."
       },
       {
         "summary": "Define Required Credentials and Training",
