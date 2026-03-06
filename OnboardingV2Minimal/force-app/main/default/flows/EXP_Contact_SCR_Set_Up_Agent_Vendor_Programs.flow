@@ -129,6 +129,7 @@
         <object>Vendor__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <runInMode>SystemModeWithoutSharing</runInMode>
     <screens>
         <name>Show_No_Vendors_Available_Screen_Flow</name>
         <label>Show No Vendors Available Screen Flow</label>
@@ -196,7 +197,7 @@
         <connector>
             <targetReference>Create_Link_Between_ECC_and_Required_Credentials</targetReference>
         </connector>
-        <flowName>DOMAIN_Onboarding_SFL_CREATE_External_Contact_Credentials</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_External_Contact_Credentials</flowName>
         <inputAssignments>
             <name>OnboardingRecord</name>
             <value>
@@ -227,7 +228,7 @@
         <label>Create Link Between ECC and Required Credentials</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <flowName>DOMAIN_External_Contact_Credential_SFL_CREATE_Required_External_Contact_Credenti</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Required_External_Contact_Credenti</flowName>
         <inputAssignments>
             <name>ExternalContactCredentialRecords</name>
             <value>
@@ -255,7 +256,7 @@
         <connector>
             <targetReference>Create_External_Contact_Credentials</targetReference>
         </connector>
-        <flowName>DOMAIN_Contact_SFL_CREATE_Training_Assignment_Records</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records</flowName>
         <inputAssignments>
             <name>ContactRecord</name>
             <value>
@@ -285,7 +286,7 @@
         <connector>
             <targetReference>Loop_Completed_Vendor_Onboarding_Records</targetReference>
         </connector>
-        <flowName>DOMAIN_Contact_SFL_GET_Account_Information_from_Contact_Record</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_All_Related_Records</flowName>
         <inputAssignments>
             <name>contactId</name>
             <value>

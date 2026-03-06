@@ -13,7 +13,7 @@ public with sharing class TwilioSettingsController {
     @AuraEnabled(cacheable=true)
     public static List<TwilioConfigWrapper> getTwilioConfigurations() {
         // Admin gate: Only System Administrators can access
-        if (!OnboardingAccessService.isCurrentUserAdmin()) {
+        if (!isCurrentUserAdmin()) {
             throw new AuraHandledException('Access denied. Twilio Settings is restricted to System Administrators.');
         }
         
@@ -47,7 +47,7 @@ public with sharing class TwilioSettingsController {
     @AuraEnabled
     public static ValidationResult validateConfiguration() {
         // Admin gate: Only System Administrators can access
-        if (!OnboardingAccessService.isCurrentUserAdmin()) {
+        if (!isCurrentUserAdmin()) {
             ValidationResult validationResult = new ValidationResult();
             validationResult.isValid = false;
             validationResult.errorMessage = 'Access denied. Twilio Settings is restricted to System Administrators.';
@@ -120,5 +120,31 @@ public with sharing class TwilioSettingsController {
     public class ValidationResult {
         @AuraEnabled public Boolean isValid;
         @AuraEnabled public String errorMessage;
+    }
+
+    private static Boolean isCurrentUserAdmin() {
+        Profile userProfile = [
+            SELECT Name
+            FROM Profile
+            WHERE Id = :UserInfo.getProfileId()
+            LIMIT 1
+        ];
+        if (userProfile.Name == 'System Administrator') {
+            return true;
+        }
+
+        try {
+            PermissionSetAssignment[] assignments = [
+                SELECT PermissionSet.PermissionsCustomizeApplication
+                FROM PermissionSetAssignment
+                WHERE
+                    AssigneeId = :UserInfo.getUserId()
+                    AND PermissionSet.PermissionsCustomizeApplication = TRUE
+                LIMIT 1
+            ];
+            return !assignments.isEmpty();
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }

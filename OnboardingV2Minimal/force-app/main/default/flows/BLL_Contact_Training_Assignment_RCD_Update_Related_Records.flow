@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <description>Business Logic Layer - Contact Training Assignment Object - Record Trigger - Update Related Records</description>
@@ -17,19 +17,111 @@
         <exitConditionLogic>and</exitConditionLogic>
         <stageSteps>
             <name>Get_Onboarding_Records</name>
-            <actionName>DOMAIN_Onboarding_SFL_Get_Records</actionName>
+            <actionName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Records</actionName>
             <actionType>stepBackground</actionType>
             <canAssigneeEdit>false</canAssigneeEdit>
             <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
+                <name>AccountId</name>
+            </inputParameters>
+            <inputParameters>
+                <name>AccountRecord</name>
+            </inputParameters>
+            <inputParameters>
+                <name>AccountRecordCollection</name>
+            </inputParameters>
+            <inputParameters>
+                <name>AccountRecordList</name>
+            </inputParameters>
+            <inputParameters>
+                <name>AgreementId</name>
+            </inputParameters>
+            <inputParameters>
+                <name>AgreementRecord</name>
+            </inputParameters>
+            <inputParameters>
+                <name>AgreementRecordCollection</name>
+            </inputParameters>
+            <inputParameters>
+                <name>AgreementRecordList</name>
+            </inputParameters>
+            <inputParameters>
+                <name>ContactId</name>
+            </inputParameters>
+            <inputParameters>
+                <name>ContractId</name>
+            </inputParameters>
+            <inputParameters>
+                <name>ContractRecord</name>
+            </inputParameters>
+            <inputParameters>
+                <name>ContractRecordCollection</name>
+            </inputParameters>
+            <inputParameters>
+                <name>ContractRecordList</name>
+            </inputParameters>
+            <inputParameters>
+                <name>FindNotIncludedValues</name>
+            </inputParameters>
+            <inputParameters>
+                <name>OnboardingId</name>
+            </inputParameters>
+            <inputParameters>
+                <name>OpportunityId</name>
+            </inputParameters>
+            <inputParameters>
+                <name>OpportunityRecord</name>
+            </inputParameters>
+            <inputParameters>
+                <name>OpportunityRecordCollection</name>
+            </inputParameters>
+            <inputParameters>
+                <name>OpportunityRecordList</name>
+            </inputParameters>
+            <inputParameters>
                 <name>TrainingAssignmentRecord</name>
                 <value>
                     <elementReference>$Record</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>TrainingAssignmentRecordCollection</name>
+            </inputParameters>
+            <inputParameters>
+                <name>VendorProgramId</name>
+            </inputParameters>
+            <inputParameters>
+                <name>VendorProgramRecord</name>
+            </inputParameters>
+            <inputParameters>
+                <name>VendorProgramRecordCollection</name>
+            </inputParameters>
+            <inputParameters>
+                <name>VendorProgramRecordList</name>
+            </inputParameters>
             <label>Get Onboarding Records</label>
+            <outputConfigParams>
+                <name>OnboardingRecord</name>
+                <value xsi:nil="true"/>
+            </outputConfigParams>
+            <outputConfigParams>
+                <name>OnboardingRecordCollection</name>
+                <value xsi:nil="true"/>
+            </outputConfigParams>
+            <outputConfigParams>
+                <name>OnboardingRecordList</name>
+                <value xsi:nil="true"/>
+            </outputConfigParams>
+            <outputConfigParams>
+                <name>TotalOnboardingRecords</name>
+                <value xsi:nil="true"/>
+            </outputConfigParams>
+            <outputConfigParams>
+                <name>errorMessage</name>
+                <value xsi:nil="true"/>
+            </outputConfigParams>
             <requiresAsyncProcessing>false</requiresAsyncProcessing>
             <runAsUser>false</runAsUser>
             <shouldLock>false</shouldLock>
@@ -44,14 +136,14 @@
         <exitConditionLogic>and</exitConditionLogic>
         <stageSteps>
             <name>Update_Onboarding_Record_Flow</name>
-            <actionName>DOMAIN_Onboarding_SFL_Update_Onboarding_Record_s_Training_Status</actionName>
+            <actionName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</actionName>
             <actionType>stepBackground</actionType>
             <canAssigneeEdit>false</canAssigneeEdit>
             <debugSimulateStep>false</debugSimulateStep>
             <entryConditionLogic>and</entryConditionLogic>
             <exitConditionLogic>and</exitConditionLogic>
             <inputParameters>
-                <name>LearnUponContactEnrollmentRecord</name>
+                <name>LearnUponContactEnrollment</name>
             </inputParameters>
             <inputParameters>
                 <name>OnboardingRecord</name>
@@ -101,5 +193,5 @@
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
 </Flow>

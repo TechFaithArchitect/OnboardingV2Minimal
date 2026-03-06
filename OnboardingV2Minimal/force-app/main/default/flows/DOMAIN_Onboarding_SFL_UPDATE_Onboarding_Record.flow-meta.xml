@@ -561,7 +561,7 @@
             <name>Yes_Setup_Complete</name>
             <conditionLogic>(1 OR (2 AND 3)) OR (1 AND 4) OR (2 AND 5)</conditionLogic>
             <conditions>
-                <leftValueReference>OnboardingRecord.ERP_Setup__r.Status__c</leftValueReference>
+                <leftValueReference>OnboardingRecord.ERP_Setup_Status__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Complete</stringValue>
@@ -614,21 +614,21 @@
             <name>Yes_Denied</name>
             <conditionLogic>or</conditionLogic>
             <conditions>
-                <leftValueReference>OnboardingRecord.Background_Check__r.Status__c</leftValueReference>
+                <leftValueReference>OnboardingRecord.Background_Check_Status__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Denied</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>OnboardingRecord.Credit_Check__r.Status__c</leftValueReference>
+                <leftValueReference>OnboardingRecord.Credit_Check_Status__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Failed</stringValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>OnboardingRecord.Compliance__r.Status__c</leftValueReference>
+                <leftValueReference>OnboardingRecord.Compliance_Status__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Denied</stringValue>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Normalized_Status__c</fullName>
+    <description>Normalized status output used by BRE.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Normalized Status</label>
+    <required>true</required>
+    <type>Text</type>
+    <length>255</length>
+</CustomField>

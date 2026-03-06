@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata" fqn="reactStylePhoneInput">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="label" type="String" label="Label" role="inputOnly"/>
+            <property
+                name="defaultPhoneNumber"
+                type="String"
+                label="Default Phone Number"
+                description="Initial phone number shown when the screen loads."
+                role="inputOnly"
+            />
+            <property name="value" type="String" label="Formatted Phone Number" role="outputOnly"/>
+            <property name="isValid" type="Boolean" label="Is Valid Phone Number"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

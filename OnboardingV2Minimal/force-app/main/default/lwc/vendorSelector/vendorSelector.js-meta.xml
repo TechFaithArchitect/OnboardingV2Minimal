@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property
+                name="recordId"
+                type="String"
+                label="Account Id"
+                required="true" />
+            
+            <property
+                name="vendorOptionsJson"
+                type="String"
+                label="Vendor Options JSON"
+                description="JSON string of VendorOptionDTOs returned by Apex"
+                required="false" />
+
+            <!-- Outputs -->
+            <property name="outputVendorId" type="String" label="Selected Vendor Id" role="outputOnly" />
+            <property name="outputVendorName" type="String" label="Selected Vendor Name" role="outputOnly" />
+            <property name="outputRetailOption" type="String" label="Selected Retail Option" role="outputOnly" />
+            <property name="outputBusinessVertical" type="String" label="Selected Business Vertical" role="outputOnly" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

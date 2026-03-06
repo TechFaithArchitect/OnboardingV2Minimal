@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata" fqn="onboardingPathSelector">
+    <apiVersion>63.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="questionLabel" type="String" label="Question Label" role="inputOnly"/>
+            <property name="fieldLabel" type="String" label="Field Label" role="inputOnly"/>
+            <property name="required" type="Boolean" label="Required" role="inputOnly"/>
+            <property name="finalNextAction" type="String" label="Final Next Action" role="inputOnly"/>
+            <property name="isUserSpecial" type="Boolean" label="Is User Special" role="inputOnly"/>
+            <property name="selection" type="String" label="Selected Path"/>
+            <property name="showVendorOpportunityPath" type="Boolean" label="Show Vendor Opportunity Path" role="outputOnly"/>
+            <property name="showChuzoNoPersonalGuarantee" type="Boolean" label="Show Chuzo No Personal Guarantee" role="outputOnly"/>
+            <property name="showChuzoPath" type="Boolean" label="Show Chuzo Path" role="outputOnly"/>
+            <property name="showWithoutChuzoPath" type="Boolean" label="Show Without Chuzo Path" role="outputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

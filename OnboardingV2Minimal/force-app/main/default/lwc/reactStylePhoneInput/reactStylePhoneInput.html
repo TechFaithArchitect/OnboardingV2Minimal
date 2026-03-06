@@ -1,0 +1,40 @@
+<template>
+    <div class="slds-form-element {errorClass}">
+        <label class="slds-form-element__label" for="phoneInput">
+            <template if:true={required}><abbr class="slds-required" title="required">*</abbr> </template>{displayLabel}
+        </label>
+        <div class="phone-input-wrapper">
+            <div class="country-selector" onclick={toggleDropdown}>
+                <img src={selectedCountry.flagUrl} alt={selectedCountry.iso2} class="flag-icon" />
+                <span class="dial-code">{selectedCountry.dialCode}</span>
+                <span class="dropdown-icon">▼</span>
+            </div>
+            <lightning-input
+                id="phoneInput"
+                type="tel"
+                value={phoneNumber}
+                disabled={disabled}
+                onchange={handleInputChange}
+                class="phone-input"
+                variant="label-hidden"
+            ></lightning-input>
+        </div>
+
+        <template if:true={showDropdown}>
+            <div class="dropdown">
+                <input type="text" placeholder="Search..." oninput={handleSearch} class="search-box" disabled={disabled}/>
+                <ul>
+                    <template for:each={countryList} for:item="country">
+                        <li key={country.iso2} data-code={country.iso2} onclick={selectCountry}>
+                            <img src={country.flagUrl} alt={country.iso2} class="flag-icon" /> {country.name} ({country.dialCode})
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </template>
+
+        <template if:true={showError}>
+            <div class="slds-form-element__help slds-text-color_error">Please enter a valid phone number.</div>
+        </template>
+    </div>
+</template>

@@ -97,15 +97,6 @@ Reusable communication templates tied to vendor programs for onboarding outreach
 **Relationships:**
 - Linked to Vendor_Customization__c (Vendor Program)
 
-### Onboarding_External_Override_Log__c
-
-Audit log for external override actions on onboarding status.
-
-**Key Fields:**
-- `Onboarding__c` (Lookup) - Onboarding record
-- Override metadata (source, reason, request id)
-- `Applied_On__c` (DateTime)
-
 ### Onboarding_Next_Step_Override__c
 
 Manual override record used to control the next-step guidance for onboarding.

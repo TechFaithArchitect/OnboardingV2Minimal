@@ -1821,7 +1821,7 @@
             <targetReference>Add_Contact_Details_for_the_Account</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <variables>
         <name>accountId</name>
         <dataType>String</dataType>

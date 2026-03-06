@@ -28,7 +28,6 @@ Managed-package objects and org-only objects (e.g., LearnUpon managed objects, `
 | `ECC_Field_Configuration_Group__c` | ECC_Field_Configuration_Group__c |  |
 | `ECC_Field_Display_Configuration__c` | ECC_Field_Display_Configuration__c |  |
 | `ERP_Setup__c` | ERP Setup | This object tracks which accounts have been setup in our ERP system. |
-| `Email_Communication_Log__c` | Email Communication Log | Actively tracks onboarding, training email, and welcome emails via email templateId sent to contacts. |
 | `External_Contact_Credential_Type__c` | External_Contact_Credential_Type__c |  |
 | `External_Credential_Type_Dependency__c` | External_Credential_Type_Dependency__c |  |
 | `Follow_Up_Queue__c` | Follow Up Queue | Tracks pending/failed onboarding follow-ups (SMS/Email) with status, attempts, next attempt date, and error details. |
@@ -39,7 +38,6 @@ Managed-package objects and org-only objects (e.g., LearnUpon managed objects, `
 | `Labor_Form__c` | Labor Form | This object is for storing all employment / 1099 forms used by PerfectVision. |
 | `License__c` | License | This object stores all the different types of licenses needed by PerfectVision and our Vendors and relates it back to the Dealer. |
 | `Net_Terms__c` | Net Terms |  |
-| `Onboarding_External_Override_Log__c` | Onboarding External Override Log | Audit log for external override operations on Onboarding__c (source, reason, request, status changes). |
 | `Onboarding_Requirement__c` | Onboarding Requirement | Dealer-specific instance of each required task (status, file, etc.) |
 | `Onboarding_Status_Rule__c` | Onboarding Status Rule | Individual condition row within a status rules engine to drive onboarding status changes. |
 | `Onboarding_Status_Rules_Engine__c` | Onboarding Status Rules Engine | Configurable Rules Engine that evaluates the status of an onboarding record. |

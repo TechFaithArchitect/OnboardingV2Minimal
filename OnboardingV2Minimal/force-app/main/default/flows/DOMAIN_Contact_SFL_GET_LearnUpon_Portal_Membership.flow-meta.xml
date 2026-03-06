@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_LearnUpon_Portal_Membership_Record</name>
+        <label>Assign LearnUpon Portal Membership Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>LearnUponPortalMembership</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_LearnUpon_Contact_Membership_Record</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>DOMAIN LAYER - Contact Object - Subflow - GET - LearnUpon Portal Membership</description>
+    <environments>Default</environments>
+    <interviewLabel>DOMAIN - Contact - SFL - GET - LearnUpon Portal Membership {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>DOMAIN - Contact - SFL - GET - LearnUpon Portal Membership</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_LearnUpon_Contact_Membership_Record</name>
+        <label>Get LearnUpon Portal Membership Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_LearnUpon_Portal_Membership_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>LearnUponP__Contact__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>ContactRecord.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>LearnUponP__LearnUpon_Portal_Membership__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_LearnUpon_Contact_Membership_Record</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>ContactRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>LearnUponPortalMembership</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>LearnUponP__LearnUpon_Portal_Membership__c</objectType>
+    </variables>
+</Flow>

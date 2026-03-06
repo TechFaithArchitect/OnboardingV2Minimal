@@ -5,7 +5,7 @@
     <description>Marks that the inherited requirement has been overridden for this onboarding.</description>
     <inlineHelpText>Set this to True to Override</inlineHelpText>
     <label>Is Overridden</label>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>
 </CustomField>

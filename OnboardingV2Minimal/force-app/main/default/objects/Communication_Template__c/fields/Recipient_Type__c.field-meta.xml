@@ -16,6 +16,16 @@
                 <label>Contact</label>
             </value>
             <value>
+                <fullName>PrincipalOwner</fullName>
+                <default>false</default>
+                <label>Principal Owner</label>
+            </value>
+            <value>
+                <fullName>Agent</fullName>
+                <default>false</default>
+                <label>Agent</label>
+            </value>
+            <value>
                 <fullName>User</fullName>
                 <default>false</default>
                 <label>User</label>

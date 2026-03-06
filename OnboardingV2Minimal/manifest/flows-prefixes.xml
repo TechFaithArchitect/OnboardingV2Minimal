@@ -68,6 +68,8 @@
     <members>EXP_Contract_ACTION_Send_Adobe_Agreement</members>
     <members>EXP_Contract_SCR_Send_Adobe_Agreement</members>
     <members>EXP_Onboarding_SCR_Update_Onboarding_Record</members>
+    <members>EXP_Onboarding_SCR_Record_Creation</members>
+    <members>EXP_Opportunity_SCR_Create_Record</members>
     <name>Flow</name>
   </types>
   <version>65.0</version>

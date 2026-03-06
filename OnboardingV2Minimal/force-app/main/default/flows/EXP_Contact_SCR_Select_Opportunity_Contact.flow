@@ -908,7 +908,7 @@
             <targetReference>Get_All_Contacts_on_Account</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <subflows>
         <name>Contact_ScreenFlow_Create_Contacts_on_Accounts_Flow</name>
         <label>Contact - ScreenFlow - Create Contacts on Accounts Flow</label>

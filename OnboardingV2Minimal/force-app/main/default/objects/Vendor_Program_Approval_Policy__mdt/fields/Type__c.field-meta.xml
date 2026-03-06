@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type__c</fullName>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Type</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Agreement</fullName>
+                <default>true</default>
+                <label>Agreement</label>
+            </value>
+            <value>
+                <fullName>Auto Insurance</fullName>
+                <default>false</default>
+                <label>Auto Insurance</label>
+            </value>
+            <value>
+                <fullName>Background Check</fullName>
+                <default>false</default>
+                <label>Background Check</label>
+            </value>
+            <value>
+                <fullName>Business License</fullName>
+                <default>false</default>
+                <label>Business License</label>
+            </value>
+            <value>
+                <fullName>Chuzo Agreement</fullName>
+                <default>false</default>
+                <label>Chuzo Agreement</label>
+            </value>
+            <value>
+                <fullName>Compliance</fullName>
+                <default>false</default>
+                <label>Compliance</label>
+            </value>
+            <value>
+                <fullName>Contract</fullName>
+                <default>false</default>
+                <label>Contract</label>
+            </value>
+            <value>
+                <fullName>Credit Check</fullName>
+                <default>false</default>
+                <label>Credit Check</label>
+            </value>
+            <value>
+                <fullName>Driver&apos;s License</fullName>
+                <default>false</default>
+                <label>Driver&apos;s License</label>
+            </value>
+            <value>
+                <fullName>Employment Form</fullName>
+                <default>false</default>
+                <label>Employment Form</label>
+            </value>
+            <value>
+                <fullName>ERP Setup</fullName>
+                <default>false</default>
+                <label>ERP Setup</label>
+            </value>
+            <value>
+                <fullName>General Liability Insurance</fullName>
+                <default>false</default>
+                <label>General Liability Insurance</label>
+            </value>
+            <value>
+                <fullName>Interview</fullName>
+                <default>false</default>
+                <label>Interview</label>
+            </value>
+            <value>
+                <fullName>Net Terms</fullName>
+                <default>false</default>
+                <label>Net Terms</label>
+            </value>
+            <value>
+                <fullName>Personal Guarantee</fullName>
+                <default>false</default>
+                <label>Personal Guarantee</label>
+            </value>
+            <value>
+                <fullName>SubAgent License Agreement</fullName>
+                <default>false</default>
+                <label>SubAgent License Agreement</label>
+            </value>
+            <value>
+                <fullName>Terms &amp; Conditions</fullName>
+                <default>false</default>
+                <label>Terms &amp; Conditions</label>
+            </value>
+            <value>
+                <fullName>Training</fullName>
+                <default>false</default>
+                <label>Training</label>
+            </value>
+            <value>
+                <fullName>Worker&apos;s Compensation Insurance</fullName>
+                <default>false</default>
+                <label>Worker&apos;s Compensation Insurance</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

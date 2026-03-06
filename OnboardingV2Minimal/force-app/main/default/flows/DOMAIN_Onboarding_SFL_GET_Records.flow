@@ -151,10 +151,10 @@
             <label>Go Via ContactRecord List</label>
         </rules>
     </decisions>
-    <description>DOMAIN LAYER - Onboarding Object - Subflow - Get Records</description>
+    <description>DOMAIN LAYER - Onboarding Object - Subflow - GET - Records</description>
     <environments>Default</environments>
-    <interviewLabel>DOMAIN - Onboarding - SFL - Get Records {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>DOMAIN - Onboarding - SFL - Get Records</label>
+    <interviewLabel>DOMAIN - Onboarding - SFL - GET - Records {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>DOMAIN - Onboarding - SFL - GET - Records</label>
     <loops>
         <name>Loop_Opportunity_Records</name>
         <label>Loop Opportunity Records</label>

@@ -1,0 +1,195 @@
+<template>
+    <lightning-card>
+        <div class="slds-text-heading_medium slds-p-horizontal_medium slds-p-top_medium slds-m-bottom_small">
+            {heading}
+        </div>
+        <template if:true={isLoading}>
+            <div class="slds-p-around_medium">
+                <lightning-spinner alternative-text="Loading configuration"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={errorMessage}>
+                <div class="slds-p-horizontal_medium slds-p-vertical_small">
+                    <div class="slds-text-color_error">
+                        {errorMessage}
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={hasRows}>
+                <div class="slds-p-around_medium">
+                    <template for:each={rows} for:item="row">
+                        <div key={row.clientId} class="slds-box slds-m-bottom_small">
+                            <div class="slds-text-heading_small slds-m-bottom_small">
+                                {row.subheading}
+                            </div>
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <template for:each={row.fieldStates} for:item="fieldState">
+                                    <div
+                                        key={fieldState.fieldApiName}
+                                        class={fieldState.columnClass}
+                                    >
+                                        <div class={fieldState.formElementClass}>
+                                        <template if:true={fieldState.isPhoneField}>
+                                            <c-react-style-phone-input
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={fieldState.fieldApiName}
+                                                label={fieldState.label}
+                                                required={fieldState.required}
+                                                disabled={fieldState.readOnly}
+                                                value={fieldState.value}
+                                                onchange={handleFieldChange}
+                                            ></c-react-style-phone-input>
+                                        </template>
+                                        <template if:true={fieldState.isCheckbox}>
+                                            <lightning-input
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={fieldState.fieldApiName}
+                                                type="checkbox"
+                                                label={fieldState.label}
+                                                checked={fieldState.checked}
+                                                disabled={fieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-input>
+                                        </template>
+                                        <template if:true={fieldState.isPicklist}>
+                                            <lightning-combobox
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={fieldState.fieldApiName}
+                                                label={fieldState.label}
+                                                value={fieldState.value}
+                                                options={fieldState.picklistOptions}
+                                                required={fieldState.required}
+                                                disabled={fieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-combobox>
+                                        </template>
+                                        <template if:true={fieldState.isLookup}>
+                                            <lightning-record-picker
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={fieldState.fieldApiName}
+                                                label={fieldState.label}
+                                                value={fieldState.value}
+                                                object-api-name={fieldState.lookupObjectApiName}
+                                                required={fieldState.required}
+                                                disabled={fieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-record-picker>
+                                        </template>
+                                        <template if:true={fieldState.isTextOrDateInput}>
+                                            <lightning-input
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={fieldState.fieldApiName}
+                                                type={fieldState.dataType}
+                                                label={fieldState.label}
+                                                value={fieldState.value}
+                                                required={fieldState.required}
+                                                disabled={fieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-input>
+                                        </template>
+                                        <template if:true={fieldState.errorMessage}>
+                                            <div class="slds-text-color_error slds-text-body_small slds-m-top_xx-small">
+                                                {fieldState.errorMessage}
+                                            </div>
+                                        </template>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template for:each={row.relationshipFieldStates} for:item="relFieldState">
+                                    <div
+                                        key={relFieldState.fieldApiName}
+                                        class={relFieldState.columnClass}
+                                        data-relationship="true"
+                                    >
+                                        <div class={relFieldState.formElementClass}>
+                                        <template if:true={relFieldState.isPicklist}>
+                                            <lightning-combobox
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={relFieldState.fieldApiName}
+                                                data-relationship="true"
+                                                label={relFieldState.label}
+                                                value={relFieldState.value}
+                                                options={relFieldState.picklistOptions}
+                                                required={relFieldState.required}
+                                                disabled={relFieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-combobox>
+                                        </template>
+                                        <template if:true={relFieldState.isCheckbox}>
+                                            <lightning-input
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={relFieldState.fieldApiName}
+                                                data-relationship="true"
+                                                type="checkbox"
+                                                label={relFieldState.label}
+                                                checked={relFieldState.checked}
+                                                disabled={relFieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-input>
+                                        </template>
+                                        <template if:true={relFieldState.isLookup}>
+                                            <lightning-record-picker
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={relFieldState.fieldApiName}
+                                                data-relationship="true"
+                                                label={relFieldState.label}
+                                                value={relFieldState.value}
+                                                object-api-name={relFieldState.lookupObjectApiName}
+                                                required={relFieldState.required}
+                                                disabled={relFieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-record-picker>
+                                        </template>
+                                        <template if:true={relFieldState.isTextOrDateInput}>
+                                            <lightning-input
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={relFieldState.fieldApiName}
+                                                data-relationship="true"
+                                                type={relFieldState.dataType}
+                                                label={relFieldState.label}
+                                                value={relFieldState.value}
+                                                required={relFieldState.required}
+                                                disabled={relFieldState.readOnly}
+                                                onchange={handleFieldChange}
+                                            ></lightning-input>
+                                        </template>
+                                        <template if:true={relFieldState.errorMessage}>
+                                            <div class="slds-text-color_error slds-text-body_small slds-m-top_xx-small">
+                                                {relFieldState.errorMessage}
+                                            </div>
+                                        </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <div class="slds-p-around_medium">
+                <template if:true={showAddRowButton}>
+                    <lightning-button
+                        label={addButtonLabel}
+                        variant="brand-outline"
+                        onclick={handleAddRow}
+                        class="slds-m-right_small"
+                    ></lightning-button>
+                </template>
+                <template if:true={canShowRemoveButton}>
+                    <lightning-button
+                        label={removeButtonLabel}
+                        variant="base"
+                        icon-name="utility:delete"
+                        icon-position="left"
+                        onclick={handleRemoveLastRow}
+                        class="slds-text-color_error"
+                    ></lightning-button>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

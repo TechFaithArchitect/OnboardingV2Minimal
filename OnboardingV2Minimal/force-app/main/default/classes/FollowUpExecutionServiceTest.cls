@@ -95,6 +95,47 @@ private class FollowUpExecutionServiceTest {
         // Status depends on retry result
         System.assert(updated.Status__c == 'Sent' || updated.Status__c == 'Failed');
     }
+
+    @IsTest
+    static void testRetryFailedFollowUpsEmailWithMissingDispatchContext() {
+        Account acct = TestDataFactory.createAccount('Email Retry Account', true);
+        Contact con = TestDataFactory.createContact('Email', 'Recipient', true, acct);
+        Vendor__c vendor = TestDataFactory.createVendor(true);
+        Vendor_Customization__c vendorProgram = TestDataFactory.createVendorCustomization(
+            vendor, 'Active', true, null, true
+        );
+        Onboarding__c onboarding = TestDataFactory.createOnboarding(acct, vendorProgram, true);
+
+        List<String> validStatuses = TestDataFactoryUtil.getPicklistValues(
+            Follow_Up_Queue__c.SObjectType,
+            'Status__c'
+        );
+        String pendingRetryStatus = validStatuses.contains('Pending Retry') ? 'Pending Retry' : validStatuses[0];
+
+        Follow_Up_Queue__c emailFollowUp = new Follow_Up_Queue__c(
+            Name = 'Email Retry Missing Context',
+            Onboarding__c = onboarding.Id,
+            Follow_Up_Type__c = 'Email',
+            Status__c = pendingRetryStatus,
+            Trigger_Reason__c = 'LegacyRuleKeyWithoutDispatchContext'
+        );
+        insert emailFollowUp;
+
+        Test.startTest();
+        FollowUpExecutionService.retryFailedFollowUps(new List<Id>{ emailFollowUp.Id });
+        Test.stopTest();
+
+        Follow_Up_Queue__c updated = [
+            SELECT Status__c, Error_Message__c, Attempt_Count__c, Consecutive_Failures__c
+            FROM Follow_Up_Queue__c
+            WHERE Id = :emailFollowUp.Id
+        ];
+        System.assertEquals('Failed', updated.Status__c, 'Email retry should fail when dispatch context is missing');
+        System.assertNotEquals(null, updated.Error_Message__c, 'Error message should be captured');
+        System.assert(updated.Error_Message__c.contains('Trigger_Reason__c is missing dispatch context'));
+        System.assertEquals(1, updated.Attempt_Count__c, 'Failure should only be counted once');
+        System.assertEquals(1, updated.Consecutive_Failures__c, 'Consecutive failures should only increment once');
+    }
     
     @IsTest
     static void testRetryFailedFollowUpsWithEmptyList() {

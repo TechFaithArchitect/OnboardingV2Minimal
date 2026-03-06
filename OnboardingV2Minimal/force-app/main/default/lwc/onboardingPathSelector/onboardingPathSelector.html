@@ -1,0 +1,16 @@
+<template>
+    <template lwc:if={isVisible}>
+        <div class="path-selector">
+            <h3 class="slds-text-heading_medium slds-m-bottom_small">{questionLabel}</h3>
+            <lightning-radio-group
+                name="onboardingPath"
+                label={fieldLabel}
+                options={options}
+                value={selection}
+                required={required}
+                type="radio"
+                onchange={handleSelectionChange}
+            ></lightning-radio-group>
+        </div>
+    </template>
+</template>

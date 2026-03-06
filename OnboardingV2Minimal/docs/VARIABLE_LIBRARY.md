@@ -315,7 +315,7 @@ ValidationResult validationResult = new ValidationResult();
 ValidationTestResult validationTestResult = new ValidationTestResult();
 List<OverrideLogDTO> overrideLogDTOList = new List<OverrideLogDTO>();
 
-for (Onboarding_External_Override_Log__c overrideLogRecord : overrideLogRecords) {
+for (Onboarding_Requirement__History onboardingRequirementHistoryRecord : onboardingRequirementHistoryRecords) {
     OverrideLogDTO overrideLogDTO = new OverrideLogDTO();
     // ...
 }
@@ -323,7 +323,7 @@ for (Onboarding_External_Override_Log__c overrideLogRecord : overrideLogRecords)
 // ❌ INCORRECT
 SaveResult result = new SaveResult();
 List<OverrideLogDTO> logs = new List<OverrideLogDTO>();
-for (Onboarding_External_Override_Log__c rec : records) {
+for (Onboarding_Requirement__History rec : records) {
     OverrideLogDTO dto = new OverrideLogDTO();
 }
 ```

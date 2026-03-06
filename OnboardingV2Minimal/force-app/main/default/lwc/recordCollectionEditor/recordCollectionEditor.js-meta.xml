@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Record Collection Editor</masterLabel>
+    <description>Generic parent-child record collection editor for use in Flow screens.</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="heading" type="String" label="Heading" description="Heading text for the records section (e.g., Add Contact(s))." default="Records"/>
+            <property name="recordLabel" type="String" label="Record Label" description="Label for the record type (e.g., Contact). Used for Add/Remove button text." default="Row"/>
+            <property name="configKey" type="String" label="Config Key (Child_Record_Editor_Config__mdt DeveloperName)" description="DeveloperName of Child_Record_Editor_Config__mdt row to use for field configuration."/>
+            <property name="parentId" type="String" label="Parent Id" description="Id of the parent record (e.g., Account Id, Opportunity Id)."/>
+            <property name="existingRecordsJson" type="String" label="Existing Records JSON" description="Optional. JSON string of existing records to edit. Use 'Get Records JSON for Editor' invocable to build from a Record Collection."/>
+            <property name="minRows" type="Integer" label="Minimum Rows" description="Minimum number of child rows when no existing records. Ignored when existingRecordsJson is provided." default="1"/>
+            <property name="maxRows" type="Integer" label="Maximum Rows" description="Maximum number of child rows allowed."/>
+            <property name="recordsToCreate" type="String" label="Records To Create (JSON)" description="JSON string representing the records to create." role="outputOnly"/>
+            <property name="hasValidationError" type="Boolean" label="Has Validation Error" description="Indicates whether validation errors occurred." role="outputOnly"/>
+            <property name="errorMessage" type="String" label="Error Message" description="Validation error message." role="outputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
+

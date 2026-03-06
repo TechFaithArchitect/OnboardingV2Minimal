@@ -1,4 +1,16 @@
 public with sharing class VendorOnboardingFlowService {
+  private static final Set<String> NON_BLOCKING_ONBOARDING_STATUSES = new Set<String>{
+    'CANCELED',
+    'CANCELLED',
+    'DENIED'
+  };
+  private static final Set<String> COMPLETED_ONBOARDING_STATUSES = new Set<String>{
+    'COMPLETE',
+    'COMPLETED',
+    'SETUP COMPLETE',
+    'SETUP COMPLETED'
+  };
+
   @InvocableMethod(label='Get Eligible Vendors for Onboarding')
   public static List<List<VendorOptionDTO>> getEligibleVendors(
     List<Id> accountIds
@@ -9,28 +21,34 @@ public with sharing class VendorOnboardingFlowService {
     for (Id accountId : accountIds) {
       List<VendorOptionDTO> vendorOptionDTOList = new List<VendorOptionDTO>();
 
-      // ✅ Get already onboarded vendor program IDs and the associated vendor IDs
-      Set<Id> onboardedVendorIds = new Set<Id>();
-      Set<Id> onboardedCustomizationIds = new Set<Id>();
+      // Track vendor programs already onboarded for this account.
+      // Canceled/Denied records should not block the program from being shown again.
+      Set<Id> blockedCustomizationIds = new Set<Id>();
+      Set<Id> completedCustomizationIds = new Set<Id>();
+      Set<Id> blockedVendorIds = new Set<Id>();
 
       for (Onboarding__c onboardingRecord : [
-        SELECT Vendor_Customization__r.Vendor__c, Vendor_Customization__c
+        SELECT Vendor_Customization__c, Vendor_Customization__r.Vendor__c, Onboarding_Status__c
         FROM Onboarding__c
         WHERE Account__c = :accountId AND Vendor_Customization__c != NULL
       ]) {
-        onboardedCustomizationIds.add(onboardingRecord.Vendor_Customization__c);
+        if (isNonBlockingOnboardingStatus(onboardingRecord.Onboarding_Status__c)) {
+          continue;
+        }
+        blockedCustomizationIds.add(onboardingRecord.Vendor_Customization__c);
         if (onboardingRecord.Vendor_Customization__r.Vendor__c != null) {
-          onboardedVendorIds.add(
-            onboardingRecord.Vendor_Customization__r.Vendor__c
-          );
+          blockedVendorIds.add(onboardingRecord.Vendor_Customization__r.Vendor__c);
+        }
+        if (isCompletedOnboardingStatus(onboardingRecord.Onboarding_Status__c)) {
+          completedCustomizationIds.add(onboardingRecord.Vendor_Customization__c);
         }
       }
 
-      // ✅ Get eligible vendors (not onboarded yet)
+      // Vendors must be active to be eligible.
       List<Vendor__c> eligibleVendors = [
         SELECT Id, Name
         FROM Vendor__c
-        WHERE Active__c = TRUE AND Id NOT IN :onboardedVendorIds
+        WHERE Active__c = TRUE
       ];
 
       Map<Id, Vendor__c> vendorMap = new Map<Id, Vendor__c>();
@@ -45,12 +63,28 @@ public with sharing class VendorOnboardingFlowService {
         SELECT Id, Vendor__c, Retail_Option__c, Business_Vertical__c
         FROM Vendor_Customization__c
         WHERE Vendor__c IN :eligibleVendors
+        AND Active__c = TRUE
       ]) {
+        if (blockedCustomizationIds.contains(vendorCustomization.Id)) {
+          continue;
+        }
+
+        if (
+          blockedVendorIds.contains(vendorCustomization.Vendor__c) &&
+          !VendorPrerequisiteEvaluator.hasPrerequisites(
+            vendorCustomization.Id,
+            prereqMap
+          )
+        ) {
+          continue;
+        }
+
         // ✅ Prerequisite check
         if (
           !VendorPrerequisiteEvaluator.isCustomizationEligible(
             vendorCustomization.Id,
-            onboardedCustomizationIds,
+            completedCustomizationIds,
+            blockedCustomizationIds,
             prereqMap
           )
         ) {
@@ -108,5 +142,27 @@ public with sharing class VendorOnboardingFlowService {
     }
 
     return allResults;
+  }
+
+  private static Boolean isNonBlockingOnboardingStatus(String onboardingStatus) {
+    String normalizedOnboardingStatus = normalizeOnboardingStatus(
+      onboardingStatus
+    );
+    return normalizedOnboardingStatus != null &&
+      NON_BLOCKING_ONBOARDING_STATUSES.contains(normalizedOnboardingStatus);
+  }
+
+  private static Boolean isCompletedOnboardingStatus(String onboardingStatus) {
+    String normalizedOnboardingStatus = normalizeOnboardingStatus(
+      onboardingStatus
+    );
+    return normalizedOnboardingStatus != null &&
+      COMPLETED_ONBOARDING_STATUSES.contains(normalizedOnboardingStatus);
+  }
+
+  private static String normalizeOnboardingStatus(String onboardingStatus) {
+    return String.isBlank(onboardingStatus)
+      ? null
+      : onboardingStatus.trim().toUpperCase();
   }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Default - Setup Complete - Welcome</label>
+    <protected>false</protected>
+    <values><field>Vendor_Program_Key__c</field><value xsi:type="xsd:string">DEFAULT</value></values>
+    <values><field>Event_Key__c</field><value xsi:type="xsd:string">SetupComplete</value></values>
+    <values><field>Communication_Type__c</field><value xsi:type="xsd:string">Welcome</value></values>
+    <values><field>Dispatch_Order__c</field><value xsi:type="xsd:int">10</value></values>
+    <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
+    <values><field>Send_Enabled__c</field><value xsi:type="xsd:boolean">true</value></values>
+</CustomMetadata>

@@ -481,7 +481,7 @@
         <exitConditionLogic>and</exitConditionLogic>
         <stageSteps>
             <name>Create_Training_Assignment_Record</name>
-            <actionName>DOM_Onboarding_SFL_CREATE_Training_Assignment_Records</actionName>
+            <actionName>DOMAIN_Onboarding_SFL_CREATE_Training_Assignment_Records</actionName>
             <actionType>stepBackground</actionType>
             <canAssigneeEdit>false</canAssigneeEdit>
             <debugSimulateStep>false</debugSimulateStep>

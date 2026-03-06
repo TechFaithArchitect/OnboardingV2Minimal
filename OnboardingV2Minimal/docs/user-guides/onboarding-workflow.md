@@ -30,7 +30,7 @@ The system evaluates status rules when requirements change:
 2. Each rule is evaluated against requirement statuses.
 3. If a rule passes, `Onboarding__c.Onboarding_Status__c` is updated.
 
-External overrides (`Onboarding_External_Override_Log__c` and `Onboarding_Next_Step_Override__c`) can temporarily suppress automated updates.
+External overrides (`Onboarding_Requirement__c.Is_Overridden__c` and `Onboarding_Next_Step_Override__c`) can temporarily suppress automated updates. Override/status changes are captured through `Onboarding_Requirement__History`.
 
 ## Common Actions
 

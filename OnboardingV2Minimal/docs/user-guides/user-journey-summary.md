@@ -22,7 +22,7 @@ This summary describes how internal users move a Dealer (Account) through onboar
 ## Exceptions and Overrides
 
 - Rules-based override: `Override_Status__c` on a rules engine forces its `Target_Onboarding_Status__c` without evaluating requirements. Engines are evaluated by `Sequence__c`.
-- External override: `External_Override_Enabled__c` on `Onboarding__c` stops automated status evaluation. Manual updates are tracked and audited in `Onboarding_External_Override_Log__c`.
+- External override: `External_Override_Enabled__c` on `Onboarding__c` stops automated status evaluation. Requirement-level manual changes are tracked via `Onboarding_Requirement__History` (`Is_Overridden__c`, `Status__c`).
 
 ## Signals and Outputs
 

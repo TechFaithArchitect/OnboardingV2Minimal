@@ -21,5 +21,6 @@ This document describes the MVP onboarding lifecycle.
 
 ## Overrides
 
-- External overrides are recorded in `Onboarding_External_Override_Log__c`.
+- Requirement-level override behavior is controlled by `Onboarding_Requirement__c.Is_Overridden__c`.
+- Override/status changes are audited via field history tracking on `Onboarding_Requirement__c`.
 - Next-step guidance can be overridden via `Onboarding_Next_Step_Override__c`.

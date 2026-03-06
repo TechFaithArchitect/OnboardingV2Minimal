@@ -3,6 +3,8 @@
  * Handles retry logic and integrates with SMS provider strategies
  */
 public with sharing class FollowUpExecutionService {
+    private static final String DISPATCH_CONTEXT_DELIMITER = '\\|';
+    private static final Integer DISPATCH_CONTEXT_PART_COUNT = 5;
 
     /**
      * Send SMS follow-up via Salesforce Messaging
@@ -126,14 +128,99 @@ public with sharing class FollowUpExecutionService {
                 if (fq.Follow_Up_Type__c == 'SMS') {
                     sendSMSFollowUp(fq.Id);
                 } else if (fq.Follow_Up_Type__c == 'Email') {
-                    markFollowUpFailed(fq.Id, 'Email follow-ups are handled by Flow.');
+                    sendEmailFollowUp(fq.Id);
                 } else {
                     markFollowUpFailed(fq.Id, 'Unknown follow-up type: ' + fq.Follow_Up_Type__c);
                 }
             } catch (Exception ex) {
-                markFollowUpFailed(fq.Id, 'Retry failed: ' + ex.getMessage());
+                // Sender methods already record failures to avoid double incrementing counters.
+                System.debug(LoggingLevel.ERROR, 'Follow-up retry failed for ' + fq.Id + ': ' + ex.getMessage());
                 // LoggingUtil.logError('FollowUpRetry', 'retryFailedFollowUps', ex.getMessage(), ex.getStackTraceString());
             }
+        }
+    }
+
+    /**
+     * Retry Email follow-up by replaying the original communication template dispatch.
+     * Expects Trigger_Reason__c format:
+     *   OnboardingId|CommunicationType|RecipientType|CommunicationTemplateId|RecipientId
+     * @param followUpQueueId Follow_Up_Queue__c record ID
+     */
+    public static void sendEmailFollowUp(Id followUpQueueId) {
+        if (followUpQueueId == null) {
+            throw new IllegalArgumentException('Follow-up queue ID is required');
+        }
+
+        Follow_Up_Queue__c followUp = [
+            SELECT Id, Onboarding__c, Trigger_Reason__c,
+                   Attempt_Count__c, Last_Attempt_Date__c,
+                   Consecutive_Failures__c
+            FROM Follow_Up_Queue__c
+            WHERE Id = :followUpQueueId
+            LIMIT 1
+        ];
+
+        if (followUp.Onboarding__c == null) {
+            markFollowUpFailed(followUpQueueId, 'Cannot retry Email follow-up: missing Onboarding reference.');
+            return;
+        }
+
+        DispatchRetryContext dispatchContext = parseDispatchRetryContext(followUp.Trigger_Reason__c);
+        if (dispatchContext == null || dispatchContext.communicationTemplateId == null || dispatchContext.recipientId == null) {
+            markFollowUpFailed(
+                followUpQueueId,
+                'Cannot retry Email follow-up: Trigger_Reason__c is missing dispatch context (expected Onboarding|Type|RecipientType|TemplateId|RecipientId).'
+            );
+            return;
+        }
+
+        List<Communication_Template__c> communicationTemplates = [
+            SELECT Id
+            FROM Communication_Template__c
+            WHERE Id = :dispatchContext.communicationTemplateId
+            LIMIT 1
+        ];
+        if (communicationTemplates.isEmpty()) {
+            markFollowUpFailed(
+                followUpQueueId,
+                'Cannot retry Email follow-up: Communication_Template__c not found for id ' + String.valueOf(dispatchContext.communicationTemplateId) + '.'
+            );
+            return;
+        }
+
+        Onboarding__c onboardingRecord = new Onboarding__c(Id = followUp.Onboarding__c);
+
+        try {
+            Map<String, Object> flowInputs = new Map<String, Object>{
+                'OnboardingRecord' => onboardingRecord,
+                'CommunicationTemplateRecord' => communicationTemplates[0],
+                'RecipientId' => dispatchContext.recipientId
+            };
+
+            Flow.Interview interview = Flow.Interview.createInterview(
+                'DOMAIN_OmniSObject_ACTION_Send_Communication_Template',
+                flowInputs
+            );
+            interview.start();
+
+            Boolean sendFailed = (Boolean)interview.getVariableValue('SendFailed');
+            String errorMessage = (String)interview.getVariableValue('ErrorMessage');
+
+            if (sendFailed == true) {
+                markFollowUpFailed(
+                    followUpQueueId,
+                    'Email dispatch failed: ' + (String.isBlank(errorMessage) ? 'Unknown flow fault.' : errorMessage)
+                );
+                FollowUpFatigueService.updateAttemptTracking(followUpQueueId, false);
+                return;
+            }
+
+            markFollowUpSent(followUpQueueId);
+            FollowUpFatigueService.updateAttemptTracking(followUpQueueId, true);
+        } catch (Exception ex) {
+            markFollowUpFailed(followUpQueueId, 'Error sending Email: ' + ex.getMessage());
+            FollowUpFatigueService.updateAttemptTracking(followUpQueueId, false);
+            throw ex;
         }
     }
 
@@ -156,6 +243,26 @@ public with sharing class FollowUpExecutionService {
         followUp.Last_Attempt_Date__c = DateTime.now();
         followUp.Error_Message__c = errorMessage;
         
+        update followUp;
+    }
+
+    /**
+     * Mark follow-up as successfully sent.
+     */
+    private static void markFollowUpSent(Id followUpQueueId) {
+        Follow_Up_Queue__c followUp = [
+            SELECT Id, Status__c, Consecutive_Failures__c, Attempt_Count__c, Last_Attempt_Date__c, Error_Message__c
+            FROM Follow_Up_Queue__c
+            WHERE Id = :followUpQueueId
+            LIMIT 1
+        ];
+
+        followUp.Status__c = 'Sent';
+        followUp.Attempt_Count__c = (followUp.Attempt_Count__c == null ? 0 : followUp.Attempt_Count__c) + 1;
+        followUp.Consecutive_Failures__c = 0;
+        followUp.Last_Attempt_Date__c = DateTime.now();
+        followUp.Error_Message__c = null;
+
         update followUp;
     }
 
@@ -442,5 +549,43 @@ public with sharing class FollowUpExecutionService {
             LIMIT 1
         ];
         return comms.isEmpty() ? null : comms[0];
+    }
+
+    /**
+     * Parse idempotency dispatch key from Trigger_Reason__c:
+     * OnboardingId|CommunicationType|RecipientType|CommunicationTemplateId|RecipientId
+     */
+    private static DispatchRetryContext parseDispatchRetryContext(String triggerReason) {
+        if (String.isBlank(triggerReason)) {
+            return null;
+        }
+
+        List<String> parts = triggerReason.split(DISPATCH_CONTEXT_DELIMITER);
+        if (parts.size() < DISPATCH_CONTEXT_PART_COUNT) {
+            return null;
+        }
+
+        Id templateId = getIdIfValid(parts[3]);
+        Id recipientId = getIdIfValid(parts[4]);
+
+        if (templateId == null || recipientId == null) {
+            return null;
+        }
+
+        DispatchRetryContext context = new DispatchRetryContext();
+        context.onboardingId = getIdIfValid(parts[0]);
+        context.communicationType = parts[1];
+        context.recipientType = parts[2];
+        context.communicationTemplateId = templateId;
+        context.recipientId = recipientId;
+        return context;
+    }
+
+    private class DispatchRetryContext {
+        Id onboardingId;
+        String communicationType;
+        String recipientType;
+        Id communicationTemplateId;
+        Id recipientId;
     }
 }

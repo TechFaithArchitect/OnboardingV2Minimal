@@ -1,0 +1,2 @@
+PolicyKey,Type,IsActive,ApprovalRequired,ApprovalProcessDevName,ReasonCode,BlockAction,Priority
+VERIZON_FIOS,Agreement,true,true,VendorProgramAgreementApproval,FIOS_AGREEMENT_APPROVAL,true,10

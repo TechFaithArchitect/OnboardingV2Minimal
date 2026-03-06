@@ -25,7 +25,6 @@
     <tabs>Vendor_Program_Requirement__c</tabs>
     <tabs>Onboarding_Requirement__c</tabs>
     <tabs>Communication_Template__c</tabs>
-    <tabs>Email_Communication_Log__c</tabs>
     <tabs>Territory_Role_Assignment__c</tabs>
     <tabs>Onboarding_Status_Rules_Engine__c</tabs>
     <tabs>Onboarding_Status_Rule__c</tabs>
@@ -36,9 +35,6 @@
     <workspaceConfig>
         <mappings>
             <tab>Communication_Template__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Email_Communication_Log__c</tab>
         </mappings>
         <mappings>
             <tab>Onboarding_Next_Step_Override__c</tab>

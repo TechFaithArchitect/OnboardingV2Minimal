@@ -69,6 +69,7 @@
 
 ### 6. EmailComm Cleanup ✅
 - ✅ Removed EmailComm send/log stack and Email_Communication_Log__c metadata
+- ✅ Removed `Onboarding_External_Override_Log__c` metadata and shifted audit coverage to `Onboarding_Requirement__History` (`Is_Overridden__c`, `Status__c`)
 - ⚠️ Remaining EmailComm-named territory role sync items for future review:
   - `force-app/main/default/classes/EmailCommTerritoryRoleHelper.cls`
   - `force-app/main/default/classes/EmailCommTerritoryRoleSyncJob.cls`

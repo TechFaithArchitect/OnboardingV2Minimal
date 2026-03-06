@@ -4391,7 +4391,7 @@
             <targetReference>Get_Onboarding_Opportunity_Path</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <subflows>
         <name>Get_Customization_Records</name>
         <label>Get Customization Records</label>

@@ -10729,4 +10729,20 @@ Once information is provided and Windstream agent confirms the customer number, 
         <shortDescription>zip lowercase</shortDescription>
         <value>zip</value>
     </labels>
+    <labels>
+        <fullName>RecordCollectionEditor_AuthorizedSignerPermissionDenied</fullName>
+        <categories>Record Collection Editor</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>You do not have permission to assign Authorized Signer</shortDescription>
+        <value>You do not have permission to assign the Authorized Signer role.</value>
+    </labels>
+    <labels>
+        <fullName>RecordCollectionEditor_FixFieldErrors</fullName>
+        <categories>Record Collection Editor</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Please fix field errors before continuing</shortDescription>
+        <value>Please correct the errors below before continuing.</value>
+    </labels>
 </CustomLabels>

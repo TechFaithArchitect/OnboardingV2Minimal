@@ -51,7 +51,7 @@
             <targetReference>Get_Opportunity_Record</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <variables>
         <name>OnboardingRecord</name>
         <dataType>SObject</dataType>

@@ -30,28 +30,6 @@
                 <identifier>force_highlightsPanel</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>isActiveFieldApiName</name>
-                    <value>Is_Active__c</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>lastModifiedFieldApiName</name>
-                    <value>LastModifiedDate</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>objectApiName</name>
-                    <value>Vendor_Customization__c</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>statusFieldApiName</name>
-                    <value>Status__c</value>
-                </componentInstanceProperties>
-                <componentName>onboardingAppHeaderBar</componentName>
-                <identifier>c_onboardingAppHeaderBar</identifier>
-            </componentInstance>
-        </itemInstances>
         <mode>Replace</mode>
         <name>header</name>
         <type>Region</type>
@@ -176,16 +154,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Program_Code__c</fieldItem>
-                <identifier>RecordProgram_Code__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Version__c</fieldItem>
                 <identifier>RecordVersion__cField</identifier>
             </fieldInstance>
@@ -206,16 +174,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Effective_Date__c</fieldItem>
-                <identifier>RecordEffective_Date__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Description__c</fieldItem>
                 <identifier>RecordDescription__cField</identifier>
             </fieldInstance>
@@ -228,16 +186,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Status__c</fieldItem>
                 <identifier>RecordStatus__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Clone_From_Vendor_Program__c</fieldItem>
-                <identifier>RecordClone_From_Vendor_Program__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
