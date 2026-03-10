@@ -44,18 +44,8 @@ public class TestVendorProgramRequirementFactory {
     ) {
         return new Vendor_Program_Requirement__c(
             Vendor_Program__c = vendorProgram != null ? vendorProgram.Id : null,
-            Is_Inherited__c = false,
-            Is_Overridden__c = false,
             Is_Required__c = true,
             Active__c = isActive != null ? isActive : true,
-            Status__c = TestDataFactoryUtil.getDefaultPicklistValue(
-                Vendor_Program_Requirement__c.SObjectType,
-                'Status__c'
-            ),
-            Source_Type__c = TestDataFactoryUtil.getDefaultPicklistValue(
-                Vendor_Program_Requirement__c.SObjectType,
-                'Source_Type__c'
-            ),
             Sequence__c = 1
         );
     }

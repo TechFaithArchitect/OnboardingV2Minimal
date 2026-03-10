@@ -1,24 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <customValue>
-        <fullName>Status</fullName>
+        <fullName>Agreement</fullName>
         <default>false</default>
-        <label>Status</label>
+        <label>Agreement</label>
     </customValue>
     <customValue>
-        <fullName>File Upload</fullName>
+        <fullName>Auto Insurance</fullName>
         <default>false</default>
-        <label>File Upload</label>
+        <label>Auto Insurance</label>
     </customValue>
     <customValue>
-        <fullName>Confirmation</fullName>
+        <fullName>Background Check</fullName>
         <default>false</default>
-        <label>Confirmation</label>
+        <label>Background Check</label>
     </customValue>
     <customValue>
-        <fullName>Date</fullName>
+        <fullName>Business License</fullName>
         <default>false</default>
-        <label>Date</label>
+        <label>Business License</label>
+    </customValue>
+    <customValue>
+        <fullName>Chuzo Agreement</fullName>
+        <default>false</default>
+        <label>Chuzo Agreement</label>
+    </customValue>
+    <customValue>
+        <fullName>Compliance</fullName>
+        <default>false</default>
+        <label>Compliance</label>
+    </customValue>
+    <customValue>
+        <fullName>Contract</fullName>
+        <default>false</default>
+        <label>Contract</label>
+    </customValue>
+    <customValue>
+        <fullName>Credit Check</fullName>
+        <default>false</default>
+        <label>Credit Check</label>
+    </customValue>
+    <customValue>
+        <fullName>Driver&apos;s License</fullName>
+        <default>false</default>
+        <label>Driver&apos;s License</label>
+    </customValue>
+    <customValue>
+        <fullName>Employment Form</fullName>
+        <default>false</default>
+        <label>Employment Form</label>
+    </customValue>
+    <customValue>
+        <fullName>ERP Setup</fullName>
+        <default>false</default>
+        <label>ERP Setup</label>
+    </customValue>
+    <customValue>
+        <fullName>General Liability Insurance</fullName>
+        <default>false</default>
+        <label>General Liability Insurance</label>
+    </customValue>
+    <customValue>
+        <fullName>Interview</fullName>
+        <default>false</default>
+        <label>Interview</label>
+    </customValue>
+    <customValue>
+        <fullName>Net Terms</fullName>
+        <default>false</default>
+        <label>Net Terms</label>
+    </customValue>
+    <customValue>
+        <fullName>Personal Guarantee</fullName>
+        <default>false</default>
+        <label>Personal Guarantee</label>
+    </customValue>
+    <customValue>
+        <fullName>SubAgent License Agreement</fullName>
+        <default>false</default>
+        <label>SubAgent License Agreement</label>
+    </customValue>
+    <customValue>
+        <fullName>Terms &amp; Conditions</fullName>
+        <default>false</default>
+        <label>Terms &amp; Conditions</label>
+    </customValue>
+    <customValue>
+        <fullName>Training</fullName>
+        <default>false</default>
+        <label>Training</label>
+    </customValue>
+    <customValue>
+        <fullName>Worker&apos;s Compensation Insurance</fullName>
+        <default>false</default>
+        <label>Worker&apos;s Compensation Insurance</label>
+    </customValue>
+    <customValue>
+        <fullName>Vendor Order Entry</fullName>
+        <default>false</default>
+        <label>Vendor Order Entry</label>
     </customValue>
     <masterLabel>Requirement Type Values</masterLabel>
     <sorted>false</sorted>

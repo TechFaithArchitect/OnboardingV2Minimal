@@ -94,7 +94,7 @@
             <name>Yes_Onboarding_Record_Found</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>OpportunityRecord</leftValueReference>
+                <leftValueReference>OnboardingRecord</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>

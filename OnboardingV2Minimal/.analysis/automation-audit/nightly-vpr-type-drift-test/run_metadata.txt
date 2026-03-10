@@ -1,0 +1,10 @@
+org_alias=OnboardV2
+target_org_used=OnboardV2
+field_used=Requirement_Type__c
+generated_at_utc=2026-03-06T21:09:28Z
+missing_type_count=4
+unused_active_recordtype_count=6
+summary_tsv=.analysis/automation-audit/nightly-vpr-type-drift-test/vpr_type_recordtype_drift_summary.tsv
+missing_types_file=.analysis/automation-audit/nightly-vpr-type-drift-test/vpr_types_missing_onboarding_recordtype.txt
+unused_recordtypes_file=.analysis/automation-audit/nightly-vpr-type-drift-test/onboarding_recordtypes_without_vpr_usage.txt
+error_log=.analysis/automation-audit/nightly-vpr-type-drift-test/errors.log

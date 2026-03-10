@@ -2,6 +2,24 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <actionCalls>
+        <name>Fail_Fast_Missing_RecordType_Mapping</name>
+        <label>Fail Fast Missing RecordType Mapping</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>FlowAdminGuardService</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>message</name>
+            <value>
+                <elementReference>Missing_RecordType_Mapping_Error_Message</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>FlowAdminGuardService</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
     <assignments>
         <name>Add_Onboarding_Requirement_Record_to_Collection</name>
         <label>Add Onboarding Requirement Record to Collection</label>
@@ -48,7 +66,7 @@
             <assignToReference>OnboardingRequirementRecord.Requirement_Type__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_VendorProgramRequirements.Requirement_Type__c</elementReference>
+                <elementReference>Normalized_OnboardingRequirement_Type</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -58,12 +76,59 @@
                 <elementReference>Loop_VendorProgramRequirements.Approval_Policy_Key__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingRequirementRecord.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Onboarding_Requirement_RecordType.Id</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Add_Onboarding_Requirement_Record_to_Collection</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>Is_Onboarding_Requirement_RecordType_Mapped</name>
+        <label>Is Onboarding Requirement RecordType Mapped</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Fail_Fast_Missing_RecordType_Mapping</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Missing Mapping - Fail Fast</defaultConnectorLabel>
+        <rules>
+            <name>Mapped_RecordType_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Onboarding_Requirement_RecordType.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
+            </connector>
+            <label>Mapped RecordType Found</label>
+        </rules>
+    </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements</description>
     <environments>Default</environments>
+    <formulas>
+        <name>Missing_RecordType_Mapping_Error_Message</name>
+        <dataType>String</dataType>
+        <expression>&quot;Missing Onboarding_Requirement__c RecordType mapping for Vendor_Program_Requirement type: &quot; &amp; TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c}) &amp; &quot;. Expected RecordType DeveloperName: &quot; &amp; {!OnboardingRequirement_RecordType_DeveloperName} &amp; &quot;.&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>Normalized_OnboardingRequirement_Type</name>
+        <dataType>String</dataType>
+        <expression>TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c})</expression>
+    </formulas>
+    <formulas>
+        <name>OnboardingRequirement_RecordType_DeveloperName</name>
+        <dataType>String</dataType>
+        <expression>CASE(TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c}), &quot;Agreement&quot;, &quot;Agreement_Requirements&quot;, &quot;Auto Insurance&quot;, &quot;Auto_Insurance_Requirements&quot;, &quot;Background Check&quot;, &quot;Background_Check&quot;, &quot;Business License&quot;, &quot;Business_License&quot;, &quot;Chuzo Agreement&quot;, &quot;Chuzo_Agreement&quot;, &quot;Compliance&quot;, &quot;Compliance&quot;, &quot;Contract&quot;, &quot;Contract&quot;, &quot;Credit Check&quot;, &quot;Credit_Check&quot;, &quot;Driver&apos;s License&quot;, &quot;Drivers_License&quot;, &quot;Employment Form&quot;, &quot;Employment_Form&quot;, &quot;ERP Setup&quot;, &quot;ERP_Setup&quot;, &quot;General Liability Insurance&quot;, &quot;General_Liability_Insurance_Requirement&quot;, &quot;Interview&quot;, &quot;Interview&quot;, &quot;Net Terms&quot;, &quot;Net_Terms&quot;, &quot;Personal Guarantee&quot;, &quot;Personal_Guarantee&quot;, &quot;SubAgent License Agreement&quot;, &quot;SubAgent_License_Agreement&quot;, &quot;Terms &amp; Conditions&quot;, &quot;Terms_Conditions&quot;, &quot;Training&quot;, &quot;Training&quot;, &quot;Worker&apos;s Compensation Insurance&quot;, &quot;Workers_Compensation_Insurance&quot;, &quot;Vendor Order Entry&quot;, &quot;Vendor_Order_Entry&quot;, &quot;Agreement_Requirements&quot;)</expression>
+    </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements</label>
     <loops>
@@ -74,7 +139,7 @@
         <collectionReference>VendorProgramRequirements</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
+            <targetReference>Get_Onboarding_Requirement_RecordType</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Create_Onboarding_Requirements</targetReference>
@@ -99,6 +164,34 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Onboarding_Requirement_RecordType</name>
+        <label>Get Onboarding Requirement RecordType</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Onboarding_Requirement_RecordType_Mapped</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Onboarding_Requirement__c</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OnboardingRequirement_RecordType_DeveloperName</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordCreates>
         <name>Create_Onboarding_Requirements</name>
         <label>Create Onboarding Requirements</label>

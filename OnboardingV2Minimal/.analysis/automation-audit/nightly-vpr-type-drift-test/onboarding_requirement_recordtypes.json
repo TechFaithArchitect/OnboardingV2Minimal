@@ -1,0 +1,210 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AhSYvYAN"
+        },
+        "Id": "012RL00000AhSYvYAN",
+        "Name": "Personal Guarantee",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AhVKaYAN"
+        },
+        "Id": "012RL00000AhVKaYAN",
+        "Name": "Terms & Conditions",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AhaP7YAJ"
+        },
+        "Id": "012RL00000AhaP7YAJ",
+        "Name": "Auto Insurance Requirements",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AhbGMYAZ"
+        },
+        "Id": "012RL00000AhbGMYAZ",
+        "Name": "General Liability Insurance Requirement",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AhbmXYAR"
+        },
+        "Id": "012RL00000AhbmXYAR",
+        "Name": "Agreement Requirements",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AhfWnYAJ"
+        },
+        "Id": "012RL00000AhfWnYAJ",
+        "Name": "Worker's Compensation Insurance",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000Ahfa1YAB"
+        },
+        "Id": "012RL00000Ahfa1YAB",
+        "Name": "Net Terms",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AiusDYAR"
+        },
+        "Id": "012RL00000AiusDYAR",
+        "Name": "Employment Form",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AiuteYAB"
+        },
+        "Id": "012RL00000AiuteYAB",
+        "Name": "Contract",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AixBoYAJ"
+        },
+        "Id": "012RL00000AixBoYAJ",
+        "Name": "ERP Setup",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000Aj2CvYAJ"
+        },
+        "Id": "012RL00000Aj2CvYAJ",
+        "Name": "Driver's License",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000Aj5nXYAR"
+        },
+        "Id": "012RL00000Aj5nXYAR",
+        "Name": "Interview",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000Aj5xAYAR"
+        },
+        "Id": "012RL00000Aj5xAYAR",
+        "Name": "Background Check",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000Aj6o8YAB"
+        },
+        "Id": "012RL00000Aj6o8YAB",
+        "Name": "Training",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000Aj91WYAR"
+        },
+        "Id": "012RL00000Aj91WYAR",
+        "Name": "Compliance",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AjAARYA3"
+        },
+        "Id": "012RL00000AjAARYA3",
+        "Name": "Chuzo Agreement",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AjBpdYAF"
+        },
+        "Id": "012RL00000AjBpdYAF",
+        "Name": "Credit Check",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AjDbjYAF"
+        },
+        "Id": "012RL00000AjDbjYAF",
+        "Name": "SubAgent License Agreement",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000AjFl8YAF"
+        },
+        "Id": "012RL00000AjFl8YAF",
+        "Name": "Business License",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      },
+      {
+        "attributes": {
+          "type": "RecordType",
+          "url": "/services/data/v66.0/tooling/sobjects/RecordType/012RL00000BNFOtYAP"
+        },
+        "Id": "012RL00000BNFOtYAP",
+        "Name": "Vendor Order Entry",
+        "SobjectType": "Onboarding_Requirement__c",
+        "IsActive": true
+      }
+    ],
+    "totalSize": 20,
+    "done": true
+  },
+  "warnings": []
+}

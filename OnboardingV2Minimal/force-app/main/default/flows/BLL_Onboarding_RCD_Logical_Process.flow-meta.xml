@@ -93,43 +93,6 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Route_After_Get_Vendor_Program</name>
-        <label>Route After Get Vendor Program</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>No Route</defaultConnectorLabel>
-        <rules>
-            <name>Execution_Path_Created</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ExecutionPath</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Created</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Vendor_Program_Requirements</targetReference>
-            </connector>
-            <label>Execution Path Created</label>
-        </rules>
-        <rules>
-            <name>Execution_Path_Update</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ExecutionPath</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Update</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Determine_Send_Training</targetReference>
-            </connector>
-            <label>Execution Path Update</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Determine_Send_Setup_Complete</name>
         <label>Determine Send Setup Complete</label>
         <locationX>0</locationX>
@@ -188,6 +151,43 @@
                 <targetReference>Evaluate_BRE_Training_Gate</targetReference>
             </connector>
             <label>LearnUpon Triggered</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Route_After_Get_Vendor_Program</name>
+        <label>Route After Get Vendor Program</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Route</defaultConnectorLabel>
+        <rules>
+            <name>Execution_Path_Created</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ExecutionPath</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Created</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Vendor_Program_Requirements</targetReference>
+            </connector>
+            <label>Execution Path Created</label>
+        </rules>
+        <rules>
+            <name>Execution_Path_Update</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ExecutionPath</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Update</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Determine_Send_Training</targetReference>
+            </connector>
+            <label>Execution Path Update</label>
         </rules>
     </decisions>
     <decisions>
@@ -310,6 +310,12 @@
             <targetReference>Evaluate_BRE_Onboarding_Created_Gate</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Requirements</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <name>VendorProgramRequirements</name>
             <value>

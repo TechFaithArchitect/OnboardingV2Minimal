@@ -1,0 +1,19 @@
+RequirementType	VPRCount	HasActiveOnboardingRequirementRecordType	MatchingRecordTypeName
+Agreement	16	N	Agreement
+Auto Insurance	2	N	Auto Insurance
+Background Check	15	Y	Background Check
+Business License	15	Y	Business License
+Chuzo Agreement	14	Y	Chuzo Agreement
+Compliance	14	Y	Compliance
+Contract	15	Y	Contract
+Credit Check	13	Y	Credit Check
+Driver's License	15	Y	Driver's License
+ERP Setup	15	Y	ERP Setup
+Employment Form	15	Y	Employment Form
+General Liability Insurance	2	N	General Liability Insurance
+Interview	2	Y	Interview
+Net Terms	13	Y	Net Terms
+Personal Guarantee	15	Y	Personal Guarantee
+SubAgent License Agreement	1	Y	SubAgent License Agreement
+Training	15	Y	Training
+Vendor Order Entry Setup Status	1	N	Vendor Order Entry Setup Status

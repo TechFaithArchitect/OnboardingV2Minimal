@@ -2,6 +2,19 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Contract_Preconditions_Missing_Error</name>
+        <label>Assign Contract Preconditions Missing Error</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Skipped contract creation. Missing AccountRecord.Id, VendorProgramRecord.Id, OnboardingRecord.Id, or OpportunityContactRole.ContactId.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Is_There_Related_Onboarding_Record_to_Opportunity</name>
         <label>Is There Related Onboarding Record to Opportunity</label>
@@ -24,10 +37,56 @@
             <label>Yes - Opportunity is Related to Onboarding</label>
         </rules>
     </decisions>
-    <description>Business Logic Layer - Opportunity Object - Record Trigger - Onboarding Logical Process</description>
+    <decisions>
+        <name>Should_Create_Contract</name>
+        <label>Should Create Contract</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Contract_Preconditions_Missing_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Skip Contract Creation</defaultConnectorLabel>
+        <rules>
+            <name>Ready_to_Create_Contract</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>AccountRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>VendorProgramRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OpportunityContactRole.ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Contract</targetReference>
+            </connector>
+            <label>Ready to Create Contract</label>
+        </rules>
+    </decisions>
+    <description>Business Logic Layer - Opportunity Object - Record Trigger - Logical Process</description>
     <environments>Default</environments>
-    <interviewLabel>BLL - Opportunity - RCD - Onboarding Logical Process {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>BLL - Opportunity - RCD - Onboarding Logical Process</label>
+    <interviewLabel>BLL - Opportunity - RCD - Logical Process {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>BLL - Opportunity - RCD - Logical Process</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -99,7 +158,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_Contract</targetReference>
+            <targetReference>Should_Create_Contract</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
         <inputAssignments>

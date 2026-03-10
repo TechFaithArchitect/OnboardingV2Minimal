@@ -124,7 +124,10 @@
         <name>contractTypeFormatted</name>
         <dataType>String</dataType>
         <expression>IF(
-  TEXT({!OnboardingRecord.Contract__r.Contract_Type__c}) = &quot;NDA&quot;,
+  AND(
+    NOT(ISBLANK({!OnboardingRecord.Contract__c})),
+    TEXT({!OnboardingRecord.Contract__r.Contract_Type__c}) = &quot;NDA&quot;
+  ),
   &quot;NDA&quot;,
   IF(
     OR(

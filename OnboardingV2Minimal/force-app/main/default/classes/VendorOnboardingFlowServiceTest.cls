@@ -36,6 +36,7 @@ private class VendorOnboardingFlowServiceTest {
       Retail_Option__c = 'National Agent',
       Business_Vertical__c = businessVertical
     );
+    setVendorCustomizationStatuses(new List<Vendor_Customization__c>{ program });
     insert program;
 
     Test.startTest();
@@ -75,7 +76,12 @@ private class VendorOnboardingFlowServiceTest {
       Retail_Option__c = 'National Retail',
       Business_Vertical__c = businessVertical
     );
-    insert new List<Vendor_Customization__c>{ deniedProgram, canceledProgram };
+    List<Vendor_Customization__c> statusPrograms = new List<Vendor_Customization__c>{
+      deniedProgram,
+      canceledProgram
+    };
+    setVendorCustomizationStatuses(statusPrograms);
+    insert statusPrograms;
 
     List<String> onboardingStatuses = getPicklistValues(
       Onboarding__c.Onboarding_Status__c
@@ -122,7 +128,7 @@ private class VendorOnboardingFlowServiceTest {
   }
 
   @isTest
-  static void testOneVendorShownWhenOthersAreBlockedWithoutCompletedPrereq() {
+  static void testUnorderedVendorBlocksDuplicateProgramOptionsAndKeepsOtherPrograms() {
     Account acct = new Account(Name = 'Flow Service Single Vendor Account');
     insert acct;
 
@@ -158,7 +164,7 @@ private class VendorOnboardingFlowServiceTest {
     Vendor_Customization__c perfectVisionOtherProgram = new Vendor_Customization__c(
       Vendor__c = perfectVisionVendor.Id,
       Active__c = true,
-      Retail_Option__c = 'National Agent',
+      Retail_Option__c = 'N/A',
       Business_Vertical__c = businessVertical
     );
     Vendor_Customization__c frontierRequiredProgram = new Vendor_Customization__c(
@@ -173,13 +179,15 @@ private class VendorOnboardingFlowServiceTest {
       Retail_Option__c = 'Frontier Amendment',
       Business_Vertical__c = businessVertical
     );
-    insert new List<Vendor_Customization__c>{
+    List<Vendor_Customization__c> unorderedPrograms = new List<Vendor_Customization__c>{
       verizonProgram,
       perfectVisionCompleteProgram,
       perfectVisionOtherProgram,
       frontierRequiredProgram,
       frontierTargetProgram
     };
+    setVendorCustomizationStatuses(unorderedPrograms);
+    insert unorderedPrograms;
 
     Vendor_Program_Group__c prereqGroup = new Vendor_Program_Group__c(
       Name = 'Flow Service Frontier Group',
@@ -229,7 +237,15 @@ private class VendorOnboardingFlowServiceTest {
     }
 
     System.assertEquals(1, vendorNames.size(), 'Expected one eligible vendor');
-    System.assert(vendorNames.contains('Verizon'), 'Only Verizon should be visible');
+    System.assert(vendorNames.contains('Verizon'), 'Verizon should be visible');
+    System.assert(
+      !vendorNames.contains('PerfectVision'),
+      'PerfectVision should be hidden because any blocking onboarding for N/A blocks all N/A customizations for that vendor'
+    );
+    System.assert(
+      !vendorNames.contains('Frontier'),
+      'Frontier should remain hidden until a target program is unlocked by completion logic'
+    );
   }
 
   @isTest
@@ -261,7 +277,12 @@ private class VendorOnboardingFlowServiceTest {
       Retail_Option__c = 'Frontier Amendment',
       Business_Vertical__c = businessVertical
     );
-    insert new List<Vendor_Customization__c>{ requiredProgram, targetProgram };
+    List<Vendor_Customization__c> prereqPrograms = new List<Vendor_Customization__c>{
+      requiredProgram,
+      targetProgram
+    };
+    setVendorCustomizationStatuses(prereqPrograms);
+    insert prereqPrograms;
 
     Vendor_Program_Group__c prereqGroup = new Vendor_Program_Group__c(
       Name = 'Flow Service Completion Group',
@@ -297,8 +318,11 @@ private class VendorOnboardingFlowServiceTest {
       'Target should not be visible until prerequisite is completed'
     );
 
-    onboardingRecord.Onboarding_Status__c = pickCompletedStatus(onboardingStatuses);
-    update onboardingRecord;
+    insert new Onboarding__c(
+      Account__c = acct.Id,
+      Vendor_Customization__c = requiredProgram.Id,
+      Onboarding_Status__c = pickCompletedStatus(onboardingStatuses)
+    );
 
     List<VendorOptionDTO> completedOptions = getOptionsForAccount(acct.Id);
     Set<String> completedRetailOptions = new Set<String>();
@@ -415,5 +439,68 @@ private class VendorOnboardingFlowServiceTest {
       values.add(entry.getValue());
     }
     return values;
+  }
+
+  private static void setVendorCustomizationStatuses(
+    List<Vendor_Customization__c> programs
+  ) {
+    if (programs == null || programs.isEmpty()) {
+      return;
+    }
+
+    String activeStatus = pickVendorCustomizationStatus(true);
+    String inactiveStatus = pickVendorCustomizationStatus(false);
+
+    for (Vendor_Customization__c program : programs) {
+      if (program == null) {
+        continue;
+      }
+      Boolean isActive = program.Active__c == true;
+      program.Status__c = isActive ? activeStatus : inactiveStatus;
+    }
+  }
+
+  private static String pickVendorCustomizationStatus(Boolean wantActive) {
+    List<String> statuses = getPicklistValues(Vendor_Customization__c.Status__c);
+    if (statuses.isEmpty()) {
+      return null;
+    }
+
+    String activeStatus;
+    String inactiveStatus;
+    for (String status : statuses) {
+      if (String.isBlank(status)) {
+        continue;
+      }
+      String normalized = status.trim().toUpperCase();
+      if (
+        activeStatus == null &&
+        (normalized == 'ACTIVE' ||
+        (normalized.contains('ACTIVE') && !normalized.contains('INACTIVE')))
+      ) {
+        activeStatus = status;
+      }
+      if (inactiveStatus == null && normalized.contains('INACTIVE')) {
+        inactiveStatus = status;
+      }
+    }
+
+    if (wantActive) {
+      return activeStatus == null ? statuses[0] : activeStatus;
+    }
+
+    if (inactiveStatus != null) {
+      return inactiveStatus;
+    }
+
+    if (activeStatus != null) {
+      for (String status : statuses) {
+        if (status != activeStatus) {
+          return status;
+        }
+      }
+    }
+
+    return statuses[0];
   }
 }

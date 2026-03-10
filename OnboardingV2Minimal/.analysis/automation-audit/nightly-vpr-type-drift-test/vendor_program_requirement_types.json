@@ -1,0 +1,136 @@
+{
+  "status": 0,
+  "result": {
+    "records": [
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Agreement",
+        "expr0": 16
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Auto Insurance",
+        "expr0": 2
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Background Check",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Business License",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Chuzo Agreement",
+        "expr0": 14
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Compliance",
+        "expr0": 14
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Contract",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Credit Check",
+        "expr0": 13
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Driver's License",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Employment Form",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "ERP Setup",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "General Liability Insurance",
+        "expr0": 2
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Interview",
+        "expr0": 2
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Net Terms",
+        "expr0": 13
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Personal Guarantee",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "SubAgent License Agreement",
+        "expr0": 1
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Training",
+        "expr0": 15
+      },
+      {
+        "attributes": {
+          "type": "AggregateResult"
+        },
+        "Requirement_Type__c": "Vendor Order Entry Setup Status",
+        "expr0": 1
+      }
+    ],
+    "totalSize": 18,
+    "done": true
+  },
+  "warnings": []
+}

@@ -14,6 +14,9 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
 
         @InvocableVariable(label='Opportunity Contact Records JSON')
         public String OpportunityContactRecordsJSON;
+
+        @InvocableVariable(label='Create Contacts In Queue')
+        public Boolean CreateContactsInQueue;
     }
 
     public class QueueResult {
@@ -56,7 +59,8 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
                     cloneOpportunity(requestItem.OpportunityRecord),
                     cloneVendorProgram(requestItem.VendorProgramRecord),
                     requestItem.ContactsToCreateJSONString,
-                    requestItem.OpportunityContactRecordsJSON
+                    requestItem.OpportunityContactRecordsJSON,
+                    requestItem.CreateContactsInQueue
                 )
             );
 
@@ -69,7 +73,7 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
     }
 
     private static Account cloneAccount(Account source) {
-        return source == null ? null : (Account) source.clone(false, true, false, false);
+        return source == null ? null : (Account) source.clone(true, true, false, false);
     }
 
     private static Opportunity cloneOpportunity(Opportunity source) {
@@ -77,7 +81,7 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
     }
 
     private static Vendor_Customization__c cloneVendorProgram(Vendor_Customization__c source) {
-        return source == null ? null : (Vendor_Customization__c) source.clone(false, true, false, false);
+        return source == null ? null : (Vendor_Customization__c) source.clone(true, true, false, false);
     }
 
     private class OpportunityCreateChainQueueable implements Queueable {
@@ -86,49 +90,80 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
         private final Vendor_Customization__c vendorProgramRecord;
         private final String contactsToCreateJson;
         private final String opportunityContactsJson;
+        private final Boolean createContactsInQueue;
 
         OpportunityCreateChainQueueable(
             Account accountRecord,
             Opportunity opportunityRecord,
             Vendor_Customization__c vendorProgramRecord,
             String contactsToCreateJson,
-            String opportunityContactsJson
+            String opportunityContactsJson,
+            Boolean createContactsInQueue
         ) {
             this.accountRecord = accountRecord;
             this.opportunityRecord = opportunityRecord;
             this.vendorProgramRecord = vendorProgramRecord;
             this.contactsToCreateJson = contactsToCreateJson;
             this.opportunityContactsJson = opportunityContactsJson;
+            this.createContactsInQueue = createContactsInQueue;
         }
 
         public void execute(QueueableContext context) {
-            try {
-                if (String.isNotBlank(contactsToCreateJson)) {
-                    runCreateContactFlow(contactsToCreateJson);
-                }
+            List<String> stageErrors = new List<String>();
+            Opportunity createdOpportunity;
 
-                Opportunity createdOpportunity = runCreateOpportunityFlow(
+            if (createContactsInQueue == true && String.isNotBlank(contactsToCreateJson)) {
+                try {
+                    runCreateContactFlow(contactsToCreateJson);
+                } catch (Exception ex) {
+                    stageErrors.add('Contact create failed: ' + summarizeException(ex));
+                }
+            }
+
+            try {
+                createdOpportunity = runCreateOpportunityFlow(
                     accountRecord,
                     opportunityRecord,
                     vendorProgramRecord
                 );
+                if (createdOpportunity == null || createdOpportunity.Id == null) {
+                    stageErrors.add('Opportunity create returned no OpportunityRecord.Id.');
+                }
+            } catch (Exception ex) {
+                stageErrors.add('Opportunity create failed: ' + summarizeException(ex));
+            }
 
-                if (
-                    createdOpportunity != null &&
-                    createdOpportunity.Id != null &&
-                    String.isNotBlank(opportunityContactsJson)
-                ) {
+            if (
+                createdOpportunity != null &&
+                createdOpportunity.Id != null &&
+                String.isNotBlank(opportunityContactsJson)
+            ) {
+                try {
                     runCreateOpportunityContactRoleFlow(
                         applyOpportunityId(opportunityContactsJson, createdOpportunity.Id)
                     );
+                } catch (Exception ex) {
+                    stageErrors.add('Opportunity contact role create failed: ' + summarizeException(ex));
                 }
-            } catch (Exception ex) {
-                System.debug(
-                    LoggingLevel.ERROR,
-                    'ExperienceOpportunityCreateAsyncService queue execution failed: ' + ex.getMessage()
+            }
+
+            if (!stageErrors.isEmpty()) {
+                LoggingUtil.error(
+                    'ExperienceOpportunityCreateAsyncService queue execution errors. '
+                    + 'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
+                    + ', OpportunityId=' + String.valueOf(createdOpportunity == null ? null : createdOpportunity.Id)
+                    + ', Details=' + String.join(stageErrors, ' | ')
                 );
             }
         }
+    }
+
+    @TestVisible
+    private static String summarizeException(Exception ex) {
+        if (ex == null) {
+            return 'Unknown exception.';
+        }
+        return ex.getTypeName() + ': ' + ex.getMessage();
     }
 
     @TestVisible

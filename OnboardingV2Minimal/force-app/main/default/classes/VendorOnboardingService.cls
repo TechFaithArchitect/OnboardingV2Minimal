@@ -48,10 +48,16 @@ public with sharing class VendorOnboardingService {
     // Canceled/Denied records should not block the program from being shown again.
     Set<Id> blockedCustomizationIds = new Set<Id>();
     Set<Id> completedCustomizationIds = new Set<Id>();
+    Set<Id> completedVendorIds = new Set<Id>();
     Set<Id> blockedVendorIds = new Set<Id>();
+    Set<String> blockedVendorProgramKeys = new Set<String>();
+    Map<String, VendorOnboardingEligibilityRuleEngine.Rule> rulesByVendorName = VendorOnboardingEligibilityRuleEngine.getRulesByVendorName();
 
     for (Onboarding__c onboardingRecord : [
-      SELECT Vendor_Customization__c, Vendor_Customization__r.Vendor__c, Onboarding_Status__c
+      SELECT Vendor_Customization__c,
+        Vendor_Customization__r.Vendor__c,
+        Vendor_Customization__r.Retail_Option__c,
+        Onboarding_Status__c
       FROM Onboarding__c
       WHERE Account__c = :accountId AND Vendor_Customization__c != NULL
     ]) {
@@ -61,9 +67,19 @@ public with sharing class VendorOnboardingService {
       blockedCustomizationIds.add(onboardingRecord.Vendor_Customization__c);
       if (onboardingRecord.Vendor_Customization__r.Vendor__c != null) {
         blockedVendorIds.add(onboardingRecord.Vendor_Customization__r.Vendor__c);
+        String blockedProgramKey = buildVendorProgramKey(
+          onboardingRecord.Vendor_Customization__r.Vendor__c,
+          onboardingRecord.Vendor_Customization__r.Retail_Option__c
+        );
+        if (blockedProgramKey != null) {
+          blockedVendorProgramKeys.add(blockedProgramKey);
+        }
       }
       if (isCompletedOnboardingStatus(onboardingRecord.Onboarding_Status__c)) {
         completedCustomizationIds.add(onboardingRecord.Vendor_Customization__c);
+        if (onboardingRecord.Vendor_Customization__r.Vendor__c != null) {
+          completedVendorIds.add(onboardingRecord.Vendor_Customization__r.Vendor__c);
+        }
       }
     }
 
@@ -75,6 +91,7 @@ public with sharing class VendorOnboardingService {
     ];
 
     Map<Id, Vendor__c> vendorMap = new Map<Id, Vendor__c>(eligibleVendors);
+    Set<Id> vendorsWithProgramOrder = getVendorsWithProgramOrder(prereqMap);
 
     // Build customization → retail options → verticals map
     Map<Id, Map<String, Set<String>>> vendorRetailMap = new Map<Id, Map<String, Set<String>>>();
@@ -85,14 +102,41 @@ public with sharing class VendorOnboardingService {
       WHERE Vendor__c IN :eligibleVendors
       AND Active__c = TRUE
     ]) {
+      Vendor__c vendorRecord = vendorMap.get(vendorCustomization.Vendor__c);
+      VendorOnboardingEligibilityRuleEngine.Rule vendorRule = VendorOnboardingEligibilityRuleEngine.getRuleForVendorName(
+        vendorRecord == null ? null : vendorRecord.Name,
+        rulesByVendorName
+      );
+
+      if (
+        vendorRule.blockMode ==
+        VendorOnboardingEligibilityRuleEngine.BLOCK_MODE_VENDOR_ANY_COMPLETE &&
+        completedVendorIds.contains(vendorCustomization.Vendor__c)
+      ) {
+        continue;
+      }
+
+      if (
+        blockedVendorProgramKeys.contains(
+          buildVendorProgramKey(
+            vendorCustomization.Vendor__c,
+            vendorCustomization.Retail_Option__c
+          )
+        )
+      ) {
+        continue;
+      }
+
       if (blockedCustomizationIds.contains(vendorCustomization.Id)) {
         continue;
       }
 
-      // If a vendor has an active onboarding in a blocking status,
-      // only target programs controlled by prerequisite groups can re-open eligibility.
+      // Apply vendor-level blocking only for vendors configured with ordered
+      // program progression (target-based prerequisite groups).
       if (
+        vendorRule.usePrerequisites &&
         blockedVendorIds.contains(vendorCustomization.Vendor__c) &&
+        vendorsWithProgramOrder.contains(vendorCustomization.Vendor__c) &&
         !VendorPrerequisiteEvaluator.hasPrerequisites(
           vendorCustomization.Id,
           prereqMap
@@ -102,6 +146,7 @@ public with sharing class VendorOnboardingService {
       }
 
       if (
+        vendorRule.usePrerequisites &&
         !VendorPrerequisiteEvaluator.isCustomizationEligible(
           vendorCustomization.Id,
           completedCustomizationIds,
@@ -181,6 +226,38 @@ public with sharing class VendorOnboardingService {
     return String.isBlank(onboardingStatus)
       ? null
       : onboardingStatus.trim().toUpperCase();
+  }
+
+  private static String buildVendorProgramKey(Id vendorId, String retailOption) {
+    if (vendorId == null || String.isBlank(retailOption)) {
+      return null;
+    }
+
+    return String.valueOf(vendorId) + '|' + retailOption.trim().toUpperCase();
+  }
+
+  private static Set<Id> getVendorsWithProgramOrder(
+    VendorPrerequisiteEvaluator.PrereqMap prereqMap
+  ) {
+    Set<Id> vendorsWithProgramOrder = new Set<Id>();
+    if (
+      prereqMap == null ||
+      prereqMap.customizationToGroupToRequired == null ||
+      prereqMap.customizationToGroupToRequired.isEmpty()
+    ) {
+      return vendorsWithProgramOrder;
+    }
+
+    for (Vendor_Customization__c targetProgram : [
+      SELECT Vendor__c
+      FROM Vendor_Customization__c
+      WHERE Id IN :prereqMap.customizationToGroupToRequired.keySet()
+      AND Vendor__c != NULL
+    ]) {
+      vendorsWithProgramOrder.add(targetProgram.Vendor__c);
+    }
+
+    return vendorsWithProgramOrder;
   }
   
   // ============================================
