@@ -19,20 +19,16 @@
       Also deletes their other onboarding junction links first.
 */
 
-String onboardingIdInput = 'PUT_ONBOARDING_ID_HERE';
-Boolean dryRun = true;
-Boolean deleteSharedAssignments = false;
+String onboardingIdInput = 'PutTheOnboardingIdHere';
+Boolean dryRun = false;
+Boolean deleteSharedAssignments = true;
 
-String normalizedOnboardingIdInput = onboardingIdInput == null ? null : onboardingIdInput.trim();
-
-if (String.isBlank(normalizedOnboardingIdInput)) {
+if (String.isBlank(onboardingIdInput) || onboardingIdInput == 'PutTheOnboardingIdHere') {
     System.debug(LoggingLevel.ERROR, 'Set onboardingIdInput before running.');
-} else if (!Pattern.matches('^[a-zA-Z0-9]{15}([a-zA-Z0-9]{3})?$', normalizedOnboardingIdInput)) {
-    System.debug(LoggingLevel.ERROR, 'onboardingIdInput must be a 15 or 18 character Salesforce Id: ' + onboardingIdInput);
 } else {
     Id onboardingId;
     try {
-        onboardingId = (Id) normalizedOnboardingIdInput;
+        onboardingId = (Id) onboardingIdInput.trim();
     } catch (Exception e) {
         System.debug(LoggingLevel.ERROR, 'Invalid onboardingIdInput: ' + onboardingIdInput);
     }
