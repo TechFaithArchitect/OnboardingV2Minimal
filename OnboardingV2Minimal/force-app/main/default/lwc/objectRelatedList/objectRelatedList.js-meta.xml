@@ -1,6 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
-    <isExposed>false</isExposed>
-    <description>Reusable related list component for any object. Use object-specific wrapper components instead.</description>
+    <isExposed>true</isExposed>
+    <masterLabel>Object Related List</masterLabel>
+    <description>Reusable related list for any child object. Configure object, parent lookup, fields, and new-record behavior directly in Lightning App Builder.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property
+                name="objectApiName"
+                type="String"
+                label="Record Object API Name (System)"
+                description="System-provided by Lightning record pages. Do not use for related child object configuration." />
+            <property
+                name="childObjectApiName"
+                type="String"
+                label="Child Object API Name"
+                description="API name of the related object to query (example: Program_Dates__c)." />
+            <property
+                name="parentFieldApiName"
+                type="String"
+                label="Parent Lookup Field API Name"
+                description="Lookup/master-detail field on the child object that points to this record (example: Account__c)." />
+            <property
+                name="relationshipApiName"
+                type="String"
+                label="Relationship API Name"
+                description="Relationship API name used for header/View All navigation (example: Program_Dates__r)." />
+            <property
+                name="fieldApiNamesCsv"
+                type="String"
+                label="Fields (CSV)"
+                description="Comma-separated field API names to query (example: Requirement_Type__c,Status__c,Completed__c)." />
+            <property
+                name="relationshipFieldApiNamesCsv"
+                type="String"
+                label="Relationship Fields (CSV)"
+                description="Optional comma-separated relationship fields to query (example: Vendor_Program__r.Label__c)." />
+            <property
+                name="columnFieldApiNamesCsv"
+                type="String"
+                label="Auto Column Fields (CSV)"
+                description="Optional columns for auto-generation. If blank, uses Fields (CSV)." />
+            <property
+                name="columnsJson"
+                type="String"
+                label="Column JSON Override"
+                description="Optional JSON array of lightning-datatable columns. Overrides auto-generated columns when provided." />
+            <property
+                name="linkFieldApiName"
+                type="String"
+                label="Link Field API Name"
+                description="Optional field rendered as a clickable record link when using auto-generated columns." />
+            <property
+                name="enableInlineEdit"
+                type="Boolean"
+                label="Enable Inline Edit"
+                description="Allows inline editing for updateable fields in auto-generated columns."
+                default="true" />
+            <property
+                name="readOnlyFieldApiNamesCsv"
+                type="String"
+                label="Read Only Fields (CSV)"
+                description="Optional comma-separated field API names that should always be read-only (example: Completed__c)." />
+            <property
+                name="readOnlyTreatAsTextFieldApiNamesCsv"
+                type="String"
+                label="Read Only &amp; Treat As Text (CSV)"
+                description="Optional comma-separated fields rendered as read-only text (example: Requirement_Type__c)." />
+            <property
+                name="orderByField"
+                type="String"
+                label="Order By Field API Name"
+                description="Field used for ordering query results." />
+            <property
+                name="orderDirection"
+                type="String"
+                label="Order Direction"
+                datasource="ASC,DESC"
+                default="DESC"
+                description="Sort direction for query results." />
+            <property
+                name="recordLimit"
+                type="Integer"
+                label="Record Limit"
+                description="Optional max records to query (default 2000, max 10000)." />
+            <property
+                name="newActionBehavior"
+                type="String"
+                label="New Button Behavior"
+                datasource="auto,standard,modal,hidden"
+                default="auto"
+                description="auto: modal when child component is set, else standard New page." />
+            <property
+                name="childComponent"
+                type="String"
+                label="Modal Child Component Name"
+                description="Optional child component used for modal create flow (example: programDatesScreenAction)." />
+            <property
+                name="defaultFieldValuesCsv"
+                type="String"
+                label="Default Field Values (CSV)"
+                description="Optional defaults for standard New action in format Field__c=value,Field2__c=value2." />
+            <property
+                name="modalTitle"
+                type="String"
+                label="Modal Title Override"
+                description="Optional modal title override." />
+            <property
+                name="objectLabel"
+                type="String"
+                label="Object Label Override"
+                description="Optional label override used in headers and toasts." />
+            <property
+                name="headerTitleOverride"
+                type="String"
+                label="Header Title Override"
+                description="Optional custom header title. Supports {count} token." />
+            <property
+                name="itemCountLabelOverride"
+                type="String"
+                label="Item Count Label Override"
+                description="Optional custom subheader text under the title." />
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

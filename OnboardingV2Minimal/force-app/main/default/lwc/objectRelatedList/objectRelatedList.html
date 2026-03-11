@@ -4,8 +4,8 @@
             <div class="slds-grid slds-wrap">
                 <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
                     <div class="slds-media slds-no-space slds-grow">
-                        <div class="slds-media__figure">
-                            <span class="slds-icon_container slds-m-right_small" title={iconAlt}>
+                        <div class="slds-media__figure slds-m-right_small">
+                            <span class="slds-icon_container" title={iconAlt}>
                                 <lightning-icon
                                     icon-name={objectIconName}
                                     alternative-text={iconAlt}
@@ -15,9 +15,14 @@
                         </div>
                         <div class="slds-media__body slds-align-middle">
                             <h2 class="slds-card__header-title">
-                                <a href="javascript:void(0);" class="slds-card__header-link baseCard__header-title-container header-link" onclick={handleHeaderClick}>
+                                <template if:true={canNavigateToRelationship}>
+                                    <a href="javascript:void(0);" class="slds-card__header-link baseCard__header-title-container header-link" onclick={handleHeaderClick}>
+                                        <span class="slds-truncate slds-m-right_xx-small" title={headerTitle}>{headerTitle}</span>
+                                    </a>
+                                </template>
+                                <template if:false={canNavigateToRelationship}>
                                     <span class="slds-truncate slds-m-right_xx-small" title={headerTitle}>{headerTitle}</span>
-                                </a>
+                                </template>
                             </h2>
                         </div>
                     </div>
@@ -30,12 +35,14 @@
                         class="slds-m-left_xx-small"
                         onclick={handleRefresh}>
                     </lightning-button-icon>
-                    <lightning-button 
-                        variant="neutral" 
-                        label="New" 
-                        class="slds-m-left_xx-small"
-                        onclick={handleNew}>
-                    </lightning-button>
+                    <template if:true={showNewButton}>
+                        <lightning-button 
+                            variant="neutral" 
+                            label="New" 
+                            class="slds-m-left_xx-small"
+                            onclick={handleNew}>
+                        </lightning-button>
+                    </template>
                 </div>
             </div>
             <div class="slds-grid slds-wrap">
@@ -48,28 +55,30 @@
         </div>
 
         <div class="slds-card__body slds-card__body_inner slds-p-around_none">
-            <template if:true={error}>
+            <template if:true={hasError}>
                 <div class="slds-text-color_error slds-p-around_small">
-                    {error}
+                    {displayError}
                 </div>
             </template>
 
             <template if:true={hasRows}>
                 <div class="slds-box slds-box_xx-small slds-p-around_none slds-m-vertical_xx-small">
-                    <lightning-datatable
+                    <c-object-related-list-datatable
                         key-field="Id"
                         data={rows}
-                        columns={columns}
+                        columns={resolvedColumns}
                         class="related-list-table"
                         show-row-number-column
                         onrowaction={handleRowAction}
                         draft-values={draftValues}
                         onsave={handleInlineSave}>
-                    </lightning-datatable>
+                    </c-object-related-list-datatable>
                 </div>
-                <div class="slds-text-align_center slds-p-vertical_xx-small slds-m-vertical_none">
-                    <a class="slds-text-link" href="javascript:void(0)" onclick={handleViewAll}>View All</a>
-                </div>
+                <template if:true={canNavigateToRelationship}>
+                    <div class="slds-text-align_center slds-p-vertical_xx-small slds-m-vertical_none">
+                        <a class="slds-text-link" href="javascript:void(0)" onclick={handleViewAll}>View All</a>
+                    </div>
+                </template>
             </template>
 
             <template if:false={hasRows}>
@@ -83,7 +92,7 @@
     <template if:true={showNewModal}>
         <c-related-object-action-modal
             record-id={recordId}
-            object-api-name={objectApiName}
+            object-api-name={targetObjectApiName}
             child-component={childComponent}
             modal-title={displayModalTitle}
             onclose={handleModalClose}
@@ -91,4 +100,3 @@
         </c-related-object-action-modal>
     </template>
 </template>
-
