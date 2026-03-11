@@ -12,10 +12,10 @@ Custom related list for Program_Dates__c on Account to replace the standard "Rel
 - Uses **SLDS standards** throughout for proper spacing, layout, and styling.
 
 ## Files
-- `programDatesRelatedList.js` — wires data from `ProgramDatesRelatedListController`, handles actions, and fetches object icon via `getObjectInfo`.
+- `programDatesRelatedList.js` — wires data from `ObjectRelatedListController.getProgramDates`, handles actions, and fetches object icon via `getObjectInfo`.
 - `programDatesRelatedList.html` — Standard SLDS card markup using `slds-card__header`, `slds-media`, `slds-icon_container`, proper grid layout, and SLDS spacing utilities.
 - `programDatesRelatedList.css` — Light custom CSS to match standard related list gray header background.
-- `ProgramDatesRelatedListController.cls` — Apex (with sharing, WITH SECURITY_ENFORCED) querying Program_Dates__c by `Account__c`.
+- `ObjectRelatedListController.cls` — Apex controller used for both generic related list queries and Program Dates retrieval.
 - `programDatesScreenAction` — reused for creation; emits `recordcreated` and `cancel` so the modal can close/refresh.
 
 ## How to use

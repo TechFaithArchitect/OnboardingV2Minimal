@@ -1,5 +1,5 @@
 import { api, LightningElement, wire } from 'lwc';
-import getVendorPrograms from '@salesforce/apex/VendorProgramService.getVendorProgramsForSelection';
+import getLookupOptions from '@salesforce/apex/ObjectRelatedListController.getLookupOptions';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { CloseActionScreenEvent } from 'lightning/actions';
 
@@ -14,10 +14,11 @@ import PROGRAM_DEACTIVATED_FLAG_FIELD from '@salesforce/schema/Program_Dates__c.
 import PROGRAM_DEACTIVATED_REASON_FIELD from '@salesforce/schema/Program_Dates__c.Program_Deactivated_Reason__c';
 import PROGRAM_REACTIVATED_FLAG_FIELD from '@salesforce/schema/Program_Dates__c.Program_Reactivated_Flag__c';
 import PROGRAM_REACTIVATED_DATE_FIELD from '@salesforce/schema/Program_Dates__c.Program_Reactivated_Date__c';
-import VENDOR_PROGRAM_FIELD from '@salesforce/schema/Program_Dates__c.Vendor_Program__c';
+
+const VENDOR_PROGRAM_FIELD_API_NAME = 'Vendor_Program__c';
 
 export default class ProgramDatesQuickAction extends LightningElement {
-    @api recordId; // Account Id when launched from Account related list/action
+    @api recordId;
 
     objectApiName = PROGRAM_DATES_OBJECT;
     defaultAccountId;
@@ -35,12 +36,18 @@ export default class ProgramDatesQuickAction extends LightningElement {
     PROGRAM_REACTIVATED_FLAG_FIELD = PROGRAM_REACTIVATED_FLAG_FIELD;
     PROGRAM_REACTIVATED_DATE_FIELD = PROGRAM_REACTIVATED_DATE_FIELD;
 
-    @wire(getVendorPrograms)
+    @wire(getLookupOptions, {
+        objectApiName: 'Vendor_Customization__c',
+        labelFieldApiName: 'Label__c',
+        orderByField: 'Label__c',
+        orderDirection: 'ASC',
+        recordLimit: 500
+    })
     wiredVendors({ data, error }) {
         if (data) {
             this.vendorOptions = data.map((item) => ({
-                label: item.Label__c || 'Unlabeled',
-                value: item.Id
+                label: item.label || item.Label__c || 'Unlabeled',
+                value: item.value || item.Id
             }));
         } else if (error) {
             this.showToast('Error loading vendor programs', this.reduceErrors(error).join(', '), 'error');
@@ -48,7 +55,7 @@ export default class ProgramDatesQuickAction extends LightningElement {
     }
 
     connectedCallback() {
-        this.defaultAccountId = this.recordId;
+        this.defaultAccountId = this.isAccountId(this.recordId) ? this.recordId : null;
     }
 
     handleVendorChange(event) {
@@ -58,8 +65,10 @@ export default class ProgramDatesQuickAction extends LightningElement {
     handleSubmit(event) {
         event.preventDefault();
         const fields = { ...event.detail.fields };
-        fields[ACCOUNT_FIELD.fieldApiName] = this.defaultAccountId;
-        fields[VENDOR_PROGRAM_FIELD.fieldApiName] = this.selectedVendorProgramId || null;
+        if (this.defaultAccountId) {
+            fields[ACCOUNT_FIELD.fieldApiName] = this.defaultAccountId;
+        }
+        fields[VENDOR_PROGRAM_FIELD_API_NAME] = this.selectedVendorProgramId || null;
 
         this.isSaving = true;
         this.template.querySelector('lightning-record-edit-form').submit(fields);
@@ -82,6 +91,10 @@ export default class ProgramDatesQuickAction extends LightningElement {
 
     get hasVendorOptions() {
         return this.vendorOptions && this.vendorOptions.length > 0;
+    }
+
+    isAccountId(value) {
+        return typeof value === 'string' && value.startsWith('001');
     }
 
     reduceErrors(errors) {

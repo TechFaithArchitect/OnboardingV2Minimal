@@ -144,24 +144,24 @@ Triggers save and reset form for new entry.
 
 ## Apex Dependencies
 
-### VendorProgramService.getVendorProgramsForSelection
+### ObjectRelatedListController.getLookupOptions
 
-**Purpose:** Returns list of Vendor Programs for dropdown
-
-**Expected Return:** List of objects with:
-- `Id` - Record ID
-- `Label__c` - Display label
+**Purpose:** Returns reusable combobox options (`value`, `label`) for lookup-style selectors.
 
 **Usage:**
 ```javascript
-@wire(getVendorPrograms)
-wiredVendors({ data, error }) {
-    if (data) {
-        this.vendorOptions = data.map(v => ({
-            label: v.Label__c || 'Unlabeled',
-            value: v.Id
-        }));
-    }
+@wire(getLookupOptions, {
+    objectApiName: 'Vendor_Customization__c',
+    labelFieldApiName: 'Label__c',
+    orderByField: 'Label__c',
+    orderDirection: 'ASC',
+    recordLimit: 500
+})
+wiredVendors({ data }) {
+    this.vendorOptions = data.map(v => ({
+        label: v.label || 'Unlabeled',
+        value: v.value
+    }));
 }
 ```
 
@@ -266,4 +266,3 @@ None currently.
 - Field-level validation messages
 - Dependent field logic
 - Bulk field updates
-

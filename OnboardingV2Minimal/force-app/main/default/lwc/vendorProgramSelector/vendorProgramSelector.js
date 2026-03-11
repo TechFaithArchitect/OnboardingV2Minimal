@@ -1,11 +1,9 @@
 import { api, LightningElement, wire } from 'lwc';
-import getVendorCustomizations from '@salesforce/apex/VendorProgramService.getVendorProgramsForSelection';
-import { getRecord, getFieldValue, updateRecord } from 'lightning/uiRecordApi';
+import getLookupOptions from '@salesforce/apex/ObjectRelatedListController.getLookupOptions';
+import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { refreshApex } from '@salesforce/apex';
-import VENDOR_PROGRAM_FIELD from '@salesforce/schema/Program_Dates__c.Vendor_Program__c';
-
-const PROGRAM_DATES_FIELDS = [VENDOR_PROGRAM_FIELD];
+const VENDOR_PROGRAM_FIELD_API_NAME = 'Vendor_Program__c';
+const PROGRAM_DATES_FIELDS = ['Program_Dates__c.Vendor_Program__c'];
 
 export default class VendorProgramSelector extends LightningElement {
     @api recordId;
@@ -14,45 +12,39 @@ export default class VendorProgramSelector extends LightningElement {
     selectedVendorProgramId;
     currentVendorProgramId;
     isSaving = false;
-    selectionInitialized = false;
-    vendorCustomizationsWireResult;
-    programDatesWireResult;
 
-    @wire(getVendorCustomizations)
-    wiredVendorCustomizations(result) {
-        this.vendorCustomizationsWireResult = result;
-        if (result.data) {
-            this.options = result.data.map((item) => ({
-                label: item.Label__c || 'Unlabeled',
-                value: item.Id
+    @wire(getLookupOptions, {
+        objectApiName: 'Vendor_Customization__c',
+        labelFieldApiName: 'Label__c',
+        orderByField: 'Label__c',
+        orderDirection: 'ASC',
+        recordLimit: 500
+    })
+    wiredVendorCustomizations({ data, error }) {
+        if (data) {
+            this.options = data.map((item) => ({
+                label: item.label || item.Label__c || 'Unlabeled',
+                value: item.value || item.Id
             }));
-
-            if (!this.selectionInitialized && this.currentVendorProgramId) {
-                this.selectedVendorProgramId = this.currentVendorProgramId;
-                this.selectionInitialized = true;
-            }
-        } else if (result.error) {
+        } else if (error) {
             this.options = [];
             this.showToast(
                 'Error loading vendor customizations',
-                this.reduceErrors(result.error).join(', '),
+                this.reduceErrors(error).join(', '),
                 'error'
             );
         }
     }
 
     @wire(getRecord, { recordId: '$recordId', fields: PROGRAM_DATES_FIELDS })
-    wiredProgramDates(result) {
-        this.programDatesWireResult = result;
-        if (result.data) {
-            this.currentVendorProgramId = getFieldValue(result.data, VENDOR_PROGRAM_FIELD);
-
-            if (!this.selectionInitialized) {
+    wiredProgramDates({ data, error }) {
+        if (data) {
+            this.currentVendorProgramId = data.fields?.Vendor_Program__c?.value || null;
+            if (!this.selectedVendorProgramId) {
                 this.selectedVendorProgramId = this.currentVendorProgramId;
-                this.selectionInitialized = true;
             }
-        } else if (result.error) {
-            this.showToast('Error loading record', this.reduceErrors(result.error).join(', '), 'error');
+        } else if (error) {
+            this.showToast('Error loading record', this.reduceErrors(error).join(', '), 'error');
         }
     }
 
@@ -92,13 +84,12 @@ export default class VendorProgramSelector extends LightningElement {
         const fields = {
             Id: this.recordId
         };
-        fields[VENDOR_PROGRAM_FIELD.fieldApiName] = this.selectedVendorProgramId;
+        fields[VENDOR_PROGRAM_FIELD_API_NAME] = this.selectedVendorProgramId;
 
         updateRecord({ fields })
             .then(() => {
                 this.currentVendorProgramId = this.selectedVendorProgramId;
                 this.showToast('Success', 'Vendor customization updated.', 'success');
-                return Promise.all([refreshApex(this.programDatesWireResult)]);
             })
             .catch((error) => {
                 this.showToast('Error updating record', this.reduceErrors(error).join(', '), 'error');

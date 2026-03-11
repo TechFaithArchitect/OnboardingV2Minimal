@@ -1,5 +1,5 @@
 import { LightningElement, api, wire } from 'lwc';
-import getProgramDates from '@salesforce/apex/ProgramDatesRelatedListController.getProgramDates';
+import getProgramDates from '@salesforce/apex/ObjectRelatedListController.getProgramDates';
 import { refreshApex } from '@salesforce/apex';
 import { deleteRecord, updateRecord } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
