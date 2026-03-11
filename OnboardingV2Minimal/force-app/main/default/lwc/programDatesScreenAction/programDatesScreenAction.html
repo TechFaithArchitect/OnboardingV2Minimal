@@ -1,0 +1,161 @@
+<template>
+    <lightning-messages></lightning-messages>
+
+    <div class="record-body-container slds-form slds-form_stacked">
+        <!-- Required Information -->
+        <div class="required-legend">
+            <abbr class="slds-required slds-grid_align-right">*</abbr> = Required Information
+        </div>
+        <div class="slds-grid slds-wrap slds-grid_align-center">
+            <div class="slds-col slds-size_12-of-12 slds-medium-size_11-of-12">
+                <!-- Information Section -->
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme--shade">
+                        <span class="section-header-title">Information</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <div class="slds-grid slds-wrap slds-p-horizontal_x-small">
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="text"
+                                    name="partnerCategory"
+                                    label="Partner Category"
+                                    variant="label-inline"
+                                    value={partnerCategory}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-combobox
+                                    name="vendorProgram"
+                                    label="Vendor Program"
+                                    variant="label-inline"
+                                    value={selectedVendorProgramId}
+                                    placeholder="Search Vendor Programs..."
+                                    options={vendorOptions}
+                                    onchange={handleVendorChange}
+                                    required>
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="text"
+                                    name="programId"
+                                    label="Program ID"
+                                    variant="label-inline"
+                                    value={programId}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-record-edit-form object-api-name={objectApiName}>
+                                    <lightning-input-field
+                                        field-name="Account__c"
+                                        value={accountId}
+                                        onchange={handleAccountChange}
+                                        variant="label-inline"
+                                        required>
+                                    </lightning-input-field>
+                                </lightning-record-edit-form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Program Active/Inactive Section -->
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title slds-theme--shade">
+                        <span class="section-header-title">Program Active/Inactive Info</span>
+                    </h3>
+                    <div class="slds-section__content">
+                        <div class="slds-m-bottom_small slds-p-horizontal_x-small">
+                            <div class="slds-text-title_bold slds-m-bottom_x-small">Program Activated</div>
+                            <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="checkbox"
+                                    name="programActiveFlag"
+                                    label="Program Active Flag"
+                                    variant="label-inline"
+                                    checked={programFieldValues.programActiveFlag}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="date"
+                                    name="programDate"
+                                    label="Program Date"
+                                    variant="label-inline"
+                                    value={programFieldValues.programDate}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="slds-m-bottom_small slds-p-horizontal_x-small">
+                            <div class="slds-text-title_bold slds-m-bottom_x-small">Program Deactivated</div>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="checkbox"
+                                    name="programDeactivatedFlag"
+                                    label="Program Deactivated Flag"
+                                    variant="label-inline"
+                                    checked={getProgramFieldValue.programDeactivatedFlag}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="date"
+                                    name="programDeactivatedDate"
+                                    label="Program Deactivated Date"
+                                    variant="label-inline"
+                                    value={programFieldValues.programDeactivatedDate}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                                <div class="slds-col slds-size_1-of-1 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                    <lightning-textarea
+                                        name="programDeactivatedReason"
+                                        label="Program Deactivated Reason"
+                                        value={programFieldValues.programDeactivatedReason}
+                                        onchange={handleChange}>
+                                    </lightning-textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slds-p-horizontal_x-small">
+                            <div class="slds-text-title_bold slds-m-bottom_x-small">Program Reactivated</div>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="checkbox"
+                                    name="programReactivatedFlag"
+                                    label="Program Reactivated Flag"
+                                    variant="label-inline"
+                                    checked={getProgramFieldValue.programReactivatedFlag}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_x-small slds-p-vertical_x-small">
+                                <lightning-input
+                                    type="date"
+                                    name="programReactivatedDate"
+                                    label="Program Reactivated Date"
+                                    variant="label-inline"
+                                    value={programFieldValues.programReactivatedDate}
+                                    onchange={handleChange}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

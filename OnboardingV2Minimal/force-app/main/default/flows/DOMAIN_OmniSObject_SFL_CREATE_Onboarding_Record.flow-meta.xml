@@ -49,6 +49,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Training_Assignment_Id_to_Collection</name>
+        <label>Assign Training Assignment Id to Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TrainingAssignmentIdCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Training_Assignment_Onboarding_Links.Training_Assignment__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Training_Assignment_Onboarding_Links</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Variables_to_be_Updated</name>
         <label>Assign Variables to be Updated</label>
         <locationX>0</locationX>
@@ -99,264 +115,6 @@
             <targetReference>Update_Onboarding_Record</targetReference>
         </connector>
     </assignments>
-    <assignments>
-        <name>Add_Contract_and_Onboarding_Records_to_Respective_Collections</name>
-        <label>Add Contract and Onboarding Records to Respective Collections</label>
-        <locationX>1386</locationX>
-        <locationY>1334</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecordCollection</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>ContractRecord</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>OnboardingRecordCollection</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>OnboardingRecord</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_All_Onboarding_Records_Found</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Contract_Record_Status_to_Cancelled_NDA</name>
-        <label>Assign Contract Record Status to Cancelled</label>
-        <locationX>1320</locationX>
-        <locationY>782</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Application_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Canceled</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Contract__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Onboarding_Record_Status_to_Cancelled</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Contract_Record_Status_to_Cancelled_NDA_Not_Complete</name>
-        <label>Assign Contract Record Status to Cancelled</label>
-        <locationX>1584</locationX>
-        <locationY>782</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Application_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Canceled</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Contract__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Status</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Cancelled</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Onboarding_Record_Status_to_Cancelled</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Contract_Record_Status_to_Denied_DOM</name>
-        <label>Assign Contract Record Status to Denied</label>
-        <locationX>1056</locationX>
-        <locationY>566</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Status</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Denied</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Application_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Denied</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Contract__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Onboarding_Record_Status_to_Denied_NDA</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Contract_Record_Status_to_Denied_NDA</name>
-        <label>Assign Contract Record Status to Denied</label>
-        <locationX>264</locationX>
-        <locationY>782</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Application_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Denied</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Contract__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Onboarding_Record_Status_to_Denied_NDA</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Contract_Record_Status_to_Denied_NDA_Denied</name>
-        <label>Assign Contract Record Status to Denied</label>
-        <locationX>528</locationX>
-        <locationY>782</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Application_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Denied</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Contract__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Status</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Denied</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Onboarding_Record_Status_to_Denied_NDA</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Onboarding_Record_Status_to_Denied_NDA</name>
-        <label>Assign Onboarding Record Status to Denied</label>
-        <locationX>825</locationX>
-        <locationY>1142</locationY>
-        <assignmentItems>
-            <assignToReference>OnboardingRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>OnboardingRecord.Onboarding_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Denied</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Add_Contract_and_Onboarding_Records_to_Respective_Collections</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Update_Contract_Record_Application_Status_to_Canceled</name>
-        <label>Update Contract Record Application Status to Canceled Only</label>
-        <locationX>2112</locationX>
-        <locationY>674</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Application_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Canceled</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Contract__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Onboarding_Record_Status_to_Cancelled</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Update_Contract_Record_Status_to_Canceled</name>
-        <label>Update Contract Record Status to Canceled</label>
-        <locationX>2376</locationX>
-        <locationY>674</locationY>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Application_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Canceled</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Contract__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContractRecord.Status</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Cancelled</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Onboarding_Record_Status_to_Cancelled</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Update_Onboarding_Record_Status_to_Cancelled</name>
-        <label>Update Onboarding Record Status to Cancelled</label>
-        <locationX>1947</locationX>
-        <locationY>1142</locationY>
-        <assignmentItems>
-            <assignToReference>OnboardingRecord.Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_All_Onboarding_Records_Found.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>OnboardingRecord.Onboarding_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Cancelled</stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Add_Contract_and_Onboarding_Records_to_Respective_Collections</targetReference>
-        </connector>
-    </assignments>
     <collectionProcessors>
         <name>Filter_Total_Completed_or_Passed_Enrollments</name>
         <elementSubtype>FilterCollectionProcessor</elementSubtype>
@@ -401,7 +159,7 @@
         <assignNextValueToReference>currentItem_Filter_Total_Completed_Or_Passed_Training_Assignments</assignNextValueToReference>
         <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
         <collectionReference>TrainingAssignmentRecordCollection</collectionReference>
-        <conditionLogic>and</conditionLogic>
+        <conditionLogic>or</conditionLogic>
         <conditions>
             <leftValueReference>currentItem_Filter_Total_Completed_Or_Passed_Training_Assignments.Status__c</leftValueReference>
             <operator>EqualTo</operator>
@@ -428,300 +186,35 @@
         </connector>
     </collectionProcessors>
     <decisions>
-        <name>Route_by_Input_Signature</name>
-        <label>Route by Input Signature</label>
+        <name>Are_Training_Assignment_Onboarding_Links_Found</name>
+        <label>Are Training Assignment Onboarding Links Found</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Create_Or_Update_Onboarding_Record</targetReference>
+            <targetReference>Get_All_Training_Assignment_Records</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Create or Update Onboarding Record</defaultConnectorLabel>
+        <defaultConnectorLabel>No - Use Legacy Onboarding Lookup</defaultConnectorLabel>
         <rules>
-            <name>Status_Propagation_Request</name>
+            <name>Yes_Links_Found</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>OpportunityRecord.Id</leftValueReference>
+                <leftValueReference>TrainingAssignmentOnboardingLinkCollection</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>OnboardingRecord</leftValueReference>
-                <operator>IsNull</operator>
+                <leftValueReference>TrainingAssignmentOnboardingLinkCollection</leftValueReference>
+                <operator>IsEmpty</operator>
                 <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>OnboardingRecordCollection</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>TrainingAssignmentRecord</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>LearnUponContactEnrollment</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>VendorProgramRecord</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>ContractRecord</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>AgreementRecord</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Onboarding_Records</targetReference>
+                <targetReference>Loop_Training_Assignment_Onboarding_Links</targetReference>
             </connector>
-            <label>Status Propagation Request</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Contract_Already_Set_an_Activated_Status</name>
-        <label>Is Contract Already Set an Activated Status</label>
-        <locationX>2244</locationX>
-        <locationY>566</locationY>
-        <defaultConnector>
-            <targetReference>Update_Contract_Record_Status_to_Canceled</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No Activated Status</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Activated_Status</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Contract__r.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Activated</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Contract__r.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Denied</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_Contract_Record_Application_Status_to_Canceled</targetReference>
-            </connector>
-            <label>Yes - Activated Status</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_NDA_Onboarding_Record_Only_Onboarding_Record_NDA_Cancelled</name>
-        <label>Is NDA Onboarding Record Only Onboarding Record</label>
-        <locationX>1650</locationX>
-        <locationY>566</locationY>
-        <defaultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Loop_All_Onboarding_Records_Found</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No Opportunity is Associated with Multiple Onboarding Records</defaultConnectorLabel>
-        <rules>
-            <name>Yes_NDA_Onboarding_Record_is_Only_Onboarding_Record_Cancelled_NDA</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>TotalOnboardingRecords</leftValueReference>
-                <operator>LessThan</operator>
-                <rightValue>
-                    <numberValue>2.0</numberValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Is_NDA_Status_Complete_Cancelled</targetReference>
-            </connector>
-            <label>Yes - NDA Onboarding Record is Only Onboarding Record</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_NDA_Onboarding_Record_Only_Onboarding_Record_NDA_Denied</name>
-        <label>Is NDA Onboarding Record Only Onboarding Record</label>
-        <locationX>594</locationX>
-        <locationY>566</locationY>
-        <defaultConnector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Loop_All_Onboarding_Records_Found</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No Opportunity is Associated with Multiple Onboarding Records</defaultConnectorLabel>
-        <rules>
-            <name>Yes_NDA_Onboarding_Record_is_Only_Onboarding_Record_NDA_Denied</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>TotalOnboardingRecords</leftValueReference>
-                <operator>LessThan</operator>
-                <rightValue>
-                    <numberValue>2.0</numberValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Is_NDA_Status_Complete_Denied</targetReference>
-            </connector>
-            <label>Yes - NDA Onboarding Record is Only Onboarding Record</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_NDA_Status_Complete_Cancelled</name>
-        <label>Is NDA Status Complete</label>
-        <locationX>1452</locationX>
-        <locationY>674</locationY>
-        <defaultConnector>
-            <targetReference>Assign_Contract_Record_Status_to_Cancelled_NDA_Not_Complete</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>NDA Status Not Complete</defaultConnectorLabel>
-        <rules>
-            <name>Yes_NDA_Is_Complete_Cancelled</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Contract__r.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Activated</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_Contract_Record_Status_to_Cancelled_NDA</targetReference>
-            </connector>
-            <label>Yes - NDA Is Complete</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_NDA_Status_Complete_Denied</name>
-        <label>Is NDA Status Complete</label>
-        <locationX>396</locationX>
-        <locationY>674</locationY>
-        <defaultConnector>
-            <targetReference>Assign_Contract_Record_Status_to_Denied_NDA_Denied</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>NDA Status Not Complete</defaultConnectorLabel>
-        <rules>
-            <name>Yes_NDA_Status_Complete</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Contract__r.Status</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Activated</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_Contract_Record_Status_to_Denied_NDA</targetReference>
-            </connector>
-            <label>Yes - NDA Status Complete</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Onboarding_Denied_Already</name>
-        <label>Is Onboarding Denied Already?</label>
-        <locationX>1386</locationX>
-        <locationY>350</locationY>
-        <defaultConnector>
-            <targetReference>Is_Onboarding_Record_NDA_Cancelled</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Not Denied Previously</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Denied</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Background_Check_Status__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Denied</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Credit_Check_Status__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Failed</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Compliance_Status__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Denied</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Is_Onboarding_Record_NDA_Denied</targetReference>
-            </connector>
-            <label>Yes - Denied</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Onboarding_Record_NDA_Cancelled</name>
-        <label>Is Onboarding Record NDA</label>
-        <locationX>1947</locationX>
-        <locationY>458</locationY>
-        <defaultConnector>
-            <targetReference>Is_Contract_Already_Set_an_Activated_Status</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Onboarding Record is Not NDA</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Onboarding_Record_is_NDA_Canceled</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Contract__r.Contract_Type__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>NDA</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Is_NDA_Onboarding_Record_Only_Onboarding_Record_NDA_Cancelled</targetReference>
-            </connector>
-            <label>Yes - Onboarding Record is NDA</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Onboarding_Record_NDA_Denied</name>
-        <label>Is Onboarding Record NDA</label>
-        <locationX>825</locationX>
-        <locationY>458</locationY>
-        <defaultConnector>
-            <targetReference>Assign_Contract_Record_Status_to_Denied_DOM</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Onboarding Record is Not NDA</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Onboarding_Record_is_NDA_Denied</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_All_Onboarding_Records_Found.Contract__r.Contract_Type__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>NDA</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Is_NDA_Onboarding_Record_Only_Onboarding_Record_NDA_Denied</targetReference>
-            </connector>
-            <label>Yes - Onboarding Record is NDA</label>
+            <label>Yes - Links Found</label>
         </rules>
     </decisions>
     <decisions>
@@ -755,7 +248,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_All_Training_Assignment_Records</targetReference>
+            <targetReference>Get_Training_Assignment_Onboarding_Links</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Triggering Record contains Training Assignment</defaultConnectorLabel>
         <rules>
@@ -807,7 +300,7 @@
         <defaultConnectorLabel>No - Standard Update</defaultConnectorLabel>
         <rules>
             <name>Yes_Sync_Training_Assignments</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>TrainingAssignmentRecord</leftValueReference>
                 <operator>IsNull</operator>
@@ -834,7 +327,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Assign_Variables_to_be_Updated</targetReference>
+            <targetReference>Updating_Status_Only</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Single Record</defaultConnectorLabel>
         <rules>
@@ -853,24 +346,70 @@
             <label>Collection of Records</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Updating_Status_Only</name>
+        <label>Updating Status Only</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Variables_to_be_Updated</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Update Full Record</defaultConnectorLabel>
+        <rules>
+            <name>Status_Only</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>VendorProgramRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OpportunityRecord.AccountId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ContractRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OpportunityRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>AgreementRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>VendorProgramRecord.Vendor__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Onboarding_Record</targetReference>
+            </connector>
+            <label>Status Only</label>
+        </rules>
+    </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Record</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Record {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Record</label>
-    <loops>
-        <name>Loop_All_Onboarding_Records_Found</name>
-        <label>Loop All Onboarding Records Found</label>
-        <locationX>176</locationX>
-        <locationY>242</locationY>
-        <collectionReference>OnboardingRecordCollection</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Is_Onboarding_Denied_Already</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Update_Contracts</targetReference>
-        </noMoreValuesConnector>
-    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -890,6 +429,20 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <loops>
+        <name>Loop_Training_Assignment_Onboarding_Links</name>
+        <label>Loop Training Assignment Onboarding Links</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>TrainingAssignmentOnboardingLinkCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Training_Assignment_Id_to_Collection</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_All_Training_Assignment_Records_Via_Links</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <recordCreates>
         <name>Create_Onboarding_Record</name>
         <label>Create Onboarding Record</label>
@@ -945,6 +498,28 @@
         <queriedFields>LearnUponP__Status__c</queriedFields>
     </recordLookups>
     <recordLookups>
+        <name>Get_All_Training_Assignment_Records_Via_Links</name>
+        <label>Get All Training Assignment Records Via Links</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Filter_Total_Completed_Or_Passed_Training_Assignments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>In</operator>
+            <value>
+                <stringValue>{!TrainingAssignmentIdCollection}</stringValue>
+            </value>
+        </filters>
+        <object>Training_Assignment__c</object>
+        <outputReference>TrainingAssignmentRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
         <name>Get_All_Training_Assignment_Records</name>
         <label>Get All Training Assignment Records</label>
         <locationX>0</locationX>
@@ -965,6 +540,28 @@
         <outputReference>TrainingAssignmentRecordCollection</outputReference>
         <queriedFields>Id</queriedFields>
         <queriedFields>Status__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Training_Assignment_Onboarding_Links</name>
+        <label>Get Training Assignment Onboarding Links</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Are_Training_Assignment_Onboarding_Links_Found</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Onboarding__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </filters>
+        <object>Training_Assignment_Onboarding__c</object>
+        <outputReference>TrainingAssignmentOnboardingLinkCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Training_Assignment__c</queriedFields>
     </recordLookups>
     <recordUpdates>
         <name>Update_Onboarding_Record</name>
@@ -1001,59 +598,14 @@
         </inputAssignments>
         <object>Onboarding__c</object>
     </recordUpdates>
-    <recordUpdates>
-        <name>Update_Contracts</name>
-        <label>Update Contracts</label>
-        <locationX>176</locationX>
-        <locationY>1526</locationY>
-        <connector>
-            <targetReference>Update_Onboarding_Records</targetReference>
-        </connector>
-        <inputReference>ContractRecordCollection</inputReference>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Update_Onboarding_Records</name>
-        <label>Update Onboarding Records</label>
-        <locationX>176</locationX>
-        <locationY>1634</locationY>
-        <inputReference>OnboardingRecordCollection</inputReference>
-    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Route_by_Input_Signature</targetReference>
+            <targetReference>Create_Or_Update_Onboarding_Record</targetReference>
         </connector>
     </start>
     <status>Active</status>
-    <subflows>
-        <name>Get_Onboarding_Records</name>
-        <label>Get Onboarding Records</label>
-        <locationX>176</locationX>
-        <locationY>134</locationY>
-        <connector>
-            <targetReference>Loop_All_Onboarding_Records_Found</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Records</flowName>
-        <inputAssignments>
-            <name>OpportunityRecord</name>
-            <value>
-                <elementReference>OpportunityRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>OnboardingRecord</assignToReference>
-            <name>OnboardingRecord</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>OnboardingRecordCollection</assignToReference>
-            <name>OnboardingRecordCollection</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>TotalOnboardingRecords</assignToReference>
-            <name>TotalOnboardingRecords</name>
-        </outputAssignments>
-    </subflows>
     <variables>
         <name>AgreementRecord</name>
         <dataType>SObject</dataType>
@@ -1173,6 +725,21 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Training_Assignment__c</objectType>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentIdCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentOnboardingLinkCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Training_Assignment_Onboarding__c</objectType>
     </variables>
     <variables>
         <name>VendorProgramRecord</name>

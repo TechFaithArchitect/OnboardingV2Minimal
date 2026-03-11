@@ -385,6 +385,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Onboarding_Record_List_via_Training_Assignment_Link</name>
+        <label>Assign Onboarding Record List via Training Assignment Link</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>OnboardingRecordList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Training_Assignment_Onboarding_Link_Collection.Onboarding__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Training_Assignment_Onboarding_Link_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Onboarding_Record_to_OnboardingRecord_via_OnboardingRecordList</name>
         <label>Assign Onboarding Record to OnboardingRecord via OnboardingRecordList</label>
         <locationX>0</locationX>
@@ -888,7 +904,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Onboarding_Record_via_TrainingAssignmentRecord</targetReference>
+                <targetReference>Get_Training_Assignment_Onboarding_Links_via_TrainingAssignmentRecord</targetReference>
             </connector>
             <label>Training Assignment Record</label>
         </rules>
@@ -936,6 +952,38 @@
                 <targetReference>Get_Onboarding_Record_via_OnboardingRequirementRecord</targetReference>
             </connector>
             <label>Via Onboarding Requirement Record</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Are_Training_Assignment_Onboarding_Links_Found_for_Training_Assignment</name>
+        <label>Are Training Assignment Onboarding Links Found for Training Assignment</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Onboarding_Record_via_TrainingAssignmentRecord</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Use Legacy Training Assignment Onboarding</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Links_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>TrainingAssignmentOnboardingLinkCollection</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TrainingAssignmentOnboardingLinkCollection</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Training_Assignment_Onboarding_Link_Collection</targetReference>
+            </connector>
+            <label>Yes - Links Found</label>
         </rules>
     </decisions>
     <decisions>
@@ -1164,6 +1212,21 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
+        <name>Loop_Training_Assignment_Onboarding_Link_Collection</name>
+        <label>Loop Training Assignment Onboarding Link Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>TrainingAssignmentOnboardingLinkCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Onboarding_Record_List_via_Training_Assignment_Link</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Get_Onboarding_Records_via_OnboardingRecordList</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
         <name>Loop_Training_Assignment_Record_Collection</name>
         <label>Loop Training Assignment Record Collection</label>
         <locationX>0</locationX>
@@ -1253,6 +1316,29 @@
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Onboarding__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Training_Assignment_Onboarding_Links_via_TrainingAssignmentRecord</name>
+        <label>Get Training Assignment Onboarding Links via TrainingAssignmentRecord</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Are_Training_Assignment_Onboarding_Links_Found_for_Training_Assignment</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Training_Assignment__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>TrainingAssignmentRecord.Id</elementReference>
+            </value>
+        </filters>
+        <object>Training_Assignment_Onboarding__c</object>
+        <outputReference>TrainingAssignmentOnboardingLinkCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Onboarding__c</queriedFields>
+        <queriedFields>Training_Assignment__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Onboarding_Records_Not_In_OnboardingRecordList</name>
@@ -1906,6 +1992,14 @@
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>Training_Assignment__c</objectType>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentOnboardingLinkCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Training_Assignment_Onboarding__c</objectType>
     </variables>
     <variables>
         <name>VendorProgramId</name>

@@ -124,22 +124,15 @@
         <name>contractTypeFormatted</name>
         <dataType>String</dataType>
         <expression>IF(
-  AND(
-    NOT(ISBLANK({!OnboardingRecord.Contract__c})),
-    TEXT({!OnboardingRecord.Contract__r.Contract_Type__c}) = &quot;NDA&quot;
+  OR(
+    TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Program Base Application - with Chuzo&quot;,
+    TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Program Base Application - without Chuzo&quot;,
+    TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Program Base Application - with Chuzo (No Personal Guarantee)&quot;,
+    TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Base Application - Infrastructure&quot;,
+    TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Not Applicable&quot;
   ),
-  &quot;NDA&quot;,
-  IF(
-    OR(
-      TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Program Base Application - with Chuzo&quot;,
-      TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Program Base Application - without Chuzo&quot;,
-      TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Program Base Application - with Chuzo (No Personal Guarantee)&quot;,
-       TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Base Application - Infrastructure&quot;,
-       TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}) = &quot;Not Applicable&quot;
-    ),
-          TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}),
-    &quot;Vendor&quot;
-  )
+  TEXT({!VendorProgram.Opportunity__r.Program_Base_App_Selection__c}),
+  &quot;Vendor&quot;
 )</expression>
     </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Contract {!$Flow.CurrentDateTime}</interviewLabel>

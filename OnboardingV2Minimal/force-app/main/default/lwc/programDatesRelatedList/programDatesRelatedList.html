@@ -1,0 +1,94 @@
+<template>
+    <article class="slds-card slds-card_boundary slds-card_related-list-fix" aria-label="Program Dates">
+        <div class="slds-page-header slds-page-header_joined slds-page-header_bleed slds-shrink-none slds-is-relative slds-page-header_object-home">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-m-right_small" title={iconAlt}>
+                                <lightning-icon
+                                    icon-name={objectIconName}
+                                    alternative-text={iconAlt}
+                                    size="small">
+                                </lightning-icon>
+                            </span>
+                        </div>
+                        <div class="slds-media__body slds-align-middle">
+                            <h2 class="slds-card__header-title">
+                                <a href="javascript:void(0);" class="slds-card__header-link baseCard__header-title-container header-link" onclick={handleHeaderClick}>
+                                    <span class="slds-truncate slds-m-right_xx-small" title="Program Dates">Program Dates</span>
+                                    <span class="slds-shrink-none slds-m-left_xx-small slds-text-body_medium" title={recordCountLabel}>{recordCountLabel}</span>
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex slds-grid slds-align-bottom">
+                    <lightning-button-icon
+                        icon-name="utility:refresh"
+                        alternative-text="Refresh list"
+                        variant="border-filled"
+                        class="slds-m-left_xx-small"
+                        onclick={handleRefresh}>
+                    </lightning-button-icon>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="New" 
+                        class="slds-m-left_xx-small"
+                        onclick={handleNew}>
+                    </lightning-button>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-align-bottom">
+                    <p class="slds-text-body_small slds-text-color_weak status-text">
+                        {itemCountLabel}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner slds-p-around_none">
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-p-around_small">
+                    {error}
+                </div>
+            </template>
+
+            <template if:true={hasRows}>
+                <div class="slds-box slds-box_xx-small slds-p-around_none slds-m-vertical_xx-small">
+                    <lightning-datatable
+                        key-field="Id"
+                        data={rows}
+                        columns={columns}
+                        class="related-list-table"
+                        show-row-number-column
+                        onrowaction={handleRowAction}
+                        draft-values={draftValues}
+                        onsave={handleInlineSave}
+                    ></lightning-datatable>
+                </div>
+                <div class="slds-text-align_center slds-p-vertical_xx-small slds-m-vertical_none">
+                    <a class="slds-text-link" href="javascript:void(0)" onclick={handleViewAll}>View All</a>
+                </div>
+            </template>
+
+            <template if:false={hasRows}>
+                <div class="slds-p-around_medium slds-text-align_center slds-text-color_weak">
+                    No items
+                </div>
+            </template>
+        </div>
+    </article>
+
+    <template if:true={showNewModal}>
+        <c-related-object-action-modal
+            record-id={recordId}
+            object-api-name="Program_Dates__c"
+            child-component="programDatesScreenAction"
+            modal-title="New Program Dates"
+            onclose={handleModalClose}
+            onrecordcreated={handleRecordCreated}>
+        </c-related-object-action-modal>
+    </template>
+</template>

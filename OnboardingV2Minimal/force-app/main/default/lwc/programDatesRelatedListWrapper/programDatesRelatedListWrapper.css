@@ -1,0 +1,11 @@
+/* Wrapper component styles to match standard related list container */
+:host {
+    display: block;
+    /* No margin - Lightning App Builder handles spacing between components */
+}
+
+/* Ensure child component renders with proper context */
+c-program-dates-related-list {
+    display: block;
+}
+

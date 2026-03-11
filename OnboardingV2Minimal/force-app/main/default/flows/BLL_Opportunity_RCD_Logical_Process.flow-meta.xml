@@ -11,7 +11,7 @@
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Skipped contract creation. Missing AccountRecord.Id, VendorProgramRecord.Id, OnboardingRecord.Id, or OpportunityContactRole.ContactId.</stringValue>
+                <stringValue>Skipped onboarding/contract creation. Missing one or more required values: AccountRecord.Id, VendorProgramRecord.Id, OnboardingRecord.Id, or OpportunityContactRole.ContactId.</stringValue>
             </value>
         </assignmentItems>
     </assignments>
@@ -35,6 +35,45 @@
                 </rightValue>
             </conditions>
             <label>Yes - Opportunity is Related to Onboarding</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Create_Onboarding</name>
+        <label>Should Create Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Contract_Preconditions_Missing_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Skip Onboarding and Contract Creation</defaultConnectorLabel>
+        <rules>
+            <name>Ready_to_Create_Onboarding</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>AccountRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>VendorProgramRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OpportunityContactRole.ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Onboarding_Record</targetReference>
+            </connector>
+            <label>Ready to Create Onboarding</label>
         </rules>
     </decisions>
     <decisions>
@@ -228,7 +267,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_Onboarding_Record</targetReference>
+            <targetReference>Should_Create_Onboarding</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Primary_Opportunity_Contact</flowName>
         <inputAssignments>

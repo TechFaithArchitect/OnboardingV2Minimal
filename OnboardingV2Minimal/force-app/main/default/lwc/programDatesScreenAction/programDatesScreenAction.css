@@ -1,0 +1,86 @@
+/* === Host Container Styling === */
+:host {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    background: #fff;
+}
+
+/* === Main Form Wrapper === */
+.record-body-container {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    border-radius: 0;
+    padding: 0 1rem 1rem;
+    box-sizing: border-box;
+}
+
+/* === Grid Helpers === */
+.section-grid {
+    margin: 0 -0.4rem;
+}
+
+.field-col {
+    padding: 0.4rem;
+    box-sizing: border-box;
+}
+
+/* === Required Info Legend === */
+.required-legend {
+    text-align: right;
+    padding: 0.5rem 0;
+    color: #737373;
+    font-size: 0.75rem;
+}
+
+.required-legend .slds-required {
+    color: #ea001e;
+}
+
+/* === Section Headers === */
+.slds-section {
+    margin-bottom: 0.75rem;
+}
+
+.slds-section__title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.875rem;
+    padding: 0.5rem 0;
+    color: #03234d;
+    background-color: #f3f3f3;
+}
+
+.section-header-title {
+    display: block;
+    padding: 0 0.75rem;
+}
+
+.slds-section__content {
+    padding: 0.75rem 0;
+}
+
+/* === Form Layout === */
+.slds-form {
+    padding: 0;
+}
+
+.slds-form-element {
+    margin-bottom: 0.75rem;
+}
+
+.slds-form-element__label {
+    font-weight: 400;
+}
+
+.slds-form-element__control lightning-input,
+.slds-form-element__control lightning-combobox {
+    width: 100%;
+    display: block;
+}
+
+.lookup-field lightning-input,
+.lookup-field lightning-base-combobox {
+    width: 100%;
+}

@@ -194,10 +194,17 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
             opportunityInput.AccountId = accountRecord.Id;
         }
 
+        Vendor_Customization__c resolvedVendorProgramRecord =
+            resolveVendorProgramForCreate(opportunityInput, vendorProgramRecord);
+
+        if (resolvedVendorProgramRecord != null && resolvedVendorProgramRecord.Id != null) {
+            opportunityInput.Vendor_Customization__c = resolvedVendorProgramRecord.Id;
+        }
+
         Map<String, Object> inputs = new Map<String, Object>{
             'AccountRecord' => accountRecord,
             'OpportunityRecord' => opportunityInput,
-            'VendorProgramRecord' => vendorProgramRecord
+            'VendorProgramRecord' => resolvedVendorProgramRecord
         };
 
         Flow.Interview interview = Flow.Interview.createInterview(
@@ -220,6 +227,72 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
         }
 
         return null;
+    }
+
+    @TestVisible
+    private static Vendor_Customization__c resolveVendorProgramForCreate(
+        Opportunity opportunityRecord,
+        Vendor_Customization__c vendorProgramRecord
+    ) {
+        if (vendorProgramRecord != null && vendorProgramRecord.Id != null) {
+            return vendorProgramRecord;
+        }
+
+        // First preference: resolve from selected vendor attributes passed from the EXP screenflow.
+        if (
+            vendorProgramRecord != null &&
+            vendorProgramRecord.Vendor__c != null &&
+            String.isNotBlank(vendorProgramRecord.Retail_Option__c) &&
+            String.isNotBlank(vendorProgramRecord.Business_Vertical__c)
+        ) {
+            List<Vendor_Customization__c> vendorMatches = [
+                SELECT Id, Name, Vendor__c, Retail_Option__c, Business_Vertical__c
+                FROM Vendor_Customization__c
+                WHERE Vendor__c = :vendorProgramRecord.Vendor__c
+                  AND Retail_Option__c = :vendorProgramRecord.Retail_Option__c
+                  AND Business_Vertical__c = :vendorProgramRecord.Business_Vertical__c
+                LIMIT 1
+            ];
+            if (!vendorMatches.isEmpty()) {
+                return vendorMatches[0];
+            }
+        }
+
+        // Required fallback: default to PerfectVision and use the Opportunity program selection.
+        String programSelection = normalizeProgramSelectionForFallback(
+            opportunityRecord == null ? null : opportunityRecord.Program_Base_App_Selection__c
+        );
+        if (String.isBlank(programSelection)) {
+            return vendorProgramRecord;
+        }
+
+        List<Vendor_Customization__c> perfectVisionMatches = [
+            SELECT Id, Name, Vendor__c
+            FROM Vendor_Customization__c
+            WHERE Vendor__r.Name = 'PerfectVision'
+              AND Name = :programSelection
+            LIMIT 1
+        ];
+
+        if (!perfectVisionMatches.isEmpty()) {
+            return perfectVisionMatches[0];
+        }
+
+        return vendorProgramRecord;
+    }
+
+    @TestVisible
+    private static String normalizeProgramSelectionForFallback(String sourceSelection) {
+        if (String.isBlank(sourceSelection)) {
+            return null;
+        }
+        if (sourceSelection == 'Base Application - Infrastructure') {
+            return 'Program Base Application - with Chuzo (No Personal Guarantee)';
+        }
+        if (sourceSelection == 'Not Applicable') {
+            return 'Program Base Application - without Chuzo';
+        }
+        return sourceSelection;
     }
 
     @TestVisible

@@ -1,0 +1,28 @@
+/* Object Related List Styles */
+/* Matches standard Salesforce related list styling */
+
+.slds-card_related-list-fix {
+    margin-bottom: 0.5rem;
+}
+
+.firstHeaderRow {
+    min-width: 0;
+}
+
+.header-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-link:hover {
+    text-decoration: underline;
+}
+
+.related-list-table {
+    min-height: 200px;
+}
+
+.status-text {
+    margin-top: 0.25rem;
+}
+

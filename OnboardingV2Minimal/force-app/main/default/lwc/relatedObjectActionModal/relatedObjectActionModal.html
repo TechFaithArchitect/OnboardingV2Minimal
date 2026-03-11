@@ -1,0 +1,74 @@
+<template>
+    <!-- 
+        Modal Structure - SLDS Compliant
+        Uses standard Salesforce Lightning Design System modal classes
+        Provides full control over modal appearance and behavior
+    -->
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- Modal Header: Contains close button and title -->
+            <div class="slds-modal__header slds-modal__header_empty">
+                <!-- Close Button: Positioned absolutely, matches Salesforce standard -->
+                <button
+                    type="button"
+                    title="Cancel and close"
+                    class="slds-button slds-button_icon slds-modal__close closeIcon slds-button_icon-bare"
+                    onclick={handleCancel}>
+                    <lightning-primitive-icon
+                        icon-name="utility:close"
+                        variant="bare"
+                        class="slds-button__icon slds-button__icon_large">
+                    </lightning-primitive-icon>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <!-- Modal Title: Centered, uses masterLabel or modalTitle property -->
+                <h2 id="modal-heading" class="slds-modal__title slds-hyphenate">{modalTitle}</h2>
+            </div>
+            
+            <!-- Modal Content: Contains child form component -->
+            <div class="slds-modal__content slds-p-around_none">
+                <!-- Child Component: Program Dates Form -->
+                <!-- Add more child components here for other objects -->
+                <c-program-dates-screen-action
+                    if:true={isProgramDates}
+                    data-child-component
+                    record-id={recordId}
+                    onvaliditychange={handleValidityChange}
+                    onsuccess={handleSuccess}
+                    onerror={handleError}>
+                </c-program-dates-screen-action>
+            </div>
+            
+            <!-- Modal Footer: Action buttons (Cancel, Save & New, Save) -->
+            <footer class="slds-modal__footer">
+                <div class="footer-container">
+                    <lightning-button
+                        variant="neutral"
+                        label="Cancel"
+                        onclick={handleCancel}>
+                    </lightning-button>
+                    <lightning-button
+                        variant="neutral"
+                        label="Save & New"
+                        onclick={handleSaveAndNew}
+                        disabled={saveDisabled}>
+                    </lightning-button>
+                    <lightning-button
+                        variant="brand"
+                        label="Save"
+                        onclick={handleSave}
+                        disabled={saveDisabled}>
+                    </lightning-button>
+                </div>
+            </footer>
+        </div>
+    </section>
+    
+    <!-- Modal Backdrop: Dark overlay behind modal -->
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    
+    <!-- Loading Spinner: Shown during save operation -->
+    <template if:true={isSaving}>
+        <lightning-spinner alternative-text="Saving" size="medium"></lightning-spinner>
+    </template>
+</template>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <isExposed>false</isExposed>
+    <masterLabel>Program Dates Related List (Child)</masterLabel>
+    <description>Child component that renders the Program Dates related list table. Use programDatesRelatedListWrapper on record pages.</description>
+</LightningComponentBundle>

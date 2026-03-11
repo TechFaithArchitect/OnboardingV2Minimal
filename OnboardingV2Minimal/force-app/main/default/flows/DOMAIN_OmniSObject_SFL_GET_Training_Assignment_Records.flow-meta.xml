@@ -2,6 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Training_Assignment_Id_from_Onboarding_Link</name>
+        <label>Assign Training Assignment Id from Onboarding Link</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TrainingAssignmentIdsFromOnboardingLinks</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Training_Assignment_Onboarding_Links.Training_Assignment__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Training_Assignment_Onboarding_Links</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Are_We_Provided_Records_to_Filter_Against</name>
         <label>Are We Provided Records to Filter Against</label>
@@ -29,6 +45,96 @@
                 <targetReference>How_Are_We_Filtering_Training_Assignments</targetReference>
             </connector>
             <label>Yes - Provided Records</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Route_Onboarding_Linked_Assignment_Lookup</name>
+        <label>Route Onboarding Linked Assignment Lookup</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Training_Assignment_Records_via_Onboarding_Legacy</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Legacy Onboarding Fetch</defaultConnectorLabel>
+        <rules>
+            <name>Links_Found_Filter_Mode</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>TrainingAssignmentIdsFromOnboardingLinks</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TrainingAssignmentIdsFromOnboardingLinks</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TrainingAssignmentList</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TrainingAssignmentList</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Filter_Get_Training_Assignment_Records_via_Onboarding</targetReference>
+            </connector>
+            <label>Links Found Filter Mode</label>
+        </rules>
+        <rules>
+            <name>Links_Found_Standard_Mode</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>TrainingAssignmentIdsFromOnboardingLinks</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TrainingAssignmentIdsFromOnboardingLinks</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Training_Assignment_Records_via_Onboarding</targetReference>
+            </connector>
+            <label>Links Found Standard Mode</label>
+        </rules>
+        <rules>
+            <name>Legacy_Filter_Mode</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>TrainingAssignmentList</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TrainingAssignmentList</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Filter_Get_Training_Assignment_Records_via_Onboarding_Legacy</targetReference>
+            </connector>
+            <label>Legacy Filter Mode</label>
         </rules>
     </decisions>
     <decisions>
@@ -69,7 +175,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Filter_Get_Training_Assignment_Records_via_Onboarding</targetReference>
+                <targetReference>Get_Training_Assignment_Onboarding_Links_via_Onboarding</targetReference>
             </connector>
             <label>Filter Via Onboarding Records</label>
         </rules>
@@ -201,7 +307,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Training_Assignment_Records_via_Onboarding</targetReference>
+                <targetReference>Get_Training_Assignment_Onboarding_Links_via_Onboarding</targetReference>
             </connector>
             <label>Via Onboarding Records</label>
         </rules>
@@ -329,6 +435,20 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <loops>
+        <name>Loop_Training_Assignment_Onboarding_Links</name>
+        <label>Loop Training Assignment Onboarding Links</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>TrainingAssignmentOnboardingLinkCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Training_Assignment_Id_from_Onboarding_Link</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Route_Onboarding_Linked_Assignment_Lookup</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <recordLookups>
         <name>Filter_Get_Training_Assignment_Records_via_Contacts</name>
         <label>Filter Get Training Assignment Records via Contacts</label>
@@ -400,6 +520,34 @@
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
         <filters>
+            <field>Id</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>TrainingAssignmentIdsFromOnboardingLinks</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotIn</operator>
+            <value>
+                <elementReference>TrainingAssignmentList</elementReference>
+            </value>
+        </filters>
+        <object>Training_Assignment__c</object>
+        <outputReference>TrainingAssignmentRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Contact__c</queriedFields>
+        <queriedFields>Onboarding__c</queriedFields>
+        <queriedFields>Vendor_Training_Requirement__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Filter_Get_Training_Assignment_Records_via_Onboarding_Legacy</name>
+        <label>Filter Get Training Assignment Records via Onboarding Legacy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
             <field>Onboarding__c</field>
             <operator>In</operator>
             <value>
@@ -419,6 +567,29 @@
         <queriedFields>Contact__c</queriedFields>
         <queriedFields>Onboarding__c</queriedFields>
         <queriedFields>Vendor_Training_Requirement__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Training_Assignment_Onboarding_Links_via_Onboarding</name>
+        <label>Get Training Assignment Onboarding Links via Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Training_Assignment_Onboarding_Links</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Onboarding__c</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>OnboardingRecordList</elementReference>
+            </value>
+        </filters>
+        <object>Training_Assignment_Onboarding__c</object>
+        <outputReference>TrainingAssignmentOnboardingLinkCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Onboarding__c</queriedFields>
+        <queriedFields>Training_Assignment__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Training_Assignment_Records_that_are_Common_Contact_and_Onboarding_Records</name>
@@ -477,6 +648,27 @@
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
         <filters>
+            <field>Id</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>TrainingAssignmentIdsFromOnboardingLinks</elementReference>
+            </value>
+        </filters>
+        <object>Training_Assignment__c</object>
+        <outputReference>TrainingAssignmentRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Contact__c</queriedFields>
+        <queriedFields>Onboarding__c</queriedFields>
+        <queriedFields>Vendor_Training_Requirement__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Training_Assignment_Records_via_Onboarding_Legacy</name>
+        <label>Get Training Assignment Records via Onboarding Legacy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
             <field>Onboarding__c</field>
             <operator>In</operator>
             <value>
@@ -526,5 +718,20 @@
         <isInput>false</isInput>
         <isOutput>true</isOutput>
         <objectType>Training_Assignment__c</objectType>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentIdsFromOnboardingLinks</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentOnboardingLinkCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Training_Assignment_Onboarding__c</objectType>
     </variables>
 </Flow>

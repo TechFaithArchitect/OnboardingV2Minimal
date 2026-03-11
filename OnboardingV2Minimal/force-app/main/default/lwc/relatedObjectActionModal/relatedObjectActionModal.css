@@ -1,0 +1,65 @@
+/* Generic Reusable Modal Wrapper Styling - For Screen Actions */
+
+/* Ensure SLDS modal styles apply as in standard dialogs */
+:host {
+    display: block;
+}
+
+.slds-modal__container {
+    width: clamp(44rem, 60vw, 60rem);
+    max-width: 60rem;
+    min-width: 44rem;
+}
+
+.slds-modal__header {
+    position: relative;
+    text-align: center;
+    padding: var(--lwc-spacingMedium, 1rem);
+    border-bottom: 2px solid rgb(201, 201, 201);
+}
+
+.slds-modal__header .slds-modal__close {
+    position: absolute;
+    top: -2.5rem;
+    right: 0;
+    margin-left: 0;
+    bottom: 0;
+}
+
+.slds-modal__close {
+    width: var(--lwc-squareIconMediumBoundary, 2rem);
+    height: var(--lwc-squareIconMediumBoundary, 2rem);
+    margin-left: auto;
+    position: relative;
+    bottom: var(--lwc-spacingXSmall, 0.5rem);
+    background-color: var(--slds-g-color-neutral-base-100, rgb(255, 255, 255));
+}
+
+/* Modal Title */
+.slds-modal__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.slds-modal__content {
+    background: rgb(255, 255, 255);
+    padding: 0;
+    border-radius: 0;
+}
+
+/* Footer - From StandardSalesforce.css reference */
+.slds-modal__footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background: rgb(243, 243, 243);
+    border-top: 1px solid rgb(201, 201, 201);
+    box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.16);
+}
+
+.footer-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}

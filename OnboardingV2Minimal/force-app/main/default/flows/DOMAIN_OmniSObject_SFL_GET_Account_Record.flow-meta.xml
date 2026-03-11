@@ -200,7 +200,10 @@
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>ContactRecord</leftValueReference>
-                <operator>EqualTo</operator>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
             </conditions>
             <connector>
                 <targetReference>Get_Account_Record_via_Contact_Record</targetReference>
@@ -212,7 +215,10 @@
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>ContactRecordCollection</leftValueReference>
-                <operator>EqualTo</operator>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
             </conditions>
             <connector>
                 <targetReference>Loop_Contact_Record_Collection</targetReference>

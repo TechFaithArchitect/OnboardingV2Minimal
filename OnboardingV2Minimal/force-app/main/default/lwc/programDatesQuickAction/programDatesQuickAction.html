@@ -1,0 +1,69 @@
+<template>
+    <lightning-card title="New Program Dates">
+        <div class="slds-p-horizontal_medium slds-p-vertical_small">
+            <lightning-record-edit-form
+                object-api-name={objectApiName}
+                onsubmit={handleSubmit}
+                onsuccess={handleSuccess}
+                onerror={handleError}
+            >
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-size_1-of-1">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Information</h3>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_small">
+                        <label class="slds-form-element__label">Vendor Program</label>
+                        <lightning-combobox
+                            name="vendorProgram"
+                            value={selectedVendorProgramId}
+                            placeholder="Search Vendor Customizations..."
+                            options={vendorOptions}
+                            onchange={handleVendorChange}
+                        ></lightning-combobox>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_small">
+                        <lightning-input-field field-name={ACCOUNT_FIELD.fieldApiName} value={defaultAccountId}></lightning-input-field>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_small">
+                        <lightning-input-field field-name={PARTNER_CATEGORY_FIELD.fieldApiName}></lightning-input-field>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_small">
+                        <lightning-input-field field-name={PROGRAM_ID_FIELD.fieldApiName}></lightning-input-field>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium">
+                    <div class="slds-size_1-of-1">
+                        <h3 class="slds-text-heading_small slds-m-bottom_small">Program Active/Inactive Info</h3>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_small">
+                        <lightning-input-field field-name={PROGRAM_ACTIVE_FLAG_FIELD.fieldApiName}></lightning-input-field>
+                        <lightning-input-field field-name={PROGRAM_DATE_FIELD.fieldApiName}></lightning-input-field>
+                        <lightning-input-field field-name={PROGRAM_REACTIVATED_FLAG_FIELD.fieldApiName}></lightning-input-field>
+                        <lightning-input-field field-name={PROGRAM_REACTIVATED_DATE_FIELD.fieldApiName}></lightning-input-field>
+                    </div>
+
+                    <div class="slds-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_small">
+                        <lightning-input-field field-name={PROGRAM_DEACTIVATED_DATE_FIELD.fieldApiName}></lightning-input-field>
+                        <lightning-input-field field-name={PROGRAM_DEACTIVATED_FLAG_FIELD.fieldApiName}></lightning-input-field>
+                        <lightning-input-field field-name={PROGRAM_DEACTIVATED_REASON_FIELD.fieldApiName}></lightning-input-field>
+                    </div>
+                </div>
+
+                <div class="slds-m-top_medium slds-grid slds-grid_align-end">
+                    <lightning-button variant="neutral" label="Cancel" onclick={handleCancel} class="slds-m-right_small"></lightning-button>
+                    <lightning-button variant="brand" type="submit" label="Save" disabled={isSaving}></lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+
+        <template if:true={isSaving}>
+            <lightning-spinner alternative-text="Saving" size="small"></lightning-spinner>
+        </template>
+    </lightning-card>
+</template>

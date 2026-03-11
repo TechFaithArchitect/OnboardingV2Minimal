@@ -1,0 +1,93 @@
+/* Match standard "Related List - Single" from flexipage-component2 screenshots */
+:host {
+    display: block;
+}
+
+/* Card - SLDS handles border via slds-card_boundary class */
+.slds-card {
+    margin: 0;
+    padding: 0;
+}
+
+/* Card Body - SLDS handles border via slds-card_body_boundary class */
+.slds-card__body {
+    margin-top: 0;
+}
+
+/* Card Body - SLDS handles border via slds-box class */
+.slds-box {
+    margin-top: 0;
+    border-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+}
+
+/* Page header - matches inspector: background #F3F3F3, padding 8px 12px */
+.slds-page-header {
+    background-color: #f3f3f3;
+    padding: 0.5rem 0.75rem; /* 8px 12px from inspector */ 
+    margin-bottom: 0; /* remove default gap below header */
+}
+
+/* Page header title - standard related list title */
+.slds-card__header-title {
+    font-size: 0.875rem; /* 14px - matches computed standard component */
+    font-weight: 700; /* Bold weight from standard SLDS */
+    line-height: 1.25; /* Results in 17.5px at 14px font-size */
+}
+
+/* Header link - clickable title */
+.slds-card__header-link {
+    color: inherit; /* Inherit dark color by default */
+    font-weight: inherit;
+    text-decoration: none;
+}
+
+.slds-card__header-link:hover {
+    color: rgb(39, 58, 157); /* Blue color on hover */
+    text-decoration: underline;
+}
+
+/* Ensure underline shows on span inside link on hover */
+.slds-card__header-link:hover .slds-truncate {
+    text-decoration: underline;
+}
+
+.header-link {
+    display: inline-flex;
+    align-items: center;
+}
+
+.status-text {
+    margin: 0;
+}
+
+.related-list-table {
+    margin-top: 0;
+}
+
+.related-list-table .slds-table_header-fixed_container {
+    padding-top: 0;
+}
+
+/* Title span truncation */
+.slds-card__header-title .slds-truncate {
+    display: inline-block;
+}
+
+/* Media no-space variant - removes default figure margin */
+.slds-media.slds-no-space .slds-media__figure {
+    margin-right: 0;
+}
+
+/* Grow class for media */
+.slds-media.slds-grow {
+    flex-grow: 1;
+}
+
+/* First header row */
+.firstHeaderRow {
+    flex-grow: 1;
+}
+
+/* Removed modal-specific overrides to stay aligned with standard related list styling */

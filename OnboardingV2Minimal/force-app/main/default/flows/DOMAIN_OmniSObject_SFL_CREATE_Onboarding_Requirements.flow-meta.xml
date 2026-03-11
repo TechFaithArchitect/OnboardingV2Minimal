@@ -122,12 +122,40 @@
     <formulas>
         <name>Normalized_OnboardingRequirement_Type</name>
         <dataType>String</dataType>
-        <expression>TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c})</expression>
+        <expression>IF(
+  TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c}) = &quot;Vendor Order Entry Setup Status&quot;,
+  &quot;Vendor Order Entry&quot;,
+  TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c})
+)</expression>
     </formulas>
     <formulas>
         <name>OnboardingRequirement_RecordType_DeveloperName</name>
         <dataType>String</dataType>
-        <expression>CASE(TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c}), &quot;Agreement&quot;, &quot;Agreement_Requirements&quot;, &quot;Auto Insurance&quot;, &quot;Auto_Insurance_Requirements&quot;, &quot;Background Check&quot;, &quot;Background_Check&quot;, &quot;Business License&quot;, &quot;Business_License&quot;, &quot;Chuzo Agreement&quot;, &quot;Chuzo_Agreement&quot;, &quot;Compliance&quot;, &quot;Compliance&quot;, &quot;Contract&quot;, &quot;Contract&quot;, &quot;Credit Check&quot;, &quot;Credit_Check&quot;, &quot;Driver&apos;s License&quot;, &quot;Drivers_License&quot;, &quot;Employment Form&quot;, &quot;Employment_Form&quot;, &quot;ERP Setup&quot;, &quot;ERP_Setup&quot;, &quot;General Liability Insurance&quot;, &quot;General_Liability_Insurance_Requirement&quot;, &quot;Interview&quot;, &quot;Interview&quot;, &quot;Net Terms&quot;, &quot;Net_Terms&quot;, &quot;Personal Guarantee&quot;, &quot;Personal_Guarantee&quot;, &quot;SubAgent License Agreement&quot;, &quot;SubAgent_License_Agreement&quot;, &quot;Terms &amp; Conditions&quot;, &quot;Terms_Conditions&quot;, &quot;Training&quot;, &quot;Training&quot;, &quot;Worker&apos;s Compensation Insurance&quot;, &quot;Workers_Compensation_Insurance&quot;, &quot;Vendor Order Entry&quot;, &quot;Vendor_Order_Entry&quot;, &quot;Agreement_Requirements&quot;)</expression>
+        <expression>CASE(
+  TEXT({!Loop_VendorProgramRequirements.Requirement_Type__c}),
+  &quot;Agreement&quot;, &quot;Agreement_Requirements&quot;,
+  &quot;Auto Insurance&quot;, &quot;Auto_Insurance_Requirements&quot;,
+  &quot;Background Check&quot;, &quot;Background_Check&quot;,
+  &quot;Business License&quot;, &quot;Business_License&quot;,
+  &quot;Chuzo Agreement&quot;, &quot;Chuzo_Agreement&quot;,
+  &quot;Compliance&quot;, &quot;Compliance&quot;,
+  &quot;Contract&quot;, &quot;Contract&quot;,
+  &quot;Credit Check&quot;, &quot;Credit_Check&quot;,
+  &quot;Driver&apos;s License&quot;, &quot;Drivers_License&quot;,
+  &quot;Employment Form&quot;, &quot;Employment_Form&quot;,
+  &quot;ERP Setup&quot;, &quot;ERP_Setup&quot;,
+  &quot;General Liability Insurance&quot;, &quot;General_Liability_Insurance_Requirement&quot;,
+  &quot;Interview&quot;, &quot;Interview&quot;,
+  &quot;Net Terms&quot;, &quot;Net_Terms&quot;,
+  &quot;Personal Guarantee&quot;, &quot;Personal_Guarantee&quot;,
+  &quot;SubAgent License Agreement&quot;, &quot;SubAgent_License_Agreement&quot;,
+  &quot;Terms &amp; Conditions&quot;, &quot;Terms_Conditions&quot;,
+  &quot;Training&quot;, &quot;Training&quot;,
+  &quot;Worker&apos;s Compensation Insurance&quot;, &quot;Workers_Compensation_Insurance&quot;,
+  &quot;Vendor Order Entry&quot;, &quot;Vendor_Order_Entry&quot;,
+  &quot;Vendor Order Entry Setup Status&quot;, &quot;Vendor_Order_Entry&quot;,
+  &quot;Agreement_Requirements&quot;
+)</expression>
     </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements</label>
