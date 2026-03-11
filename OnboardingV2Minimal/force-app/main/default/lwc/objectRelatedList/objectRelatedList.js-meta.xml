@@ -71,6 +71,11 @@
                 label="Read Only &amp; Treat As Text (CSV)"
                 description="Optional comma-separated fields rendered as read-only text (example: Requirement_Type__c)." />
             <property
+                name="excludeRowsWhereCsv"
+                type="String"
+                label="Exclude Rows Where (CSV)"
+                description="Optional comma-separated exclusions in format FieldApiName=value (example: Field=created)." />
+            <property
                 name="orderByField"
                 type="String"
                 label="Order By Field API Name"

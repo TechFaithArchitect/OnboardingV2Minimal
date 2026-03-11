@@ -21,6 +21,7 @@ import { NavigationMixin } from 'lightning/navigation';
 import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
+import { RefreshEvent, registerRefreshHandler, unregisterRefreshHandler } from 'lightning/refresh';
 
 const UI_API_VERSION = 'v65.0';
 
@@ -106,6 +107,9 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     /** Comma-separated field API names rendered as read-only text (never checkbox/picklist editors) */
     @api readOnlyTreatAsTextFieldApiNamesCsv;
 
+    /** Optional CSV filters to exclude rows in format FieldApiName=value */
+    @api excludeRowsWhereCsv;
+
     rows = [];
     draftValues = [];
     error;
@@ -115,6 +119,28 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     picklistOptionsByFieldByRecordType = {};
     picklistRequestKeys = new Set();
     lastLoadedAt;
+    refreshHandlerId;
+
+    connectedCallback() {
+        try {
+            this.refreshHandlerId = registerRefreshHandler(this, this.handlePageRefresh.bind(this));
+        } catch (e) {
+            this.refreshHandlerId = undefined;
+        }
+    }
+
+    disconnectedCallback() {
+        if (this.refreshHandlerId) {
+            unregisterRefreshHandler(this.refreshHandlerId);
+            this.refreshHandlerId = undefined;
+        }
+    }
+
+    handlePageRefresh() {
+        return this.refreshList()
+            .then(() => true)
+            .catch(() => false);
+    }
 
     /**
      * Builds query configuration for Apex controller.
@@ -126,7 +152,22 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         }
 
         const fieldApiNames = [...this.resolvedFieldApiNames];
-        if (!fieldApiNames.includes('RecordTypeId')) {
+        const relationshipFieldApiNames = [...this.resolvedRelationshipFieldApiNames];
+
+        this.rowExclusionRules.forEach((rule) => {
+            if (!rule.fieldApiName) {
+                return;
+            }
+            if (rule.fieldApiName.includes('.')) {
+                if (!relationshipFieldApiNames.includes(rule.fieldApiName)) {
+                    relationshipFieldApiNames.push(rule.fieldApiName);
+                }
+            } else if (!fieldApiNames.includes(rule.fieldApiName)) {
+                fieldApiNames.push(rule.fieldApiName);
+            }
+        });
+
+        if (this.objectHasRecordTypeId && !fieldApiNames.includes('RecordTypeId')) {
             fieldApiNames.push('RecordTypeId');
         }
 
@@ -135,11 +176,19 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             parentFieldApiName: this.parentFieldApiName,
             parentRecordId: this.recordId,
             fieldApiNames,
-            relationshipFieldApiNames: this.resolvedRelationshipFieldApiNames,
+            relationshipFieldApiNames,
             orderByField: this.orderByField,
             orderDirection: this.orderDirection || 'DESC',
             recordLimit: this.recordLimit
         };
+    }
+
+    get objectHasRecordTypeId() {
+        return Object.prototype.hasOwnProperty.call(this.objectInfo?.fields || {}, 'RecordTypeId');
+    }
+
+    get rowExclusionRules() {
+        return this.parseFieldValuePairsCsv(this.excludeRowsWhereCsv);
     }
 
     get resolvedFieldApiNames() {
@@ -294,7 +343,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         this.wiredResult = value;
         const { data, error } = value;
         if (data) {
-            const transformedRows = this.transformRows(data);
+            const transformedRows = this.applyRowExclusions(this.transformRows(data));
             this.rows = this.decorateRowsWithPicklistOptions(transformedRows);
             this.ensurePicklistOptionsLoadedForRows(transformedRows);
             this.lastLoadedAt = new Date();
@@ -613,7 +662,10 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             .then(() => {
                 this.showToast('Success', 'Records updated', 'success');
                 this.draftValues = [];
-                this.refreshList();
+                return this.refreshList();
+            })
+            .then(() => {
+                this.dispatchEvent(new RefreshEvent());
             })
             .catch((error) => {
                 this.showToast('Error updating records', this.reduceErrors(error).join(', '), 'error');
@@ -645,7 +697,9 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         this.showNewModal = false;
         const label = this.objectLabel || this.objectInfo?.label || 'Record';
         this.showToast('Success', `${label} record created.`, 'success');
-        this.refreshList();
+        this.refreshList().then(() => {
+            this.dispatchEvent(new RefreshEvent());
+        });
     }
 
     // Constants for row actions
@@ -696,7 +750,10 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             .then(() => {
                 const label = this.objectLabel || this.objectInfo?.label || 'Record';
                 this.showToast('Deleted', `${label} record deleted.`, 'success');
-                this.refreshList();
+                return this.refreshList();
+            })
+            .then(() => {
+                this.dispatchEvent(new RefreshEvent());
             })
             .catch((error) => {
                 this.showToast('Error deleting record', this.reduceErrors(error).join(', '), 'error');
@@ -705,8 +762,9 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
 
     refreshList() {
         if (this.wiredResult) {
-            refreshApex(this.wiredResult);
+            return refreshApex(this.wiredResult);
         }
+        return Promise.resolve();
     }
 
     navigateToNewRecord() {
@@ -763,6 +821,66 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             });
 
         return defaults;
+    }
+
+    parseFieldValuePairsCsv(csvValue) {
+        const pairs = [];
+        if (typeof csvValue !== 'string' || !csvValue.trim()) {
+            return pairs;
+        }
+
+        csvValue
+            .split(',')
+            .map((entry) => entry.trim())
+            .filter((entry) => !!entry)
+            .forEach((entry) => {
+                const separatorIndex = entry.indexOf('=');
+                if (separatorIndex <= 0) {
+                    return;
+                }
+                const fieldApiName = entry.substring(0, separatorIndex).trim();
+                const fieldValue = entry.substring(separatorIndex + 1).trim();
+                if (!fieldApiName) {
+                    return;
+                }
+                pairs.push({
+                    fieldApiName,
+                    fieldValue
+                });
+            });
+
+        return pairs;
+    }
+
+    applyRowExclusions(rows) {
+        if (!Array.isArray(rows) || !rows.length || !this.rowExclusionRules.length) {
+            return rows;
+        }
+
+        return rows.filter((row) => !this.matchesAnyExclusionRule(row));
+    }
+
+    matchesAnyExclusionRule(row) {
+        return this.rowExclusionRules.some((rule) => this.rowMatchesExclusionRule(row, rule));
+    }
+
+    rowMatchesExclusionRule(row, rule) {
+        if (!row || !rule?.fieldApiName) {
+            return false;
+        }
+
+        const rawValue = rule.fieldApiName.includes('.')
+            ? this.getNestedValue(row, rule.fieldApiName)
+            : row[rule.fieldApiName];
+
+        return this.normalizeComparableValue(rawValue) === this.normalizeComparableValue(rule.fieldValue);
+    }
+
+    normalizeComparableValue(value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        return String(value).trim().toLowerCase();
     }
 
     normalizeStringList(rawValue) {

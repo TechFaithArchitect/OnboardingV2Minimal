@@ -65,11 +65,25 @@ public with sharing class ObjectRelatedListController {
         if (config.fieldApiNames == null || config.fieldApiNames.isEmpty()) {
             throw new AuraHandledException('At least one field API name is required');
         }
+
+        Map<String, Schema.SObjectType> globalDescribe = Schema.getGlobalDescribe();
+        if (!globalDescribe.containsKey(config.objectApiName)) {
+            throw new AuraHandledException('Invalid object API name: ' + config.objectApiName);
+        }
+
+        Schema.DescribeSObjectResult objectDescribe =
+            globalDescribe.get(config.objectApiName).getDescribe();
+        if (!objectDescribe.isAccessible()) {
+            throw new AuraHandledException('Object is not accessible: ' + config.objectApiName);
+        }
+        Map<String, Schema.SObjectField> objectFieldMap = objectDescribe.fields.getMap();
         
         // Build field list
         Set<String> fields = new Set<String>();
         fields.add('Id'); // Always include Id
-        fields.add('Name'); // Try to include Name if it exists
+        if (objectFieldMap.containsKey('Name')) {
+            fields.add('Name');
+        }
         
         // Add specified fields
         for (String field : config.fieldApiNames) {
