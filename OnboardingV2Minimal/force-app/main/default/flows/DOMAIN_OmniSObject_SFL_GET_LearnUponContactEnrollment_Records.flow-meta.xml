@@ -3,38 +3,6 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
-        <name>Should_Filter_Out_Completed_or_Passed</name>
-        <label>Should Filter Out Completed or Passed</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>ContactRecordList_Provided_No_Status_Filter</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Include Completed and Passed</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Filter_Out_Completed_or_Passed</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>FilterOutCompletedOrPassed</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>FilterOutCompletedOrPassed</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>ContactRecordList_Provided_Filtered</targetReference>
-            </connector>
-            <label>Yes - Filter Out Completed and Passed</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>ContactRecordList_Provided_Filtered</name>
         <label>ContactRecordList Provided Filtered</label>
         <locationX>0</locationX>
@@ -98,6 +66,38 @@
             <label>Yes - Contact Record List Provided</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Should_Filter_Out_Completed_or_Passed</name>
+        <label>Should Filter Out Completed or Passed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>ContactRecordList_Provided_No_Status_Filter</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Include Completed and Passed</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Filter_Out_Completed_or_Passed</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>FilterOutCompletedOrPassed</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>FilterOutCompletedOrPassed</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ContactRecordList_Provided_Filtered</targetReference>
+            </connector>
+            <label>Yes - Filter Out Completed and Passed</label>
+        </rules>
+    </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - GET - LearnUponContactEnrollment records.</description>
     <environments>Default</environments>
     <formulas>
@@ -127,6 +127,29 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
+        <description>Get LearnUponContactEnrollment records.</description>
+        <name>Get_LearnUponContactEnrollment_Records</name>
+        <label>Get LearnUponContactEnrollment Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CreatedDate</field>
+            <operator>LessThanOrEqualTo</operator>
+            <value>
+                <elementReference>globalCreatedDateTime31DaysAgo</elementReference>
+            </value>
+        </filters>
+        <object>LearnUponP__LearnUponContactEnrollment__c</object>
+        <outputReference>LUCERecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>LearnUponP__SFContact__c</queriedFields>
+        <queriedFields>Onboarding__c</queriedFields>
+        <queriedFields>LearnUponP__Status__c</queriedFields>
+        <queriedFields>CreatedDate</queriedFields>
+    </recordLookups>
+    <recordLookups>
         <description>Get LearnUponContactEnrollment records with status filtering.</description>
         <name>Get_LearnUponContactEnrollment_Records_Filtered</name>
         <label>Get LearnUponContactEnrollment Records Filtered</label>
@@ -155,7 +178,6 @@
                 <stringValue>Completed</stringValue>
             </value>
         </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>LearnUponP__LearnUponContactEnrollment__c</object>
         <outputReference>LUCERecordCollection</outputReference>
         <queriedFields>Id</queriedFields>
@@ -193,30 +215,6 @@
                 <stringValue>Completed</stringValue>
             </value>
         </filters>
-        <object>LearnUponP__LearnUponContactEnrollment__c</object>
-        <outputReference>LUCERecordCollection</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>LearnUponP__SFContact__c</queriedFields>
-        <queriedFields>Onboarding__c</queriedFields>
-        <queriedFields>LearnUponP__Status__c</queriedFields>
-        <queriedFields>CreatedDate</queriedFields>
-    </recordLookups>
-    <recordLookups>
-        <description>Get LearnUponContactEnrollment records.</description>
-        <name>Get_LearnUponContactEnrollment_Records</name>
-        <label>Get LearnUponContactEnrollment Records</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>CreatedDate</field>
-            <operator>LessThanOrEqualTo</operator>
-            <value>
-                <elementReference>globalCreatedDateTime31DaysAgo</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>LearnUponP__LearnUponContactEnrollment__c</object>
         <outputReference>LUCERecordCollection</outputReference>
         <queriedFields>Id</queriedFields>

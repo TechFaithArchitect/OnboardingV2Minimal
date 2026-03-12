@@ -15,6 +15,44 @@
             </value>
         </assignmentItems>
     </assignments>
+    <assignments>
+        <name>Assign_to_Active_Training_System_to_TraininSystemRecord</name>
+        <label>Assign to Active Training System to TraininSystemRecord</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TrainingSystemRecord</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Active_Training_System</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Get_Single_or_All_Training_Systems</name>
+        <label>Get Single or All Training Systems</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Active_Training_Systems</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Training System Name Present</defaultConnectorLabel>
+        <rules>
+            <name>Training_System_Name_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>TrainingSystemName</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Active_Training_System</targetReference>
+            </connector>
+            <label>Training System Name Present</label>
+        </rules>
+    </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - GET - Training Systems</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - Training Systems - GET - Training Systems {!$Flow.CurrentDateTime}</interviewLabel>
@@ -38,6 +76,34 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Active_Training_System</name>
+        <label>Get Active Training System</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_to_Active_Training_System_to_TraininSystemRecord</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>TrainingSystemName</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Training_System__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Active_Training_Systems</name>
         <label>Get Active Training Systems</label>
@@ -63,10 +129,25 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Active_Training_Systems</targetReference>
+            <targetReference>Get_Single_or_All_Training_Systems</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>TrainingSystemName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TrainingSystemRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Training_System__c</objectType>
+    </variables>
     <variables>
         <name>TrainingSystemRecordCollection</name>
         <dataType>SObject</dataType>

@@ -2,6 +2,19 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Adobe_Agreement</name>
+        <label>Assign Adobe Agreement</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>AgreementRecord</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Adobe_Agreements</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Are_Required_Inputs_Provided</name>
         <label>Are Required Inputs Provided</label>
@@ -24,19 +37,6 @@
             <label>Via Contract Record</label>
         </rules>
     </decisions>
-    <assignments>
-        <name>Assign_Adobe_Agreement</name>
-        <label>Assign Adobe Agreement</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>AgreementRecord</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Get_Adobe_Agreements</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
     <description>DOMAIN LAYER - OmniSObject - Subflow - GET - Agreements</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - GET - Agreements {!$Flow.CurrentDateTime}</interviewLabel>

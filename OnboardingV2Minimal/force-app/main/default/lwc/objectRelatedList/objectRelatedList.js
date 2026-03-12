@@ -16,7 +16,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import getRelatedRecords from '@salesforce/apex/ObjectRelatedListController.getRelatedRecords';
 import { refreshApex } from '@salesforce/apex';
-import { deleteRecord, updateRecord } from 'lightning/uiRecordApi';
+import { deleteRecord, getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
 import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -40,6 +40,9 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     
     /** Parent field API name that links to the parent record (e.g., 'Account__c') */
     @api parentFieldApiName;
+
+    /** Optional field on current record whose Id value should be used as parentRecordId (example: Account__c) */
+    @api parentRecordIdSourceFieldApiName;
     
     /** Array of field API names to query and display */
     @api fieldApiNames = [];
@@ -116,6 +119,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     showNewModal = false;
     wiredResult;
     objectInfo;
+    parentSourceRecord;
     picklistOptionsByFieldByRecordType = {};
     picklistRequestKeys = new Set();
     lastLoadedAt;
@@ -142,12 +146,22 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             .catch(() => false);
     }
 
+    @wire(getRecord, { recordId: '$recordId', fields: '$parentRecordSourceFields' })
+    wiredParentSourceRecord({ data, error }) {
+        if (data) {
+            this.parentSourceRecord = data;
+        } else if (error) {
+            this.parentSourceRecord = undefined;
+        }
+    }
+
     /**
      * Builds query configuration for Apex controller.
      * Returns undefined if required properties are missing (prevents unnecessary wire calls).
      */
     get queryConfig() {
-        if (!this.targetObjectApiName || !this.parentFieldApiName || !this.recordId || !this.resolvedFieldApiNames.length) {
+        const parentRecordId = this.effectiveParentRecordId;
+        if (!this.targetObjectApiName || !this.parentFieldApiName || !parentRecordId || !this.resolvedFieldApiNames.length) {
             return undefined;
         }
 
@@ -174,7 +188,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         return {
             objectApiName: this.targetObjectApiName,
             parentFieldApiName: this.parentFieldApiName,
-            parentRecordId: this.recordId,
+            parentRecordId,
             fieldApiNames,
             relationshipFieldApiNames,
             orderByField: this.orderByField,
@@ -189,6 +203,40 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
 
     get rowExclusionRules() {
         return this.parseFieldValuePairsCsv(this.excludeRowsWhereCsv);
+    }
+
+    get parentRecordSourceFields() {
+        const fieldPath = this.parentRecordIdSourceFieldPath;
+        return fieldPath ? [fieldPath] : undefined;
+    }
+
+    get parentRecordIdSourceFieldPath() {
+        const fieldApiName = (this.parentRecordIdSourceFieldApiName || '').trim();
+        if (!fieldApiName || !this.objectApiName) {
+            return undefined;
+        }
+        if (fieldApiName.includes('.')) {
+            return fieldApiName;
+        }
+        return `${this.objectApiName}.${fieldApiName}`;
+    }
+
+    get effectiveParentRecordId() {
+        if (!(this.parentRecordIdSourceFieldApiName || '').trim()) {
+            return this.recordId;
+        }
+        return this.parentRecordIdFromSourceField;
+    }
+
+    get parentRecordIdFromSourceField() {
+        const sourceFieldApiName = (this.parentRecordIdSourceFieldApiName || '').trim();
+        if (!sourceFieldApiName || !this.parentSourceRecord?.fields) {
+            return undefined;
+        }
+        const fieldToken = sourceFieldApiName.includes('.')
+            ? sourceFieldApiName.split('.').pop()
+            : sourceFieldApiName;
+        return this.parentSourceRecord.fields?.[fieldToken]?.value;
     }
 
     get resolvedFieldApiNames() {
@@ -792,8 +840,8 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
 
     buildDefaultFieldValues() {
         const defaults = this.parseDefaultFieldValuesCsv(this.defaultFieldValuesCsv);
-        if (this.parentFieldApiName && this.recordId) {
-            defaults[this.parentFieldApiName] = this.recordId;
+        if (this.parentFieldApiName && this.effectiveParentRecordId) {
+            defaults[this.parentFieldApiName] = this.effectiveParentRecordId;
         }
         return defaults;
     }

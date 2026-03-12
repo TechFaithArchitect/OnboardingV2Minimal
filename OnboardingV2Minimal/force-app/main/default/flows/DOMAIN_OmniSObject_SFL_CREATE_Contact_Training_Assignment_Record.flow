@@ -119,6 +119,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Is_Onboarding_Record_Associated_with_Select_Program</name>
+        <label>Is Onboarding Record Associated with Select Program</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Training_Assignment_Records_for_Onboarding_Id_List</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Select Program Does Not Need Reassignment</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Select_Program_Need_Reassignment</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Training_Assignment_Records_for_Onboarding_Id_List.Onboarding__r.Vendor__r.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Verizon</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Training_Assignment_Id</targetReference>
+            </connector>
+            <label>Yes - Select Program Need Reassignment</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>LearnUponContactEnrollment_Status_is_Complete_OR_Passed</name>
         <label>LearnUponContactEnrollment Status is Complete OR Passed</label>
         <locationX>0</locationX>
@@ -195,31 +220,6 @@
                 <targetReference>Update_Training_Assignment_Record_Not_Complete</targetReference>
             </connector>
             <label>No - Not Complete Or Passed</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Onboarding_Record_Associated_with_Select_Program</name>
-        <label>Is Onboarding Record Associated with Select Program</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Loop_Training_Assignment_Records_for_Onboarding_Id_List</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Select Program Does Not Need Reassignment</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Select_Program_Need_Reassignment</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_Training_Assignment_Records_for_Onboarding_Id_List.Onboarding__r.Vendor__r.Name</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Verizon</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_Training_Assignment_Id</targetReference>
-            </connector>
-            <label>Yes - Select Program Need Reassignment</label>
         </rules>
     </decisions>
     <decisions>

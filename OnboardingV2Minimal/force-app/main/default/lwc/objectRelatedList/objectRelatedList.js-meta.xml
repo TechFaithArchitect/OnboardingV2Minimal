@@ -25,6 +25,11 @@
                 label="Parent Lookup Field API Name"
                 description="Lookup/master-detail field on the child object that points to this record (example: Account__c)." />
             <property
+                name="parentRecordIdSourceFieldApiName"
+                type="String"
+                label="Parent Id Source Field API Name"
+                description="Optional field on this record whose Id value will be used as the parent filter Id (example: Account__c, Opportunity__c)." />
+            <property
                 name="relationshipApiName"
                 type="String"
                 label="Relationship API Name"

@@ -5,7 +5,7 @@
         <label>Send Email and Log Communication</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>EmailCommBatchSendAction</actionName>
+        <actionName>01pRL00000WBaqXNotFound</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Loop_Training_Assignment_Records</targetReference>
@@ -17,7 +17,6 @@
                 <elementReference>EmailPayloadRecordCollection</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>EmailCommBatchSendAction</nameSegment>
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
