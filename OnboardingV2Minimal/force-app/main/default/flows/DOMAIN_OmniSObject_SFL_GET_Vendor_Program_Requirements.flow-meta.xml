@@ -144,6 +144,8 @@
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Vendor_Program_Requirement__c</object>
+        <sortField>Sequence__c</sortField>
+        <sortOrder>Asc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>

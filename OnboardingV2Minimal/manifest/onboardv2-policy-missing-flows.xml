@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+  <types>
+    <members>BLL_BRE_Evaluate_Business_Rules</members>
+    <members>BLL_OmniSObject_RCD_SYNC_Training_Assignments</members>
+    <members>BLL_Onboarding_RCD_Logical_Process</members>
+    <members>BLL_Onboarding_Requirement_RCD_Logical_Process</members>
+    <members>BLL_Onboarding_SFL_Dispatch_Communication_By_Context</members>
+    <members>BLL_Opportunity_RCD_Logical_Process</members>
+    <members>BLL_Training_Assignment_Onboarding_RCD_Prevent_Duplicates</members>
+    <members>BLL_Training_Assignment_RCD_Populate_Unique_Assignment_Key</members>
+    <members>BLL_Vendor_Program_Training_Requirement_RCD_Prevent_Duplicates</members>
+    <members>DOMAIN_OmniSObject_ACTION_Send_Communication_Template</members>
+    <members>DOMAIN_OmniSObject_SFL_CREATE_Agreement</members>
+    <members>DOMAIN_OmniSObject_SFL_CREATE_Contract</members>
+    <members>DOMAIN_OmniSObject_SFL_CREATE_Follow_Up_Queue</members>
+    <members>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</members>
+    <members>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Requirements</members>
+    <members>DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records</members>
+    <members>DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records</members>
+    <members>DOMAIN_OmniSObject_SFL_GET_Account_Record</members>
+    <members>DOMAIN_OmniSObject_SFL_GET_Communication_Recipients</members>
+    <members>DOMAIN_OmniSObject_SFL_GET_Onboarding_Records</members>
+    <members>DOMAIN_OmniSObject_SFL_GET_Training_Assignment_Records</members>
+    <members>DOMAIN_OmniSObject_SFL_GET_Training_Requirement_Records</members>
+    <members>DOMAIN_OmniSObject_SFL_GET_Vendor_Program</members>
+    <members>EXP_Contact_SCR_Create_Contact</members>
+    <members>EXP_Opportunity_Contacts_SCR_CREATE_Opportunity_Contacts</members>
+    <members>EXP_Opportunity_SCR_Create_Record</members>
+    <name>Flow</name>
+  </types>
+  <version>66.0</version>
+</Package>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Business Logic Layer - Training Assignment Object - Record Trigger - Populate canonical unique assignment key</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>UniqueAssignmentKeyValue</name>
+        <dataType>String</dataType>
+        <expression>IF(
+    AND(
+        {!$Record.Is_Canonical__c},
+        NOT(ISBLANK({!$Record.Contact__c})),
+        NOT(ISBLANK({!$Record.Vendor_Training_Requirement__c}))
+    ),
+    {!$Record.Contact__c} &amp; &apos;|&apos; &amp; {!$Record.Vendor_Training_Requirement__c},
+    {!$Record.Unique_Assignment_Key__c}
+)</expression>
+    </formulas>
+    <interviewLabel>BLL - Training Assignment - RCD - Populate Unique Assignment Key {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>BLL - Training Assignment - RCD - Populate Unique Assignment Key</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Set_Unique_Assignment_Key</name>
+        <label>Set Unique Assignment Key</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Unique_Assignment_Key__c</field>
+            <value>
+                <elementReference>UniqueAssignmentKeyValue</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_Unique_Assignment_Key</targetReference>
+        </connector>
+        <object>Training_Assignment__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
