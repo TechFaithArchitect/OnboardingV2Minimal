@@ -90,7 +90,10 @@ public with sharing class FollowUpMessagingService {
         try {
             provider = SMSProviderStrategyFactory.getStrategy(providerType);
         } catch (IllegalArgumentException ex) {
-            System.debug('Invalid provider type, defaulting to phone check: ' + ex.getMessage());
+            LoggingUtil.warn(
+                'FollowUpMessagingService.hasActiveMessagingEndpoint invalid provider type; using phone fallback: ' +
+                ex.getMessage()
+            );
             // Fallback to phone check
             return hasPhoneNumber(contactId);
         }
@@ -122,6 +125,7 @@ public with sharing class FollowUpMessagingService {
             FROM Contact
             WHERE Id = :contactId
               AND (Phone != null OR MobilePhone != null)
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return !contacts.isEmpty();
@@ -142,6 +146,7 @@ public with sharing class FollowUpMessagingService {
             SELECT Id, Name, Phone, MobilePhone, Email
             FROM Contact
             WHERE AccountId = :accountId
+            WITH SECURITY_ENFORCED
             ORDER BY CreatedDate ASC
             LIMIT 1
         ];

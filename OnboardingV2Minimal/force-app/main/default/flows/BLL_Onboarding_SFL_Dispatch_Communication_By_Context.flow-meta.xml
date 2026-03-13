@@ -285,15 +285,6 @@
 {!Loop_Recipient_Ids}</expression>
     </formulas>
     <formulas>
-        <name>ResolvedDispatchFaultMessage</name>
-        <dataType>String</dataType>
-        <expression>IF(
-  ISBLANK({!SendErrorMessage}),
-  &quot;Communication dispatch failed in async flow.&quot;,
-  {!SendErrorMessage}
-)</expression>
-    </formulas>
-    <formulas>
         <name>ResolvedRecipientType</name>
         <dataType>String</dataType>
         <expression>IF(
@@ -553,17 +544,29 @@
     </subflows>
     <subflows>
         <name>Queue_Communication_Fault</name>
-        <label>Queue Communication Fault</label>
+        <label>Handle Communication Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Loop_Recipient_Ids</targetReference>
         </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Follow_Up_Queue</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
         <inputAssignments>
-            <name>ErrorMessage</name>
+            <name>ContextKey</name>
             <value>
-                <elementReference>ResolvedDispatchFaultMessage</elementReference>
+                <elementReference>DispatchIdempotencyKey</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Communication dispatch failed in async flow.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>SendErrorMessage</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -579,11 +582,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>TriggerReason</name>
+            <name>SourceElementApiName</name>
             <value>
-                <elementReference>DispatchIdempotencyKey</elementReference>
+                <stringValue>Send_Communication_Template</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_Onboarding_SFL_Dispatch_Communication_By_Context</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>SendErrorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
+        </outputAssignments>
     </subflows>
     <subflows>
         <name>Send_Communication_Template</name>

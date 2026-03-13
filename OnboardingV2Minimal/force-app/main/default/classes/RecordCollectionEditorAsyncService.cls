@@ -72,9 +72,10 @@ public with sharing class RecordCollectionEditorAsyncService {
                     new List<RecordCollectionEditorConfigService.CreateFromJsonRequest>{ requestItem }
                 );
             } catch (Exception ex) {
-                System.debug(
-                    LoggingLevel.ERROR,
-                    'RecordCollectionEditorAsyncService queue execution failed: ' + ex.getMessage()
+                LoggingUtil.error(
+                    'RecordCollectionEditorAsyncService queue execution failed. '
+                    + 'configKey=' + configKey
+                    + ', message=' + ex.getMessage()
                 );
             }
         }

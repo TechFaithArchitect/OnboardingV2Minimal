@@ -183,6 +183,7 @@ public with sharing class FollowUpFatigueService {
                 SELECT Time_zone__pc
                 FROM Account
                 WHERE Id = :accountId
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
 
@@ -197,7 +198,10 @@ public with sharing class FollowUpFatigueService {
             // For now, return null to let caller handle fallback
             return null;
         } catch (Exception ex) {
-            System.debug('Error getting dealer timezone: ' + ex.getMessage());
+            LoggingUtil.warn(
+                'FollowUpFatigueService.getDealerTimezone query error: ' +
+                ex.getMessage()
+            );
             return null;
         }
     }

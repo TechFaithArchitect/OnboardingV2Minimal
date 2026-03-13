@@ -73,6 +73,24 @@
 )</expression>
     </formulas>
     <formulas>
+        <name>ResolvedInitialStatus</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  ISBLANK({!InitialStatus}),
+  &quot;Pending Retry&quot;,
+  {!InitialStatus}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>ResolvedOnboardingId</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  ISBLANK({!OnboardingId}),
+  {!OnboardingRecord.Id},
+  {!OnboardingId}
+)</expression>
+    </formulas>
+    <formulas>
         <name>ResolvedTriggerReason</name>
         <dataType>String</dataType>
         <expression>IF(
@@ -146,13 +164,13 @@
         <inputAssignments>
             <field>Onboarding__c</field>
             <value>
-                <elementReference>OnboardingRecord.Id</elementReference>
+                <elementReference>ResolvedOnboardingId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Status__c</field>
             <value>
-                <stringValue>Pending Retry</stringValue>
+                <elementReference>ResolvedInitialStatus</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -177,7 +195,7 @@
             <field>Onboarding__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>OnboardingRecord.Id</elementReference>
+                <elementReference>ResolvedOnboardingId</elementReference>
             </value>
         </filters>
         <filters>
@@ -260,7 +278,7 @@
         <inputAssignments>
             <field>Status__c</field>
             <value>
-                <stringValue>Pending Retry</stringValue>
+                <elementReference>ResolvedInitialStatus</elementReference>
             </value>
         </inputAssignments>
         <object>Follow_Up_Queue__c</object>
@@ -290,6 +308,20 @@
     </variables>
     <variables>
         <name>FollowUpType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>InitialStatus</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>OnboardingId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>

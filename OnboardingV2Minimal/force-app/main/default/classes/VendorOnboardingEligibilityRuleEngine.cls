@@ -32,6 +32,7 @@ public with sharing class VendorOnboardingEligibilityRuleEngine {
         SELECT Vendor_Name__c, Block_Mode__c, Use_Prerequisites__c
         FROM Vendor_Onboarding_Eligibility_Rule__mdt
         WHERE Active__c = TRUE
+        WITH SECURITY_ENFORCED
       ]) {
         String normalizedVendorName = normalizeVendorName(
           metadataRule.Vendor_Name__c

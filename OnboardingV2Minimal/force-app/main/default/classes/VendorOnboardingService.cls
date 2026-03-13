@@ -60,6 +60,7 @@ public with sharing class VendorOnboardingService {
         Onboarding_Status__c
       FROM Onboarding__c
       WHERE Account__c = :accountId AND Vendor_Customization__c != NULL
+      WITH SECURITY_ENFORCED
     ]) {
       if (isNonBlockingOnboardingStatus(onboardingRecord.Onboarding_Status__c)) {
         continue;
@@ -88,6 +89,7 @@ public with sharing class VendorOnboardingService {
       SELECT Id, Name
       FROM Vendor__c
       WHERE Active__c = TRUE
+      WITH SECURITY_ENFORCED
     ];
 
     Map<Id, Vendor__c> vendorMap = new Map<Id, Vendor__c>(eligibleVendors);
@@ -101,6 +103,7 @@ public with sharing class VendorOnboardingService {
       FROM Vendor_Customization__c
       WHERE Vendor__c IN :eligibleVendors
       AND Active__c = TRUE
+      WITH SECURITY_ENFORCED
     ]) {
       Vendor__c vendorRecord = vendorMap.get(vendorCustomization.Vendor__c);
       VendorOnboardingEligibilityRuleEngine.Rule vendorRule = VendorOnboardingEligibilityRuleEngine.getRuleForVendorName(
@@ -253,6 +256,7 @@ public with sharing class VendorOnboardingService {
       FROM Vendor_Customization__c
       WHERE Id IN :prereqMap.customizationToGroupToRequired.keySet()
       AND Vendor__c != NULL
+      WITH SECURITY_ENFORCED
     ]) {
       vendorsWithProgramOrder.add(targetProgram.Vendor__c);
     }

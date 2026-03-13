@@ -7,6 +7,9 @@
         <locationY>0</locationY>
         <actionName>RecordCollectionEditorConfigService</actionName>
         <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Capture_Create_Opportunity_Contact_Fault</targetReference>
+        </faultConnector>
         <dataTypeMappings>
             <typeName>U__createdRecords</typeName>
             <typeValue>OpportunityContactRole</typeValue>
@@ -45,6 +48,19 @@
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Create_Opportunity_Contact_Fault</name>
+        <label>Capture Create Opportunity Contact Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>CreateRecordsErrorMessages</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Opportunity Contact Role</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Opportunity Contact Role {!$Flow.CurrentDateTime}</interviewLabel>

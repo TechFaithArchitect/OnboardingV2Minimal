@@ -19,7 +19,7 @@ The onboarding system uses Salesforce Flows for automation across three architec
 
 **Examples:**
 - `BLL_Contact_Training_Assignment_RCD_Update_Related_Records` - Updates related records
-- `BLL_External_Contact_Credential_RCD_Execute_Supplemental_Onboarding_Requirements` - Executes supplemental requirements
+- `BLL_External_Contact_Credential_RCD_Logical_Process` - Runs supplemental onboarding logic
 - `BLL_Order_RCD_GET_Onboarding_Record` - Gets onboarding record from order
 
 ### Domain Layer Flows
@@ -237,7 +237,7 @@ This list reflects the current contents of `force-app/main/default/flows`.
 - `APP_Onboarding` - APPLICATION LAYER - Onboarding Object - This flow invokes the business logic layer and the domain layer to update and maintain the Onboarding Object records.
 - `Action_Plan_Subflow_Create_Action_Plan` - Action Plan - Subflow - Create Action Plan
 - `BLL_Contact_Training_Assignment_RCD_Update_Related_Records` - Business Logic Layer - Contact Training Assignment Object - Record Trigger - Update Related Records
-- `BLL_External_Contact_Credential_RCD_Execute_Supplemental_Onboarding_Requirements` - Business Logic Layer - External Contact Credential Object - Record Trigger - Execute Supplemental Onboarding Requirements
+- `BLL_External_Contact_Credential_RCD_Logical_Process` - Business Logic Layer - External Contact Credential Object - Record Trigger - Logical Process
 - `BLL_Order_RCD_GET_Onboarding_Record` - Business Logic Layer - Order Object - Record - GET - Onboarding Record
 - `Contact_ScreenFlow_Create_Contacts_on_Accounts` - Contact - ScreenFlow - Create Contacts on Accounts
 - `Contract_Onboarding_Age_Count_flow` - Record-triggered on Contract to stamp onboarding milestone dates (application, ACH/W9, agreement, background check, base account).

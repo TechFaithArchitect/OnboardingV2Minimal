@@ -12,6 +12,7 @@ public with sharing class FollowUpRuleRepository {
             SELECT Max_Attempts_Per_Window__c, Fatigue_Window_Days__c, Fatigue_Suppression_Enabled__c
             FROM Follow_Up_Rule__mdt
             WHERE DeveloperName = :developerName
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return followUpRules.isEmpty() ? null : followUpRules[0];
@@ -22,6 +23,7 @@ public with sharing class FollowUpRuleRepository {
             SELECT Start_Date__c, End_Date__c, Reason__c, Suppression_Type__c, Timezone_Aware__c
             FROM Follow_Up_Suppression__mdt
             WHERE Active__c = true
+            WITH SECURITY_ENFORCED
         ];
     }
 
@@ -34,6 +36,7 @@ public with sharing class FollowUpRuleRepository {
                 SELECT Onboarding__r.Account__c
                 FROM Onboarding_Requirement__c
                 WHERE Id = :onboardingRequirementId
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             return onboardingRequirement.Onboarding__r.Account__c;
@@ -52,6 +55,7 @@ public with sharing class FollowUpRuleRepository {
             WHERE Onboarding_Requirement__c = :onboardingRequirementId
               AND Last_Attempt_Date__c >= :thresholdDateTime
               AND Is_Archived__c = false
+            WITH SECURITY_ENFORCED
             ORDER BY Last_Attempt_Date__c DESC
             LIMIT 100
         ];
@@ -65,6 +69,7 @@ public with sharing class FollowUpRuleRepository {
             SELECT Id, Fatigue_Suppressed__c, Suppression_Reason__c, Status__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return queues.isEmpty() ? null : queues[0];
@@ -79,6 +84,7 @@ public with sharing class FollowUpRuleRepository {
                    Fatigue_Suppressed__c, Suppression_Reason__c, Status__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return queues.isEmpty() ? null : queues[0];

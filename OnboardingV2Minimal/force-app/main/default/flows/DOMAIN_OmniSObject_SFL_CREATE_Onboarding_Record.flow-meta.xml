@@ -545,7 +545,7 @@
             <field>Id</field>
             <operator>In</operator>
             <value>
-                <stringValue>{!TrainingAssignmentIdCollection}</stringValue>
+                <elementReference>TrainingAssignmentIdCollection</elementReference>
             </value>
         </filters>
         <object>Training_Assignment__c</object>
@@ -596,19 +596,33 @@
         <locationY>0</locationY>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Id</field>
+            <field>Onboarding__c</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>OnboardingRecord.Id</elementReference>
             </value>
         </filters>
-        <inputAssignments>
-            <field>LearnUpon_Training_Status__c</field>
+        <filters>
+            <field>Requirement_Type__c</field>
+            <operator>EqualTo</operator>
             <value>
-                <stringValue>Completed</stringValue>
+                <stringValue>Training</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Is_Overridden__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Complete</stringValue>
             </value>
         </inputAssignments>
-        <object>Onboarding__c</object>
+        <object>Onboarding_Requirement__c</object>
     </recordUpdates>
     <start>
         <locationX>0</locationX>

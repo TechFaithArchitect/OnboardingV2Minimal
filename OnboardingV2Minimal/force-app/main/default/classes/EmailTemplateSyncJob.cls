@@ -4,7 +4,7 @@ public with sharing class EmailTemplateSyncJob implements Schedulable {
         try {
             EmailTemplateSyncOrchestrator.run(false);
         } catch (Exception ex) {
-            System.debug('❌ Email Template Sync Job failed: ' + ex.getMessage());
+            LoggingUtil.error('EmailTemplateSyncJob failure: ' + ex.getMessage());
         }
     }
 }

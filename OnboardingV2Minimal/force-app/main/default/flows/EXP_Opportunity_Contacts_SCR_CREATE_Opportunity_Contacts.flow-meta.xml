@@ -10,6 +10,9 @@
         <connector>
             <targetReference>Assign_Primary_Opportunity_Contact</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Format_Contact_Record_Fault</targetReference>
+        </faultConnector>
         <dataTypeMappings>
             <typeName>T__records</typeName>
             <typeValue>Contact</typeValue>
@@ -37,6 +40,10 @@
             <assignToReference>contactRecordsJSON</assignToReference>
             <name>recordsJson</name>
         </outputParameters>
+        <outputParameters>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
     </actionCalls>
     <actionCalls>
         <name>Queue_Opportunity_Contact_Role_Create</name>
@@ -45,6 +52,9 @@
         <locationY>0</locationY>
         <actionName>RecordCollectionEditorAsyncService</actionName>
         <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Capture_Queue_Opportunity_Contact_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>configKey</name>
@@ -67,6 +77,42 @@
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Format_Contact_Record_Fault</name>
+        <label>Capture Format Contact Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>contactRecordsJSON</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Primary_Opportunity_Contact</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Queue_Opportunity_Contact_Fault</name>
+        <label>Capture Queue Opportunity Contact Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <assignments>
         <name>Assign_Error_Message</name>
         <label>Assign Error Message</label>

@@ -90,6 +90,9 @@
                 <elementReference>$Flow.FaultMessage</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Handle_Communication_Fault</targetReference>
+        </connector>
     </assignments>
     <decisions>
         <name>Determine_Logical_Method_to_Find_Communication_Template</name>
@@ -264,6 +267,59 @@
         <queriedFields>Id</queriedFields>
         <queriedFields>Email_Template_Id__c</queriedFields>
     </recordLookups>
+    <subflows>
+        <name>Handle_Communication_Fault</name>
+        <label>Handle Communication Fault</label>
+        <locationX>270</locationX>
+        <locationY>608</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>ResolvedRecipientId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Communication template send failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>ErrorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>Email</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Send_Email_Action</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>DOMAIN_OmniSObject_ACTION_Send_Communication_Template</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>ErrorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
+        </outputAssignments>
+    </subflows>
     <start>
         <locationX>144</locationX>
         <locationY>0</locationY>

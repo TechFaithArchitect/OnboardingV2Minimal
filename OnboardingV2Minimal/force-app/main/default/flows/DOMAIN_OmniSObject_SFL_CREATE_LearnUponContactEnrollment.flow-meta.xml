@@ -149,7 +149,7 @@
     <processType>AutoLaunchedFlow</processType>
     <recordUpdates>
         <name>Update_LearnUpon_Status</name>
-        <label>Update LearnUpon Status</label>
+        <label>Update LearnUpon Trigger</label>
         <locationX>578</locationX>
         <locationY>242</locationY>
         <filterLogic>and</filterLogic>
@@ -160,12 +160,6 @@
                 <elementReference>OnboardingRecord.Id</elementReference>
             </value>
         </filters>
-        <inputAssignments>
-            <field>LearnUpon_Training_Status__c</field>
-            <value>
-                <elementReference>LearnUponContactEnrollment.LearnUponP__Status__c</elementReference>
-            </value>
-        </inputAssignments>
         <inputAssignments>
             <field>LearnUpon_Triggered__c</field>
             <value>

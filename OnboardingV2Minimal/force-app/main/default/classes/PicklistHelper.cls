@@ -38,7 +38,14 @@ public with sharing class PicklistHelper {
                 }
             }
         } catch (Exception ex) {
-            System.debug('Error getting picklist values for ' + objectApiName + '.' + fieldApiName + ': ' + ex.getMessage());
+            LoggingUtil.warn(
+                'PicklistHelper.getPicklistValues failed for ' +
+                objectApiName +
+                '.' +
+                fieldApiName +
+                ': ' +
+                ex.getMessage()
+            );
         }
         
         return options;
@@ -96,7 +103,10 @@ public with sharing class PicklistHelper {
                 }
             }
         } catch (Exception ex) {
-            System.debug('Error getting picklist values: ' + ex.getMessage());
+            LoggingUtil.warn(
+                'PicklistHelper.getPicklistValuesByField failed: ' +
+                ex.getMessage()
+            );
         }
         
         // If no values found and fallback provided, use fallback
@@ -134,7 +144,14 @@ public with sharing class PicklistHelper {
                 }
             }
         } catch (Exception ex) {
-            System.debug('Error validating picklist value for ' + objectApiName + '.' + fieldApiName + ': ' + ex.getMessage());
+            LoggingUtil.warn(
+                'PicklistHelper.isPicklistValueValid failed for ' +
+                objectApiName +
+                '.' +
+                fieldApiName +
+                ': ' +
+                ex.getMessage()
+            );
         }
 
         return false;
@@ -180,7 +197,14 @@ public with sharing class PicklistHelper {
                 return firstActive;
             }
         } catch (Exception ex) {
-            System.debug('Error getting picklist value for ' + objectApiName + '.' + fieldApiName + ': ' + ex.getMessage());
+            LoggingUtil.warn(
+                'PicklistHelper.getValidPicklistValue failed for ' +
+                objectApiName +
+                '.' +
+                fieldApiName +
+                ': ' +
+                ex.getMessage()
+            );
         }
 
         return preferredValue;

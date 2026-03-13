@@ -2,17 +2,17 @@ public with sharing class EmailTemplateSyncOrchestrator {
 
     public static void run(Boolean isManual) {
         Datetime start = Datetime.now();
-        System.debug('Email Template Sync started at ' + start.format());
+        LoggingUtil.info('EmailTemplateSyncOrchestrator start. manualRun=' + String.valueOf(isManual) + ', at=' + start.format());
 
         try {
             EmailTemplateSyncService service = new EmailTemplateSyncService();
             EmailSyncSummaryDTO summary = service.syncAllTemplates(null);
-            System.debug('Sync completed successfully: ' + summary.toString());
+            LoggingUtil.info('EmailTemplateSyncOrchestrator success: ' + summary.toString());
 
         } catch (Exception ex) {
-            System.debug('Sync failed: ' + ex.getMessage());
+            LoggingUtil.error('EmailTemplateSyncOrchestrator failure: ' + ex.getMessage());
         }
 
-        System.debug('Email Template Sync finished at ' + Datetime.now().format());
+        LoggingUtil.info('EmailTemplateSyncOrchestrator finished at ' + Datetime.now().format());
     }
 }

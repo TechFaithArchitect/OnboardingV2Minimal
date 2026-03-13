@@ -30,10 +30,17 @@ public with sharing class SalesforceMessagingProvider implements SMSProviderStra
             return sendViaMessagingAPI(contactId, messageContent, messagingChannelId, (Id)providerConfig.get('templateId'));
         } catch (TypeException typeEx) {
             // Messaging API objects not available - log and return placeholder
-            System.debug('Salesforce Messaging API not available: ' + typeEx.getMessage());
-            System.debug('SMS would be sent to Contact: ' + contactId);
-            System.debug('Message: ' + messageContent);
-            System.debug('Channel ID: ' + messagingChannelId);
+            LoggingUtil.warn(
+                'SalesforceMessagingProvider.sendSMS falling back because Messaging API ' +
+                'is unavailable: ' +
+                typeEx.getMessage()
+            );
+            LoggingUtil.info(
+                'SalesforceMessagingProvider.sendSMS fallback logged for contact ' +
+                String.valueOf(contactId) +
+                ' on channel ' +
+                String.valueOf(messagingChannelId)
+            );
             
             return 'SMS-LOGGED-' + String.valueOf(DateTime.now().getTime());
         } catch (Exception ex) {
@@ -79,7 +86,11 @@ public with sharing class SalesforceMessagingProvider implements SMSProviderStra
                 // For now, skip Messaging API check
             } catch (TypeException typeEx) {
                 // Messaging API not available - fall through to phone check
-                System.debug('Messaging API not available, falling back to phone check: ' + typeEx.getMessage());
+                LoggingUtil.warn(
+                    'SalesforceMessagingProvider.hasActiveMessagingEndpoint falling back ' +
+                    'to phone check because Messaging API is unavailable: ' +
+                    typeEx.getMessage()
+                );
             }
         }
         
@@ -89,6 +100,7 @@ public with sharing class SalesforceMessagingProvider implements SMSProviderStra
             FROM Contact
             WHERE Id = :contactId
               AND (Phone != null OR MobilePhone != null)
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         

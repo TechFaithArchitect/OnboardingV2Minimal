@@ -21,6 +21,7 @@ public with sharing class FollowUpExecutionService {
                    Attempt_Count__c, Last_Attempt_Date__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -117,6 +118,7 @@ public with sharing class FollowUpExecutionService {
             FROM Follow_Up_Queue__c
             WHERE Id IN :followUpQueueIds
               AND Status__c = 'Pending Retry'
+            WITH SECURITY_ENFORCED
         ];
 
         if (followUps.isEmpty()) {
@@ -134,7 +136,12 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Sender methods already record failures to avoid double incrementing counters.
-                System.debug(LoggingLevel.ERROR, 'Follow-up retry failed for ' + fq.Id + ': ' + ex.getMessage());
+                LoggingUtil.error(
+                    'FollowUpExecutionService.retryFailedFollowUps failed for ' +
+                    fq.Id +
+                    ': ' +
+                    ex.getMessage()
+                );
                 // LoggingUtil.logError('FollowUpRetry', 'retryFailedFollowUps', ex.getMessage(), ex.getStackTraceString());
             }
         }
@@ -157,6 +164,7 @@ public with sharing class FollowUpExecutionService {
                    Consecutive_Failures__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -178,6 +186,7 @@ public with sharing class FollowUpExecutionService {
             SELECT Id
             FROM Communication_Template__c
             WHERE Id = :dispatchContext.communicationTemplateId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         if (communicationTemplates.isEmpty()) {
@@ -234,6 +243,7 @@ public with sharing class FollowUpExecutionService {
             SELECT Id, Status__c, Consecutive_Failures__c, Attempt_Count__c, Last_Attempt_Date__c, Error_Message__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -254,6 +264,7 @@ public with sharing class FollowUpExecutionService {
             SELECT Id, Status__c, Consecutive_Failures__c, Attempt_Count__c, Last_Attempt_Date__c, Error_Message__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -312,7 +323,10 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist yet - fall through to default logic
-                System.debug('SMS_Provider__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn(
+                    'FollowUpExecutionService.determineSMSProvider SMS_Provider__c field not accessible: ' +
+                    ex.getMessage()
+                );
             }
         }
         
@@ -389,7 +403,10 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist - continue
-                System.debug('Twilio_From_Phone__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn(
+                    'FollowUpExecutionService.getTwilioFromPhone Twilio_From_Phone__c field not accessible: ' +
+                    ex.getMessage()
+                );
             }
         }
         
@@ -399,6 +416,7 @@ public with sharing class FollowUpExecutionService {
                 SELECT From_Phone_Number__c
                 FROM Twilio_Configuration__mdt
                 WHERE Active__c = true
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             
@@ -406,7 +424,10 @@ public with sharing class FollowUpExecutionService {
                 return configs[0].From_Phone_Number__c;
             }
         } catch (Exception ex) {
-            System.debug('Twilio_Configuration__mdt not found or not accessible: ' + ex.getMessage());
+            LoggingUtil.warn(
+                'FollowUpExecutionService.getTwilioFromPhone configuration lookup failed: ' +
+                ex.getMessage()
+            );
         }
         
         return null;
@@ -427,7 +448,10 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist - continue
-                System.debug('Twilio_Account_SID__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn(
+                    'FollowUpExecutionService.getTwilioAccountSid Twilio_Account_SID__c field not accessible: ' +
+                    ex.getMessage()
+                );
             }
         }
         
@@ -437,6 +461,7 @@ public with sharing class FollowUpExecutionService {
                 SELECT Account_SID__c
                 FROM Twilio_Configuration__mdt
                 WHERE Active__c = true
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             
@@ -444,7 +469,10 @@ public with sharing class FollowUpExecutionService {
                 return configs[0].Account_SID__c;
             }
         } catch (Exception ex) {
-            System.debug('Could not get Account SID from Twilio_Configuration__mdt: ' + ex.getMessage());
+            LoggingUtil.warn(
+                'FollowUpExecutionService.getTwilioAccountSid configuration lookup failed: ' +
+                ex.getMessage()
+            );
         }
         
         return null;
@@ -464,7 +492,10 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist - continue
-                System.debug('Twilio_Named_Credential__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn(
+                    'FollowUpExecutionService.getTwilioNamedCredential Twilio_Named_Credential__c field not accessible: ' +
+                    ex.getMessage()
+                );
             }
         }
         
@@ -474,6 +505,7 @@ public with sharing class FollowUpExecutionService {
                 SELECT Named_Credential__c
                 FROM Twilio_Configuration__mdt
                 WHERE Active__c = true
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             
@@ -481,7 +513,10 @@ public with sharing class FollowUpExecutionService {
                 return configs[0].Named_Credential__c;
             }
         } catch (Exception ex) {
-            System.debug('Could not get Named Credential from Twilio_Configuration__mdt: ' + ex.getMessage());
+            LoggingUtil.warn(
+                'FollowUpExecutionService.getTwilioNamedCredential configuration lookup failed: ' +
+                ex.getMessage()
+            );
         }
         
         // Default to 'Twilio_API' if nothing is configured
@@ -531,6 +566,7 @@ public with sharing class FollowUpExecutionService {
                    SMS_Provider__c, Twilio_From_Phone__c, Twilio_Account_SID__c, Twilio_Named_Credential__c
             FROM Follow_Up_Rule__mdt
             WHERE DeveloperName = :developerName
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return followUpRules.isEmpty() ? null : followUpRules[0];
@@ -546,6 +582,7 @@ public with sharing class FollowUpExecutionService {
                    Messaging_Template_Id__c, Messaging_Channel_Id__c, Message_Body__c
             FROM Communication_Template__c
             WHERE Id = :followUpRule.Messaging_Template__c
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return comms.isEmpty() ? null : comms[0];

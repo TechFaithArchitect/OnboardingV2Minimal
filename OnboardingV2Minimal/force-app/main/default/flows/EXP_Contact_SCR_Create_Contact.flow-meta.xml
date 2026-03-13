@@ -10,6 +10,9 @@
         <connector>
             <targetReference>Create_Contacts_Screenflow</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Convert_Record_Collection_Fault</targetReference>
+        </faultConnector>
         <dataTypeMappings>
             <typeName>T__records</typeName>
             <typeValue>Contact</typeValue>
@@ -55,6 +58,9 @@
         <locationY>566</locationY>
         <actionName>RecordCollectionEditorAsyncService</actionName>
         <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Capture_Queue_Contact_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>configKey</name>
@@ -77,6 +83,42 @@
     </actionCalls>
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Convert_Record_Collection_Fault</name>
+        <label>Capture Convert Record Collection Fault</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>existingRecordJSON</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Contacts_Screenflow</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Queue_Contact_Fault</name>
+        <label>Capture Queue Contact Fault</label>
+        <locationX>264</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Select_DML_Mode</name>
         <label>Select DML Mode</label>

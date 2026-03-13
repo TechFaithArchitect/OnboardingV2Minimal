@@ -107,7 +107,7 @@ The onboarding system follows a three-layer architecture pattern that separates 
 
 - `BLL_Training_Assignment_Credential_RCD_Unique_Key_Creation`
 - `BLL_Contact_Training_Assignment_RCD_Update_Related_Records`
-- `BLL_External_Contact_Credential_RCD_Execute_Supplemental_Onboarding_Requirements`
+- `BLL_External_Contact_Credential_RCD_Logical_Process`
 - `BLL_Order_RCD_GET_Onboarding_Record`
 
 **Communication:**
