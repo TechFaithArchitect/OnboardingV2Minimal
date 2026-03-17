@@ -248,6 +248,102 @@
             <targetReference>Loop_Resolved_Training_Assignments_For_Linking</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Capture_Create_Contact_Training_Assignment_Fault</name>
+        <label>Capture Create Contact Training Assignment Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_If_Assignment_Processed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_LearnUpon_Training_Assignment_Fault</name>
+        <label>Capture Create LearnUpon Training Assignment Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_If_Assignment_Processed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Training_Assignment_Onboarding_Link_Fault</name>
+        <label>Capture Create Training Assignment Onboarding Link Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_If_Assignment_Processed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Training_Assignment_Records_Fault</name>
+        <label>Capture Create Training Assignment Records Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Resolved_Training_Assignments_For_Target_Requirements</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Training_Assignment_Onboarding_Links_Bulk_Fault</name>
+        <label>Capture Create Training Assignment Onboarding Links Bulk Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Determine_If_Assignment_Processed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Clear_Onboarding_Training_Status_Error</name>
+        <label>Clear Onboarding Training Status Error</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Recalculate_Onboarding_Training_Status</targetReference>
+        </connector>
+    </assignments>
     <collectionProcessors>
         <name>Filter_Existing_Assignments_For_Current_Requirement</name>
         <elementSubtype>FilterCollectionProcessor</elementSubtype>
@@ -339,9 +435,38 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Recalculate_Onboarding_Training_Status</targetReference>
+                <targetReference>Clear_Onboarding_Training_Status_Error</targetReference>
             </connector>
             <label>Yes - Assignment Processed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Recalculate_Onboarding_Training_Status_Fail</name>
+        <label>Did Recalculate Onboarding Training Status Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Recalculate_Onboarding_Training_Status_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Recalculate_Onboarding_Training_Status_Fault</targetReference>
+            </connector>
+            <label>Recalculate Onboarding Training Status Failed</label>
         </rules>
     </decisions>
     <decisions>
@@ -750,6 +875,9 @@
         <connector>
             <targetReference>Get_Existing_Training_Assignment_Onboarding_Link</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Create_Contact_Training_Assignment_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Contact__c</field>
             <value>
@@ -800,6 +928,9 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignRecordIdToReference>ContactTrainingAssignment.Id</assignRecordIdToReference>
+        <faultConnector>
+            <targetReference>Capture_Create_LearnUpon_Training_Assignment_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Contact__c</field>
             <value>
@@ -846,6 +977,9 @@
         <connector>
             <targetReference>Determine_If_Assignment_Processed</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Create_Training_Assignment_Onboarding_Link_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Onboarding__c</field>
             <value>
@@ -868,6 +1002,9 @@
         <connector>
             <targetReference>Get_Resolved_Training_Assignments_For_Target_Requirements</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Create_Training_Assignment_Records_Fault</targetReference>
+        </faultConnector>
         <inputReference>NewTrainingAssignmentRecordCollectionToCreate</inputReference>
     </recordCreates>
     <recordCreates>
@@ -879,7 +1016,7 @@
             <targetReference>Determine_If_Assignment_Processed</targetReference>
         </connector>
         <faultConnector>
-            <targetReference>Determine_If_Assignment_Processed</targetReference>
+            <targetReference>Capture_Create_Training_Assignment_Onboarding_Links_Bulk_Fault</targetReference>
         </faultConnector>
         <inputReference>TrainingAssignmentOnboardingLinkRecordCollectionToCreate</inputReference>
     </recordCreates>
@@ -1131,6 +1268,9 @@
         <label>Recalculate Onboarding Training Status</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Recalculate_Onboarding_Training_Status_Fail</targetReference>
+        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
         <inputAssignments>
             <name>OnboardingRecord</name>
@@ -1144,7 +1284,65 @@
                 <elementReference>ContactTrainingAssignment</elementReference>
             </value>
         </inputAssignments>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Recalculate_Onboarding_Training_Status_Fault</name>
+        <label>Handle Recalculate Onboarding Training Status Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>ContactTrainingAssignment.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Onboarding training status recalculation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Recalculate_Onboarding_Training_Status</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records</stringValue>
+            </value>
+        </inputAssignments>
     </subflows>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
@@ -1233,6 +1431,13 @@
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>POE_External_Contact_Credential__c</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>LearnUponContactEnrollmentRecord</name>

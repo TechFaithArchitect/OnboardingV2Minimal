@@ -27,6 +27,38 @@
             <label>Yes - Agreement Created</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Did_Update_Onboarding_Record_Fail</name>
+        <label>Did Update Onboarding Record Fail</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <defaultConnector>
+            <targetReference>Update_Contract_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Update_Onboarding_Record_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Update_Onboarding_Record_Fault</targetReference>
+            </connector>
+            <label>Update Onboarding Record Failed</label>
+        </rules>
+    </decisions>
     <description>EXP - Contract - SCR - Send Adobe Agreement</description>
     <environments>Default</environments>
     <interviewLabel>EXP - Contract - SCR - Send Adobe Agreement {!$Flow.CurrentDateTime}</interviewLabel>
@@ -122,6 +154,30 @@
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
+    <screens>
+        <name>Onboarding_Update_Error</name>
+        <label>Onboarding Update Error</label>
+        <locationX>314</locationX>
+        <locationY>782</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>HeaderOnboardingUpdateError</name>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;font-size: 28px; color: rgb(24, 24, 24);&quot;&gt;Agreement send request was queued, but the onboarding record could not be updated. An admin has been notified.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <start>
         <locationX>56</locationX>
         <locationY>0</locationY>
@@ -176,7 +232,7 @@
         <locationX>50</locationX>
         <locationY>458</locationY>
         <connector>
-            <targetReference>Update_Contract_Record</targetReference>
+            <targetReference>Did_Update_Onboarding_Record_Fail</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
         <inputAssignments>
@@ -195,6 +251,74 @@
             <assignToReference>OnboardingRecord</assignToReference>
             <name>OnboardingRecord</name>
         </outputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Update_Onboarding_Record_Fault</name>
+        <label>Handle Update Onboarding Record Fault</label>
+        <locationX>314</locationX>
+        <locationY>674</locationY>
+        <connector>
+            <targetReference>Onboarding_Update_Error</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>ContractRecord.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Agreement send request completed, but the onboarding record update failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LogWithoutOnboarding</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Update_Onboarding_Record</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>EXP_Contract_SCR_Send_Adobe_Agreement</stringValue>
+            </value>
+        </inputAssignments>
     </subflows>
     <variables>
         <name>AgreementRecord</name>
@@ -211,6 +335,13 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Contract</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>OnboardingRecord</name>

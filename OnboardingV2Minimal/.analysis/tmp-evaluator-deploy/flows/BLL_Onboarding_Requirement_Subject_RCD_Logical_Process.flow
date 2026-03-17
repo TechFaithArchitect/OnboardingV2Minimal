@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Business Logic Layer - Onboarding Requirement Subject Object - Record Trigger - Logical Process</description>
+    <environments>Default</environments>
+    <interviewLabel>BLL - Onboarding Requirement Subject - RCD - Logical Process {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>BLL - Onboarding Requirement Subject - RCD - Logical Process</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Onboarding_Requirement__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Onboarding_Requirement_Subject__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Evaluate_Onboarding_Requirement_Subject</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Evaluate_Onboarding_Requirement_Subject</name>
+        <label>Evaluate Onboarding Requirement Subject</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subject</flowName>
+        <inputAssignments>
+            <name>OnboardingRequirementId</name>
+            <value>
+                <elementReference>$Record.Onboarding_Requirement__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

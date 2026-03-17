@@ -155,6 +155,23 @@
 )</expression>
     </formulas>
     <formulas>
+        <name>ResolvedAdminFaultMessageFormula</name>
+        <dataType>String</dataType>
+        <expression>LEFT(
+  {!ResolvedFaultMessageFormula} &amp;
+  &quot; | Flow=&quot; &amp; {!ResolvedSourceFlowApiName} &amp;
+  &quot; | Element=&quot; &amp; {!ResolvedSourceElementApiName} &amp;
+  &quot; | Context=&quot; &amp; {!ResolvedContextKey} &amp;
+  IF(
+    ISBLANK({!ResolvedOnboardingId}),
+    &quot;&quot;,
+    &quot; | OnboardingId=&quot; &amp; {!ResolvedOnboardingId}
+  ) &amp;
+  &quot; | UserId=&quot; &amp; $User.Id,
+  3900
+)</expression>
+    </formulas>
+    <formulas>
         <name>ResolvedFollowUpType</name>
         <dataType>String</dataType>
         <expression>IF(
@@ -259,7 +276,7 @@
         <inputAssignments>
             <name>ErrorMessage</name>
             <value>
-                <elementReference>ResolvedFaultMessageFormula</elementReference>
+                <elementReference>ResolvedAdminFaultMessageFormula</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

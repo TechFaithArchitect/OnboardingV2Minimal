@@ -41,11 +41,40 @@
             <targetReference>Assign_RECC_Record_to_Collection</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Assign_Missing_Input_Error_Message</name>
+        <label>Assign Missing Input Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Required external contact credential inputs were not provided.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_RECC_Fault</name>
+        <label>Capture Create RECC Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Are_Required_Collections_Provided</name>
         <label>Are Required Collections Provided</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Missing_Input_Error_Message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Missing Required Inputs</defaultConnectorLabel>
         <rules>
             <name>Yes_Collections_Are_Provided</name>
@@ -151,6 +180,9 @@
         <label>Create Required External Contact Credential Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Create_RECC_Fault</targetReference>
+        </faultConnector>
         <inputReference>RECCRecordCollection</inputReference>
     </recordCreates>
     <runInMode>SystemModeWithoutSharing</runInMode>
@@ -201,5 +233,12 @@
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>Required_Credential__c</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
     </variables>
 </Flow>

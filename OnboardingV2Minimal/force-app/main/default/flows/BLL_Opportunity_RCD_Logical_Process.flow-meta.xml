@@ -24,6 +24,35 @@
             <label>Yes - Opportunity is Related to Onboarding</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Did_Create_Onboarding_Record_Fail</name>
+        <label>Did Create Onboarding Record Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Create_Onboarding_Record_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Create_Onboarding_Record_Fault</targetReference>
+            </connector>
+            <label>Create Onboarding Record Failed</label>
+        </rules>
+    </decisions>
     <description>Business Logic Layer - Opportunity Object - Record Trigger - Logical Process</description>
     <environments>Default</environments>
     <interviewLabel>BLL - Opportunity - RCD - Logical Process {!$Flow.CurrentDateTime}</interviewLabel>
@@ -66,6 +95,9 @@
         <label>Create Onboarding Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Create_Onboarding_Record_Fail</targetReference>
+        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
         <inputAssignments>
             <name>OpportunityRecord</name>
@@ -82,6 +114,10 @@
         <outputAssignments>
             <assignToReference>OnboardingRecord</assignToReference>
             <name>OnboardingRecord</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -126,6 +162,71 @@
         <outputAssignments>
             <assignToReference>VendorProgramRecord</assignToReference>
             <name>VendorProgramRecord</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Create_Onboarding_Record_Fault</name>
+        <label>Handle Create Onboarding Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Opportunity onboarding record creation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LogWithoutOnboarding</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Create_Onboarding_Record</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_Opportunity_RCD_Logical_Process</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
         </outputAssignments>
     </subflows>
     <variables>

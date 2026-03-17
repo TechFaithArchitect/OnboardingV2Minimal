@@ -34,6 +34,83 @@
             <label>Yes - Update Each Onboarding Record</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Did_Update_Onboarding_Record_Fail</name>
+        <label>Did Update Onboarding Record Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Update_Onboarding_Record_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Update_Onboarding_Record_Fault</targetReference>
+            </connector>
+            <label>Update Onboarding Record Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Update_Onboarding_Record_From_Collection_Fail</name>
+        <label>Did Update Onboarding Record From Collection Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Onboarding_Record_Collection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Update_Onboarding_Record_From_Collection_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Update_Onboarding_Record_From_Collection_Fault</targetReference>
+            </connector>
+            <label>Update Onboarding Record From Collection Failed</label>
+        </rules>
+    </decisions>
+    <assignments>
+        <name>Reset_Onboarding_Sync_Error_Message</name>
+        <label>Reset Onboarding Sync Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Onboarding_Record_Collection</targetReference>
+        </connector>
+    </assignments>
     <description>Business Logic Layer - OmniSObject - Record Trigger - SYNC - Training Assignments</description>
     <environments>Default</environments>
     <interviewLabel>BLL - OmniSObject - RCD - Sync Training Assignments {!$Flow.CurrentDateTime}</interviewLabel>
@@ -109,7 +186,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Loop_Onboarding_Record_Collection</targetReference>
+            <targetReference>Did_Update_Onboarding_Record_From_Collection_Fail</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
         <inputAssignments>
@@ -124,13 +201,19 @@
                 <elementReference>$Record</elementReference>
             </value>
         </inputAssignments>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
     </subflows>
     <subflows>
         <name>Update_Onboarding_Records</name>
         <label>Update Onboarding Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Update_Onboarding_Record_Fail</targetReference>
+        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
         <inputAssignments>
             <name>OnboardingRecord</name>
@@ -144,8 +227,135 @@
                 <elementReference>$Record</elementReference>
             </value>
         </inputAssignments>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputAssignments>
+            <assignToReference>OnboardingRecord</assignToReference>
+            <name>OnboardingRecord</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
     </subflows>
+    <subflows>
+        <name>Handle_Update_Onboarding_Record_From_Collection_Fault</name>
+        <label>Handle Update Onboarding Record From Collection Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Reset_Onboarding_Sync_Error_Message</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>Loop_Onboarding_Record_Collection.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Onboarding training assignment sync failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>Loop_Onboarding_Record_Collection</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Update_Onboarding_Record_From_Collection</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Update_Onboarding_Record_Fault</name>
+        <label>Handle Update Onboarding Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Onboarding training assignment sync failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Update_Onboarding_Records</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>OnboardingRecord</name>
         <dataType>SObject</dataType>

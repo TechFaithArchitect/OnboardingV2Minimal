@@ -115,6 +115,58 @@
             <targetReference>Update_Onboarding_Record</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Capture_Create_Onboarding_Record_Fault</name>
+        <label>Capture Create Onboarding Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Record_Fault</name>
+        <label>Capture Update Onboarding Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Record_Collection_Fault</name>
+        <label>Capture Update Onboarding Record Collection Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Training_Status_Fault</name>
+        <label>Capture Update Onboarding Training Status Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <collectionProcessors>
         <name>Filter_Total_Completed_or_Passed_Enrollments</name>
         <elementSubtype>FilterCollectionProcessor</elementSubtype>
@@ -449,6 +501,9 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignRecordIdToReference>OnboardingRecord.Id</assignRecordIdToReference>
+        <faultConnector>
+            <targetReference>Capture_Create_Onboarding_Record_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Account__c</field>
             <value>
@@ -580,6 +635,9 @@
         <label>Update Onboarding Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Onboarding_Record_Fault</targetReference>
+        </faultConnector>
         <inputReference>OnboardingRecord</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -587,6 +645,9 @@
         <label>Update Onboarding Record Collection</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Onboarding_Record_Collection_Fault</targetReference>
+        </faultConnector>
         <inputReference>OnboardingRecordCollection</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -594,6 +655,9 @@
         <label>Update Onboarding Training Status</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Onboarding_Training_Status_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Onboarding__c</field>
@@ -679,6 +743,13 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Training_Assignment__c</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>LearnUponContactEnrollment</name>
