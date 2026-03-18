@@ -4,7 +4,7 @@
 ORG_ALIAS ?= OnboardV2
 ANALYSIS_DIR ?= .analysis/automation-audit
 
-.PHONY: audit check-vpr-drift build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors fix-deploy
+.PHONY: audit check-vpr-drift build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors fix-deploy deploy-default-vendor-program
 
 # Fix UnsafeFilepathError from cached temp path in source tracking (e.g. ../../tmp/onboardv2-training-sync-review/...)
 # Run this when deploys fail with "contains unsafe character sequences"
@@ -14,6 +14,11 @@ fix-deploy:
 	@echo "Disabling source tracking for target org..."
 	@sf org disable tracking --target-org $(ORG_ALIAS) 2>/dev/null || sf org disable tracking 2>/dev/null || true
 	@echo "Done. Try your deploy again."
+
+# Deploy Default Vendor Program components (bypasses VS Code extension - use when UI deploy fails)
+deploy-default-vendor-program:
+	@echo "Deploying Onboarding Default Vendor Program (Apex, CMDT field, CMDT record)..."
+	@sf project deploy start --manifest manifest/deploy-default-vendor-program.xml --target-org $(ORG_ALIAS)
 
 # Run all automation scripts (default target for `make audit`)
 audit: check-vpr-drift build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors

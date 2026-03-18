@@ -4,13 +4,14 @@
  * with Vendor_Name__c = 'Perfect Vision'.
  */
 @isTest
-private class OnboardingDefaultVendorProgramInvocableTest {
+private class OnboardingDefaultVendorProgramInvocTest {
   @isTest
   static void testGetDefaultVendorProgramReturnsProgramWhenConfigured() {
-    Vendor__c vendor = new Vendor__c(Name = 'Perfect Vision', Active__c = true);
+    Vendor__c vendor = new Vendor__c(Name = 'PerfectVision', Active__c = true);
     insert vendor;
 
     Vendor_Customization__c vc = new Vendor_Customization__c(
+      Name = 'NDA',
       Vendor__c = vendor.Id,
       Retail_Option__c = 'NDA',
       Business_Vertical__c = 'Default',

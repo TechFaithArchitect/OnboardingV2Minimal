@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+  <types>
+    <members>Onboarding_Default_Vendor_Program__mdt.Vendor_Program_Name_Contains__c</members>
+    <name>CustomField</name>
+  </types>
+  <types>
+    <members>Onboarding_Default_Vendor_Program__mdt.REQUIRE_NDA</members>
+    <name>CustomMetadata</name>
+  </types>
+  <types>
+    <members>OnboardingDefaultVendorProgramInvocable</members>
+    <name>ApexClass</name>
+  </types>
+  <version>65.0</version>
+</Package>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vendor_Program_Name_Contains__c</fullName>
+    <description>Optional. When set, filters Vendor Programs by Name containing this value (case-insensitive). Use to match "NDA", "PerfectVision NDA", etc. without exact name match.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>e.g., NDA - matches any Vendor Program whose name contains "NDA".</inlineHelpText>
+    <label>Vendor Program Name Contains</label>
+    <length>80</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

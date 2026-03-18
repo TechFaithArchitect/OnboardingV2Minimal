@@ -25,17 +25,14 @@ Use `onboardingHomeDashboard` and `onboardingRequirementsPanel` to:
 
 ## Status Evaluation
 
-The system evaluates status rules when requirements change:
-1. Status rules engines are loaded for the Vendor Program Group.
-2. Each rule is evaluated against requirement statuses.
-3. If a rule passes, `Onboarding__c.Onboarding_Status__c` is updated.
+The system evaluates status rules when requirements change. Status evaluation is driven by Flow (e.g., `BLL_Onboarding_Requirement_RCD_Logical_Process`) and configurable via `Onboarding_Status_Normalization__mdt` (per-requirement) and `Onboarding_Status_Evaluation_Rule__mdt` (aggregation rules, when implemented).
 
 External overrides (`Onboarding_Requirement__c.Is_Overridden__c` and `Onboarding_Next_Step_Override__c`) can temporarily suppress automated updates. Override/status changes are captured through `Onboarding_Requirement__History`.
 
 ## Common Actions
 
 - **Add/Edit Requirements**: Update `Vendor_Program_Requirement__c` for the program.
-- **Configure Status Rules**: Use `Onboarding_Status_Rules_Engine__c` and `Onboarding_Status_Rule__c`.
+- **Configure Status Rules**: Use `Onboarding_Status_Normalization__mdt` (per-requirement) and `Onboarding_Status_Evaluation_Rule__mdt` (aggregation rules).
 - **Manual Overrides**: Apply override records when manual control is needed.
 
 ## Notes

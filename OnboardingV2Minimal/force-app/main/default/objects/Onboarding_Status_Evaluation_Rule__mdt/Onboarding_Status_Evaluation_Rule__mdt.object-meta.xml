@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Rules for evaluating Onboarding Status based on requirement statuses, normalized statuses, Assigned Team, and Opportunity stage. Used by OnboardingStatusEvaluatorInvocable.</description>
+    <label>Onboarding Status Evaluation Rule</label>
+    <pluralLabel>Onboarding Status Evaluation Rules</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

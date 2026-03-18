@@ -51,7 +51,7 @@ This script:
 
 Or run specific test classes:
 ```bash
-./scripts/deploy/run-tests.sh myorg OnboardingRulesServiceTest,OnboardingStatusEvaluatorTest
+./scripts/deploy/run-tests.sh myorg VendorOnboardingServiceTest,OnboardingDefaultVendorProgramInvocTest
 ```
 
 #### 6. Post-Deployment Configuration
@@ -89,7 +89,7 @@ sf project deploy start --source-dir force-app/main/default --target-org myorg
 #### 4. Run Tests
 
 ```bash
-sf apex run test --class-names OnboardingRulesServiceTest,OnboardingStatusEvaluatorTest --target-org myorg
+sf apex run test --class-names VendorOnboardingServiceTest,OnboardingDefaultVendorProgramInvocTest --target-org myorg
 ```
 
 #### 5. Assign Permission Sets
@@ -114,9 +114,7 @@ Create required custom metadata records:
 ### 2. Configure Status Rules
 
 1. Create `Vendor_Program_Group__c` records
-2. Create `Onboarding_Status_Rules_Engine__c` records
-3. Create `Onboarding_Status_Rule__c` records
-4. Link rules to engines
+2. Ensure `Onboarding_Status_Normalization__mdt` has the required per-requirement mappings (e.g., Agreement+signed, Contract+Complete → Setup Complete)
 
 ### 3. Set Up Record Pages
 

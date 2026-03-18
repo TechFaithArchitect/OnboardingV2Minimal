@@ -9,18 +9,16 @@
 These are unrelated to the email log and only handle territory role sync:
 
 - `force-app/main/default/classes/EmailCommTerritoryRoleHelper.cls`
-- `force-app/main/default/classes/EmailCommTerritoryRoleSyncJob.cls`
 - `force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger`
-- Tests: `EmailCommTerritoryRoleHelperTest`, `EmailCommTerritoryRoleSyncJobTest`
+- Tests: `EmailCommTerritoryRoleHelperTest`
 
 ## If Removing Territory Role Sync
 1. Update `force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger` to remove the helper call (or replace with a new helper).
-2. Delete the helper/job classes and their tests + meta files.
-3. Unschedule the job in the org (Setup → Scheduled Jobs or delete `CronTrigger`).
-4. Remove class access entries from profiles/permsets for the deleted classes.
-5. Re-verify `Territory_Role_Assignment__c` behavior (this sync currently populates roles).
+2. Delete the helper class and its test + meta files.
+3. Remove class access entries from profiles/permsets for the deleted classes.
+4. Re-verify `Territory_Role_Assignment__c` behavior (this sync currently populates roles).
 
 ## If Renaming But Keeping Functionality
-- Create new classes (e.g., `TerritoryRoleHelper`, `TerritoryRoleSyncJob`) with the same logic.
-- Update `TerritoryAssignmentsTrigger` and any schedules to reference the new names.
-- Remove old EmailComm-prefixed classes, tests, and profile access entries.
+- Create new class (e.g., `TerritoryRoleHelper`) with the same logic.
+- Update `TerritoryAssignmentsTrigger` to reference the new name.
+- Remove old EmailComm-prefixed class, test, and profile access entries.

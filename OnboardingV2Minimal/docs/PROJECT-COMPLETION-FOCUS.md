@@ -8,18 +8,10 @@ This document outlines the key areas that need attention to complete and perfect
 **Status**: Many test files exist but contain only placeholder TODOs
 
 **Components Needing Real Tests**:
-1. ✅ `onboardingStatusRulesEngine` - Has mocks set up, needs actual test cases
-2. ❌ `onboardingStatusRulesManager` - Only placeholder test
-3. ❌ `requirementConditionsList` - Only placeholder test  
-4. ❌ `onboardingRuleModal` - Only placeholder test
-5. ❌ `vendorProgramOnboardingVendorProgramRequirements` - Only placeholder test
-6. ❌ `vendorProgramOnboardingStatusRuleBuilder` - Only placeholder test
-7. ❌ `vendorProgramOnboardingStatusRulesEngine` - Only placeholder test
-8. ❌ `vendorProgramOnboardingCommunicationTemplate` - Only placeholder test
-9. ❌ `onboardingAppVendorProgramECCManager` - Only placeholder test
-10. ❌ `twilioSettings` - New component, needs tests (per implementation-status.md)
-11. ❌ `onboardingWorkQueue` - Enhanced component, needs tests for filters/pagination/sorting
-12. ❌ `messagingIssuesPanel` - Enhanced component, needs tests for async actions/detail drawer
+1. ❌ `onboardingStatusRulesManager` - Only placeholder test
+2. ❌ `onboardingRuleModal` - Only placeholder test
+3. ❌ `twilioSettings` - New component, needs tests (per implementation-status.md)
+4. ❌ `onboardingWorkQueue` - Enhanced component, needs tests for filters/pagination/sorting
 
 **Action Items**:
 - [ ] Install Jest dependencies (`npm install`)
@@ -48,25 +40,12 @@ This document outlines the key areas that need attention to complete and perfect
    - TODO: Edit functionality to be implemented
    - Action: Implement edit functionality for status rules
 
-2. **`validationRuleBuilder.js`** (Line ~):
-   - TODO: Load existing rule when editing
-   - Action: Implement edit mode for validation rules
-
-3. **`vendorProgramOnboardingTrainingRequirements.js`**:
-   - TODO: Implement edit functionality
-   - TODO: Implement delete functionality
-   - Action: Complete CRUD operations for training requirements
-
-4. **`messagingIssuesTab.js`** & **`adobeSyncFailuresTab.js`**:
-   - TODO: Implement CSV export
-   - Action: Add CSV export functionality (nice-to-have)
-
-5. **`SalesforceMessagingProvider.cls`**:
+2. **`SalesforceMessagingProvider.cls`**:
    - TODO: Implement actual Salesforce Messaging API integration
    - TODO: Check MessagingEndUser if available
    - Action: Complete Salesforce Messaging provider implementation
 
-6. **`TwilioSMSProvider.cls`**:
+3. **`TwilioSMSProvider.cls`**:
    - TODO: Extract Account SID from Named Credential username if possible
    - Action: Enhance to read Account SID from Named Credential (optional enhancement)
 

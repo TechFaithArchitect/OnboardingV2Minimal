@@ -22,18 +22,19 @@ sf apex run --file scripts/sample-data/seed-vendor-program.apex
 
 ### seed-status-rules.apex
 
-Creates status rules with different evaluation logic types.
+Creates sample status evaluation rules (if needed for testing).
 
 **What it creates**:
 - Vendor Program Group (if needed)
 - Vendor Program Requirements (if needed)
-- Onboarding_Status_Rules_Engine__c
-- Onboarding_Status_Rule__c
+- Sample `Onboarding_Status_Evaluation_Rule__mdt` records (if applicable)
 
 **Usage**:
 ```bash
 sf apex run --file scripts/sample-data/seed-status-rules.apex
 ```
+
+**Note**: Status evaluation is driven by Flow and `Onboarding_Status_Normalization__mdt` (per-requirement).
 
 ## Verifying Setup
 
@@ -45,13 +46,10 @@ FROM Vendor_Customization__c
 WHERE Name = 'Sample Vendor Program'
 ```
 
-### Status Rules
+### Status Normalization Rules
 
 ```soql
-SELECT Id, Name, Evaluation_Logic__c, Target_Onboarding_Status__c,
-       (SELECT Id, Rule_Number__c, Expected_Status__c
-        FROM Onboarding_Status_Rules__r
-        ORDER BY Rule_Number__c)
-FROM Onboarding_Status_Rules_Engine__c
-WHERE Vendor_Program_Group__r.Name = 'Sample Program Group'
+SELECT Id, DeveloperName, Requirement_Type__c, Status__c, Normalized_Status__c
+FROM Onboarding_Status_Normalization__mdt
+WHERE Active__c = true
 ```

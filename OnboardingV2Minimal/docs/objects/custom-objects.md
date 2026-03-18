@@ -39,8 +39,6 @@ Managed-package objects and org-only objects (e.g., LearnUpon managed objects, `
 | `License__c` | License | This object stores all the different types of licenses needed by PerfectVision and our Vendors and relates it back to the Dealer. |
 | `Net_Terms__c` | Net Terms |  |
 | `Onboarding_Requirement__c` | Onboarding Requirement | Dealer-specific instance of each required task (status, file, etc.) |
-| `Onboarding_Status_Rule__c` | Onboarding Status Rule | Individual condition row within a status rules engine to drive onboarding status changes. |
-| `Onboarding_Status_Rules_Engine__c` | Onboarding Status Rules Engine | Configurable Rules Engine that evaluates the status of an onboarding record. |
 | `Onboarding__c` | Onboarding__c |  |
 | `Opportunity` | Opportunity |  |
 | `OpportunityContactRole` | OpportunityContactRole |  |

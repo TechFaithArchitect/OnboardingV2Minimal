@@ -26,8 +26,6 @@ For each LWC component used in stages:
 - `vendorProgramOnboardingRecipientGroupMembers`
 - `vendorProgramOnboardingRequiredCredentials`
 - `vendorProgramOnboardingTrainingRequirements`
-- `vendorProgramOnboardingStatusRulesEngine`
-- `vendorProgramOnboardingStatusRuleBuilder`
 - `vendorProgramOnboardingCommunicationTemplate`
 - `vendorProgramOnboardingFinalize`
 
@@ -55,10 +53,9 @@ For each LWC component used in stages:
 2. Stage 2: Program Search/Create (Order: 2)
 3. Stage 3: Required Credentials (Order: 3)
 4. Stage 4: Training Requirements (Order: 4)
-5. Stage 5: Status Rules Engine (Order: 5)
-6. Stage 6: Recipient Groups (Order: 6)
-7. Stage 7: Communication Template (Order: 7)
-8. Stage 8: Finalize (Order: 8)
+5. Stage 5: Recipient Groups (Order: 5)
+6. Stage 6: Communication Template (Order: 6)
+7. Stage 7: Finalize (Order: 7)
 
 ### Step 4: Assign Process to Vendor Program
 
@@ -68,92 +65,15 @@ For each LWC component used in stages:
    - **Vendor Program**: Current vendor program
    - **Current Stage**: (Leave blank initially)
 
-## Status Rules Configuration
-
-### Step 1: Create Vendor Program Groups
-
-1. Navigate to `Vendor Program Group` tab
-2. Create group:
-   - **Name**: Group name
-   - **Vendor Program**: Select program
-   - **Active**: Checked
-
-### Step 2: Create Rules Engine
-
-1. Navigate to `Onboarding Status Rules Engine` tab
-2. Create engine:
-   - **Name**: Engine name
-   - **Vendor Program Group**: Select group
-   - **Target Onboarding Status**: Status to set (e.g., "Ready for Review")
-   - **Evaluation Logic**: Select (ALL, ANY, or CUSTOM)
-   - **Custom Evaluation Logic**: (If CUSTOM) Enter expression
-
-**Evaluation Logic Options:**
-- **ALL**: All rules must pass
-- **ANY**: At least one rule must pass
-- **CUSTOM**: Use custom expression
-
-### Step 3: Create Rules
-
-1. Navigate to `Onboarding Status Rule` tab
-2. For each rule condition, create record:
-   - **Parent Rule**: Select rules engine
-   - **Requirement**: Select Vendor Program Requirement
-   - **Expected Status**: Expected status (e.g., "Complete", "Approved")
-   - **Rule Number**: Sequential number (1, 2, 3, ...)
-
-**Example Rule Configuration:**
-- Rule 1: Background Check = "Complete"
-- Rule 2: Business License = "Approved"
-- Rule 3: Credit Check = "Complete"
-- Rule 4: Compliance = "Approved"
-
-**Custom Expression Example:**
-1. Application Layer Onboarding_c record changes
-↓
-Application Layer Flow
-Onboarding_Record_Trigger_Update_Onboarding_Status
-↓
-Business Logic Layer
-OnboardingStatusEvaluator.evaluateAndApplyStatus()
-↓
-Business Logic Layer
-OnboardingRulesService.getRulesForGroups()
-↓
-Business Logic Layer
-OnboardingRuleEvaluator.evaluateRule()
-↓
-Domain Layer (if needed)
-Data queries via SOQL
-↓
-Business Logic Layer
-Update Onboardingc.Onboarding_Status_c
-
-
 ### Example: Onboarding Flow
 Application Layer
-User navigates to Vendor Program record page
+User starts onboarding from Account or dashboard
 ↓
 Application Layer Component
-vendorProgramOnboardingFlow
+accountProgramOnboardingModal / onboardingDealerOnboardingModal
 ↓
 Business Logic Layer
-OnboardingApplicationService.getProcessIdForVendorProgram()
-↓
-Application Layer Component
-onboardingFlowEngine
-↓
-Business Logic Layer
-OnboardingApplicationService.getStagesForProcess()
-↓
-Application Layer Component
-onboardingStageRenderer (dynamically renders stage components)
-↓
-Application Layer Component
-Stage component (e.g., vendorProgramOnboardingVendor)
-↓
-Business Logic Layer
-OnboardingApplicationService.saveProgress()
+VendorOnboardingService / Flows
 ↓
 Domain Layer (if needed)
 Data operations via flows

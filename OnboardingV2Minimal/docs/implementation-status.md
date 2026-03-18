@@ -43,15 +43,6 @@
 - ✅ Added loading and empty states
 - ✅ Added responsive layout for mobile/tablet
 
-**messagingIssuesPanel:**
-- ✅ Added NavigationMixin for record navigation
-- ✅ Added detail drawer with issue information
-- ✅ Disabled Retry/Dismiss buttons during async operations
-- ✅ Added pagination
-- ✅ Added no-results state
-- ✅ Added row-level status feedback (color coding)
-- ✅ Improved error handling
-
 ### 5. Testing ✅ (Apex Tests)
 - ✅ Created `FollowUpExecutionServiceTest.cls`:
   - Tests SMS follow-up sending
@@ -70,11 +61,10 @@
 ### 6. EmailComm Cleanup ✅
 - ✅ Removed EmailComm send/log stack and Email_Communication_Log__c metadata
 - ✅ Removed `Onboarding_External_Override_Log__c` metadata and shifted audit coverage to `Onboarding_Requirement__History` (`Is_Overridden__c`, `Status__c`)
-- ⚠️ Remaining EmailComm-named territory role sync items for future review:
+  - ⚠️ Remaining EmailComm-named territory role sync items for future review:
   - `force-app/main/default/classes/EmailCommTerritoryRoleHelper.cls`
-  - `force-app/main/default/classes/EmailCommTerritoryRoleSyncJob.cls`
   - `force-app/main/default/triggers/TerritoryAssignmentsTrigger.trigger`
-  - Tests: `EmailCommTerritoryRoleHelperTest`, `EmailCommTerritoryRoleSyncJobTest`
+  - Tests: `EmailCommTerritoryRoleHelperTest`
 
 ## 🔄 Remaining Work
 
@@ -89,12 +79,6 @@
   - Pagination
   - Sorting
   - Action handling
-- ⏳ Jest tests for enhanced `messagingIssuesPanel`:
-  - Filter changes
-  - Pagination
-  - Async action handling
-  - Detail drawer
-  - Navigation
 
 ## 📋 Deployment Notes
 
@@ -126,7 +110,6 @@
 
 - ✅ **Improve admin/operator UX** - Complete
   - Work queue has filters, pagination, sorting
-  - Messaging issues panel has navigation, detail drawer, async handling
   - Admin UI for Twilio settings
 
 - ⏳ **Add safety nets (validation + tests)** - Partially Complete

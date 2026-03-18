@@ -21,8 +21,6 @@ Most configuration objects use ReadWrite sharing, allowing all users with object
 
 - `Vendor_Program_Group__c`
 - `Vendor_Program_Group_Member__c`
-- `Onboarding_Status_Rules_Engine__c`
-- `Onboarding_Status_Rule__c`
 - `Training_System__c`
 - `External_Contact_Credential_Type__c`
 - `ECC_Field_Configuration_Group__c`
@@ -72,14 +70,14 @@ Field-Level Security (FLS) is managed through:
 
 #### Configuration Fields
 
-- **Rules Engine Logic**: `Onboarding_Status_Rules_Engine__c.Custom_Evaluation_Logic__c`
+- **Status Normalization**: `Onboarding_Status_Normalization__mdt` (CMDT)
 
 ### FLS Enforcement
 
 Apex classes use `with sharing` to enforce FLS:
 
 ```apex
-public with sharing class OnboardingStatusEvaluator {
+public with sharing class VendorOnboardingService {
     // FLS automatically enforced
 }
 ```
@@ -197,7 +195,7 @@ Consider adding sharing rules if:
 If sharing rules are required in the future:
 
 1. **Public Read for Configuration Objects**:
-   - Allow all users to read `Onboarding_Status_Rules_Engine__c`
+   - Allow all users to read `Onboarding_Status_Normalization__mdt` (CMDT)
    - Allow all users to read `Vendor_Program_Group__c`
 
 2. **Role-Based Sharing for Onboarding Records**:
@@ -215,17 +213,16 @@ If sharing rules are required in the future:
 All service and controller classes use `with sharing`:
 
 ```apex
-public with sharing class OnboardingStatusEvaluator {
+public with sharing class VendorOnboardingService {
     // Automatically enforces FLS and sharing rules
 }
 ```
 
 **Classes Using `with sharing`**:
-- `OnboardingRulesService`
-- `OnboardingRequirementsPanelController`
-- `OnboardingStatusRulesEngineController`
-- `OnboardingStatusRuleController`
-- All other service and controller classes
+- `VendorOnboardingService`
+- `OnboardingDefaultVendorProgramInvocable`
+- Flow actions (e.g., OnboardingFollowUpInvocables, OnboardingInvocables)
+- All other service and controller classes in this repo
 
 ### Without Sharing
 

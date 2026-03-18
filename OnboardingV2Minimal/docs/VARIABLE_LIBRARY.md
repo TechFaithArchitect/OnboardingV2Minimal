@@ -134,13 +134,13 @@ public static void updateRecord(Vendor_Customization__c vendorCustomizationRecor
     // ...
 }
 
-public static Id createStatusRule(Onboarding_Status_Rule__c onboardingStatusRule) {
+public static Id createOnboardingRequirement(Onboarding_Requirement__c onboardingRequirement) {
     // ...
 }
 
 // ❌ INCORRECT
 public static void updateRecord(Vendor_Customization__c record) {
-public static Id createStatusRule(Onboarding_Status_Rule__c rule) {
+public static Id createOnboardingRequirement(Onboarding_Requirement__c rule) {
 ```
 
 ## Local Variables
@@ -379,18 +379,18 @@ List<Vendor_Customization__c> vps = ...;
 for (Vendor_Customization__c vp : programs) {
 ```
 
-### Status Rule Variables
+### CMDT and Requirement Variables
 ```apex
 // ✅ CORRECT
-Onboarding_Status_Rule__c onboardingStatusRule = ...;
-Onboarding_Status_Rules_Engine__c statusRulesEngineRecord = ...;
-List<Onboarding_Status_Rule__c> statusRules = ...;
+Onboarding_Requirement__c onboardingRequirement = ...;
+Onboarding_Status_Normalization__mdt normalizationRule = ...;
+List<Onboarding_Requirement__c> onboardingRequirements = ...;
 Follow_Up_Rule__mdt followUpRule = ...;
 
 // ❌ INCORRECT
-Onboarding_Status_Rule__c rule = ...;
-Onboarding_Status_Rules_Engine__c r = ...;
-List<Onboarding_Status_Rule__c> rules = ...;
+Onboarding_Requirement__c rule = ...;
+Onboarding_Status_Normalization__mdt r = ...;
+List<Onboarding_Requirement__c> rules = ...;
 Follow_Up_Rule__mdt rule = ...;
 ```
 

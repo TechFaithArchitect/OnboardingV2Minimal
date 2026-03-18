@@ -47,7 +47,7 @@ force-app/main/default/classes/
 
 - **Pattern**: `*Service.cls`
 - **Location**: `services/`
-- **Example**: `OnboardingApplicationService`, `OnboardingRulesService`, `OnboardingAppActivationService`
+- **Example**: `VendorOnboardingService`, `OnboardingDefaultVendorProgramInvocable`
 - **Responsibilities**: Business logic, validation, coordination
 - **Must NOT**: Contain direct SOQL queries or DML operations (use repositories)
 - **May**: Include `@AuraEnabled` methods for direct LWC integration
@@ -490,75 +490,20 @@ public interface OnboardingAppValidationRule {
 
 ## Current Pattern Violations
 
-### Directory Organization Issues
+### Directory Organization
 
-The following classes are in the root directory but should be moved:
-
-1. **Services** (should be in `services/`):
-   - `OnboardingApplicationService.cls`
-   - `OnboardingRulesService.cls`
-   - `OnboardingAppECCService.cls`
-
-2. **Controllers** (should be in `controllers/`):
-   - `OnboardingRequirementsPanelController.cls`
-   - `OnboardingStatusRulesEngineController.cls`
-   - `OnboardingStatusRuleController.cls`
-   - `VendorOnboardingWizardController.cls`
-
-3. **Repositories** (should be in `repository/`):
-   - `OnboardingAppECCRepository.cls`
-   - `VendorOnboardingWizardRepository.cls`
-
-4. **Handlers** (should be in `handlers/`):
-   - `OnboardingAppRuleEngineHandler.cls`
-
-5. **Validation Rules** (should be in `rules/` or `validation/`):
-   - `OnlyOneTargetProgramInGroupRule.cls`
-   - `NoDuplicateRecipientGroupAssignmentRule.cls`
+Classes in this repo are in the root `classes/` directory. Consider organizing into subdirectories (e.g., `services/`, `controllers/`) as the codebase grows.
 
 ### Simplified Architecture Notes
 
-- ✅ **Orchestrators**: Most orchestrators have been consolidated into services
-- ✅ **Facade Services**: Large facade services (e.g., `VendorOnboardingWizardService`) have been eliminated
-- ✅ **Thin Controllers**: Many thin controllers have been eliminated; LWC components call services directly
-- ✅ **Domain Services**: Related services have been consolidated into domain services (e.g., `VendorDomainService`, `RequirementDomainService`)
+- ✅ **Invocables**: Flow actions use invocable Apex (e.g., `OnboardingDefaultVendorProgramInvocable`, `OnboardingFollowUpInvocables`)
+- ✅ **Services**: Core logic in services (e.g., `VendorOnboardingService`, `FollowUpDetectionService`)
+- ✅ **CMDT**: Configuration via custom metadata (e.g., `Onboarding_Status_Normalization__mdt`, `Follow_Up_Rule__mdt`)
 
-### Service Layer Violations
+### Service Layer Notes
 
-1. **Direct SOQL in Services**:
-   - `OnboardingApplicationService` - Contains direct SOQL queries
-   - `OnboardingRulesService` - Contains direct SOQL queries
-   - Should use repository pattern
-
-2. **Direct DML in Services**:
-   - `OnboardingApplicationService.saveProgress()` - Contains direct DML
-   - `OnboardingRulesService.createOrUpdateRule()` - Contains direct DML
-   - Should use repository pattern
-
-3. **Direct Updates in Evaluators**:
-   - `OnboardingStatusEvaluator` - Directly updates records
-   - Should use repository pattern
-
-## Migration Recommendations
-
-### Phase 1: Directory Organization
-
-1. Move classes to appropriate subdirectories
-2. Update all references
-3. Update package.xml if needed
-
-### Phase 2: Repository Pattern Implementation
-
-1. Create repositories for `OnboardingApplicationService`
-2. Create repositories for `OnboardingRulesService`
-3. Refactor services to use repositories
-4. Update `OnboardingStatusEvaluator` to use repositories
-
-### Phase 3: Validation
-
-1. Create validation rule directory
-2. Move validation rule classes
-3. Ensure all follow interface pattern
+- `VendorOnboardingService` - Onboarding and vendor operations
+- Flow handles status evaluation; consider invocable Apex for complex rule logic
 
 ## Best Practices Summary
 

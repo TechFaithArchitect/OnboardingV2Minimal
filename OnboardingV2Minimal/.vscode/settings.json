@@ -1,5 +1,9 @@
 {
     "xml.preferences.showSchemaDocumentationType": "none",
+    "files.associations": {
+        "manifest/*.xml": "forcesourcemanifest",
+        "package.xml": "forcesourcemanifest"
+    },
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,

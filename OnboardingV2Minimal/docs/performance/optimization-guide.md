@@ -14,17 +14,17 @@ OnboardingV2 is designed with performance in mind, using bulkification patterns,
 
 All service classes and handlers are bulkified:
 
-**OnboardingRulesService**:
+**VendorOnboardingService**:
 - `getRequirementsByVPR()`: Single query with map building (no loop queries)
 - `getVendorProgramGroupIds()`: Single query, iterates results (not querying in loop)
 - `getRulesForGroups()`: Uses relationship query to fetch child records in one query
 
-**OnboardingStatusEvaluator**:
+**Flow (status evaluation)**:
 - Processes all rules in memory after bulk query
 - Single update per onboarding record
 - Early returns to avoid unnecessary processing
 
-**OnboardingRuleEvaluator**:
+**Onboarding_Status_Normalization__mdt**:
 - Uses pre-fetched child relationship data
 - In-memory evaluation (no additional queries)
 - Efficient map-based lookups
@@ -33,26 +33,19 @@ All service classes and handlers are bulkified:
 
 All triggers use handler pattern with bulkification:
 
-**VendorProgramGroupMemberTrigger**:
-- Uses aggregate queries to count in bulk
-- Processes all records in single transaction
-- No queries in loops
-
-**VersioningTriggerHandler**:
-- Bulk queries for parent records
-- Map-based lookups for efficiency
+**TerritoryAssignmentsTrigger**:
+- Delegates to `EmailCommTerritoryRoleHelper.syncRoles()`
+- Processes territory assignment changes in bulk
 
 ### 2. Query Optimization
 
 #### Relationship Queries
 
-**Efficient Pattern** (Used in `getRulesForGroups`):
+**Efficient Pattern** (Used in status evaluation):
 ```apex
-SELECT Id, Evaluation_Logic__c, Custom_Evaluation_Logic__c,
-    (SELECT Id, Rule_Number__c, Requirement__c, Expected_Status__c 
-     FROM Onboarding_Status_Rules__r)
-FROM Onboarding_Status_Rules_Engine__c
-WHERE Vendor_Program_Group__c IN :groupIds
+SELECT Id, DeveloperName, Requirement_Type__c, Status__c, Normalized_Status__c
+FROM Onboarding_Status_Normalization__mdt
+WHERE Active__c = true
 ```
 
 **Benefits**:
@@ -64,8 +57,7 @@ WHERE Vendor_Program_Group__c IN :groupIds
 
 All queries use indexed fields in WHERE clauses:
 - `WHERE Onboarding__c = :onboardingId` (indexed)
-- `WHERE Vendor_Program_Group__c IN :groupIds` (indexed)
-- `WHERE Parent_Rule__c = :engineId` (indexed)
+- `WHERE Onboarding__c = :onboardingId` (indexed)
 
 #### Query Result Caching
 
@@ -145,10 +137,9 @@ for (Onboarding_Requirement__c req : [
 
 **✅ Current Pattern**:
 ```apex
-SELECT Id, Evaluation_Logic__c,
-    (SELECT Id, Rule_Number__c, Requirement__c 
-     FROM Onboarding_Status_Rules__r)
-FROM Onboarding_Status_Rules_Engine__c
+SELECT Id, DeveloperName, Requirement_Type__c, Status__c
+FROM Onboarding_Status_Normalization__mdt
+WHERE Active__c = true
 ```
 
 **Benefits**:
@@ -212,9 +203,9 @@ const savedIndex = this.stages.findIndex(stage => stage.Id === progress.Current_
 #### Record-Triggered Flows
 
 **Current Implementation**:
-- `Onboarding_Record_Trigger_Update_Onboarding_Status`: Bulkified
-- Processes all records in trigger context
-- Uses bulk queries
+- `BLL_Onboarding_Requirement_RCD_Logical_Process`: Runs on Onboarding Requirement create/update
+- Calls `OnboardingStatusEvaluatorInvocable` for status evaluation
+- Uses bulk queries in Apex service
 
 **Best Practices**:
 - Use $Record variables for single record context
@@ -272,7 +263,7 @@ If queries become slow with large data volumes:
 
 ```sql
 -- Example: Add index on frequently queried fields
-CREATE INDEX idx_vendor_program_group ON Onboarding_Status_Rules_Engine__c(Vendor_Program_Group__c);
+-- Status evaluation uses CMDT (Onboarding_Status_Evaluation_Rule__mdt); no custom index needed.
 ```
 
 **Note**: Salesforce automatically creates indexes on:
@@ -281,14 +272,14 @@ CREATE INDEX idx_vendor_program_group ON Onboarding_Status_Rules_Engine__c(Vendo
 - External IDs
 - Unique fields
 
-#### 2. Optimize Custom Expression Evaluation
+#### 2. Optimize Status Evaluation
 
-**Current**: `OnboardingExpressionEngine.evaluate()` uses recursive parsing
+**Current**: `OnboardingStatusEvaluatorService.evaluate()` uses CMDT rules and in-memory evaluation
 
 **Potential Optimization**:
-- Cache parsed expressions
-- Pre-compile common patterns
-- Use more efficient parsing algorithm
+- Cache CMDT rule queries for bulk operations
+- Pre-build normalized status maps
+- Consider batch job for bulk status evaluation
 
 #### 3. Batch Processing for Large Datasets
 

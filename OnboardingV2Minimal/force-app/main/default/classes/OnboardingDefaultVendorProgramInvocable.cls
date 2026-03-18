@@ -41,7 +41,7 @@ public with sharing class OnboardingDefaultVendorProgramInvocable {
 
     try {
       List<Onboarding_Default_Vendor_Program__mdt> configs = [
-        SELECT Vendor_Name__c
+        SELECT Vendor_Name__c, Vendor_Program_Name_Contains__c
         FROM Onboarding_Default_Vendor_Program__mdt
         WHERE Scenario_Key__c = :scenarioKey
         AND Active__c = true
@@ -64,20 +64,43 @@ public with sharing class OnboardingDefaultVendorProgramInvocable {
         return results;
       }
 
-      List<Vendor_Customization__c> programs = [
-        SELECT Id, Vendor__c, Business_Vertical__c, Retail_Option__c
-        FROM Vendor_Customization__c
-        WHERE Vendor__r.Name = :vendorName
-        AND Active__c = true
-        WITH SECURITY_ENFORCED
-        LIMIT 1
-      ];
+      String nameContains = configs[0].Vendor_Program_Name_Contains__c;
+      List<Vendor_Customization__c> programs;
+
+      if (String.isNotBlank(nameContains)) {
+        String namePattern =
+          '%' + String.escapeSingleQuotes(nameContains.trim()) + '%';
+        programs = [
+          SELECT Id, Vendor__c, Business_Vertical__c, Retail_Option__c
+          FROM Vendor_Customization__c
+          WHERE Vendor__r.Name = :vendorName
+          AND Name LIKE :namePattern
+          AND Active__c = true
+          WITH SECURITY_ENFORCED
+          LIMIT 1
+        ];
+      } else {
+        programs = [
+          SELECT Id, Vendor__c, Business_Vertical__c, Retail_Option__c
+          FROM Vendor_Customization__c
+          WHERE Vendor__r.Name = :vendorName
+          AND Active__c = true
+          WITH SECURITY_ENFORCED
+          LIMIT 1
+        ];
+      }
 
       if (!programs.isEmpty()) {
         result.vendorProgramRecord = programs[0];
       } else {
         result.errorMessage =
-          'No active Vendor Program found for Vendor: ' + vendorName;
+          String.isNotBlank(nameContains)
+            ? 'No active Vendor Program found for Vendor: ' +
+              vendorName +
+              ' with Name containing "' +
+              nameContains +
+              '"'
+            : 'No active Vendor Program found for Vendor: ' + vendorName;
       }
     } catch (Exception ex) {
       result.errorMessage = 'Unable to resolve default Vendor Program: ' + ex.getMessage();

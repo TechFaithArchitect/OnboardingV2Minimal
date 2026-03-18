@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "path": "OnboardingV2Minimal",
+      "name": "OnboardingV2Minimal (SFDX Project)"
+    }
+  ],
+  "settings": {
+    "files.associations": {
+      "manifest/*.xml": "forcesourcemanifest",
+      "package.xml": "forcesourcemanifest"
+    },
+    "xml.preferences.showSchemaDocumentationType": "none"
+  }
+}

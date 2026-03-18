@@ -102,6 +102,7 @@
         <queriedFields>Fulfillment_Policy_Key__c</queriedFields>
         <queriedFields>Sequence__c</queriedFields>
         <queriedFields>Status__c</queriedFields>
+        <queriedFields>Is_Overridden__c</queriedFields>
         <queriedFields>RecordTypeId</queriedFields>
     </recordLookups>
     <recordLookups>
@@ -128,6 +129,7 @@
         <queriedFields>Fulfillment_Policy_Key__c</queriedFields>
         <queriedFields>Sequence__c</queriedFields>
         <queriedFields>Status__c</queriedFields>
+        <queriedFields>Is_Overridden__c</queriedFields>
         <queriedFields>RecordTypeId</queriedFields>
     </recordLookups>
     <start>

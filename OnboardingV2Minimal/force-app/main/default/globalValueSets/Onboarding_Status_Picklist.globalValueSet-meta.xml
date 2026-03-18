@@ -11,6 +11,11 @@
         <label>Paperwork Sent</label>
     </customValue>
     <customValue>
+        <fullName>Out For Signature</fullName>
+        <default>false</default>
+        <label>Out For Signature</label>
+    </customValue>
+    <customValue>
         <fullName>Pending Initial Review</fullName>
         <default>false</default>
         <label>Pending Initial Review</label>

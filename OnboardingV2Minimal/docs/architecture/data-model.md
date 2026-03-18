@@ -48,7 +48,7 @@ Groups requirements and rules for a vendor program. Follows the Campaign/Campaig
 
 **Relationships:**
 - Has many Vendor_Program_Group_Member__c records (junction object)
-- Has many Onboarding_Status_Rules_Engine__c records
+- Status evaluation uses Onboarding_Status_Evaluation_Rule__mdt (CMDT)
 - Referenced by Vendor_Customization__c as a default program group
 
 **Pattern:** Campaign/Campaign Member - allows many-to-many relationships between Groups and Vendor Programs
@@ -77,7 +77,7 @@ Links an Account to a specific Onboarding record (and optional Opportunity) for 
 - `Account__c` (Lookup) - Dealer account
 - `Onboarding__c` (Lookup) - Onboarding record
 - `Opportunity__c` (Lookup) - Optional onboarding opportunity
-- `Status__c` (Picklist/Text) - Intake/in''ëprogress status
+- `Status__c` (Picklist/Text) - Intake/in''ùprogress status
 - `Primary_Contact__c` (Lookup) - Primary contact for the onboarding
 
 **Relationships:**
@@ -96,14 +96,6 @@ Reusable communication templates tied to vendor programs for onboarding outreach
 
 **Relationships:**
 - Linked to Vendor_Customization__c (Vendor Program)
-
-### Onboarding_Next_Step_Override__c
-
-Manual override record used to control the next-step guidance for onboarding.
-
-**Key Fields:**
-- `Onboarding__c` (Lookup) - Onboarding record
-- Override metadata (reason/source)
 
 ### Onboarding_Requirement__c
 
@@ -140,7 +132,7 @@ The requirement system in V2 minimal is streamlined: requirements are stored dir
 **Relationships:**
 - Belongs to Vendor_Customization__c (Vendor Program)
 - Referenced by Onboarding_Requirement__c (completion tracking)
-- Referenced by Onboarding_Status_Rule__c (for status evaluation)
+- Status evaluated via Onboarding_Status_Evaluation_Rule__mdt (CMDT)
 
 **Pattern:** Instance - Created for specific programs
 
@@ -154,50 +146,25 @@ Vendor_Customization__c (Vendor Program)
   '--'-' Vendor_Program_Requirement__c (Requirements)
 
 Vendor_Program_Requirement__c
-  '--'-' Vendor_Program__c 'Üí Vendor_Customization__c
+  '--'-' Vendor_Program__c 'ùù Vendor_Customization__c
 
 Onboarding_Requirement__c (Completion Tracking)
-  '-ú'-' Onboarding__c
+  '-ù'-' Onboarding__c
   '--'-' Vendor_Program_Requirement__c
 ```
 
-### Onboarding_Status_Rules_Engine__c
+### Onboarding_Status_Normalization__mdt (CMDT)
 
-Defines a rule engine for status evaluation.
-
-**Key Fields:**
-- `Name` - Rules engine name
-- `Vendor_Program_Group__c` (Lookup) - Associated program group
-- `Target_Onboarding_Status__c` - Status to set when rule passes
-- `Evaluation_Logic__c` - Logic type (AND, OR, Custom)
-- `Active__c` - Whether the rules engine is active
-
-**Relationships:**
-- Has many Onboarding_Status_Rule__c records
-- Linked to Vendor_Program_Group__c
-
-**Activation Constraints:**
-- All child `Onboarding_Status_Rule__c` records must be active
-
-### Onboarding_Status_Rule__c
-
-Individual rule conditions within a rules engine.
+Per-requirement status normalization. Maps Requirement_Type__c + Status__c to Normalized_Status__c.
 
 **Key Fields:**
-- `Name` - Rule name
-- `Parent_Rule__c` (Lookup) - Parent rules engine (`Onboarding_Status_Rules_Engine__c`)
-- `Requirement__c` (Lookup) - Requirement to evaluate (`Vendor_Program_Requirement__c`)
-- `Expected_Status__c` - Expected requirement status
-- `Rule_Number__c` - Order of evaluation
+- `Requirement_Type__c` - Requirement type (e.g., Agreement, Contract)
+- `Status__c` - Raw requirement status
+- `Normalized_Status__c` - Normalized status (e.g., Setup Complete, Denied)
 - `Active__c` - Whether the rule is active
 
-**Relationships:**
-- Belongs to Onboarding_Status_Rules_Engine__c
-- References Vendor_Program_Requirement__c
-
-**Activation Constraints:**
-- Parent `Onboarding_Status_Rules_Engine__c` must be active
-- Related `Vendor_Program_Requirement__c` must be active
+**Related:**
+- Flow `BLL_Onboarding_Requirement_RCD_Logical_Process` - Record-triggered status evaluation
 
 ## Training & Credentials Objects
 
@@ -269,7 +236,7 @@ Maps field configurations to groups.
 
 ### Program_Dates__c
 
-External custom object (not in this repo) used to track program''ëspecific dates tied to Account.
+External custom object (not in this repo) used to track program''ùspecific dates tied to Account.
 
 ### Territory_Assignments__c
 
@@ -287,18 +254,17 @@ Managed package object for LearnUpon training enrollment tracking.
 
 ### Core Onboarding Objects
 Account
-'-ú'-''-' Onboarding__c (Master-Detail)
-'-Ç '--'-''-' Onboarding_Requirement__c
-'-Ç
+'-ù'-''-' Onboarding__c (Master-Detail)
+'-ù '--'-''-' Onboarding_Requirement__c
+'-ù
 '--'-''-' Vendor_Customization__c (Vendor Program)
-    '-ú'-''-' Onboarding__c
+    '-ù'-''-' Onboarding__c
     '--'-''-' Vendor_Program_Requirement__c
 
 Vendor_Program_Group__c (Campaign pattern)
 '--'-''-' Vendor_Program_Group_Member__c (Campaign Member pattern)
-    '-ú'-''-' Required_Program__c 'Üí Vendor_Customization__c
-'--'-''-' Onboarding_Status_Rules_Engine__c
-    '--'-''-' Onboarding_Status_Rule__c
+    '-ù'-''-' Required_Program__c 'ùù Vendor_Customization__c
+(Status evaluation: Onboarding_Status_Evaluation_Rule__mdt)
 
 ### Requirement Objects
 Vendor_Customization__c
@@ -306,7 +272,7 @@ Vendor_Customization__c
     '--'-''-' Onboarding_Requirement__c (Completion tracking)
 
 Contact
-'-ú'-''-' Training_Assignment__c
+'-ù'-''-' Training_Assignment__c
 '--'-''-' POE_External_Contact_Credential__c
 '--'-''-' External_Contact_Credential_Type__c
 
@@ -326,12 +292,6 @@ Activation rules execute during the activation process (not on save) and prevent
 **Legacy registry key `Vendor_Program__c`:**
 - `AllChildRequirementsMustBeActiveRule` - All child `Vendor_Program_Requirement__c` records must be active
 
-**Onboarding_Status_Rule__c:**
-- `AllLinkedEngineMustBeActiveRule` - Parent `Onboarding_Status_Rules_Engine__c` and related `Requirement__c` must be active
-
-**Onboarding_Status_Rules_Engine__c:**
-- `AllStatusRulesMustBeActiveRule` - All child `Onboarding_Status_Rule__c` records must be active
-
 **Activation Flow:**
 1. User initiates activation via `OnboardingAppActivationOrchestrator`
 2. Orchestrator routes to appropriate service (`VendorProgramActivationService` or `OnboardingAppActivationService`)
@@ -349,11 +309,6 @@ Activation rules execute during the activation process (not on save) and prevent
   - See [Architecture Overview - Versioning Pattern](./overview.md#5-versioning-pattern)
 - **Template/Instance Pattern**: Templates define requirements, instances are created for programs
   - See [Requirement Objects](#requirement-objects) above
-- **Activation Guard Pattern**: Activation rules enforce dependencies before records can be activated
-  - See [Activation Rules](#activation-rules-activation-time) above
-  - Implemented via `OnboardingAppActivationRule` interface
-  - Executed by activation services before setting records to active
-
 ## Related Documentation
 
 - [Architecture Overview](./overview.md) - Design patterns and system architecture
