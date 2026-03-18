@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Auto_Insurance_Requirements</fullName>
+    <active>true</active>
+    <description>Requirement type used for Auto Insurance Records</description>
+    <label>Auto Insurance Requirements</label>
+    <picklistValues>
+        <picklist>Override_Action__c</picklist>
+        <values>
+            <fullName>Treat as Complete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waive Requirement</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Requirement_Type__c</picklist>
+        <values>
+            <fullName>Auto Insurance</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Complete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Started</fullName>
+            <default>true</default>
+        </values>
+    </picklistValues>
+</RecordType>

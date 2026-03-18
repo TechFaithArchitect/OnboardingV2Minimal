@@ -7,9 +7,6 @@
         <locationY>0</locationY>
         <actionName>RecordCollectionEditorConfigService</actionName>
         <actionType>apex</actionType>
-        <faultConnector>
-            <targetReference>Capture_Create_Contact_Fault</targetReference>
-        </faultConnector>
         <dataTypeMappings>
             <typeName>U__createdRecords</typeName>
             <typeValue>Contact</typeValue>
@@ -18,6 +15,9 @@
             <typeName>U__createdRelationshipRecords</typeName>
             <typeValue>AccountContactRelation</typeValue>
         </dataTypeMappings>
+        <faultConnector>
+            <targetReference>Capture_Create_Contact_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>configKey</name>
@@ -45,19 +45,6 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Capture_Create_Contact_Fault</name>
-        <label>Capture Create Contact Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>Assign_Error_Message</name>
         <label>Assign Error Message</label>
         <locationX>0</locationX>
@@ -67,6 +54,19 @@
             <operator>Assign</operator>
             <value>
                 <stringValue>Proper Inputs not passed to Create Contact</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Contact_Fault</name>
+        <label>Capture Create Contact Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
             </value>
         </assignmentItems>
     </assignments>

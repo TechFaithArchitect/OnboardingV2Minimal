@@ -35,6 +35,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Add_Contact_Subject_Record_From_Primary_Opportunity_Contact</name>
+        <label>Add Contact Subject Record From Primary Opportunity Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>RequirementSubjectRecordCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>ContactRequirementSubjectRecord</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Onboarding_Requirements</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Add_Contact_Subject_Record_From_Principal_Owner_Relationship</name>
         <label>Add Contact Subject Record From Principal Owner Relationship</label>
         <locationX>0</locationX>
@@ -59,7 +75,7 @@
             <assignToReference>FulfillmentPolicyKeyCollection</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Loop_Onboarding_Requirements_for_Fulfillment_Policy_Keys.Fulfillment_Policy_Key__c</elementReference>
+                <elementReference>ResolvedFulfillmentPolicyKeyForCollection</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -169,6 +185,57 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Contact_Subject_Record_From_Primary_Opportunity_Contact</name>
+        <label>Assign Contact Subject Record From Primary Opportunity Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ContactRequirementSubjectRecord.Onboarding_Requirement__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Onboarding_Requirements.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ContactRequirementSubjectRecord.Contact__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PrimaryOpportunityContactRecord.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ContactRequirementSubjectRecord.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ContactRequirementSubjectRecord.Requirement_Type__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Onboarding_Requirements.Requirement_Type__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ContactRequirementSubjectRecord.Role_Snapshot__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PrimaryOpportunityContactRoleSnapshot</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ContactRequirementSubjectRecord.Unique_Key__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PrimaryOpportunityContactSubjectUniqueKey</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Add_Contact_Subject_Record_From_Primary_Opportunity_Contact</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Contact_Subject_Record_From_Principal_Owner_Relationship</name>
         <label>Assign Contact Subject Record From Principal Owner Relationship</label>
         <locationX>0</locationX>
@@ -266,6 +333,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Capture_Create_Onboarding_Requirement_Subjects_Fault</name>
+        <label>Capture Create Onboarding Requirement Subjects Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Create_Onboarding_Requirement_Subjects_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Clear_Fulfillment_Policy_Record</name>
         <label>Clear Fulfillment Policy Record</label>
         <locationX>0</locationX>
@@ -293,22 +376,6 @@
         </assignmentItems>
         <connector>
             <targetReference>Loop_Fulfillment_Policies</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Capture_Create_Onboarding_Requirement_Subjects_Fault</name>
-        <label>Capture Create Onboarding Requirement Subjects Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Handle_Create_Onboarding_Requirement_Subjects_Fault</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -365,6 +432,21 @@
             </connector>
             <label>Principal Owner</label>
         </rules>
+        <rules>
+            <name>Primary_Contact_Or_Account</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>FulfillmentPolicyRecord.Subject_Model__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PrimaryContactOrAccount</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Has_Primary_Opportunity_Contact</targetReference>
+            </connector>
+            <label>Primary Contact Or Account</label>
+        </rules>
     </decisions>
     <decisions>
         <name>Does_Current_Fulfillment_Policy_Match_Requirement</name>
@@ -382,7 +464,7 @@
                 <leftValueReference>Loop_Fulfillment_Policies.Policy_Key__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <elementReference>Loop_Onboarding_Requirements.Fulfillment_Policy_Key__c</elementReference>
+                    <elementReference>ResolvedFulfillmentPolicyKey</elementReference>
                 </rightValue>
             </conditions>
             <connector>
@@ -429,14 +511,14 @@
             <name>Fulfillment_Policy_Key_Is_Present</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Loop_Onboarding_Requirements_for_Fulfillment_Policy_Keys.Fulfillment_Policy_Key__c</leftValueReference>
+                <leftValueReference>ResolvedFulfillmentPolicyKeyForCollection</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>Loop_Onboarding_Requirements_for_Fulfillment_Policy_Keys.Fulfillment_Policy_Key__c</leftValueReference>
+                <leftValueReference>ResolvedFulfillmentPolicyKeyForCollection</leftValueReference>
                 <operator>NotEqualTo</operator>
                 <rightValue>
                     <stringValue></stringValue>
@@ -454,7 +536,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Has_Onboarding_Account</targetReference>
+            <targetReference>Get_Primary_Opportunity_Contact</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Fulfillment Policy Keys</defaultConnectorLabel>
         <rules>
@@ -535,6 +617,38 @@
                 <targetReference>Loop_Onboarding_Requirements_for_Fulfillment_Policy_Keys</targetReference>
             </connector>
             <label>Onboarding Requirements Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Has_Primary_Opportunity_Contact</name>
+        <label>Has Primary Opportunity Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Account_Subject_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Fallback To Account</defaultConnectorLabel>
+        <rules>
+            <name>Primary_Opportunity_Contact_Is_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>PrimaryOpportunityContactRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>PrimaryOpportunityContactRecord.ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Contact_Subject_Record_From_Primary_Opportunity_Contact</targetReference>
+            </connector>
+            <label>Primary Opportunity Contact Is Present</label>
         </rules>
     </decisions>
     <decisions>
@@ -647,18 +761,28 @@
         <expression>{!Loop_Onboarding_Requirements.Id} &amp; &quot;|&quot; &amp; {!OnboardingRecord.Account__c}</expression>
     </formulas>
     <formulas>
+        <name>MissingFulfillmentPolicyErrorMessage</name>
+        <dataType>String</dataType>
+        <expression>&quot;No active fulfillment policy was found for Onboarding Requirement &quot; &amp; {!Loop_Onboarding_Requirements.Id} &amp; &quot; with Fulfillment_Policy_Key__c = &quot; &amp; {!ResolvedFulfillmentPolicyKey} &amp; &quot;.&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>PrimaryOpportunityContactRoleSnapshot</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  ISBLANK(TEXT({!PrimaryOpportunityContactRecord.Role})),
+  &quot;Primary Opportunity Contact&quot;,
+  &quot;Primary Opportunity Contact - &quot; &amp; TEXT({!PrimaryOpportunityContactRecord.Role})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>PrimaryOpportunityContactSubjectUniqueKey</name>
+        <dataType>String</dataType>
+        <expression>{!Loop_Onboarding_Requirements.Id} &amp; &quot;|&quot; &amp; {!PrimaryOpportunityContactRecord.ContactId}</expression>
+    </formulas>
+    <formulas>
         <name>PrincipalOwnerSubjectUniqueKey</name>
         <dataType>String</dataType>
         <expression>{!Loop_Onboarding_Requirements.Id} &amp; &quot;|&quot; &amp; {!Loop_Account_Contact_Relationships.ContactId}</expression>
-    </formulas>
-    <formulas>
-        <name>ResolvedFulfillmentPolicyKey</name>
-        <dataType>String</dataType>
-        <expression>IF(
-  ISBLANK({!Loop_Onboarding_Requirements.Fulfillment_Policy_Key__c}),
-  &quot;NO_POLICY_KEY&quot;,
-  {!Loop_Onboarding_Requirements.Fulfillment_Policy_Key__c}
-)</expression>
     </formulas>
     <formulas>
         <name>RequirementPolicyContextKey</name>
@@ -669,14 +793,22 @@
 )</expression>
     </formulas>
     <formulas>
-        <name>MissingFulfillmentPolicyErrorMessage</name>
+        <name>ResolvedFulfillmentPolicyKey</name>
         <dataType>String</dataType>
-        <expression>&quot;No active fulfillment policy was found for Onboarding Requirement &quot; &amp; {!Loop_Onboarding_Requirements.Id} &amp; &quot; with Fulfillment_Policy_Key__c = &quot; &amp; {!ResolvedFulfillmentPolicyKey} &amp; &quot;.&quot;</expression>
+        <expression>IF(
+  ISBLANK({!Loop_Onboarding_Requirements.Fulfillment_Policy_Key__c}),
+  &quot;PRIMARY_CONTACT_OR_ACCOUNT&quot;,
+  {!Loop_Onboarding_Requirements.Fulfillment_Policy_Key__c}
+)</expression>
     </formulas>
     <formulas>
-        <name>UnsupportedSubjectModelErrorMessage</name>
+        <name>ResolvedFulfillmentPolicyKeyForCollection</name>
         <dataType>String</dataType>
-        <expression>&quot;Unsupported subject model &quot; &amp; TEXT({!FulfillmentPolicyRecord.Subject_Model__c}) &amp; &quot; for Onboarding Requirement &quot; &amp; {!Loop_Onboarding_Requirements.Id} &amp; &quot; with Fulfillment_Policy_Key__c = &quot; &amp; {!ResolvedFulfillmentPolicyKey} &amp; &quot;.&quot;</expression>
+        <expression>IF(
+  ISBLANK({!Loop_Onboarding_Requirements_for_Fulfillment_Policy_Keys.Fulfillment_Policy_Key__c}),
+  &quot;PRIMARY_CONTACT_OR_ACCOUNT&quot;,
+  {!Loop_Onboarding_Requirements_for_Fulfillment_Policy_Keys.Fulfillment_Policy_Key__c}
+)</expression>
     </formulas>
     <formulas>
         <name>SubjectCreateContextKey</name>
@@ -685,6 +817,11 @@
   {!OnboardingRecord.Id} &amp; &quot;|SUBJECT_CREATE&quot;,
   255
 )</expression>
+    </formulas>
+    <formulas>
+        <name>UnsupportedSubjectModelErrorMessage</name>
+        <dataType>String</dataType>
+        <expression>&quot;Unsupported subject model &quot; &amp; TEXT({!FulfillmentPolicyRecord.Subject_Model__c}) &amp; &quot; for Onboarding Requirement &quot; &amp; {!Loop_Onboarding_Requirements.Id} &amp; &quot; with Fulfillment_Policy_Key__c = &quot; &amp; {!ResolvedFulfillmentPolicyKey} &amp; &quot;.&quot;</expression>
     </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirement Subjects {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirement Subjects</label>
@@ -802,6 +939,66 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <name>Get_Fulfillment_Policies</name>
+        <label>Get Fulfillment Policies</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Primary_Opportunity_Contact</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Fullfilment_Policy</flowName>
+        <inputAssignments>
+            <name>FulfillmentPolicyKeyCollection</name>
+            <value>
+                <elementReference>FulfillmentPolicyKeyCollection</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>FulfillmentPolicyRecordCollection</assignToReference>
+            <name>FulfillmentPolicyRecordCollection</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Get_Onboarding_Requirements</name>
+        <label>Get Onboarding Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Has_Onboarding_Requirements_To_Process</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Requirement</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>OnboardingRequirementRecordCollection</assignToReference>
+            <name>OnboardingRequirementRecordCollection</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Get_Primary_Opportunity_Contact</name>
+        <label>Get Primary Opportunity Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Has_Onboarding_Account</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Primary_Opportunity_Contact</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>PrimaryOpportunityContactRecord</assignToReference>
+            <name>OpportunityContactRecord</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Handle_Create_Onboarding_Requirement_Subjects_Fault</name>
         <label>Handle Create Onboarding Requirement Subjects Fault</label>
         <locationX>0</locationX>
@@ -858,26 +1055,6 @@
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
             <name>ResolvedFaultMessage</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>Get_Fulfillment_Policies</name>
-        <label>Get Fulfillment Policies</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Has_Onboarding_Account</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Fullfilment_Policy</flowName>
-        <inputAssignments>
-            <name>FulfillmentPolicyKeyCollection</name>
-            <value>
-                <elementReference>FulfillmentPolicyKeyCollection</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>FulfillmentPolicyRecordCollection</assignToReference>
-            <name>FulfillmentPolicyRecordCollection</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -943,26 +1120,6 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>Get_Onboarding_Requirements</name>
-        <label>Get Onboarding Requirements</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Has_Onboarding_Requirements_To_Process</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Requirement</flowName>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>OnboardingRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>OnboardingRequirementRecordCollection</assignToReference>
-            <name>OnboardingRequirementRecordCollection</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
         <name>Handle_Unsupported_Subject_Model</name>
         <label>Handle Unsupported Subject Model</label>
         <locationX>0</locationX>
@@ -1025,20 +1182,20 @@
         </outputAssignments>
     </subflows>
     <variables>
-        <name>AccountRecord</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Account</objectType>
-    </variables>
-    <variables>
         <name>AccountContactRelCollection</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>AccountContactRelation</objectType>
+    </variables>
+    <variables>
+        <name>AccountRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
     </variables>
     <variables>
         <name>AccountRequirementSubjectRecord</name>
@@ -1055,6 +1212,13 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding_Requirement_Subject__c</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>FulfillmentPolicyKeyCollection</name>
@@ -1080,13 +1244,6 @@
         <objectType>Onboarding_Fulfillment_Policy__mdt</objectType>
     </variables>
     <variables>
-        <name>errorMessage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
         <name>OnboardingRecord</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -1101,6 +1258,14 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>PrimaryOpportunityContactRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>OpportunityContactRole</objectType>
     </variables>
     <variables>
         <name>RequirementSubjectRecordCollection</name>

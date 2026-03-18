@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Override_Details_When_Overridden</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  Is_Overridden__c,
+  OR(
+    ISBLANK(TEXT(Override_Action__c)),
+    ISBLANK(Override_Reason__c),
+    ISBLANK(Override_Approved_On__c),
+    ISBLANK(Override_Approved_By__c)
+  )
+)</errorConditionFormula>
+    <errorDisplayField>Is_Overridden__c</errorDisplayField>
+    <errorMessage>When Is Overridden is checked, Override Action, Override Reason, and Override Approved On are required.</errorMessage>
+</ValidationRule>

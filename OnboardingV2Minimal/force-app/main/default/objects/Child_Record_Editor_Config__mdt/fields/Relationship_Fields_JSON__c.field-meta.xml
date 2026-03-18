@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Relationship_Fields_JSON__c</fullName>
+    <description>JSON array of field configs for the relationship object (e.g. Role picklist on AccountContactRelation). Same structure as Fields_JSON__c.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Relationship Fields JSON</label>
+    <length>32768</length>
+    <type>LongTextArea</type>
+    <visibleLines>8</visibleLines>
+</CustomField>

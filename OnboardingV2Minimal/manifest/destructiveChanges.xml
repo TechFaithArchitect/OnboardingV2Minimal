@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
+  <types>
+    <members>Vendor_Customization__c.Status__c</members>
+    <members>Vendor_Customization__c.Action_Plan_Template__c</members>
+    <members>Vendor_Customization__c.Previous_Version__c</members>
+    <members>Vendor_Customization__c.Order_Entry_Platform__c</members>
+    <members>Vendor_Customization__c.General_Liability_Insurance_Needed__c</members>
+    <members>Vendor_Customization__c.Auto_Insurance_Needed__c</members>
+    <members>Vendor_Customization__c.Certificate_Holder_Needed__c</members>
+    <members>Vendor_Customization__c.Works_Comp_Insurance_Needed__c</members>
+    <name>CustomField</name>
+  </types>
+  <types>
+    <members>Contact.Set_Up_Agent_on_Vendor</members>
+    <name>QuickAction</name>
+  </types>
+  <types>
+    <members>DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subject</members>
+    <members>DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subjects_By_Evidence</members>
+    <members>DOMAIN_OmniSObject_SFL_EVAL_OnbReq_Subjects_For_OnbRec</members>
+    <name>Flow</name>
+  </types>
   <version>59.0</version>
 </Package>

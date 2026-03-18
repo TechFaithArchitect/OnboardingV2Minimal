@@ -80,7 +80,7 @@
             <assignToReference>OnboardingRequirementRecord.Fulfillment_Policy_Key__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_VendorProgramRequirements.Fulfillment_Policy_Key__c</elementReference>
+                <elementReference>Resolved_Fulfillment_Policy_Key</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -94,31 +94,6 @@
             <targetReference>Add_Onboarding_Requirement_Record_to_Collection</targetReference>
         </connector>
     </assignments>
-    <decisions>
-        <name>Is_Onboarding_Requirement_RecordType_Mapped</name>
-        <label>Is Onboarding Requirement RecordType Mapped</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Fail_Fast_Missing_RecordType_Mapping</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Missing Mapping - Fail Fast</defaultConnectorLabel>
-        <rules>
-            <name>Mapped_RecordType_Found</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Onboarding_Requirement_RecordType.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
-            </connector>
-            <label>Mapped RecordType Found</label>
-        </rules>
-    </decisions>
     <decisions>
         <name>Did_Create_Onboarding_Requirement_Subjects_Fail</name>
         <label>Did Create Onboarding Requirement Subjects Fail</label>
@@ -149,6 +124,31 @@
                 <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
             </connector>
             <label>Create Onboarding Requirement Subjects Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Onboarding_Requirement_RecordType_Mapped</name>
+        <label>Is Onboarding Requirement RecordType Mapped</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Fail_Fast_Missing_RecordType_Mapping</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Missing Mapping - Fail Fast</defaultConnectorLabel>
+        <rules>
+            <name>Mapped_RecordType_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Onboarding_Requirement_RecordType.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
+            </connector>
+            <label>Mapped RecordType Found</label>
         </rules>
     </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements</description>
@@ -194,6 +194,15 @@
   &quot;Vendor Order Entry&quot;, &quot;Vendor_Order_Entry&quot;,
   &quot;Vendor Order Entry Setup Status&quot;, &quot;Vendor_Order_Entry&quot;,
   &quot;Agreement_Requirements&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>Resolved_Fulfillment_Policy_Key</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  ISBLANK({!Loop_VendorProgramRequirements.Fulfillment_Policy_Key__c}),
+  &quot;PRIMARY_CONTACT_OR_ACCOUNT&quot;,
+  {!Loop_VendorProgramRequirements.Fulfillment_Policy_Key__c}
 )</expression>
     </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements {!$Flow.CurrentDateTime}</interviewLabel>

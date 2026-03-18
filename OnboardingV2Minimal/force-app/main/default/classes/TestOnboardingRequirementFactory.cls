@@ -1,24 +1,19 @@
 @isTest
 public class TestOnboardingRequirementFactory {
-
     public static Onboarding_Requirement__c create(
         Boolean doInsert,
         Boolean completed,
-        Boolean isInherited,
         Boolean isOverridden,
         Onboarding__c onboarding,
         String requirementType,
-        Boolean requiresFiles,
         Integer sequence,
         String status,
         Vendor_Program_Requirement__c vendorProgramRequirement
     ) {
         Onboarding_Requirement__c onboardingRequirement = new Onboarding_Requirement__c(
             Completed__c = completed != null ? completed : false,
-            Is_Inherited__c = isInherited != null ? isInherited : false,
             Is_Overridden__c = isOverridden != null ? isOverridden : false,
             Onboarding__c = onboarding != null ? onboarding.Id : null,
-            Requires_Files__c = requiresFiles != null ? requiresFiles : false,
             Sequence__c = sequence != null ? sequence : 1,
             Vendor_Program_Requirement__c = vendorProgramRequirement != null ? vendorProgramRequirement.Id : null
         );
@@ -76,11 +71,9 @@ public class TestOnboardingRequirementFactory {
         return create(
             doInsert,
             false,      
-            false,      
-            false,      
+            false,           
             onboarding,
-            null,   // Will use default from picklist
-            false,      
+            null,   // Will use default from picklist      
             1,          
             null,   // Will use default from picklist
             vendorProgramRequirement

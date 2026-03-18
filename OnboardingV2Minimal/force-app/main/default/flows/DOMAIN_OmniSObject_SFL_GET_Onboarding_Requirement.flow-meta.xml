@@ -79,6 +79,32 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
+        <name>Get_Onboarding_Requirement</name>
+        <label>Get Onboarding Requirement</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OnboardingRequirementId</elementReference>
+            </value>
+        </filters>
+        <object>Onboarding_Requirement__c</object>
+        <outputReference>OnboardingRequirementRecord</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Onboarding__c</queriedFields>
+        <queriedFields>Vendor_Program_Requirement__c</queriedFields>
+        <queriedFields>Requirement_Type__c</queriedFields>
+        <queriedFields>Approval_Policy_Key__c</queriedFields>
+        <queriedFields>Fulfillment_Policy_Key__c</queriedFields>
+        <queriedFields>Sequence__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>RecordTypeId</queriedFields>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Onboarding_Requirements</name>
         <label>Get Onboarding Requirements</label>
         <locationX>0</locationX>
@@ -94,33 +120,6 @@
         </filters>
         <object>Onboarding_Requirement__c</object>
         <outputReference>OnboardingRequirementRecordCollection</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Onboarding__c</queriedFields>
-        <queriedFields>Vendor_Program_Requirement__c</queriedFields>
-        <queriedFields>Requirement_Type__c</queriedFields>
-        <queriedFields>Approval_Policy_Key__c</queriedFields>
-        <queriedFields>Fulfillment_Policy_Key__c</queriedFields>
-        <queriedFields>Sequence__c</queriedFields>
-        <queriedFields>Status__c</queriedFields>
-        <queriedFields>RecordTypeId</queriedFields>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Onboarding_Requirement</name>
-        <label>Get Onboarding Requirement</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>OnboardingRequirementId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Onboarding_Requirement__c</object>
-        <outputReference>OnboardingRequirementRecord</outputReference>
         <queriedFields>Id</queriedFields>
         <queriedFields>Onboarding__c</queriedFields>
         <queriedFields>Vendor_Program_Requirement__c</queriedFields>

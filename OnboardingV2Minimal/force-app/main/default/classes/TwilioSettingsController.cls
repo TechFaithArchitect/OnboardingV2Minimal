@@ -25,7 +25,6 @@ public with sharing class TwilioSettingsController {
                        From_Phone_Number__c, Named_Credential__c, 
                        Account_SID__c, Active__c
                 FROM Twilio_Configuration__mdt
-                WITH SECURITY_ENFORCED
                 ORDER BY Active__c DESC, MasterLabel
             ];
             
@@ -62,7 +61,6 @@ public with sharing class TwilioSettingsController {
                 SELECT From_Phone_Number__c, Named_Credential__c, Account_SID__c
                 FROM Twilio_Configuration__mdt
                 WHERE Active__c = true
-                WITH SECURITY_ENFORCED
             ];
             
             if (activeConfigs.isEmpty()) {
@@ -129,7 +127,6 @@ public with sharing class TwilioSettingsController {
             SELECT Name
             FROM Profile
             WHERE Id = :UserInfo.getProfileId()
-            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         if (userProfile.Name == 'System Administrator') {
@@ -143,7 +140,6 @@ public with sharing class TwilioSettingsController {
                 WHERE
                     AssigneeId = :UserInfo.getUserId()
                     AND PermissionSet.PermissionsCustomizeApplication = TRUE
-                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             return !assignments.isEmpty();

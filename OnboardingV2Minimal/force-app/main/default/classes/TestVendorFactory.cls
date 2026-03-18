@@ -44,9 +44,6 @@ public class TestVendorFactory {
             Status__c = validStatus,
             Active__c = isActive
         );
-        if (parentVersionId != null) {
-            record.Previous_Version__c = parentVersionId;
-        }
         TestDataFactoryUtil.maybeInsert(record, doInsert);
         return record;
     }

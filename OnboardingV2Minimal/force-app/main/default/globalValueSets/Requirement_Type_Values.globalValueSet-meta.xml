@@ -100,6 +100,12 @@
         <default>false</default>
         <label>Vendor Order Entry</label>
     </customValue>
+    <customValue>
+        <fullName>Vendor Order Entry Setup Status</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Vendor Order Entry Setup Status</label>
+    </customValue>
     <masterLabel>Requirement Type Values</masterLabel>
     <sorted>false</sorted>
 </GlobalValueSet>

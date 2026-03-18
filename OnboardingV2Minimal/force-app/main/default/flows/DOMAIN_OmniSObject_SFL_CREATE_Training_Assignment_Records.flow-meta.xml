@@ -3,6 +3,38 @@
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Add_New_Training_Assignment_To_Collection</name>
+        <label>Add New Training Assignment To Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>NewTrainingAssignmentRecordCollectionToCreate</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>NewTrainingAssignmentRecord</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Training_Requirement_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Add_Training_Assignment_Onboarding_Link_To_Collection</name>
+        <label>Add Training Assignment Onboarding Link To Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TrainingAssignmentOnboardingLinkRecordCollectionToCreate</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>TrainingAssignmentOnboardingLinkRecord</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Resolved_Training_Assignments_For_Linking</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Existing_External_Training_Assignment_Id</name>
         <label>Assign Existing External Training Assignment Id</label>
         <locationX>0</locationX>
@@ -16,6 +48,45 @@
         </assignmentItems>
         <connector>
             <targetReference>Loop_Training_Requirement_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_External_Training_Requirement_Id_To_Collection</name>
+        <label>Assign External Training Requirement Id To Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ExternalTrainingRequirementIdList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Training_Requirement_Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Filter_Existing_Assignments_For_Current_Requirement</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Resolved_Assignment_Id_To_AssignmentIdList</name>
+        <label>Assign Resolved Assignment Id To AssignmentIdList</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TrainingAssignmentIdList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Resolved_Training_Assignments_For_Id_Collection.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ContactTrainingAssignment</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Resolved_Training_Assignments_For_Id_Collection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Resolved_Training_Assignments_For_Id_Collection</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -35,6 +106,36 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Training_Assignment_Onboarding_Link_Record_Values</name>
+        <label>Assign Training Assignment Onboarding Link Record Values</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TrainingAssignmentOnboardingLinkRecord.Onboarding__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>TrainingAssignmentOnboardingLinkRecord.Training_Assignment__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Resolved_Training_Assignments_For_Linking.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>TrainingAssignmentOnboardingLinkRecord.Unique_Key__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TrainingAssignmentOnboardingLinkKey</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Add_Training_Assignment_Onboarding_Link_To_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Training_Requirement_Id_to_TrainingRequirementIdList</name>
         <label>Assign Training Requirement Id to TrainingRequirementIdList</label>
         <locationX>0</locationX>
@@ -48,54 +149,6 @@
         </assignmentItems>
         <connector>
             <targetReference>Loop_Vendor_Program_Training_Requirement_Links</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Vendor_Customization_From_Onboarding_Record</name>
-        <label>Assign Vendor Customization From Onboarding Record</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>ResolvedVendorCustomizationId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>OnboardingRecord.Vendor_Customization__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Resolved_Vendor_Customization_to_VendorProgramIdList</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Vendor_Customization_Id_Input</name>
-        <label>Assign Vendor Customization Id Input</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>ResolvedVendorCustomizationId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>VendorCustomizationId</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Resolved_Vendor_Customization_to_VendorProgramIdList</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_External_Training_Requirement_Id_To_Collection</name>
-        <label>Assign External Training Requirement Id To Collection</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>ExternalTrainingRequirementIdList</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Loop_Training_Requirement_Record.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Filter_Existing_Assignments_For_Current_Requirement</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -164,88 +217,35 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Add_New_Training_Assignment_To_Collection</name>
-        <label>Add New Training Assignment To Collection</label>
+        <name>Assign_Vendor_Customization_From_Onboarding_Record</name>
+        <label>Assign Vendor Customization From Onboarding Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>NewTrainingAssignmentRecordCollectionToCreate</assignToReference>
-            <operator>Add</operator>
+            <assignToReference>ResolvedVendorCustomizationId</assignToReference>
+            <operator>Assign</operator>
             <value>
-                <elementReference>NewTrainingAssignmentRecord</elementReference>
+                <elementReference>OnboardingRecord.Vendor_Customization__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Training_Requirement_Record</targetReference>
+            <targetReference>Assign_Resolved_Vendor_Customization_to_VendorProgramIdList</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Resolved_Assignment_Id_To_AssignmentIdList</name>
-        <label>Assign Resolved Assignment Id To AssignmentIdList</label>
+        <name>Assign_Vendor_Customization_Id_Input</name>
+        <label>Assign Vendor Customization Id Input</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>TrainingAssignmentIdList</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Loop_Resolved_Training_Assignments_For_Id_Collection.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>ContactTrainingAssignment</assignToReference>
+            <assignToReference>ResolvedVendorCustomizationId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_Resolved_Training_Assignments_For_Id_Collection</elementReference>
+                <elementReference>VendorCustomizationId</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Resolved_Training_Assignments_For_Id_Collection</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Training_Assignment_Onboarding_Link_Record_Values</name>
-        <label>Assign Training Assignment Onboarding Link Record Values</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>TrainingAssignmentOnboardingLinkRecord.Onboarding__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>OnboardingRecord.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>TrainingAssignmentOnboardingLinkRecord.Training_Assignment__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Resolved_Training_Assignments_For_Linking.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>TrainingAssignmentOnboardingLinkRecord.Unique_Key__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>TrainingAssignmentOnboardingLinkKey</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Add_Training_Assignment_Onboarding_Link_To_Collection</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Add_Training_Assignment_Onboarding_Link_To_Collection</name>
-        <label>Add Training Assignment Onboarding Link To Collection</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>TrainingAssignmentOnboardingLinkRecordCollectionToCreate</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>TrainingAssignmentOnboardingLinkRecord</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_Resolved_Training_Assignments_For_Linking</targetReference>
+            <targetReference>Assign_Resolved_Vendor_Customization_to_VendorProgramIdList</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -297,22 +297,6 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Capture_Create_Training_Assignment_Records_Fault</name>
-        <label>Capture Create Training Assignment Records Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Get_Resolved_Training_Assignments_For_Target_Requirements</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>Capture_Create_Training_Assignment_Onboarding_Links_Bulk_Fault</name>
         <label>Capture Create Training Assignment Onboarding Links Bulk Fault</label>
         <locationX>0</locationX>
@@ -326,6 +310,22 @@
         </assignmentItems>
         <connector>
             <targetReference>Determine_If_Assignment_Processed</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Training_Assignment_Records_Fault</name>
+        <label>Capture Create Training Assignment Records Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Resolved_Training_Assignments_For_Target_Requirements</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -495,6 +495,56 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Does_Onboarding_Link_Already_Exist</name>
+        <label>Does Onboarding Link Already Exist</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Resolved_Training_Assignments_For_Linking</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Yes - Link Already Exists</defaultConnectorLabel>
+        <rules>
+            <name>No_Link_Does_Not_Exist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Filter_Existing_Onboarding_Links_For_Current_Assignment</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Training_Assignment_Onboarding_Link_Record_Values</targetReference>
+            </connector>
+            <label>No - Link Does Not Exist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Does_Training_Assignment_Onboarding_Link_Exist</name>
+        <label>Does Training Assignment Onboarding Link Exist</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_Training_Assignment_Onboarding_Link</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Create Training Assignment Onboarding Link</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Link_Already_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ExistingTrainingAssignmentOnboardingRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Determine_If_Assignment_Processed</targetReference>
+            </connector>
+            <label>Yes - Link Already Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Has_External_Training_Requirements</name>
         <label>Has External Training Requirements</label>
         <locationX>0</locationX>
@@ -570,31 +620,6 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Does_Onboarding_Link_Already_Exist</name>
-        <label>Does Onboarding Link Already Exist</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Loop_Resolved_Training_Assignments_For_Linking</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Yes - Link Already Exists</defaultConnectorLabel>
-        <rules>
-            <name>No_Link_Does_Not_Exist</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Filter_Existing_Onboarding_Links_For_Current_Assignment</leftValueReference>
-                <operator>IsEmpty</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_Training_Assignment_Onboarding_Link_Record_Values</targetReference>
-            </connector>
-            <label>No - Link Does Not Exist</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Has_Training_Assignment_Onboarding_Links_To_Create</name>
         <label>Has Training Assignment Onboarding Links To Create</label>
         <locationX>0</locationX>
@@ -617,31 +642,6 @@
                 <targetReference>Create_Training_Assignment_Onboarding_Links_Bulk</targetReference>
             </connector>
             <label>Yes - Links To Create</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Does_Training_Assignment_Onboarding_Link_Exist</name>
-        <label>Does Training Assignment Onboarding Link Exist</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Create_Training_Assignment_Onboarding_Link</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Create Training Assignment Onboarding Link</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Link_Already_Exists</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ExistingTrainingAssignmentOnboardingRecord.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Determine_If_Assignment_Processed</targetReference>
-            </connector>
-            <label>Yes - Link Already Exists</label>
         </rules>
     </decisions>
     <decisions>
@@ -792,20 +792,6 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>Loop_Training_Requirement_Record</name>
-        <label>Loop Training Requirement Record</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>TrainingRequirementRecordCollection</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Is_Training_Requirement_External</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Has_External_Training_Requirements</targetReference>
-        </noMoreValuesConnector>
-    </loops>
-    <loops>
         <name>Loop_Resolved_Training_Assignments_For_Id_Collection</name>
         <label>Loop Resolved Training Assignments For Id Collection</label>
         <locationX>0</locationX>
@@ -831,6 +817,20 @@
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Has_Training_Assignment_Onboarding_Links_To_Create</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Training_Requirement_Record</name>
+        <label>Loop Training Requirement Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>TrainingRequirementRecordCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_Training_Requirement_External</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Has_External_Training_Requirements</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
@@ -995,19 +995,6 @@
         <object>Training_Assignment_Onboarding__c</object>
     </recordCreates>
     <recordCreates>
-        <name>Create_Training_Assignment_Records</name>
-        <label>Create Training Assignment Records</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Get_Resolved_Training_Assignments_For_Target_Requirements</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>Capture_Create_Training_Assignment_Records_Fault</targetReference>
-        </faultConnector>
-        <inputReference>NewTrainingAssignmentRecordCollectionToCreate</inputReference>
-    </recordCreates>
-    <recordCreates>
         <name>Create_Training_Assignment_Onboarding_Links_Bulk</name>
         <label>Create Training Assignment Onboarding Links Bulk</label>
         <locationX>0</locationX>
@@ -1020,102 +1007,19 @@
         </faultConnector>
         <inputReference>TrainingAssignmentOnboardingLinkRecordCollectionToCreate</inputReference>
     </recordCreates>
-    <recordLookups>
-        <name>Get_Existing_Canonical_Training_Assignments</name>
-        <label>Get Existing Canonical Training Assignments</label>
+    <recordCreates>
+        <name>Create_Training_Assignment_Records</name>
+        <label>Create Training Assignment Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Vendor_Program_Training_Requirement_Links</targetReference>
+            <targetReference>Get_Resolved_Training_Assignments_For_Target_Requirements</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Contact__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>ContactRecord.Id</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>Is_Canonical__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <object>Training_Assignment__c</object>
-        <outputReference>ExistingTrainingAssignmentRecordCollection</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Status__c</queriedFields>
-        <queriedFields>Vendor_Training_Requirement__c</queriedFields>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Resolved_Training_Assignments_For_Target_Requirements</name>
-        <label>Get Resolved Training Assignments For Target Requirements</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Has_Resolved_Training_Assignments</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Contact__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>ContactRecord.Id</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>Is_Canonical__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Vendor_Training_Requirement__c</field>
-            <operator>In</operator>
-            <value>
-                <elementReference>ExternalTrainingRequirementIdList</elementReference>
-            </value>
-        </filters>
-        <object>Training_Assignment__c</object>
-        <outputReference>TrainingAssignmentRecordCollection</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Status__c</queriedFields>
-        <queriedFields>Vendor_Training_Requirement__c</queriedFields>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Existing_Onboarding_Links_For_Target_Assignments</name>
-        <label>Get Existing Onboarding Links For Target Assignments</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Loop_Resolved_Training_Assignments_For_Linking</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Onboarding__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>OnboardingRecord.Id</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>Training_Assignment__c</field>
-            <operator>In</operator>
-            <value>
-                <elementReference>TrainingAssignmentIdList</elementReference>
-            </value>
-        </filters>
-        <object>Training_Assignment_Onboarding__c</object>
-        <outputReference>ExistingTrainingAssignmentOnboardingLinkCollection</outputReference>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>Training_Assignment__c</queriedFields>
-    </recordLookups>
+        <faultConnector>
+            <targetReference>Capture_Create_Training_Assignment_Records_Fault</targetReference>
+        </faultConnector>
+        <inputReference>NewTrainingAssignmentRecordCollectionToCreate</inputReference>
+    </recordCreates>
     <recordLookups>
         <name>Get_Account_Associated_with_Contact</name>
         <label>Get Account Associated with Contact</label>
@@ -1184,6 +1088,65 @@
         <sortOrder>Desc</sortOrder>
     </recordLookups>
     <recordLookups>
+        <name>Get_Existing_Canonical_Training_Assignments</name>
+        <label>Get Existing Canonical Training Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Vendor_Program_Training_Requirement_Links</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contact__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>ContactRecord.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Is_Canonical__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Training_Assignment__c</object>
+        <outputReference>ExistingTrainingAssignmentRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>Vendor_Training_Requirement__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Existing_Onboarding_Links_For_Target_Assignments</name>
+        <label>Get Existing Onboarding Links For Target Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Resolved_Training_Assignments_For_Linking</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Onboarding__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Training_Assignment__c</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>TrainingAssignmentIdList</elementReference>
+            </value>
+        </filters>
+        <object>Training_Assignment_Onboarding__c</object>
+        <outputReference>ExistingTrainingAssignmentOnboardingLinkCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Training_Assignment__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Existing_Training_Assignment_Onboarding_Link</name>
         <label>Get Existing Training Assignment Onboarding Link</label>
         <locationX>0</locationX>
@@ -1210,6 +1173,43 @@
         <object>Training_Assignment_Onboarding__c</object>
         <outputReference>ExistingTrainingAssignmentOnboardingRecord</outputReference>
         <queriedFields>Id</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Resolved_Training_Assignments_For_Target_Requirements</name>
+        <label>Get Resolved Training Assignments For Target Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Has_Resolved_Training_Assignments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contact__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>ContactRecord.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Is_Canonical__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Vendor_Training_Requirement__c</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>ExternalTrainingRequirementIdList</elementReference>
+            </value>
+        </filters>
+        <object>Training_Assignment__c</object>
+        <outputReference>TrainingAssignmentRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>Vendor_Training_Requirement__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Training_Requirements_From_Links</name>
@@ -1263,32 +1263,15 @@
         <queriedFields>Id</queriedFields>
         <queriedFields>Training_Requirement__c</queriedFields>
     </recordLookups>
-    <subflows>
-        <name>Recalculate_Onboarding_Training_Status</name>
-        <label>Recalculate Onboarding Training Status</label>
+    <runInMode>SystemModeWithoutSharing</runInMode>
+    <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Did_Recalculate_Onboarding_Training_Status_Fail</targetReference>
+            <targetReference>How_Are_We_Creating_Training_Assignment_Record</targetReference>
         </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>OnboardingRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>TrainingAssignmentRecord</name>
-            <value>
-                <elementReference>ContactTrainingAssignment</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
-    </subflows>
+    </start>
+    <status>Active</status>
     <subflows>
         <name>Handle_Recalculate_Onboarding_Training_Status_Fault</name>
         <label>Handle Recalculate Onboarding Training Status Fault</label>
@@ -1344,15 +1327,32 @@
             </value>
         </inputAssignments>
     </subflows>
-    <runInMode>SystemModeWithoutSharing</runInMode>
-    <start>
+    <subflows>
+        <name>Recalculate_Onboarding_Training_Status</name>
+        <label>Recalculate Onboarding Training Status</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>How_Are_We_Creating_Training_Assignment_Record</targetReference>
+            <targetReference>Did_Recalculate_Onboarding_Training_Status_Fail</targetReference>
         </connector>
-    </start>
-    <status>Active</status>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TrainingAssignmentRecord</name>
+            <value>
+                <elementReference>ContactTrainingAssignment</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
     <variables>
         <name>AccountRecord</name>
         <dataType>SObject</dataType>
@@ -1394,6 +1394,21 @@
         <objectType>Training_Assignment_Onboarding__c</objectType>
     </variables>
     <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>ExistingTrainingAssignmentOnboardingLinkCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Training_Assignment_Onboarding__c</objectType>
+    </variables>
+    <variables>
         <name>ExistingTrainingAssignmentOnboardingRecord</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -1410,12 +1425,12 @@
         <objectType>Training_Assignment__c</objectType>
     </variables>
     <variables>
-        <name>ExistingTrainingAssignmentOnboardingLinkCollection</name>
+        <name>ExternalContactCredentialRecord</name>
         <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
-        <objectType>Training_Assignment_Onboarding__c</objectType>
+        <objectType>POE_External_Contact_Credential__c</objectType>
     </variables>
     <variables>
         <name>ExternalTrainingRequirementIdList</name>
@@ -1425,35 +1440,12 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>ExternalContactCredentialRecord</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-        <objectType>POE_External_Contact_Credential__c</objectType>
-    </variables>
-    <variables>
-        <name>errorMessage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
         <name>LearnUponContactEnrollmentRecord</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>LearnUponP__LearnUponContactEnrollment__c</objectType>
-    </variables>
-    <variables>
-        <name>OnboardingRecord</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Onboarding__c</objectType>
     </variables>
     <variables>
         <name>NewTrainingAssignmentRecord</name>
@@ -1472,11 +1464,42 @@
         <objectType>Training_Assignment__c</objectType>
     </variables>
     <variables>
+        <name>OnboardingRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding__c</objectType>
+    </variables>
+    <variables>
         <name>ResolvedVendorCustomizationId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentOnboardingLinkRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Training_Assignment_Onboarding__c</objectType>
+    </variables>
+    <variables>
+        <name>TrainingAssignmentOnboardingLinkRecordCollectionToCreate</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Training_Assignment_Onboarding__c</objectType>
     </variables>
     <variables>
         <name>TrainingAssignmentRecordCollection</name>
@@ -1488,13 +1511,6 @@
     </variables>
     <variables>
         <name>TrainingRequirementIdList</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>TrainingAssignmentIdList</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
@@ -1515,22 +1531,6 @@
         <isInput>false</isInput>
         <isOutput>true</isOutput>
         <objectType>Training_Requirement__c</objectType>
-    </variables>
-    <variables>
-        <name>TrainingAssignmentOnboardingLinkRecord</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Training_Assignment_Onboarding__c</objectType>
-    </variables>
-    <variables>
-        <name>TrainingAssignmentOnboardingLinkRecordCollectionToCreate</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Training_Assignment_Onboarding__c</objectType>
     </variables>
     <variables>
         <name>VendorCustomizationId</name>

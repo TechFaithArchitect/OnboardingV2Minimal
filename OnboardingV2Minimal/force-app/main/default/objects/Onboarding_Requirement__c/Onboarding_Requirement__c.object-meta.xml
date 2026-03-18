@@ -162,6 +162,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Onboarding Requirements</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
     <searchLayouts></searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>

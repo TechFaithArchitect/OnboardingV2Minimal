@@ -153,15 +153,15 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>childComponent</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>childObjectApiName</name>
                     <value>Onboarding_Requirement__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>childComponent</name>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
                     <name>columnFieldApiNamesCsv</name>
-                    <value>Sequence__c,Requirement_Type__c,Status__c,Completed__c,Is_Overridden__c,Is_Inherited__c</value>
+                    <value>Requirement_Type__c,Status__c,Completed__c,Is_Overridden__c,Override_Action__c,Override_Approved_By__c,Override_Reason__c,Override_Approved_On__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>columnsJson</name>
@@ -175,7 +175,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>fieldApiNamesCsv</name>
-                    <value>Requirement_Type__c,Status__c,Completed__c,Is_Overridden__c,Is_Inherited__c,Sequence__c</value>
+                    <value>Requirement_Type__c,Status__c,Completed__c,Is_Overridden__c,Override_Action__c,Override_Approved_By__c,Override_Reason__c,Override_Approved_On__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>headerTitleOverride</name>
@@ -183,7 +183,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>itemCountLabelOverride</name>
-                    <value>Sorted by Sequence</value>
+                    <value>{count} items • Sorted by Sequence • {Last Updated}</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>linkFieldApiName</name>
@@ -215,16 +215,16 @@
                     <value>Onboarding__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relationshipApiName</name>
-                    <value>Onboarding_Requirements__r</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
                     <name>readOnlyFieldApiNamesCsv</name>
                     <value>Completed__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>readOnlyTreatAsTextFieldApiNamesCsv</name>
                     <value>Requirement_Type__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relationshipApiName</name>
+                    <value>Onboarding_Requirements__r</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relationshipFieldApiNamesCsv</name>
@@ -236,105 +236,85 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>actionNames</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>New</value>
-                        </valueListItems>
-                    </valueList>
+                    <name>childComponent</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>adminFilters</name>
+                    <name>childObjectApiName</name>
+                    <value>Onboarding_Requirement__History</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>maxRecordsToDisplay</name>
-                    <value>25</value>
+                    <name>columnFieldApiNamesCsv</name>
+                    <value>Parent.Requirement_Type__c,Field,OldValue,NewValue,CreatedBy.Name,CreatedDate</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>parentFieldApiName</name>
-                    <value>Onboarding__c.Id</value>
+                    <name>columnsJson</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>Onboarding_Requirements__r</value>
+                    <name>defaultFieldValuesCsv</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListDisplayType</name>
-                    <value>ADVGRID</value>
+                    <name>enableInlineEdit</name>
+                    <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListFieldAliases</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>Requirement_Type__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Status__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Completed__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Is_Overridden__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Override_Action__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Override_Reason__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Override_Approved_By__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Override_Approved_On__c</value>
-                        </valueListItems>
-                    </valueList>
+                    <name>excludeRowsWhereCsv</name>
+                    <value>Field=created</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListLabel</name>
-                    <value>Onboarding Requirements</value>
+                    <name>fieldApiNamesCsv</name>
+                    <value>CreatedBy.Name,Parent.Requirement_Type__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
+                    <name>headerTitleOverride</name>
+                    <value>Onboarding Requirement History ({count})</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>sortFieldAlias</name>
-                    <value>Sequence__c</value>
+                    <name>itemCountLabelOverride</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>sortFieldOrder</name>
-                    <value>Ascending</value>
+                    <name>linkFieldApiName</name>
                 </componentInstanceProperties>
-                <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList2</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
+                <componentInstanceProperties>
+                    <name>modalTitle</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>newActionBehavior</name>
+                    <value>hidden</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectApiName</name>
+                    <value>Onboarding_Requirement__History</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectLabel</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderByField</name>
+                    <value>CreatedDate</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderDirection</name>
+                    <value>DESC</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>parentFieldApiName</name>
-                    <value>Onboarding__c.Id</value>
+                    <value>Parent.Onboarding__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>ActivityHistories</value>
+                    <name>readOnlyFieldApiNamesCsv</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
+                    <name>readOnlyTreatAsTextFieldApiNamesCsv</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>rowsToDisplay</name>
-                    <value>10</value>
+                    <name>relationshipApiName</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
+                    <name>relationshipFieldApiNamesCsv</name>
+                    <value>Parent.Requirement_Type__c,Field,OldValue,NewValue,CreatedBy.Name,CreatedDate</value>
                 </componentInstanceProperties>
-                <componentName>force:relatedListSingleContainer</componentName>
-                <identifier>force_relatedListSingleContainer3</identifier>
+                <componentName>objectRelatedList</componentName>
+                <identifier>c_objectRelatedList2</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -652,87 +632,171 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>onboardingOrderStatusViewer</componentName>
-                <identifier>c_onboardingOrderStatusViewer</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Onboarding_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Vendor Onboarding</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Vendor_Name__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Verizon</rightValue>
-                    </criteria>
-                </visibilityRule>
+                <componentInstanceProperties>
+                    <name>childComponent</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>childObjectApiName</name>
+                    <value>AccountContactRelation</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>columnFieldApiNamesCsv</name>
+                    <value>Contact.Name,Roles,IsActive</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>columnsJson</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>defaultFieldValuesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>enableInlineEdit</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>excludeRowsWhereCsv</name>
+                    <value>IsActive=False</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>fieldApiNamesCsv</name>
+                    <value>ContactId,Roles,IsActive</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>headerTitleOverride</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>itemCountLabelOverride</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>linkFieldApiName</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>modalTitle</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>newActionBehavior</name>
+                    <value>hidden</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectApiName</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectLabel</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderByField</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderDirection</name>
+                    <value>DESC</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>AccountId</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentRecordIdSourceFieldApiName</name>
+                    <value>Account__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>readOnlyFieldApiNamesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>readOnlyTreatAsTextFieldApiNamesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relationshipApiName</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relationshipFieldApiNamesCsv</name>
+                    <value>Contact.Name</value>
+                </componentInstanceProperties>
+                <componentName>objectRelatedList</componentName>
+                <identifier>c_objectRelatedList3</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>actionNames</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>NewContact</value>
-                        </valueListItems>
-                    </valueList>
+                    <name>childComponent</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>maxRecordsToDisplay</name>
-                    <value>10</value>
+                    <name>childObjectApiName</name>
+                    <value>OpportunityContactRole</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>columnFieldApiNamesCsv</name>
+                    <value>Contact.Name,Role,IsPrimary</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>columnsJson</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>defaultFieldValuesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>enableInlineEdit</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>excludeRowsWhereCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>fieldApiNamesCsv</name>
+                    <value>ContactId,Role,IsPrimary</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>headerTitleOverride</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>itemCountLabelOverride</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>linkFieldApiName</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>modalTitle</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>newActionBehavior</name>
+                    <value>hidden</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectApiName</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectLabel</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderByField</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderDirection</name>
+                    <value>DESC</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>parentFieldApiName</name>
-                    <value>Onboarding__c.Account__c</value>
+                    <value>OpportunityId</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>Contacts</value>
+                    <name>parentRecordIdSourceFieldApiName</name>
+                    <value>Opportunity__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListDisplayType</name>
-                    <value>ADVGRID</value>
+                    <name>readOnlyFieldApiNamesCsv</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListFieldAliases</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>FULL_NAME</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Principal_Owner__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Owner__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Add_to_Agreements__c</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>CONTACT.EMAIL</value>
-                        </valueListItems>
-                    </valueList>
+                    <name>readOnlyTreatAsTextFieldApiNamesCsv</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListLabel</name>
-                    <value>Contacts for Parent Account</value>
+                    <name>relationshipApiName</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
+                    <name>relationshipFieldApiNamesCsv</name>
+                    <value>Contact.Name</value>
                 </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sortFieldAlias</name>
-                    <value>__DEFAULT__</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>sortFieldOrder</name>
-                    <value>Default</value>
-                </componentInstanceProperties>
-                <componentName>lst:dynamicRelatedList</componentName>
-                <identifier>lst_dynamicRelatedList</identifier>
+                <componentName>objectRelatedList</componentName>
+                <identifier>c_objectRelatedList4</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

@@ -109,13 +109,26 @@ Responsibilities:
 Responsibilities:
 - return all runtime subject rows for a given `Onboarding_Requirement__c`
 
-`DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subject`
+`DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent`
 
 Responsibilities:
 - aggregate child `Onboarding_Requirement_Subject__c.Status__c` values
 - recalculate parent `Onboarding_Requirement__c.Status__c`
 - set parent `Onboarding_Requirement__c.Completed__c`
 - log evaluation faults through the shared fault-handler flow
+
+`DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence`
+
+Responsibilities:
+- given `RequirementType`, `EvidenceStatus`, and `ContactId` or `AccountId`, find matching subjects via getter
+- map evidence status to subject status (e.g. Training Complete → Setup Complete)
+- update subject records, return `ChangedOnboardingRequirementIdCollection` for parent reevaluation
+
+`DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_For_Onb_Rec`
+
+Responsibilities:
+- orchestrator for onboarding-record context (e.g. opportunity primary contact)
+- resolves evaluation contact, calls `_By_Evidence` (contact then account fallback), invokes `_Parent` on changed requirement ids
 
 `BLL_Onboarding_Requirement_Subject_RCD_Logical_Process`
 
@@ -140,11 +153,23 @@ Implemented behavior:
 
 This avoids using raw `Contact` data to infer relationship roles.
 
+## Flow Naming Convention and Consolidation
+
+Standardized naming: `DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_*` (all under 80 chars).
+
+| Suffix | Purpose |
+|--------|---------|
+| `_Parent` | Child→parent rollup: aggregates subject statuses to `Onboarding_Requirement__c` |
+| `_By_Evidence` | Evidence matching: maps evidence status to subject status, updates subjects |
+| `_For_Onb_Rec` | Orchestrator: onboarding-record context, calls `_By_Evidence` + `_Parent` |
+
+**Consolidation rationale:** The three flows have distinct single responsibilities. Merging would blur concerns (aggregation vs. evidence mapping vs. context resolution). `_For_Onb_Rec` could be inlined into its sole caller if/when wired, but keeping it separate preserves reuse for future opportunity/onboarding-record flows.
+
 ## What This First Pass Does Not Yet Do
 This implementation now creates the subject rows and performs a first-pass parent aggregation when subject status changes.
 
 It does not yet:
-- evaluate real evidence sources such as contract-backed compliance statuses, training assignments, agreements, or credentials against the subject rows
+- evaluate real evidence sources such as contract-backed compliance statuses, agreements, or credentials against the subject rows
 - automatically set `Onboarding_Requirement_Subject__c.Status__c` from those evidence records
 - distinguish evidence-specific pass/fail rules beyond the current subject-status rollup
 
@@ -160,6 +185,9 @@ The next layer should include:
 - 2026-03-16: Standardized the reusable getter APIs onto `SFL_GET_*` names, deploying `DOMAIN_OmniSObject_SFL_GET_Onboarding_Fullfilment_Policy`, `DOMAIN_OmniSObject_SFL_GET_Onboarding_Requirement_Subjects`, and `DOMAIN_OmniSObject_SFL_GET_Onboarding_Requirement` to `OnboardV2` (`0AfRL00000dNHRV0A4`) and deactivating the two old `GET_` getter definitions
 - 2026-03-16: Removed `DOMAIN_OmniSObject_SFL_ROLLUP_Onboarding_Requirement_From_Subjects` from source in favor of the retained evaluator flow `DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subject`, updated `BLL_Onboarding_Requirement_Subject_RCD_Logical_Process` to call the evaluator, validated the cutover (`0AfRL00000dNI930AG`), deployed it (`0AfRL00000dNIAf0AO`), and retired the old rollup flow definition from `OnboardV2`
 - 2026-03-16: Deleted the two old legacy `GET_` getter flow definitions from `OnboardV2` after their obsolete dependent flows and historical versions were removed
+- 2026-03-17: Expanded canonical getter `DOMAIN_OmniSObject_SFL_GET_Onboarding_Requirement_Subjects` to support either `OnboardingRequirementId` or subject-based retrieval (`RequirementType` + `ContactId` / `AccountId`), repointed `DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subjects_By_Evidence` to that getter, deleted the unused parallel repo getter `DOMAIN_OmniSObject_SFL_GET_Onboarding_Requirement_Subjects_By_Subject`, validated the first training-assignment evidence bundle (`0AfRL00000dO3kg0AC`), and deployed it to `OnboardV2` (`0AfRL00000dO5bB0AS`)
+- 2026-03-17: Added explicit orchestration to the training-assignment path so `DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subjects_By_Evidence` now returns `ChangedOnboardingRequirementIdCollection`, and `BLL_OmniSObject_RCD_SYNC_Training_Assignments` explicitly evaluates changed parent `Onboarding_Requirement__c` rows after subject updates and onboarding sync complete; targeted dry-run validation succeeded (`0AfRL00000dO8KX0A0`) and deployment to `OnboardV2` succeeded (`0AfRL00000dO8M90AK`)
+- 2026-03-17: Standardized evaluator flow naming to `DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_*` (`_Parent`, `_By_Evidence`, `_For_Onb_Rec`); retired legacy flows via destructiveChanges; updated callers and docs
 
 ## Practical Usage
 To configure a vendor program requirement:
@@ -169,7 +197,9 @@ To configure a vendor program requirement:
    - `ACCOUNT_ONLY`
    - `ALL_CONTACTS`
    - `PRINCIPAL_OWNER`
-3. Let onboarding requirement creation expand the runtime subject rows automatically.
+   - `PRIMARY_CONTACT_OR_ACCOUNT`
+3. If `Fulfillment_Policy_Key__c` is blank, onboarding requirement creation now defaults it to `PRIMARY_CONTACT_OR_ACCOUNT`.
+4. Let onboarding requirement creation expand the runtime subject rows automatically.
 
 ## Recommended Next Step
-Build the remaining evidence evaluator layer so real evidence sources such as contract-backed compliance statuses, training assignments, agreements, and credentials update `Onboarding_Requirement_Subject__c.Status__c` automatically; the parent `Onboarding_Requirement__c` rollup layer is now in place.
+Build the remaining evidence evaluator layer for agreements, credentials, and contract-backed compliance sources so those records update `Onboarding_Requirement_Subject__c.Status__c` automatically; the parent `Onboarding_Requirement__c` rollup layer, explicit training-assignment orchestration path, and async subject-trigger safety net are now in place.

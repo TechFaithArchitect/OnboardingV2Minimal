@@ -2,36 +2,212 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Add_Changed_Onboarding_Requirement_Ids_From_Account</name>
+        <label>Add Changed Onboarding Requirement Ids From Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ChangedOnboardingRequirementIdCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>subjectEvaluatorChangedRequirementIdCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Records</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Add_Changed_Onboarding_Requirement_Ids_From_Account_From_Collection</name>
+        <label>Add Changed Onboarding Requirement Ids From Account From Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ChangedOnboardingRequirementIdCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>subjectEvaluatorChangedRequirementIdCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Record_From_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Add_Changed_Onboarding_Requirement_Ids_From_Contact</name>
+        <label>Add Changed Onboarding Requirement Ids From Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ChangedOnboardingRequirementIdCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>subjectEvaluatorChangedRequirementIdCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Has_Onboarding_Record_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Reset_Onboarding_Sync_Error_Message</name>
+        <label>Reset Onboarding Sync Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Onboarding_Record_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Reset_Parent_Evaluator_Error_Message</name>
+        <label>Reset Parent Evaluator Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Evaluate_Changed_Onboarding_Requirement</targetReference>
+        </connector>
+    </assignments>
     <decisions>
-        <name>Has_Onboarding_Record_Collection</name>
-        <label>Has Onboarding Record Collection</label>
+        <name>Did_Evaluate_Changed_Onboarding_Requirement_Fail</name>
+        <label>Did Evaluate Changed Onboarding Requirement Fail</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Update_Onboarding_Records</targetReference>
+            <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Fallback to Single Onboarding Record</defaultConnectorLabel>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
-            <name>Yes_Onboarding_Collection</name>
+            <name>Evaluate_Changed_Onboarding_Requirement_Failed</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>OnboardingRecordCollection</leftValueReference>
+                <leftValueReference>parentEvaluatorErrorMessage</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>OnboardingRecordCollection</leftValueReference>
-                <operator>IsEmpty</operator>
+                <leftValueReference>parentEvaluatorErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Evaluate_Changed_Onboarding_Requirement_Fault</targetReference>
+            </connector>
+            <label>Evaluate Changed Onboarding Requirement Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Evaluate_Training_Subjects_By_Account_Fail</name>
+        <label>Did Evaluate Training Subjects By Account Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Add_Changed_Onboarding_Requirement_Ids_From_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Evaluate_Training_Subjects_By_Account_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>subjectEvaluatorErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>subjectEvaluatorErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
             <connector>
-                <targetReference>Loop_Onboarding_Record_Collection</targetReference>
+                <targetReference>Handle_Evaluate_Training_Subjects_By_Account_Fault</targetReference>
             </connector>
-            <label>Yes - Update Each Onboarding Record</label>
+            <label>Evaluate Training Subjects By Account Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Evaluate_Training_Subjects_By_Account_From_Collection_Fail</name>
+        <label>Did Evaluate Training Subjects By Account From Collection Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Add_Changed_Onboarding_Requirement_Ids_From_Account_From_Collection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Evaluate_Training_Subjects_By_Account_From_Collection_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>subjectEvaluatorErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>subjectEvaluatorErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Evaluate_Training_Subjects_By_Account_From_Collection_Fault</targetReference>
+            </connector>
+            <label>Evaluate Training Subjects By Account From Collection Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Evaluate_Training_Subjects_By_Contact_Fail</name>
+        <label>Did Evaluate Training Subjects By Contact Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Add_Changed_Onboarding_Requirement_Ids_From_Contact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Evaluate_Training_Subjects_By_Contact_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>subjectEvaluatorErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>subjectEvaluatorErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Evaluate_Training_Subjects_By_Contact_Fault</targetReference>
+            </connector>
+            <label>Evaluate Training Subjects By Contact Failed</label>
         </rules>
     </decisions>
     <decisions>
@@ -39,6 +215,9 @@
         <label>Did Update Onboarding Record Fail</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Has_Changed_Onboarding_Requirement_Ids</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
             <name>Update_Onboarding_Record_Failed</name>
@@ -95,26 +274,146 @@
             <label>Update Onboarding Record From Collection Failed</label>
         </rules>
     </decisions>
-    <assignments>
-        <name>Reset_Onboarding_Sync_Error_Message</name>
-        <label>Reset Onboarding Sync Error Message</label>
+    <decisions>
+        <name>Has_Changed_Onboarding_Requirement_Ids</name>
+        <label>Has Changed Onboarding Requirement Ids</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue></stringValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_Onboarding_Record_Collection</targetReference>
-        </connector>
-    </assignments>
+        <defaultConnectorLabel>No Parent Evaluations Needed</defaultConnectorLabel>
+        <rules>
+            <name>Changed_Onboarding_Requirement_Ids_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ChangedOnboardingRequirementIdCollection</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ChangedOnboardingRequirementIdCollection</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
+            </connector>
+            <label>Changed Onboarding Requirement Ids Found</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Has_Onboarding_Record_Collection</name>
+        <label>Has Onboarding Record Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Should_Evaluate_Account_Subjects_For_Single_Onboarding</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Fallback to Single Onboarding Record</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Onboarding_Collection</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OnboardingRecordCollection</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecordCollection</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Onboarding_Record_Collection</targetReference>
+            </connector>
+            <label>Yes - Update Each Onboarding Record</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Evaluate_Account_Subjects_For_Onboarding_Collection</name>
+        <label>Should Evaluate Account Subjects For Onboarding Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Onboarding_Record_From_Collection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Account Fallback Needed</defaultConnectorLabel>
+        <rules>
+            <name>Evaluate_Account_Subjects_For_Onboarding_Collection</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>subjectEvaluatorMatchedSubjectCount</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Onboarding_Record_Collection.Account__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Evaluate_Training_Subjects_By_Account_From_Collection</targetReference>
+            </connector>
+            <label>Evaluate Account Subjects For Onboarding Collection</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Evaluate_Account_Subjects_For_Single_Onboarding</name>
+        <label>Should Evaluate Account Subjects For Single Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Onboarding_Records</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Account Fallback Needed</defaultConnectorLabel>
+        <rules>
+            <name>Evaluate_Account_Subjects_For_Single_Onboarding</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>subjectEvaluatorMatchedSubjectCount</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Account__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Evaluate_Training_Subjects_By_Account</targetReference>
+            </connector>
+            <label>Evaluate Account Subjects For Single Onboarding</label>
+        </rules>
+    </decisions>
     <description>Business Logic Layer - OmniSObject - Record Trigger - SYNC - Training Assignments</description>
     <environments>Default</environments>
     <interviewLabel>BLL - OmniSObject - RCD - Sync Training Assignments {!$Flow.CurrentDateTime}</interviewLabel>
     <label>BLL - OmniSObject - RCD - SYNC - Training Assignments</label>
+    <loops>
+        <name>Loop_Changed_Onboarding_Requirement_Ids</name>
+        <label>Loop Changed Onboarding Requirement Ids</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>ChangedOnboardingRequirementIdCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Reset_Parent_Evaluator_Error_Message</targetReference>
+        </nextValueConnector>
+    </loops>
     <loops>
         <name>Loop_Onboarding_Record_Collection</name>
         <label>Loop Onboarding Record Collection</label>
@@ -123,8 +422,11 @@
         <collectionReference>OnboardingRecordCollection</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Update_Onboarding_Record_From_Collection</targetReference>
+            <targetReference>Should_Evaluate_Account_Subjects_For_Onboarding_Collection</targetReference>
         </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Has_Changed_Onboarding_Requirement_Ids</targetReference>
+        </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -157,12 +459,144 @@
     </start>
     <status>Active</status>
     <subflows>
+        <name>Evaluate_Changed_Onboarding_Requirement</name>
+        <label>Evaluate Changed Onboarding Requirement</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Evaluate_Changed_Onboarding_Requirement_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent</flowName>
+        <inputAssignments>
+            <name>OnboardingRequirementId</name>
+            <value>
+                <elementReference>currentItem_Loop_Changed_Onboarding_Requirement_Ids</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Evaluate_Training_Subjects_By_Account</name>
+        <label>Evaluate Training Subjects By Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Evaluate_Training_Subjects_By_Account_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence</flowName>
+        <inputAssignments>
+            <name>AccountId</name>
+            <value>
+                <elementReference>OnboardingRecord.Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>EvidenceStatus</name>
+            <value>
+                <elementReference>$Record.Status__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RequirementType</name>
+            <value>
+                <stringValue>Training</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>subjectEvaluatorErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>subjectEvaluatorChangedRequirementIdCollection</assignToReference>
+            <name>ChangedOnboardingRequirementIdCollection</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Evaluate_Training_Subjects_By_Account_From_Collection</name>
+        <label>Evaluate Training Subjects By Account From Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Evaluate_Training_Subjects_By_Account_From_Collection_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence</flowName>
+        <inputAssignments>
+            <name>AccountId</name>
+            <value>
+                <elementReference>Loop_Onboarding_Record_Collection.Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>EvidenceStatus</name>
+            <value>
+                <elementReference>$Record.Status__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RequirementType</name>
+            <value>
+                <stringValue>Training</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>subjectEvaluatorErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>subjectEvaluatorChangedRequirementIdCollection</assignToReference>
+            <name>ChangedOnboardingRequirementIdCollection</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Evaluate_Training_Subjects_By_Contact</name>
+        <label>Evaluate Training Subjects By Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Evaluate_Training_Subjects_By_Contact_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence</flowName>
+        <inputAssignments>
+            <name>ContactId</name>
+            <value>
+                <elementReference>$Record.Contact__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>EvidenceStatus</name>
+            <value>
+                <elementReference>$Record.Status__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RequirementType</name>
+            <value>
+                <stringValue>Training</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>subjectEvaluatorErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>subjectEvaluatorMatchedSubjectCount</assignToReference>
+            <name>MatchedSubjectCount</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>subjectEvaluatorChangedRequirementIdCollection</assignToReference>
+            <name>ChangedOnboardingRequirementIdCollection</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Get_Onboarding_Records</name>
         <label>Get Onboarding Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Has_Onboarding_Record_Collection</targetReference>
+            <targetReference>Evaluate_Training_Subjects_By_Contact</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Records</flowName>
         <inputAssignments>
@@ -181,40 +615,102 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>Update_Onboarding_Record_From_Collection</name>
-        <label>Update Onboarding Record From Collection</label>
+        <name>Handle_Evaluate_Changed_Onboarding_Requirement_Fault</name>
+        <label>Handle Evaluate Changed Onboarding Requirement Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Did_Update_Onboarding_Record_From_Collection_Fail</targetReference>
+            <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
         </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
         <inputAssignments>
-            <name>OnboardingRecord</name>
+            <name>ContextKey</name>
             <value>
-                <elementReference>Loop_Onboarding_Record_Collection</elementReference>
+                <elementReference>currentItem_Loop_Changed_Onboarding_Requirement_Ids</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>TrainingAssignmentRecord</name>
+            <name>DefaultErrorMessage</name>
             <value>
-                <elementReference>$Record</elementReference>
+                <stringValue>Onboarding requirement parent evaluation failed after training subject updates.</stringValue>
             </value>
         </inputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>parentEvaluatorErrorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LogWithoutOnboarding</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Evaluate_Changed_Onboarding_Requirement</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
+            </value>
+        </inputAssignments>
     </subflows>
     <subflows>
-        <name>Update_Onboarding_Records</name>
-        <label>Update Onboarding Records</label>
+        <name>Handle_Evaluate_Training_Subjects_By_Account_Fault</name>
+        <label>Handle Evaluate Training Subjects By Account Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Did_Update_Onboarding_Record_Fail</targetReference>
+            <targetReference>Update_Onboarding_Records</targetReference>
         </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Training assignment account-subject evaluation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>subjectEvaluatorErrorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <name>OnboardingRecord</name>
             <value>
@@ -222,27 +718,25 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>TrainingAssignmentRecord</name>
+            <name>SourceElementApiName</name>
             <value>
-                <elementReference>$Record</elementReference>
+                <stringValue>Evaluate_Training_Subjects_By_Account</stringValue>
             </value>
         </inputAssignments>
-        <outputAssignments>
-            <assignToReference>OnboardingRecord</assignToReference>
-            <name>OnboardingRecord</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
+            </value>
+        </inputAssignments>
     </subflows>
     <subflows>
-        <name>Handle_Update_Onboarding_Record_From_Collection_Fault</name>
-        <label>Handle Update Onboarding Record From Collection Fault</label>
+        <name>Handle_Evaluate_Training_Subjects_By_Account_From_Collection_Fault</name>
+        <label>Handle Evaluate Training Subjects By Account From Collection Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Reset_Onboarding_Sync_Error_Message</targetReference>
+            <targetReference>Update_Onboarding_Record_From_Collection</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
         <inputAssignments>
@@ -254,13 +748,13 @@
         <inputAssignments>
             <name>DefaultErrorMessage</name>
             <value>
-                <stringValue>Onboarding training assignment sync failed.</stringValue>
+                <stringValue>Training assignment account-subject evaluation failed.</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
             <name>FaultMessage</name>
             <value>
-                <elementReference>errorMessage</elementReference>
+                <elementReference>subjectEvaluatorErrorMessage</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -284,7 +778,65 @@
         <inputAssignments>
             <name>SourceElementApiName</name>
             <value>
-                <stringValue>Update_Onboarding_Record_From_Collection</stringValue>
+                <stringValue>Evaluate_Training_Subjects_By_Account_From_Collection</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Evaluate_Training_Subjects_By_Contact_Fault</name>
+        <label>Handle Evaluate Training Subjects By Contact Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Has_Onboarding_Record_Collection</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Training assignment subject evaluation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>subjectEvaluatorErrorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LogWithoutOnboarding</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Evaluate_Training_Subjects_By_Contact</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -349,6 +901,134 @@
             </value>
         </inputAssignments>
     </subflows>
+    <subflows>
+        <name>Handle_Update_Onboarding_Record_From_Collection_Fault</name>
+        <label>Handle Update Onboarding Record From Collection Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Reset_Onboarding_Sync_Error_Message</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>Loop_Onboarding_Record_Collection.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Onboarding training assignment sync failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>Loop_Onboarding_Record_Collection</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Update_Onboarding_Record_From_Collection</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Update_Onboarding_Record_From_Collection</name>
+        <label>Update Onboarding Record From Collection</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Update_Onboarding_Record_From_Collection_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>Loop_Onboarding_Record_Collection</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TrainingAssignmentRecord</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Update_Onboarding_Records</name>
+        <label>Update Onboarding Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Update_Onboarding_Record_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>TrainingAssignmentRecord</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>OnboardingRecord</assignToReference>
+            <name>OnboardingRecord</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <variables>
+        <name>ChangedOnboardingRequirementIdCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>currentItem_Loop_Changed_Onboarding_Requirement_Ids</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>errorMessage</name>
         <dataType>String</dataType>
@@ -371,5 +1051,34 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding__c</objectType>
+    </variables>
+    <variables>
+        <name>parentEvaluatorErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>subjectEvaluatorChangedRequirementIdCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>subjectEvaluatorErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>subjectEvaluatorMatchedSubjectCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
     </variables>
 </Flow>

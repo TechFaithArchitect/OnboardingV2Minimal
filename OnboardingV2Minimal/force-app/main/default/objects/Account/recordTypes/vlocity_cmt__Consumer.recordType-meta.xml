@@ -788,6 +788,21 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Credit_Risk__c</picklist>
+        <values>
+            <fullName>High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medium</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Customer_Classification__c</picklist>
         <values>
             <fullName>Bronze</fullName>

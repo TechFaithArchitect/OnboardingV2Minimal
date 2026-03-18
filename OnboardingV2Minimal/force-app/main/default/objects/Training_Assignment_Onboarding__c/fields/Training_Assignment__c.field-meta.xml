@@ -6,7 +6,6 @@
     <referenceTo>Training_Assignment__c</referenceTo>
     <relationshipName>Onboarding_Links</relationshipName>
     <required>true</required>
-    <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

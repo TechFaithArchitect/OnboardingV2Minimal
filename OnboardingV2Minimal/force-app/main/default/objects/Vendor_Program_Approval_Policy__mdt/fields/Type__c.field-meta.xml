@@ -104,6 +104,18 @@
                 <default>false</default>
                 <label>Worker&apos;s Compensation Insurance</label>
             </value>
+            <value>
+                <fullName>Completion</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Completion</label>
+            </value>
+            <value>
+                <fullName>Welcome</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Welcome</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

@@ -142,7 +142,6 @@
                 <elementReference>FulfillmentPolicyKey</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Onboarding_Fulfillment_Policy__mdt</object>
         <outputReference>FulfillmentPolicyRecord</outputReference>
         <queriedFields>Id</queriedFields>

@@ -1,12 +1,12 @@
-/**
- * Service for detecting when follow-ups should be created
- * Evaluates Follow_Up_Rule__mdt conditions and creates Follow_Up_Queue__c records
- */
+//----------------------
+ // Service for detecting when follow-ups should be created
+ // Evaluates Follow_Up_Rule__mdt conditions and creates Follow_Up_Queue__c records
+//----------------------
 public with sharing class FollowUpDetectionService {
-  /**
-   * Evaluate follow-up rules for a requirement and create queue records if conditions are met
-   * @param requirementId Onboarding_Requirement__c record ID
-   */
+    //----------------------
+    // Evaluate follow-up rules for a requirement and create queue records if conditions are met    
+    // @param requirementId Onboarding_Requirement__c record ID
+    //----------------------
   public static void evaluateAndCreateFollowUps(Id requirementId) {
     if (requirementId == null) {
       return;
@@ -47,10 +47,10 @@ public with sharing class FollowUpDetectionService {
     }
   }
 
-  /**
-   * Enqueue follow-ups for onboarding records (called by existing trigger handler)
-   * @param onboardingIds Set of Onboarding__c record IDs
-   */
+  //----------------------
+   // Enqueue follow-ups for onboarding records (called by existing trigger handler)
+   // @param onboardingIds Set of Onboarding__c record IDs
+   //----------------------
   public static void enqueueFollowUps(Set<Id> onboardingIds) {
     if (onboardingIds == null || onboardingIds.isEmpty()) {
       return;
@@ -63,16 +63,12 @@ public with sharing class FollowUpDetectionService {
         SELECT Id
         FROM Onboarding_Requirement__c
         WHERE Onboarding__c IN :onboardingIds
-        WITH SECURITY_ENFORCED
       ];
       for (Onboarding_Requirement__c onboardingRequirement : requirements) {
         requirementIds.add(onboardingRequirement.Id);
       }
     } catch (Exception ex) {
-      LoggingUtil.warn(
-        'FollowUpDetectionService.enqueueFollowUps query error: ' +
-        ex.getMessage()
-      );
+      System.debug('Error querying requirements: ' + ex.getMessage());
       return;
     }
 
@@ -81,10 +77,10 @@ public with sharing class FollowUpDetectionService {
     }
   }
 
-  /**
-   * Evaluate follow-up rules for multiple requirements (bulk)
-   * @param requirementIds Set of Onboarding_Requirement__c record IDs
-   */
+  //----------------------
+   // Evaluate follow-up rules for multiple requirements (bulk)
+   // @param requirementIds Set of Onboarding_Requirement__c record IDs
+   //----------------------
   public static void evaluateAndCreateFollowUpsBulk(Set<Id> requirementIds) {
     if (requirementIds == null || requirementIds.isEmpty()) {
       return;
@@ -137,9 +133,9 @@ public with sharing class FollowUpDetectionService {
     }
   }
 
-  /**
-   * Get requirement with context data needed for rule evaluation
-   */
+  //----------------------
+   // Get requirement with context data needed for rule evaluation
+   //----------------------
   private static Onboarding_Requirement__c getRequirementWithContext(
     Id requirementId
   ) {
@@ -157,22 +153,18 @@ public with sharing class FollowUpDetectionService {
           Vendor_Program_Requirement__c
         FROM Onboarding_Requirement__c
         WHERE Id = :requirementId
-        WITH SECURITY_ENFORCED
         LIMIT 1
       ];
       return requirements.isEmpty() ? null : requirements[0];
     } catch (Exception ex) {
-      LoggingUtil.warn(
-        'FollowUpDetectionService.getRequirementWithContext query error: ' +
-        ex.getMessage()
-      );
+      System.debug('Error querying requirement: ' + ex.getMessage());
       return null;
     }
   }
 
-  /**
-   * Get multiple requirements with context (bulk)
-   */
+  //----------------------
+   // Get multiple requirements with context (bulk)
+   //----------------------
   private static Map<Id, Onboarding_Requirement__c> getRequirementsWithContext(
     Set<Id> requirementIds
   ) {
@@ -191,7 +183,6 @@ public with sharing class FollowUpDetectionService {
           Vendor_Program_Requirement__c
         FROM Onboarding_Requirement__c
         WHERE Id IN :requirementIds
-        WITH SECURITY_ENFORCED
       ];
       for (
         Onboarding_Requirement__c onboardingRequirement : onboardingRequirements
@@ -199,17 +190,14 @@ public with sharing class FollowUpDetectionService {
         requirements.put(onboardingRequirement.Id, onboardingRequirement);
       }
     } catch (Exception ex) {
-      LoggingUtil.warn(
-        'FollowUpDetectionService.getRequirementsWithContext query error: ' +
-        ex.getMessage()
-      );
+      System.debug('Error querying requirements: ' + ex.getMessage());
     }
     return requirements;
   }
 
-  /**
-   * Get active follow-up rules from metadata
-   */
+  //----------------------
+   // Get active follow-up rules from metadata
+   //----------------------
   private static List<Follow_Up_Rule__mdt> getActiveFollowUpRules() {
     try {
       return [
@@ -225,22 +213,18 @@ public with sharing class FollowUpDetectionService {
           Active__c
         FROM Follow_Up_Rule__mdt
         WHERE Active__c = TRUE
-        WITH SECURITY_ENFORCED
         ORDER BY Initial_Delay_Days__c ASC
       ];
     } catch (Exception ex) {
-      LoggingUtil.warn(
-        'FollowUpDetectionService.getActiveFollowUpRules query error: ' +
-        ex.getMessage()
-      );
+      System.debug('Error querying follow-up rules: ' + ex.getMessage());
       return new List<Follow_Up_Rule__mdt>();
     }
   }
 
-  /**
-   * Evaluate rule condition against requirement
-   * Simple condition evaluation - can be enhanced for complex expressions
-   */
+  //----------------------
+   // Evaluate rule condition against requirement
+   // Simple condition evaluation - can be enhanced for complex expressions
+   //----------------------
   @TestVisible
   private static Boolean evaluateRuleCondition(
     Onboarding_Requirement__c requirement,
@@ -292,9 +276,9 @@ public with sharing class FollowUpDetectionService {
     return false;
   }
 
-  /**
-   * Extract quoted value from condition string
-   */
+  //----------------------
+   // Extract quoted value from condition string
+   //----------------------
   private static String extractQuotedValue(String condition) {
     Integer startQuote = condition.indexOf('\'');
     if (startQuote == -1) {
@@ -315,9 +299,9 @@ public with sharing class FollowUpDetectionService {
     return condition.substring(startQuote + 1, endQuote);
   }
 
-  /**
-   * Extract number from condition string
-   */
+  //----------------------
+   // Extract number from condition string
+   //----------------------
   private static Integer extractNumber(String condition) {
     Pattern numberPattern = Pattern.compile('\\d+');
     Matcher matcher = numberPattern.matcher(condition);
@@ -327,9 +311,9 @@ public with sharing class FollowUpDetectionService {
     return null;
   }
 
-  /**
-   * Create Follow_Up_Queue__c record from requirement and rule
-   */
+  //----------------------
+   // Create Follow_Up_Queue__c record from requirement and rule
+   //----------------------
   private static Follow_Up_Queue__c createFollowUpQueue(
     Onboarding_Requirement__c requirement,
     Follow_Up_Rule__mdt rule
@@ -370,26 +354,22 @@ public with sharing class FollowUpDetectionService {
           SELECT Time_zone__pc
           FROM Account
           WHERE Id = :requirement.Onboarding__r.Account__c
-          WITH SECURITY_ENFORCED
           LIMIT 1
         ];
         // Timezone stored in custom field - adjust if field name differs
         // followUp.Timezone__c = account.Time_zone__pc;
       } catch (Exception ex) {
         // Timezone field may not exist or be accessible
-        LoggingUtil.warn(
-          'FollowUpDetectionService.createFollowUpQueue timezone lookup failed: ' +
-          ex.getMessage()
-        );
+        System.debug('Could not set timezone: ' + ex.getMessage());
       }
     }
 
     return followUp;
   }
 
-  /**
-   * Calculate next attempt date based on rule and requirement
-   */
+  //----------------------
+   // Calculate next attempt date based on rule and requirement
+   //----------------------
   private static DateTime calculateNextAttemptDate(
     Onboarding_Requirement__c requirement,
     Follow_Up_Rule__mdt rule
@@ -411,9 +391,9 @@ public with sharing class FollowUpDetectionService {
     return DateTime.newInstance(nextDate, defaultTime);
   }
 
-  /**
-   * Check if follow-up already exists for requirement and rule
-   */
+  //----------------------
+   // Check if follow-up already exists for requirement and rule
+   //----------------------
   private static Boolean followUpExists(
     Id requirementId,
     String ruleDeveloperName
@@ -427,15 +407,11 @@ public with sharing class FollowUpDetectionService {
           AND Follow_Up_Rule__c = :ruleDeveloperName
           AND Status__c IN ('Pending', 'Pending Retry')
           AND Is_Archived__c = FALSE
-        WITH SECURITY_ENFORCED
         LIMIT 1
       ];
       return count > 0;
     } catch (Exception ex) {
-      LoggingUtil.warn(
-        'FollowUpDetectionService.followUpExists query error: ' +
-        ex.getMessage()
-      );
+      System.debug('Error checking existing follow-up: ' + ex.getMessage());
       return false;
     }
   }

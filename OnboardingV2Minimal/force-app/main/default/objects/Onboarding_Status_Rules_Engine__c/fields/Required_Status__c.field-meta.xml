@@ -8,6 +8,6 @@
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
-        <valueSetName>Onboarding_Status_Picklist_Options</valueSetName>
+        <valueSetName>Onboarding_Status_Picklist</valueSetName>
     </valueSet>
 </CustomField>

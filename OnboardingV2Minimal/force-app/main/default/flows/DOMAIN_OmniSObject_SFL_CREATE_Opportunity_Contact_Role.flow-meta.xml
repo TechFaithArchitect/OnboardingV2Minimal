@@ -7,9 +7,6 @@
         <locationY>0</locationY>
         <actionName>RecordCollectionEditorConfigService</actionName>
         <actionType>apex</actionType>
-        <faultConnector>
-            <targetReference>Capture_Create_Opportunity_Contact_Fault</targetReference>
-        </faultConnector>
         <dataTypeMappings>
             <typeName>U__createdRecords</typeName>
             <typeValue>OpportunityContactRole</typeValue>
@@ -18,6 +15,9 @@
             <typeName>U__createdRelationshipRecords</typeName>
             <typeValue>OpportunityContactRole</typeValue>
         </dataTypeMappings>
+        <faultConnector>
+            <targetReference>Capture_Create_Opportunity_Contact_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>configKey</name>

@@ -10,9 +10,6 @@
         <connector>
             <targetReference>Create_Contacts_Screenflow</targetReference>
         </connector>
-        <faultConnector>
-            <targetReference>Capture_Convert_Record_Collection_Fault</targetReference>
-        </faultConnector>
         <dataTypeMappings>
             <typeName>T__records</typeName>
             <typeValue>Contact</typeValue>
@@ -21,6 +18,9 @@
             <typeName>T__relationshipRecords</typeName>
             <typeValue>AccountContactRelation</typeValue>
         </dataTypeMappings>
+        <faultConnector>
+            <targetReference>Capture_Convert_Record_Collection_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>configKey</name>

@@ -125,7 +125,6 @@
     <members>Email_to_Case_Link_Accounts_and_Contacts_to_Case</members>
     <members>Exception_Approvals</members>
     <members>EXP_Contact_SCR_Create_Contact</members>
-    <members>EXP_Contact_SCR_Set_Up_Agent_Vendor_Programs</members>
     <members>EXP_Contract_ACTION_Send_Adobe_Agreement</members>
     <members>EXP_Contract_SCR_Send_Adobe_Agreement</members>
     <members>EXP_Onboarding_SCR_Update_Onboarding_Record</members>

@@ -22,7 +22,6 @@ public with sharing class TwilioSMSProvider implements SMSProviderStrategy {
                 SELECT Named_Credential__c
                 FROM Twilio_Configuration__mdt
                 WHERE Active__c = true
-                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             if (!configs.isEmpty() && String.isNotBlank(configs[0].Named_Credential__c)) {
@@ -30,10 +29,7 @@ public with sharing class TwilioSMSProvider implements SMSProviderStrategy {
             }
         } catch (Exception ex) {
             // Twilio_Configuration__mdt may not exist - use default
-            LoggingUtil.warn(
-                'TwilioSMSProvider.getNamedCredential configuration lookup failed: ' +
-                ex.getMessage()
-            );
+            System.debug('Could not get Named Credential from Twilio_Configuration__mdt: ' + ex.getMessage());
         }
         
         return DEFAULT_NAMED_CREDENTIAL;
@@ -166,10 +162,7 @@ public with sharing class TwilioSMSProvider implements SMSProviderStrategy {
             Map<String, Object> responseMap = (Map<String, Object>)JSON.deserializeUntyped(response);
             return (String)responseMap.get('sid');
         } catch (Exception ex) {
-            LoggingUtil.warn(
-                'TwilioSMSProvider.extractMessageSid parse error: ' +
-                ex.getMessage()
-            );
+            System.debug('Error parsing Twilio response: ' + ex.getMessage());
             return null;
         }
     }
@@ -214,7 +207,6 @@ public with sharing class TwilioSMSProvider implements SMSProviderStrategy {
             FROM Contact
             WHERE Id = :contactId
               AND (Phone != null OR MobilePhone != null)
-            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return contacts.isEmpty() ? null : contacts[0];
@@ -237,7 +229,6 @@ public with sharing class TwilioSMSProvider implements SMSProviderStrategy {
             FROM Contact
             WHERE Id = :contactId
               AND (Phone != null OR MobilePhone != null)
-            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         

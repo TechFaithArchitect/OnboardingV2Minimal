@@ -614,7 +614,7 @@ public class TestDataFactoryWrapper {
         );
         if (String.isNotBlank(initialRequirementStatus)) {
           onboardingRequirement.Status__c = initialRequirementStatus;
-        }
+       }
         update onboardingRequirement;
         onboardingRequirements.add(onboardingRequirement);
       }

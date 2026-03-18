@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Maps flow scenarios (e.g., REQUIRE_NDA) to default Vendor Programs when no vendor selection is made. Used when the BRE returns REQUIRE_NDA and the user has no onboarding records.</description>
+    <label>Onboarding Default Vendor Program</label>
+    <pluralLabel>Onboarding Default Vendor Programs</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

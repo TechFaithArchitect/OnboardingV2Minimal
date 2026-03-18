@@ -128,6 +128,23 @@
     <description>DOMAIN LAYER - OmniSObject - SFL - CREATE - Fault Message</description>
     <environments>Default</environments>
     <formulas>
+        <name>ResolvedAdminFaultMessageFormula</name>
+        <dataType>String</dataType>
+        <expression>LEFT(
+  {!ResolvedFaultMessageFormula} &amp;
+  &quot; | Flow=&quot; &amp; {!ResolvedSourceFlowApiName} &amp;
+  &quot; | Element=&quot; &amp; {!ResolvedSourceElementApiName} &amp;
+  &quot; | Context=&quot; &amp; {!ResolvedContextKey} &amp;
+  IF(
+    ISBLANK({!ResolvedOnboardingId}),
+    &quot;&quot;,
+    &quot; | OnboardingId=&quot; &amp; {!ResolvedOnboardingId}
+  ) &amp;
+  &quot; | UserId=&quot; &amp; {!$User.Id},
+  3900
+)</expression>
+    </formulas>
+    <formulas>
         <name>ResolvedContextKey</name>
         <dataType>String</dataType>
         <expression>IF(
@@ -152,23 +169,6 @@
   ISBLANK({!FaultMessage}),
   {!ResolvedDefaultErrorMessage},
   {!FaultMessage}
-)</expression>
-    </formulas>
-    <formulas>
-        <name>ResolvedAdminFaultMessageFormula</name>
-        <dataType>String</dataType>
-        <expression>LEFT(
-  {!ResolvedFaultMessageFormula} &amp;
-  &quot; | Flow=&quot; &amp; {!ResolvedSourceFlowApiName} &amp;
-  &quot; | Element=&quot; &amp; {!ResolvedSourceElementApiName} &amp;
-  &quot; | Context=&quot; &amp; {!ResolvedContextKey} &amp;
-  IF(
-    ISBLANK({!ResolvedOnboardingId}),
-    &quot;&quot;,
-    &quot; | OnboardingId=&quot; &amp; {!ResolvedOnboardingId}
-  ) &amp;
-  &quot; | UserId=&quot; &amp; $User.Id,
-  3900
 )</expression>
     </formulas>
     <formulas>

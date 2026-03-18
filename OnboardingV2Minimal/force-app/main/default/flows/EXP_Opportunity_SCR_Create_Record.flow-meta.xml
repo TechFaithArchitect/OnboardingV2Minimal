@@ -4,7 +4,7 @@
         <name>Get_Available_Vendors</name>
         <label>Get Available Vendors</label>
         <locationX>578</locationX>
-        <locationY>458</locationY>
+        <locationY>566</locationY>
         <actionName>VendorOnboardingJsonAdapter</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -25,10 +25,34 @@
         </outputParameters>
     </actionCalls>
     <actionCalls>
+        <name>Get_Default_Vendor_Program</name>
+        <label>Get Default Vendor Program</label>
+        <locationX>446</locationX>
+        <locationY>1898</locationY>
+        <actionName>OnboardingDefaultVendorProgramInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Update_Account_Record</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>scenarioKey</name>
+            <value>
+                <elementReference>FinalNextAction</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingDefaultVendorProgramInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>VendorProgramRecord</assignToReference>
+            <name>vendorProgramRecord</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
         <name>Queue_Opportunity_Create_Chain</name>
         <label>Queue Opportunity Create Chain</label>
         <locationX>578</locationX>
-        <locationY>2114</locationY>
+        <locationY>2414</locationY>
         <actionName>ExperienceOpportunityCreateAsyncService</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -78,7 +102,7 @@
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_NDA_Program_Base_App</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - NDA/Program Base App</label>
         <locationX>446</locationX>
-        <locationY>1190</locationY>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Type__c</assignToReference>
             <operator>Assign</operator>
@@ -94,7 +118,7 @@
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Not_Sending_Documents</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - Not Sending Documents</label>
         <locationX>710</locationX>
-        <locationY>1490</locationY>
+        <locationY>1598</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Documents_Ready__c</assignToReference>
             <operator>Assign</operator>
@@ -110,14 +134,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Get_Vendor_Program</targetReference>
+            <targetReference>Is_VendorProgramRecord_Empty</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Sending_Documents</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - Sending Documents</label>
         <locationX>446</locationX>
-        <locationY>1490</locationY>
+        <locationY>1598</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Documents_Ready__c</assignToReference>
             <operator>Assign</operator>
@@ -133,14 +157,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Get_Vendor_Program</targetReference>
+            <targetReference>Is_VendorProgramRecord_Empty</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Vendor</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - Vendor</label>
         <locationX>710</locationX>
-        <locationY>1190</locationY>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Type__c</assignToReference>
             <operator>Assign</operator>
@@ -156,7 +180,7 @@
         <name>Assign_Non_Standard_Universal_Values_from_Screenflow</name>
         <label>Assign Non Standard Universal Values from Screenflow</label>
         <locationX>578</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.RecordTypeId</assignToReference>
             <operator>Assign</operator>
@@ -179,7 +203,7 @@
         <name>Assign_ProgramPath_Offer</name>
         <label>Assign ProgramPath_Offer</label>
         <locationX>314</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -195,7 +219,7 @@
         <name>Assign_ProgramPath_Offer_Special</name>
         <label>Assign ProgramPath_Offer_Special</label>
         <locationX>842</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -211,7 +235,7 @@
         <name>Assign_ProgramPath_Prompt</name>
         <label>Assign ProgramPath_Prompt</label>
         <locationX>50</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -227,7 +251,7 @@
         <name>Assign_ProgramPath_Prompt_Special</name>
         <label>Assign ProgramPath_Prompt_Special</label>
         <locationX>578</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -243,7 +267,7 @@
         <name>Assign_Vendor_Program</name>
         <label>Assign Vendor Program</label>
         <locationX>1106</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -255,22 +279,6 @@
             <targetReference>Program_Type_Variable_Selection</targetReference>
         </connector>
     </assignments>
-    <choices>
-        <name>InfrastructureDealerPicklistChoice</name>
-        <choiceText>Infrastructure Dealer</choiceText>
-        <dataType>String</dataType>
-        <value>
-            <stringValue>Infrastructure Dealer</stringValue>
-        </value>
-    </choices>
-    <choices>
-        <name>PersonalGuranteeRequired</name>
-        <choiceText>Yes</choiceText>
-        <dataType>String</dataType>
-        <value>
-            <stringValue>Program Base Application - with Chuzo</stringValue>
-        </value>
-    </choices>
     <choices>
         <name>ProgramBaseAppwithChuzo</name>
         <choiceText>Program Base App with Chuzo</choiceText>
@@ -320,14 +328,6 @@
         </value>
     </choices>
     <choices>
-        <name>VendorOnboardingPicklistChoice</name>
-        <choiceText>Vendor Onboarding</choiceText>
-        <dataType>String</dataType>
-        <value>
-            <stringValue>Vendor Onboarding</stringValue>
-        </value>
-    </choices>
-    <choices>
         <name>VendorProgram</name>
         <choiceText>Vendor Program</choiceText>
         <dataType>String</dataType>
@@ -339,7 +339,7 @@
         <name>Can_Send_Documents</name>
         <label>Can Send Documents</label>
         <locationX>578</locationX>
-        <locationY>1382</locationY>
+        <locationY>1490</locationY>
         <defaultConnector>
             <targetReference>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Not_Sending_Documents</targetReference>
         </defaultConnector>
@@ -368,10 +368,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Is_VendorProgramRecord_Empty</name>
+        <label>Is VendorProgramRecord Empty</label>
+        <locationX>578</locationX>
+        <locationY>1790</locationY>
+        <defaultConnector>
+            <targetReference>Get_Vendor_Program</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Has Vendor Selection</defaultConnectorLabel>
+        <rules>
+            <name>Yes_NDA_Path_Needs_Default</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>VendorProgramRecord.Vendor__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Default_Vendor_Program</targetReference>
+            </connector>
+            <label>Yes - NDA Path Needs Default</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Program_Base_App_Selection</name>
         <label>Program Base App Selection</label>
         <locationX>578</locationX>
-        <locationY>782</locationY>
+        <locationY>890</locationY>
         <defaultConnector>
             <targetReference>Assign_Vendor_Program</targetReference>
         </defaultConnector>
@@ -441,7 +466,7 @@
         <name>Program_Type_Variable_Selection</name>
         <label>Program Type Variable Selection</label>
         <locationX>578</locationX>
-        <locationY>1082</locationY>
+        <locationY>1190</locationY>
         <defaultConnector>
             <targetReference>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Vendor</targetReference>
         </defaultConnector>
@@ -464,30 +489,6 @@
     </decisions>
     <description>EXPERIENCE LAYER - Opportunity Object - Screenflow - Create Record</description>
     <dynamicChoiceSets>
-        <name>LeadSourcePicklist</name>
-        <dataType>Picklist</dataType>
-        <displayField xsi:nil="true"/>
-        <object xsi:nil="true"/>
-        <picklistField>LeadSource</picklistField>
-        <picklistObject>Opportunity</picklistObject>
-    </dynamicChoiceSets>
-    <dynamicChoiceSets>
-        <name>OpportunitySourcePicklist</name>
-        <dataType>Picklist</dataType>
-        <displayField xsi:nil="true"/>
-        <object xsi:nil="true"/>
-        <picklistField>Opportunity__c</picklistField>
-        <picklistObject>Opportunity</picklistObject>
-    </dynamicChoiceSets>
-    <dynamicChoiceSets>
-        <name>OpportunityStagePicklist</name>
-        <dataType>Picklist</dataType>
-        <displayField xsi:nil="true"/>
-        <object xsi:nil="true"/>
-        <picklistField>StageName</picklistField>
-        <picklistObject>Opportunity</picklistObject>
-    </dynamicChoiceSets>
-    <dynamicChoiceSets>
         <name>OwnerPicklist</name>
         <dataType>Picklist</dataType>
         <displayField xsi:nil="true"/>
@@ -503,60 +504,16 @@
         <picklistField>Program_Type__c</picklistField>
         <picklistObject>Opportunity</picklistObject>
     </dynamicChoiceSets>
-    <dynamicChoiceSets>
-        <name>retailerTypePicklistChoice_Set</name>
-        <dataType>Picklist</dataType>
-        <displayField xsi:nil="true"/>
-        <object xsi:nil="true"/>
-        <picklistField>Retailer_Type__c</picklistField>
-        <picklistObject>Contract</picklistObject>
-    </dynamicChoiceSets>
-    <dynamicChoiceSets>
-        <name>retailerTypePicklistChoiceSet</name>
-        <dataType>String</dataType>
-        <displayField>Retailer_Type__c</displayField>
-        <object>Contract</object>
-    </dynamicChoiceSets>
     <environments>Default</environments>
-    <formulas>
-        <name>actionPlanName</name>
-        <dataType>String</dataType>
-        <expression>{!templateNameOrID} &amp; &apos; Action Plan&apos;</expression>
-    </formulas>
-    <formulas>
-        <name>CanSendSpecialChuzoAgreement</name>
-        <dataType>Boolean</dataType>
-        <expression>{!$Permission.Onboarding_Allowed_to_Send_Special_Agreement}</expression>
-    </formulas>
     <formulas>
         <name>IsUserSpecial</name>
         <dataType>Boolean</dataType>
         <expression>{!$Permission.Onboarding_Allowed_to_Send_Special_Agreement}</expression>
     </formulas>
     <formulas>
-        <name>opportunityDocumentsReady</name>
-        <dataType>Boolean</dataType>
-        <expression>if({!SendDocumentsChoice}=&quot;Yes&quot;,TRUE,FALSE)</expression>
-    </formulas>
-    <formulas>
         <name>ShowVendorOpportunityPath</name>
         <dataType>Boolean</dataType>
         <expression>{!Select_One}=&apos;VendorProgram&apos;</expression>
-    </formulas>
-    <formulas>
-        <name>templateNameOrID</name>
-        <dataType>String</dataType>
-        <expression>IF(OR({!selectedVendorName} = &quot;NDA&quot;,CONTAINS({!selectedVendorName}, &quot;Program Base Application&quot;)),&quot;Program Dealer&quot;,{!selectedVendorName})</expression>
-    </formulas>
-    <formulas>
-        <name>userPrifle</name>
-        <dataType>String</dataType>
-        <expression>{!$Profile.Name}</expression>
-    </formulas>
-    <formulas>
-        <name>userRoleName</name>
-        <dataType>String</dataType>
-        <expression>{!$UserRole.Name}</expression>
     </formulas>
     <interviewLabel>EXP - {!$Flow.CurrentDateTime}</interviewLabel>
     <label>EXP - Opportunity - SCR - Create Record</label>
@@ -583,7 +540,7 @@
         <name>Get_Opportunity_Record_Types</name>
         <label>Get Opportunity Record Types</label>
         <locationX>578</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Evaluate_OnboardingOrchestrator</targetReference>
@@ -611,7 +568,7 @@
         <name>Update_Account_Record</name>
         <label>Update Account Record</label>
         <locationX>578</locationX>
-        <locationY>1790</locationY>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>Experience_Create_or_Update_Contacts</targetReference>
         </connector>
@@ -702,7 +659,7 @@
         <name>Create_Opportunity_Screenflow</name>
         <label>Create Opportunity Screenflow</label>
         <locationX>578</locationX>
-        <locationY>566</locationY>
+        <locationY>674</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1837,7 +1794,7 @@
         <name>Prompt_User_to_Refresh_Sceen</name>
         <label>Prompt User to Refresh Sceen</label>
         <locationX>578</locationX>
-        <locationY>2222</locationY>
+        <locationY>2522</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1895,7 +1852,7 @@
         <locationX>452</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Onboarding_Records</targetReference>
+            <targetReference>Get_Account_Record</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -1903,7 +1860,7 @@
         <name>Evaluate_OnboardingOrchestrator</name>
         <label>Evaluate Onboarding Orchestrator</label>
         <locationX>578</locationX>
-        <locationY>350</locationY>
+        <locationY>458</locationY>
         <connector>
             <targetReference>Get_Available_Vendors</targetReference>
         </connector>
@@ -1969,7 +1926,7 @@
         <name>Experience_Create_Opportunity_Contacts</name>
         <label>Experience - Create Opportunity Contacts</label>
         <locationX>578</locationX>
-        <locationY>2006</locationY>
+        <locationY>2306</locationY>
         <connector>
             <targetReference>Queue_Opportunity_Create_Chain</targetReference>
         </connector>
@@ -2011,7 +1968,7 @@
         <name>Experience_Create_or_Update_Contacts</name>
         <label>Experience - Create or Update Contacts</label>
         <locationX>578</locationX>
-        <locationY>1898</locationY>
+        <locationY>2198</locationY>
         <connector>
             <targetReference>Experience_Create_Opportunity_Contacts</targetReference>
         </connector>
@@ -2042,10 +1999,30 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <name>Get_Account_Record</name>
+        <label>Get Account Record</label>
+        <locationX>578</locationX>
+        <locationY>134</locationY>
+        <connector>
+            <targetReference>Get_Onboarding_Records</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Account_Record</flowName>
+        <inputAssignments>
+            <name>accountId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>AccountRecord</assignToReference>
+            <name>AccountRecord</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Get_Onboarding_Records</name>
         <label>Get Onboarding Records</label>
         <locationX>578</locationX>
-        <locationY>134</locationY>
+        <locationY>242</locationY>
         <connector>
             <targetReference>Get_Opportunity_Record_Types</targetReference>
         </connector>
@@ -2076,8 +2053,8 @@
     <subflows>
         <name>Get_Vendor_Program</name>
         <label>Get Vendor Program</label>
-        <locationX>578</locationX>
-        <locationY>1682</locationY>
+        <locationX>710</locationX>
+        <locationY>1898</locationY>
         <connector>
             <targetReference>Update_Account_Record</targetReference>
         </connector>
@@ -2110,75 +2087,12 @@
         </outputAssignments>
     </subflows>
     <variables>
-        <name>accountBillingCity</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountBillingCountry</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountBillingPostalCode</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountBillingState</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountBillingStreetAddress</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>AccountContactRelationshipCollection</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>AccountContactRelation</objectType>
-    </variables>
-    <variables>
-        <name>accountEmail</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountIdrecordId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountPhone</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>AccountRecord</name>
@@ -2189,76 +2103,6 @@
         <objectType>Account</objectType>
     </variables>
     <variables>
-        <name>accountShippingCity</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountShippingCountry</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountShippingPostalCode</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountShippingState</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>accountShippingStreetAddress</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>actionPlanId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>actionPlanTemplateId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>adobeAgreementId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>adobeAgreementTemplateId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>availableRetailOptions</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>availableVendorOptionsAfterSelection</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -2267,27 +2111,6 @@
     </variables>
     <variables>
         <name>availableVendorOptionString</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>businessVerticals</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>CloseDate</name>
-        <dataType>Date</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>contactId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -2307,44 +2130,6 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>contractId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>contractRecordTypeId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>contractRecordTypeName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>contractType</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>CreateNewOpportunity</name>
-        <dataType>Boolean</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <value>
-            <booleanValue>false</booleanValue>
-        </value>
     </variables>
     <variables>
         <name>currentItem_CompletedProgramDealerNDA</name>
@@ -2415,41 +2200,6 @@
         </value>
     </variables>
     <variables>
-        <name>LeadSource</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>NextAction</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>OnboardingFlowDirection</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>OnboardingFlowDirectionForChuzo</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>OnboardingTypeChoiceValue</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>OpportunityContactRecordsJSON</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -2465,13 +2215,6 @@
         <objectType>OpportunityContactRole</objectType>
     </variables>
     <variables>
-        <name>opportunityId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>OpportunityRecord</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -2480,28 +2223,7 @@
         <objectType>Opportunity</objectType>
     </variables>
     <variables>
-        <name>OpportunitySource</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>Owner</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>PerfectVisionVendorId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>programBaseAppSelection</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -2518,28 +2240,7 @@
         </value>
     </variables>
     <variables>
-        <name>ProgramType</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>recordId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>retailOption</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>SelectedOnboardingPath</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
@@ -2552,42 +2253,6 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Contact</objectType>
-    </variables>
-    <variables>
-        <name>selectedRetailerOption</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>selectedVendorId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <description>This is the ContractRecordTypeName for the contract and is used to search for either the vendor contract record type OR the contract record type needed to advance the account.</description>
-        <name>selectedVendorName</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>true</isOutput>
-    </variables>
-    <variables>
-        <name>selectedVertical</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>SendDocumentsChoice</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>ShowAgreementChoice</name>
@@ -2628,27 +2293,6 @@
         <value>
             <booleanValue>true</booleanValue>
         </value>
-    </variables>
-    <variables>
-        <name>Stage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>vendorCustomizationId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>VendorDataString</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>VendorProgramRecord</name>

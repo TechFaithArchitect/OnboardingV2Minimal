@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Contact on Account</label>
+    <protected>false</protected>
+    <values>
+        <field>Fields_JSON__c</field>
+        <value xsi:type="xsd:string">[{&quot;fieldApiName&quot;:&quot;FirstName&quot;,&quot;label&quot;:&quot;First Name&quot;,&quot;required&quot;:true,&quot;columnSize&quot;:&quot;1-of-4&quot;},{&quot;fieldApiName&quot;:&quot;MiddleName&quot;,&quot;label&quot;:&quot;Middle Name&quot;,&quot;required&quot;:false,&quot;columnSize&quot;:&quot;1-of-4&quot;},{&quot;fieldApiName&quot;:&quot;LastName&quot;,&quot;label&quot;:&quot;Last Name&quot;,&quot;required&quot;:true,&quot;columnSize&quot;:&quot;1-of-4&quot;},{&quot;fieldApiName&quot;:&quot;Title&quot;,&quot;label&quot;:&quot;Title&quot;,&quot;required&quot;:false,&quot;columnSize&quot;:&quot;1-of-4&quot;},{&quot;fieldApiName&quot;:&quot;Email&quot;,&quot;label&quot;:&quot;Email&quot;,&quot;type&quot;:&quot;email&quot;,&quot;required&quot;:true},{&quot;fieldApiName&quot;:&quot;Phone&quot;,&quot;label&quot;:&quot;Phone&quot;,&quot;type&quot;:&quot;tel&quot;,&quot;required&quot;:true}]</value>
+    </values>
+    <values>
+        <field>Object_API_Name__c</field>
+        <value xsi:type="xsd:string">Contact</value>
+    </values>
+    <values>
+        <field>Parent_Field_API_Name__c</field>
+        <value xsi:type="xsd:string">AccountId</value>
+    </values>
+    <values>
+        <field>Relationship_Child_Field__c</field>
+        <value xsi:type="xsd:string">ContactId</value>
+    </values>
+    <values>
+        <field>Relationship_Fields_JSON__c</field>
+        <value xsi:type="xsd:string">[{&quot;fieldApiName&quot;:&quot;Roles&quot;,&quot;label&quot;:&quot;Role&quot;,&quot;required&quot;:true},{&quot;fieldApiName&quot;:&quot;StartDate&quot;,&quot;label&quot;:&quot;Start Date&quot;,&quot;required&quot;:false,&quot;type&quot;:&quot;date&quot;}]</value>
+    </values>
+    <values>
+        <field>Relationship_Object_API_Name__c</field>
+        <value xsi:type="xsd:string">AccountContactRelation</value>
+    </values>
+    <values>
+        <field>Relationship_Parent_Field__c</field>
+        <value xsi:type="xsd:string">AccountId</value>
+    </values>
+    <values>
+        <field>Role_Constraints_JSON__c</field>
+        <value xsi:type="xsd:string">{&quot;singlePerAccountRoles&quot;:[&quot;Principal Owner&quot;],&quot;requiresPermissionRoles&quot;:[&quot;Authorized Signer&quot;],&quot;authorizedSignerPermission&quot;:&quot;Can_Assign_Authorized_Signer&quot;,&quot;roleFieldApiName&quot;:&quot;Roles&quot;}</value>
+    </values>
+</CustomMetadata>

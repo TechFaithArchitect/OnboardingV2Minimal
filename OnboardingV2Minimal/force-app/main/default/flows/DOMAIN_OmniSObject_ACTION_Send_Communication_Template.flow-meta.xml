@@ -267,6 +267,14 @@
         <queriedFields>Id</queriedFields>
         <queriedFields>Email_Template_Id__c</queriedFields>
     </recordLookups>
+    <start>
+        <locationX>144</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Determine_Logical_Method_to_Find_Communication_Template</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
     <subflows>
         <name>Handle_Communication_Fault</name>
         <label>Handle Communication Fault</label>
@@ -320,14 +328,6 @@
             <name>ResolvedFaultMessage</name>
         </outputAssignments>
     </subflows>
-    <start>
-        <locationX>144</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Determine_Logical_Method_to_Find_Communication_Template</targetReference>
-        </connector>
-    </start>
-    <status>Active</status>
     <variables>
         <name>ccEmailAddresses</name>
         <dataType>String</dataType>

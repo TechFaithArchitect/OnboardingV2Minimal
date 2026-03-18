@@ -19,6 +19,35 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Did_Update_Onboarding_Record_Fail</name>
+        <label>Did Update Onboarding Record Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Update_Onboarding_Record_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Update_Onboarding_Record_Fault</targetReference>
+            </connector>
+            <label>Update Onboarding Record Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Is_Create_Event</name>
         <label>Is Create Event</label>
         <locationX>0</locationX>
@@ -169,35 +198,6 @@
             <label>Has Normalized Status</label>
         </rules>
     </decisions>
-    <decisions>
-        <name>Did_Update_Onboarding_Record_Fail</name>
-        <label>Did Update Onboarding Record Fail</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
-        <rules>
-            <name>Update_Onboarding_Record_Failed</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>errorMessage</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>errorMessage</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue></stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Handle_Update_Onboarding_Record_Fault</targetReference>
-            </connector>
-            <label>Update Onboarding Record Failed</label>
-        </rules>
-    </decisions>
     <description>Business Logic Layer - Onboarding Requirement - RCD - Logical Process</description>
     <environments>Default</environments>
     <interviewLabel>BLL - Onboarding Requirement - RCD - Logical Process {!$Flow.CurrentDateTime}</interviewLabel>
@@ -241,6 +241,12 @@
             <targetReference>Should_Evaluate_Normalization</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records</flowName>
+        <inputAssignments>
+            <name>AccountRecord</name>
+            <value>
+                <elementReference>AccountRecord</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <name>OnboardingRecord</name>
             <value>
@@ -456,30 +462,6 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>Update_Onboarding_Record</name>
-        <label>Update Onboarding Record</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Did_Update_Onboarding_Record_Fail</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>OnboardingRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>OnboardingRecord</assignToReference>
-            <name>OnboardingRecord</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
         <name>Handle_Update_Onboarding_Record_Fault</name>
         <label>Handle Update Onboarding Record Fault</label>
         <locationX>0</locationX>
@@ -536,6 +518,30 @@
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
             <name>ResolvedFaultMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Update_Onboarding_Record</name>
+        <label>Update Onboarding Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Update_Onboarding_Record_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>OnboardingRecord</assignToReference>
+            <name>OnboardingRecord</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
         </outputAssignments>
     </subflows>
     <variables>

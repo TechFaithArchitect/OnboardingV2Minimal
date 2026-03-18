@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vendor_Name__c</fullName>
+    <description>Name of the Vendor__c record. The first active Vendor_Customization__c for this vendor is used as the default program.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>e.g., Perfect Vision for the gate NDA, or NDA for a generic NDA vendor.</inlineHelpText>
+    <label>Vendor Name</label>
+    <length>255</length>
+    <required>true</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

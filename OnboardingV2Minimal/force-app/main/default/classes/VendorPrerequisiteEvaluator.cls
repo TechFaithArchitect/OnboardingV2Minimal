@@ -1,4 +1,4 @@
-public with sharing class VendorPrerequisiteEvaluator {
+public class VendorPrerequisiteEvaluator {
 
     public class PrereqMap {
         public Map<Id, Map<Id, List<Id>>> customizationToGroupToRequired;
@@ -23,7 +23,6 @@ public with sharing class VendorPrerequisiteEvaluator {
             FROM Vendor_Program_Group_Member__c
             WHERE Active__c = true
             AND Vendor_Program_Group__r.Active__c = true
-            WITH SECURITY_ENFORCED
         ];
 
         // Step 2: Build a map of group to logic type, and identify target customizations

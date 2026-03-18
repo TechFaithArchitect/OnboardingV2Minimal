@@ -129,8 +129,8 @@
         </assignmentItems>
     </assignments>
     <assignments>
-        <name>Capture_Update_Onboarding_Record_Fault</name>
-        <label>Capture Update Onboarding Record Fault</label>
+        <name>Capture_Update_Onboarding_Record_Collection_Fault</name>
+        <label>Capture Update Onboarding Record Collection Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
@@ -142,8 +142,8 @@
         </assignmentItems>
     </assignments>
     <assignments>
-        <name>Capture_Update_Onboarding_Record_Collection_Fault</name>
-        <label>Capture Update Onboarding Record Collection Fault</label>
+        <name>Capture_Update_Onboarding_Record_Fault</name>
+        <label>Capture Update Onboarding Record Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>

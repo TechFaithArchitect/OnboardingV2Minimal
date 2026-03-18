@@ -29,15 +29,11 @@
     <tabs>Onboarding_Status_Rules_Engine__c</tabs>
     <tabs>Onboarding_Status_Rule__c</tabs>
     <tabs>Required_Credential__c</tabs>
-    <tabs>Onboarding_Next_Step_Override__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Onboarding_UtilityBar</utilityBar>
     <workspaceConfig>
         <mappings>
             <tab>Communication_Template__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Onboarding_Next_Step_Override__c</tab>
         </mappings>
         <mappings>
             <tab>Onboarding_Requirement__c</tab>

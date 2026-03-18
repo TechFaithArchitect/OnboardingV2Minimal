@@ -9,7 +9,6 @@
     <columns>Credit_Check_Status__c</columns>
     <columns>Contract_Type__c</columns>
     <columns>Territory_Assignments__c</columns>
-    <columns>Action_Plan__c</columns>
     <columns>CREATED_DATE</columns>
     <filterScope>Everything</filterScope>
     <filters>

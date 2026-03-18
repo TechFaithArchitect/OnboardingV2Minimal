@@ -213,7 +213,7 @@
         </schedule>
         <triggerType>Scheduled</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <subflows>
         <name>Get_Onboarding_Records</name>
         <label>Get Onboarding Records</label>

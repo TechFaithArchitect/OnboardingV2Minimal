@@ -59,7 +59,7 @@
         <label>Evaluate Onboarding Requirement Subject</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <flowName>DOMAIN_OmniSObject_SFL_EVALUATE_Onboarding_Requirement_Subject</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent</flowName>
         <inputAssignments>
             <name>OnboardingRequirementId</name>
             <value>

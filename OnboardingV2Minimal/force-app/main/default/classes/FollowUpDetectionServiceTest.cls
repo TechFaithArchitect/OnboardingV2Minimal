@@ -1,6 +1,6 @@
-/**
- * Test class for FollowUpDetectionService
- */
+//----------------------
+ // Test class for FollowUpDetectionService
+ //----------------------
 @isTest
 private class FollowUpDetectionServiceTest {
 

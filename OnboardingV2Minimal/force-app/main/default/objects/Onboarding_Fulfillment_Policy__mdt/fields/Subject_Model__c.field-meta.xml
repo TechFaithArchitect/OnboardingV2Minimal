@@ -20,6 +20,11 @@
                 <label>All Contacts</label>
             </value>
             <value>
+                <fullName>PrimaryContactOrAccount</fullName>
+                <default>false</default>
+                <label>Primary Contact Or Account</label>
+            </value>
+            <value>
                 <fullName>PrincipalOwner</fullName>
                 <default>false</default>
                 <label>Principal Owner</label>

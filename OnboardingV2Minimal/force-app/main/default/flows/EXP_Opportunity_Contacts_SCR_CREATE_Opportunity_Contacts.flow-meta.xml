@@ -10,9 +10,6 @@
         <connector>
             <targetReference>Assign_Primary_Opportunity_Contact</targetReference>
         </connector>
-        <faultConnector>
-            <targetReference>Capture_Format_Contact_Record_Fault</targetReference>
-        </faultConnector>
         <dataTypeMappings>
             <typeName>T__records</typeName>
             <typeValue>Contact</typeValue>
@@ -21,6 +18,9 @@
             <typeName>T__relationshipRecords</typeName>
             <typeValue>OpportunityContactRole</typeValue>
         </dataTypeMappings>
+        <faultConnector>
+            <targetReference>Capture_Format_Contact_Record_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>configKey</name>
@@ -78,6 +78,19 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_Error_Message</name>
+        <label>Assign Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Please Select an Opportunity to Assign Contacts</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Capture_Format_Contact_Record_Fault</name>
         <label>Capture Format Contact Record Fault</label>
         <locationX>0</locationX>
@@ -110,19 +123,6 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Assign_Error_Message</name>
-        <label>Assign Error Message</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Please Select an Opportunity to Assign Contacts</stringValue>
             </value>
         </assignmentItems>
     </assignments>

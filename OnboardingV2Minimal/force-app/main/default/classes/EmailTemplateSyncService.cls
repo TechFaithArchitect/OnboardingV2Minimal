@@ -15,7 +15,7 @@ public with sharing class EmailTemplateSyncService {
         }
 
         Datetime startTime = Datetime.now();
-        LoggingUtil.info('EmailTemplateSyncService start: ' + String.valueOf(startTime));
+        System.debug('🚀 [EmailTemplateSyncService] Starting sync at ' + startTime);
 
         EmailSyncSummaryDTO summary = new EmailSyncSummaryDTO();
         summary.jobId = jobId;
@@ -59,12 +59,12 @@ public with sharing class EmailTemplateSyncService {
         // Step 4️⃣ - Deploy CMDT metadata
         if (!newCmdts.isEmpty()) {
             summary.asyncOperationId = EmailCatalogCMDTRepository.deployMetadata(newCmdts);
-            LoggingUtil.info('EmailTemplateSyncService CMDT deployment enqueued: ' + summary.asyncOperationId);
+            System.debug('🧩 [CMDT] Deployment enqueued. Async ID: ' + summary.asyncOperationId);
         }
 
         // Step 5️⃣ - Compute duration
         summary.durationSeconds = (Datetime.now().getTime() - startTime.getTime()) / EmailSyncServiceConstants.MILLISECONDS_TO_SECONDS;
-        LoggingUtil.info('EmailTemplateSyncService completed: ' +
+        System.debug('✅ [EmailTemplateSyncService] Completed: ' +
             'Inserted=' + summary.insertedCount + 
             ', Updated=' + summary.updatedCount +
             ', New CMDTs=' + summary.newCMDTCount +

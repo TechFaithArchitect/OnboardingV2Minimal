@@ -64,7 +64,6 @@
     <members>DOMAIN_Training_Requirement_SFL_GET_Training_Requirement_Records</members>
     <members>DOMAIN_Vendor_Program_SFL_CREATE_or_UPDATE_Required_Credentials</members>
     <members>EXP_Contact_SCR_Select_Opportunity_Contact</members>
-    <members>EXP_Contact_SCR_Set_Up_Agent_Vendor_Programs</members>
     <members>EXP_Contract_ACTION_Send_Adobe_Agreement</members>
     <members>EXP_Contract_SCR_Send_Adobe_Agreement</members>
     <members>EXP_Onboarding_SCR_Update_Onboarding_Record</members>

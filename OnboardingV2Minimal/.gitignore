@@ -1,0 +1,6 @@
+# Salesforce CLI local cache - can contain stale paths causing UnsafeFilepathError
+.sf/
+.sfdx/
+
+# Local org auth
+.localdevserver/

@@ -11,13 +11,13 @@
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Onboarding Requirement Id was not passed.</stringValue>
+                <stringValue>Onboarding Requirement Id or Requirement Type plus ContactId or AccountId is required.</stringValue>
             </value>
         </assignmentItems>
     </assignments>
     <decisions>
-        <name>Has_Onboarding_Requirement_Id</name>
-        <label>Has Onboarding Requirement Id</label>
+        <name>Determine_Get_Onboarding_Requirement_Subjects_Path</name>
+        <label>Determine Get Onboarding Requirement Subjects Path</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
@@ -45,6 +45,78 @@
                 <targetReference>Get_Onboarding_Requirement_Subjects</targetReference>
             </connector>
             <label>Onboarding Requirement Id Was Passed</label>
+        </rules>
+        <rules>
+            <name>Contact_Subject_Query_Was_Passed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RequirementType</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RequirementType</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ContactId</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Onboarding_Requirement_Subjects_By_Contact</targetReference>
+            </connector>
+            <label>Contact Subject Query Was Passed</label>
+        </rules>
+        <rules>
+            <name>Account_Subject_Query_Was_Passed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RequirementType</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RequirementType</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>AccountId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>AccountId</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Onboarding_Requirement_Subjects_By_Account</targetReference>
+            </connector>
+            <label>Account Subject Query Was Passed</label>
         </rules>
     </decisions>
     <description>DOMAIN LAYER - OmniSObject - SFL - GET - Onboarding Requirement Subjects</description>
@@ -95,14 +167,92 @@
         <queriedFields>Role_Snapshot__c</queriedFields>
         <queriedFields>Unique_Key__c</queriedFields>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Onboarding_Requirement_Subjects_By_Account</name>
+        <label>Get Onboarding Requirement Subjects By Account</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Account__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Requirement_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RequirementType</elementReference>
+            </value>
+        </filters>
+        <object>Onboarding_Requirement_Subject__c</object>
+        <outputReference>OnboardingRequirementSubjectCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Onboarding_Requirement__c</queriedFields>
+        <queriedFields>Account__c</queriedFields>
+        <queriedFields>Contact__c</queriedFields>
+        <queriedFields>Requirement_Type__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>Role_Snapshot__c</queriedFields>
+        <queriedFields>Unique_Key__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Onboarding_Requirement_Subjects_By_Contact</name>
+        <label>Get Onboarding Requirement Subjects By Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contact__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>ContactId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Requirement_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>RequirementType</elementReference>
+            </value>
+        </filters>
+        <object>Onboarding_Requirement_Subject__c</object>
+        <outputReference>OnboardingRequirementSubjectCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Onboarding_Requirement__c</queriedFields>
+        <queriedFields>Account__c</queriedFields>
+        <queriedFields>Contact__c</queriedFields>
+        <queriedFields>Requirement_Type__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>Role_Snapshot__c</queriedFields>
+        <queriedFields>Unique_Key__c</queriedFields>
+    </recordLookups>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Has_Onboarding_Requirement_Id</targetReference>
+            <targetReference>Determine_Get_Onboarding_Requirement_Subjects_Path</targetReference>
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>AccountId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>ContactId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>errorMessage</name>
         <dataType>String</dataType>
@@ -124,5 +274,12 @@
         <isInput>false</isInput>
         <isOutput>true</isOutput>
         <objectType>Onboarding_Requirement_Subject__c</objectType>
+    </variables>
+    <variables>
+        <name>RequirementType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
     </variables>
 </Flow>

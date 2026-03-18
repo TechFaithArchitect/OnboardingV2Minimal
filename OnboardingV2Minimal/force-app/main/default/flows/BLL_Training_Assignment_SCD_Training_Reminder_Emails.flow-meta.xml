@@ -5,7 +5,7 @@
         <label>Send Email and Log Communication</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>EmailCommBatchSendAction</actionName>
+        <actionName>01pRL00000WBaqXNotFound</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Reset_Email_Send_State</targetReference>
@@ -20,7 +20,6 @@
                 <elementReference>EmailPayloadRecordCollection</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>EmailCommBatchSendAction</nameSegment>
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
@@ -634,29 +633,6 @@
         <objectType>Communication_Template__c</objectType>
     </variables>
     <variables>
-        <name>EmptyEmailPayloadRecord</name>
-        <apexClass>EmailCommSendRequestDTO</apexClass>
-        <dataType>Apex</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>EmptyEmailPayloadRecordCollection</name>
-        <apexClass>EmailCommSendRequestDTO</apexClass>
-        <dataType>Apex</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>ErrorMessage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>currentItem_Find_Contact_Owner</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -677,6 +653,29 @@
         <apexClass>EmailCommSendRequestDTO</apexClass>
         <dataType>Apex</dataType>
         <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EmptyEmailPayloadRecord</name>
+        <apexClass>EmailCommSendRequestDTO</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EmptyEmailPayloadRecordCollection</name>
+        <apexClass>EmailCommSendRequestDTO</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>ErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>

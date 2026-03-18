@@ -251,7 +251,6 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
                 WHERE Vendor__c = :vendorProgramRecord.Vendor__c
                   AND Retail_Option__c = :vendorProgramRecord.Retail_Option__c
                   AND Business_Vertical__c = :vendorProgramRecord.Business_Vertical__c
-                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             if (!vendorMatches.isEmpty()) {
@@ -272,7 +271,6 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
             FROM Vendor_Customization__c
             WHERE Vendor__r.Name = 'PerfectVision'
               AND Name = :programSelection
-            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 

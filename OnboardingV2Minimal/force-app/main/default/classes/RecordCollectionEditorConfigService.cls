@@ -76,10 +76,6 @@ public with sharing class RecordCollectionEditorConfigService {
 
         Map<String, Schema.SObjectField> fieldMap =
             sobjectType.getDescribe().fields.getMap();
-        if (!fieldMap.containsKey(parentFieldApiName) ||
-            !fieldMap.get(parentFieldApiName).getDescribe().isAccessible()) {
-            throw new AuraHandledException('Configured parent field is not accessible: ' + parentFieldApiName);
-        }
 
         List<FieldConfig> fieldConfigs = new List<FieldConfig>();
 
@@ -96,10 +92,51 @@ public with sharing class RecordCollectionEditorConfigService {
 
         for (Object raw : rawFields) {
             Map<String, Object> rawField = (Map<String, Object>) raw;
-            FieldConfig fc = buildFieldConfig(rawField, fieldMap);
-            if (fc != null) {
-                fieldConfigs.add(fc);
+            String fieldApiName = (String) rawField.get('fieldApiName');
+            if (String.isBlank(fieldApiName)) {
+                continue;
             }
+
+            Schema.SObjectField sfield = fieldMap.get(fieldApiName);
+            if (sfield == null) {
+                continue;
+            }
+
+            Schema.DescribeFieldResult dfr = sfield.getDescribe();
+
+            FieldConfig fc = new FieldConfig();
+            fc.fieldApiName = fieldApiName;
+            fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null
+                ? rawField.get('label')
+                : dfr.getLabel());
+            fc.required = (Boolean) (rawField.containsKey('required') && rawField.get('required') != null
+                ? rawField.get('required')
+                : !dfr.isNillable() && !dfr.isDefaultedOnCreate());
+            fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
+
+            fc.columnSize = (String) rawField.get('columnSize');
+
+            String configuredType = (String) rawField.get('type');
+            if (!String.isBlank(configuredType)) {
+                fc.dataType = configuredType;
+            } else {
+                fc.dataType = mapDescribeToDataType(dfr);
+            }
+
+            if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
+                fc.picklistValues = new List<String>();
+                for (Schema.PicklistEntry pe : dfr.getPicklistValues()) {
+                    fc.picklistValues.add(pe.getValue());
+                }
+            }
+            if (dfr.getType() == Schema.DisplayType.Reference) {
+                List<Schema.SObjectType> refTypes = dfr.getReferenceTo();
+                if (refTypes != null && !refTypes.isEmpty()) {
+                    fc.lookupObjectApiName = refTypes[0].getDescribe().getName();
+                }
+            }
+
+            fieldConfigs.add(fc);
         }
 
         List<FieldConfig> relationshipFieldConfigs = new List<FieldConfig>();
@@ -117,10 +154,30 @@ public with sharing class RecordCollectionEditorConfigService {
                 }
                 for (Object raw : rawRelFields) {
                     Map<String, Object> rawField = (Map<String, Object>) raw;
-                    FieldConfig fc = buildFieldConfig(rawField, relFieldMap);
-                    if (fc != null) {
-                        relationshipFieldConfigs.add(fc);
+                    String fieldApiName = (String) rawField.get('fieldApiName');
+                    if (String.isBlank(fieldApiName)) continue;
+                    Schema.SObjectField sfield = relFieldMap.get(fieldApiName);
+                    if (sfield == null) continue;
+                    Schema.DescribeFieldResult dfr = sfield.getDescribe();
+                    FieldConfig fc = new FieldConfig();
+                    fc.fieldApiName = fieldApiName;
+                    fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null ? rawField.get('label') : dfr.getLabel());
+                    fc.required = (Boolean) (rawField.containsKey('required') && rawField.get('required') != null ? rawField.get('required') : !dfr.isNillable() && !dfr.isDefaultedOnCreate());
+                    fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
+                    fc.columnSize = (String) rawField.get('columnSize');
+                    String configuredType = (String) rawField.get('type');
+                    fc.dataType = !String.isBlank(configuredType) ? configuredType : mapDescribeToDataType(dfr);
+                    if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
+                        fc.picklistValues = new List<String>();
+                        for (Schema.PicklistEntry pe : dfr.getPicklistValues()) fc.picklistValues.add(pe.getValue());
                     }
+                    if (dfr.getType() == Schema.DisplayType.Reference) {
+                        List<Schema.SObjectType> refTypes = dfr.getReferenceTo();
+                        if (refTypes != null && !refTypes.isEmpty()) {
+                            fc.lookupObjectApiName = refTypes[0].getDescribe().getName();
+                        }
+                    }
+                    relationshipFieldConfigs.add(fc);
                 }
             }
         }
@@ -330,7 +387,7 @@ public with sharing class RecordCollectionEditorConfigService {
             Map<Integer, Id> indexToChildId = new Map<Integer, Id>();
 
             if (!toUpdate.isEmpty()) {
-                Database.SaveResult[] updateResults = Database.update(toUpdate, false, AccessLevel.USER_MODE);
+                Database.SaveResult[] updateResults = Database.update(toUpdate, false);
                 for (Integer i = 0; i < updateResults.size(); i++) {
                     if (updateResults[i].isSuccess()) {
                         singleResult.createdRecords.add(toUpdate[i]);
@@ -344,7 +401,7 @@ public with sharing class RecordCollectionEditorConfigService {
             }
 
             if (!toInsert.isEmpty()) {
-                Database.SaveResult[] insertResults = Database.insert(toInsert, false, AccessLevel.USER_MODE);
+                Database.SaveResult[] insertResults = Database.insert(toInsert, false);
                 for (Integer i = 0; i < insertResults.size(); i++) {
                     if (insertResults[i].isSuccess()) {
                         singleResult.createdRecords.add(toInsert[i]);
@@ -406,40 +463,8 @@ public with sharing class RecordCollectionEditorConfigService {
                 Id parentId = Id.valueOf(String.valueOf(parentIdObj));
                 Schema.SObjectType relType = Schema.getGlobalDescribe().get(relObjectName);
                 if (relType != null) {
-                    Schema.DescribeSObjectResult relDescribe = relType.getDescribe();
-                    Map<String, Schema.SObjectField> relFieldMap = relDescribe.fields.getMap();
-                    if (!relDescribe.isAccessible() ||
-                        !relFieldMap.containsKey(relParentField) ||
-                        !relFieldMap.containsKey(relChildField) ||
-                        !relFieldMap.get(relParentField).getDescribe().isAccessible() ||
-                        !relFieldMap.get(relChildField).getDescribe().isAccessible()) {
-                        singleResult.errorMessages.add('Relationship configuration is not accessible for config: ' + requestItem.configKey);
-                        results.add(singleResult);
-                        continue;
-                    }
-
                     List<SObject> relRecordsToInsert = new List<SObject>();
                     List<SObject> relRecordsToUpdate = new List<SObject>();
-                    Set<Id> childIdsWithRelationshipPayload = new Set<Id>();
-
-                    for (Integer i = 0; i < childDataList.size(); i++) {
-                        Id childId = indexToChildId.get(i);
-                        if (childId == null) {
-                            continue;
-                        }
-                        Map<String, Object> relFields = relationshipDataList[i];
-                        if (relFields != null && !relFields.isEmpty()) {
-                            childIdsWithRelationshipPayload.add(childId);
-                        }
-                    }
-
-                    Map<Id, SObject> existingRelationshipsByChildId = queryExistingRelationshipRecords(
-                        relObjectName,
-                        relChildField,
-                        relParentField,
-                        childIdsWithRelationshipPayload,
-                        parentId
-                    );
 
                     for (Integer i = 0; i < childDataList.size(); i++) {
                         Id childId = indexToChildId.get(i);
@@ -447,36 +472,26 @@ public with sharing class RecordCollectionEditorConfigService {
                         Map<String, Object> relFields = relationshipDataList[i];
                         if (relFields.isEmpty()) continue;
 
-                        Schema.SObjectField startDateField = relFieldMap.get('StartDate');
-                        SObject existingRelationship = existingRelationshipsByChildId.get(childId);
-                        if (existingRelationship != null) {
-                            SObject acr = relType.newSObject();
-                            acr.put('Id', existingRelationship.get('Id'));
-                            Boolean hasUpdateValues = false;
+                        List<SObject> existing = Database.query(
+                            'SELECT Id, ' + relParentField + ', ' + relChildField + ' FROM ' + relObjectName +
+                            ' WHERE ' + relChildField + ' = :childId AND ' + relParentField + ' = :parentId LIMIT 1'
+                        );
+                        Schema.SObjectField startDateField = relType.getDescribe().fields.getMap().get('StartDate');
+                        if (!existing.isEmpty()) {
+                            SObject acr = existing[0];
                             for (String fName : relFields.keySet()) {
-                                Schema.SObjectField relField = relFieldMap.get(fName);
-                                if (relField == null || !relField.getDescribe().isUpdateable()) {
-                                    continue;
-                                }
                                 Object fVal = relFields.get(fName);
                                 Object converted = convertRelationshipFieldValue(relType, fName, fVal);
                                 if (converted != null) {
                                     acr.put(fName, converted);
-                                    hasUpdateValues = true;
                                 }
                             }
-                            if (hasUpdateValues) {
-                                relRecordsToUpdate.add(acr);
-                            }
+                            relRecordsToUpdate.add(acr);
                         } else {
                             SObject relRec = relType.newSObject();
                             relRec.put(relParentField, parentId);
                             relRec.put(relChildField, childId);
                             for (String fName : relFields.keySet()) {
-                                Schema.SObjectField relField = relFieldMap.get(fName);
-                                if (relField == null || !relField.getDescribe().isCreateable()) {
-                                    continue;
-                                }
                                 Object fVal = relFields.get(fName);
                                 if (startDateField != null && 'StartDate'.equals(fName) &&
                                     (fVal == null || String.isBlank(String.valueOf(fVal)))) {
@@ -489,7 +504,7 @@ public with sharing class RecordCollectionEditorConfigService {
                             }
                             if (startDateField != null) {
                                 Object existingStart = relRec.get('StartDate');
-                                if (existingStart == null && startDateField.getDescribe().isCreateable()) {
+                                if (existingStart == null) {
                                     relRec.put('StartDate', Date.today());
                                 }
                             }
@@ -498,7 +513,7 @@ public with sharing class RecordCollectionEditorConfigService {
                     }
 
                     if (!relRecordsToUpdate.isEmpty()) {
-                        Database.SaveResult[] relUpdateResults = Database.update(relRecordsToUpdate, false, AccessLevel.USER_MODE);
+                        Database.SaveResult[] relUpdateResults = Database.update(relRecordsToUpdate, false);
                         for (Integer j = 0; j < relUpdateResults.size(); j++) {
                             if (relUpdateResults[j].isSuccess()) {
                                 singleResult.createdRelationshipRecords.add(relRecordsToUpdate[j]);
@@ -510,7 +525,7 @@ public with sharing class RecordCollectionEditorConfigService {
                         }
                     }
                     if (!relRecordsToInsert.isEmpty()) {
-                        Database.SaveResult[] relInsertResults = Database.insert(relRecordsToInsert, false, AccessLevel.USER_MODE);
+                        Database.SaveResult[] relInsertResults = Database.insert(relRecordsToInsert, false);
                         for (Integer j = 0; j < relInsertResults.size(); j++) {
                             if (relInsertResults[j].isSuccess()) {
                                 singleResult.createdRelationshipRecords.add(relRecordsToInsert[j]);
@@ -528,35 +543,6 @@ public with sharing class RecordCollectionEditorConfigService {
         }
 
         return results;
-    }
-
-    private static Map<Id, SObject> queryExistingRelationshipRecords(
-        String relObjectName,
-        String relChildField,
-        String relParentField,
-        Set<Id> childIds,
-        Id parentId
-    ) {
-        Map<Id, SObject> relationshipsByChildId = new Map<Id, SObject>();
-        if (childIds == null || childIds.isEmpty() || parentId == null) {
-            return relationshipsByChildId;
-        }
-
-        String q =
-            'SELECT Id, ' + relChildField +
-            ' FROM ' + relObjectName +
-            ' WHERE ' + relChildField + ' IN :childIds' +
-            ' AND ' + relParentField + ' = :parentId' +
-            ' WITH SECURITY_ENFORCED';
-
-        for (SObject relationshipRecord : Database.query(q)) {
-            Id childId = (Id) relationshipRecord.get(relChildField);
-            if (childId != null) {
-                relationshipsByChildId.put(childId, relationshipRecord);
-            }
-        }
-
-        return relationshipsByChildId;
     }
 
     private static Object convertRelationshipFieldValue(Schema.SObjectType sobjectType, String fieldName, Object fVal) {
@@ -597,61 +583,6 @@ public with sharing class RecordCollectionEditorConfigService {
             }
         }
         return fVal;
-    }
-
-    private static FieldConfig buildFieldConfig(
-        Map<String, Object> rawField,
-        Map<String, Schema.SObjectField> fieldMap
-    ) {
-        String fieldApiName = (String) rawField.get('fieldApiName');
-        if (String.isBlank(fieldApiName)) {
-            return null;
-        }
-
-        Schema.SObjectField sfield = fieldMap.get(fieldApiName);
-        if (sfield == null) {
-            return null;
-        }
-
-        Schema.DescribeFieldResult dfr = sfield.getDescribe();
-        if (!dfr.isAccessible()) {
-            return null;
-        }
-
-        FieldConfig fc = new FieldConfig();
-        fc.fieldApiName = fieldApiName;
-        fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null
-            ? rawField.get('label')
-            : dfr.getLabel());
-        fc.required = (Boolean) (rawField.containsKey('required') && rawField.get('required') != null
-            ? rawField.get('required')
-            : !dfr.isNillable() && !dfr.isDefaultedOnCreate());
-        fc.readOnly =
-            parseBoolean(rawField.get('readOnly'), false) ||
-            (!dfr.isCreateable() && !dfr.isUpdateable());
-        fc.columnSize = (String) rawField.get('columnSize');
-
-        String configuredType = (String) rawField.get('type');
-        fc.dataType = !String.isBlank(configuredType)
-            ? configuredType
-            : mapDescribeToDataType(dfr);
-
-        if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
-            fc.picklistValues = new List<String>();
-            for (Schema.PicklistEntry pe : dfr.getPicklistValues()) {
-                if (pe.isActive()) {
-                    fc.picklistValues.add(pe.getValue());
-                }
-            }
-        }
-        if (dfr.getType() == Schema.DisplayType.Reference) {
-            List<Schema.SObjectType> refTypes = dfr.getReferenceTo();
-            if (refTypes != null && !refTypes.isEmpty()) {
-                fc.lookupObjectApiName = refTypes[0].getDescribe().getName();
-            }
-        }
-
-        return fc;
     }
 
     private static Boolean parseBoolean(Object rawValue, Boolean defaultValue) {

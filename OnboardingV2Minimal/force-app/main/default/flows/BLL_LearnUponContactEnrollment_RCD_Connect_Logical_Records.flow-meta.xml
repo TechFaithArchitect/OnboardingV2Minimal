@@ -291,6 +291,35 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Did_Create_Training_Assignment_Records_Fail</name>
+        <label>Did Create Training Assignment Records Fail</label>
+        <locationX>1364</locationX>
+        <locationY>3432</locationY>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Create_Training_Assignment_Records_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Create_Training_Assignment_Records_Fault</targetReference>
+            </connector>
+            <label>Create Training Assignment Records Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Does_LearnUpon_Course_Name_Contain_Vendor_on_Onboarding_Record</name>
         <label>Does LearnUpon Course Name Contain Vendor on Onboarding Record</label>
         <locationX>2464</locationX>
@@ -392,35 +421,6 @@
                 <targetReference>Loop_Training_Requirements</targetReference>
             </connector>
             <label>Unique Key is Not Available to Be Created</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Did_Create_Training_Assignment_Records_Fail</name>
-        <label>Did Create Training Assignment Records Fail</label>
-        <locationX>1364</locationX>
-        <locationY>3432</locationY>
-        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
-        <rules>
-            <name>Create_Training_Assignment_Records_Failed</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>errorMessage</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>errorMessage</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue></stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Handle_Create_Training_Assignment_Records_Fault</targetReference>
-            </connector>
-            <label>Create Training Assignment Records Failed</label>
         </rules>
     </decisions>
     <description>BUSINESS LOGICAL LAYER - LearnUponContactEnrollment Object - Record Trigger - Connect Logical Records</description>
@@ -578,65 +578,6 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>Handle_Create_Training_Assignment_Records_Fault</name>
-        <label>Handle Create Training Assignment Records Fault</label>
-        <locationX>1364</locationX>
-        <locationY>3540</locationY>
-        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
-        <inputAssignments>
-            <name>ContextKey</name>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>DefaultErrorMessage</name>
-            <value>
-                <stringValue>LearnUpon training assignment creation failed.</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>FaultMessage</name>
-            <value>
-                <elementReference>errorMessage</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>FollowUpType</name>
-            <value>
-                <stringValue>In-App</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>InitialStatus</name>
-            <value>
-                <stringValue>Failed</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>LogWithoutOnboarding</name>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>SourceElementApiName</name>
-            <value>
-                <stringValue>Create_Training_Assignment_Records</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>SourceFlowApiName</name>
-            <value>
-                <stringValue>BLL_LearnUponContactEnrollment_RCD_Connect_Logical_Records</stringValue>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>ResolvedFaultMessage</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
         <name>Get_Contact_Records</name>
         <label>Get Contact Records</label>
         <locationX>1100</locationX>
@@ -769,6 +710,65 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <name>Handle_Create_Training_Assignment_Records_Fault</name>
+        <label>Handle Create Training Assignment Records Fault</label>
+        <locationX>1364</locationX>
+        <locationY>3540</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>LearnUpon training assignment creation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LogWithoutOnboarding</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Create_Training_Assignment_Records</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_LearnUponContactEnrollment_RCD_Connect_Logical_Records</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Update_LearnUponContactEnrollment_Records</name>
         <label>Update LearnUponContactEnrollment Records</label>
         <locationX>1100</locationX>
@@ -805,19 +805,19 @@
         <objectType>Training_Requirement__c</objectType>
     </variables>
     <variables>
-        <name>errorMessage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>currentItemFromSourceCollection</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding__c</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>LearnUponContactEnrollment</name>
