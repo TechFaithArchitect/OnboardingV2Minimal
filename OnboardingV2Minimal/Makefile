@@ -6,7 +6,7 @@ ANALYSIS_DIR ?= .analysis/automation-audit
 BEST_PRACTICES_SOURCE ?= docs/implementation-notes/best-practices-review-2026-03-12/full-original.md
 BEST_PRACTICES_DIR ?= docs/implementation-notes/best-practices-review-2026-03-12
 
-.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts fix-deploy deploy-default-vendor-program refresh-best-practices-docs
+.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts audit-screen-flow-fault-user-messaging fix-deploy deploy-default-vendor-program refresh-best-practices-docs
 
 # Fix UnsafeFilepathError from cached temp path in source tracking (e.g. ../../tmp/onboardv2-training-sync-review/...)
 # Run this when deploys fail with "contains unsafe character sequences"
@@ -23,7 +23,7 @@ deploy-default-vendor-program:
 	@sf project deploy start --manifest manifest/deploy-default-vendor-program.xml --target-org $(ORG_ALIAS)
 
 # Run all automation scripts (default target for `make audit`)
-audit: check-vpr-drift check-cmdt-alias-drift validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts
+audit: check-vpr-drift check-cmdt-alias-drift validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts audit-screen-flow-fault-user-messaging
 	@echo "All automation audits complete."
 
 # CMDT alias drift check (Onboarding-focused)
@@ -70,6 +70,12 @@ audit-subflow-error-contracts:
 	@echo "Auditing subflow error-message output contracts..."
 	@mkdir -p "$(ANALYSIS_DIR)"
 	scripts/automation/audit-subflow-error-contracts.sh force-app/main/default/flows "$(ANALYSIS_DIR)/subflow_error_contract_audit.tsv" || true
+
+# Screen-flow fault UX contract audit (user-safe message + context inputs)
+audit-screen-flow-fault-user-messaging:
+	@echo "Auditing screen-flow fault user-messaging contract..."
+	@mkdir -p "$(ANALYSIS_DIR)"
+	scripts/automation/audit-screen-flow-fault-user-messaging.sh force-app/main/default/flows "$(ANALYSIS_DIR)/screen_flow_fault_user_messaging_audit.tsv" || true
 
 # VPR type vs record type drift check
 check-vpr-drift:
