@@ -6,7 +6,7 @@ ANALYSIS_DIR ?= .analysis/automation-audit
 BEST_PRACTICES_SOURCE ?= docs/implementation-notes/best-practices-review-2026-03-12/full-original.md
 BEST_PRACTICES_DIR ?= docs/implementation-notes/best-practices-review-2026-03-12
 
-.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors fix-deploy deploy-default-vendor-program refresh-best-practices-docs
+.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts fix-deploy deploy-default-vendor-program refresh-best-practices-docs
 
 # Fix UnsafeFilepathError from cached temp path in source tracking (e.g. ../../tmp/onboardv2-training-sync-review/...)
 # Run this when deploys fail with "contains unsafe character sequences"
@@ -23,7 +23,7 @@ deploy-default-vendor-program:
 	@sf project deploy start --manifest manifest/deploy-default-vendor-program.xml --target-org $(ORG_ALIAS)
 
 # Run all automation scripts (default target for `make audit`)
-audit: check-vpr-drift check-cmdt-alias-drift validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors
+audit: check-vpr-drift check-cmdt-alias-drift validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts
 	@echo "All automation audits complete."
 
 # CMDT alias drift check (Onboarding-focused)
@@ -58,6 +58,18 @@ audit-flow-loop-connectors:
 	@echo "Auditing flow loop connector targets..."
 	@mkdir -p "$(ANALYSIS_DIR)"
 	scripts/automation/audit-flow-loop-connectors.sh force-app/main/default/flows "$(ANALYSIS_DIR)/flow_loop_connector_audit.tsv" || true
+
+# Onboarding status single-owner audit (direct write detection)
+audit-onboarding-status-owner:
+	@echo "Auditing onboarding status owner-write enforcement..."
+	@mkdir -p "$(ANALYSIS_DIR)"
+	scripts/automation/audit-onboarding-status-owner-writes.sh force-app/main/default/flows force-app/main/default/classes "$(ANALYSIS_DIR)/onboarding_status_owner_audit.tsv" || true
+
+# Subflow error-contract audit (called flow exposes errorMessage output but parent does not map it)
+audit-subflow-error-contracts:
+	@echo "Auditing subflow error-message output contracts..."
+	@mkdir -p "$(ANALYSIS_DIR)"
+	scripts/automation/audit-subflow-error-contracts.sh force-app/main/default/flows "$(ANALYSIS_DIR)/subflow_error_contract_audit.tsv" || true
 
 # VPR type vs record type drift check
 check-vpr-drift:

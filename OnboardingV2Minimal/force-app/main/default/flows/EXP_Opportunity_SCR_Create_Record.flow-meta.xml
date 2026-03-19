@@ -659,13 +659,13 @@
         <name>ResolvedFlowErrorMessage</name>
         <dataType>String</dataType>
         <expression>IF(
-  ISBLANK({!QueueChainMessage}),
+  ISBLANK({!errorMessage}),
   IF(
-    ISBLANK({!errorMessage}),
+    ISBLANK({!QueueChainMessage}),
     &quot;The onboarding request could not be queued. Please contact your administrator.&quot;,
-    {!errorMessage}
+    {!QueueChainMessage}
   ),
-  {!QueueChainMessage}
+  {!errorMessage}
 )</expression>
     </formulas>
     <formulas>
@@ -2357,14 +2357,32 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Get Available Vendors</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>EXP_Opportunity_SCR_Create_Record</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>UserFacingMessageOverride</name>
+            <value>
+                <stringValue>We couldn't load available vendor options. Please try again or contact support.</stringValue>
+            </value>
+        </inputAssignments>
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
-            <name>ResolvedFaultMessage</name>
+            <name>UserFacingMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -2419,14 +2437,32 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Get Default Vendor Program</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>EXP_Opportunity_SCR_Create_Record</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>UserFacingMessageOverride</name>
+            <value>
+                <stringValue>We couldn't resolve the default vendor program. Please review your selection and try again.</stringValue>
+            </value>
+        </inputAssignments>
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
-            <name>ResolvedFaultMessage</name>
+            <name>UserFacingMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -2481,14 +2517,32 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Get Vendor Program</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>EXP_Opportunity_SCR_Create_Record</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>UserFacingMessageOverride</name>
+            <value>
+                <stringValue>We couldn't resolve the selected vendor program. Please try again.</stringValue>
+            </value>
+        </inputAssignments>
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
-            <name>ResolvedFaultMessage</name>
+            <name>UserFacingMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -2543,14 +2597,32 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Queue Opportunity Create Chain</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>EXP_Opportunity_SCR_Create_Record</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>UserFacingMessageOverride</name>
+            <value>
+                <stringValue>We couldn't queue the onboarding request. Please try again or contact support.</stringValue>
+            </value>
+        </inputAssignments>
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
-            <name>ResolvedFaultMessage</name>
+            <name>UserFacingMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -2605,14 +2677,32 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Queue Opportunity Create Chain Output</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>EXP_Opportunity_SCR_Create_Record</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>UserFacingMessageOverride</name>
+            <value>
+                <stringValue>The onboarding request could not be accepted for processing. Please try again.</stringValue>
+            </value>
+        </inputAssignments>
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
-            <name>ResolvedFaultMessage</name>
+            <name>UserFacingMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -2667,14 +2757,32 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Update Account Record</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>EXP_Opportunity_SCR_Create_Record</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>UserFacingMessageOverride</name>
+            <value>
+                <stringValue>We couldn't save account updates needed for onboarding. Please review and retry.</stringValue>
+            </value>
+        </inputAssignments>
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
-            <name>ResolvedFaultMessage</name>
+            <name>UserFacingMessage</name>
         </outputAssignments>
     </subflows>
     <variables>

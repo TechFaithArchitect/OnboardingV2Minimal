@@ -3,6 +3,53 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
+        <name>Did_Evaluate_Agreement_Subjects_Fail</name>
+        <label>Did Evaluate Agreement Subjects Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Evaluate_Agreement_Subjects_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Evaluate_Agreement_Subjects_Fault</targetReference>
+            </connector>
+            <label>Evaluate Agreement Subjects Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Get_Onboarding_Record_Fail</name>
+        <label>Did Get Onboarding Record Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Is_Agreement_Signed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Get_Onboarding_Record_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Get_Onboarding_Record_Fault</targetReference>
+            </connector>
+            <label>Get Onboarding Record Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Is_Agreement_Signed</name>
         <label>Is Agreement Signed</label>
         <locationX>0</locationX>
@@ -98,6 +145,9 @@
         <label>Evaluate Agreement Subjects</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Did_Evaluate_Agreement_Subjects_Fail</targetReference>
+        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence</flowName>
         <inputAssignments>
             <name>AccountId</name>
@@ -117,6 +167,10 @@
                 <stringValue>Agreement</stringValue>
             </value>
         </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
     </subflows>
     <subflows>
         <name>Get_Onboarding_Record</name>
@@ -124,7 +178,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Is_Agreement_Signed</targetReference>
+            <targetReference>Did_Get_Onboarding_Record_Fail</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Onboarding_Records</flowName>
         <inputAssignments>
@@ -137,6 +191,96 @@
             <assignToReference>OnboardingRecord</assignToReference>
             <name>OnboardingRecord</name>
         </outputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Evaluate_Agreement_Subjects_Fault</name>
+        <label>Handle Evaluate Agreement Subjects Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Agreement subject evaluation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Evaluate_Agreement_Subjects</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_Agreement_RCD_Logical_Process</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Get_Onboarding_Record_Fault</name>
+        <label>Handle Get Onboarding Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Agreement onboarding lookup failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Get_Onboarding_Record</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_Agreement_RCD_Logical_Process</stringValue>
+            </value>
+        </inputAssignments>
     </subflows>
     <subflows>
         <name>LearnUpon_Training_Assignment_Process</name>
@@ -154,6 +298,13 @@
             </value>
         </inputAssignments>
     </subflows>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>ContactRecord</name>
         <dataType>SObject</dataType>

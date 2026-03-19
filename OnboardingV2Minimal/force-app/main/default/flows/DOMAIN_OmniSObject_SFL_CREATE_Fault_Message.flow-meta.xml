@@ -32,7 +32,7 @@
             <assignToReference>UserFacingMessage</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>ResolvedUserFacingMessageFormula</elementReference>
+                <elementReference>ResolvedUserFacingMessageWithReferenceFormula</elementReference>
             </value>
         </assignmentItems>
     </assignments>
@@ -66,7 +66,7 @@
             <assignToReference>UserFacingMessage</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>ResolvedUserFacingMessageFormula</elementReference>
+                <elementReference>ResolvedUserFacingMessageWithReferenceFormula</elementReference>
             </value>
         </assignmentItems>
     </assignments>
@@ -134,6 +134,8 @@
   {!ResolvedFaultMessageFormula} &amp;
   &quot; | Flow=&quot; &amp; {!ResolvedSourceFlowApiName} &amp;
   &quot; | Element=&quot; &amp; {!ResolvedSourceElementApiName} &amp;
+  &quot; | ElementLabel=&quot; &amp; {!ResolvedSourceElementLabel} &amp;
+  &quot; | InterviewGuid=&quot; &amp; {!ResolvedInterviewGuid} &amp;
   &quot; | Context=&quot; &amp; {!ResolvedContextKey} &amp;
   IF(
     ISBLANK({!ResolvedOnboardingId}),
@@ -190,6 +192,15 @@
 )</expression>
     </formulas>
     <formulas>
+        <name>ResolvedInterviewGuid</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  ISBLANK({!InterviewGuid}),
+  &quot;NO_INTERVIEW_GUID&quot;,
+  {!InterviewGuid}
+)</expression>
+    </formulas>
+    <formulas>
         <name>ResolvedOnboardingId</name>
         <dataType>String</dataType>
         <expression>IF(
@@ -205,6 +216,15 @@
   ISBLANK({!SourceElementApiName}),
   &quot;UNKNOWN_ELEMENT&quot;,
   {!SourceElementApiName}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>ResolvedSourceElementLabel</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  ISBLANK({!SourceElementLabel}),
+  &quot;UNKNOWN_LABEL&quot;,
+  {!SourceElementLabel}
 )</expression>
     </formulas>
     <formulas>
@@ -233,6 +253,15 @@
   ISBLANK({!UserFacingMessageOverride}),
   &quot;The communication request could not be completed.&quot;,
   {!UserFacingMessageOverride}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>ResolvedUserFacingMessageWithReferenceFormula</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  ISBLANK({!InterviewGuid}),
+  {!ResolvedUserFacingMessageFormula},
+  {!ResolvedUserFacingMessageFormula} &amp; &quot; Reference: &quot; &amp; LEFT({!InterviewGuid}, 8)
 )</expression>
     </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Fault Message {!$Flow.CurrentDateTime}</interviewLabel>
@@ -353,6 +382,13 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>InterviewGuid</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>LogWithoutOnboarding</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
@@ -390,6 +426,13 @@
     </variables>
     <variables>
         <name>SourceElementApiName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>SourceElementLabel</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
