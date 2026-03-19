@@ -2,6 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Update_Contract_Fault</name>
+        <label>Capture Update Contract Fault</label>
+        <locationX>314</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Screenflow2aError</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Adobe_Agreement_Created</name>
         <label>Adobe Agreement Created?</label>
@@ -90,6 +106,9 @@
         <connector>
             <targetReference>Screenflow2a</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Update_Contract_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>

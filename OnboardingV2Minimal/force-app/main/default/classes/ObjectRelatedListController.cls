@@ -39,7 +39,7 @@ public with sharing class ObjectRelatedListController {
         @AuraEnabled public Id value { get; set; }
         @AuraEnabled public String label { get; set; }
     }
-    
+
     /**
      * Returns related records for a parent record using dynamic SOQL.
      * 

@@ -90,7 +90,7 @@ public with sharing class FollowUpMessagingService {
         try {
             provider = SMSProviderStrategyFactory.getStrategy(providerType);
         } catch (IllegalArgumentException ex) {
-            System.debug('Invalid provider type, defaulting to phone check: ' + ex.getMessage());
+            LoggingUtil.warn('Invalid provider type, defaulting to phone check: ' + ex.getMessage());
             // Fallback to phone check
             return hasPhoneNumber(contactId);
         }

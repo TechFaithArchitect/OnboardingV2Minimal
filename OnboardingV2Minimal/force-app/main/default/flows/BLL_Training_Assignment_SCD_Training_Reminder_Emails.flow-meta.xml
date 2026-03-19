@@ -5,42 +5,52 @@
         <label>Send Email and Log Communication</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>01pRL00000WBaqXNotFound</actionName>
+        <actionName>CommunicationTemplateBulkSendAction</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Reset_Email_Send_State</targetReference>
+            <targetReference>Did_Send_Email_Fail</targetReference>
         </connector>
         <faultConnector>
             <targetReference>Capture_Send_Email_Fault</targetReference>
         </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
-            <name>payloads</name>
+            <name>defaultSenderAddress</name>
             <value>
-                <elementReference>EmailPayloadRecordCollection</elementReference>
+                <stringValue>training@perfect-vision.com</stringValue>
             </value>
         </inputParameters>
+        <inputParameters>
+            <name>communicationTemplateIds</name>
+            <value>
+                <elementReference>CommunicationTemplateIdList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>RecipientIdList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onboardingIds</name>
+            <value>
+                <elementReference>OnboardingIdForSendList</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>CommunicationTemplateBulkSendAction</nameSegment>
         <offset>0</offset>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputParameters>
+            <assignToReference>ErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>SendFailed</assignToReference>
+            <name>sendFailed</name>
+        </outputParameters>
     </actionCalls>
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
-    <assignments>
-        <name>Add_Payload_Record_to_Collection</name>
-        <label>Add Payload Record to Collection</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecordCollection</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>EmailPayloadRecord</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Reset_Email_Payload_Record</targetReference>
-        </connector>
-    </assignments>
     <assignments>
         <name>Assign_Onboarding_Id_to_List</name>
         <label>Assign Onboarding Id and Vendor Program Id to List</label>
@@ -65,71 +75,6 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Record_to_Payload</name>
-        <label>Assign Record to Payload</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.accountId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Onboarding_Records.Account__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.contactId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Training_Assignment_Records.Contact__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.onboardingId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Onboarding_Records.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.emailTemplateId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Communication_Templates.Email_Template_Id__c</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.orgWideEmailAddressId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>training@perfect-vision.com</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.communicationTemplateId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Communication_Templates.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.senderType</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>OrgWide</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecord.recipientId</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Training_Assignment_Records.Contact__c</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Add_Payload_Record_to_Collection</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>Assign_Training_Requirment_Id_to_List</name>
         <label>Assign Training Requirment Id to List</label>
         <locationX>0</locationX>
@@ -146,6 +91,36 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Record_to_Email_Request</name>
+        <label>Assign Record to Email Request</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>CommunicationTemplateIdList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Communication_Templates.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>RecipientIdList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Training_Assignment_Records.Contact__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingIdForSendList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Onboarding_Records.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Onboarding_Records</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Capture_Send_Email_Fault</name>
         <label>Capture Send Email Fault</label>
         <locationX>0</locationX>
@@ -157,24 +132,15 @@
                 <elementReference>$Flow.FaultMessage</elementReference>
             </value>
         </assignmentItems>
-        <connector>
-            <targetReference>Handle_Send_Email_Fault</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Reset_Email_Payload_Record</name>
-        <label>Reset Email Payload Record</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>EmailPayloadRecord</assignToReference>
+            <assignToReference>SendFailed</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>EmptyEmailPayloadRecord</elementReference>
+                <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Onboarding_Records</targetReference>
+            <targetReference>Handle_Send_Email_Fault</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -183,17 +149,10 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>EmailPayloadRecord</assignToReference>
+            <assignToReference>SendFailed</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>EmptyEmailPayloadRecord</elementReference>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>EmailPayloadRecordCollection</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>EmptyEmailPayloadRecordCollection</elementReference>
+                <booleanValue>false</booleanValue>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -201,6 +160,27 @@
             <operator>Assign</operator>
             <value>
                 <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CommunicationTemplateIdList</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyCommunicationTemplateIdList</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>RecipientIdList</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyRecipientIdList</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingIdForSendList</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyOnboardingIdForSendList</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -252,7 +232,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Assign_Record_to_Payload</targetReference>
+                <targetReference>Assign_Record_to_Email_Request</targetReference>
             </connector>
             <label>Yes - Match So Add Record</label>
         </rules>
@@ -283,20 +263,66 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Has_Email_Payloads</name>
-        <label>Has Email Payloads</label>
+        <name>Did_Send_Email_Fail</name>
+        <label>Did Send Email Fail</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
             <targetReference>Reset_Email_Send_State</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>No Payloads</defaultConnectorLabel>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
-            <name>Payloads_Present</name>
+            <name>Send_Email_Failed</name>
+            <conditionLogic>1 OR (2 AND 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>SendFailed</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>ErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Send_Email_Fault</targetReference>
+            </connector>
+            <label>Send Email Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Has_Email_Requests</name>
+        <label>Has Email Requests</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Reset_Email_Send_State</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Requests</defaultConnectorLabel>
+        <rules>
+            <name>Requests_Present</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>EmailPayloadRecordCollection</leftValueReference>
+                <leftValueReference>CommunicationTemplateIdList</leftValueReference>
                 <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CommunicationTemplateIdList</leftValueReference>
+                <operator>IsEmpty</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
@@ -304,7 +330,7 @@
             <connector>
                 <targetReference>Send_Email_and_Log_Communication</targetReference>
             </connector>
-            <label>Payloads Present</label>
+            <label>Requests Present</label>
         </rules>
     </decisions>
     <description>BUSINESS LOGIC LAYER - Training Assignment Object - Scheduled System - Training Reminder Emails</description>
@@ -332,7 +358,7 @@
             <targetReference>Loop_Training_Requirements</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Has_Email_Payloads</targetReference>
+            <targetReference>Has_Email_Requests</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
@@ -584,7 +610,7 @@
         <inputAssignments>
             <name>DefaultErrorMessage</name>
             <value>
-                <stringValue>Training reminder batch send failed.</stringValue>
+                <stringValue>Training reminder send failed.</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -641,33 +667,43 @@
         <objectType>Contact</objectType>
     </variables>
     <variables>
-        <name>EmailPayloadRecord</name>
-        <apexClass>EmailCommSendRequestDTO</apexClass>
-        <dataType>Apex</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>EmailPayloadRecordCollection</name>
-        <apexClass>EmailCommSendRequestDTO</apexClass>
-        <dataType>Apex</dataType>
+        <name>CommunicationTemplateIdList</name>
+        <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>EmptyEmailPayloadRecord</name>
-        <apexClass>EmailCommSendRequestDTO</apexClass>
-        <dataType>Apex</dataType>
-        <isCollection>false</isCollection>
+        <name>EmptyCommunicationTemplateIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>EmptyEmailPayloadRecordCollection</name>
-        <apexClass>EmailCommSendRequestDTO</apexClass>
-        <dataType>Apex</dataType>
+        <name>EmptyOnboardingIdForSendList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EmptyRecipientIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>OnboardingIdForSendList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>RecipientIdList</name>
+        <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
@@ -709,6 +745,13 @@
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>Contact</objectType>
+    </variables>
+    <variables>
+        <name>SendFailed</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>TrainingAssignmentRecordCollection</name>

@@ -197,7 +197,7 @@ public with sharing class FollowUpFatigueService {
             // For now, return null to let caller handle fallback
             return null;
         } catch (Exception ex) {
-            System.debug('Error getting dealer timezone: ' + ex.getMessage());
+            LoggingUtil.warn('Error getting dealer timezone: ' + ex.getMessage());
             return null;
         }
     }

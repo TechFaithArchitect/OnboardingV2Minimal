@@ -3,8 +3,10 @@
 
 ORG_ALIAS ?= OnboardV2
 ANALYSIS_DIR ?= .analysis/automation-audit
+BEST_PRACTICES_SOURCE ?= docs/implementation-notes/best-practices-review-2026-03-12/full-original.md
+BEST_PRACTICES_DIR ?= docs/implementation-notes/best-practices-review-2026-03-12
 
-.PHONY: audit check-vpr-drift build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors fix-deploy deploy-default-vendor-program
+.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors fix-deploy deploy-default-vendor-program refresh-best-practices-docs
 
 # Fix UnsafeFilepathError from cached temp path in source tracking (e.g. ../../tmp/onboardv2-training-sync-review/...)
 # Run this when deploys fail with "contains unsafe character sequences"
@@ -21,14 +23,41 @@ deploy-default-vendor-program:
 	@sf project deploy start --manifest manifest/deploy-default-vendor-program.xml --target-org $(ORG_ALIAS)
 
 # Run all automation scripts (default target for `make audit`)
-audit: check-vpr-drift build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors
+audit: check-vpr-drift check-cmdt-alias-drift validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors
 	@echo "All automation audits complete."
+
+# CMDT alias drift check (Onboarding-focused)
+check-cmdt-alias-drift:
+	@echo "Checking onboarding CMDT alias drift..."
+	scripts/automation/check-cmdt-alias-drift.sh force-app/main/default/customMetadata
+
+# Canonicalize onboarding CMDT aliases to __mdt naming
+canonicalize-onboarding-cmdt-aliases:
+	@echo "Canonicalizing onboarding CMDT aliases..."
+	scripts/automation/canonicalize-onboarding-cmdt-aliases.sh force-app/main/default/customMetadata
+
+# Validate focal flow error propagation and fault-path assertions
+validate-focal-flow-error-paths:
+	@echo "Validating focal flow error paths..."
+	scripts/automation/validate-focal-flow-error-paths.sh force-app/main/default/flows
 
 # Flow fault connector audit
 audit-fault-connectors:
 	@echo "Auditing flow fault connectors..."
 	@mkdir -p "$(ANALYSIS_DIR)"
 	scripts/automation/audit-flow-fault-connectors.sh force-app/main/default/flows "$(ANALYSIS_DIR)/flow_fault_connector_audit.tsv" || true
+
+# Flow loop-shape audit (in-loop lookup/DML reference detection)
+audit-flow-loop-shape:
+	@echo "Auditing flow loop shape..."
+	@mkdir -p "$(ANALYSIS_DIR)"
+	scripts/automation/audit-flow-loop-shape.sh force-app/main/default/flows "$(ANALYSIS_DIR)" || true
+
+# Flow loop connector-target audit
+audit-flow-loop-connectors:
+	@echo "Auditing flow loop connector targets..."
+	@mkdir -p "$(ANALYSIS_DIR)"
+	scripts/automation/audit-flow-loop-connectors.sh force-app/main/default/flows "$(ANALYSIS_DIR)/flow_loop_connector_audit.tsv" || true
 
 # VPR type vs record type drift check
 check-vpr-drift:
@@ -84,3 +113,8 @@ build-redundancy-audit:
 	@echo "Building automation redundancy audit..."
 	@mkdir -p "$(ANALYSIS_DIR)"
 	scripts/automation/build-automation-redundancy-audit.sh "$(ORG_ALIAS)" "$(ANALYSIS_DIR)" || true
+
+# Refresh split best-practices docs from the source plan
+refresh-best-practices-docs:
+	@echo "Refreshing best-practices split docs..."
+	scripts/automation/refresh-best-practices-review-docs.sh "$(BEST_PRACTICES_SOURCE)" "$(BEST_PRACTICES_DIR)"

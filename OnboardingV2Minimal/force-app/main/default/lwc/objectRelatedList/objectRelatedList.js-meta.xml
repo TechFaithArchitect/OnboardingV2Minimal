@@ -66,6 +66,12 @@
                 description="Allows inline editing for updateable fields in auto-generated columns."
                 default="true" />
             <property
+                name="enablePicklistTelemetry"
+                type="Boolean"
+                label="Enable Picklist Telemetry"
+                description="Shows picklist request/success/fallback counters in the related list header for troubleshooting."
+                default="false" />
+            <property
                 name="readOnlyFieldApiNamesCsv"
                 type="String"
                 label="Read Only Fields (CSV)"

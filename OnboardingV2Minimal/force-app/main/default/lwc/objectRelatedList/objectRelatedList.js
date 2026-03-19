@@ -20,10 +20,8 @@ import { deleteRecord, getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
 import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { getObjectInfo } from 'lightning/uiObjectInfoApi';
+import { getObjectInfo, getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
 import { RefreshEvent, registerRefreshHandler, unregisterRefreshHandler } from 'lightning/refresh';
-
-const UI_API_VERSION = 'v65.0';
 
 export default class ObjectRelatedList extends NavigationMixin(LightningElement) {
     static DEFAULT_NEW_ACTION_BEHAVIOR = 'auto';
@@ -113,6 +111,9 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     /** Optional CSV filters to exclude rows in format FieldApiName=value */
     @api excludeRowsWhereCsv;
 
+    /** Shows picklist fetch telemetry in header for runtime troubleshooting. */
+    @api enablePicklistTelemetry;
+
     rows = [];
     draftValues = [];
     error;
@@ -122,8 +123,23 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     parentSourceRecord;
     picklistOptionsByFieldByRecordType = {};
     picklistRequestKeys = new Set();
+    picklistRecordTypeQueue = [];
+    picklistRecordTypeIdToLoad;
+    picklistWireErrorDetected = false;
     lastLoadedAt;
     refreshHandlerId;
+    recordTypeRefreshRequested = false;
+    picklistTelemetry = {
+        requestCount: 0,
+        successCount: 0,
+        fallbackEmptyCount: 0,
+        fallbackErrorCount: 0,
+        lastFieldApiName: '',
+        lastRecordTypeId: '',
+        lastOutcome: 'none',
+        lastOptionCount: 0,
+        lastError: ''
+    };
 
     connectedCallback() {
         try {
@@ -353,6 +369,19 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         return [this.columnsJsonErrorMessage, this.error].filter((message) => !!message).join(' | ');
     }
 
+    get showPicklistTelemetry() {
+        return this.enablePicklistTelemetry !== false && this.editablePicklistFieldApiNames.length > 0;
+    }
+
+    get picklistTelemetryLabel() {
+        const telemetry = this.picklistTelemetry;
+        const lastField = telemetry.lastFieldApiName || '-';
+        const lastRecordType = telemetry.lastRecordTypeId || '-';
+        const errorSuffix = telemetry.lastError ? ` | err: ${telemetry.lastError}` : '';
+        const wireErrorDetected = this.picklistWireErrorDetected ? 1 : 0;
+        return `Picklist telemetry req:${telemetry.requestCount} ok:${telemetry.successCount} emptyFallback:${telemetry.fallbackEmptyCount} errorFallback:${telemetry.fallbackErrorCount} wireError:${wireErrorDetected} last:${telemetry.lastOutcome} ${lastField}@${lastRecordType} opts:${telemetry.lastOptionCount}${errorSuffix}`;
+    }
+
     get columnsJsonErrorMessage() {
         if (typeof this.columnsJson !== 'string' || !this.columnsJson.trim()) {
             return undefined;
@@ -374,15 +403,116 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             if (previousApiName && previousApiName !== data.apiName) {
                 this.picklistOptionsByFieldByRecordType = {};
                 this.picklistRequestKeys.clear();
+                this.picklistRecordTypeQueue = [];
+                this.picklistRecordTypeIdToLoad = undefined;
+                this.picklistWireErrorDetected = false;
+                this.recordTypeRefreshRequested = false;
+                this.resetPicklistTelemetry();
             }
             this.objectInfo = data;
             if (this.rows.length) {
                 this.rows = this.decorateRowsWithPicklistOptions(this.rows);
                 this.ensurePicklistOptionsLoadedForRows(this.rows);
+                if (
+                    this.objectHasRecordTypeId &&
+                    !this.rowsIncludeRecordTypeId(this.rows) &&
+                    !this.recordTypeRefreshRequested
+                ) {
+                    this.recordTypeRefreshRequested = true;
+                    this.refreshList().catch(() => {});
+                }
             }
         } else if (error) {
             // Safe to ignore; will fall back to default icon
             this.objectInfo = undefined;
+        }
+    }
+
+    @wire(getPicklistValuesByRecordType, {
+        objectApiName: '$childObjectApiName',
+        recordTypeId: '$picklistRecordTypeIdToLoad'
+    })
+    wiredPicklistValuesByRecordType({ data, error }) {
+        const recordTypeId = this.picklistRecordTypeIdToLoad;
+        if (!recordTypeId) {
+            return;
+        }
+
+        const requestKey = this.getPicklistRecordTypeRequestKey(recordTypeId);
+        const picklistFields = this.editablePicklistFieldApiNames;
+        if (!picklistFields.length) {
+            this.completePicklistRecordTypeLoad(requestKey);
+            return;
+        }
+
+        if (!data && !error) {
+            return;
+        }
+
+        try {
+            if (data) {
+                picklistFields.forEach((fieldApiName) => {
+                    if (!this.picklistOptionsByFieldByRecordType[fieldApiName]) {
+                        this.picklistOptionsByFieldByRecordType[fieldApiName] = {};
+                    }
+                    const rawValues = data?.picklistFieldValues?.[fieldApiName]?.values || [];
+                    const scopedOptions = this.normalizePicklistOptions(
+                        rawValues.map((entry) => ({
+                            label: entry.label || entry.value,
+                            value: entry.value
+                        }))
+                    );
+                    const finalOptions = this.hasNonEmptyOptions(scopedOptions)
+                        ? scopedOptions
+                        : this.getFieldPicklistFallbackOptions(fieldApiName);
+                    this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId] = finalOptions;
+                    this.recordPicklistTelemetryOutcome({
+                        fieldApiName,
+                        recordTypeId,
+                        outcome: this.hasNonEmptyOptions(scopedOptions) ? 'success' : 'fallback-empty',
+                        optionCount: finalOptions.length
+                    });
+                });
+            } else {
+                const errorMessage = this.reduceErrors(error).join(', ');
+                this.picklistWireErrorDetected = true;
+                picklistFields.forEach((fieldApiName) => {
+                    if (!this.picklistOptionsByFieldByRecordType[fieldApiName]) {
+                        this.picklistOptionsByFieldByRecordType[fieldApiName] = {};
+                    }
+                    const fallbackOptions = this.getFieldPicklistFallbackOptions(fieldApiName);
+                    this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId] = fallbackOptions;
+                    this.recordPicklistTelemetryOutcome({
+                        fieldApiName,
+                        recordTypeId,
+                        outcome: 'fallback-error',
+                        optionCount: fallbackOptions.length,
+                        errorMessage
+                    });
+                });
+            }
+        } catch (unexpectedError) {
+            const errorMessage = this.reduceErrors(unexpectedError).join(', ');
+            this.picklistWireErrorDetected = true;
+            picklistFields.forEach((fieldApiName) => {
+                if (!this.picklistOptionsByFieldByRecordType[fieldApiName]) {
+                    this.picklistOptionsByFieldByRecordType[fieldApiName] = {};
+                }
+                if (!this.hasNonEmptyOptions(this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId])) {
+                    this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId] =
+                        this.getFieldPicklistFallbackOptions(fieldApiName);
+                }
+                this.recordPicklistTelemetryOutcome({
+                    fieldApiName,
+                    recordTypeId,
+                    outcome: 'fallback-error',
+                    optionCount: this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId]?.length || 0,
+                    errorMessage
+                });
+            });
+        } finally {
+            this.rows = this.decorateRowsWithPicklistOptions(this.rows);
+            this.completePicklistRecordTypeLoad(requestKey);
         }
     }
 
@@ -392,6 +522,9 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         const { data, error } = value;
         if (data) {
             const transformedRows = this.applyRowExclusions(this.transformRows(data));
+            if (this.rowsIncludeRecordTypeId(transformedRows)) {
+                this.recordTypeRefreshRequested = false;
+            }
             this.rows = this.decorateRowsWithPicklistOptions(transformedRows);
             this.ensurePicklistOptionsLoadedForRows(transformedRows);
             this.lastLoadedAt = new Date();
@@ -568,7 +701,8 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
 
     getPicklistOptionsForRowField(fieldApiName, recordTypeId, currentValue) {
         const fieldOptionsByRecordType = this.picklistOptionsByFieldByRecordType[fieldApiName] || {};
-        const options = recordTypeId ? (fieldOptionsByRecordType[recordTypeId] || []) : [];
+        const cachedOptions = recordTypeId ? (fieldOptionsByRecordType[recordTypeId] || []) : [];
+        const options = this.hasNonEmptyOptions(cachedOptions) ? cachedOptions : [];
         const normalizedValue = currentValue === null || currentValue === undefined ? '' : String(currentValue);
 
         if (!normalizedValue) {
@@ -581,6 +715,173 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         }
 
         return [{ label: normalizedValue, value: normalizedValue }, ...options];
+    }
+
+    getFieldPicklistFallbackOptions(fieldApiName) {
+        const fieldInfo = this.getFieldInfo(fieldApiName);
+        const picklistValues = Array.isArray(fieldInfo?.picklistValues) ? fieldInfo.picklistValues : [];
+        return this.normalizePicklistOptions(
+            picklistValues
+            .filter((entry) => entry?.active !== false && entry?.value)
+            .map((entry) => ({
+                label: entry.label || entry.value,
+                value: entry.value
+            }))
+        );
+    }
+
+    normalizePicklistOptions(options) {
+        if (!Array.isArray(options) || !options.length) {
+            return [];
+        }
+        const normalized = [];
+        const seenValues = new Set();
+        options.forEach((entry) => {
+            const rawValue = entry?.value;
+            if (rawValue === null || rawValue === undefined || rawValue === '') {
+                return;
+            }
+            const value = String(rawValue);
+            if (seenValues.has(value)) {
+                return;
+            }
+            seenValues.add(value);
+            const label = entry?.label ? String(entry.label) : value;
+            normalized.push({ label, value });
+        });
+        return normalized;
+    }
+
+    hasNonEmptyOptions(options) {
+        return Array.isArray(options) && options.length > 0;
+    }
+
+    getPicklistRecordTypeRequestKey(recordTypeId) {
+        return `${this.targetObjectApiName || '-'}|${recordTypeId || '-'}`;
+    }
+
+    hasAllFieldOptionsForRecordType(recordTypeId, fieldApiNames) {
+        if (!recordTypeId || !Array.isArray(fieldApiNames) || !fieldApiNames.length) {
+            return true;
+        }
+        return fieldApiNames.every((fieldApiName) => {
+            const options = this.picklistOptionsByFieldByRecordType?.[fieldApiName]?.[recordTypeId];
+            return this.hasNonEmptyOptions(options);
+        });
+    }
+
+    enqueuePicklistRecordTypeLoad(recordTypeId, fieldApiNames) {
+        if (!recordTypeId || this.hasAllFieldOptionsForRecordType(recordTypeId, fieldApiNames)) {
+            return;
+        }
+        const requestKey = this.getPicklistRecordTypeRequestKey(recordTypeId);
+        if (this.picklistRequestKeys.has(requestKey)) {
+            return;
+        }
+        if (this.picklistRecordTypeIdToLoad === recordTypeId) {
+            return;
+        }
+        if (this.picklistRecordTypeQueue.includes(recordTypeId)) {
+            return;
+        }
+
+        this.picklistRecordTypeQueue = [...this.picklistRecordTypeQueue, recordTypeId];
+        this.processPicklistRecordTypeQueue();
+    }
+
+    processPicklistRecordTypeQueue() {
+        if (this.picklistRecordTypeIdToLoad || !this.picklistRecordTypeQueue.length) {
+            return;
+        }
+
+        const nextRecordTypeId = this.picklistRecordTypeQueue[0];
+        this.picklistRecordTypeQueue = this.picklistRecordTypeQueue.slice(1);
+        this.picklistRecordTypeIdToLoad = nextRecordTypeId;
+
+        const requestKey = this.getPicklistRecordTypeRequestKey(nextRecordTypeId);
+        this.picklistRequestKeys.add(requestKey);
+        this.editablePicklistFieldApiNames.forEach((fieldApiName) => {
+            this.recordPicklistTelemetryStart(fieldApiName, nextRecordTypeId);
+        });
+    }
+
+    completePicklistRecordTypeLoad(requestKey) {
+        if (requestKey) {
+            this.picklistRequestKeys.delete(requestKey);
+        }
+        this.picklistRecordTypeIdToLoad = undefined;
+        this.processPicklistRecordTypeQueue();
+    }
+
+    rowsIncludeRecordTypeId(rows) {
+        if (!Array.isArray(rows) || !rows.length) {
+            return false;
+        }
+        return rows.some((row) => !!row?.RecordTypeId);
+    }
+
+    resetPicklistTelemetry() {
+        this.picklistTelemetry = {
+            requestCount: 0,
+            successCount: 0,
+            fallbackEmptyCount: 0,
+            fallbackErrorCount: 0,
+            lastFieldApiName: '',
+            lastRecordTypeId: '',
+            lastOutcome: 'none',
+            lastOptionCount: 0,
+            lastError: ''
+        };
+    }
+
+    recordPicklistTelemetryStart(fieldApiName, recordTypeId) {
+        this.picklistTelemetry = {
+            ...this.picklistTelemetry,
+            requestCount: (this.picklistTelemetry.requestCount || 0) + 1,
+            lastFieldApiName: fieldApiName || '',
+            lastRecordTypeId: recordTypeId || '',
+            lastOutcome: 'request',
+            lastOptionCount: 0,
+            lastError: ''
+        };
+
+        // eslint-disable-next-line no-console
+        console.info(
+            `[objectRelatedList][picklist] request field=${fieldApiName || '-'} recordTypeId=${recordTypeId || '-'}`
+        );
+    }
+
+    recordPicklistTelemetryOutcome({ fieldApiName, recordTypeId, outcome, optionCount, errorMessage }) {
+        const nextTelemetry = {
+            ...this.picklistTelemetry,
+            lastFieldApiName: fieldApiName || '',
+            lastRecordTypeId: recordTypeId || '',
+            lastOutcome: outcome || 'unknown',
+            lastOptionCount: Number.isFinite(optionCount) ? optionCount : 0,
+            lastError: errorMessage || ''
+        };
+
+        if (outcome === 'success') {
+            nextTelemetry.successCount = (nextTelemetry.successCount || 0) + 1;
+        } else if (outcome === 'fallback-empty') {
+            nextTelemetry.fallbackEmptyCount = (nextTelemetry.fallbackEmptyCount || 0) + 1;
+        } else if (outcome === 'fallback-error') {
+            nextTelemetry.fallbackErrorCount = (nextTelemetry.fallbackErrorCount || 0) + 1;
+        }
+
+        this.picklistTelemetry = nextTelemetry;
+
+        const logMessage =
+            `[objectRelatedList][picklist] ${outcome || 'unknown'} ` +
+            `field=${fieldApiName || '-'} recordTypeId=${recordTypeId || '-'} options=${nextTelemetry.lastOptionCount}` +
+            (errorMessage ? ` error=${errorMessage}` : '');
+        if (outcome === 'fallback-error') {
+            // eslint-disable-next-line no-console
+            console.warn(logMessage);
+        } else {
+            // eslint-disable-next-line no-console
+            console.info(logMessage);
+        }
     }
 
     decorateRowsWithPicklistOptions(rows) {
@@ -627,66 +928,17 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             recordTypeIds.add(this.defaultRecordTypeId);
         }
 
-        const loadPromises = [];
         picklistFields.forEach((fieldApiName) => {
             if (!this.picklistOptionsByFieldByRecordType[fieldApiName]) {
                 this.picklistOptionsByFieldByRecordType[fieldApiName] = {};
             }
-
-            recordTypeIds.forEach((recordTypeId) => {
-                if (!recordTypeId || this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId]) {
-                    return;
-                }
-                const requestKey = `${this.targetObjectApiName}|${fieldApiName}|${recordTypeId}`;
-                if (this.picklistRequestKeys.has(requestKey)) {
-                    return;
-                }
-
-                this.picklistRequestKeys.add(requestKey);
-                loadPromises.push(
-                    this.fetchPicklistOptions(fieldApiName, recordTypeId)
-                        .then((options) => {
-                            this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId] = options;
-                        })
-                        .catch(() => {
-                            this.picklistOptionsByFieldByRecordType[fieldApiName][recordTypeId] = [];
-                        })
-                        .finally(() => {
-                            this.picklistRequestKeys.delete(requestKey);
-                        })
-                );
-            });
         });
 
-        if (loadPromises.length) {
-            Promise.all(loadPromises).then(() => {
-                this.rows = this.decorateRowsWithPicklistOptions(this.rows);
-            });
-        }
-    }
-
-    async fetchPicklistOptions(fieldApiName, recordTypeId) {
-        const objectApiName = encodeURIComponent(this.targetObjectApiName);
-        const field = encodeURIComponent(fieldApiName);
-        const rtId = encodeURIComponent(recordTypeId);
-        const endpoint = `/services/data/${UI_API_VERSION}/ui-api/object-info/${objectApiName}/picklist-values/${rtId}/${field}`;
-        const response = await fetch(endpoint, {
-            method: 'GET',
-            headers: { Accept: 'application/json' }
+        recordTypeIds.forEach((recordTypeId) => {
+            this.enqueuePicklistRecordTypeLoad(recordTypeId, picklistFields);
         });
-        const body = await response.json();
-        if (!response.ok) {
-            throw new Error(
-                body?.[0]?.message ||
-                body?.message ||
-                `Failed to load picklist values for ${fieldApiName}`
-            );
-        }
-        const values = Array.isArray(body?.values) ? body.values : [];
-        return values.map((option) => ({
-            label: option.label,
-            value: option.value
-        }));
+
+        this.processPicklistRecordTypeQueue();
     }
 
     handleRefresh() {

@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Evaluate_Onboarding_Status_Bulk</name>
+        <label>Evaluate Onboarding Status Bulk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingStatusEvaluatorInvocable</actionName>
+        <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Capture_Evaluate_Onboarding_Status_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>onboardingIds</name>
+            <value>
+                <elementReference>OnboardingIdCollection</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>applyUpdates</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingStatusEvaluatorInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Set_Onboarding_Status_to_Setup_Complete</name>
-        <label>Set Onboarding Status to Setup Complete</label>
+        <name>Add_Onboarding_Id_To_Collection</name>
+        <label>Add Onboarding Id To Collection</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>Loop_Onboarding_Records.Onboarding_Status__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Setup Complete</stringValue>
-            </value>
-        </assignmentItems>
-        <assignmentItems>
-            <assignToReference>UpdatedOnboardingRecordCollection</assignToReference>
+            <assignToReference>OnboardingIdCollection</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Loop_Onboarding_Records</elementReference>
+                <elementReference>Loop_Onboarding_Records.Id</elementReference>
             </value>
         </assignmentItems>
         <connector>
             <targetReference>Loop_Onboarding_Records</targetReference>
         </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Evaluate_Onboarding_Status_Fault</name>
+        <label>Capture Evaluate Onboarding Status Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
     </assignments>
     <decisions>
         <name>Onboarding_Records_Found</name>
@@ -66,10 +102,10 @@
         <collectionReference>OnboardingRecordCollection</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Set_Onboarding_Status_to_Setup_Complete</targetReference>
+            <targetReference>Add_Onboarding_Id_To_Collection</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Update_Onboarding_Status</targetReference>
+            <targetReference>Evaluate_Onboarding_Status_Bulk</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -91,13 +127,6 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordUpdates>
-        <name>Update_Onboarding_Status</name>
-        <label>Update Onboarding Status</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <inputReference>UpdatedOnboardingRecordCollection</inputReference>
-    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
@@ -114,6 +143,7 @@
         </filters>
         <object>Order</object>
         <recordTriggerType>Update</recordTriggerType>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
@@ -138,15 +168,21 @@
         </outputAssignments>
     </subflows>
     <variables>
-        <name>OnboardingRecordCollection</name>
-        <dataType>SObject</dataType>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>OnboardingIdCollection</name>
+        <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-        <objectType>Onboarding__c</objectType>
     </variables>
     <variables>
-        <name>UpdatedOnboardingRecordCollection</name>
+        <name>OnboardingRecordCollection</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>

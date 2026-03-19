@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Email_and_Log_Communication</name>
+        <label>Send Email and Log Communication</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>CommunicationTemplateBulkSendAction</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Should_Queue_Communication_Fault</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Capture_Send_Email_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>defaultSenderAddress</name>
+            <value>
+                <stringValue>customeronboarding@perfect-vision.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>communicationTemplateIds</name>
+            <value>
+                <elementReference>CommunicationTemplateIdList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>RecipientIdList</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onboardingIds</name>
+            <value>
+                <elementReference>OnboardingIdForSendList</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>CommunicationTemplateBulkSendAction</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>SendErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>SendFailed</assignToReference>
+            <name>sendFailed</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
@@ -15,7 +64,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Recipient_Ids</targetReference>
+            <targetReference>Reset_Send_Result</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -31,7 +80,71 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Recipient_Ids</targetReference>
+            <targetReference>Reset_Send_Result</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Dispatch_Allowed_From_Agent</name>
+        <label>Assign Dispatch Allowed From Agent</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>DispatchAllowed</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>DispatchAllowedForAgent</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Should_Dispatch_Template</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Dispatch_Allowed_From_Contact</name>
+        <label>Assign Dispatch Allowed From Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>DispatchAllowed</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>DispatchAllowedForContact</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Should_Dispatch_Template</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Dispatch_Allowed_From_Input</name>
+        <label>Assign Dispatch Allowed From Input</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>DispatchAllowed</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>DispatchAllowedForInput</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Should_Dispatch_Template</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Dispatch_Allowed_From_PrincipalOwner</name>
+        <label>Assign Dispatch Allowed From Principal Owner</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>DispatchAllowed</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>DispatchAllowedForPrincipalOwner</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Should_Dispatch_Template</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -47,7 +160,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Recipient_Ids</targetReference>
+            <targetReference>Reset_Send_Result</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -63,7 +176,60 @@
             </value>
         </assignmentItems>
         <connector>
+            <targetReference>Reset_Send_Result</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Record_to_Email_Request</name>
+        <label>Assign Record to Email Request</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>CommunicationTemplateIdList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Communication_Templates.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>RecipientIdList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Recipient_Ids</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingIdForSendList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
             <targetReference>Loop_Recipient_Ids</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Send_Email_Fault</name>
+        <label>Capture Send Email Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>SendErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>SendFailed</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Queue_Communication_Fault</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -85,10 +251,140 @@
                 <stringValue></stringValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CommunicationTemplateIdList</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyCommunicationTemplateIdList</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>RecipientIdList</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyRecipientIdList</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingIdForSendList</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyOnboardingIdForSendList</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
-            <targetReference>Send_Communication_Template</targetReference>
+            <targetReference>Loop_Recipient_Ids</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>Determine_Dispatch_Allowance_For_Template</name>
+        <label>Determine Dispatch Allowance For Template</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Dispatch_Allowed_From_Contact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Contact (Default)</defaultConnectorLabel>
+        <rules>
+            <name>Use_Input_Recipient_Type_for_Dispatch_Allowance</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientType</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientType</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Dispatch_Allowed_From_Input</targetReference>
+            </connector>
+            <label>Use Input Recipient Type</label>
+        </rules>
+        <rules>
+            <name>Template_Recipient_PrincipalOwner_Dispatch</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Communication_Templates.Recipient_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>PrincipalOwner</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Dispatch_Allowed_From_PrincipalOwner</targetReference>
+            </connector>
+            <label>Template Recipient Principal Owner</label>
+        </rules>
+        <rules>
+            <name>Template_Recipient_Agent_Dispatch</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Communication_Templates.Recipient_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Agent</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Dispatch_Allowed_From_Agent</targetReference>
+            </connector>
+            <label>Template Recipient Agent</label>
+        </rules>
+        <rules>
+            <name>Template_Recipient_Contact_Dispatch</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Communication_Templates.Recipient_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Contact</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Dispatch_Allowed_From_Contact</targetReference>
+            </connector>
+            <label>Template Recipient Contact</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Determine_Dispatch_Policy_Preload_Strategy</name>
+        <label>Determine Dispatch Policy Preload Strategy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Contact_Dispatch_Policy</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Build Policy Cache From Templates</defaultConnectorLabel>
+        <rules>
+            <name>Use_Input_Recipient_Type_for_Policy_Cache</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>RecipientType</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>RecipientType</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Input_Dispatch_Policy</targetReference>
+            </connector>
+            <label>Use Input Recipient Type</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Determine_Recipient_Cache_Strategy</name>
         <label>Determine Recipient Cache Strategy</label>
@@ -224,6 +520,38 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Has_Email_Requests</name>
+        <label>Has Email Requests</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Communication_Templates</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Requests</defaultConnectorLabel>
+        <rules>
+            <name>Requests_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CommunicationTemplateIdList</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CommunicationTemplateIdList</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_Email_and_Log_Communication</targetReference>
+            </connector>
+            <label>Requests Present</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Should_Dispatch_Template</name>
         <label>Should Dispatch Template</label>
         <locationX>0</locationX>
@@ -254,7 +582,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Loop_Recipient_Ids</targetReference>
+            <targetReference>Loop_Communication_Templates</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
@@ -281,8 +609,7 @@
         <expression>{!OnboardingRecord.Id} &amp; &quot;|&quot; &amp;
 {!CommunicationType} &amp; &quot;|&quot; &amp;
 {!ResolvedRecipientType} &amp; &quot;|&quot; &amp;
-{!Loop_Communication_Templates.Id} &amp; &quot;|&quot; &amp;
-{!Loop_Recipient_Ids}</expression>
+{!Loop_Communication_Templates.Id}</expression>
     </formulas>
     <formulas>
         <name>ResolvedRecipientType</name>
@@ -310,7 +637,7 @@
         <collectionReference>CommunicationTemplateRecordCollection</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Communication_Dispatch_Policy</targetReference>
+            <targetReference>Determine_Dispatch_Allowance_For_Template</targetReference>
         </nextValueConnector>
     </loops>
     <loops>
@@ -321,10 +648,10 @@
         <collectionReference>CurrentRecipientIdCollection</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Reset_Send_Result</targetReference>
+            <targetReference>Assign_Record_to_Email_Request</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Loop_Communication_Templates</targetReference>
+            <targetReference>Has_Email_Requests</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -360,7 +687,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Loop_Communication_Templates</targetReference>
+            <targetReference>Determine_Dispatch_Policy_Preload_Strategy</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Recipients</flowName>
         <inputAssignments>
@@ -381,12 +708,12 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>Get_Communication_Dispatch_Policy</name>
-        <label>Get Communication Dispatch Policy</label>
+        <name>Get_Agent_Dispatch_Policy</name>
+        <label>Get Agent Dispatch Policy</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Should_Dispatch_Template</targetReference>
+            <targetReference>Loop_Communication_Templates</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
         <inputAssignments>
@@ -398,7 +725,7 @@
         <inputAssignments>
             <name>RecipientType</name>
             <value>
-                <elementReference>ResolvedRecipientType</elementReference>
+                <stringValue>Agent</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -408,7 +735,103 @@
             </value>
         </inputAssignments>
         <outputAssignments>
-            <assignToReference>DispatchAllowed</assignToReference>
+            <assignToReference>DispatchAllowedForAgent</assignToReference>
+            <name>DispatchAllowed</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Get_Contact_Dispatch_Policy</name>
+        <label>Get Contact Dispatch Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_PrincipalOwner_Dispatch_Policy</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
+        <inputAssignments>
+            <name>CommunicationType</name>
+            <value>
+                <elementReference>CommunicationType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecipientType</name>
+            <value>
+                <stringValue>Contact</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>DispatchAllowedForContact</assignToReference>
+            <name>DispatchAllowed</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Get_Input_Dispatch_Policy</name>
+        <label>Get Input Dispatch Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_Communication_Templates</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
+        <inputAssignments>
+            <name>CommunicationType</name>
+            <value>
+                <elementReference>CommunicationType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecipientType</name>
+            <value>
+                <elementReference>RecipientType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>DispatchAllowedForInput</assignToReference>
+            <name>DispatchAllowed</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Get_PrincipalOwner_Dispatch_Policy</name>
+        <label>Get Principal Owner Dispatch Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Agent_Dispatch_Policy</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
+        <inputAssignments>
+            <name>CommunicationType</name>
+            <value>
+                <elementReference>CommunicationType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecipientType</name>
+            <value>
+                <stringValue>PrincipalOwner</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>DispatchAllowedForPrincipalOwner</assignToReference>
             <name>DispatchAllowed</name>
         </outputAssignments>
     </subflows>
@@ -476,7 +899,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Loop_Communication_Templates</targetReference>
+            <targetReference>Determine_Dispatch_Policy_Preload_Strategy</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Recipients</flowName>
         <inputAssignments>
@@ -548,7 +971,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Loop_Recipient_Ids</targetReference>
+            <targetReference>Loop_Communication_Templates</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
         <inputAssignments>
@@ -584,7 +1007,7 @@
         <inputAssignments>
             <name>SourceElementApiName</name>
             <value>
-                <stringValue>Send_Communication_Template</stringValue>
+                <stringValue>Send_Email_and_Log_Communication</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -596,42 +1019,6 @@
         <outputAssignments>
             <assignToReference>SendErrorMessage</assignToReference>
             <name>ResolvedFaultMessage</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>Send_Communication_Template</name>
-        <label>Send Communication Template</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Should_Queue_Communication_Fault</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_ACTION_Send_Communication_Template</flowName>
-        <inputAssignments>
-            <name>CommunicationTemplateRecord</name>
-            <value>
-                <elementReference>Loop_Communication_Templates</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>OnboardingRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>RecipientId</name>
-            <value>
-                <elementReference>Loop_Recipient_Ids</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>SendErrorMessage</assignToReference>
-            <name>ErrorMessage</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>SendFailed</assignToReference>
-            <name>SendFailed</name>
         </outputAssignments>
     </subflows>
     <variables>
@@ -657,6 +1044,13 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>CommunicationTemplateIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>ContactRecipientIdCollection</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
@@ -678,7 +1072,63 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>DispatchAllowedForAgent</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DispatchAllowedForContact</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DispatchAllowedForInput</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DispatchAllowedForPrincipalOwner</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EmptyCommunicationTemplateIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EmptyOnboardingIdForSendList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EmptyRecipientIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>InputRecipientIdCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>OnboardingIdForSendList</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
@@ -704,6 +1154,13 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>RecipientIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

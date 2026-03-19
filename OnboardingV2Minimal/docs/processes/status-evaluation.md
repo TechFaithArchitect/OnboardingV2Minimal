@@ -1,33 +1,45 @@
-# Status Evaluation (MVP)
+# Status Evaluation
 
-This document describes how onboarding status is evaluated.
+This document describes the current status-evaluation chain and the intended single-owner pattern.
 
-## Inputs
+## Current chain
 
-- `Onboarding__c` (with related `Onboarding_Requirement__c` records)
-- `Onboarding_Status_Normalization__mdt` (CMDT) – per-requirement normalized status mapping (Requirement_Type__c + Status__c → Normalized_Status__c)
-- `Onboarding_Status_Evaluation_Rule__mdt` (CMDT) – rules for evaluating target Onboarding Status and Opportunity Stage
-- Flow: `BLL_Onboarding_Requirement_RCD_Logical_Process` – record-triggered on Onboarding Requirement create/update
+1. Evidence updates subject status (`Onboarding_Requirement_Subject__c.Status__c`).
+2. Subject statuses roll up to parent requirement status/completion.
+3. Requirement change triggers `BLL_Onboarding_Requirement_RCD_Logical_Process`.
+4. That flow calls `OnboardingStatusEvaluatorInvocable`.
+5. Evaluator normalizes statuses and applies ordered CMDT rules.
+6. Evaluator updates `Onboarding__c.Onboarding_Status__c` and optional `Opportunity.StageName`.
 
-## Flow
+## CMDT used
 
-1. When an Onboarding Requirement is created or updated, the flow runs.
-2. The flow calls `OnboardingStatusEvaluatorInvocable` (Apex) with the Onboarding Id.
-3. The invocable loads requirements, normalizes statuses via `Onboarding_Status_Normalization__mdt`, and evaluates rules from `Onboarding_Status_Evaluation_Rule__mdt` in order.
-4. The first matching rule determines the target Onboarding Status (and optionally Opportunity Stage).
-5. The invocable updates `Onboarding__c.Onboarding_Status__c` and `Opportunity.StageName` when applicable.
+- `Onboarding_Status_Normalization__mdt`
+  - Maps `(Requirement_Type__c, Status__c)` to `Normalized_Status__c`.
+- `Onboarding_Status_Evaluation_Rule__mdt`
+  - Ordered first-match rules using `Rule_Order__c`.
+- `Onboarding_Fulfillment_Policy__mdt`
+  - Defines subject model for requirement fulfillment (`Account`, `AllContacts`, `PrincipalOwner`, etc.).
 
-## Evaluation Rules (Condition Types)
+## Evaluation rules (condition types)
 
-- `ANY_DENIED` – Any requirement has normalized status Denied → Denied
-- `OPPORTUNITY_CANCELED` – Opportunity stage is Canceled/Closed Lost → Canceled
-- `ALL_SETUP_COMPLETE` – All requirements Setup Complete or Ignore → Setup Complete
-- `ONLY_AGREEMENT_OUT_FOR_SIGNATURE` – Only Agreement has "Out for signature" → Out For Signature
-- `ONLY_AGREEMENT_SIGNED` – Only Agreement has Signed/Setup Complete → Pending Initial Review
-- `AGREEMENT_SIGNED_AND_CONTRACT_COMPLETE` – Agreement signed, Contract complete → In Process
-- `PENDING_SALES` – Not denied, not all complete, Assigned_Team = Sales → Pending Sales
-- `IN_PROCESS_DEFAULT` – Not denied, not all complete → In Process
+- `ANY_DENIED`
+- `OPPORTUNITY_CANCELED`
+- `ALL_SETUP_COMPLETE`
+- `ONLY_AGREEMENT_OUT_FOR_SIGNATURE`
+- `ONLY_AGREEMENT_SIGNED`
+- `AGREEMENT_SIGNED_AND_CONTRACT_COMPLETE`
+- `PENDING_SALES`
+- `IN_PROCESS_DEFAULT`
 
-## Overrides
+## Known design direction
 
-When `Onboarding_Requirement__c.Is_Overridden__c` is true, the normalized status can differ from the raw status.
+Onboarding status should have one owner flow:
+
+- Owner: `BLL_Onboarding_Requirement_RCD_Logical_Process`
+- Other flows should update subject/requirement evidence only, not write onboarding status directly.
+- `P0` implementation (2026-03-19) has been deployed: `BLL_Order_RCD_Business_Logic` now routes through evaluator action instead of direct onboarding-status assignment.
+
+See:
+
+- Business guide: `docs/user-guides/onboarding-status-business-rules-guide.md`
+- Technical plan: `docs/implementation-notes/onboarding-status-single-owner-flow-plan-2026-03-19.md`

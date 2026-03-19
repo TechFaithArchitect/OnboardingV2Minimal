@@ -3,6 +3,45 @@
     <apiVersion>62.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Capture_Create_Contract_Fault</name>
+        <label>Capture Create Contract Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Contract_Record_Collection_Fault</name>
+        <label>Capture Update Contract Record Collection Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Contract_Record_Fault</name>
+        <label>Capture Update Contract Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Assign_Created_Contract_to_ContractRecord</name>
         <label>Assign Created Contract to ContractRecord</label>
         <locationX>578</locationX>
@@ -123,6 +162,9 @@
         <connector>
             <targetReference>Assign_Created_Contract_to_ContractRecord</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Create_Contract_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>AccountId</field>
             <value>
@@ -265,6 +307,9 @@
         <label>Update Contract Record</label>
         <locationX>50</locationX>
         <locationY>242</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Contract_Record_Fault</targetReference>
+        </faultConnector>
         <inputReference>ContractRecord</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -272,6 +317,9 @@
         <label>Update Contract Record Collection</label>
         <locationX>314</locationX>
         <locationY>242</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Contract_Record_Collection_Fault</targetReference>
+        </faultConnector>
         <inputReference>ContractRecordCollection</inputReference>
     </recordUpdates>
     <start>
@@ -305,6 +353,13 @@
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>Contract</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>OnboardingRecord</name>

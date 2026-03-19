@@ -68,7 +68,7 @@ public with sharing class FollowUpDetectionService {
         requirementIds.add(onboardingRequirement.Id);
       }
     } catch (Exception ex) {
-      System.debug('Error querying requirements: ' + ex.getMessage());
+      LoggingUtil.error('Error querying requirements: ' + ex.getMessage());
       return;
     }
 
@@ -157,7 +157,7 @@ public with sharing class FollowUpDetectionService {
       ];
       return requirements.isEmpty() ? null : requirements[0];
     } catch (Exception ex) {
-      System.debug('Error querying requirement: ' + ex.getMessage());
+      LoggingUtil.error('Error querying requirement: ' + ex.getMessage());
       return null;
     }
   }
@@ -190,7 +190,7 @@ public with sharing class FollowUpDetectionService {
         requirements.put(onboardingRequirement.Id, onboardingRequirement);
       }
     } catch (Exception ex) {
-      System.debug('Error querying requirements: ' + ex.getMessage());
+      LoggingUtil.error('Error querying requirements: ' + ex.getMessage());
     }
     return requirements;
   }
@@ -216,7 +216,7 @@ public with sharing class FollowUpDetectionService {
         ORDER BY Initial_Delay_Days__c ASC
       ];
     } catch (Exception ex) {
-      System.debug('Error querying follow-up rules: ' + ex.getMessage());
+      LoggingUtil.error('Error querying follow-up rules: ' + ex.getMessage());
       return new List<Follow_Up_Rule__mdt>();
     }
   }
@@ -360,7 +360,7 @@ public with sharing class FollowUpDetectionService {
         // followUp.Timezone__c = account.Time_zone__pc;
       } catch (Exception ex) {
         // Timezone field may not exist or be accessible
-        System.debug('Could not set timezone: ' + ex.getMessage());
+        LoggingUtil.warn('Could not set timezone: ' + ex.getMessage());
       }
     }
 
@@ -411,7 +411,7 @@ public with sharing class FollowUpDetectionService {
       ];
       return count > 0;
     } catch (Exception ex) {
-      System.debug('Error checking existing follow-up: ' + ex.getMessage());
+      LoggingUtil.error('Error checking existing follow-up: ' + ex.getMessage());
       return false;
     }
   }

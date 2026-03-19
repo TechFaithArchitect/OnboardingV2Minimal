@@ -3,6 +3,59 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_Contract_and_Agreement_to_Onboarding</name>
+        <label>Assign Contract and Agreement to Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>OnboardingRecord.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingRecord.Contract__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>ContractRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingRecord.Agreement__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>AgreementRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Contract_to_Onboarding</name>
+        <label>Assign Contract to Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>OnboardingRecord.Contract__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>ContractRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>OnboardingRecord.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Error_Message</name>
         <label>Assign Error Message</label>
         <locationX>0</locationX>
@@ -12,6 +65,19 @@
             <operator>Assign</operator>
             <value>
                 <stringValue>Error: Neither the Onboarding Record Nor the Onboarding Requirement Record Were Passed</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Record_Fault</name>
+        <label>Capture Update Onboarding Record Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
             </value>
         </assignmentItems>
     </assignments>
@@ -112,6 +178,16 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Onboarding_Record</name>
+        <label>Update Onboarding Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Onboarding_Record_Fault</targetReference>
+        </faultConnector>
+        <inputReference>OnboardingRecord</inputReference>
+    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
@@ -125,6 +201,9 @@
         <label>Create Agreement</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Contract_and_Agreement_to_Onboarding</targetReference>
+        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Agreement</flowName>
         <inputAssignments>
             <name>ContractRecord</name>
@@ -152,6 +231,9 @@
         <label>Create Contract</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Contract_to_Onboarding</targetReference>
+        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Contract</flowName>
         <inputAssignments>
             <name>AccountRecord</name>
@@ -186,6 +268,10 @@
         <outputAssignments>
             <assignToReference>ContractRecord</assignToReference>
             <name>ContractRecord</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>

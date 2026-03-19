@@ -2,6 +2,38 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Set_Execution_Path_Create</name>
+        <label>Set Execution Path Create</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ExecutionPath</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Create</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Vendor_Program</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Execution_Path_Communication_Update</name>
+        <label>Set Execution Path Communication Update</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ExecutionPath</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>CommunicationUpdate</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Vendor_Program</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Determine_Execution_Path</name>
         <label>Determine Execution Path</label>
@@ -19,7 +51,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Vendor_Program_Requirements</targetReference>
+                <targetReference>Set_Execution_Path_Create</targetReference>
             </connector>
             <label>Onboarding Created</label>
         </rules>
@@ -55,9 +87,46 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Determine_Send_Training</targetReference>
+                <targetReference>Set_Execution_Path_Communication_Update</targetReference>
             </connector>
             <label>Onboarding Communication Update</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Route_After_Vendor_Program</name>
+        <label>Route After Vendor Program</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Action Needed</defaultConnectorLabel>
+        <rules>
+            <name>Create_Path</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ExecutionPath</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Create</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Vendor_Program_Requirements</targetReference>
+            </connector>
+            <label>Create Path</label>
+        </rules>
+        <rules>
+            <name>Communication_Update_Path</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ExecutionPath</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CommunicationUpdate</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Determine_Send_Training</targetReference>
+            </connector>
+            <label>Communication Update Path</label>
         </rules>
     </decisions>
     <decisions>
@@ -195,7 +264,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Vendor_Program</targetReference>
+            <targetReference>Determine_Execution_Path</targetReference>
         </connector>
         <object>Onboarding__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
@@ -344,7 +413,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Determine_Execution_Path</targetReference>
+            <targetReference>Route_After_Vendor_Program</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Vendor_Program</flowName>
         <inputAssignments>

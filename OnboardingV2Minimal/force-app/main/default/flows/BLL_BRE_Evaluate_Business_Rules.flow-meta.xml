@@ -7,6 +7,9 @@
         <locationY>0</locationY>
         <actionName>CommunicationDispatchResolver</actionName>
         <actionType>runExpressionSet</actionType>
+        <faultConnector>
+            <targetReference>Capture_Run_Communication_Dispatch_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>IsLearnUponTriggeredEvent</name>
@@ -44,6 +47,9 @@
         <locationY>0</locationY>
         <actionName>OnboardingOrchestrator_V2</actionName>
         <actionType>runExpressionSet</actionType>
+        <faultConnector>
+            <targetReference>Capture_Run_Onboarding_Orchestrator_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>HasNDAOnboardingForOpportunity</name>
@@ -105,6 +111,9 @@
         <locationY>0</locationY>
         <actionName>OnboardingStatusNormalization</actionName>
         <actionType>runExpressionSet</actionType>
+        <faultConnector>
+            <targetReference>Capture_Run_Onboarding_Status_Normalization_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>RequirementType</name>
@@ -144,6 +153,9 @@
         <locationY>0</locationY>
         <actionName>VendorProgramApprovalPolicyResolver</actionName>
         <actionType>runExpressionSet</actionType>
+        <faultConnector>
+            <targetReference>Capture_Run_Vendor_Program_Approval_Policy_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>Policy_Key__c</name>
@@ -196,6 +208,98 @@
                 <stringValue>Unsupported RuleContext provided to BLL_BRE_Evaluate_Business_Rules.</stringValue>
             </value>
         </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Run_Communication_Dispatch_Fault</name>
+        <label>Capture Run Communication Dispatch Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>FaultSourceElementApiName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Run_Communication_Dispatch</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Rule_Context_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Run_Onboarding_Orchestrator_Fault</name>
+        <label>Capture Run Onboarding Orchestrator Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>FaultSourceElementApiName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Run_Onboarding_Orchestrator</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Rule_Context_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Run_Onboarding_Status_Normalization_Fault</name>
+        <label>Capture Run Onboarding Status Normalization Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>FaultSourceElementApiName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Run_Onboarding_Status_Normalization</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Rule_Context_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Run_Vendor_Program_Approval_Policy_Fault</name>
+        <label>Capture Run Vendor Program Approval Policy Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>FaultSourceElementApiName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Run_Vendor_Program_Approval_Policy</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Rule_Context_Fault</targetReference>
+        </connector>
     </assignments>
     <decisions>
         <name>Decide_Rule_Context</name>
@@ -313,6 +417,65 @@
         </connector>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>Handle_Rule_Context_Fault</name>
+        <label>Handle Rule Context Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>RuleContext</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Business rules evaluation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>ErrorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>LogWithoutOnboarding</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <elementReference>FaultSourceElementApiName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_BRE_Evaluate_Business_Rules</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>ErrorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
+        </outputAssignments>
+    </subflows>
     <variables>
         <name>ApprovalRequired</name>
         <dataType>Boolean</dataType>
@@ -346,6 +509,13 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>FaultSourceElementApiName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

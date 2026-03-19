@@ -7,6 +7,9 @@
         <label>Is Agreement Signed</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Evaluate_Agreement_Subjects</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Agreement Is Not Signed or Is NDA</defaultConnectorLabel>
         <rules>
             <name>Agreement_is_Signed</name>
@@ -91,6 +94,31 @@
     </start>
     <status>Active</status>
     <subflows>
+        <name>Evaluate_Agreement_Subjects</name>
+        <label>Evaluate Agreement Subjects</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence</flowName>
+        <inputAssignments>
+            <name>AccountId</name>
+            <value>
+                <elementReference>OnboardingRecord.Account__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>EvidenceStatus</name>
+            <value>
+                <elementReference>$Record.echosign_dev1__Status__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RequirementType</name>
+            <value>
+                <stringValue>Agreement</stringValue>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
         <name>Get_Onboarding_Record</name>
         <label>Get Onboarding Record</label>
         <locationX>0</locationX>
@@ -115,6 +143,9 @@
         <label>LearnUpon Training Assignment Process</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>Evaluate_Agreement_Subjects</targetReference>
+        </connector>
         <flowName>BLL_LearnUpon_SFL_Logical_Process</flowName>
         <inputAssignments>
             <name>AgreementRecord</name>

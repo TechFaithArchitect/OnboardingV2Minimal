@@ -134,7 +134,7 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Sender methods already record failures to avoid double incrementing counters.
-                System.debug(LoggingLevel.ERROR, 'Follow-up retry failed for ' + fq.Id + ': ' + ex.getMessage());
+                LoggingUtil.error('Follow-up retry failed for ' + fq.Id + ': ' + ex.getMessage());
                 // LoggingUtil.logError('FollowUpRetry', 'retryFailedFollowUps', ex.getMessage(), ex.getStackTraceString());
             }
         }
@@ -312,7 +312,7 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist yet - fall through to default logic
-                System.debug('SMS_Provider__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn('SMS_Provider__c field not accessible: ' + ex.getMessage());
             }
         }
         
@@ -389,7 +389,7 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist - continue
-                System.debug('Twilio_From_Phone__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn('Twilio_From_Phone__c field not accessible: ' + ex.getMessage());
             }
         }
         
@@ -406,7 +406,7 @@ public with sharing class FollowUpExecutionService {
                 return configs[0].From_Phone_Number__c;
             }
         } catch (Exception ex) {
-            System.debug('Twilio_Configuration__mdt not found or not accessible: ' + ex.getMessage());
+            LoggingUtil.warn('Twilio_Configuration__mdt not found or not accessible: ' + ex.getMessage());
         }
         
         return null;
@@ -427,7 +427,7 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist - continue
-                System.debug('Twilio_Account_SID__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn('Twilio_Account_SID__c field not accessible: ' + ex.getMessage());
             }
         }
         
@@ -444,7 +444,7 @@ public with sharing class FollowUpExecutionService {
                 return configs[0].Account_SID__c;
             }
         } catch (Exception ex) {
-            System.debug('Could not get Account SID from Twilio_Configuration__mdt: ' + ex.getMessage());
+            LoggingUtil.warn('Could not get Account SID from Twilio_Configuration__mdt: ' + ex.getMessage());
         }
         
         return null;
@@ -464,7 +464,7 @@ public with sharing class FollowUpExecutionService {
                 }
             } catch (Exception ex) {
                 // Field may not exist - continue
-                System.debug('Twilio_Named_Credential__c field not accessible: ' + ex.getMessage());
+                LoggingUtil.warn('Twilio_Named_Credential__c field not accessible: ' + ex.getMessage());
             }
         }
         
@@ -481,7 +481,7 @@ public with sharing class FollowUpExecutionService {
                 return configs[0].Named_Credential__c;
             }
         } catch (Exception ex) {
-            System.debug('Could not get Named Credential from Twilio_Configuration__mdt: ' + ex.getMessage());
+            LoggingUtil.warn('Could not get Named Credential from Twilio_Configuration__mdt: ' + ex.getMessage());
         }
         
         // Default to 'Twilio_API' if nothing is configured

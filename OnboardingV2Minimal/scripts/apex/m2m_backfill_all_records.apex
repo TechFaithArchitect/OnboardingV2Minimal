@@ -17,21 +17,43 @@
   - Re-run until "remaining" counts are 0
 */
 
-Boolean dryRun = true;
+Boolean dryRun = false;
 
-Boolean runVendorProgramRequirementBackfill = true;
+Boolean runVendorProgramRequirementBackfill = false;
 Boolean runAssignmentOnboardingBackfill = true;
-Boolean runCanonicalAssignmentKeyBackfill = true;
+Boolean runCanonicalAssignmentKeyBackfill = false;
 
-Integer vendorProgramRequirementBatchSize = 2000;
-Integer assignmentOnboardingBatchSize = 2000;
-Integer canonicalKeyBatchSize = 2000;
+Integer vendorProgramRequirementBatchSize = 338;
+Integer assignmentOnboardingBatchSize = 338;
+Integer canonicalKeyBatchSize = 338;
+
+Boolean enforceSinglePhasePerRun = true;
+Boolean includeRemainingCounts = true;
+Boolean verboseRowErrors = false;
 
 System.debug('=== M2M Backfill Start ===');
 System.debug('dryRun=' + dryRun);
 System.debug('runVendorProgramRequirementBackfill=' + runVendorProgramRequirementBackfill);
 System.debug('runAssignmentOnboardingBackfill=' + runAssignmentOnboardingBackfill);
 System.debug('runCanonicalAssignmentKeyBackfill=' + runCanonicalAssignmentKeyBackfill);
+System.debug('enforceSinglePhasePerRun=' + enforceSinglePhasePerRun);
+System.debug('includeRemainingCounts=' + includeRemainingCounts);
+System.debug('verboseRowErrors=' + verboseRowErrors);
+System.debug('vendorProgramRequirementBatchSize=' + vendorProgramRequirementBatchSize);
+System.debug('assignmentOnboardingBatchSize=' + assignmentOnboardingBatchSize);
+System.debug('canonicalKeyBatchSize=' + canonicalKeyBatchSize);
+
+Integer selectedPhaseCount = 0;
+selectedPhaseCount += runVendorProgramRequirementBackfill ? 1 : 0;
+selectedPhaseCount += runAssignmentOnboardingBackfill ? 1 : 0;
+selectedPhaseCount += runCanonicalAssignmentKeyBackfill ? 1 : 0;
+
+if (selectedPhaseCount == 0) {
+    System.debug(LoggingLevel.WARN, 'No phase selected. Nothing to do.');
+} else if (enforceSinglePhasePerRun && selectedPhaseCount > 1) {
+    System.debug(LoggingLevel.ERROR,
+        'CPU-safe guard: select only one phase per run, or set enforceSinglePhasePerRun=false.');
+} else {
 
 if (runVendorProgramRequirementBackfill) {
     List<Training_Requirement__c> trainingRequirementsToBackfill = [
@@ -79,28 +101,33 @@ if (runVendorProgramRequirementBackfill) {
             } else {
                 vendorProgramFailure++;
                 for (Database.Error err : vendorProgramResults[i].getErrors()) {
-                    System.debug(
-                        LoggingLevel.ERROR,
-                        'Vendor_Program_Training_Requirement__c upsert failed. key='
-                        + vendorProgramLinksToUpsert[i].Unique_Key__c
-                        + ', status=' + err.getStatusCode()
-                        + ', message=' + err.getMessage()
-                    );
+                    if (verboseRowErrors) {
+                        System.debug(
+                            LoggingLevel.ERROR,
+                            'Vendor_Program_Training_Requirement__c upsert failed. key='
+                            + vendorProgramLinksToUpsert[i].Unique_Key__c
+                            + ', status=' + err.getStatusCode()
+                            + ', message=' + err.getMessage()
+                        );
+                    }
                 }
             }
         }
     }
 
-    Integer vendorProgramRemaining = [
-        SELECT COUNT()
-        FROM Training_Requirement__c
-        WHERE Vendor_Customization__c != null
-        AND Id NOT IN (
-            SELECT Training_Requirement__c
-            FROM Vendor_Program_Training_Requirement__c
-            WHERE Training_Requirement__c != null
-        )
-    ];
+    Integer vendorProgramRemaining = -1;
+    if (includeRemainingCounts) {
+        vendorProgramRemaining = [
+            SELECT COUNT()
+            FROM Training_Requirement__c
+            WHERE Vendor_Customization__c != null
+            AND Id NOT IN (
+                SELECT Training_Requirement__c
+                FROM Vendor_Program_Training_Requirement__c
+                WHERE Training_Requirement__c != null
+            )
+        ];
+    }
 
     System.debug('--- Phase 1: Vendor Program <-> Training Requirement ---');
     System.debug('Candidates in this run: ' + trainingRequirementsToBackfill.size());
@@ -110,7 +137,11 @@ if (runVendorProgramRequirementBackfill) {
     } else {
         System.debug('Upsert success: ' + vendorProgramSuccess + ', failed: ' + vendorProgramFailure);
     }
-    System.debug('Remaining after this run: ' + vendorProgramRemaining);
+    if (includeRemainingCounts) {
+        System.debug('Remaining after this run: ' + vendorProgramRemaining);
+    } else {
+        System.debug('Remaining after this run: (skipped; set includeRemainingCounts=true to compute)');
+    }
 }
 
 if (runAssignmentOnboardingBackfill) {
@@ -159,28 +190,33 @@ if (runAssignmentOnboardingBackfill) {
             } else {
                 assignmentLinkFailure++;
                 for (Database.Error err : assignmentLinkResults[i].getErrors()) {
-                    System.debug(
-                        LoggingLevel.ERROR,
-                        'Training_Assignment_Onboarding__c upsert failed. key='
-                        + assignmentOnboardingLinksToUpsert[i].Unique_Key__c
-                        + ', status=' + err.getStatusCode()
-                        + ', message=' + err.getMessage()
-                    );
+                    if (verboseRowErrors) {
+                        System.debug(
+                            LoggingLevel.ERROR,
+                            'Training_Assignment_Onboarding__c upsert failed. key='
+                            + assignmentOnboardingLinksToUpsert[i].Unique_Key__c
+                            + ', status=' + err.getStatusCode()
+                            + ', message=' + err.getMessage()
+                        );
+                    }
                 }
             }
         }
     }
 
-    Integer assignmentLinksRemaining = [
-        SELECT COUNT()
-        FROM Training_Assignment__c
-        WHERE Onboarding__c != null
-        AND Id NOT IN (
-            SELECT Training_Assignment__c
-            FROM Training_Assignment_Onboarding__c
-            WHERE Training_Assignment__c != null
-        )
-    ];
+    Integer assignmentLinksRemaining = -1;
+    if (includeRemainingCounts) {
+        assignmentLinksRemaining = [
+            SELECT COUNT()
+            FROM Training_Assignment__c
+            WHERE Onboarding__c != null
+            AND Id NOT IN (
+                SELECT Training_Assignment__c
+                FROM Training_Assignment_Onboarding__c
+                WHERE Training_Assignment__c != null
+            )
+        ];
+    }
 
     System.debug('--- Phase 2: Training Assignment <-> Onboarding ---');
     System.debug('Candidates in this run: ' + assignmentsMissingAnyLink.size());
@@ -190,7 +226,11 @@ if (runAssignmentOnboardingBackfill) {
     } else {
         System.debug('Upsert success: ' + assignmentLinkSuccess + ', failed: ' + assignmentLinkFailure);
     }
-    System.debug('Remaining after this run: ' + assignmentLinksRemaining);
+    if (includeRemainingCounts) {
+        System.debug('Remaining after this run: ' + assignmentLinksRemaining);
+    } else {
+        System.debug('Remaining after this run: (skipped; set includeRemainingCounts=true to compute)');
+    }
 }
 
 if (runCanonicalAssignmentKeyBackfill) {
@@ -228,27 +268,32 @@ if (runCanonicalAssignmentKeyBackfill) {
             } else {
                 canonicalKeyFailure++;
                 for (Database.Error err : canonicalKeyResults[i].getErrors()) {
-                    System.debug(
-                        LoggingLevel.ERROR,
-                        'Training_Assignment__c key update failed. assignmentId='
-                        + canonicalAssignmentsToUpdate[i].Id
-                        + ', key=' + canonicalAssignmentsToUpdate[i].Unique_Assignment_Key__c
-                        + ', status=' + err.getStatusCode()
-                        + ', message=' + err.getMessage()
-                    );
+                    if (verboseRowErrors) {
+                        System.debug(
+                            LoggingLevel.ERROR,
+                            'Training_Assignment__c key update failed. assignmentId='
+                            + canonicalAssignmentsToUpdate[i].Id
+                            + ', key=' + canonicalAssignmentsToUpdate[i].Unique_Assignment_Key__c
+                            + ', status=' + err.getStatusCode()
+                            + ', message=' + err.getMessage()
+                        );
+                    }
                 }
             }
         }
     }
 
-    Integer canonicalKeysRemaining = [
-        SELECT COUNT()
-        FROM Training_Assignment__c
-        WHERE Is_Canonical__c = true
-        AND Unique_Assignment_Key__c = null
-        AND Contact__c != null
-        AND Vendor_Training_Requirement__c != null
-    ];
+    Integer canonicalKeysRemaining = -1;
+    if (includeRemainingCounts) {
+        canonicalKeysRemaining = [
+            SELECT COUNT()
+            FROM Training_Assignment__c
+            WHERE Is_Canonical__c = true
+            AND Unique_Assignment_Key__c = null
+            AND Contact__c != null
+            AND Vendor_Training_Requirement__c != null
+        ];
+    }
 
     System.debug('--- Phase 3: Canonical Assignment Keys ---');
     System.debug('Candidates in this run: ' + canonicalAssignmentsMissingKeys.size());
@@ -258,7 +303,12 @@ if (runCanonicalAssignmentKeyBackfill) {
     } else {
         System.debug('Update success: ' + canonicalKeySuccess + ', failed: ' + canonicalKeyFailure);
     }
-    System.debug('Remaining after this run: ' + canonicalKeysRemaining);
+    if (includeRemainingCounts) {
+        System.debug('Remaining after this run: ' + canonicalKeysRemaining);
+    } else {
+        System.debug('Remaining after this run: (skipped; set includeRemainingCounts=true to compute)');
+    }
+}
 }
 
 System.debug('=== M2M Backfill Complete ===');

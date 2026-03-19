@@ -7,11 +7,14 @@
         <locationY>0</locationY>
         <actionName>FlowAdminGuardService</actionName>
         <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Capture_Fail_Fast_Missing_RecordType_Mapping_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>message</name>
             <value>
-                <elementReference>Missing_RecordType_Mapping_Error_Message</elementReference>
+                <elementReference>errorMessage</elementReference>
             </value>
         </inputParameters>
         <nameSegment>FlowAdminGuardService</nameSegment>
@@ -20,6 +23,64 @@
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Create_Onboarding_Requirements_Fault</name>
+        <label>Capture Create Onboarding Requirements Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Fail_Fast_Missing_RecordType_Mapping_Fault</name>
+        <label>Capture Fail Fast Missing RecordType Mapping Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Missing_RecordType_Mapping_Error_Message</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Record_with_Completion_Fault</name>
+        <label>Capture Update Onboarding Record with Completion Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Record_with_Incomplete_Subject_Creation_Fault</name>
+        <label>Capture Update Onboarding Record with Incomplete Subject Creation Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <assignments>
         <name>Add_Onboarding_Requirement_Record_to_Collection</name>
         <label>Add Onboarding Requirement Record to Collection</label>
@@ -34,6 +95,54 @@
         </assignmentItems>
         <connector>
             <targetReference>Loop_VendorProgramRequirements</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Missing_RecordType_Mapping_Error</name>
+        <label>Assign Missing RecordType Mapping Error</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Missing_RecordType_Mapping_Error_Message</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Should_Fail_Fast_Missing_RecordType_Mapping</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Resolved_RecordType_Id</name>
+        <label>Assign Resolved RecordType Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Resolved_Onboarding_Requirement_RecordType_Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Onboarding_Requirement_RecordTypes.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Reset_Resolved_RecordType_Id</name>
+        <label>Reset Resolved RecordType Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Resolved_Onboarding_Requirement_RecordType_Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Onboarding_Requirement_RecordTypes</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -87,7 +196,7 @@
             <assignToReference>OnboardingRequirementRecord.RecordTypeId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Onboarding_Requirement_RecordType.Id</elementReference>
+                <elementReference>Resolved_Onboarding_Requirement_RecordType_Id</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -127,28 +236,60 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Is_Onboarding_Requirement_RecordType_Mapped</name>
-        <label>Is Onboarding Requirement RecordType Mapped</label>
+        <name>Does_RecordType_DeveloperName_Match_Requirement</name>
+        <label>Does RecordType DeveloperName Match Requirement</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Fail_Fast_Missing_RecordType_Mapping</targetReference>
+            <targetReference>Loop_Onboarding_Requirement_RecordTypes</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Missing Mapping - Fail Fast</defaultConnectorLabel>
+        <defaultConnectorLabel>No Match</defaultConnectorLabel>
         <rules>
-            <name>Mapped_RecordType_Found</name>
+            <name>RecordType_Name_Match</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Onboarding_Requirement_RecordType.Id</leftValueReference>
+                <leftValueReference>Loop_Onboarding_Requirement_RecordTypes.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>OnboardingRequirement_RecordType_DeveloperName</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Resolved_RecordType_Id</targetReference>
+            </connector>
+            <label>RecordType Name Match</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Fail_Fast_Missing_RecordType_Mapping</name>
+        <label>Should Fail Fast Missing RecordType Mapping</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_Onboarding_Requirements</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Missing Mapping</defaultConnectorLabel>
+        <rules>
+            <name>Missing_Mapping_Detected</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
             <connector>
-                <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
+                <targetReference>Fail_Fast_Missing_RecordType_Mapping</targetReference>
             </connector>
-            <label>Mapped RecordType Found</label>
+            <label>Missing Mapping Detected</label>
         </rules>
     </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements</description>
@@ -208,6 +349,20 @@
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements</label>
     <loops>
+        <name>Loop_Onboarding_Requirement_RecordTypes</name>
+        <label>Loop Onboarding Requirement RecordTypes</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Onboarding_Requirement_RecordTypes</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Does_RecordType_DeveloperName_Match_Requirement</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Assign_Missing_RecordType_Mapping_Error</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
         <name>Loop_VendorProgramRequirements</name>
         <label>Loop VendorProgramRequirements</label>
         <locationX>0</locationX>
@@ -215,10 +370,10 @@
         <collectionReference>VendorProgramRequirements</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Onboarding_Requirement_RecordType</targetReference>
+            <targetReference>Reset_Resolved_RecordType_Id</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Create_Onboarding_Requirements</targetReference>
+            <targetReference>Should_Fail_Fast_Missing_RecordType_Mapping</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -248,16 +403,19 @@
         <connector>
             <targetReference>Create_Onboarding_Requirement_Subjects</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Create_Onboarding_Requirements_Fault</targetReference>
+        </faultConnector>
         <inputReference>OnboardingRequirementCollection</inputReference>
     </recordCreates>
     <recordLookups>
-        <name>Get_Onboarding_Requirement_RecordType</name>
-        <label>Get Onboarding Requirement RecordType</label>
+        <name>Get_Onboarding_Requirement_RecordTypes</name>
+        <label>Get Onboarding Requirement RecordTypes</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Is_Onboarding_Requirement_RecordType_Mapped</targetReference>
+            <targetReference>Loop_VendorProgramRequirements</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -267,15 +425,10 @@
                 <stringValue>Onboarding_Requirement__c</stringValue>
             </value>
         </filters>
-        <filters>
-            <field>DeveloperName</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>OnboardingRequirement_RecordType_DeveloperName</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>RecordType</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>DeveloperName</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
@@ -283,6 +436,9 @@
         <label>Update Onboarding Record with Completion</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Onboarding_Record_with_Completion_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -304,6 +460,9 @@
         <label>Update Onboarding Record with Incomplete Subject Creation</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Onboarding_Record_with_Incomplete_Subject_Creation_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -324,7 +483,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Loop_VendorProgramRequirements</targetReference>
+            <targetReference>Get_Onboarding_Requirement_RecordTypes</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -378,6 +537,13 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>Resolved_Onboarding_Requirement_RecordType_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>VendorProgramRequirements</name>

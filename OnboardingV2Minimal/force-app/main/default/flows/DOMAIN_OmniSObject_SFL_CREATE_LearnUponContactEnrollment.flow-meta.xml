@@ -38,6 +38,9 @@
                 <elementReference>LearnUponPortalMembershipRecord.LearnUponP__LU_Portal_Membership_ID__c</elementReference>
             </value>
         </inputParameters>
+        <faultConnector>
+            <targetReference>Capture_Create_Group_Membership_Fault</targetReference>
+        </faultConnector>
         <nameSegment>LearnUponP__learnUponNewGroupAssignmentHelper</nameSegment>
         <offset>0</offset>
     </actionCalls>
@@ -53,6 +56,45 @@
             <operator>Assign</operator>
             <value>
                 <stringValue>Please pass valid Inputs to create LearnUponContactEnrollmentRecord or Update the Record(s)</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Group_Membership_Fault</name>
+        <label>Capture Create Group Membership Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_LearnUpon_Status_Fault</name>
+        <label>Capture Update LearnUpon Status Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_LearnUpon_Enrollments_Fault</name>
+        <label>Capture Update LearnUpon Enrollments Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
             </value>
         </assignmentItems>
     </assignments>
@@ -152,6 +194,9 @@
         <label>Update LearnUpon Trigger</label>
         <locationX>578</locationX>
         <locationY>242</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_LearnUpon_Status_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -173,6 +218,9 @@
         <label>Update LearnUponContactEnrollmentCollection</label>
         <locationX>314</locationX>
         <locationY>242</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_LearnUpon_Enrollments_Fault</targetReference>
+        </faultConnector>
         <inputReference>LearnUponContactEnrollmentCollection</inputReference>
     </recordUpdates>
     <start>

@@ -10,6 +10,9 @@
         <connector>
             <targetReference>UpdateAdobeAgreementWithVendorId</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Load_and_Send_Agreement_Template_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>isAsync</name>
@@ -43,6 +46,9 @@
         <locationY>458</locationY>
         <actionName>echosign_dev1__AgreementSendInvocableAction</actionName>
         <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Capture_Resend_Adobe_Agreement_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>agreementId</name>
@@ -56,6 +62,45 @@
     </actionCalls>
     <apiVersion>62.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Load_and_Send_Agreement_Template_Fault</name>
+        <label>Capture Load and Send Agreement Template Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Resend_Adobe_Agreement_Fault</name>
+        <label>Capture Resend Adobe Agreement Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Adobe_Agreement_With_Vendor_Id_Fault</name>
+        <label>Capture Update Adobe Agreement With Vendor Id Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <assignments>
         <name>Assign_Error_Message_for_Contract</name>
         <label>Assign Error Message for Contract</label>
@@ -185,6 +230,9 @@
         <label>Update Adobe Agreement with Vendor Id</label>
         <locationX>50</locationX>
         <locationY>566</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Adobe_Agreement_With_Vendor_Id_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>

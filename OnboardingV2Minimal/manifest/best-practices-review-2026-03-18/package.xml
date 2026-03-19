@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>OnboardingDefaultVendorProgramInvocTest</members>
+        <members>OnboardingStatusEvaluatorService</members>
+        <members>OnboardingStatusEvaluatorTest</members>
+        <members>RelatedOnboardingReqFlowTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>BLL_Agreement_RCD_Logical_Process</members>
+        <members>BLL_BRE_Evaluate_Business_Rules</members>
+        <members>BLL_External_Contact_Credential_RCD_Logical_Process</members>
+        <members>BLL_Onboarding_Requirement_RCD_Logical_Process</members>
+        <members>DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records</members>
+        <members>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence</members>
+        <members>EXP_Opportunity_SCR_Create_Record</members>
+        <name>Flow</name>
+    </types>
+    <types>
+        <members>Onboarding_Default_Vendor_Program__mdt.REQUIRE_NDA_NAME_CONTAINS</members>
+        <members>Onboarding_Status_Normalization__mdt.agreement_out_for_signature</members>
+        <members>Onboarding_Status_Normalization__mdt.agreement_paperwork_sent</members>
+        <members>Onboarding_Status_Normalization__mdt.agreement_signed</members>
+        <members>Onboarding_Status_Normalization__mdt.contract_complete</members>
+        <name>CustomMetadata</name>
+    </types>
+    <version>66.0</version>
+</Package>

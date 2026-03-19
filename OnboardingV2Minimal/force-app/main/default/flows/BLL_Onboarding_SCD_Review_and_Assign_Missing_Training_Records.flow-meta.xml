@@ -3,6 +3,19 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Capture_Update_Training_Assignment_Records_Fault</name>
+        <label>Capture Update Training Assignment Records Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Add_TA_to_Be_Updated_to_Collection</name>
         <label>Add TA to Be Updated to Collection</label>
         <locationX>0</locationX>
@@ -267,6 +280,9 @@
         <label>Update Training Assignment Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Training_Assignment_Records_Fault</targetReference>
+        </faultConnector>
         <inputReference>TAToBeUpdatedCollection</inputReference>
     </recordUpdates>
     <start>
@@ -358,6 +374,13 @@
             <name>TrainingRequirementRecordCollection</name>
         </outputAssignments>
     </subflows>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>ContactRecordList</name>
         <dataType>String</dataType>

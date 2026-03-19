@@ -1,7 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Evaluate_Onboarding_Requirement_Subject_Bulk</name>
+        <label>Evaluate Onboarding Requirement Subject Bulk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnbReqParentBulkEvalInvocable</actionName>
+        <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Capture_Evaluate_Onboarding_Requirement_Subject_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>onboardingRequirementIds</name>
+            <value>
+                <elementReference>ChangedOnboardingRequirementIdCollection</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnbReqParentBulkEvalInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Add_Changed_Onboarding_Requirement_Id</name>
+        <label>Add Changed Onboarding Requirement Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ChangedOnboardingRequirementIdCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Onboarding_Requirement__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Evaluate_Onboarding_Requirement_Subject_Bulk</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Evaluate_Onboarding_Requirement_Subject_Fault</name>
+        <label>Capture Evaluate Onboarding Requirement Subject Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <description>Business Logic Layer - Onboarding Requirement Subject Object - Record Trigger - Logical Process</description>
     <environments>Default</environments>
     <interviewLabel>BLL - Onboarding Requirement Subject - RCD - Logical Process {!$Flow.CurrentDateTime}</interviewLabel>
@@ -47,24 +100,25 @@
         <recordTriggerType>Update</recordTriggerType>
         <scheduledPaths>
             <connector>
-                <targetReference>Evaluate_Onboarding_Requirement_Subject</targetReference>
+                <targetReference>Add_Changed_Onboarding_Requirement_Id</targetReference>
             </connector>
             <pathType>AsyncAfterCommit</pathType>
         </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
-    <subflows>
-        <name>Evaluate_Onboarding_Requirement_Subject</name>
-        <label>Evaluate Onboarding Requirement Subject</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent</flowName>
-        <inputAssignments>
-            <name>OnboardingRequirementId</name>
-            <value>
-                <elementReference>$Record.Onboarding_Requirement__c</elementReference>
-            </value>
-        </inputAssignments>
-    </subflows>
+    <variables>
+        <name>ChangedOnboardingRequirementIdCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
 </Flow>

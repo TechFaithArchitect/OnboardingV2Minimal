@@ -1,41 +1,45 @@
-# Dealer Onboarding Workflow (MVP)
+# Onboarding Workflow
 
-This guide covers the MVP onboarding flow for Dealers (Accounts) tied to Vendor Programs.
+This guide reflects the current OnboardV2 flow/CMDT design (not legacy wizard behavior).
 
 ## Overview
 
-Each `Onboarding__c` represents one Dealer'''s onboarding to a specific Vendor Program. Requirements are created from `Vendor_Program_Requirement__c`, and status updates are driven by the status rules engine.
+Each `Onboarding__c` record represents one account onboarding to one vendor program. Requirement rows are created from active `Vendor_Program_Requirement__c` definitions.
 
-## Start an Onboarding
+## Start onboarding
 
 1. Open the Account record.
-2. Launch `accountProgramOnboardingModal`.
-3. Select a Vendor Program (`Vendor_Customization__c`).
-4. Submit to create:
+2. Run the onboarding start quick action (currently backed by `EXP_Opportunity_SCR_Create_Record`).
+3. Select the vendor program and submit.
+4. System creates:
    - `Onboarding__c`
-   - `Onboarding_Requirement__c` (one per `Vendor_Program_Requirement__c`)
-   - Optional `Account_Vendor_Program_Onboarding__c`
+   - `Onboarding_Requirement__c` rows for that program
+   - related subject rows where fulfillment policy requires them (`Onboarding_Requirement_Subject__c`)
 
-## Work Requirements
+## Work the onboarding
 
-Use `onboardingHomeDashboard` and `onboardingRequirementsPanel` to:
-- Review requirements
-- Update requirement statuses
-- Track progress
+Use the **Onboarding record Lightning page** and its related-list components (including `objectRelatedList`) to:
 
-## Status Evaluation
+- Review requirement rows
+- Update requirement status/override fields
+- Track onboarding progress/status
 
-The system evaluates status rules when requirements change. Status evaluation is driven by Flow (e.g., `BLL_Onboarding_Requirement_RCD_Logical_Process`) and configurable via `Onboarding_Status_Normalization__mdt` (per-requirement) and `Onboarding_Status_Evaluation_Rule__mdt` (aggregation rules, when implemented).
+## Status evaluation model
 
-External overrides (`Onboarding_Requirement__c.Is_Overridden__c` and `Onboarding_Next_Step_Override__c`) can temporarily suppress automated updates. Override/status changes are captured through `Onboarding_Requirement__History`.
+Status updates are CMDT-driven and flow/Apex-evaluated:
 
-## Common Actions
+- Requirement status normalization: `Onboarding_Status_Normalization__mdt`
+- Onboarding status rules: `Onboarding_Status_Evaluation_Rule__mdt`
+- Subject fulfillment model: `Onboarding_Fulfillment_Policy__mdt`
 
-- **Add/Edit Requirements**: Update `Vendor_Program_Requirement__c` for the program.
-- **Configure Status Rules**: Use `Onboarding_Status_Normalization__mdt` (per-requirement) and `Onboarding_Status_Evaluation_Rule__mdt` (aggregation rules).
-- **Manual Overrides**: Apply override records when manual control is needed.
+Primary status owner flow: `BLL_Onboarding_Requirement_RCD_Logical_Process`.
 
-## Notes
+For business-facing rule maintenance, use:
 
-- Every onboarding is tied to a Vendor Program.
-- Wizard stages, recipient groups, and application process tracking are removed in MVP v2.
+- `docs/user-guides/onboarding-status-business-rules-guide.md`
+
+## Common admin actions
+
+- Update program requirement definitions in `Vendor_Program_Requirement__c`
+- Adjust normalization/rule CMDT records
+- Use overrides only for exception handling, not steady-state rule behavior

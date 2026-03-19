@@ -3,6 +3,19 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Capture_Update_LearnUponContact_Enrollment_Records_Fault</name>
+        <label>Capture Update LearnUponContact Enrollment Records Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Add_LearnUponContactEnrollment_Records_to_Collection</name>
         <label>Add LearnUponContactEnrollment Records to Collection</label>
         <locationX>0</locationX>
@@ -168,6 +181,9 @@
         <label>Update LearnUponContact Enrollment Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_LearnUponContact_Enrollment_Records_Fault</targetReference>
+        </faultConnector>
         <inputReference>LUCECollectionForUpdate</inputReference>
     </recordUpdates>
     <start>
@@ -254,6 +270,13 @@
             <name>OpportunityRecordCollection</name>
         </outputAssignments>
     </subflows>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>ContactRecordList</name>
         <dataType>String</dataType>

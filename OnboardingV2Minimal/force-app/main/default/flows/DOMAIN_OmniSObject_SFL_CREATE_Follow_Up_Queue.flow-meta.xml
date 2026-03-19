@@ -2,6 +2,32 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Create_Follow_Up_Queue_Fault</name>
+        <label>Capture Create Follow Up Queue Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Follow_Up_Queue_Fault</name>
+        <label>Capture Update Follow Up Queue Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Existing_Queue_Record_Found</name>
         <label>Existing Queue Record Found</label>
@@ -125,6 +151,9 @@
         <label>Create Follow Up Queue Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Create_Follow_Up_Queue_Fault</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Attempt_Count__c</field>
             <value>
@@ -237,6 +266,9 @@
         <label>Update Follow Up Queue Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Follow_Up_Queue_Fault</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>

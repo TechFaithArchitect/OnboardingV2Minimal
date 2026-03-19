@@ -356,7 +356,7 @@
         <name>MappedSubjectStatus</name>
         <dataType>String</dataType>
         <expression>IF(
-  OR({!EvidenceStatus} = &quot;Complete&quot;, {!EvidenceStatus} = &quot;Waived&quot;, {!EvidenceStatus} = &quot;Completed&quot;, {!EvidenceStatus} = &quot;Passed&quot;, {!EvidenceStatus} = &quot;Exempt&quot;),
+  OR({!EvidenceStatus} = &quot;Complete&quot;, {!EvidenceStatus} = &quot;Waived&quot;, {!EvidenceStatus} = &quot;Completed&quot;, {!EvidenceStatus} = &quot;Passed&quot;, {!EvidenceStatus} = &quot;Exempt&quot;, {!EvidenceStatus} = &quot;Signed&quot;),
   &quot;Setup Complete&quot;,
   IF(
     OR({!EvidenceStatus} = &quot;Denied&quot;, {!EvidenceStatus} = &quot;Denied by PV&quot;, {!EvidenceStatus} = &quot;Denied by Partner&quot;),
@@ -371,7 +371,7 @@
           OR({!EvidenceStatus} = &quot;Requested&quot;, {!EvidenceStatus} = &quot;Incomplete&quot;, {!EvidenceStatus} = &quot;In Progress&quot;, {!EvidenceStatus} = &quot;Enrolled&quot;, {!EvidenceStatus} = &quot;Failed&quot;),
           &quot;In Process&quot;,
           IF(
-            OR({!EvidenceStatus} = &quot;Training Sent&quot;, {!EvidenceStatus} = &quot;Paperwork Sent&quot;),
+            OR({!EvidenceStatus} = &quot;Out for Signature&quot;, {!EvidenceStatus} = &quot;Training Sent&quot;, {!EvidenceStatus} = &quot;Paperwork Sent&quot;),
             &quot;Paperwork Sent&quot;,
             IF(
               OR({!EvidenceStatus} = &quot;New&quot;, {!EvidenceStatus} = &quot;Not Started&quot;, {!EvidenceStatus} = &quot;Assigned&quot;),

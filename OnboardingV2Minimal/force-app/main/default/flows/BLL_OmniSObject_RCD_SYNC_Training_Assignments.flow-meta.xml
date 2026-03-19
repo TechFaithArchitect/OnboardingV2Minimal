@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Evaluate_Changed_Onboarding_Requirements_Bulk</name>
+        <label>Evaluate Changed Onboarding Requirements Bulk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnbReqParentBulkEvalInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Did_Evaluate_Changed_Onboarding_Requirement_Fail</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Capture_Evaluate_Changed_Onboarding_Requirement_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>onboardingRequirementIds</name>
+            <value>
+                <elementReference>ChangedOnboardingRequirementIdCollection</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnbReqParentBulkEvalInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
@@ -51,6 +78,22 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Capture_Evaluate_Changed_Onboarding_Requirement_Fault</name>
+        <label>Capture Evaluate Changed Onboarding Requirement Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Evaluate_Changed_Onboarding_Requirement_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Reset_Onboarding_Sync_Error_Message</name>
         <label>Reset Onboarding Sync Error Message</label>
         <locationX>0</locationX>
@@ -79,17 +122,57 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Evaluate_Changed_Onboarding_Requirement</targetReference>
+            <targetReference>Evaluate_Changed_Onboarding_Requirements_Bulk</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>Should_Process_Training_Assignment_Change</name>
+        <label>Should Process Training Assignment Change</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Relevant Change</defaultConnectorLabel>
+        <rules>
+            <name>Create_Or_Relevant_Field_Change</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Contact__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Onboarding__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Onboarding_Records</targetReference>
+            </connector>
+            <label>Create Or Relevant Field Change</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Did_Evaluate_Changed_Onboarding_Requirement_Fail</name>
         <label>Did Evaluate Changed Onboarding Requirement Fail</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
-        </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
             <name>Evaluate_Changed_Onboarding_Requirement_Failed</name>
@@ -298,7 +381,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
+                <targetReference>Reset_Parent_Evaluator_Error_Message</targetReference>
             </connector>
             <label>Changed Onboarding Requirement Ids Found</label>
         </rules>
@@ -404,17 +487,6 @@
     <interviewLabel>BLL - OmniSObject - RCD - Sync Training Assignments {!$Flow.CurrentDateTime}</interviewLabel>
     <label>BLL - OmniSObject - RCD - SYNC - Training Assignments</label>
     <loops>
-        <name>Loop_Changed_Onboarding_Requirement_Ids</name>
-        <label>Loop Changed Onboarding Requirement Ids</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>ChangedOnboardingRequirementIdCollection</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Reset_Parent_Evaluator_Error_Message</targetReference>
-        </nextValueConnector>
-    </loops>
-    <loops>
         <name>Loop_Onboarding_Record_Collection</name>
         <label>Loop Onboarding Record Collection</label>
         <locationX>0</locationX>
@@ -451,33 +523,13 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Onboarding_Records</targetReference>
+            <targetReference>Should_Process_Training_Assignment_Change</targetReference>
         </connector>
         <object>Training_Assignment__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
-    <subflows>
-        <name>Evaluate_Changed_Onboarding_Requirement</name>
-        <label>Evaluate Changed Onboarding Requirement</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Did_Evaluate_Changed_Onboarding_Requirement_Fail</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent</flowName>
-        <inputAssignments>
-            <name>OnboardingRequirementId</name>
-            <value>
-                <elementReference>currentItem_Loop_Changed_Onboarding_Requirement_Ids</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
-    </subflows>
     <subflows>
         <name>Evaluate_Training_Subjects_By_Account</name>
         <label>Evaluate Training Subjects By Account</label>
@@ -619,14 +671,11 @@
         <label>Handle Evaluate Changed Onboarding Requirement Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
-        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
         <inputAssignments>
             <name>ContextKey</name>
             <value>
-                <elementReference>currentItem_Loop_Changed_Onboarding_Requirement_Ids</elementReference>
+                <elementReference>$Record.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -662,7 +711,7 @@
         <inputAssignments>
             <name>SourceElementApiName</name>
             <value>
-                <stringValue>Evaluate_Changed_Onboarding_Requirement</stringValue>
+                <stringValue>Evaluate_Changed_Onboarding_Requirements_Bulk</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1019,13 +1068,6 @@
         <name>ChangedOnboardingRequirementIdCollection</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>currentItem_Loop_Changed_Onboarding_Requirement_Ids</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>

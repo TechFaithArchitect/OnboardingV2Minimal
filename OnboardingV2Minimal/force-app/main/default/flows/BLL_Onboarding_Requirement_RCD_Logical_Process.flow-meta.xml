@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Evaluate_Onboarding_Status</name>
+        <label>Evaluate Onboarding Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingStatusEvaluatorInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Did_Evaluate_Onboarding_Status_Fail</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Capture_Evaluate_Onboarding_Status_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>onboardingId</name>
+            <value>
+                <elementReference>OnboardingId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>applyUpdates</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingStatusEvaluatorInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
@@ -11,13 +44,90 @@
             <assignToReference>OnboardingId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>OnboardingRecord.Id</elementReference>
+                <elementReference>$Record.Onboarding__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
             <targetReference>Evaluate_Onboarding_Status</targetReference>
         </connector>
     </assignments>
+    <assignments>
+        <name>Capture_Evaluate_Onboarding_Status_Fault</name>
+        <label>Capture Evaluate Onboarding Status Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Evaluate_Onboarding_Status_Fault</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Did_Create_Required_Related_Onboarding_Records_Fail</name>
+        <label>Did Create Required Related Onboarding Records Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Should_Evaluate_Normalization</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Create_Required_Related_Onboarding_Records_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Create_Required_Related_Onboarding_Records_Fault</targetReference>
+            </connector>
+            <label>Create Required Related Onboarding Records Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Evaluate_Onboarding_Status_Fail</name>
+        <label>Did Evaluate Onboarding Status Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Evaluate_Onboarding_Status_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Evaluate_Onboarding_Status_Fault</targetReference>
+            </connector>
+            <label>Evaluate Onboarding Status Failed</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Is_Create_Event</name>
         <label>Is Create Event</label>
@@ -38,7 +148,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Evaluate_Approval_Policy</targetReference>
+                <targetReference>Get_Onboarding_Record</targetReference>
             </connector>
             <label>On Create</label>
         </rules>
@@ -138,43 +248,20 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Onboarding_Record</targetReference>
+            <targetReference>Is_Create_Event</targetReference>
         </connector>
         <object>Onboarding_Requirement__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
-    <actionCalls>
-        <name>Evaluate_Onboarding_Status</name>
-        <label>Evaluate Onboarding Status</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <actionName>OnboardingStatusEvaluatorInvocable</actionName>
-        <actionType>apex</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>onboardingId</name>
-            <value>
-                <elementReference>OnboardingId</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>applyUpdates</name>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </inputParameters>
-        <nameSegment>OnboardingStatusEvaluatorInvocable</nameSegment>
-        <offset>0</offset>
-    </actionCalls>
     <subflows>
         <name>Create_Required_Related_Onboarding_Records</name>
         <label>Create Required Related Onboarding Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Should_Evaluate_Normalization</targetReference>
+            <targetReference>Did_Create_Required_Related_Onboarding_Records_Fail</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records</flowName>
         <inputAssignments>
@@ -213,7 +300,10 @@
                 <elementReference>VendorProgramRecord</elementReference>
             </value>
         </inputAssignments>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
     </subflows>
     <subflows>
         <name>Evaluate_Approval_Policy</name>
@@ -339,7 +429,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Is_Create_Event</targetReference>
+            <targetReference>Evaluate_Approval_Policy</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Vendor_Program</flowName>
         <inputAssignments>
@@ -353,13 +443,124 @@
             <name>VendorProgramRecord</name>
         </outputAssignments>
     </subflows>
-    <variables>
-        <name>OnboardingId</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
+    <subflows>
+        <name>Handle_Create_Required_Related_Onboarding_Records_Fault</name>
+        <label>Handle Create Required Related Onboarding Records Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Related onboarding requirement record creation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Create_Required_Related_Onboarding_Records</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_Onboarding_Requirement_RCD_Logical_Process</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Evaluate_Onboarding_Status_Fault</name>
+        <label>Handle Evaluate Onboarding Status Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Onboarding status evaluation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FollowUpType</name>
+            <value>
+                <stringValue>In-App</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InitialStatus</name>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Evaluate_Onboarding_Status</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>BLL_Onboarding_Requirement_RCD_Logical_Process</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
+        </outputAssignments>
+    </subflows>
     <variables>
         <name>AccountRecord</name>
         <dataType>SObject</dataType>
@@ -371,6 +572,20 @@
     <variables>
         <name>ApprovalRequired</name>
         <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>OnboardingId</name>
+        <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>

@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Evaluate_Changed_Onboarding_Requirements_Bulk</name>
+        <label>Evaluate Changed Onboarding Requirements Bulk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnbReqParentBulkEvalInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Did_Evaluate_Changed_Onboarding_Requirement_Fail</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Capture_Evaluate_Changed_Onboarding_Requirements_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>onboardingRequirementIds</name>
+            <value>
+                <elementReference>ChangedOnboardingRequirementIdCollection</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnbReqParentBulkEvalInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
@@ -32,6 +59,22 @@
         </assignmentItems>
         <connector>
             <targetReference>Should_Evaluate_Account_Subjects</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Evaluate_Changed_Onboarding_Requirements_Fault</name>
+        <label>Capture Evaluate Changed Onboarding Requirements Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Parent_Evaluator_Error_Message</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -131,7 +174,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Evaluate_Changed_Onboarding_Requirement</targetReference>
+            <targetReference>Evaluate_Changed_Onboarding_Requirements_Bulk</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -139,9 +182,6 @@
         <label>Did Evaluate Changed Onboarding Requirement Fail</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
-        </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
             <name>Evaluate_Changed_Onboarding_Requirement_Failed</name>
@@ -236,7 +276,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Has_Evaluation_Contact_Id</targetReference>
+            <targetReference>Assign_Evaluation_Contact_Id_From_Primary_Contact</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
@@ -308,7 +348,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Loop_Changed_Onboarding_Requirement_Ids</targetReference>
+                <targetReference>Reset_Parent_Evaluator_Error_Message</targetReference>
             </connector>
             <label>Changed Onboarding Requirement Ids Found</label>
         </rules>
@@ -462,21 +502,10 @@
             <label>Account Fallback Is Required</label>
         </rules>
     </decisions>
-    <description>DOMAIN LAYER - OmniSObject - SFL - EVAL - Onb Req Subjects - For Onb Rec</description>
+    <description>DOMAIN LAYER - OmniSObject - Subflow - EVAL - Onboarding Requirement Subjects</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - EVAL - Onb Req Subjects - For Onb Rec {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>DOMAIN - OmniSObject - SFL - EVAL - Onb Req Subjects - For Onb Rec</label>
-    <loops>
-        <name>Loop_Changed_Onboarding_Requirement_Ids</name>
-        <label>Loop Changed Onboarding Requirement Ids</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>ChangedOnboardingRequirementIdCollection</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Reset_Parent_Evaluator_Error_Message</targetReference>
-        </nextValueConnector>
-    </loops>
+    <label>DOMAIN - OmniSObject - SFL - EVAL - Onboarding Requirement Subjects</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -504,26 +533,6 @@
         </connector>
     </start>
     <status>Active</status>
-    <subflows>
-        <name>Evaluate_Changed_Onboarding_Requirement</name>
-        <label>Evaluate Changed Onboarding Requirement</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Did_Evaluate_Changed_Onboarding_Requirement_Fail</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent</flowName>
-        <inputAssignments>
-            <name>OnboardingRequirementId</name>
-            <value>
-                <elementReference>currentItem_Loop_Changed_Onboarding_Requirement_Ids</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
-    </subflows>
     <subflows>
         <name>Evaluate_Subjects_By_Account</name>
         <label>Evaluate Subjects By Account</label>
@@ -636,13 +645,6 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>currentItem_Loop_Changed_Onboarding_Requirement_Ids</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
