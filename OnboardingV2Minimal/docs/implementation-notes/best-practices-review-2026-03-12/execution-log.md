@@ -251,3 +251,9 @@ Chronological implementation and validation log.
 - 2026-03-19: Added deployable SOQL security hardening to `ExperienceOpportunityCreateAsyncService`: both vendor-program lookup SOQL branches in `resolveVendorProgramForCreate` now use `WITH SECURITY_ENFORCED`.
 - 2026-03-19: Validation/deploy for `ExperienceOpportunityCreateAsyncService` hardening: targeted dry-run with specified tests `0AfRL00000dRqFN0A0` (`3/3` passing; coverage-warning-only deploy gate on specified-test mode), compile dry-run `0AfRL00000dRqGz0AK` succeeded, deployment succeeded `0AfRL00000dRpj80AC`.
 - 2026-03-19: Post-deploy org verification: `ExpOppCreateAsyncServiceTest` run `707RL00001Ih0f8` passed `3/3`.
+- 2026-03-20: Follow-up deployable security hardening on `RecordCollectionEditorConfigService`: `getConfig` now filters inaccessible fields out of both child and relationship field config payloads before returning editor metadata.
+- 2026-03-20: Validation/deploy for the `getConfig` inaccessible-field filter update: compile dry-run `0AfRL00000dSGZd0AO` succeeded, deployment succeeded `0AfRL00000dSGcr0AG`.
+- 2026-03-20: Post-deploy org verification: `RecordCollectionEditorConfigServiceTest` run `707RL00001IjQqI` passed `4/4`.
+- 2026-03-20: Additional deployable read-path hardening on `RecordCollectionEditorGetRecordsService`: configured child/relationship field API names are now filtered by describe accessibility before extraction/query, reducing runtime FLS/query failures on drifted metadata.
+- 2026-03-20: Validation/deploy for the read-path filter update: compile dry-run `0AfRL00000dSGxp0AG` succeeded, deployment succeeded `0AfRL00000dSH2f0AG`.
+- 2026-03-20: Post-deploy org verification: `RecordCollectionEditorConfigServiceTest` run `707RL00001IjW2a` passed `4/4`.

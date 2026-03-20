@@ -51,6 +51,8 @@ public with sharing class RecordCollectionEditorGetRecordsService {
 
                 Child_Record_Editor_Config__mdt cmdt = configList[0];
                 Schema.SObjectType recordsType = req.records[0].getSObjectType();
+                Map<String, Schema.SObjectField> childFieldMap =
+                    recordsType.getDescribe().fields.getMap();
 
                 if ('CONTACT_ON_OPPORTUNITY'.equals(req.configKey) && recordsType == Contact.SObjectType) {
                     List<Map<String, Object>> output = new List<Map<String, Object>>();
@@ -80,7 +82,14 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                 for (Object raw : rawFields) {
                     Map<String, Object> f = (Map<String, Object>) raw;
                     String apiName = (String) f.get('fieldApiName');
-                    if (String.isNotBlank(apiName)) childFieldNames.add(apiName);
+                    if (String.isBlank(apiName)) {
+                        continue;
+                    }
+                    Schema.SObjectField childField = childFieldMap.get(apiName);
+                    if (childField == null || !childField.getDescribe().isAccessible()) {
+                        continue;
+                    }
+                    childFieldNames.add(apiName);
                 }
                 childFieldNames.add('Id');
                 childFieldNames.add(cmdt.Parent_Field_API_Name__c);
@@ -89,12 +98,23 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                 String relObjName = cmdt.Relationship_Object_API_Name__c;
                 String relFieldsJson = cmdt.Relationship_Fields_JSON__c;
                 if (String.isNotBlank(relObjName) && String.isNotBlank(relFieldsJson)) {
+                    Schema.SObjectType relType = Schema.getGlobalDescribe().get(relObjName);
+                    Map<String, Schema.SObjectField> relFieldMap = relType == null
+                        ? new Map<String, Schema.SObjectField>()
+                        : relType.getDescribe().fields.getMap();
                     try {
                         List<Object> rawRel = (List<Object>) JSON.deserializeUntyped(relFieldsJson.trim());
                         for (Object raw : rawRel) {
                             Map<String, Object> f = (Map<String, Object>) raw;
                             String apiName = (String) f.get('fieldApiName');
-                            if (String.isNotBlank(apiName)) relFieldNames.add(apiName);
+                            if (String.isBlank(apiName)) {
+                                continue;
+                            }
+                            Schema.SObjectField relField = relFieldMap.get(apiName);
+                            if (relField == null || !relField.getDescribe().isAccessible()) {
+                                continue;
+                            }
+                            relFieldNames.add(apiName);
                         }
                     } catch (Exception e) { }
                 }

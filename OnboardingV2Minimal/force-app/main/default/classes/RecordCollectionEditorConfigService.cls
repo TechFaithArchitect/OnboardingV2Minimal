@@ -103,6 +103,9 @@ public with sharing class RecordCollectionEditorConfigService {
             }
 
             Schema.DescribeFieldResult dfr = sfield.getDescribe();
+            if (!dfr.isAccessible()) {
+                continue;
+            }
 
             FieldConfig fc = new FieldConfig();
             fc.fieldApiName = fieldApiName;
@@ -159,6 +162,7 @@ public with sharing class RecordCollectionEditorConfigService {
                     Schema.SObjectField sfield = relFieldMap.get(fieldApiName);
                     if (sfield == null) continue;
                     Schema.DescribeFieldResult dfr = sfield.getDescribe();
+                    if (!dfr.isAccessible()) continue;
                     FieldConfig fc = new FieldConfig();
                     fc.fieldApiName = fieldApiName;
                     fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null ? rawField.get('label') : dfr.getLabel());
