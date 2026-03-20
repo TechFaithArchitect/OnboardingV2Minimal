@@ -7,6 +7,7 @@ This folder splits the large action-plan document into focused working views.
 - `execution-log.md`: chronological implementation log.
 - `in-progress.md`: active in-progress items.
 - `full-original.md`: full detailed source plan.
+- Related: `../onboarding-contract-centric-model-and-migration-plan-2026-03-20.md` for contract-centric onboarding routing and legacy data migration planning.
 
 ## Refresh
 - `make refresh-best-practices-docs`

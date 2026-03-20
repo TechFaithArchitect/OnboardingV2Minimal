@@ -75,6 +75,7 @@ Checkbox status list extracted from the source plan.
 - [ ] Add drift checks or validation so `Vendor_Program_Requirement__c.Fulfillment_Policy_Key__c` values stay aligned with active `Onboarding_Fulfillment_Policy__mdt` records.
 - [ ] Expand custom-permission gating for admin actions in LWCs and Flows.
 - [ ] Externalize hard-coded user-facing strings to Custom Labels for i18n readiness.
+- [ ] Execute contract-centric onboarding data model migration (`Onboarding__c.Contract__c` as authoritative link) and legacy backfill plan documented in `docs/implementation-notes/onboarding-contract-centric-model-and-migration-plan-2026-03-20.md`.
 
 ## F. Deployment and CI/CD
 - [x] `package.xml` variants and `destructiveChanges.xml` patterns already exist.

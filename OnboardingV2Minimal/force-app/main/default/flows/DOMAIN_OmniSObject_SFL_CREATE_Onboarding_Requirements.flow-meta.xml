@@ -24,64 +24,6 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Capture_Create_Onboarding_Requirements_Fault</name>
-        <label>Capture Create Onboarding Requirements Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Capture_Fail_Fast_Missing_RecordType_Mapping_Fault</name>
-        <label>Capture Fail Fast Missing RecordType Mapping Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Missing_RecordType_Mapping_Error_Message</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Capture_Update_Onboarding_Record_with_Completion_Fault</name>
-        <label>Capture Update Onboarding Record with Completion Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Capture_Update_Onboarding_Record_with_Incomplete_Subject_Creation_Fault</name>
-        <label>Capture Update Onboarding Record with Incomplete Subject Creation Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>Add_Onboarding_Requirement_Record_to_Collection</name>
         <label>Add Onboarding Requirement Record to Collection</label>
         <locationX>0</locationX>
@@ -123,22 +65,6 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Onboarding_Requirement_RecordTypes.Id</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Reset_Resolved_RecordType_Id</name>
-        <label>Reset Resolved RecordType Id</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>Resolved_Onboarding_Requirement_RecordType_Id</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue></stringValue>
             </value>
         </assignmentItems>
         <connector>
@@ -201,6 +127,80 @@
         </assignmentItems>
         <connector>
             <targetReference>Add_Onboarding_Requirement_Record_to_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Onboarding_Requirements_Fault</name>
+        <label>Capture Create Onboarding Requirements Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Fail_Fast_Missing_RecordType_Mapping_Fault</name>
+        <label>Capture Fail Fast Missing RecordType Mapping Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Missing_RecordType_Mapping_Error_Message</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Record_with_Completion_Fault</name>
+        <label>Capture Update Onboarding Record with Completion Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Onboarding_Record_with_Incomplete_Subject_Creation_Fault</name>
+        <label>Capture Update Onboarding Record with Incomplete Subject Creation Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Reset_Resolved_RecordType_Id</name>
+        <label>Reset Resolved RecordType Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Resolved_Onboarding_Requirement_RecordType_Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Onboarding_Requirement_RecordTypes</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -292,6 +292,31 @@
             <label>Missing Mapping Detected</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Did_Resolve_RecordType_Id</name>
+        <label>Did Resolve RecordType Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Missing_RecordType_Mapping_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Resolved</defaultConnectorLabel>
+        <rules>
+            <name>Resolved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Resolved_Onboarding_Requirement_RecordType_Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
+            </connector>
+            <label>Resolved</label>
+        </rules>
+    </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements</description>
     <environments>Default</environments>
     <formulas>
@@ -340,11 +365,7 @@
     <formulas>
         <name>Resolved_Fulfillment_Policy_Key</name>
         <dataType>String</dataType>
-        <expression>IF(
-  ISBLANK({!Loop_VendorProgramRequirements.Fulfillment_Policy_Key__c}),
-  &quot;PRIMARY_CONTACT_OR_ACCOUNT&quot;,
-  {!Loop_VendorProgramRequirements.Fulfillment_Policy_Key__c}
-)</expression>
+        <expression>&quot;PRIMARY_CONTACT_OR_ACCOUNT&quot;</expression>
     </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Requirements</label>
@@ -359,7 +380,7 @@
             <targetReference>Does_RecordType_DeveloperName_Match_Requirement</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Assign_Missing_RecordType_Mapping_Error</targetReference>
+            <targetReference>Did_Resolve_RecordType_Id</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>

@@ -1058,7 +1058,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -1133,7 +1132,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -1208,7 +1206,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
