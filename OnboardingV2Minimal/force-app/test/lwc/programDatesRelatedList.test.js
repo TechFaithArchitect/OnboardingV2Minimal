@@ -2,8 +2,17 @@ import { createElement } from 'lwc';
 import { registerApexTestWireAdapter, registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 import ProgramDatesRelatedList from 'c/programDatesRelatedList';
 import getProgramDates from '@salesforce/apex/ObjectRelatedListController.getProgramDates';
+import { refreshApex } from '@salesforce/apex';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { deleteRecord, updateRecord } from 'lightning/uiRecordApi';
+
+jest.mock(
+    '@salesforce/apex',
+    () => ({
+        refreshApex: jest.fn(() => Promise.resolve())
+    }),
+    { virtual: true }
+);
 
 jest.mock(
     'lightning/uiRecordApi',
@@ -30,6 +39,7 @@ describe('c-program-dates-related-list', () => {
         while (document.body.firstChild) {
             document.body.removeChild(document.body.firstChild);
         }
+        jest.useRealTimers();
         jest.clearAllMocks();
     });
 
@@ -224,5 +234,37 @@ describe('c-program-dates-related-list', () => {
 
         const statusText = element.shadowRoot.querySelector('.status-text');
         expect(statusText.getAttribute('aria-live')).toBe('polite');
+    });
+
+    it('debounces repeated refresh button clicks to a single refresh call', async () => {
+        jest.useFakeTimers();
+
+        const element = createComponent();
+        element.recordId = '001RL0000001ABCYAA';
+        document.body.appendChild(element);
+        await Promise.resolve();
+
+        getProgramDatesAdapter.emit([
+            {
+                Id: 'a01',
+                Name: 'Row 1'
+            }
+        ]);
+        await Promise.resolve();
+        jest.clearAllMocks();
+
+        const refreshButton = element.shadowRoot.querySelector('lightning-button-icon');
+        expect(refreshButton).not.toBeNull();
+        refreshButton.click();
+        refreshButton.click();
+        refreshButton.click();
+
+        expect(refreshApex).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(210);
+        await Promise.resolve();
+        await Promise.resolve();
+
+        expect(refreshApex).toHaveBeenCalledTimes(1);
     });
 });

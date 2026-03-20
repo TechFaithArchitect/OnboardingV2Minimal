@@ -26,6 +26,7 @@ import { RefreshEvent, registerRefreshHandler, unregisterRefreshHandler } from '
 export default class ObjectRelatedList extends NavigationMixin(LightningElement) {
     static DEFAULT_NEW_ACTION_BEHAVIOR = 'auto';
     static NEW_ACTION_BEHAVIORS = ['auto', 'standard', 'modal', 'hidden'];
+    static REFRESH_DEBOUNCE_MS = 200;
 
     /** Parent record ID (e.g., Account Id) */
     @api recordId;
@@ -140,6 +141,9 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         lastOptionCount: 0,
         lastError: ''
     };
+    refreshInFlightPromise;
+    refreshDebounceHandle;
+    suppressNextPageRefresh = false;
 
     connectedCallback() {
         try {
@@ -154,12 +158,38 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             unregisterRefreshHandler(this.refreshHandlerId);
             this.refreshHandlerId = undefined;
         }
+        if (this.refreshDebounceHandle) {
+            clearTimeout(this.refreshDebounceHandle);
+            this.refreshDebounceHandle = undefined;
+        }
     }
 
     handlePageRefresh() {
+        if (this.suppressNextPageRefresh) {
+            this.suppressNextPageRefresh = false;
+            return Promise.resolve(true);
+        }
         return this.refreshList()
             .then(() => true)
             .catch(() => false);
+    }
+
+    scheduleDebouncedRefresh() {
+        if (this.refreshDebounceHandle) {
+            clearTimeout(this.refreshDebounceHandle);
+        }
+        this.refreshDebounceHandle = setTimeout(() => {
+            this.refreshDebounceHandle = undefined;
+            this.refreshList().catch(() => {});
+        }, ObjectRelatedList.REFRESH_DEBOUNCE_MS);
+    }
+
+    dispatchPageRefresh() {
+        this.suppressNextPageRefresh = true;
+        this.dispatchEvent(new RefreshEvent());
+        setTimeout(() => {
+            this.suppressNextPageRefresh = false;
+        }, 0);
     }
 
     @wire(getRecord, { recordId: '$recordId', fields: '$parentRecordSourceFields' })
@@ -919,12 +949,15 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         }
 
         const recordTypeIds = new Set();
+        let rowMissingRecordType = false;
         rows.forEach((row) => {
             if (row.RecordTypeId) {
                 recordTypeIds.add(row.RecordTypeId);
+            } else {
+                rowMissingRecordType = true;
             }
         });
-        if (this.defaultRecordTypeId) {
+        if (this.defaultRecordTypeId && (rowMissingRecordType || !recordTypeIds.size)) {
             recordTypeIds.add(this.defaultRecordTypeId);
         }
 
@@ -942,7 +975,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     }
 
     handleRefresh() {
-        this.refreshList();
+        this.scheduleDebouncedRefresh();
     }
 
     /**
@@ -965,7 +998,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
                 return this.refreshList();
             })
             .then(() => {
-                this.dispatchEvent(new RefreshEvent());
+                this.dispatchPageRefresh();
             })
             .catch((error) => {
                 this.showToast('Error updating records', this.reduceErrors(error).join(', '), 'error');
@@ -998,7 +1031,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         const label = this.objectLabel || this.objectInfo?.label || 'Record';
         this.showToast('Success', `${label} record created.`, 'success');
         this.refreshList().then(() => {
-            this.dispatchEvent(new RefreshEvent());
+            this.dispatchPageRefresh();
         });
     }
 
@@ -1053,7 +1086,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
                 return this.refreshList();
             })
             .then(() => {
-                this.dispatchEvent(new RefreshEvent());
+                this.dispatchPageRefresh();
             })
             .catch((error) => {
                 this.showToast('Error deleting record', this.reduceErrors(error).join(', '), 'error');
@@ -1061,10 +1094,16 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     }
 
     refreshList() {
-        if (this.wiredResult) {
-            return refreshApex(this.wiredResult);
+        if (!this.wiredResult) {
+            return Promise.resolve();
         }
-        return Promise.resolve();
+        if (this.refreshInFlightPromise) {
+            return this.refreshInFlightPromise;
+        }
+        this.refreshInFlightPromise = Promise.resolve(refreshApex(this.wiredResult)).finally(() => {
+            this.refreshInFlightPromise = undefined;
+        });
+        return this.refreshInFlightPromise;
     }
 
     navigateToNewRecord() {

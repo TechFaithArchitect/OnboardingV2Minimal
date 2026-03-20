@@ -2,8 +2,17 @@ import { createElement } from 'lwc';
 import { registerApexTestWireAdapter, registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 import ObjectRelatedList from 'c/objectRelatedList';
 import getRelatedRecords from '@salesforce/apex/ObjectRelatedListController.getRelatedRecords';
+import { refreshApex } from '@salesforce/apex';
 import { getRecord } from 'lightning/uiRecordApi';
 import { getObjectInfo, getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
+
+jest.mock(
+    '@salesforce/apex',
+    () => ({
+        refreshApex: jest.fn(() => Promise.resolve())
+    }),
+    { virtual: true }
+);
 
 const getRelatedRecordsAdapter = registerApexTestWireAdapter(getRelatedRecords);
 const getRecordAdapter = registerLdsTestWireAdapter(getRecord);
@@ -23,6 +32,7 @@ describe('c-object-related-list dotted path compatibility', () => {
         while (document.body.firstChild) {
             document.body.removeChild(document.body.firstChild);
         }
+        jest.useRealTimers();
         jest.clearAllMocks();
     });
 
@@ -164,6 +174,42 @@ describe('c-object-related-list dotted path compatibility', () => {
 
         const statusText = element.shadowRoot.querySelector('.status-text');
         expect(statusText.getAttribute('aria-live')).toBe('polite');
+    });
+
+    it('debounces repeated refresh button clicks to a single refresh call', async () => {
+        jest.useFakeTimers();
+
+        const element = createComponent();
+        element.recordId = 'a1DRL0000001ABCYAA';
+        element.childObjectApiName = 'Onboarding_Requirement__c';
+        element.parentFieldApiName = 'Onboarding__c';
+        element.fieldApiNamesCsv = 'Name';
+        element.columnFieldApiNamesCsv = 'Name';
+        document.body.appendChild(element);
+        await flushPromises();
+
+        getRelatedRecordsAdapter.emit([
+            {
+                Id: 'a01',
+                Name: 'Requirement 1'
+            }
+        ]);
+        await flushPromises();
+        jest.clearAllMocks();
+
+        const refreshButton = element.shadowRoot.querySelector('lightning-button-icon');
+        expect(refreshButton).not.toBeNull();
+        refreshButton.click();
+        refreshButton.click();
+        refreshButton.click();
+
+        expect(refreshApex).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(210);
+        await flushPromises();
+        await flushPromises();
+
+        expect(refreshApex).toHaveBeenCalledTimes(1);
     });
 
     it('loads picklist options by record type and tracks success telemetry', async () => {

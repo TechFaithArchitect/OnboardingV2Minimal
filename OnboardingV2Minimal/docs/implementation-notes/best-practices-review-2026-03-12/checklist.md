@@ -49,10 +49,10 @@ Checkbox status list extracted from the source plan.
 - [x] `objectRelatedList`
 - [x] `programDatesRelatedList*`
 - [x] Add cases for inline edit save success/error toasts, navigation, query config derivation, CSV parsing, and picklist fallback/caching.
-- [ ] Performance tuning:
-- [ ] Debounce heavy refresh patterns.
-- [ ] Verify picklist fetch batching by record type.
-- [ ] Improve LDS cache orchestration for large related lists.
+- [x] Performance tuning: (Completed for `objectRelatedList` + `programDatesRelatedList`.)
+- [x] Debounce heavy refresh patterns.
+- [x] Verify picklist fetch batching by record type.
+- [x] Improve LDS cache orchestration for large related lists.
 
 ## D. Flows (Fault Handling, Modularity, Governance)
 - [x] Naming/modularity taxonomy is strong (`DOMAIN_`, `BLL_`, `EXP_`; `SFL`/`SCR`/`RCD` conventions).
@@ -148,3 +148,4 @@ Checkbox status list extracted from the source plan.
 - [x] 2026-03-20 Jest deployability fix applied: moved `objectRelatedList` Jest tests out of the LWC bundle path into `force-app/test/lwc` so Salesforce metadata deploy no longer attempts to compile test harness files; post-fix dry-run deploy `0AfRL00000dSNxi0AG` and deploy `0AfRL00000dSWbB0AW` both succeeded.
 - [x] 2026-03-20 Added Jest regression suites for `programDatesRelatedList` and `programDatesQuickAction` in `force-app/test/lwc` with DOM-driven coverage for wire data/error rendering, inline save success/error toasts, row delete actions, quick-action submit defaults (account/vendor), and success/error close/toast behavior; targeted run passed `11/11` and full LWC Jest baseline now passes `17/17`.
 - [x] 2026-03-20 LWC accessibility hardening pass completed for high-traffic related-list surfaces: replaced `javascript:void` anchor actions with keyboard-native button controls (`objectRelatedList`, `programDatesRelatedList`), added live-region semantics (`aria-live` for count/status and alert regions for errors), and bound `programDatesQuickAction` vendor combobox to native `label` for proper form control association. Jest updated and passing (`19/19`), and bundles deployed to `OnboardV2` (`0AfRL00000dSXyg0AG`).
+- [x] 2026-03-20 LWC performance hardening pass completed for high-traffic related lists: added debounced manual refresh handling (`200ms`) and in-flight refresh coalescing in `objectRelatedList` + `programDatesRelatedList`, suppressed self-induced duplicate refresh loops on internal `RefreshEvent` dispatch in `objectRelatedList`, and reduced unnecessary picklist record-type fetches by only loading default record type options when rows are missing `RecordTypeId`. Jest updated with debounce assertions and now passes `21/21`; deployed to `OnboardV2` (`0AfRL00000dST750AG`).

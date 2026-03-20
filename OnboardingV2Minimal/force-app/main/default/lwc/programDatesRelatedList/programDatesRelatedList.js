@@ -6,6 +6,7 @@ import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import PROGRAM_DATES_OBJECT from '@salesforce/schema/Program_Dates__c';
+const REFRESH_DEBOUNCE_MS = 200;
 
 const COLUMNS = [
     {
@@ -38,6 +39,25 @@ export default class ProgramDatesRelatedList extends NavigationMixin(LightningEl
     wiredResult;
     objectInfo;
     isChildSaving = false;
+    refreshInFlightPromise;
+    refreshDebounceHandle;
+
+    disconnectedCallback() {
+        if (this.refreshDebounceHandle) {
+            clearTimeout(this.refreshDebounceHandle);
+            this.refreshDebounceHandle = undefined;
+        }
+    }
+
+    scheduleDebouncedRefresh() {
+        if (this.refreshDebounceHandle) {
+            clearTimeout(this.refreshDebounceHandle);
+        }
+        this.refreshDebounceHandle = setTimeout(() => {
+            this.refreshDebounceHandle = undefined;
+            this.refreshList().catch(() => {});
+        }, REFRESH_DEBOUNCE_MS);
+    }
 
     @wire(getObjectInfo, { objectApiName: PROGRAM_DATES_OBJECT })
     wiredObjectInfo({ data, error }) {
@@ -145,7 +165,7 @@ export default class ProgramDatesRelatedList extends NavigationMixin(LightningEl
     }
 
     handleRefresh() {
-        this.refreshList();
+        this.scheduleDebouncedRefresh();
     }
 
     /**
@@ -165,7 +185,7 @@ export default class ProgramDatesRelatedList extends NavigationMixin(LightningEl
             .then(() => {
                 this.showToast('Success', 'Records updated', 'success');
                 this.draftValues = [];
-                this.refreshList();
+                return this.refreshList();
             })
             .catch((error) => {
                 this.showToast('Error updating records', this.reduceErrors(error).join(', '), 'error');
@@ -192,7 +212,7 @@ export default class ProgramDatesRelatedList extends NavigationMixin(LightningEl
     handleRecordCreated() {
         this.showNewModal = false;
         this.showToast('Success', 'Program Dates record created.', 'success');
-        this.refreshList();
+        this.refreshList().catch(() => {});
     }
 
     handleFooterCancel() {
@@ -264,7 +284,7 @@ export default class ProgramDatesRelatedList extends NavigationMixin(LightningEl
         deleteRecord(recordId)
             .then(() => {
                 this.showToast('Deleted', 'Program Dates record deleted.', 'success');
-                this.refreshList();
+                return this.refreshList();
             })
             .catch((error) => {
                 this.showToast('Error deleting record', this.reduceErrors(error).join(', '), 'error');
@@ -272,9 +292,16 @@ export default class ProgramDatesRelatedList extends NavigationMixin(LightningEl
     }
 
     refreshList() {
-        if (this.wiredResult) {
-            refreshApex(this.wiredResult);
+        if (!this.wiredResult) {
+            return Promise.resolve();
         }
+        if (this.refreshInFlightPromise) {
+            return this.refreshInFlightPromise;
+        }
+        this.refreshInFlightPromise = Promise.resolve(refreshApex(this.wiredResult)).finally(() => {
+            this.refreshInFlightPromise = undefined;
+        });
+        return this.refreshInFlightPromise;
     }
 
     showToast(title, message, variant) {
