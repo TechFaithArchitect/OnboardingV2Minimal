@@ -159,6 +159,7 @@ public with sharing class CommunicationTemplateBulkSendAction {
             SELECT Id, Email_Template_Id__c
             FROM Communication_Template__c
             WHERE Id IN :templateIds
+            WITH SECURITY_ENFORCED
           ]) {
             templateById.put(template.Id, template);
           }

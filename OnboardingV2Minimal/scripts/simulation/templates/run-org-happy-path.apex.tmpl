@@ -1,0 +1,342 @@
+/**
+ * Runtime template for configurable org-data happy-path simulation.
+ * Placeholder __PAYLOAD_BASE64__ is replaced by the shell runner.
+ */
+
+String payloadBase64 = '__PAYLOAD_BASE64__';
+String payloadJson = EncodingUtil.base64Decode(payloadBase64).toString();
+Map<String, Object> payload = (Map<String, Object>) JSON.deserializeUntyped(payloadJson);
+
+String scenarioName = String.valueOf(payload.get('scenarioName'));
+if (String.isBlank(scenarioName) || scenarioName == 'null') {
+    scenarioName = 'org-happy-path';
+}
+
+String accountIdInput = String.valueOf(payload.get('accountId'));
+if (accountIdInput == 'null') {
+    accountIdInput = null;
+}
+
+String vendorProgramIdInput = String.valueOf(payload.get('vendorProgramId'));
+if (vendorProgramIdInput == 'null') {
+    vendorProgramIdInput = null;
+}
+
+String requirementIdInput = String.valueOf(payload.get('requirementId'));
+if (requirementIdInput == 'null') {
+    requirementIdInput = null;
+}
+
+String requirementTypeInput = String.valueOf(payload.get('requirementType'));
+if (requirementTypeInput == 'null') {
+    requirementTypeInput = null;
+}
+
+String opportunityStageInput = String.valueOf(payload.get('opportunityStageName'));
+if (opportunityStageInput == 'null') {
+    opportunityStageInput = null;
+}
+
+String programBaseSelectionInput = String.valueOf(payload.get('programBaseSelection'));
+if (programBaseSelectionInput == 'null') {
+    programBaseSelectionInput = null;
+}
+
+String programTypeInput = String.valueOf(payload.get('programType'));
+if (programTypeInput == 'null') {
+    programTypeInput = null;
+}
+
+Integer closeDateOffsetDays = payload.get('closeDateOffsetDays') == null
+    ? 14
+    : Integer.valueOf(String.valueOf(payload.get('closeDateOffsetDays')));
+Boolean expectCreationCompleted = payload.get('expectCreationCompleted') == null
+    ? true
+    : (Boolean) payload.get('expectCreationCompleted');
+Integer minRequirementCount = payload.get('minRequirementCount') == null
+    ? 1
+    : Integer.valueOf(String.valueOf(payload.get('minRequirementCount')));
+Integer minSubjectCount = payload.get('minSubjectCount') == null
+    ? 0
+    : Integer.valueOf(String.valueOf(payload.get('minSubjectCount')));
+Boolean requireSeededRequirement = payload.get('requireSeededRequirement') == null
+    ? true
+    : (Boolean) payload.get('requireSeededRequirement');
+
+System.assert(String.isNotBlank(vendorProgramIdInput), 'Simulation failed: vendorProgramId is required.');
+
+Vendor_Customization__c selectedVendorProgram = [
+    SELECT Id, Name, Vendor__c
+    FROM Vendor_Customization__c
+    WHERE Id = :vendorProgramIdInput
+    LIMIT 1
+];
+System.assert(selectedVendorProgram.Vendor__c != null, 'Simulation failed: selected vendor program has no Vendor__c.');
+
+Vendor_Program_Requirement__c selectedRequirement;
+if (String.isNotBlank(requirementIdInput)) {
+    List<Vendor_Program_Requirement__c> explicitRequirement = [
+        SELECT Id, Requirement_Type__c, Vendor_Program__c
+        FROM Vendor_Program_Requirement__c
+        WHERE Id = :requirementIdInput
+        LIMIT 1
+    ];
+    System.assert(!explicitRequirement.isEmpty(), 'Simulation failed: requirementId not found: ' + requirementIdInput);
+    selectedRequirement = explicitRequirement[0];
+    System.assertEquals(
+        selectedVendorProgram.Id,
+        selectedRequirement.Vendor_Program__c,
+        'Simulation failed: requirement does not belong to selected vendor program.'
+    );
+} else {
+    List<Vendor_Program_Requirement__c> fallbackRequirement = [
+        SELECT Id, Requirement_Type__c
+        FROM Vendor_Program_Requirement__c
+        WHERE Vendor_Program__c = :selectedVendorProgram.Id
+          AND Active__c = true
+        ORDER BY Sequence__c ASC, CreatedDate ASC
+        LIMIT 1
+    ];
+    System.assert(
+        !fallbackRequirement.isEmpty(),
+        'Simulation failed: no active Vendor_Program_Requirement__c found for selected vendor program.'
+    );
+    selectedRequirement = fallbackRequirement[0];
+}
+
+if (String.isBlank(requirementTypeInput)) {
+    requirementTypeInput = selectedRequirement.Requirement_Type__c;
+}
+
+Account selectedAccount;
+Boolean usedExistingAccount = false;
+if (String.isNotBlank(accountIdInput)) {
+    selectedAccount = [
+        SELECT Id, Name
+        FROM Account
+        WHERE Id = :accountIdInput
+        LIMIT 1
+    ];
+    usedExistingAccount = true;
+} else {
+    selectedAccount = new Account(
+        Name = 'Simulation Account ' + scenarioName + ' ' + DateTime.now().formatGmt('yyyyMMddHHmmssSSS'),
+        Available_FSL_Vendors__c = Label.DIRECTV
+    );
+    insert selectedAccount;
+}
+
+String resolvedStageName = null;
+if (String.isNotBlank(opportunityStageInput)) {
+    for (Schema.PicklistEntry entry : Opportunity.StageName.getDescribe().getPicklistValues()) {
+        if (entry.isActive() && entry.getValue() == opportunityStageInput) {
+            resolvedStageName = entry.getValue();
+            break;
+        }
+    }
+}
+if (String.isBlank(resolvedStageName)) {
+    for (Schema.PicklistEntry entry : Opportunity.StageName.getDescribe().getPicklistValues()) {
+        if (entry.isActive()) {
+            resolvedStageName = entry.getValue();
+            break;
+        }
+    }
+}
+System.assert(String.isNotBlank(resolvedStageName), 'Simulation failed: no active Opportunity StageName found.');
+
+String resolvedProgramBaseSelection = null;
+if (String.isNotBlank(programBaseSelectionInput)) {
+    for (Schema.PicklistEntry entry : Opportunity.Program_Base_App_Selection__c.getDescribe().getPicklistValues()) {
+        if (entry.isActive() && entry.getValue() == programBaseSelectionInput) {
+            resolvedProgramBaseSelection = entry.getValue();
+            break;
+        }
+    }
+}
+
+String resolvedProgramType = null;
+if (String.isNotBlank(programTypeInput)) {
+    for (Schema.PicklistEntry entry : Opportunity.Program_Type__c.getDescribe().getPicklistValues()) {
+        if (entry.isActive() && entry.getValue() == programTypeInput) {
+            resolvedProgramType = entry.getValue();
+            break;
+        }
+    }
+}
+
+Opportunity opportunityInput = new Opportunity(
+    AccountId = selectedAccount.Id,
+    StageName = resolvedStageName,
+    CloseDate = Date.today().addDays(closeDateOffsetDays),
+    Vendor_Customization__c = selectedVendorProgram.Id
+);
+
+if (String.isNotBlank(resolvedProgramBaseSelection)) {
+    opportunityInput.Program_Base_App_Selection__c = resolvedProgramBaseSelection;
+}
+if (String.isNotBlank(resolvedProgramType)) {
+    opportunityInput.Program_Type__c = resolvedProgramType;
+}
+
+Map<String, Object> opportunityFlowInputs = new Map<String, Object>{
+    'AccountRecord' => new Account(Id = selectedAccount.Id),
+    'OpportunityRecord' => opportunityInput,
+    'VendorProgramRecord' => new Vendor_Customization__c(
+        Id = selectedVendorProgram.Id,
+        Vendor__c = selectedVendorProgram.Vendor__c,
+        Name = selectedVendorProgram.Name
+    )
+};
+
+Flow.Interview opportunityInterview = Flow.Interview.createInterview(
+    'DOMAIN_OmniSObject_SFL_CREATE_Opportunity',
+    opportunityFlowInputs
+);
+opportunityInterview.start();
+
+String opportunityFlowError = String.valueOf(opportunityInterview.getVariableValue('errorMessage'));
+if (opportunityFlowError == 'null') {
+    opportunityFlowError = null;
+}
+System.assert(String.isBlank(opportunityFlowError), 'Simulation failed in opportunity flow: ' + opportunityFlowError);
+
+Opportunity createdOpportunity = (Opportunity) opportunityInterview.getVariableValue('OpportunityRecord');
+Id createdOpportunityId = createdOpportunity == null ? null : createdOpportunity.Id;
+if (createdOpportunityId == null) {
+    List<Opportunity> fallbackOpportunities = [
+        SELECT Id
+        FROM Opportunity
+        WHERE AccountId = :selectedAccount.Id
+          AND Vendor_Customization__c = :selectedVendorProgram.Id
+        ORDER BY CreatedDate DESC
+        LIMIT 1
+    ];
+    if (!fallbackOpportunities.isEmpty()) {
+        createdOpportunityId = fallbackOpportunities[0].Id;
+    }
+}
+System.assert(createdOpportunityId != null, 'Simulation failed: Opportunity was not created.');
+
+Map<String, Object> onboardingFlowInputs = new Map<String, Object>{
+    'OpportunityRecord' => new Opportunity(
+        Id = createdOpportunityId,
+        AccountId = selectedAccount.Id
+    ),
+    'VendorProgramRecord' => new Vendor_Customization__c(
+        Id = selectedVendorProgram.Id,
+        Vendor__c = selectedVendorProgram.Vendor__c
+    )
+};
+
+Flow.Interview onboardingInterview = Flow.Interview.createInterview(
+    'DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record',
+    onboardingFlowInputs
+);
+onboardingInterview.start();
+
+String onboardingFlowError = String.valueOf(onboardingInterview.getVariableValue('errorMessage'));
+if (onboardingFlowError == 'null') {
+    onboardingFlowError = null;
+}
+System.assert(String.isBlank(onboardingFlowError), 'Simulation failed in onboarding flow: ' + onboardingFlowError);
+
+Onboarding__c createdOnboarding = (Onboarding__c) onboardingInterview.getVariableValue('OnboardingRecord');
+Id createdOnboardingId = createdOnboarding == null ? null : createdOnboarding.Id;
+if (createdOnboardingId == null) {
+    List<Onboarding__c> fallbackOnboardings = [
+        SELECT Id
+        FROM Onboarding__c
+        WHERE Opportunity__c = :createdOpportunityId
+        ORDER BY CreatedDate DESC
+        LIMIT 1
+    ];
+    if (!fallbackOnboardings.isEmpty()) {
+        createdOnboardingId = fallbackOnboardings[0].Id;
+    }
+}
+System.assert(createdOnboardingId != null, 'Simulation failed: Onboarding record was not created.');
+
+Onboarding__c onboardingSnapshot = [
+    SELECT Id,
+           Account__c,
+           Vendor_Customization__c,
+           Opportunity__c,
+           Onboarding_Status__c,
+           Creation_of_Record_Completed__c
+    FROM Onboarding__c
+    WHERE Id = :createdOnboardingId
+    LIMIT 1
+];
+
+System.assertEquals(selectedAccount.Id, onboardingSnapshot.Account__c, 'Onboarding account link mismatch.');
+System.assertEquals(selectedVendorProgram.Id, onboardingSnapshot.Vendor_Customization__c, 'Onboarding vendor program link mismatch.');
+System.assertEquals(createdOpportunityId, onboardingSnapshot.Opportunity__c, 'Onboarding opportunity link mismatch.');
+System.assertEquals(expectCreationCompleted, onboardingSnapshot.Creation_of_Record_Completed__c, 'Onboarding completion flag did not match expectation.');
+
+List<Onboarding_Requirement__c> onboardingRequirements = [
+    SELECT Id,
+           Vendor_Program_Requirement__c,
+           Requirement_Type__c,
+           Status__c
+    FROM Onboarding_Requirement__c
+    WHERE Onboarding__c = :createdOnboardingId
+    ORDER BY CreatedDate ASC
+];
+
+System.assert(
+    onboardingRequirements.size() >= minRequirementCount,
+    'Simulation failed: requirement count ' + onboardingRequirements.size() +
+    ' is below expected minimum ' + minRequirementCount + '.'
+);
+
+Boolean matchedSeededRequirement = false;
+Set<Id> onboardingRequirementIds = new Set<Id>();
+for (Onboarding_Requirement__c requirementRecord : onboardingRequirements) {
+    onboardingRequirementIds.add(requirementRecord.Id);
+    if (requirementRecord.Vendor_Program_Requirement__c == selectedRequirement.Id) {
+        matchedSeededRequirement = true;
+    }
+}
+
+if (requireSeededRequirement) {
+    System.assertEquals(
+        true,
+        matchedSeededRequirement,
+        'Simulation failed: selected Vendor_Program_Requirement__c was not propagated to onboarding requirements.'
+    );
+}
+
+Integer subjectCount = 0;
+if (!onboardingRequirementIds.isEmpty()) {
+    subjectCount = [
+        SELECT COUNT()
+        FROM Onboarding_Requirement_Subject__c
+        WHERE Onboarding_Requirement__c IN :onboardingRequirementIds
+    ];
+}
+
+System.assert(
+    subjectCount >= minSubjectCount,
+    'Simulation failed: subject count ' + subjectCount +
+    ' is below expected minimum ' + minSubjectCount + '.'
+);
+
+Map<String, Object> simulationResult = new Map<String, Object>{
+    'scenarioName' => scenarioName,
+    'usedExistingAccount' => usedExistingAccount,
+    'accountId' => selectedAccount.Id,
+    'vendorProgramId' => selectedVendorProgram.Id,
+    'vendorId' => selectedVendorProgram.Vendor__c,
+    'requirementId' => selectedRequirement.Id,
+    'requirementType' => selectedRequirement.Requirement_Type__c,
+    'opportunityId' => createdOpportunityId,
+    'onboardingId' => createdOnboardingId,
+    'onboardingStatus' => onboardingSnapshot.Onboarding_Status__c,
+    'creationCompleted' => onboardingSnapshot.Creation_of_Record_Completed__c,
+    'onboardingRequirementCount' => onboardingRequirements.size(),
+    'onboardingRequirementSubjectCount' => subjectCount,
+    'closeDateOffsetDays' => closeDateOffsetDays
+};
+
+System.debug(LoggingLevel.ERROR, 'SIMULATION_RESULT_JSON=' + JSON.serialize(simulationResult));

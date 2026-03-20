@@ -1,4 +1,4 @@
-public class ExceptionUtil {
+public with sharing class ExceptionUtil {
     private static final String DEFAULT_DOMAIN_MESSAGE = 'Request could not be completed.';
     private static final String DEFAULT_UNEXPECTED_MESSAGE =
         'Something went wrong while processing your request.';

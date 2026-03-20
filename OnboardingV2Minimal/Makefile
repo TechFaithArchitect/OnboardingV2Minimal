@@ -6,7 +6,7 @@ ANALYSIS_DIR ?= .analysis/automation-audit
 BEST_PRACTICES_SOURCE ?= docs/implementation-notes/best-practices-review-2026-03-12/full-original.md
 BEST_PRACTICES_DIR ?= docs/implementation-notes/best-practices-review-2026-03-12
 
-.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts audit-screen-flow-fault-user-messaging audit-fault-message-context-contract fix-deploy deploy-default-vendor-program refresh-best-practices-docs simulate-onboarding-opportunity
+.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts audit-screen-flow-fault-user-messaging audit-fault-message-context-contract fix-deploy deploy-default-vendor-program refresh-best-practices-docs simulate-onboarding-opportunity simulate-org-happy-path
 
 # Fix UnsafeFilepathError from cached temp path in source tracking (e.g. ../../tmp/onboardv2-training-sync-review/...)
 # Run this when deploys fail with "contains unsafe character sequences"
@@ -147,3 +147,8 @@ refresh-best-practices-docs:
 simulate-onboarding-opportunity:
 	@echo "Running onboarding opportunity simulation..."
 	bash scripts/simulation/run-account-onboarding-through-opportunity.sh "$(ORG_ALIAS)"
+
+# Run configurable org-data happy-path simulation + post-run assertions
+simulate-org-happy-path:
+	@echo "Running configurable org-data happy-path simulation..."
+	bash scripts/simulation/run-configurable-org-happy-path.sh --org "$(ORG_ALIAS)"

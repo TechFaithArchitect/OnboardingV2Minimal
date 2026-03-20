@@ -1,0 +1,54 @@
+{
+  "scenarioName": "org-happy-path",
+  "targetOrg": "OnboardV2",
+  "selection": {
+    "vendorProgramSoql": "SELECT Id, Vendor__c FROM Vendor_Customization__c WHERE Active__c = true AND Vendor__c != null ORDER BY LastModifiedDate DESC LIMIT 1",
+    "requirementSoql": "SELECT Id, Requirement_Type__c FROM Vendor_Program_Requirement__c WHERE Vendor_Program__c = '{{vendorProgramId}}' AND Active__c = true ORDER BY Sequence__c ASC LIMIT 1"
+  },
+  "inputs": {
+    "accountId": null,
+    "vendorProgramId": null,
+    "requirementId": null,
+    "requirementType": null,
+    "opportunityStageName": "Prospecting",
+    "closeDateOffsetDays": 14,
+    "programBaseSelection": "Not Applicable",
+    "programType": null
+  },
+  "expectations": {
+    "creationCompleted": true,
+    "minRequirementCount": 1,
+    "minSubjectCount": 0,
+    "requireSeededRequirement": true
+  },
+  "assertions": [
+    {
+      "name": "Onboarding links to selected vendor program",
+      "soql": "SELECT Vendor_Customization__c FROM Onboarding__c WHERE Id = '{{onboardingId}}' LIMIT 1",
+      "actualField": "Vendor_Customization__c",
+      "operator": "eq",
+      "expected": "{{vendorProgramId}}"
+    },
+    {
+      "name": "Onboarding links to created opportunity",
+      "soql": "SELECT Opportunity__c FROM Onboarding__c WHERE Id = '{{onboardingId}}' LIMIT 1",
+      "actualField": "Opportunity__c",
+      "operator": "eq",
+      "expected": "{{opportunityId}}"
+    },
+    {
+      "name": "At least one onboarding requirement exists",
+      "soql": "SELECT Id FROM Onboarding_Requirement__c WHERE Onboarding__c = '{{onboardingId}}'",
+      "actualField": "__totalSize__",
+      "operator": "gte",
+      "expected": 1
+    },
+    {
+      "name": "Selected requirement propagated",
+      "soql": "SELECT Id FROM Onboarding_Requirement__c WHERE Onboarding__c = '{{onboardingId}}' AND Vendor_Program_Requirement__c = '{{requirementId}}'",
+      "actualField": "__totalSize__",
+      "operator": "gte",
+      "expected": 1
+    }
+  ]
+}

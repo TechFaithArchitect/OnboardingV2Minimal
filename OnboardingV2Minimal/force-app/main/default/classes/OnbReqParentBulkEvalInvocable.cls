@@ -52,6 +52,7 @@ public with sharing class OnbReqParentBulkEvalInvocable {
           SELECT Id, Status__c, Completed__c
           FROM Onboarding_Requirement__c
           WHERE Id IN :requirementIds
+          WITH SECURITY_ENFORCED
         ]);
 
         Map<Id, StatusCounts> countsByRequirementId = new Map<Id, StatusCounts>();
@@ -59,6 +60,7 @@ public with sharing class OnbReqParentBulkEvalInvocable {
           SELECT Id, Onboarding_Requirement__c, Status__c
           FROM Onboarding_Requirement_Subject__c
           WHERE Onboarding_Requirement__c IN :requirementsById.keySet()
+          WITH SECURITY_ENFORCED
         ]) {
           StatusCounts counts = countsByRequirementId.get(subject.Onboarding_Requirement__c);
           if (counts == null) {

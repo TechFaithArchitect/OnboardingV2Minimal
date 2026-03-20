@@ -3,5 +3,5 @@
     <description>Global logging controls for onboarding automation.</description>
     <label>Onboarding Logging Config</label>
     <pluralLabel>Onboarding Logging Configs</pluralLabel>
-    <visibility>Protected</visibility>
+    <visibility>Public</visibility>
 </CustomObject>

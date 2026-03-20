@@ -96,10 +96,13 @@ public with sharing class RecordCollectionEditorGetRecordsService {
 
                 List<String> relFieldNames = new List<String>();
                 String relObjName = cmdt.Relationship_Object_API_Name__c;
+                String relChildField = cmdt.Relationship_Child_Field__c;
+                String relParentField = cmdt.Relationship_Parent_Field__c;
                 String relFieldsJson = cmdt.Relationship_Fields_JSON__c;
+                Map<String, Schema.SObjectField> relFieldMap = new Map<String, Schema.SObjectField>();
                 if (String.isNotBlank(relObjName) && String.isNotBlank(relFieldsJson)) {
                     Schema.SObjectType relType = Schema.getGlobalDescribe().get(relObjName);
-                    Map<String, Schema.SObjectField> relFieldMap = relType == null
+                    relFieldMap = relType == null
                         ? new Map<String, Schema.SObjectField>()
                         : relType.getDescribe().fields.getMap();
                     try {
@@ -122,10 +125,61 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                 Map<String, SObject> acrByChildAndParent = new Map<String, SObject>();
                 if (req.relationshipRecords != null && !req.relationshipRecords.isEmpty()) {
                     for (SObject acr : req.relationshipRecords) {
-                        Id childId = (Id) acr.get(cmdt.Relationship_Child_Field__c);
-                        Id parentId = (Id) acr.get(cmdt.Relationship_Parent_Field__c);
+                        Id childId = (Id) acr.get(relChildField);
+                        Id parentId = (Id) acr.get(relParentField);
                         if (childId != null && parentId != null) {
-                            acrByChildAndParent.put(String.valueOf(childId) + '|' + String.valueOf(parentId), acr);
+                            acrByChildAndParent.put(relationshipPairKey(parentId, childId), acr);
+                        }
+                    }
+                }
+
+                if (!relFieldNames.isEmpty() && String.isNotBlank(relObjName)) {
+                    if (
+                        String.isBlank(relChildField) ||
+                        String.isBlank(relParentField) ||
+                        !relFieldMap.containsKey(relChildField) ||
+                        !relFieldMap.containsKey(relParentField)
+                    ) {
+                        res.errorMessage = 'Invalid relationship field configuration for key: ' + req.configKey;
+                        results.add(res);
+                        continue;
+                    }
+
+                    Set<Id> fallbackChildIds = new Set<Id>();
+                    Set<Id> fallbackParentIds = new Set<Id>();
+                    for (SObject rec : req.records) {
+                        Id childId = tryCastToId(safeGetFieldValue(rec, 'Id'));
+                        Id parentId = tryCastToId(safeGetFieldValue(rec, cmdt.Parent_Field_API_Name__c));
+                        if (childId == null || parentId == null) {
+                            continue;
+                        }
+                        if (!acrByChildAndParent.containsKey(relationshipPairKey(parentId, childId))) {
+                            fallbackChildIds.add(childId);
+                            fallbackParentIds.add(parentId);
+                        }
+                    }
+
+                    if (!fallbackChildIds.isEmpty() && !fallbackParentIds.isEmpty()) {
+                        Set<String> selectFieldSet = new Set<String>{
+                            'Id',
+                            relChildField,
+                            relParentField
+                        };
+                        selectFieldSet.addAll(relFieldNames);
+                        List<String> selectFieldList = new List<String>(selectFieldSet);
+                        selectFieldList.sort();
+
+                        String q = 'SELECT ' + String.join(selectFieldList, ', ') + ' FROM ' + relObjName +
+                            ' WHERE ' + relChildField + ' IN :fallbackChildIds' +
+                            ' AND ' + relParentField + ' IN :fallbackParentIds' +
+                            ' WITH SECURITY_ENFORCED';
+
+                        for (SObject acr : Database.query(q)) {
+                            Id childId = tryCastToId(safeGetFieldValue(acr, relChildField));
+                            Id parentId = tryCastToId(safeGetFieldValue(acr, relParentField));
+                            if (childId != null && parentId != null) {
+                                acrByChildAndParent.put(relationshipPairKey(parentId, childId), acr);
+                            }
                         }
                     }
                 }
@@ -146,19 +200,9 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                         Id childId = tryCastToId(safeGetFieldValue(rec, 'Id'));
                         Id parentId = tryCastToId(safeGetFieldValue(rec, cmdt.Parent_Field_API_Name__c));
                         if (childId != null && parentId != null) {
-                            SObject acr = null;
-                            if (!acrByChildAndParent.isEmpty()) {
-                                acr = acrByChildAndParent.get(String.valueOf(childId) + '|' + String.valueOf(parentId));
-                            }
-                            if (acr == null) {
-                                String selectFields = 'Id, ' + String.join(relFieldNames, ', ');
-                                String q = 'SELECT ' + selectFields + ' FROM ' + relObjName +
-                                    ' WHERE ' + cmdt.Relationship_Child_Field__c + ' = :childId' +
-                                    ' AND ' + cmdt.Relationship_Parent_Field__c + ' = :parentId' +
-                                    ' WITH SECURITY_ENFORCED LIMIT 1';
-                                List<SObject> acrs = Database.query(q);
-                                acr = acrs.isEmpty() ? null : acrs[0];
-                            }
+                            SObject acr = acrByChildAndParent.isEmpty()
+                                ? null
+                                : acrByChildAndParent.get(relationshipPairKey(parentId, childId));
                             if (acr != null) {
                                 for (String fName : relFieldNames) {
                                     Object val = safeGetFieldValue(acr, fName);
@@ -187,6 +231,10 @@ public with sharing class RecordCollectionEditorGetRecordsService {
             results.add(res);
         }
         return results;
+    }
+
+    private static String relationshipPairKey(Id parentId, Id childId) {
+        return String.valueOf(parentId) + '|' + String.valueOf(childId);
     }
 
     private static Object safeGetFieldValue(SObject record, String fieldApiName) {

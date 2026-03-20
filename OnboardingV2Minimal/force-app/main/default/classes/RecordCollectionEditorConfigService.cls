@@ -510,6 +510,49 @@ public with sharing class RecordCollectionEditorConfigService {
                     List<SObject> relRecordsToUpdate = new List<SObject>();
                     Map<String, Schema.SObjectField> relFieldMap =
                         relType.getDescribe().fields.getMap();
+                    Schema.SObjectField startDateField = relFieldMap.get('StartDate');
+                    if (!relFieldMap.containsKey(relParentField) || !relFieldMap.containsKey(relChildField)) {
+                        singleResult.errorMessages.add(
+                            'Relationship config fields are invalid: parent=' +
+                            relParentField + ', child=' + relChildField + '.'
+                        );
+                        results.add(singleResult);
+                        continue;
+                    }
+
+                    Set<Id> childIdsToQuery = new Set<Id>();
+                    for (Integer i = 0; i < childDataList.size(); i++) {
+                        Id childId = indexToChildId.get(i);
+                        if (childId == null) {
+                            continue;
+                        }
+                        Map<String, Object> relFields = relationshipDataList[i];
+                        if (relFields == null || relFields.isEmpty()) {
+                            continue;
+                        }
+                        childIdsToQuery.add(childId);
+                    }
+
+                    Map<String, SObject> existingByParentAndChild = new Map<String, SObject>();
+                    if (!childIdsToQuery.isEmpty()) {
+                        String existingQuery =
+                            'SELECT Id, ' + relParentField + ', ' + relChildField +
+                            ' FROM ' + relObjectName +
+                            ' WHERE ' + relChildField + ' IN :childIdsToQuery' +
+                            ' AND ' + relParentField + ' = :parentId' +
+                            ' WITH SECURITY_ENFORCED';
+                        for (SObject existingRel : Database.query(existingQuery)) {
+                            Id existingChildId = (Id) existingRel.get(relChildField);
+                            Id existingParentId = (Id) existingRel.get(relParentField);
+                            if (existingChildId == null || existingParentId == null) {
+                                continue;
+                            }
+                            existingByParentAndChild.put(
+                                relationshipPairKey(existingParentId, existingChildId),
+                                existingRel
+                            );
+                        }
+                    }
 
                     for (Integer i = 0; i < childDataList.size(); i++) {
                         Id childId = indexToChildId.get(i);
@@ -517,15 +560,12 @@ public with sharing class RecordCollectionEditorConfigService {
                         Map<String, Object> relFields = relationshipDataList[i];
                         if (relFields.isEmpty()) continue;
 
-                        List<SObject> existing = Database.query(
-                            'SELECT Id, ' + relParentField + ', ' + relChildField + ' FROM ' + relObjectName +
-                            ' WHERE ' + relChildField + ' = :childId AND ' + relParentField + ' = :parentId' +
-                            ' WITH SECURITY_ENFORCED LIMIT 1'
+                        SObject existing = existingByParentAndChild.get(
+                            relationshipPairKey(parentId, childId)
                         );
-                        Schema.SObjectField startDateField = relFieldMap.get('StartDate');
-                        if (!existing.isEmpty()) {
+                        if (existing != null) {
                             SObject acr = relType.newSObject();
-                            acr.put('Id', existing[0].get('Id'));
+                            acr.put('Id', existing.get('Id'));
                             for (String fName : relFields.keySet()) {
                                 Schema.SObjectField relSField = relFieldMap.get(fName);
                                 if (relSField == null) continue;
@@ -596,6 +636,10 @@ public with sharing class RecordCollectionEditorConfigService {
         }
 
         return results;
+    }
+
+    private static String relationshipPairKey(Id parentId, Id childId) {
+        return String.valueOf(parentId) + '|' + String.valueOf(childId);
     }
 
     private static Object convertRelationshipFieldValue(Schema.SObjectType sobjectType, String fieldName, Object fVal) {

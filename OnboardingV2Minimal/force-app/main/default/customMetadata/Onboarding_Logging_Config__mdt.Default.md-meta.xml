@@ -5,7 +5,7 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 >
     <label>Default Logging Config</label>
-    <protected>true</protected>
+    <protected>false</protected>
     <values>
         <field>Enabled__c</field>
         <value xsi:type="xsd:boolean">true</value>
