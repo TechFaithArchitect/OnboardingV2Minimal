@@ -109,6 +109,12 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
         }
 
         public void execute(QueueableContext context) {
+            AsyncFailureTelemetryFinalizer.attach(
+                'ExperienceOpportunityCreateAsyncService.OpportunityCreateChainQueueable',
+                'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
+                + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id)
+            );
+
             List<String> stageErrors = new List<String>();
             Opportunity createdOpportunity;
 
@@ -148,11 +154,12 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
             }
 
             if (!stageErrors.isEmpty()) {
-                LoggingUtil.error(
-                    'ExperienceOpportunityCreateAsyncService queue execution errors. '
-                    + 'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
-                    + ', OpportunityId=' + String.valueOf(createdOpportunity == null ? null : createdOpportunity.Id)
-                    + ', Details=' + String.join(stageErrors, ' | ')
+                AsyncFailureTelemetryFinalizer.logHandledFailure(
+                    'ExperienceOpportunityCreateAsyncService.OpportunityCreateChainQueueable',
+                    'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
+                    + ', OpportunityId=' + String.valueOf(createdOpportunity == null ? null : createdOpportunity.Id),
+                    null,
+                    'Queue execution completed with handled stage errors: ' + String.join(stageErrors, ' | ')
                 );
             }
         }
