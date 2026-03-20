@@ -1321,6 +1321,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Recalculate_Onboarding_Training_Status</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records</stringValue>

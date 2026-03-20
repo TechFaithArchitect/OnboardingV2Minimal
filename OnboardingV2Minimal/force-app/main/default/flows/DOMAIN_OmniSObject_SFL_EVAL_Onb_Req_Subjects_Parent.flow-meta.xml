@@ -928,6 +928,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Get_Onboarding_Requirement_Subjects</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent</stringValue>
@@ -986,6 +999,19 @@
                 <stringValue>Has_Onboarding_Requirement_Id</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Has_Onboarding_Requirement_Id</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -1046,6 +1072,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Get_Onboarding_Requirement</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_Parent</stringValue>
@@ -1104,6 +1143,19 @@
                 <stringValue>Update_Onboarding_Requirement</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Update_Onboarding_Requirement</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>

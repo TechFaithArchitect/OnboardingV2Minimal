@@ -492,6 +492,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Create_Required_Related_Onboarding_Records</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>BLL_Onboarding_Requirement_RCD_Logical_Process</stringValue>
@@ -550,6 +563,19 @@
                 <stringValue>Evaluate_Onboarding_Status</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Evaluate_Onboarding_Status</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>

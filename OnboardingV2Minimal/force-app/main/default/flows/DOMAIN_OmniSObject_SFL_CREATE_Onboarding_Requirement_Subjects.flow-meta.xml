@@ -1047,6 +1047,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Create_Onboarding_Requirement_Subjects</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Requirement_Subjects</stringValue>
@@ -1109,6 +1122,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Get_Fulfillment_Policies</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Requirement_Subjects</stringValue>
@@ -1170,6 +1196,19 @@
                 <stringValue>Determine_Subject_Model</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Determine_Subject_Model</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>

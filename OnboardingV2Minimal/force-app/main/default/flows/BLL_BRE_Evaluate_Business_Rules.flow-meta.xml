@@ -466,6 +466,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <elementReference>FaultSourceElementApiName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>BLL_BRE_Evaluate_Business_Rules</stringValue>

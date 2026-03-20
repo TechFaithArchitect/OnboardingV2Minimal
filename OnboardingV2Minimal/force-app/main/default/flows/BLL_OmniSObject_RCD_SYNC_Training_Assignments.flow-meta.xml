@@ -715,6 +715,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Evaluate_Changed_Onboarding_Requirements_Bulk</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
@@ -772,6 +785,19 @@
                 <stringValue>Evaluate_Training_Subjects_By_Account</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Evaluate_Training_Subjects_By_Account</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -831,6 +857,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Evaluate_Training_Subjects_By_Account_From_Collection</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
@@ -889,6 +928,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Evaluate_Training_Subjects_By_Contact</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>BLL_OmniSObject_RCD_SYNC_Training_Assignments</stringValue>
@@ -943,6 +995,19 @@
                 <stringValue>Update_Onboarding_Records</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Update_Onboarding_Records</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -1001,6 +1066,19 @@
                 <stringValue>Update_Onboarding_Record_From_Collection</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Update_Onboarding_Record_From_Collection</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>

@@ -233,9 +233,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Evaluate_Agreement_Subjects</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>BLL_Agreement_RCD_Logical_Process</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
     </subflows>
@@ -276,9 +288,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Get_Onboarding_Record</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
                 <stringValue>BLL_Agreement_RCD_Logical_Process</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
     </subflows>

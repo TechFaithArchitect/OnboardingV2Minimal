@@ -6,7 +6,7 @@ ANALYSIS_DIR ?= .analysis/automation-audit
 BEST_PRACTICES_SOURCE ?= docs/implementation-notes/best-practices-review-2026-03-12/full-original.md
 BEST_PRACTICES_DIR ?= docs/implementation-notes/best-practices-review-2026-03-12
 
-.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts audit-screen-flow-fault-user-messaging fix-deploy deploy-default-vendor-program refresh-best-practices-docs
+.PHONY: audit check-vpr-drift check-cmdt-alias-drift canonicalize-onboarding-cmdt-aliases validate-focal-flow-error-paths build-legacy-queue build-flow-deps check-apex-refs profile-flows build-redundancy-audit audit-fault-connectors audit-flow-loop-shape audit-flow-loop-connectors audit-onboarding-status-owner audit-subflow-error-contracts audit-screen-flow-fault-user-messaging fix-deploy deploy-default-vendor-program refresh-best-practices-docs simulate-onboarding-opportunity
 
 # Fix UnsafeFilepathError from cached temp path in source tracking (e.g. ../../tmp/onboardv2-training-sync-review/...)
 # Run this when deploys fail with "contains unsafe character sequences"
@@ -136,3 +136,8 @@ build-redundancy-audit:
 refresh-best-practices-docs:
 	@echo "Refreshing best-practices split docs..."
 	scripts/automation/refresh-best-practices-review-docs.sh "$(BEST_PRACTICES_SOURCE)" "$(BEST_PRACTICES_DIR)"
+
+# Run end-to-end onboarding simulation (account -> opportunity -> onboarding -> requirements)
+simulate-onboarding-opportunity:
+	@echo "Running onboarding opportunity simulation..."
+	bash scripts/simulation/run-account-onboarding-through-opportunity.sh "$(ORG_ALIAS)"
