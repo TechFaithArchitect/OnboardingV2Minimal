@@ -115,7 +115,7 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                     Map<String, Object> childData = new Map<String, Object>();
                     for (String fName : childFieldNames) {
                         if (rec.getSObjectType().getDescribe().fields.getMap().containsKey(fName)) {
-                            Object val = rec.get(fName);
+                            Object val = safeGetFieldValue(rec, fName);
                             if (val != null) childData.put(fName, val);
                         }
                     }
@@ -123,8 +123,8 @@ public with sharing class RecordCollectionEditorGetRecordsService {
 
                     Map<String, Object> relData = new Map<String, Object>();
                     if (!relFieldNames.isEmpty() && String.isNotBlank(relObjName)) {
-                        Id childId = (Id) rec.get('Id');
-                        Id parentId = (Id) rec.get(cmdt.Parent_Field_API_Name__c);
+                        Id childId = tryCastToId(safeGetFieldValue(rec, 'Id'));
+                        Id parentId = tryCastToId(safeGetFieldValue(rec, cmdt.Parent_Field_API_Name__c));
                         if (childId != null && parentId != null) {
                             SObject acr = null;
                             if (!acrByChildAndParent.isEmpty()) {
@@ -134,13 +134,14 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                                 String selectFields = 'Id, ' + String.join(relFieldNames, ', ');
                                 String q = 'SELECT ' + selectFields + ' FROM ' + relObjName +
                                     ' WHERE ' + cmdt.Relationship_Child_Field__c + ' = :childId' +
-                                    ' AND ' + cmdt.Relationship_Parent_Field__c + ' = :parentId LIMIT 1';
+                                    ' AND ' + cmdt.Relationship_Parent_Field__c + ' = :parentId' +
+                                    ' WITH SECURITY_ENFORCED LIMIT 1';
                                 List<SObject> acrs = Database.query(q);
                                 acr = acrs.isEmpty() ? null : acrs[0];
                             }
                             if (acr != null) {
                                 for (String fName : relFieldNames) {
-                                    Object val = acr.get(fName);
+                                    Object val = safeGetFieldValue(acr, fName);
                                     if (val != null) relData.put(fName, val);
                                 }
                             }
@@ -156,10 +157,46 @@ public with sharing class RecordCollectionEditorGetRecordsService {
 
                 res.recordsJson = JSON.serialize(output);
             } catch (Exception e) {
-                res.errorMessage = e.getMessage();
+                String errorRef = buildErrorReference();
+                LoggingUtil.error(
+                    'RecordCollectionEditorGetRecordsService.getRecordsJsonForEditor [' +
+                    errorRef + ']: ' + e.getMessage()
+                );
+                res.errorMessage = 'Unable to prepare records for editor. Reference ' + errorRef + '.';
             }
             results.add(res);
         }
         return results;
+    }
+
+    private static Object safeGetFieldValue(SObject record, String fieldApiName) {
+        if (record == null || String.isBlank(fieldApiName)) {
+            return null;
+        }
+        try {
+            return record.get(fieldApiName);
+        } catch (SObjectException ex) {
+            return null;
+        }
+    }
+
+    private static Id tryCastToId(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Id) {
+            return (Id) value;
+        }
+        try {
+            return Id.valueOf(String.valueOf(value));
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    private static String buildErrorReference() {
+        Long nowMs = DateTime.now().getTime();
+        String randPart = String.valueOf(Math.abs(Crypto.getRandomInteger()));
+        return 'RCE-' + String.valueOf(nowMs).right(6) + '-' + randPart.left(4);
     }
 }

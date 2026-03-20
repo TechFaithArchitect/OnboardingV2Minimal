@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Audit user-facing Screen Flows that call shared fault handler:
-# enforce UserFacingMessage mapping + InterviewGuid + SourceElementLabel inputs.
+# enforce UserFacingMessage mapping + context inputs and prevent raw
+# ResolvedFaultMessage mapping to user-facing screen variables.
 
 set -euo pipefail
 
@@ -28,12 +29,19 @@ for f in "$FLOWS_DIR"/*.flow-meta.xml "$FLOWS_DIR"/*.flow; do
       $name ||= "(unnamed)";
 
       my $maps_user_message = ($block =~ /<outputAssignments>[\s\S]*?<name>UserFacingMessage<\/name>[\s\S]*?<\/outputAssignments>/) ? "yes" : "no";
+      my $maps_resolved_fault = ($block =~ /<outputAssignments>[\s\S]*?<name>ResolvedFaultMessage<\/name>[\s\S]*?<\/outputAssignments>/) ? "yes" : "no";
       my $has_interview_guid = ($block =~ /<inputAssignments>[\s\S]*?<name>InterviewGuid<\/name>[\s\S]*?<\/inputAssignments>/) ? "yes" : "no";
       my $has_source_label = ($block =~ /<inputAssignments>[\s\S]*?<name>SourceElementLabel<\/name>[\s\S]*?<\/inputAssignments>/) ? "yes" : "no";
+      my $has_source_api = ($block =~ /<inputAssignments>[\s\S]*?<name>SourceElementApiName<\/name>[\s\S]*?<\/inputAssignments>/) ? "yes" : "no";
+      my $has_source_flow = ($block =~ /<inputAssignments>[\s\S]*?<name>SourceFlowApiName<\/name>[\s\S]*?<\/inputAssignments>/) ? "yes" : "no";
+      my $avoids_resolved_fault = ($maps_resolved_fault eq "yes") ? "no" : "yes";
 
       print "$flow\t$name\tMAP_USERFACINGMESSAGE_OUTPUT\t$maps_user_message\n";
       print "$flow\t$name\tPASS_INTERVIEWGUID\t$has_interview_guid\n";
       print "$flow\t$name\tPASS_SOURCEELEMENTLABEL\t$has_source_label\n";
+      print "$flow\t$name\tPASS_SOURCEELEMENTAPINAME\t$has_source_api\n";
+      print "$flow\t$name\tPASS_SOURCEFLOWAPINAME\t$has_source_flow\n";
+      print "$flow\t$name\tAVOID_RESOLVEDFAULTMESSAGE_OUTPUT\t$avoids_resolved_fault\n";
     }
   ' "$f" >> "$OUT_TSV" 2>/dev/null || true
 done

@@ -387,7 +387,7 @@ public with sharing class RecordCollectionEditorConfigService {
             Map<Integer, Id> indexToChildId = new Map<Integer, Id>();
 
             if (!toUpdate.isEmpty()) {
-                Database.SaveResult[] updateResults = Database.update(toUpdate, false);
+                Database.SaveResult[] updateResults = Database.update(toUpdate, false, AccessLevel.USER_MODE);
                 for (Integer i = 0; i < updateResults.size(); i++) {
                     if (updateResults[i].isSuccess()) {
                         singleResult.createdRecords.add(toUpdate[i]);
@@ -401,7 +401,7 @@ public with sharing class RecordCollectionEditorConfigService {
             }
 
             if (!toInsert.isEmpty()) {
-                Database.SaveResult[] insertResults = Database.insert(toInsert, false);
+                Database.SaveResult[] insertResults = Database.insert(toInsert, false, AccessLevel.USER_MODE);
                 for (Integer i = 0; i < insertResults.size(); i++) {
                     if (insertResults[i].isSuccess()) {
                         singleResult.createdRecords.add(toInsert[i]);
@@ -465,6 +465,8 @@ public with sharing class RecordCollectionEditorConfigService {
                 if (relType != null) {
                     List<SObject> relRecordsToInsert = new List<SObject>();
                     List<SObject> relRecordsToUpdate = new List<SObject>();
+                    Map<String, Schema.SObjectField> relFieldMap =
+                        relType.getDescribe().fields.getMap();
 
                     for (Integer i = 0; i < childDataList.size(); i++) {
                         Id childId = indexToChildId.get(i);
@@ -474,12 +476,17 @@ public with sharing class RecordCollectionEditorConfigService {
 
                         List<SObject> existing = Database.query(
                             'SELECT Id, ' + relParentField + ', ' + relChildField + ' FROM ' + relObjectName +
-                            ' WHERE ' + relChildField + ' = :childId AND ' + relParentField + ' = :parentId LIMIT 1'
+                            ' WHERE ' + relChildField + ' = :childId AND ' + relParentField + ' = :parentId' +
+                            ' WITH SECURITY_ENFORCED LIMIT 1'
                         );
-                        Schema.SObjectField startDateField = relType.getDescribe().fields.getMap().get('StartDate');
+                        Schema.SObjectField startDateField = relFieldMap.get('StartDate');
                         if (!existing.isEmpty()) {
-                            SObject acr = existing[0];
+                            SObject acr = relType.newSObject();
+                            acr.put('Id', existing[0].get('Id'));
                             for (String fName : relFields.keySet()) {
+                                Schema.SObjectField relSField = relFieldMap.get(fName);
+                                if (relSField == null) continue;
+                                if (!relSField.getDescribe().isUpdateable()) continue;
                                 Object fVal = relFields.get(fName);
                                 Object converted = convertRelationshipFieldValue(relType, fName, fVal);
                                 if (converted != null) {
@@ -492,6 +499,9 @@ public with sharing class RecordCollectionEditorConfigService {
                             relRec.put(relParentField, parentId);
                             relRec.put(relChildField, childId);
                             for (String fName : relFields.keySet()) {
+                                Schema.SObjectField relSField = relFieldMap.get(fName);
+                                if (relSField == null) continue;
+                                if (!relSField.getDescribe().isCreateable()) continue;
                                 Object fVal = relFields.get(fName);
                                 if (startDateField != null && 'StartDate'.equals(fName) &&
                                     (fVal == null || String.isBlank(String.valueOf(fVal)))) {
@@ -502,7 +512,7 @@ public with sharing class RecordCollectionEditorConfigService {
                                     relRec.put(fName, converted);
                                 }
                             }
-                            if (startDateField != null) {
+                            if (startDateField != null && startDateField.getDescribe().isCreateable()) {
                                 Object existingStart = relRec.get('StartDate');
                                 if (existingStart == null) {
                                     relRec.put('StartDate', Date.today());
@@ -513,7 +523,7 @@ public with sharing class RecordCollectionEditorConfigService {
                     }
 
                     if (!relRecordsToUpdate.isEmpty()) {
-                        Database.SaveResult[] relUpdateResults = Database.update(relRecordsToUpdate, false);
+                        Database.SaveResult[] relUpdateResults = Database.update(relRecordsToUpdate, false, AccessLevel.USER_MODE);
                         for (Integer j = 0; j < relUpdateResults.size(); j++) {
                             if (relUpdateResults[j].isSuccess()) {
                                 singleResult.createdRelationshipRecords.add(relRecordsToUpdate[j]);
@@ -525,7 +535,7 @@ public with sharing class RecordCollectionEditorConfigService {
                         }
                     }
                     if (!relRecordsToInsert.isEmpty()) {
-                        Database.SaveResult[] relInsertResults = Database.insert(relRecordsToInsert, false);
+                        Database.SaveResult[] relInsertResults = Database.insert(relRecordsToInsert, false, AccessLevel.USER_MODE);
                         for (Integer j = 0; j < relInsertResults.size(); j++) {
                             if (relInsertResults[j].isSuccess()) {
                                 singleResult.createdRelationshipRecords.add(relRecordsToInsert[j]);
