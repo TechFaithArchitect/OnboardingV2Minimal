@@ -63,6 +63,7 @@ public with sharing class FollowUpDetectionService {
         SELECT Id
         FROM Onboarding_Requirement__c
         WHERE Onboarding__c IN :onboardingIds
+        WITH SECURITY_ENFORCED
       ];
       for (Onboarding_Requirement__c onboardingRequirement : requirements) {
         requirementIds.add(onboardingRequirement.Id);
@@ -153,6 +154,7 @@ public with sharing class FollowUpDetectionService {
           Vendor_Program_Requirement__c
         FROM Onboarding_Requirement__c
         WHERE Id = :requirementId
+        WITH SECURITY_ENFORCED
         LIMIT 1
       ];
       return requirements.isEmpty() ? null : requirements[0];
@@ -183,6 +185,7 @@ public with sharing class FollowUpDetectionService {
           Vendor_Program_Requirement__c
         FROM Onboarding_Requirement__c
         WHERE Id IN :requirementIds
+        WITH SECURITY_ENFORCED
       ];
       for (
         Onboarding_Requirement__c onboardingRequirement : onboardingRequirements
@@ -354,6 +357,7 @@ public with sharing class FollowUpDetectionService {
           SELECT Time_zone__pc
           FROM Account
           WHERE Id = :requirement.Onboarding__r.Account__c
+          WITH SECURITY_ENFORCED
           LIMIT 1
         ];
         // Timezone stored in custom field - adjust if field name differs
@@ -407,6 +411,7 @@ public with sharing class FollowUpDetectionService {
           AND Follow_Up_Rule__c = :ruleDeveloperName
           AND Status__c IN ('Pending', 'Pending Retry')
           AND Is_Archived__c = FALSE
+        WITH SECURITY_ENFORCED
         LIMIT 1
       ];
       return count > 0;

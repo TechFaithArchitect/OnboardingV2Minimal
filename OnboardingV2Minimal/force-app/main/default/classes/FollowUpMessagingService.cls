@@ -122,6 +122,7 @@ public with sharing class FollowUpMessagingService {
             FROM Contact
             WHERE Id = :contactId
               AND (Phone != null OR MobilePhone != null)
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return !contacts.isEmpty();
@@ -142,6 +143,7 @@ public with sharing class FollowUpMessagingService {
             SELECT Id, Name, Phone, MobilePhone, Email
             FROM Contact
             WHERE AccountId = :accountId
+            WITH SECURITY_ENFORCED
             ORDER BY CreatedDate ASC
             LIMIT 1
         ];

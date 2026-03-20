@@ -11,7 +11,7 @@ Checkbox status list extracted from the source plan.
 ## A. Apex (Architecture, Security, Limits, Testability)
 - [ ] Enforce sharing model consistency and security annotations.
 - [x] Confirm all exposed UI/Flow-invoked services/controllers use `with sharing`.
-- [ ] Ensure SOQL parity with `WITH SECURITY_ENFORCED` where appropriate.
+- [ ] Ensure SOQL parity with `WITH SECURITY_ENFORCED` where appropriate. (Targeted `VendorOnboarding*` / `FollowUp*` / `Twilio*` scope completed on 2026-03-20; broader codebase sweep still open.)
 - [ ] Add `WITH USER_MODE` / user-mode DML (`Database.insert(records, AccessLevel.USER_MODE)`) for UI-context writes where appropriate.
 - [x] Document and encapsulate explicit system-mode exceptions.
 - [x] Adopt invocable Apex facades for Flow-bound operations where possible.
@@ -89,7 +89,7 @@ Checkbox status list extracted from the source plan.
 - [x] Add a simple make/script target that runs existing audit automation under `scripts/automation/*`.
 
 ## Immediate Concrete Actions (Proposed Diffs)
-- [ ] Add missing `with sharing` and SOQL security enforcement in key services/controllers (`VendorOnboarding*`, `EmailTemplateSync*`, `FollowUp*`, `Twilio*`).
+- [x] Add missing `with sharing` and SOQL security enforcement in key services/controllers (`VendorOnboarding*`, `EmailTemplateSync*`, `FollowUp*`, `Twilio*`). (Completed targeted pass 2026-03-20: data-object SOQL in `VendorOnboardingService`, `FollowUpDetectionService`, `FollowUpExecutionService`, `FollowUpFatigueService`, `FollowUpMessagingService`, `FollowUpRuleRepository`, `TwilioSMSProvider`, and `TwilioSettingsController` now uses `WITH SECURITY_ENFORCED` where appropriate; `EmailTemplateSyncService` itself has no direct SOQL. Validated by dry-run `0AfRL00000dSYRi0AO`, deployed `0AfRL00000dScez0AC`.)
 - [x] Create reusable invocable facade class (`OnboardingInvocables.cls`) with typed request/response DTOs.
 - [x] Add standard trigger-handler base/recursion guard where missing; add bulk safety tests.
 - [x] Introduce GraphQL read-path proof of concept for `objectRelatedList` behind a feature flag, keep Apex fallback.

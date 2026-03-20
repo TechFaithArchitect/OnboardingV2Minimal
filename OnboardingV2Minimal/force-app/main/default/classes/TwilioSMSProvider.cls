@@ -207,6 +207,7 @@ public with sharing class TwilioSMSProvider implements SMSProviderStrategy {
             FROM Contact
             WHERE Id = :contactId
               AND (Phone != null OR MobilePhone != null)
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return contacts.isEmpty() ? null : contacts[0];
@@ -229,6 +230,7 @@ public with sharing class TwilioSMSProvider implements SMSProviderStrategy {
             FROM Contact
             WHERE Id = :contactId
               AND (Phone != null OR MobilePhone != null)
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         

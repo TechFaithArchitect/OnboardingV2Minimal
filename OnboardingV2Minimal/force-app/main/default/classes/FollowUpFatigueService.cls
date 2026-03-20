@@ -183,6 +183,7 @@ public with sharing class FollowUpFatigueService {
                 SELECT Time_zone__pc
                 FROM Account
                 WHERE Id = :accountId
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
 

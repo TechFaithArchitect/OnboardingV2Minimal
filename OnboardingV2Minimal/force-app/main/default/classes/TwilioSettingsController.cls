@@ -123,14 +123,19 @@ public with sharing class TwilioSettingsController {
     }
 
     private static Boolean isCurrentUserAdmin() {
-        Profile userProfile = [
-            SELECT Name
-            FROM Profile
-            WHERE Id = :UserInfo.getProfileId()
-            LIMIT 1
-        ];
-        if (userProfile.Name == 'System Administrator') {
-            return true;
+        try {
+            List<Profile> profiles = [
+                SELECT Name
+                FROM Profile
+                WHERE Id = :UserInfo.getProfileId()
+                WITH SECURITY_ENFORCED
+                LIMIT 1
+            ];
+            if (!profiles.isEmpty() && profiles[0].Name == 'System Administrator') {
+                return true;
+            }
+        } catch (Exception ex) {
+            // Fall back to permission-set based admin check.
         }
 
         try {
@@ -140,6 +145,7 @@ public with sharing class TwilioSettingsController {
                 WHERE
                     AssigneeId = :UserInfo.getUserId()
                     AND PermissionSet.PermissionsCustomizeApplication = TRUE
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             return !assignments.isEmpty();

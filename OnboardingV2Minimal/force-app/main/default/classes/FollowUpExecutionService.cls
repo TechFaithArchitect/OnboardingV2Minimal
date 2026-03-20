@@ -21,6 +21,7 @@ public with sharing class FollowUpExecutionService {
                    Attempt_Count__c, Last_Attempt_Date__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -117,6 +118,7 @@ public with sharing class FollowUpExecutionService {
             FROM Follow_Up_Queue__c
             WHERE Id IN :followUpQueueIds
               AND Status__c = 'Pending Retry'
+            WITH SECURITY_ENFORCED
         ];
 
         if (followUps.isEmpty()) {
@@ -157,6 +159,7 @@ public with sharing class FollowUpExecutionService {
                    Consecutive_Failures__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -178,6 +181,7 @@ public with sharing class FollowUpExecutionService {
             SELECT Id
             FROM Communication_Template__c
             WHERE Id = :dispatchContext.communicationTemplateId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         if (communicationTemplates.isEmpty()) {
@@ -234,6 +238,7 @@ public with sharing class FollowUpExecutionService {
             SELECT Id, Status__c, Consecutive_Failures__c, Attempt_Count__c, Last_Attempt_Date__c, Error_Message__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -254,6 +259,7 @@ public with sharing class FollowUpExecutionService {
             SELECT Id, Status__c, Consecutive_Failures__c, Attempt_Count__c, Last_Attempt_Date__c, Error_Message__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
 
@@ -546,6 +552,7 @@ public with sharing class FollowUpExecutionService {
                    Messaging_Template_Id__c, Messaging_Channel_Id__c, Message_Body__c
             FROM Communication_Template__c
             WHERE Id = :followUpRule.Messaging_Template__c
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return comms.isEmpty() ? null : comms[0];

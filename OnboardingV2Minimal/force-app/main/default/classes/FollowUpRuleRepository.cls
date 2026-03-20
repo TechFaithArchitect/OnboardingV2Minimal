@@ -34,6 +34,7 @@ public with sharing class FollowUpRuleRepository {
                 SELECT Onboarding__r.Account__c
                 FROM Onboarding_Requirement__c
                 WHERE Id = :onboardingRequirementId
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             return onboardingRequirement.Onboarding__r.Account__c;
@@ -52,6 +53,7 @@ public with sharing class FollowUpRuleRepository {
             WHERE Onboarding_Requirement__c = :onboardingRequirementId
               AND Last_Attempt_Date__c >= :thresholdDateTime
               AND Is_Archived__c = false
+            WITH SECURITY_ENFORCED
             ORDER BY Last_Attempt_Date__c DESC
             LIMIT 100
         ];
@@ -65,6 +67,7 @@ public with sharing class FollowUpRuleRepository {
             SELECT Id, Fatigue_Suppressed__c, Suppression_Reason__c, Status__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return queues.isEmpty() ? null : queues[0];
@@ -79,6 +82,7 @@ public with sharing class FollowUpRuleRepository {
                    Fatigue_Suppressed__c, Suppression_Reason__c, Status__c
             FROM Follow_Up_Queue__c
             WHERE Id = :followUpQueueId
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return queues.isEmpty() ? null : queues[0];
