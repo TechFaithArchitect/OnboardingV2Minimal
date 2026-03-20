@@ -12,14 +12,15 @@ public with sharing class TwilioSettingsController {
      */
     @AuraEnabled(cacheable=true)
     public static List<TwilioConfigWrapper> getTwilioConfigurations() {
-        // Admin gate: Only System Administrators can access
-        if (!isCurrentUserAdmin()) {
-            throw new AuraHandledException('Access denied. Twilio Settings is restricted to System Administrators.');
-        }
-        
-        List<TwilioConfigWrapper> configs = new List<TwilioConfigWrapper>();
-        
         try {
+            // Admin gate: Only System Administrators can access
+            if (!isCurrentUserAdmin()) {
+                throw new OnboardingDomainException(
+                    'Access denied. Twilio Settings is restricted to System Administrators.'
+                );
+            }
+
+            List<TwilioConfigWrapper> configs = new List<TwilioConfigWrapper>();
             List<Twilio_Configuration__mdt> twilioConfigRecords = [
                 SELECT DeveloperName, MasterLabel, 
                        From_Phone_Number__c, Named_Credential__c, 
@@ -31,11 +32,19 @@ public with sharing class TwilioSettingsController {
             for (Twilio_Configuration__mdt config : twilioConfigRecords) {
                 configs.add(new TwilioConfigWrapper(config));
             }
+            return configs;
+        } catch (OnboardingDomainException domainException) {
+            throw ExceptionUtil.domainError(
+                'TwilioSettingsController.getTwilioConfigurations',
+                domainException
+            );
         } catch (Exception ex) {
-            throw new AuraHandledException('Error loading Twilio configurations: ' + ex.getMessage());
+            throw ExceptionUtil.unexpectedAuraError(
+                'TwilioSettingsController.getTwilioConfigurations',
+                ex,
+                'Unable to load Twilio configurations.'
+            );
         }
-        
-        return configs;
     }
     
     /**
@@ -87,7 +96,11 @@ public with sharing class TwilioSettingsController {
             
         } catch (Exception ex) {
             validationResult.isValid = false;
-            validationResult.errorMessage = 'Error validating configuration: ' + ex.getMessage();
+            validationResult.errorMessage = ExceptionUtil.unexpectedUserMessage(
+                'TwilioSettingsController.validateConfiguration',
+                ex,
+                'Unable to validate Twilio configuration.'
+            );
         }
         
         return validationResult;

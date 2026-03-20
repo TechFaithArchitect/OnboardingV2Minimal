@@ -16,8 +16,8 @@ Checkbox status list extracted from the source plan.
 - [x] Document and encapsulate explicit system-mode exceptions.
 - [x] Adopt invocable Apex facades for Flow-bound operations where possible.
 - [x] Add `@InvocableMethod` + typed `@InvocableVariable` DTO wrappers for selected operations.
-- [ ] Standardize exception handling.
-- [ ] Centralize domain exception base type and user-safe error messaging for UI calls.
+- [x] Standardize exception handling. (2026-03-20 targeted pass: UI/Aura entry points now follow shared exception mapping through existing `ExceptionUtil` for domain vs unexpected paths, with consistent user-facing messaging + support reference codes.)
+- [x] Centralize domain exception base type and user-safe error messaging for UI calls. (Added shared base `OnboardingDomainException`; `ObjectRelatedListController`, `RecordCollectionEditorConfigService.getConfig`, and `TwilioSettingsController` now route validation/business errors via `ExceptionUtil.domainError(...)` and unexpected errors via `ExceptionUtil.unexpectedAuraError(...)` / `ExceptionUtil.unexpectedUserMessage(...)`.)
 - [x] Keep production code free of ad hoc `System.debug`.
 - [ ] Verify bulkification and governor safety in helpers.
 - [ ] Confirm no SOQL/DML in loops and collection-first signatures. (Targeted 2026-03-20 fix shipped: `FollowUpDetectionService.evaluateAndCreateFollowUpsBulk` now preloads existing follow-up keys in one query instead of per-requirement/per-rule `followUpExists` SOQL calls.)

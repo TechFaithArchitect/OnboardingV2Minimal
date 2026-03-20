@@ -45,156 +45,195 @@ public with sharing class RecordCollectionEditorConfigService {
 
     @AuraEnabled(cacheable=true)
     public static RecordCollectionConfig getConfig(String developerName) {
-        if (String.isBlank(developerName)) {
-            throw new AuraHandledException('Config developer name is required.');
-        }
-
-        List<Child_Record_Editor_Config__mdt> records = [
-            SELECT Id, DeveloperName, Object_API_Name__c, Parent_Field_API_Name__c, Fields_JSON__c,
-                Relationship_Object_API_Name__c, Relationship_Fields_JSON__c, Role_Constraints_JSON__c
-            FROM Child_Record_Editor_Config__mdt
-            WHERE DeveloperName = :developerName
-            LIMIT 1
-        ];
-
-        if (records.isEmpty()) {
-            throw new AuraHandledException('No Child_Record_Editor_Config__mdt found for key: ' + developerName);
-        }
-
-        Child_Record_Editor_Config__mdt cmdt = records[0];
-        String objectApiName = cmdt.Object_API_Name__c;
-        String parentFieldApiName = cmdt.Parent_Field_API_Name__c;
-
-        if (String.isBlank(objectApiName) || String.isBlank(parentFieldApiName)) {
-            throw new AuraHandledException('Object_API_Name__c and Parent_Field_API_Name__c must be populated for config: ' + developerName);
-        }
-
-        Schema.SObjectType sobjectType = Schema.getGlobalDescribe().get(objectApiName);
-        if (sobjectType == null) {
-            throw new AuraHandledException('Unknown object API name: ' + objectApiName);
-        }
-
-        Map<String, Schema.SObjectField> fieldMap =
-            sobjectType.getDescribe().fields.getMap();
-
-        List<FieldConfig> fieldConfigs = new List<FieldConfig>();
-
-        String fieldsJson = cmdt.Fields_JSON__c;
-        if (String.isBlank(fieldsJson)) {
-            throw new AuraHandledException('Fields_JSON__c is empty for config ' + developerName + '. Add a valid JSON array of field configs.');
-        }
-        List<Object> rawFields;
         try {
-            rawFields = (List<Object>) JSON.deserializeUntyped(fieldsJson.trim());
-        } catch (Exception e) {
-            throw new AuraHandledException('Invalid Fields_JSON__c for config ' + developerName + ': ' + e.getMessage());
-        }
-
-        for (Object raw : rawFields) {
-            Map<String, Object> rawField = (Map<String, Object>) raw;
-            String fieldApiName = (String) rawField.get('fieldApiName');
-            if (String.isBlank(fieldApiName)) {
-                continue;
+            if (String.isBlank(developerName)) {
+                throw new OnboardingDomainException('Config developer name is required.');
             }
 
-            Schema.SObjectField sfield = fieldMap.get(fieldApiName);
-            if (sfield == null) {
-                continue;
+            List<Child_Record_Editor_Config__mdt> records = [
+                SELECT Id, DeveloperName, Object_API_Name__c, Parent_Field_API_Name__c, Fields_JSON__c,
+                    Relationship_Object_API_Name__c, Relationship_Fields_JSON__c, Role_Constraints_JSON__c
+                FROM Child_Record_Editor_Config__mdt
+                WHERE DeveloperName = :developerName
+                LIMIT 1
+            ];
+
+            if (records.isEmpty()) {
+                throw new OnboardingDomainException(
+                    'No Child_Record_Editor_Config__mdt found for key: ' +
+                    developerName
+                );
             }
 
-            Schema.DescribeFieldResult dfr = sfield.getDescribe();
-            if (!dfr.isAccessible()) {
-                continue;
+            Child_Record_Editor_Config__mdt cmdt = records[0];
+            String objectApiName = cmdt.Object_API_Name__c;
+            String parentFieldApiName = cmdt.Parent_Field_API_Name__c;
+
+            if (String.isBlank(objectApiName) || String.isBlank(parentFieldApiName)) {
+                throw new OnboardingDomainException(
+                    'Object_API_Name__c and Parent_Field_API_Name__c must be populated for config: ' +
+                    developerName
+                );
             }
 
-            FieldConfig fc = new FieldConfig();
-            fc.fieldApiName = fieldApiName;
-            fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null
-                ? rawField.get('label')
-                : dfr.getLabel());
-            fc.required = (Boolean) (rawField.containsKey('required') && rawField.get('required') != null
-                ? rawField.get('required')
-                : !dfr.isNillable() && !dfr.isDefaultedOnCreate());
-            fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
-
-            fc.columnSize = (String) rawField.get('columnSize');
-
-            String configuredType = (String) rawField.get('type');
-            if (!String.isBlank(configuredType)) {
-                fc.dataType = configuredType;
-            } else {
-                fc.dataType = mapDescribeToDataType(dfr);
+            Schema.SObjectType sobjectType = Schema.getGlobalDescribe().get(objectApiName);
+            if (sobjectType == null) {
+                throw new OnboardingDomainException(
+                    'Unknown object API name: ' + objectApiName
+                );
             }
 
-            if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
-                fc.picklistValues = new List<String>();
-                for (Schema.PicklistEntry pe : dfr.getPicklistValues()) {
-                    fc.picklistValues.add(pe.getValue());
+            Map<String, Schema.SObjectField> fieldMap =
+                sobjectType.getDescribe().fields.getMap();
+
+            List<FieldConfig> fieldConfigs = new List<FieldConfig>();
+
+            String fieldsJson = cmdt.Fields_JSON__c;
+            if (String.isBlank(fieldsJson)) {
+                throw new OnboardingDomainException(
+                    'Fields_JSON__c is empty for config ' +
+                    developerName +
+                    '. Add a valid JSON array of field configs.'
+                );
+            }
+            List<Object> rawFields;
+            try {
+                rawFields = (List<Object>) JSON.deserializeUntyped(fieldsJson.trim());
+            } catch (Exception e) {
+                throw new OnboardingDomainException(
+                    'Invalid Fields_JSON__c for config ' + developerName + '.'
+                );
+            }
+
+            for (Object raw : rawFields) {
+                Map<String, Object> rawField = (Map<String, Object>) raw;
+                String fieldApiName = (String) rawField.get('fieldApiName');
+                if (String.isBlank(fieldApiName)) {
+                    continue;
                 }
-            }
-            if (dfr.getType() == Schema.DisplayType.Reference) {
-                List<Schema.SObjectType> refTypes = dfr.getReferenceTo();
-                if (refTypes != null && !refTypes.isEmpty()) {
-                    fc.lookupObjectApiName = refTypes[0].getDescribe().getName();
-                }
-            }
 
-            fieldConfigs.add(fc);
-        }
-
-        List<FieldConfig> relationshipFieldConfigs = new List<FieldConfig>();
-        String relObjectName = cmdt.Relationship_Object_API_Name__c;
-        String relFieldsJson = cmdt.Relationship_Fields_JSON__c;
-        if (!String.isBlank(relObjectName) && !String.isBlank(relFieldsJson)) {
-            Schema.SObjectType relType = Schema.getGlobalDescribe().get(relObjectName);
-            if (relType != null) {
-                Map<String, Schema.SObjectField> relFieldMap = relType.getDescribe().fields.getMap();
-                List<Object> rawRelFields;
-                try {
-                    rawRelFields = (List<Object>) JSON.deserializeUntyped(relFieldsJson.trim());
-                } catch (Exception e) {
-                    rawRelFields = new List<Object>();
+                Schema.SObjectField sfield = fieldMap.get(fieldApiName);
+                if (sfield == null) {
+                    continue;
                 }
-                for (Object raw : rawRelFields) {
-                    Map<String, Object> rawField = (Map<String, Object>) raw;
-                    String fieldApiName = (String) rawField.get('fieldApiName');
-                    if (String.isBlank(fieldApiName)) continue;
-                    Schema.SObjectField sfield = relFieldMap.get(fieldApiName);
-                    if (sfield == null) continue;
-                    Schema.DescribeFieldResult dfr = sfield.getDescribe();
-                    if (!dfr.isAccessible()) continue;
-                    FieldConfig fc = new FieldConfig();
-                    fc.fieldApiName = fieldApiName;
-                    fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null ? rawField.get('label') : dfr.getLabel());
-                    fc.required = (Boolean) (rawField.containsKey('required') && rawField.get('required') != null ? rawField.get('required') : !dfr.isNillable() && !dfr.isDefaultedOnCreate());
-                    fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
-                    fc.columnSize = (String) rawField.get('columnSize');
-                    String configuredType = (String) rawField.get('type');
-                    fc.dataType = !String.isBlank(configuredType) ? configuredType : mapDescribeToDataType(dfr);
-                    if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
-                        fc.picklistValues = new List<String>();
-                        for (Schema.PicklistEntry pe : dfr.getPicklistValues()) fc.picklistValues.add(pe.getValue());
+
+                Schema.DescribeFieldResult dfr = sfield.getDescribe();
+                if (!dfr.isAccessible()) {
+                    continue;
+                }
+
+                FieldConfig fc = new FieldConfig();
+                fc.fieldApiName = fieldApiName;
+                fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null
+                    ? rawField.get('label')
+                    : dfr.getLabel());
+                fc.required = (Boolean) (rawField.containsKey('required') && rawField.get('required') != null
+                    ? rawField.get('required')
+                    : !dfr.isNillable() && !dfr.isDefaultedOnCreate());
+                fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
+
+                fc.columnSize = (String) rawField.get('columnSize');
+
+                String configuredType = (String) rawField.get('type');
+                if (!String.isBlank(configuredType)) {
+                    fc.dataType = configuredType;
+                } else {
+                    fc.dataType = mapDescribeToDataType(dfr);
+                }
+
+                if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
+                    fc.picklistValues = new List<String>();
+                    for (Schema.PicklistEntry pe : dfr.getPicklistValues()) {
+                        fc.picklistValues.add(pe.getValue());
                     }
-                    if (dfr.getType() == Schema.DisplayType.Reference) {
-                        List<Schema.SObjectType> refTypes = dfr.getReferenceTo();
-                        if (refTypes != null && !refTypes.isEmpty()) {
-                            fc.lookupObjectApiName = refTypes[0].getDescribe().getName();
+                }
+                if (dfr.getType() == Schema.DisplayType.Reference) {
+                    List<Schema.SObjectType> refTypes = dfr.getReferenceTo();
+                    if (refTypes != null && !refTypes.isEmpty()) {
+                        fc.lookupObjectApiName = refTypes[0].getDescribe().getName();
+                    }
+                }
+
+                fieldConfigs.add(fc);
+            }
+
+            List<FieldConfig> relationshipFieldConfigs = new List<FieldConfig>();
+            String relObjectName = cmdt.Relationship_Object_API_Name__c;
+            String relFieldsJson = cmdt.Relationship_Fields_JSON__c;
+            if (!String.isBlank(relObjectName) && !String.isBlank(relFieldsJson)) {
+                Schema.SObjectType relType = Schema.getGlobalDescribe().get(relObjectName);
+                if (relType != null) {
+                    Map<String, Schema.SObjectField> relFieldMap =
+                        relType.getDescribe().fields.getMap();
+                    List<Object> rawRelFields;
+                    try {
+                        rawRelFields =
+                            (List<Object>) JSON.deserializeUntyped(relFieldsJson.trim());
+                    } catch (Exception e) {
+                        rawRelFields = new List<Object>();
+                    }
+                    for (Object raw : rawRelFields) {
+                        Map<String, Object> rawField = (Map<String, Object>) raw;
+                        String fieldApiName = (String) rawField.get('fieldApiName');
+                        if (String.isBlank(fieldApiName)) {
+                            continue;
                         }
+                        Schema.SObjectField sfield = relFieldMap.get(fieldApiName);
+                        if (sfield == null) {
+                            continue;
+                        }
+                        Schema.DescribeFieldResult dfr = sfield.getDescribe();
+                        if (!dfr.isAccessible()) {
+                            continue;
+                        }
+                        FieldConfig fc = new FieldConfig();
+                        fc.fieldApiName = fieldApiName;
+                        fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null ? rawField.get('label') : dfr.getLabel());
+                        fc.required = (Boolean) (rawField.containsKey('required') && rawField.get('required') != null ? rawField.get('required') : !dfr.isNillable() && !dfr.isDefaultedOnCreate());
+                        fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
+                        fc.columnSize = (String) rawField.get('columnSize');
+                        String configuredType = (String) rawField.get('type');
+                        fc.dataType = !String.isBlank(configuredType) ? configuredType : mapDescribeToDataType(dfr);
+                        if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
+                            fc.picklistValues = new List<String>();
+                            for (Schema.PicklistEntry pe : dfr.getPicklistValues()) {
+                                fc.picklistValues.add(pe.getValue());
+                            }
+                        }
+                        if (dfr.getType() == Schema.DisplayType.Reference) {
+                            List<Schema.SObjectType> refTypes = dfr.getReferenceTo();
+                            if (refTypes != null && !refTypes.isEmpty()) {
+                                fc.lookupObjectApiName = refTypes[0].getDescribe().getName();
+                            }
+                        }
+                        relationshipFieldConfigs.add(fc);
                     }
-                    relationshipFieldConfigs.add(fc);
                 }
             }
+
+            RoleConstraintsConfig roleConstraints = parseRoleConstraints(
+                cmdt.Role_Constraints_JSON__c
+            );
+
+            RecordCollectionConfig config = new RecordCollectionConfig();
+            config.objectApiName = objectApiName;
+            config.parentFieldApiName = parentFieldApiName;
+            config.fields = fieldConfigs;
+            config.relationshipFields = relationshipFieldConfigs;
+            config.roleConstraints = roleConstraints;
+            return config;
+        } catch (OnboardingDomainException domainException) {
+            throw ExceptionUtil.domainError(
+                'RecordCollectionEditorConfigService.getConfig',
+                domainException
+            );
+        } catch (Exception unexpectedException) {
+            throw ExceptionUtil.unexpectedAuraError(
+                'RecordCollectionEditorConfigService.getConfig',
+                unexpectedException,
+                'Unable to load record collection editor configuration.'
+            );
         }
-
-        RoleConstraintsConfig roleConstraints = parseRoleConstraints(cmdt.Role_Constraints_JSON__c);
-
-        RecordCollectionConfig config = new RecordCollectionConfig();
-        config.objectApiName = objectApiName;
-        config.parentFieldApiName = parentFieldApiName;
-        config.fields = fieldConfigs;
-        config.relationshipFields = relationshipFieldConfigs;
-        config.roleConstraints = roleConstraints;
-        return config;
     }
 
     private static RoleConstraintsConfig parseRoleConstraints(String jsonStr) {
