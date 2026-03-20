@@ -94,7 +94,7 @@
             <assignToReference>OnboardingRecord.Opportunity__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>OpportunityRecord.Id</elementReference>
+                <elementReference>ResolvedOpportunityId</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -460,6 +460,15 @@
     </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Record</description>
     <environments>Default</environments>
+    <formulas>
+        <name>ResolvedOpportunityId</name>
+        <dataType>String</dataType>
+        <expression>IF(
+  NOT(ISBLANK({!ContractRecord.Opportunity_to_Contract__c})),
+  {!ContractRecord.Opportunity_to_Contract__c},
+  {!OpportunityRecord.Id}
+)</expression>
+    </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Record {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Onboarding Record</label>
     <loops>
@@ -525,7 +534,7 @@
         <inputAssignments>
             <field>Opportunity__c</field>
             <value>
-                <elementReference>OpportunityRecord.Id</elementReference>
+                <elementReference>ResolvedOpportunityId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
