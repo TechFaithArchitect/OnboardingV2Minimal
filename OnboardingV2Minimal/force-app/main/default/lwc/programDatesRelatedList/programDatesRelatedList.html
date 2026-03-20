@@ -15,10 +15,14 @@
                         </div>
                         <div class="slds-media__body slds-align-middle">
                             <h2 class="slds-card__header-title">
-                                <a href="javascript:void(0);" class="slds-card__header-link baseCard__header-title-container header-link" onclick={handleHeaderClick}>
+                                <button
+                                    type="button"
+                                    class="slds-button slds-button_reset slds-card__header-link baseCard__header-title-container header-link"
+                                    onclick={handleHeaderClick}
+                                    aria-label={headerTitle}>
                                     <span class="slds-truncate slds-m-right_xx-small" title="Program Dates">Program Dates</span>
                                     <span class="slds-shrink-none slds-m-left_xx-small slds-text-body_medium" title={recordCountLabel}>{recordCountLabel}</span>
-                                </a>
+                                </button>
                             </h2>
                         </div>
                     </div>
@@ -41,7 +45,7 @@
             </div>
             <div class="slds-grid slds-wrap">
                 <div class="slds-col slds-align-bottom">
-                    <p class="slds-text-body_small slds-text-color_weak status-text">
+                    <p class="slds-text-body_small slds-text-color_weak status-text" aria-live="polite" aria-atomic="true">
                         {itemCountLabel}
                     </p>
                 </div>
@@ -50,7 +54,7 @@
 
         <div class="slds-card__body slds-card__body_inner slds-p-around_none">
             <template if:true={error}>
-                <div class="slds-text-color_error slds-p-around_small">
+                <div class="slds-text-color_error slds-p-around_small" role="alert" aria-live="assertive" aria-atomic="true">
                     {error}
                 </div>
             </template>
@@ -69,7 +73,9 @@
                     ></lightning-datatable>
                 </div>
                 <div class="slds-text-align_center slds-p-vertical_xx-small slds-m-vertical_none">
-                    <a class="slds-text-link" href="javascript:void(0)" onclick={handleViewAll}>View All</a>
+                    <button type="button" class="slds-button slds-button_reset slds-text-link text-link-button" onclick={handleViewAll}>
+                        View All
+                    </button>
                 </div>
             </template>
 

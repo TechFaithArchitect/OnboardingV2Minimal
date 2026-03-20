@@ -34,6 +34,7 @@ describe('c-program-dates-quick-action', () => {
         await flushPromises();
 
         const combobox = element.shadowRoot.querySelector('lightning-combobox');
+        expect(combobox.label).toBe('Vendor Program');
         expect(combobox.options).toEqual([
             { label: 'Vendor One', value: 'a01' },
             { label: 'Vendor Two', value: 'a02' },

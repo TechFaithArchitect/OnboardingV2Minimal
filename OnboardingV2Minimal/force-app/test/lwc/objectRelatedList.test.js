@@ -134,6 +134,38 @@ describe('c-object-related-list dotted path compatibility', () => {
         expect(datatable.data[0].recordLink).toBe('/a1');
     });
 
+    it('renders keyboard-accessible header and view-all controls for relationship navigation', async () => {
+        const element = createComponent();
+        element.recordId = 'a1DRL0000001ABCYAA';
+        element.childObjectApiName = 'Onboarding_Requirement__c';
+        element.parentFieldApiName = 'Onboarding__c';
+        element.relationshipApiName = 'Onboarding_Requirements__r';
+        element.fieldApiNamesCsv = 'Name';
+        element.columnFieldApiNamesCsv = 'Name';
+
+        document.body.appendChild(element);
+        await flushPromises();
+
+        getRelatedRecordsAdapter.emit([
+            {
+                Id: 'a01',
+                Name: 'Requirement 1'
+            }
+        ]);
+        await flushPromises();
+
+        const headerButton = element.shadowRoot.querySelector('button.header-link');
+        expect(headerButton).not.toBeNull();
+        expect(headerButton.getAttribute('type')).toBe('button');
+
+        const viewAllButton = element.shadowRoot.querySelector('button.text-link-button');
+        expect(viewAllButton).not.toBeNull();
+        expect(viewAllButton.textContent).toContain('View All');
+
+        const statusText = element.shadowRoot.querySelector('.status-text');
+        expect(statusText.getAttribute('aria-live')).toBe('polite');
+    });
+
     it('loads picklist options by record type and tracks success telemetry', async () => {
         const element = createComponent();
         element.recordId = 'a1DRL0000001ABCYAA';

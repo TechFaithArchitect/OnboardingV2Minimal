@@ -56,6 +56,15 @@
 .header-link {
     display: inline-flex;
     align-items: center;
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+
+.header-link:focus-visible,
+.text-link-button:focus-visible {
+    outline: 2px solid var(--lwc-brandAccessible, #0176d3);
+    outline-offset: 2px;
 }
 
 .status-text {

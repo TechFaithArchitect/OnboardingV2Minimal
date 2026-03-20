@@ -87,6 +87,8 @@ describe('c-program-dates-related-list', () => {
         // Apex wire adapter may normalize error payloads; component always renders an error string.
         expect(element.shadowRoot.textContent).toContain('Unknown error');
         expect(element.shadowRoot.textContent).toContain('No items');
+        const errorRegion = element.shadowRoot.querySelector('[role="alert"]');
+        expect(errorRegion).not.toBeNull();
     });
 
     it('handles datatable save success', async () => {
@@ -196,5 +198,31 @@ describe('c-program-dates-related-list', () => {
         expect(deleteRecord).toHaveBeenCalledWith('a01');
         expect(toastHandler).toHaveBeenCalled();
         expect(toastHandler.mock.calls[0][0].detail.variant).toBe('success');
+    });
+
+    it('renders keyboard-accessible header and view-all controls', async () => {
+        const element = createComponent();
+        element.recordId = '001RL0000001ABCYAA';
+        document.body.appendChild(element);
+        await flushPromises();
+
+        getProgramDatesAdapter.emit([
+            {
+                Id: 'a01',
+                Name: 'Row 1'
+            }
+        ]);
+        await flushPromises();
+
+        const headerButton = element.shadowRoot.querySelector('button.header-link');
+        expect(headerButton).not.toBeNull();
+        expect(headerButton.getAttribute('type')).toBe('button');
+
+        const viewAllButton = element.shadowRoot.querySelector('button.text-link-button');
+        expect(viewAllButton).not.toBeNull();
+        expect(viewAllButton.textContent).toContain('View All');
+
+        const statusText = element.shadowRoot.querySelector('.status-text');
+        expect(statusText.getAttribute('aria-live')).toBe('polite');
     });
 });

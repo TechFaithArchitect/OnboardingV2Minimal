@@ -10,12 +10,21 @@
 }
 
 .header-link {
+    background: transparent;
+    border: 0;
+    padding: 0;
     text-decoration: none;
     color: inherit;
 }
 
 .header-link:hover {
     text-decoration: underline;
+}
+
+.header-link:focus-visible,
+.text-link-button:focus-visible {
+    outline: 2px solid var(--lwc-brandAccessible, #0176d3);
+    outline-offset: 2px;
 }
 
 .related-list-table {

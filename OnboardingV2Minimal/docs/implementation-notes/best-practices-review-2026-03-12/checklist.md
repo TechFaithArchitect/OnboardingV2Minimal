@@ -43,8 +43,8 @@ Checkbox status list extracted from the source plan.
 - [ ] Evaluate `lightning/graphql` wire adapter for complex read-heavy data shapes.
 - [ ] Keep Apex for business logic, writes, or unsupported query shapes.
 - [ ] Candidate components for read-path modernization: `objectRelatedList`, `programDatesRelatedList*`.
-- [ ] Accessibility and SLDS compliance hardening.
-- [ ] Validate `aria-*` coverage, keyboard behavior, and custom datatable editor accessibility.
+- [x] Accessibility and SLDS compliance hardening. (Completed for `objectRelatedList` + `programDatesRelatedList*` surfaces.)
+- [x] Validate `aria-*` coverage, keyboard behavior, and custom datatable editor accessibility. (Implemented on active related-list/quick-action UI paths; broader app-wide follow-up may still apply.)
 - [ ] Expand Jest coverage for high-traffic components:
 - [x] `objectRelatedList`
 - [x] `programDatesRelatedList*`
@@ -147,3 +147,4 @@ Checkbox status list extracted from the source plan.
 - [x] 2026-03-20 Added targeted `objectRelatedList` picklist-by-recordType Jest regressions covering the incident paths: recordType success option hydration, wire-error fallback to object-info picklist metadata, and multi-recordType queue release/advance behavior. Updated suite now passes `6/6` via `npx sfdx-lwc-jest -- --runTestsByPath force-app/test/lwc/objectRelatedList.test.js` (and full `npx sfdx-lwc-jest` run).
 - [x] 2026-03-20 Jest deployability fix applied: moved `objectRelatedList` Jest tests out of the LWC bundle path into `force-app/test/lwc` so Salesforce metadata deploy no longer attempts to compile test harness files; post-fix dry-run deploy `0AfRL00000dSNxi0AG` and deploy `0AfRL00000dSWbB0AW` both succeeded.
 - [x] 2026-03-20 Added Jest regression suites for `programDatesRelatedList` and `programDatesQuickAction` in `force-app/test/lwc` with DOM-driven coverage for wire data/error rendering, inline save success/error toasts, row delete actions, quick-action submit defaults (account/vendor), and success/error close/toast behavior; targeted run passed `11/11` and full LWC Jest baseline now passes `17/17`.
+- [x] 2026-03-20 LWC accessibility hardening pass completed for high-traffic related-list surfaces: replaced `javascript:void` anchor actions with keyboard-native button controls (`objectRelatedList`, `programDatesRelatedList`), added live-region semantics (`aria-live` for count/status and alert regions for errors), and bound `programDatesQuickAction` vendor combobox to native `label` for proper form control association. Jest updated and passing (`19/19`), and bundles deployed to `OnboardV2` (`0AfRL00000dSXyg0AG`).
