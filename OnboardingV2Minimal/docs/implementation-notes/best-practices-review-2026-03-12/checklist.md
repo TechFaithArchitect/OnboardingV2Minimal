@@ -46,9 +46,9 @@ Checkbox status list extracted from the source plan.
 - [ ] Accessibility and SLDS compliance hardening.
 - [ ] Validate `aria-*` coverage, keyboard behavior, and custom datatable editor accessibility.
 - [ ] Expand Jest coverage for high-traffic components:
-- [ ] `objectRelatedList`
-- [ ] `programDatesRelatedList*`
-- [ ] Add cases for inline edit save success/error toasts, navigation, query config derivation, CSV parsing, and picklist fallback/caching.
+- [x] `objectRelatedList`
+- [x] `programDatesRelatedList*`
+- [x] Add cases for inline edit save success/error toasts, navigation, query config derivation, CSV parsing, and picklist fallback/caching.
 - [ ] Performance tuning:
 - [ ] Debounce heavy refresh patterns.
 - [ ] Verify picklist fetch batching by record type.
@@ -95,7 +95,7 @@ Checkbox status list extracted from the source plan.
 - [ ] Introduce GraphQL read-path proof of concept for `objectRelatedList` behind a feature flag, keep Apex fallback.
 - [x] Add a standard Flow Fault Handler subflow and wire at least one representative flow.
 - [x] Build the remaining onboarding-requirement subject evaluator layer so real evidence sources update `Onboarding_Requirement_Subject__c.Status__c`; `Training_Assignment__c` is wired and now `Agreement` + `External_Contact_Credential__c` evidence are wired through `DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence` (with `Out for Signature` mapped to `Paperwork Sent`).
-- [ ] Expand Jest tests for `objectRelatedList` and `programDatesRelatedList*`; add Apex negative-path and bulk tests.
+- [ ] Expand Jest tests for `objectRelatedList` and `programDatesRelatedList*`; add Apex negative-path and bulk tests. (Jest portion complete on 2026-03-20; Apex follow-up remains.)
 
 ## Targeted Gap Review (2026-03-18)
 - [x] `P0` `BLL_Onboarding_Requirement_RCD_Logical_Process` now has a fault connector on `Evaluate_Onboarding_Status`; invocable output `errorMessage` is mapped and escalated through shared fault handling (completed 2026-03-18).
@@ -146,3 +146,4 @@ Checkbox status list extracted from the source plan.
 - [x] 2026-03-20 Added LWC Jest regression coverage for `objectRelatedList` dotted-path behavior: new test suite `force-app/test/lwc/objectRelatedList.test.js` verifies dotted-path wire config assembly (`parentFieldApiName`, `fieldApiNamesCsv`, `relationshipFieldApiNamesCsv`, `orderByField`), dotted parent-id source field handling (`parentRecordIdSourceFieldApiName`), and dotted exclusion/transform behavior in rendered rows. Test run passed via `npx sfdx-lwc-jest -- --runTestsByPath force-app/test/lwc/objectRelatedList.test.js` (`3/3`).
 - [x] 2026-03-20 Added targeted `objectRelatedList` picklist-by-recordType Jest regressions covering the incident paths: recordType success option hydration, wire-error fallback to object-info picklist metadata, and multi-recordType queue release/advance behavior. Updated suite now passes `6/6` via `npx sfdx-lwc-jest -- --runTestsByPath force-app/test/lwc/objectRelatedList.test.js` (and full `npx sfdx-lwc-jest` run).
 - [x] 2026-03-20 Jest deployability fix applied: moved `objectRelatedList` Jest tests out of the LWC bundle path into `force-app/test/lwc` so Salesforce metadata deploy no longer attempts to compile test harness files; post-fix dry-run deploy `0AfRL00000dSNxi0AG` and deploy `0AfRL00000dSWbB0AW` both succeeded.
+- [x] 2026-03-20 Added Jest regression suites for `programDatesRelatedList` and `programDatesQuickAction` in `force-app/test/lwc` with DOM-driven coverage for wire data/error rendering, inline save success/error toasts, row delete actions, quick-action submit defaults (account/vendor), and success/error close/toast behavior; targeted run passed `11/11` and full LWC Jest baseline now passes `17/17`.
