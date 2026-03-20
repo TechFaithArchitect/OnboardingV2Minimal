@@ -36,6 +36,20 @@ describe('c-object-related-list dotted path compatibility', () => {
         jest.clearAllMocks();
     });
 
+    it('disables Apex wire query when GraphQL PoC flag is enabled for supported config', async () => {
+        const element = createComponent();
+        element.recordId = '001RL0000001ABCYAA';
+        element.childObjectApiName = 'Program_Dates__c';
+        element.parentFieldApiName = 'Account__c';
+        element.fieldApiNamesCsv = 'Program_ID__c,Program_Date__c';
+        element.useGraphqlReadPath = true;
+
+        document.body.appendChild(element);
+        await flushPromises();
+
+        expect(getRelatedRecordsAdapter.getLastConfig()?.config).toBeUndefined();
+    });
+
     it('passes dotted query inputs to the getRelatedRecords wire config', async () => {
         const element = createComponent();
         element.recordId = 'a1DRL0000001ABCYAA';

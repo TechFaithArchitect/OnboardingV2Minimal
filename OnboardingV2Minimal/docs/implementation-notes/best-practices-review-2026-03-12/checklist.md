@@ -40,9 +40,9 @@ Checkbox status list extracted from the source plan.
 - [ ] Negative tests for helper precondition failures and graceful handling.
 
 ## C. LWC (LDS-First, Accessibility, Testing, Performance)
-- [ ] Evaluate `lightning/graphql` wire adapter for complex read-heavy data shapes.
-- [ ] Keep Apex for business logic, writes, or unsupported query shapes.
-- [ ] Candidate components for read-path modernization: `objectRelatedList`, `programDatesRelatedList*`.
+- [x] Evaluate `lightning/graphql` wire adapter for complex read-heavy data shapes. (`objectRelatedList` PoC implemented via `lightning/uiGraphQLApi` wire contract.)
+- [x] Keep Apex for business logic, writes, or unsupported query shapes. (GraphQL path is feature-flagged and falls back to existing Apex query path when unsupported.)
+- [x] Candidate components for read-path modernization: `objectRelatedList`, `programDatesRelatedList*`. (PoC landed on `objectRelatedList` for `Program_Dates__c` + `Account__c` shape.)
 - [x] Accessibility and SLDS compliance hardening. (Completed for `objectRelatedList` + `programDatesRelatedList*` surfaces.)
 - [x] Validate `aria-*` coverage, keyboard behavior, and custom datatable editor accessibility. (Implemented on active related-list/quick-action UI paths; broader app-wide follow-up may still apply.)
 - [ ] Expand Jest coverage for high-traffic components:
@@ -92,7 +92,7 @@ Checkbox status list extracted from the source plan.
 - [ ] Add missing `with sharing` and SOQL security enforcement in key services/controllers (`VendorOnboarding*`, `EmailTemplateSync*`, `FollowUp*`, `Twilio*`).
 - [x] Create reusable invocable facade class (`OnboardingInvocables.cls`) with typed request/response DTOs.
 - [x] Add standard trigger-handler base/recursion guard where missing; add bulk safety tests.
-- [ ] Introduce GraphQL read-path proof of concept for `objectRelatedList` behind a feature flag, keep Apex fallback.
+- [x] Introduce GraphQL read-path proof of concept for `objectRelatedList` behind a feature flag, keep Apex fallback.
 - [x] Add a standard Flow Fault Handler subflow and wire at least one representative flow.
 - [x] Build the remaining onboarding-requirement subject evaluator layer so real evidence sources update `Onboarding_Requirement_Subject__c.Status__c`; `Training_Assignment__c` is wired and now `Agreement` + `External_Contact_Credential__c` evidence are wired through `DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence` (with `Out for Signature` mapped to `Paperwork Sent`).
 - [ ] Expand Jest tests for `objectRelatedList` and `programDatesRelatedList*`; add Apex negative-path and bulk tests. (Jest portion complete on 2026-03-20; Apex follow-up remains.)
@@ -149,3 +149,4 @@ Checkbox status list extracted from the source plan.
 - [x] 2026-03-20 Added Jest regression suites for `programDatesRelatedList` and `programDatesQuickAction` in `force-app/test/lwc` with DOM-driven coverage for wire data/error rendering, inline save success/error toasts, row delete actions, quick-action submit defaults (account/vendor), and success/error close/toast behavior; targeted run passed `11/11` and full LWC Jest baseline now passes `17/17`.
 - [x] 2026-03-20 LWC accessibility hardening pass completed for high-traffic related-list surfaces: replaced `javascript:void` anchor actions with keyboard-native button controls (`objectRelatedList`, `programDatesRelatedList`), added live-region semantics (`aria-live` for count/status and alert regions for errors), and bound `programDatesQuickAction` vendor combobox to native `label` for proper form control association. Jest updated and passing (`19/19`), and bundles deployed to `OnboardV2` (`0AfRL00000dSXyg0AG`).
 - [x] 2026-03-20 LWC performance hardening pass completed for high-traffic related lists: added debounced manual refresh handling (`200ms`) and in-flight refresh coalescing in `objectRelatedList` + `programDatesRelatedList`, suppressed self-induced duplicate refresh loops on internal `RefreshEvent` dispatch in `objectRelatedList`, and reduced unnecessary picklist record-type fetches by only loading default record type options when rows are missing `RecordTypeId`. Jest updated with debounce assertions and now passes `21/21`; deployed to `OnboardV2` (`0AfRL00000dST750AG`).
+- [x] 2026-03-20 GraphQL read-path PoC delivered for `objectRelatedList` behind `useGraphqlReadPath` feature flag (App Builder property): supported PoC shape uses UI API GraphQL (`Program_Dates__c` filtered by `Account__c`) while preserving Apex read fallback for all unsupported shapes/configs. Added Jest guard assertion that Apex wire is disabled when PoC flag + supported shape are active; targeted/full Jest now passes `22/22`. Validated by dry-run deploy `0AfRL00000dSbe50AC` and deployed to `OnboardV2` via `0AfRL00000dSY1v0AG`.

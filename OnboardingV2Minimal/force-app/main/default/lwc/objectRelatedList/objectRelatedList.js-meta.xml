@@ -72,6 +72,12 @@
                 description="Shows picklist request/success/fallback counters in the related list header for troubleshooting."
                 default="false" />
             <property
+                name="useGraphqlReadPath"
+                type="Boolean"
+                label="Use GraphQL Read Path (PoC)"
+                description="Optional proof-of-concept read path for Program_Dates__c + Account__c related list shape. Falls back to Apex when unsupported."
+                default="false" />
+            <property
                 name="readOnlyFieldApiNamesCsv"
                 type="String"
                 label="Read Only Fields (CSV)"

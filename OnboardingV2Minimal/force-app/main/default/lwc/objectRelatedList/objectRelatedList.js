@@ -22,6 +22,7 @@ import { encodeDefaultFieldValues } from 'lightning/pageReferenceUtils';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getObjectInfo, getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
 import { RefreshEvent, registerRefreshHandler, unregisterRefreshHandler } from 'lightning/refresh';
+import { gql, graphql, refreshGraphQL } from 'lightning/uiGraphQLApi';
 
 export default class ObjectRelatedList extends NavigationMixin(LightningElement) {
     static DEFAULT_NEW_ACTION_BEHAVIOR = 'auto';
@@ -115,11 +116,15 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     /** Shows picklist fetch telemetry in header for runtime troubleshooting. */
     @api enablePicklistTelemetry;
 
+    /** Optional PoC flag to read via UI API GraphQL for supported configurations. */
+    @api useGraphqlReadPath = false;
+
     rows = [];
     draftValues = [];
     error;
     showNewModal = false;
     wiredResult;
+    graphQlResult;
     objectInfo;
     parentSourceRecord;
     picklistOptionsByFieldByRecordType = {};
@@ -206,6 +211,10 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
      * Returns undefined if required properties are missing (prevents unnecessary wire calls).
      */
     get queryConfig() {
+        if (this.isGraphQlReadPathActive) {
+            return undefined;
+        }
+
         const parentRecordId = this.effectiveParentRecordId;
         if (!this.targetObjectApiName || !this.parentFieldApiName || !parentRecordId || !this.resolvedFieldApiNames.length) {
             return undefined;
@@ -240,6 +249,110 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             orderByField: this.orderByField,
             orderDirection: this.orderDirection || 'DESC',
             recordLimit: this.recordLimit
+        };
+    }
+
+    get normalizedParentFieldApiName() {
+        return (this.parentFieldApiName || '').trim();
+    }
+
+    get normalizedOrderByField() {
+        return (this.orderByField || '').trim();
+    }
+
+    get normalizedOrderDirection() {
+        return (this.orderDirection || 'DESC').toString().trim().toUpperCase();
+    }
+
+    get isGraphQlFlagEnabled() {
+        return this.useGraphqlReadPath === true || this.useGraphqlReadPath === 'true';
+    }
+
+    get isGraphQlPoCSupportedConfig() {
+        if (!this.isGraphQlFlagEnabled) {
+            return false;
+        }
+
+        if (!this.targetObjectApiName || this.targetObjectApiName !== 'Program_Dates__c') {
+            return false;
+        }
+        if (!this.effectiveParentRecordId) {
+            return false;
+        }
+        if (this.normalizedParentFieldApiName !== 'Account__c') {
+            return false;
+        }
+        if (this.parentRecordIdSourceFieldApiName && this.parentRecordIdSourceFieldApiName.trim()) {
+            return false;
+        }
+        if (this.normalizedOrderByField && this.normalizedOrderByField !== 'Program_Date__c') {
+            return false;
+        }
+        if (this.normalizedOrderDirection !== 'DESC') {
+            return false;
+        }
+        return true;
+    }
+
+    get isGraphQlReadPathActive() {
+        return this.isGraphQlPoCSupportedConfig;
+    }
+
+    get graphQlRecordLimit() {
+        const numericLimit = Number.parseInt(this.recordLimit, 10);
+        if (Number.isNaN(numericLimit) || numericLimit <= 0) {
+            return 2000;
+        }
+        return Math.min(numericLimit, 2000);
+    }
+
+    get graphQlQuery() {
+        if (!this.isGraphQlReadPathActive) {
+            return undefined;
+        }
+        return gql`
+            query ObjectRelatedListProgramDatesPoC($parentId: ID!, $first: Int!) {
+                uiapi {
+                    query {
+                        Program_Dates__c(
+                            where: { Account__c: { eq: $parentId } }
+                            first: $first
+                            orderBy: { Program_Date__c: { order: DESC } }
+                        ) {
+                            edges {
+                                node {
+                                    Id
+                                    Name { value }
+                                    LastModifiedDate { value }
+                                    RecordTypeId { value }
+                                    Partner_Category__c { value }
+                                    Program_ID__c { value }
+                                    Program_Active_Flag__c { value }
+                                    Program_Date__c { value }
+                                    Program_Deactivated_Flag__c { value }
+                                    Program_Deactivated_Date__c { value }
+                                    Program_Deactivated_Reason__c { value }
+                                    Program_Reactivated_Date__c { value }
+                                    Vendor_Program__r {
+                                        Id
+                                        Label__c { value }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `;
+    }
+
+    get graphQlVariables() {
+        if (!this.isGraphQlReadPathActive) {
+            return undefined;
+        }
+        return {
+            parentId: this.effectiveParentRecordId,
+            first: this.graphQlRecordLimit
         };
     }
 
@@ -546,8 +659,39 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         }
     }
 
+    @wire(graphql, {
+        query: '$graphQlQuery',
+        variables: '$graphQlVariables'
+    })
+    wiredGraphQlRelatedRecords(value) {
+        this.graphQlResult = value;
+        if (!this.isGraphQlReadPathActive) {
+            return;
+        }
+
+        const { data, errors } = value || {};
+        if (data) {
+            const graphQlRows = this.extractGraphQlRows(data);
+            const transformedRows = this.applyRowExclusions(this.transformRows(graphQlRows));
+            if (this.rowsIncludeRecordTypeId(transformedRows)) {
+                this.recordTypeRefreshRequested = false;
+            }
+            this.rows = this.decorateRowsWithPicklistOptions(transformedRows);
+            this.ensurePicklistOptionsLoadedForRows(transformedRows);
+            this.lastLoadedAt = new Date();
+            this.error = undefined;
+            this.draftValues = [];
+        } else if (errors && errors.length) {
+            this.rows = [];
+            this.error = this.reduceErrors(errors).join(', ');
+        }
+    }
+
     @wire(getRelatedRecords, { config: '$queryConfig' })
     wiredRelatedRecords(value) {
+        if (this.isGraphQlReadPathActive) {
+            return;
+        }
         this.wiredResult = value;
         const { data, error } = value;
         if (data) {
@@ -597,6 +741,51 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
 
             return transformedRow;
         });
+    }
+
+    extractGraphQlRows(data) {
+        const edges = data?.uiapi?.query?.Program_Dates__c?.edges;
+        if (!Array.isArray(edges)) {
+            return [];
+        }
+
+        return edges
+            .map((edge) => edge?.node)
+            .filter((node) => !!node)
+            .map((node) => {
+                const vendorProgramId = this.extractGraphQlFieldValue(node?.Vendor_Program__r?.Id);
+                const vendorProgramLabel = this.extractGraphQlFieldValue(node?.Vendor_Program__r?.Label__c);
+                const row = {
+                    Id: this.extractGraphQlFieldValue(node?.Id),
+                    Name: this.extractGraphQlFieldValue(node?.Name),
+                    LastModifiedDate: this.extractGraphQlFieldValue(node?.LastModifiedDate),
+                    RecordTypeId: this.extractGraphQlFieldValue(node?.RecordTypeId),
+                    Partner_Category__c: this.extractGraphQlFieldValue(node?.Partner_Category__c),
+                    Program_ID__c: this.extractGraphQlFieldValue(node?.Program_ID__c),
+                    Program_Active_Flag__c: this.extractGraphQlFieldValue(node?.Program_Active_Flag__c),
+                    Program_Date__c: this.extractGraphQlFieldValue(node?.Program_Date__c),
+                    Program_Deactivated_Flag__c: this.extractGraphQlFieldValue(node?.Program_Deactivated_Flag__c),
+                    Program_Deactivated_Date__c: this.extractGraphQlFieldValue(node?.Program_Deactivated_Date__c),
+                    Program_Deactivated_Reason__c: this.extractGraphQlFieldValue(node?.Program_Deactivated_Reason__c),
+                    Program_Reactivated_Date__c: this.extractGraphQlFieldValue(node?.Program_Reactivated_Date__c)
+                };
+
+                if (vendorProgramId || vendorProgramLabel) {
+                    row.Vendor_Program__r = {
+                        Id: vendorProgramId,
+                        Label__c: vendorProgramLabel
+                    };
+                }
+
+                return row;
+            });
+    }
+
+    extractGraphQlFieldValue(fieldValue) {
+        if (fieldValue && typeof fieldValue === 'object' && Object.prototype.hasOwnProperty.call(fieldValue, 'value')) {
+            return fieldValue.value;
+        }
+        return fieldValue;
     }
 
     get hasRows() {
@@ -1094,13 +1283,24 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     }
 
     refreshList() {
-        if (!this.wiredResult) {
-            return Promise.resolve();
-        }
         if (this.refreshInFlightPromise) {
             return this.refreshInFlightPromise;
         }
-        this.refreshInFlightPromise = Promise.resolve(refreshApex(this.wiredResult)).finally(() => {
+
+        let refreshPromise;
+        if (this.isGraphQlReadPathActive) {
+            if (!this.graphQlResult) {
+                return Promise.resolve();
+            }
+            refreshPromise = Promise.resolve(refreshGraphQL(this.graphQlResult));
+        } else {
+            if (!this.wiredResult) {
+                return Promise.resolve();
+            }
+            refreshPromise = Promise.resolve(refreshApex(this.wiredResult));
+        }
+
+        this.refreshInFlightPromise = refreshPromise.finally(() => {
             this.refreshInFlightPromise = undefined;
         });
         return this.refreshInFlightPromise;
