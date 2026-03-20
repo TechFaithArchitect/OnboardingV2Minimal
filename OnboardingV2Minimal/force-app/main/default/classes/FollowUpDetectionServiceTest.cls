@@ -16,13 +16,7 @@ private class FollowUpDetectionServiceTest {
         Onboarding_Requirement__c testRequirement = TestOnboardingRequirementFactory.create(
             true, testOnboarding, null
         );
-        List<String> validStatuses = TestDataFactoryUtil.getPicklistValues(
-            Onboarding_Requirement__c.SObjectType,
-            'Status__c'
-        );
-        String inProcessStatus = validStatuses.contains('In Process') ? 'In Process' : validStatuses[0];
-        testRequirement.Status__c = inProcessStatus;
-        update testRequirement;
+        setOpenStatus(testRequirement.Id);
 
         // Create follow-up rule metadata (simulated via test)
         // Note: In real tests, you'd need to create Follow_Up_Rule__mdt records
@@ -59,15 +53,12 @@ private class FollowUpDetectionServiceTest {
             Onboarding_Requirement__c req = TestOnboardingRequirementFactory.create(
                 false, testOnboarding, null
             );
-            List<String> validStatuses = TestDataFactoryUtil.getPicklistValues(
-                Onboarding_Requirement__c.SObjectType,
-                'Status__c'
-            );
-            String inProcessStatus = validStatuses.contains('In Process') ? 'In Process' : validStatuses[0];
-            req.Status__c = inProcessStatus;
             requirements.add(req);
         }
         insert requirements;
+        for (Onboarding_Requirement__c req : requirements) {
+            setOpenStatus(req.Id);
+        }
 
         Set<Id> requirementIds = new Set<Id>();
         for (Onboarding_Requirement__c req : requirements) {
@@ -100,17 +91,8 @@ private class FollowUpDetectionServiceTest {
         Onboarding_Requirement__c testRequirement = TestOnboardingRequirementFactory.create(
             false, testOnboarding, null
         );
-        List<String> validStatuses = TestDataFactoryUtil.getPicklistValues(
-            Onboarding_Requirement__c.SObjectType,
-            'Status__c'
-        );
-        String completeStatus = validStatuses.contains('Complete') ? 'Complete' : validStatuses[validStatuses.size() - 1];
-        testRequirement.Status__c = completeStatus;
         insert testRequirement;
-        
-        // Update to trigger any after-update logic
-        testRequirement.Status__c = completeStatus;
-        update testRequirement;
+        setClosedStatus(testRequirement.Id);
 
         Test.startTest();
         FollowUpDetectionService.evaluateAndCreateFollowUps(testRequirement.Id);
@@ -144,15 +126,12 @@ private class FollowUpDetectionServiceTest {
             Onboarding_Requirement__c req = TestOnboardingRequirementFactory.create(
                 false, testOnboarding, null
             );
-            List<String> validStatuses = TestDataFactoryUtil.getPicklistValues(
-                Onboarding_Requirement__c.SObjectType,
-                'Status__c'
-            );
-            String inProcessStatus = validStatuses.contains('In Process') ? 'In Process' : validStatuses[0];
-            req.Status__c = inProcessStatus;
             requirements.add(req);
         }
         insert requirements;
+        for (Onboarding_Requirement__c req : requirements) {
+            setOpenStatus(req.Id);
+        }
 
         Test.startTest();
         FollowUpDetectionService.enqueueFollowUps(new Set<Id>{ testOnboarding.Id });
@@ -211,5 +190,49 @@ private class FollowUpDetectionServiceTest {
 
         // Should not throw exception
         System.assert(true, 'Should handle onboarding with no requirements gracefully');
+    }
+
+    private static void setOpenStatus(Id onboardingRequirementId) {
+        // Do not assume CMDT or record-type specific values; pick the first status
+        // that can be saved in this org's current configuration.
+        applyFirstValidStatus(
+            onboardingRequirementId,
+            new List<String>{ 'Draft', 'Not Started', 'New', 'In Process', 'Paperwork Sent' }
+        );
+    }
+
+    private static void setClosedStatus(Id onboardingRequirementId) {
+        if (
+            !applyFirstValidStatus(
+                onboardingRequirementId,
+                new List<String>{ 'Complete', 'Completed', 'Setup Complete', 'Canceled', 'Denied' }
+            )
+        ) {
+            // Fallback to any valid non-terminal value only to keep test setup insert-safe.
+            applyFirstValidStatus(onboardingRequirementId, new List<String>{ 'Draft' });
+        }
+    }
+
+    private static Boolean applyFirstValidStatus(Id onboardingRequirementId, List<String> candidates) {
+        if (onboardingRequirementId == null || candidates == null || candidates.isEmpty()) {
+            return false;
+        }
+
+        for (String candidate : candidates) {
+            if (String.isBlank(candidate)) {
+                continue;
+            }
+            Database.SaveResult saveResult = Database.update(
+                new Onboarding_Requirement__c(
+                    Id = onboardingRequirementId,
+                    Status__c = candidate
+                ),
+                false
+            );
+            if (saveResult != null && saveResult.isSuccess()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

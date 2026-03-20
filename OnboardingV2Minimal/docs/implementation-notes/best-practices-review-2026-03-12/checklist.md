@@ -12,7 +12,7 @@ Checkbox status list extracted from the source plan.
 - [ ] Enforce sharing model consistency and security annotations.
 - [x] Confirm all exposed UI/Flow-invoked services/controllers use `with sharing`.
 - [ ] Ensure SOQL parity with `WITH SECURITY_ENFORCED` where appropriate. (Targeted `VendorOnboarding*` / `FollowUp*` / `Twilio*` scope completed on 2026-03-20; broader codebase sweep still open.)
-- [ ] Add `WITH USER_MODE` / user-mode DML (`Database.insert(records, AccessLevel.USER_MODE)`) for UI-context writes where appropriate.
+- [x] Add `WITH USER_MODE` / user-mode DML (`Database.insert(records, AccessLevel.USER_MODE)`) for UI-context writes where appropriate. (Audited 2026-03-20: active UI-context write paths are already user-mode (`RecordCollectionEditorConfigService` `Database.insert/update(..., AccessLevel.USER_MODE)` and `OnboardingStatusEvaluatorService` `update as user`), with no remaining Aura/UI write path requiring system-mode conversion.)
 - [x] Document and encapsulate explicit system-mode exceptions.
 - [x] Adopt invocable Apex facades for Flow-bound operations where possible.
 - [x] Add `@InvocableMethod` + typed `@InvocableVariable` DTO wrappers for selected operations.
@@ -20,7 +20,7 @@ Checkbox status list extracted from the source plan.
 - [ ] Centralize domain exception base type and user-safe error messaging for UI calls.
 - [x] Keep production code free of ad hoc `System.debug`.
 - [ ] Verify bulkification and governor safety in helpers.
-- [ ] Confirm no SOQL/DML in loops and collection-first signatures.
+- [ ] Confirm no SOQL/DML in loops and collection-first signatures. (Targeted 2026-03-20 fix shipped: `FollowUpDetectionService.evaluateAndCreateFollowUpsBulk` now preloads existing follow-up keys in one query instead of per-requirement/per-rule `followUpExists` SOQL calls.)
 - [x] Add 200-record mixed-state tests and recursion safety assertions.
 - [ ] Tighten logging strategy.
 - [ ] Confirm `LoggingUtil` avoids PII, supports log levels, and feature toggles.
@@ -96,6 +96,7 @@ Checkbox status list extracted from the source plan.
 - [x] Add a standard Flow Fault Handler subflow and wire at least one representative flow.
 - [x] Build the remaining onboarding-requirement subject evaluator layer so real evidence sources update `Onboarding_Requirement_Subject__c.Status__c`; `Training_Assignment__c` is wired and now `Agreement` + `External_Contact_Credential__c` evidence are wired through `DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence` (with `Out for Signature` mapped to `Paperwork Sent`).
 - [ ] Expand Jest tests for `objectRelatedList` and `programDatesRelatedList*`; add Apex negative-path and bulk tests. (Jest portion complete on 2026-03-20; Apex follow-up remains.)
+  Apex follow-up update 2026-03-20: `TestVendorProgramRequirementFactory`, `TestOnboardingRequirementFactory`, and `FollowUpDetectionServiceTest` were hardened for record-type-restricted `Onboarding_Requirement__c.Status__c` and required `Vendor_Program_Requirement__c.Requirement_Type__c` so follow-up bulk/negative tests are now config-safe and CMDT-agnostic; validated dry-run `0AfRL00000dSZPO0A4`, deployed `0AfRL00000dSd3B0AS` (`11/11` passing across `FollowUpDetectionServiceTest` + `FollowUpFatigueServiceTest`).
 
 ## Targeted Gap Review (2026-03-18)
 - [x] `P0` `BLL_Onboarding_Requirement_RCD_Logical_Process` now has a fault connector on `Evaluate_Onboarding_Status`; invocable output `errorMessage` is mapped and escalated through shared fault handling (completed 2026-03-18).

@@ -42,11 +42,23 @@ public class TestVendorProgramRequirementFactory {
         Vendor_Customization__c vendorProgram,
         Boolean isActive
     ) {
+        String requirementType = TestDataFactoryUtil.getDefaultPicklistValue(
+            Vendor_Program_Requirement__c.SObjectType,
+            'Requirement_Type__c'
+        );
+        if (String.isBlank(requirementType)) {
+            requirementType = TestDataFactoryUtil.getFirstPicklistValue(
+                Vendor_Program_Requirement__c.SObjectType,
+                'Requirement_Type__c'
+            );
+        }
+
         return new Vendor_Program_Requirement__c(
             Vendor_Program__c = vendorProgram != null ? vendorProgram.Id : null,
             Is_Required__c = true,
             Active__c = isActive != null ? isActive : true,
-            Sequence__c = 1
+            Sequence__c = 1,
+            Requirement_Type__c = requirementType
         );
     }
 }

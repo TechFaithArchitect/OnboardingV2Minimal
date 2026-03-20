@@ -18,48 +18,37 @@ public class TestOnboardingRequirementFactory {
             Vendor_Program_Requirement__c = vendorProgramRequirement != null ? vendorProgramRequirement.Id : null
         );
 
-        // Use valid picklist values
         if (String.isNotBlank(requirementType)) {
-            List<String> validTypes = TestDataFactoryUtil.getPicklistValues(
-                Onboarding_Requirement__c.SObjectType,
-                'Requirement_Type__c'
-            );
-            if (validTypes.contains(requirementType)) {
-                onboardingRequirement.Requirement_Type__c = requirementType;
-            } else {
-                onboardingRequirement.Requirement_Type__c = TestDataFactoryUtil.getDefaultPicklistValue(
-                    Onboarding_Requirement__c.SObjectType,
-                    'Requirement_Type__c'
-                );
-            }
-        } else {
-            onboardingRequirement.Requirement_Type__c = TestDataFactoryUtil.getDefaultPicklistValue(
-                Onboarding_Requirement__c.SObjectType,
-                'Requirement_Type__c'
-            );
+            onboardingRequirement.Requirement_Type__c = requirementType;
         }
 
-        if (String.isNotBlank(status)) {
-            List<String> validStatuses = TestDataFactoryUtil.getPicklistValues(
-                Onboarding_Requirement__c.SObjectType,
-                'Status__c'
-            );
-            if (validStatuses.contains(status)) {
+        if (!doInsert) {
+            if (String.isNotBlank(status)) {
                 onboardingRequirement.Status__c = status;
-            } else {
-                onboardingRequirement.Status__c = TestDataFactoryUtil.getDefaultPicklistValue(
-                    Onboarding_Requirement__c.SObjectType,
-                    'Status__c'
-                );
             }
-        } else {
-            onboardingRequirement.Status__c = TestDataFactoryUtil.getDefaultPicklistValue(
-                Onboarding_Requirement__c.SObjectType,
-                'Status__c'
-            );
+            return onboardingRequirement;
         }
 
         TestDataFactoryUtil.maybeInsert(onboardingRequirement, doInsert);
+
+        if (String.isNotBlank(status)) {
+            applyStatusIfValid(onboardingRequirement.Id, status);
+            onboardingRequirement = [
+                SELECT
+                    Id,
+                    Completed__c,
+                    Is_Overridden__c,
+                    Onboarding__c,
+                    Sequence__c,
+                    Vendor_Program_Requirement__c,
+                    Requirement_Type__c,
+                    Status__c
+                FROM Onboarding_Requirement__c
+                WHERE Id = :onboardingRequirement.Id
+                LIMIT 1
+            ];
+        }
+
         return onboardingRequirement;
     }
 
@@ -90,5 +79,21 @@ public class TestOnboardingRequirementFactory {
         Vendor_Program_Requirement__c vendorProgramRequirement = TestVendorProgramRequirementFactory.create(doInsert);
 
         return create(doInsert, onboarding, vendorProgramRequirement);
+    }
+
+    @TestVisible
+    private static Boolean applyStatusIfValid(Id onboardingRequirementId, String statusValue) {
+        if (onboardingRequirementId == null || String.isBlank(statusValue)) {
+            return false;
+        }
+
+        Database.SaveResult saveResult = Database.update(
+            new Onboarding_Requirement__c(
+                Id = onboardingRequirementId,
+                Status__c = statusValue
+            ),
+            false
+        );
+        return saveResult != null && saveResult.isSuccess();
     }
 }

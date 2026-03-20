@@ -101,6 +101,9 @@ public with sharing class FollowUpDetectionService {
       return;
     }
 
+    // Preload existing follow-ups once to avoid per-item SOQL checks in loop.
+    Set<String> existingFollowUpKeys = getExistingFollowUpKeys(requirementIds);
+
     // Evaluate each rule for each requirement
     List<Follow_Up_Queue__c> followUpsToCreate = new List<Follow_Up_Queue__c>();
 
@@ -108,22 +111,25 @@ public with sharing class FollowUpDetectionService {
       Onboarding_Requirement__c onboardingRequirement : requirements.values()
     ) {
       for (Follow_Up_Rule__mdt followUpRule : activeRules) {
-        if (evaluateRuleCondition(onboardingRequirement, followUpRule)) {
-          // Check if follow-up already exists for this requirement and rule
-          if (
-            !followUpExists(
-              onboardingRequirement.Id,
-              followUpRule.DeveloperName
-            )
-          ) {
-            Follow_Up_Queue__c followUp = createFollowUpQueue(
-              onboardingRequirement,
-              followUpRule
-            );
-            if (followUp != null) {
-              followUpsToCreate.add(followUp);
-            }
-          }
+        if (!evaluateRuleCondition(onboardingRequirement, followUpRule)) {
+          continue;
+        }
+
+        String followUpKey = buildFollowUpKey(
+          onboardingRequirement.Id,
+          followUpRule.DeveloperName
+        );
+        if (String.isBlank(followUpKey) || existingFollowUpKeys.contains(followUpKey)) {
+          continue;
+        }
+
+        Follow_Up_Queue__c followUp = createFollowUpQueue(
+          onboardingRequirement,
+          followUpRule
+        );
+        if (followUp != null) {
+          followUpsToCreate.add(followUp);
+          existingFollowUpKeys.add(followUpKey);
         }
       }
     }
@@ -395,29 +401,43 @@ public with sharing class FollowUpDetectionService {
     return DateTime.newInstance(nextDate, defaultTime);
   }
 
-  //----------------------
-   // Check if follow-up already exists for requirement and rule
-   //----------------------
-  private static Boolean followUpExists(
-    Id requirementId,
-    String ruleDeveloperName
-  ) {
+  private static Set<String> getExistingFollowUpKeys(Set<Id> requirementIds) {
+    Set<String> keys = new Set<String>();
+    if (requirementIds == null || requirementIds.isEmpty()) {
+      return keys;
+    }
+
     try {
-      Integer count = [
-        SELECT COUNT()
+      for (Follow_Up_Queue__c followUpQueue : [
+        SELECT Onboarding_Requirement__c, Follow_Up_Rule__c
         FROM Follow_Up_Queue__c
         WHERE
-          Onboarding_Requirement__c = :requirementId
-          AND Follow_Up_Rule__c = :ruleDeveloperName
+          Onboarding_Requirement__c IN :requirementIds
+          AND Follow_Up_Rule__c != NULL
           AND Status__c IN ('Pending', 'Pending Retry')
           AND Is_Archived__c = FALSE
         WITH SECURITY_ENFORCED
-        LIMIT 1
-      ];
-      return count > 0;
+      ]) {
+        String key = buildFollowUpKey(
+          followUpQueue.Onboarding_Requirement__c,
+          followUpQueue.Follow_Up_Rule__c
+        );
+        if (String.isNotBlank(key)) {
+          keys.add(key);
+        }
+      }
     } catch (Exception ex) {
-      LoggingUtil.error('Error checking existing follow-up: ' + ex.getMessage());
-      return false;
+      LoggingUtil.error(
+        'Error querying existing follow-up keys: ' + ex.getMessage()
+      );
     }
+    return keys;
+  }
+
+  private static String buildFollowUpKey(Id requirementId, String ruleDeveloperName) {
+    if (requirementId == null || String.isBlank(ruleDeveloperName)) {
+      return null;
+    }
+    return String.valueOf(requirementId) + '|' + ruleDeveloperName;
   }
 }
