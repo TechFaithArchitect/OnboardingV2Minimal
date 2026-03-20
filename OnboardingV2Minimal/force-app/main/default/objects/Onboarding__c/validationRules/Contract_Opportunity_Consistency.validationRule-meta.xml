@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contract_Opportunity_Consistency</fullName>
+    <active>true</active>
+    <description>When Contract and Opportunity are both populated, Opportunity must match the Contract's related Opportunity.</description>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(Contract__c)),
+NOT(ISBLANK(Opportunity__c)),
+NOT(ISBLANK(Contract__r.Opportunity_to_Contract__c)),
+Opportunity__c &lt;&gt; Contract__r.Opportunity_to_Contract__c
+)</errorConditionFormula>
+    <errorDisplayField>Opportunity__c</errorDisplayField>
+    <errorMessage>Opportunity must match the Contract's related Opportunity.</errorMessage>
+</ValidationRule>

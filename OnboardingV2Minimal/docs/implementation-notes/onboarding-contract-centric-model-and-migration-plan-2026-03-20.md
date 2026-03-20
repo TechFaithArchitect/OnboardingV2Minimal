@@ -61,12 +61,15 @@ Keep easy Agreement access:
   - `BLL_Agreement_RCD_Logical_Process` now routes Agreement evidence through contract-scoped Apex action `OnbReqContractEvidenceInvocable`.
   - Account-wide Agreement requirement evaluation is removed from this Agreement event path.
   - Deployment reference: `0AfRL00000dSv050AC` (`OnbReqContractEvidenceInvocableTest` `4/4` passing).
-- Phase 2 step 1 partially completed in existing flows (no new flow):
+- Phase 2 completed in existing metadata (no Apex additions):
   - `DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record` now resolves `Onboarding.Opportunity__c` from `Contract.Opportunity_to_Contract__c` first.
   - `DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records` now sets onboarding opportunity from contract when contract linkage is assigned.
   - `BLL_Onboarding_RCD_Logical_Process` now includes idempotent contract-opportunity alignment + fault logging and is deployed (`0AfRL00000dSuNQ0A0`).
+  - `Onboarding__c` validation rule `Contract_Opportunity_Consistency` now blocks contract/opportunity mismatches when both are populated.
+  - New before-save flow `BLL_Onboarding_RCD_Prevent_Duplicates` now blocks exact duplicate onboarding rows for the same `Contract__c` + `Vendor_Customization__c`.
+  - Deployment reference for step 2/3 controls: `0AfRL00000dSzWj0AK`.
   - Async-path variant was evaluated but blocked by Salesforce record-triggered scheduled-path constraints for this `CreateAndUpdate` flow shape without narrowing entry criteria.
-- Remaining: Phase 2 mismatch-governance completion and Phase 3 legacy migration/backfill.
+- Remaining: Phase 3 legacy migration/backfill.
 
 ## Phase 1 - Routing Safety (No Data Migration Yet)
 
