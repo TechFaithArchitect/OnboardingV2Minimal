@@ -64,44 +64,83 @@ public with sharing class OnboardingDefaultVendorProgramInvocable {
         return results;
       }
 
-      String nameContains = configs[0].Vendor_Program_Name_Contains__c;
-      List<Vendor_Customization__c> programs;
+      String containsToken = String.isBlank(configs[0].Vendor_Program_Name_Contains__c)
+        ? null
+        : configs[0].Vendor_Program_Name_Contains__c.trim();
+      List<Vendor_Customization__c> activePrograms = [
+        SELECT Id, Name, Vendor__c, Business_Vertical__c, Retail_Option__c
+        FROM Vendor_Customization__c
+        WHERE Vendor__r.Name = :vendorName
+        AND Active__c = true
+        WITH SECURITY_ENFORCED
+        ORDER BY Name
+        LIMIT 200
+      ];
 
-      if (String.isNotBlank(nameContains)) {
-        String namePattern =
-          '%' + String.escapeSingleQuotes(nameContains.trim()) + '%';
-        programs = [
-          SELECT Id, Vendor__c, Business_Vertical__c, Retail_Option__c
-          FROM Vendor_Customization__c
-          WHERE Vendor__r.Name = :vendorName
-          AND Name LIKE :namePattern
-          AND Active__c = true
-          WITH SECURITY_ENFORCED
-          LIMIT 1
-        ];
-      } else {
-        programs = [
-          SELECT Id, Vendor__c, Business_Vertical__c, Retail_Option__c
-          FROM Vendor_Customization__c
-          WHERE Vendor__r.Name = :vendorName
-          AND Active__c = true
-          WITH SECURITY_ENFORCED
-          LIMIT 1
-        ];
+      if (activePrograms.isEmpty()) {
+        result.errorMessage = 'No active Vendor Program found for Vendor: ' + vendorName;
+        results.add(result);
+        return results;
       }
 
-      if (!programs.isEmpty()) {
-        result.vendorProgramRecord = programs[0];
+      Vendor_Customization__c selectedProgram;
+      if (String.isBlank(containsToken)) {
+        selectedProgram = activePrograms[0];
       } else {
-        result.errorMessage =
-          String.isNotBlank(nameContains)
-            ? 'No active Vendor Program found for Vendor: ' +
+        List<Vendor_Customization__c> containsMatches = new List<Vendor_Customization__c>();
+        for (Vendor_Customization__c program : activePrograms) {
+          if (containsIgnoreCase(program.Name, containsToken)) {
+            containsMatches.add(program);
+          }
+        }
+
+        if (!containsMatches.isEmpty()) {
+          selectedProgram = containsMatches[0];
+        } else {
+          List<Vendor_Customization__c> scenarioHintMatches = findScenarioHintMatches(
+            activePrograms,
+            scenarioKey
+          );
+          if (!scenarioHintMatches.isEmpty()) {
+            selectedProgram = scenarioHintMatches[0];
+            LoggingUtil.warn(
+              'OnboardingDefaultVendorProgramInvocable scenario-key fallback: Scenario=' +
+              scenarioKey +
+              ', Vendor=' +
               vendorName +
-              ' with Name containing "' +
-              nameContains +
-              '"'
-            : 'No active Vendor Program found for Vendor: ' + vendorName;
+              ', containsToken="' +
+              containsToken +
+              '" did not match. Using scenario-key hint match Vendor Program Id=' +
+              selectedProgram.Id
+            );
+          } else if (activePrograms.size() == 1) {
+            // Safe fallback: single active program for vendor even if token no longer matches name.
+            selectedProgram = activePrograms[0];
+            LoggingUtil.warn(
+              'OnboardingDefaultVendorProgramInvocable fallback: Scenario=' +
+              scenarioKey +
+              ', Vendor=' +
+              vendorName +
+              ', containsToken="' +
+              containsToken +
+              '" did not match. Using sole active Vendor Program Id=' +
+              selectedProgram.Id
+            );
+          } else {
+            result.errorMessage =
+              'Configured Vendor Program token "' +
+              containsToken +
+              '" did not match any active Vendor Program names for Vendor: ' +
+              vendorName +
+              '. Active program count: ' +
+              String.valueOf(activePrograms.size());
+            results.add(result);
+            return results;
+          }
+        }
       }
+
+      result.vendorProgramRecord = selectedProgram;
     } catch (Exception ex) {
       result.errorMessage = 'Unable to resolve default Vendor Program: ' + ex.getMessage();
       LoggingUtil.error(
@@ -112,5 +151,66 @@ public with sharing class OnboardingDefaultVendorProgramInvocable {
 
     results.add(result);
     return results;
+  }
+
+  private static Boolean containsIgnoreCase(String source, String token) {
+    if (String.isBlank(source) || String.isBlank(token)) {
+      return false;
+    }
+    return source.toLowerCase().contains(token.toLowerCase());
+  }
+
+  private static List<Vendor_Customization__c> findScenarioHintMatches(
+    List<Vendor_Customization__c> activePrograms,
+    String scenarioKey
+  ) {
+    List<Vendor_Customization__c> matches = new List<Vendor_Customization__c>();
+    String scenarioToken = extractScenarioHint(scenarioKey);
+    if (String.isBlank(scenarioToken)) {
+      return matches;
+    }
+
+    for (Vendor_Customization__c program : activePrograms) {
+      if (containsIgnoreCase(program.Name, scenarioToken)) {
+        matches.add(program);
+      }
+    }
+
+    if (matches.size() <= 1) {
+      return matches;
+    }
+
+    for (Vendor_Customization__c program : matches) {
+      if (program.Name != null && program.Name.trim().equalsIgnoreCase(scenarioToken)) {
+        return new List<Vendor_Customization__c>{ program };
+      }
+    }
+
+    return matches;
+  }
+
+  private static String extractScenarioHint(String scenarioKey) {
+    if (String.isBlank(scenarioKey)) {
+      return null;
+    }
+    List<String> parts = scenarioKey.split('_');
+    for (Integer i = parts.size() - 1; i >= 0; i--) {
+      String part = parts[i] == null ? null : parts[i].trim();
+      if (String.isBlank(part)) {
+        continue;
+      }
+      String upper = part.toUpperCase();
+      if (
+        upper == 'REQUIRE' ||
+        upper == 'ONLY' ||
+        upper == 'DEFAULT' ||
+        upper == 'STATUS' ||
+        upper == 'FLOW'
+      ) {
+        continue;
+      }
+      return part;
+    }
+    return null;
   }
 }
