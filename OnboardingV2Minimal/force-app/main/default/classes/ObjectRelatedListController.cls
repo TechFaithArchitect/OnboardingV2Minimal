@@ -17,6 +17,7 @@ public with sharing class ObjectRelatedListController {
     private static final Integer MAX_QUERY_LIMIT = 10000;
     private static final Integer DEFAULT_OPTIONS_LIMIT = 500;
     private static final Integer MAX_OPTIONS_LIMIT = 2000;
+    private static final String API_NAME_PATTERN = '^[A-Za-z][A-Za-z0-9_]*$';
     
     /**
      * Query configuration wrapper class
@@ -77,18 +78,38 @@ public with sharing class ObjectRelatedListController {
             throw new AuraHandledException('Object is not accessible: ' + config.objectApiName);
         }
         Map<String, Schema.SObjectField> objectFieldMap = objectDescribe.fields.getMap();
+        String validatedParentField = requireFieldPath(
+            objectDescribe,
+            config.parentFieldApiName,
+            'Parent field'
+        );
         
         // Build field list
         Set<String> fields = new Set<String>();
         fields.add('Id'); // Always include Id
-        if (objectFieldMap.containsKey('Name')) {
+        if (objectFieldMap.containsKey('Name')
+            && objectFieldMap.get('Name').getDescribe().isAccessible()) {
             fields.add('Name');
         }
         
         // Add specified fields
         for (String field : config.fieldApiNames) {
             if (String.isNotBlank(field)) {
-                fields.add(field.trim());
+                String normalizedField = field.trim();
+                if (normalizedField.contains('.')) {
+                    fields.add(requireFieldPath(
+                        objectDescribe,
+                        normalizedField,
+                        'Requested field'
+                    ));
+                } else {
+                    fields.add(requireSimpleField(
+                        objectFieldMap,
+                        normalizedField,
+                        'Requested field',
+                        true
+                    ));
+                }
             }
         }
         
@@ -96,15 +117,19 @@ public with sharing class ObjectRelatedListController {
         if (config.relationshipFieldApiNames != null) {
             for (String relField : config.relationshipFieldApiNames) {
                 if (String.isNotBlank(relField)) {
-                    fields.add(relField.trim());
+                    fields.add(requireFieldPath(
+                        objectDescribe,
+                        relField,
+                        'Relationship field'
+                    ));
                 }
             }
         }
         
         // Build SOQL query with bind variable
         String fieldList = String.join(new List<String>(fields), ', ');
-        String parentField = String.escapeSingleQuotes(config.parentFieldApiName);
-        String objectName = String.escapeSingleQuotes(config.objectApiName);
+        String parentField = validatedParentField;
+        String objectName = objectDescribe.getName();
         Id parentId = config.parentRecordId;
         
         String soql = 'SELECT ' + fieldList 
@@ -115,7 +140,12 @@ public with sharing class ObjectRelatedListController {
         // Add ORDER BY if specified
         if (String.isNotBlank(config.orderByField)) {
             String direction = (config.orderDirection == ORDER_ASC) ? ORDER_ASC : ORDER_DESC;
-            soql += ' ORDER BY ' + String.escapeSingleQuotes(config.orderByField) + ' ' + direction + ' NULLS LAST';
+            String validatedOrderBy = requireFieldPath(
+                objectDescribe,
+                config.orderByField,
+                'Order by field'
+            );
+            soql += ' ORDER BY ' + validatedOrderBy + ' ' + direction + ' NULLS LAST';
         }
         
         // Add LIMIT for performance (prevent query timeouts with large datasets)
@@ -174,11 +204,21 @@ public with sharing class ObjectRelatedListController {
             throw new AuraHandledException('Field is not accessible: ' + labelFieldApiName);
         }
 
-        String sortField = String.isNotBlank(orderByField) && fieldMap.containsKey(orderByField)
-            ? orderByField
-            : labelFieldApiName;
-        if (!fieldMap.get(sortField).getDescribe().isAccessible()) {
-            sortField = labelFieldApiName;
+        String validatedLabelField = requireSimpleField(
+            fieldMap,
+            labelFieldApiName,
+            'Label field',
+            true
+        );
+
+        String sortField = validatedLabelField;
+        if (String.isNotBlank(orderByField)) {
+            String normalizedOrderBy = orderByField.trim();
+            if (Pattern.matches(API_NAME_PATTERN, normalizedOrderBy)
+                && fieldMap.containsKey(normalizedOrderBy)
+                && fieldMap.get(normalizedOrderBy).getDescribe().isAccessible()) {
+                sortField = normalizedOrderBy;
+            }
         }
         String direction = (orderDirection == ORDER_DESC) ? ORDER_DESC : ORDER_ASC;
 
@@ -191,9 +231,9 @@ public with sharing class ObjectRelatedListController {
         }
 
         String soql =
-            'SELECT Id, ' + labelFieldApiName +
-            ' FROM ' + objectApiName +
-            ' WHERE ' + labelFieldApiName + ' != NULL' +
+            'SELECT Id, ' + validatedLabelField +
+            ' FROM ' + objectDescribe.getName() +
+            ' WHERE ' + validatedLabelField + ' != NULL' +
             ' WITH SECURITY_ENFORCED' +
             ' ORDER BY ' + sortField + ' ' + direction +
             ' LIMIT ' + limitValue;
@@ -209,10 +249,89 @@ public with sharing class ObjectRelatedListController {
         for (SObject row : records) {
             LookupOption option = new LookupOption();
             option.value = (Id)row.get('Id');
-            option.label = (String)row.get(labelFieldApiName);
+            option.label = (String)row.get(validatedLabelField);
             options.add(option);
         }
         return options;
+    }
+
+    private static String requireSimpleField(
+        Map<String, Schema.SObjectField> fieldMap,
+        String fieldApiName,
+        String label,
+        Boolean requireAccessible
+    ) {
+        String normalized = fieldApiName == null ? null : fieldApiName.trim();
+        if (String.isBlank(normalized) || !Pattern.matches(API_NAME_PATTERN, normalized)) {
+            throw new AuraHandledException('Invalid ' + label + ': ' + fieldApiName);
+        }
+        if (!fieldMap.containsKey(normalized)) {
+            throw new AuraHandledException('Invalid ' + label + ': ' + normalized);
+        }
+        if (requireAccessible && !fieldMap.get(normalized).getDescribe().isAccessible()) {
+            throw new AuraHandledException(label + ' is not accessible: ' + normalized);
+        }
+        return normalized;
+    }
+
+    private static String requireFieldPath(
+        Schema.DescribeSObjectResult rootDescribe,
+        String fieldPath,
+        String label
+    ) {
+        String normalized = fieldPath == null ? null : fieldPath.trim();
+        if (String.isBlank(normalized)) {
+            throw new AuraHandledException('Invalid ' + label + ': ' + fieldPath);
+        }
+
+        List<String> parts = normalized.split('\\.');
+        Schema.DescribeSObjectResult currentDescribe = rootDescribe;
+
+        for (Integer i = 0; i < parts.size(); i++) {
+            String part = parts[i];
+            if (String.isBlank(part) || !Pattern.matches(API_NAME_PATTERN, part)) {
+                throw new AuraHandledException('Invalid ' + label + ': ' + normalized);
+            }
+
+            Boolean isLast = (i == parts.size() - 1);
+            if (isLast) {
+                Map<String, Schema.SObjectField> fieldMap = currentDescribe.fields.getMap();
+                if (!fieldMap.containsKey(part)) {
+                    throw new AuraHandledException('Invalid ' + label + ': ' + normalized);
+                }
+                if (!fieldMap.get(part).getDescribe().isAccessible()) {
+                    throw new AuraHandledException(label + ' is not accessible: ' + normalized);
+                }
+            } else {
+                currentDescribe = resolveRelationshipDescribe(currentDescribe, part);
+                if (currentDescribe == null) {
+                    throw new AuraHandledException('Invalid ' + label + ': ' + normalized);
+                }
+            }
+        }
+
+        return normalized;
+    }
+
+    private static Schema.DescribeSObjectResult resolveRelationshipDescribe(
+        Schema.DescribeSObjectResult describeResult,
+        String relationshipName
+    ) {
+        for (Schema.SObjectField sField : describeResult.fields.getMap().values()) {
+            Schema.DescribeFieldResult fieldDescribe = sField.getDescribe();
+            if (fieldDescribe.getType() != Schema.DisplayType.Reference) {
+                continue;
+            }
+            if (fieldDescribe.getRelationshipName() != relationshipName) {
+                continue;
+            }
+            List<Schema.SObjectType> referenceTypes = fieldDescribe.getReferenceTo();
+            if (referenceTypes == null || referenceTypes.isEmpty()) {
+                continue;
+            }
+            return referenceTypes[0].getDescribe();
+        }
+        return null;
     }
     
     /**

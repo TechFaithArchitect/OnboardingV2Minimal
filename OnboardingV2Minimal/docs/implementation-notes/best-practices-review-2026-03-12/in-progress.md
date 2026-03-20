@@ -16,6 +16,9 @@ Active work items extracted from the source plan.
 ## C. LWC (LDS-First, Accessibility, Testing, Performance)
 - In progress: `objectRelatedList` inline-edit picklist incident is now stabilized in org using `getPicklistValuesByRecordType` queueing with telemetry (`wireError:0` in user validation); remaining work is to add Jest regression coverage so this cannot regress.
 - In progress: cleanup/hardening wave started on `objectRelatedList`: stale Apex fallback endpoints removed, telemetry default set to off, and record-type picklist queue release is now `finally`-guarded; next incremental hardening step is to classify wire-error vs empty-value outcomes per field in Jest tests.
+- In progress: `ObjectRelatedListController` now has deploy-validated dynamic SOQL guardrails (describe-driven object/field/path validation and safer lookup query assembly) plus dedicated Apex regression coverage (`ObjectRelatedListCtrlTest`); next UI-side hardening remains focused on Jest regression coverage and accessibility checks.
+- In progress: parent relationship filter compatibility has been restored for `objectRelatedList` configs that rely on cross-object parent paths (for example `Parent.Onboarding__c` on `Onboarding_Requirement_History`) after validator tightening; regression is now locked by dedicated Apex test coverage.
+- In progress: dotted relationship-path compatibility is now restored across all `objectRelatedList` query-field inputs (including `Fields (CSV)` values like `CreatedBy.Name`) with regression tests in place; remaining `objectRelatedList` hardening work is Jest/UI behavior coverage, not Apex query-contract compatibility.
 
 ## D. Flows (Fault Handling, Modularity, Governance)
 - In progress: Repo flow metadata was re-baselined from org source-of-truth on 2026-03-19 using an intersection-only retrieve (`78` `Flow` + `4` `FlowDefinition` already present in repo); no new flow files were introduced.
