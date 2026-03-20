@@ -1,7 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Evaluate_Agreement_Subjects</name>
+        <label>Evaluate Agreement Subjects</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnbReqContractEvidenceInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Did_Evaluate_Agreement_Subjects_Fail</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Capture_Evaluate_Agreement_Subjects_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>contractId</name>
+            <value>
+                <elementReference>$Record.echosign_dev1__Contract__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>requirementType</name>
+            <value>
+                <stringValue>Agreement</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>evidenceStatus</name>
+            <value>
+                <elementReference>$Record.echosign_dev1__Status__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>agreementId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>applyOnboardingStatus</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>OnbReqContractEvidenceInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+    </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Evaluate_Agreement_Subjects_Fault</name>
+        <label>Capture Evaluate Agreement Subjects Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Evaluate_Agreement_Subjects_Fault</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Did_Evaluate_Agreement_Subjects_Fail</name>
         <label>Did Evaluate Agreement Subjects Fail</label>
@@ -140,38 +207,6 @@
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
-    <subflows>
-        <name>Evaluate_Agreement_Subjects</name>
-        <label>Evaluate Agreement Subjects</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Did_Evaluate_Agreement_Subjects_Fail</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence</flowName>
-        <inputAssignments>
-            <name>AccountId</name>
-            <value>
-                <elementReference>OnboardingRecord.Account__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>EvidenceStatus</name>
-            <value>
-                <elementReference>$Record.echosign_dev1__Status__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>RequirementType</name>
-            <value>
-                <stringValue>Agreement</stringValue>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
-    </subflows>
     <subflows>
         <name>Get_Onboarding_Record</name>
         <label>Get Onboarding Record</label>

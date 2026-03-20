@@ -55,6 +55,14 @@ Keep easy Agreement access:
 
 ## Implementation Plan (Phased)
 
+## Execution Status (2026-03-20)
+
+- Phase 1 step 1/2 completed in `OnboardV2`:
+  - `BLL_Agreement_RCD_Logical_Process` now routes Agreement evidence through contract-scoped Apex action `OnbReqContractEvidenceInvocable`.
+  - Account-wide Agreement requirement evaluation is removed from this Agreement event path.
+  - Deployment reference: `0AfRL00000dSv050AC` (`OnbReqContractEvidenceInvocableTest` `4/4` passing).
+- Remaining: Phase 2 invariants and Phase 3 legacy migration/backfill.
+
 ## Phase 1 - Routing Safety (No Data Migration Yet)
 
 1. Tighten Agreement-triggered subject/requirement evaluation to contract-scoped onboarding only.
@@ -138,4 +146,3 @@ Track unresolved rows in a migration exception report for manual assignment.
 2. Contract review updates then drive onboarding status via existing CMDT rules.
 3. Users still navigate from onboarding to the latest relevant agreement.
 4. Legacy records are migrated with deterministic rules and manual-review exceptions.
-

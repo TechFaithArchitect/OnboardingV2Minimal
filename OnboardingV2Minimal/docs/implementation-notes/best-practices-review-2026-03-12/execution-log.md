@@ -2,6 +2,9 @@
 
 Chronological implementation and validation log.
 ## Execution Log
+- 2026-03-20: Implemented and deployed contract-scoped agreement evidence routing for contract-centric onboarding Phase 1: added Apex invocable `OnbReqContractEvidenceInvocable` and rewired `BLL_Agreement_RCD_Logical_Process` to call it (contractId/evidenceStatus/requirementType/agreementId/applyOnboardingStatus) instead of account-scoped `DOMAIN_OmniSObject_SFL_EVAL_Onb_Req_Subjects_By_Evidence`.
+- 2026-03-20: Added test coverage `OnbReqContractEvidenceInvocableTest` for contract scoping, invalid-request handling, status mapping, and agreement-pointer/status-apply branches; deployment to `OnboardV2` succeeded (`0AfRL00000dSv050AC`, `4/4` passing).
+- 2026-03-20: Confirmed existing contract creation invariant remains aligned with data model expectation: `DOMAIN_OmniSObject_SFL_CREATE_Contract` sets `Contract.Principal_Owner__c` from the primary `OpportunityContactRole.ContactId`.
 - 2026-03-20: Documented contract-centric onboarding transition and legacy migration runbook in `docs/implementation-notes/onboarding-contract-centric-model-and-migration-plan-2026-03-20.md` to formalize `Agreement -> Contract -> Onboarding` routing, preserve Agreement navigation, and define deterministic legacy backfill + exception handling for multi-contract opportunities.
 - 2026-03-12: Started `P0` step 1 (Apex sharing/FLS enforcement audit + fixes).
 - 2026-03-12: Updated `VendorOnboardingService`, `VendorPrerequisiteEvaluator`, `TwilioSettingsController`, `FollowUpMessagingService`, and `TwilioSMSProvider` for stronger sharing/query security posture.
