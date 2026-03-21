@@ -16,6 +16,6 @@
     </values>
     <values>
         <field>Target_Onboarding_Status__c</field>
-        <value xsi:type="xsd:string">Out For Signature</value>
+        <value xsi:type="xsd:string">Paperwork Sent</value>
     </values>
 </CustomMetadata>

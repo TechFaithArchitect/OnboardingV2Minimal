@@ -100,6 +100,11 @@
                 <label>Training</label>
             </value>
             <value>
+                <fullName>Vendor Order Entry</fullName>
+                <default>false</default>
+                <label>Vendor Order Entry</label>
+            </value>
+            <value>
                 <fullName>Worker&apos;s Compensation Insurance</fullName>
                 <default>false</default>
                 <label>Worker&apos;s Compensation Insurance</label>
