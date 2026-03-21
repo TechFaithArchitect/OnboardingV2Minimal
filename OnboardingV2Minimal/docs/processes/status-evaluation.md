@@ -24,12 +24,19 @@ This document describes the current status-evaluation chain and the intended sin
 
 - `ANY_DENIED`
 - `OPPORTUNITY_CANCELED`
+- `ANY_CANCELED`
+- `ANY_EXPIRED`
 - `ALL_SETUP_COMPLETE`
 - `ONLY_AGREEMENT_OUT_FOR_SIGNATURE`
 - `ONLY_AGREEMENT_SIGNED`
 - `AGREEMENT_SIGNED_AND_CONTRACT_COMPLETE`
 - `PENDING_SALES`
 - `IN_PROCESS_DEFAULT`
+
+### Condition behavior notes
+
+- `ANY_DENIED` remains metadata-driven: business can override handling by changing rule priority/order and target values in `Onboarding_Status_Evaluation_Rule__mdt`.
+- `ANY_CANCELED` is restart-aware: it matches only when at least one requirement normalizes to `Canceled`/`Cancelled` **and** the related Opportunity is still in a canceled/lost stage (`Canceled`, `Cancelled`, `Closed Lost`). If Opportunity is reopened, this condition no longer matches.
 
 ## Known design direction
 

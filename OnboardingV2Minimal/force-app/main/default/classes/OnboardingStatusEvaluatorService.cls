@@ -6,6 +6,9 @@
 public with sharing class OnboardingStatusEvaluatorService {
   private static final String IGNORE = 'Ignore';
   private static final String DENIED = 'Denied';
+  private static final String CANCELED = 'Canceled';
+  private static final String CANCELLED = 'Cancelled';
+  private static final String EXPIRED = 'Expired';
   private static final String SETUP_COMPLETE = 'Setup Complete';
   private static final String OUT_FOR_SIGNATURE = 'Out for signature';
   private static final String SIGNED = 'Signed';
@@ -319,6 +322,12 @@ public with sharing class OnboardingStatusEvaluatorService {
       when 'ALL_SETUP_COMPLETE' {
         return allRequirementsSetupComplete(ctx);
       }
+      when 'ANY_CANCELED' {
+        return hasAnyCanceled(ctx);
+      }
+      when 'ANY_EXPIRED' {
+        return hasAnyNormalized(ctx, EXPIRED);
+      }
       when 'ONLY_AGREEMENT_OUT_FOR_SIGNATURE' {
         return onlyAgreementHasStatus(ctx, OUT_FOR_SIGNATURE);
       }
@@ -362,6 +371,18 @@ public with sharing class OnboardingStatusEvaluatorService {
       }
     }
     return false;
+  }
+
+  private static Boolean hasAnyCanceled(EvaluationContext ctx) {
+    if (
+      !hasAnyNormalized(ctx, CANCELED) &&
+      !hasAnyNormalized(ctx, CANCELLED)
+    ) {
+      return false;
+    }
+
+    // Cancellation can be cleared by reopening/changing Opportunity stage.
+    return ctx.opportunity == null || isCanceledStage(ctx.opportunity.StageName);
   }
 
   private static Boolean allRequirementsSetupComplete(EvaluationContext ctx) {
@@ -436,7 +457,11 @@ public with sharing class OnboardingStatusEvaluatorService {
 
   private static Boolean isCanceledStage(String stage) {
     return stage != null &&
-      (stage.equalsIgnoreCase('Canceled') || stage.equalsIgnoreCase('Closed Lost'));
+      (
+        stage.equalsIgnoreCase('Canceled') ||
+        stage.equalsIgnoreCase('Cancelled') ||
+        stage.equalsIgnoreCase('Closed Lost')
+      );
   }
 
   private static EvaluationResult emptyResult() {

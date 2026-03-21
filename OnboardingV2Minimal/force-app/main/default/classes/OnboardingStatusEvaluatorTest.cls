@@ -286,6 +286,54 @@ private class OnboardingStatusEvaluatorTest {
       'AGREEMENT_SIGNED_AND_CONTRACT_COMPLETE should match signed agreement + complete contract'
     );
 
+    OnboardingStatusEvaluatorService.EvaluationContext expiredCtx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Expired')
+      }
+    );
+    System.assertEquals(
+      true,
+      OnboardingStatusEvaluatorService.evaluateConditionForTest('ANY_EXPIRED', expiredCtx),
+      'ANY_EXPIRED should match when one normalized status is Expired'
+    );
+
+    OnboardingStatusEvaluatorService.EvaluationContext canceledOpenOppCtx = buildContext(
+      'Onboarding',
+      'Canceled',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Canceled')
+      }
+    );
+    System.assertEquals(
+      false,
+      OnboardingStatusEvaluatorService.evaluateConditionForTest(
+        'ANY_CANCELED',
+        canceledOpenOppCtx
+      ),
+      'ANY_CANCELED should not hold canceled state when opportunity is reopened'
+    );
+
+    OnboardingStatusEvaluatorService.EvaluationContext canceledClosedOppCtx = buildContext(
+      'Onboarding',
+      'Canceled',
+      'Closed Lost',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Canceled')
+      }
+    );
+    System.assertEquals(
+      true,
+      OnboardingStatusEvaluatorService.evaluateConditionForTest(
+        'ANY_CANCELED',
+        canceledClosedOppCtx
+      ),
+      'ANY_CANCELED should match when requirement is canceled and opportunity is canceled/lost'
+    );
+
     OnboardingStatusEvaluatorService.EvaluationContext outForSignatureCtx = buildContext(
       'Onboarding',
       'New',
