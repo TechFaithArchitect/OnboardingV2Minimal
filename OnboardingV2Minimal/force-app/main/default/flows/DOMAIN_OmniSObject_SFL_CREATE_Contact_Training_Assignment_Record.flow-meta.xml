@@ -3,45 +3,6 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Capture_Update_TA_Complete_Fault</name>
-        <label>Capture Update TA Complete Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Capture_Update_TA_Not_Complete_Fault</name>
-        <label>Capture Update TA Not Complete Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Capture_Update_TA_Collection_Fault</name>
-        <label>Capture Update TA Collection Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>Add_ContactId_to_List</name>
         <label>Add ContactId to List</label>
         <locationX>0</locationX>
@@ -124,6 +85,45 @@
         <connector>
             <targetReference>Loop_Training_Assignment_Records_for_Onboarding_Id_List</targetReference>
         </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_TA_Collection_Fault</name>
+        <label>Capture Update TA Collection Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_TA_Complete_Fault</name>
+        <label>Capture Update TA Complete Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_TA_Not_Complete_Fault</name>
+        <label>Capture Update TA Not Complete Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
     </assignments>
     <decisions>
         <name>How_Are_We_Updating_Training_Assignment_Record</name>

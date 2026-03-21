@@ -3,19 +3,6 @@
     <apiVersion>64.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Capture_Update_Contact_Fault</name>
-        <label>Capture Update Contact Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>Assign_Value_of_ECC_CIM_Workers</name>
         <label>Assign Value of ECC CIM Workers #</label>
         <locationX>0</locationX>
@@ -83,6 +70,19 @@
         <connector>
             <targetReference>Update_Contact_Record</targetReference>
         </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Contact_Fault</name>
+        <label>Capture Update Contact Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
     </assignments>
     <decisions>
         <name>What_Record_Type_Are_We_Updating</name>

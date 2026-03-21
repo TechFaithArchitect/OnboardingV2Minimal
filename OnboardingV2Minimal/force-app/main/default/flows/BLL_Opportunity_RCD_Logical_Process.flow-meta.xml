@@ -36,10 +36,7 @@
         <label>Is There Related Onboarding Record to Opportunity</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Get_Vendor_Program</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Opportunity Does Not Have Related Onboarding</defaultConnectorLabel>
+        <defaultConnectorLabel>No Action Needed</defaultConnectorLabel>
         <rules>
             <name>Yes_Opportunity_is_Related_to_Onboarding</name>
             <conditionLogic>and</conditionLogic>
@@ -230,7 +227,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>

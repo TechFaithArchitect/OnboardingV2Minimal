@@ -68,7 +68,7 @@ public with sharing class OnboardingDefaultVendorProgramInvocable {
         ? null
         : configs[0].Vendor_Program_Name_Contains__c.trim();
       List<Vendor_Customization__c> activePrograms = [
-        SELECT Id, Name, Vendor__c, Business_Vertical__c, Retail_Option__c
+        SELECT Id, Name, Vendor__c, Business_Vertical__c, Retail_Option__c, Contract_Record_Type__c,Associated_Agreement_Template__c
         FROM Vendor_Customization__c
         WHERE Vendor__r.Name = :vendorName
         AND Active__c = true

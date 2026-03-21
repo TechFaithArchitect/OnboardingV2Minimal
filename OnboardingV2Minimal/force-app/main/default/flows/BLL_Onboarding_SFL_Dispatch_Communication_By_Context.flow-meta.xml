@@ -682,32 +682,6 @@
     </start>
     <status>Active</status>
     <subflows>
-        <name>Get_Agent_Recipients</name>
-        <label>Get Agent Recipients</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Determine_Dispatch_Policy_Preload_Strategy</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Recipients</flowName>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>OnboardingRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>RecipientType</name>
-            <value>
-                <stringValue>Agent</stringValue>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>AgentRecipientIdCollection</assignToReference>
-            <name>RecipientIdCollection</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
         <name>Get_Agent_Dispatch_Policy</name>
         <label>Get Agent Dispatch Policy</label>
         <locationX>0</locationX>
@@ -740,99 +714,29 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>Get_Contact_Dispatch_Policy</name>
-        <label>Get Contact Dispatch Policy</label>
+        <name>Get_Agent_Recipients</name>
+        <label>Get Agent Recipients</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_PrincipalOwner_Dispatch_Policy</targetReference>
+            <targetReference>Determine_Dispatch_Policy_Preload_Strategy</targetReference>
         </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Recipients</flowName>
         <inputAssignments>
-            <name>CommunicationType</name>
+            <name>OnboardingRecord</name>
             <value>
-                <elementReference>CommunicationType</elementReference>
+                <elementReference>OnboardingRecord</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <name>RecipientType</name>
             <value>
-                <stringValue>Contact</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
+                <stringValue>Agent</stringValue>
             </value>
         </inputAssignments>
         <outputAssignments>
-            <assignToReference>DispatchAllowedForContact</assignToReference>
-            <name>DispatchAllowed</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>Get_Input_Dispatch_Policy</name>
-        <label>Get Input Dispatch Policy</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Loop_Communication_Templates</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
-        <inputAssignments>
-            <name>CommunicationType</name>
-            <value>
-                <elementReference>CommunicationType</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>RecipientType</name>
-            <value>
-                <elementReference>RecipientType</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>DispatchAllowedForInput</assignToReference>
-            <name>DispatchAllowed</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>Get_PrincipalOwner_Dispatch_Policy</name>
-        <label>Get Principal Owner Dispatch Policy</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Get_Agent_Dispatch_Policy</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
-        <inputAssignments>
-            <name>CommunicationType</name>
-            <value>
-                <elementReference>CommunicationType</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>RecipientType</name>
-            <value>
-                <stringValue>PrincipalOwner</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>DispatchAllowedForPrincipalOwner</assignToReference>
-            <name>DispatchAllowed</name>
+            <assignToReference>AgentRecipientIdCollection</assignToReference>
+            <name>RecipientIdCollection</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -868,6 +772,38 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <name>Get_Contact_Dispatch_Policy</name>
+        <label>Get Contact Dispatch Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_PrincipalOwner_Dispatch_Policy</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
+        <inputAssignments>
+            <name>CommunicationType</name>
+            <value>
+                <elementReference>CommunicationType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecipientType</name>
+            <value>
+                <stringValue>Contact</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>DispatchAllowedForContact</assignToReference>
+            <name>DispatchAllowed</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Get_Contact_Recipients</name>
         <label>Get Contact Recipients</label>
         <locationX>0</locationX>
@@ -894,6 +830,38 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <name>Get_Input_Dispatch_Policy</name>
+        <label>Get Input Dispatch Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_Communication_Templates</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
+        <inputAssignments>
+            <name>CommunicationType</name>
+            <value>
+                <elementReference>CommunicationType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecipientType</name>
+            <value>
+                <elementReference>RecipientType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>DispatchAllowedForInput</assignToReference>
+            <name>DispatchAllowed</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Get_Input_Recipients</name>
         <label>Get Input Recipients</label>
         <locationX>0</locationX>
@@ -917,6 +885,38 @@
         <outputAssignments>
             <assignToReference>InputRecipientIdCollection</assignToReference>
             <name>RecipientIdCollection</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Get_PrincipalOwner_Dispatch_Policy</name>
+        <label>Get Principal Owner Dispatch Policy</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Agent_Dispatch_Policy</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Communication_Dispatch_Policy</flowName>
+        <inputAssignments>
+            <name>CommunicationType</name>
+            <value>
+                <elementReference>CommunicationType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>RecipientType</name>
+            <value>
+                <stringValue>PrincipalOwner</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>DispatchAllowedForPrincipalOwner</assignToReference>
+            <name>DispatchAllowed</name>
         </outputAssignments>
     </subflows>
     <subflows>
@@ -1022,7 +1022,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -1042,6 +1041,13 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>CommunicationTemplateIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>CommunicationTemplateRecordCollection</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
@@ -1054,13 +1060,6 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>CommunicationTemplateIdList</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
@@ -1163,17 +1162,17 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>RecipientType</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>true</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>RecipientIdList</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>RecipientType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

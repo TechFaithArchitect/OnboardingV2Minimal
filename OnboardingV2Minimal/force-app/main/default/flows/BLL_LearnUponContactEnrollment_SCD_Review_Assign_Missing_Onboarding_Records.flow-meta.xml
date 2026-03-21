@@ -3,19 +3,6 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Capture_Update_LearnUponContact_Enrollment_Records_Fault</name>
-        <label>Capture Update LearnUponContact Enrollment Records Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>Add_LearnUponContactEnrollment_Records_to_Collection</name>
         <label>Add LearnUponContactEnrollment Records to Collection</label>
         <locationX>0</locationX>
@@ -85,6 +72,19 @@
         <connector>
             <targetReference>Add_LearnUponContactEnrollment_to_Collection_for_Update</targetReference>
         </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_LearnUponContact_Enrollment_Records_Fault</name>
+        <label>Capture Update LearnUponContact Enrollment Records Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
     </assignments>
     <decisions>
         <name>Compare_Onboarding_Record_Vendor_Name_with_Course_Name</name>
@@ -229,7 +229,7 @@
         </schedule>
         <triggerType>Scheduled</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Draft</status>
     <subflows>
         <name>Get_Onboarding_Records</name>
         <label>Get Onboarding Records</label>
@@ -271,16 +271,16 @@
         </outputAssignments>
     </subflows>
     <variables>
-        <name>errorMessage</name>
+        <name>ContactRecordList</name>
         <dataType>String</dataType>
-        <isCollection>false</isCollection>
+        <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>ContactRecordList</name>
+        <name>errorMessage</name>
         <dataType>String</dataType>
-        <isCollection>true</isCollection>
+        <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>

@@ -32,6 +32,7 @@ private class ExpOppCreateAsyncServiceTest {
         requestItem.OpportunityRecord = opportunityRecord;
         requestItem.ContactsToCreateJSONString = '[]';
         requestItem.OpportunityContactRecordsJSON = '[]';
+        requestItem.CreateContactsInQueue = true;
 
         Test.startTest();
         List<ExperienceOpportunityCreateAsyncService.QueueResult> results =
@@ -44,6 +45,43 @@ private class ExpOppCreateAsyncServiceTest {
         System.assertEquals(true, results[0].queued, 'Request should queue with required inputs.');
         System.assert(results[0].message != null && results[0].message.contains('Queued async create chain job'),
             'Expected queue confirmation message.');
+    }
+
+    @IsTest
+    static void executesSynchronouslyByDefault() {
+        Account accountRecord = new Account(Name = 'Sync Chain Test Account');
+        insert accountRecord;
+
+        Opportunity opportunityRecord = new Opportunity(
+            Name = 'Sync Chain Test Opportunity',
+            StageName = 'Prospecting',
+            CloseDate = Date.today().addDays(30)
+        );
+
+        ExperienceOpportunityCreateAsyncService.QueueRequest requestItem =
+            new ExperienceOpportunityCreateAsyncService.QueueRequest();
+        requestItem.AccountRecord = new Account(Id = accountRecord.Id);
+        requestItem.OpportunityRecord = opportunityRecord;
+        requestItem.ContactsToCreateJSONString = '[]';
+        requestItem.OpportunityContactRecordsJSON = '[]';
+
+        Test.startTest();
+        List<ExperienceOpportunityCreateAsyncService.QueueResult> results =
+            ExperienceOpportunityCreateAsyncService.queueOpportunityCreateChain(
+                new List<ExperienceOpportunityCreateAsyncService.QueueRequest>{ requestItem }
+            );
+        Test.stopTest();
+
+        System.assertEquals(1, results.size(), 'Expected one result item.');
+        System.assertNotEquals(null, results[0].queued, 'Result should report completion status.');
+        System.assert(
+            results[0].message != null &&
+            (
+                results[0].message.contains('Create chain completed synchronously.') ||
+                results[0].message.contains('Create chain failed:')
+            ),
+            'Expected synchronous execution message.'
+        );
     }
 
     @IsTest

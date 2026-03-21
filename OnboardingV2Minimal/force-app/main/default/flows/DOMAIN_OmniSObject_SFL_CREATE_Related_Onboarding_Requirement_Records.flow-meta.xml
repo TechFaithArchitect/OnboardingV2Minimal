@@ -83,6 +83,29 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <name>Assign_Existing_Onboarding_Contract_to_ContractRecord</name>
+        <label>Assign Existing Onboarding Contract to ContractRecord</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ContractRecord.Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OnboardingRecord.Contract__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ContractRecord.Opportunity_to_Contract__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OnboardingRecord.Opportunity__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Contract_to_Onboarding</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Capture_Update_Onboarding_Record_Fault</name>
         <label>Capture Update Onboarding Record Fault</label>
         <locationX>0</locationX>
@@ -138,6 +161,28 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnectorLabel>Type Passed Does Not Require Related Record</defaultConnectorLabel>
+        <rules>
+            <name>Type_is_Contract_and_Onboarding_Already_Has_Contract</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OnboardingRequirementRecord.Requirement_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Contract</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Contract__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Existing_Onboarding_Contract_to_ContractRecord</targetReference>
+            </connector>
+            <label>Type is Contract and Onboarding Already Has Contract</label>
+        </rules>
         <rules>
             <name>Type_is_Agreement</name>
             <conditionLogic>and</conditionLogic>

@@ -62,22 +62,6 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Capture_Evaluate_Changed_Onboarding_Requirements_Fault</name>
-        <label>Capture Evaluate Changed Onboarding Requirements Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Assign_Parent_Evaluator_Error_Message</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>Assign_Evaluation_Contact_Id_From_Override</name>
         <label>Assign Evaluation Contact Id From Override</label>
         <locationX>0</locationX>
@@ -160,6 +144,22 @@
                 <elementReference>subjectEvaluatorErrorMessage</elementReference>
             </value>
         </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Evaluate_Changed_Onboarding_Requirements_Fault</name>
+        <label>Capture Evaluate Changed Onboarding Requirements Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>parentEvaluatorErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Parent_Evaluator_Error_Message</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Reset_Parent_Evaluator_Error_Message</name>

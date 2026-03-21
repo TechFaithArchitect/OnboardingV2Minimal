@@ -54,6 +54,86 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_Ambiguous_Onboarding_Error</name>
+        <label>Assign Ambiguous Onboarding Error</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Multiple unlinked onboarding records were found for this agreement contract opportunity. Contract attachment was skipped to avoid linking the wrong onboarding record.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Get_Onboarding_Record_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Onboarding_From_Contract</name>
+        <label>Assign Onboarding From Contract</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>OnboardingRecord</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Onboarding_By_Contract</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Attach_Onboarding_Context</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Onboarding_From_Unlinked</name>
+        <label>Assign Onboarding From Unlinked</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>OnboardingRecord</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Unlinked_Onboarding_Records</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Unlinked_Onboarding_Records</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Unlinked_Onboarding_Count</name>
+        <label>Assign Unlinked Onboarding Count</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>UnlinkedOnboardingCount</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>UnlinkedOnboardingRecords</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Did_Find_Single_Unlinked_Onboarding</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Attach_Onboarding_Context_Fault</name>
+        <label>Capture Attach Onboarding Context Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Get_Onboarding_Record_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Capture_Evaluate_Agreement_Subjects_Fault</name>
         <label>Capture Evaluate Agreement Subjects Fault</label>
         <locationX>0</locationX>
@@ -92,12 +172,77 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Did_Find_Onboarding_By_Contract</name>
+        <label>Did Find Onboarding By Contract</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Unlinked_Onboarding_By_Opportunity</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Onboarding_Found_By_Contract</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Onboarding_By_Contract.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Onboarding_From_Contract</targetReference>
+            </connector>
+            <label>Onboarding Found By Contract</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Find_Single_Unlinked_Onboarding</name>
+        <label>Did Find Single Unlinked Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Is_Agreement_Signed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Match</defaultConnectorLabel>
+        <rules>
+            <name>Single_Match</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>UnlinkedOnboardingCount</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Unlinked_Onboarding_Records</targetReference>
+            </connector>
+            <label>Single Match</label>
+        </rules>
+        <rules>
+            <name>Multiple_Matches</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>UnlinkedOnboardingCount</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Ambiguous_Onboarding_Error</targetReference>
+            </connector>
+            <label>Multiple Matches</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Did_Get_Onboarding_Record_Fail</name>
         <label>Did Get Onboarding Record Fail</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Is_Agreement_Signed</targetReference>
+            <targetReference>Should_Attach_Onboarding_Context</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
@@ -148,10 +293,123 @@
             <label>Agreement is Signed</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Should_Attach_Onboarding_Context</name>
+        <label>Should Attach Onboarding Context</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Is_Agreement_Signed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Needs_Attach</name>
+            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.echosign_dev1__Contract__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Contract__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Contract__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.echosign_dev1__Contract__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Agreement__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Agreement__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Opportunity__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.echosign_dev1__Contract__r.Opportunity_to_Contract__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Should_Resolve_Missing_Onboarding</targetReference>
+            </connector>
+            <label>Needs Attach</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Resolve_Missing_Onboarding</name>
+        <label>Should Resolve Missing Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Attach_Onboarding_Context</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Onboarding_Missing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OnboardingRecord</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Onboarding_By_Contract</targetReference>
+            </connector>
+            <label>Onboarding Missing</label>
+        </rules>
+    </decisions>
     <description>Business Logic Layer - Agreement Object - Record Trigger - Logic Process</description>
     <environments>Default</environments>
     <interviewLabel>BLL - Agreement - RCD - Logical Process {!$Flow.CurrentDateTime}</interviewLabel>
     <label>BLL - Agreement - RCD - Logical Process</label>
+    <loops>
+        <name>Loop_Unlinked_Onboarding_Records</name>
+        <label>Loop Unlinked Onboarding Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>UnlinkedOnboardingRecords</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Onboarding_From_Unlinked</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Attach_Onboarding_Context</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -171,6 +429,111 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Onboarding_By_Contract</name>
+        <label>Get Onboarding By Contract</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Did_Find_Onboarding_By_Contract</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contract__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.echosign_dev1__Contract__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Onboarding__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Unlinked_Onboarding_By_Opportunity</name>
+        <label>Get Unlinked Onboarding By Opportunity</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Unlinked_Onboarding_Count</targetReference>
+        </connector>
+        <filterLogic>1 AND 2 AND 3 AND 4</filterLogic>
+        <filters>
+            <field>Opportunity__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.echosign_dev1__Contract__r.Opportunity_to_Contract__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Account__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.echosign_dev1__Contract__r.AccountId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Contract__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Agreement__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Onboarding__c</object>
+        <outputReference>UnlinkedOnboardingRecords</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Agreement__c</queriedFields>
+        <queriedFields>Contract__c</queriedFields>
+        <queriedFields>Opportunity__c</queriedFields>
+    </recordLookups>
+    <recordUpdates>
+        <name>Attach_Onboarding_Context</name>
+        <label>Attach Onboarding Context</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Agreement_Signed</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Capture_Attach_Onboarding_Context_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Agreement__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Contract__c</field>
+            <value>
+                <elementReference>$Record.echosign_dev1__Contract__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Opportunity__c</field>
+            <value>
+                <elementReference>$Record.echosign_dev1__Contract__r.Opportunity_to_Contract__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Onboarding__c</object>
+    </recordUpdates>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
@@ -358,13 +721,6 @@
         </inputAssignments>
     </subflows>
     <variables>
-        <name>errorMessage</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>ContactRecord</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -379,6 +735,13 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Contract</objectType>
+    </variables>
+    <variables>
+        <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>LearnUponPortalMembership</name>
@@ -419,6 +782,22 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Training_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>UnlinkedOnboardingCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>UnlinkedOnboardingRecords</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding__c</objectType>
     </variables>
     <variables>
         <name>VendorProgramRecord</name>

@@ -30,7 +30,7 @@
     <actionCalls>
         <name>Get_Default_Vendor_Program</name>
         <label>Get Default Vendor Program</label>
-        <locationX>446</locationX>
+        <locationX>314</locationX>
         <locationY>1898</locationY>
         <actionName>OnboardingDefaultVendorProgramInvocable</actionName>
         <actionType>apex</actionType>
@@ -58,63 +58,136 @@
             <name>errorMessage</name>
         </outputParameters>
     </actionCalls>
-    <actionCalls>
-        <name>Queue_Opportunity_Create_Chain</name>
-        <label>Queue Opportunity Create Chain</label>
-        <locationX>578</locationX>
-        <locationY>2414</locationY>
-        <actionName>ExperienceOpportunityCreateAsyncService</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Did_Queue_Opportunity_Create_Chain_Fail</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>Capture_Queue_Opportunity_Create_Chain_Fault</targetReference>
-        </faultConnector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>AccountRecord</name>
-            <value>
-                <elementReference>AccountRecord</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>ContactsToCreateJSONString</name>
-            <value>
-                <elementReference>ContactsToCreateJSONString</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>OpportunityContactRecordsJSON</name>
-            <value>
-                <elementReference>OpportunityContactRecordsJSON</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>OpportunityRecord</name>
-            <value>
-                <elementReference>OpportunityRecord</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>ExperienceOpportunityCreateAsyncService</nameSegment>
-        <offset>0</offset>
-        <outputParameters>
-            <assignToReference>QueueChainMessage</assignToReference>
-            <name>message</name>
-        </outputParameters>
-        <outputParameters>
-            <assignToReference>QueueChainQueued</assignToReference>
-            <name>queued</name>
-        </outputParameters>
-    </actionCalls>
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Create_Contract_Error_From_Null_Output</name>
+        <label>Assign Create Contract Error From Null Output</label>
+        <locationX>1823</locationX>
+        <locationY>3692</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Contract creation failed because no contract record was returned.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Create_Contract_Error_From_Output</name>
+        <label>Assign Create Contract Error From Output</label>
+        <locationX>1559</locationX>
+        <locationY>3692</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CreateContractErrorMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Create_Onboarding_Error_From_Null_Output</name>
+        <label>Assign Create Onboarding Error From Null Output</label>
+        <locationX>2351</locationX>
+        <locationY>3908</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Onboarding creation failed because no onboarding record was returned.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Create_Onboarding_Error_From_Output</name>
+        <label>Assign Create Onboarding Error From Output</label>
+        <locationX>2087</locationX>
+        <locationY>3908</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CreateOnboardingErrorMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Create_Opportunity_Contact_Roles_Error</name>
+        <label>Assign Create Opportunity Contact Roles Error</label>
+        <locationX>1031</locationX>
+        <locationY>3260</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Opportunity contact role creation returned one or more errors.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Create_Opportunity_Error_From_Null_Output</name>
+        <label>Assign Create Opportunity Error From Null Output</label>
+        <locationX>767</locationX>
+        <locationY>2936</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Opportunity creation failed because no opportunity record was returned.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Create_Opportunity_Error_From_Output</name>
+        <label>Assign Create Opportunity Error From Output</label>
+        <locationX>503</locationX>
+        <locationY>2936</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CreateOpportunityErrorMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Get_Primary_Opportunity_Contact_Error</name>
+        <label>Assign Get Primary Opportunity Contact Error</label>
+        <locationX>1295</locationX>
+        <locationY>3476</locationY>
+        <assignmentItems>
+            <assignToReference>QueueChainMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>GetPrimaryOpportunityContactErrorMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
+        </connector>
+    </assignments>
     <assignments>
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_NDA_Program_Base_App</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - NDA/Program Base App</label>
@@ -299,8 +372,8 @@
     <assignments>
         <name>Capture_Get_Available_Vendors_Fault</name>
         <label>Capture Get Available Vendors Fault</label>
-        <locationX>578</locationX>
-        <locationY>566</locationY>
+        <locationX>3143</locationX>
+        <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
@@ -315,8 +388,8 @@
     <assignments>
         <name>Capture_Get_Default_Vendor_Program_Fault</name>
         <label>Capture Get Default Vendor Program Fault</label>
-        <locationX>446</locationX>
-        <locationY>1898</locationY>
+        <locationX>578</locationX>
+        <locationY>2006</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
@@ -329,26 +402,10 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Capture_Queue_Opportunity_Create_Chain_Fault</name>
-        <label>Capture Queue Opportunity Create Chain Fault</label>
-        <locationX>578</locationX>
-        <locationY>2414</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Handle_Queue_Opportunity_Create_Chain_Fault</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>Capture_Update_Account_Record_Fault</name>
         <label>Capture Update Account Record Fault</label>
-        <locationX>578</locationX>
-        <locationY>2090</locationY>
+        <locationX>2879</locationX>
+        <locationY>2612</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
@@ -449,10 +506,215 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Did_Create_Contract_Record_Fail</name>
+        <label>Did Create Contract Record Fail</label>
+        <locationX>1955</locationX>
+        <locationY>3584</locationY>
+        <defaultConnector>
+            <targetReference>Create_Onboarding_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Create_Contract_Output_Error</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CreateContractErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CreateContractErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_Contract_Error_From_Output</targetReference>
+            </connector>
+            <label>Create Contract Output Error</label>
+        </rules>
+        <rules>
+            <name>Contract_Record_Not_Created</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ContractRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_Contract_Error_From_Null_Output</targetReference>
+            </connector>
+            <label>Contract Record Not Created</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Create_Onboarding_Record_Fail</name>
+        <label>Did Create Onboarding Record Fail</label>
+        <locationX>2351</locationX>
+        <locationY>3800</locationY>
+        <defaultConnector>
+            <targetReference>Prompt_User_to_Refresh_Sceen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Created</defaultConnectorLabel>
+        <rules>
+            <name>Create_Onboarding_Output_Error</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CreateOnboardingErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CreateOnboardingErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_Onboarding_Error_From_Output</targetReference>
+            </connector>
+            <label>Create Onboarding Output Error</label>
+        </rules>
+        <rules>
+            <name>Onboarding_Record_Not_Created</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OnboardingRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_Onboarding_Error_From_Null_Output</targetReference>
+            </connector>
+            <label>Onboarding Record Not Created</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Create_Opportunity_Contact_Roles_Fail</name>
+        <label>Did Create Opportunity Contact Roles Fail</label>
+        <locationX>1328</locationX>
+        <locationY>3152</locationY>
+        <defaultConnector>
+            <targetReference>Get_Primary_Opportunity_Contact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Opportunity_Contact_Roles_Create_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OpportunityContactCreateErrorMessages</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OpportunityContactCreateErrorMessages</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_Opportunity_Contact_Roles_Error</targetReference>
+            </connector>
+            <label>Opportunity Contact Roles Create Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Create_Opportunity_Record_Fail</name>
+        <label>Did Create Opportunity Record Fail</label>
+        <locationX>916</locationX>
+        <locationY>2828</locationY>
+        <defaultConnector>
+            <targetReference>Experience_Create_Opportunity_Contacts</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Create_Opportunity_Output_Error</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CreateOpportunityErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>CreateOpportunityErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_Opportunity_Error_From_Output</targetReference>
+            </connector>
+            <label>Create Opportunity Output Error</label>
+        </rules>
+        <rules>
+            <name>Opportunity_Record_Not_Created</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OpportunityRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Create_Opportunity_Error_From_Null_Output</targetReference>
+            </connector>
+            <label>Opportunity Record Not Created</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Did_Get_Primary_Opportunity_Contact_Fail</name>
+        <label>Did Get Primary Opportunity Contact Fail</label>
+        <locationX>1625</locationX>
+        <locationY>3368</locationY>
+        <defaultConnector>
+            <targetReference>Create_Contract_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Get_Primary_Opportunity_Contact_Output_Error</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetPrimaryOpportunityContactErrorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>GetPrimaryOpportunityContactErrorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Get_Primary_Opportunity_Contact_Error</targetReference>
+            </connector>
+            <label>Get Primary Opportunity Contact Output Error</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Did_Get_Vendor_Program_Fail</name>
         <label>Did Get Vendor Program Fail</label>
         <locationX>578</locationX>
-        <locationY>1998</locationY>
+        <locationY>2396</locationY>
         <defaultConnector>
             <targetReference>Update_Account_Record</targetReference>
         </defaultConnector>
@@ -478,38 +740,6 @@
                 <targetReference>Handle_Get_Vendor_Program_Output_Error</targetReference>
             </connector>
             <label>Get Vendor Program Failed</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Did_Queue_Opportunity_Create_Chain_Fail</name>
-        <label>Did Queue Opportunity Create Chain Fail</label>
-        <locationX>578</locationX>
-        <locationY>2522</locationY>
-        <defaultConnector>
-            <targetReference>Prompt_User_to_Refresh_Sceen</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Queued</defaultConnectorLabel>
-        <rules>
-            <name>Queue_Opportunity_Create_Chain_Failed</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>QueueChainQueued</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>QueueChainQueued</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
-            </connector>
-            <label>Queue Opportunity Create Chain Failed</label>
         </rules>
     </decisions>
     <decisions>
@@ -662,7 +892,7 @@
   ISBLANK({!errorMessage}),
   IF(
     ISBLANK({!QueueChainMessage}),
-    &quot;The onboarding request could not be queued. Please contact your administrator.&quot;,
+    &quot;The onboarding request could not be completed. Please contact your administrator.&quot;,
     {!QueueChainMessage}
   ),
   {!errorMessage}
@@ -725,8 +955,8 @@
     <recordUpdates>
         <name>Update_Account_Record</name>
         <label>Update Account Record</label>
-        <locationX>578</locationX>
-        <locationY>2090</locationY>
+        <locationX>916</locationX>
+        <locationY>2504</locationY>
         <connector>
             <targetReference>Experience_Create_or_Update_Contacts</targetReference>
         </connector>
@@ -1954,14 +2184,14 @@
     <screens>
         <name>Prompt_User_to_Refresh_Sceen</name>
         <label>Prompt User to Refresh Sceen</label>
-        <locationX>578</locationX>
-        <locationY>2522</locationY>
+        <locationX>2615</locationX>
+        <locationY>3908</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <fields>
             <name>ScreenFlowDisplayHeader</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 22px;&quot;&gt;Your onboarding creation request has been queued. Click &lt;/span&gt;&lt;strong style=&quot;font-size: 22px;&quot;&gt;&lt;u&gt;FINISH&lt;/u&gt;&lt;/strong&gt;&lt;span style=&quot;font-size: 22px;&quot;&gt; to return to the account while processing completes in the background.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;font-size: 22px;&quot;&gt;Your onboarding request has been completed. Click &lt;/span&gt;&lt;strong style=&quot;font-size: 22px;&quot;&gt;&lt;u&gt;FINISH&lt;/u&gt;&lt;/strong&gt;&lt;span style=&quot;font-size: 22px;&quot;&gt; to refresh the account and review the created records.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -2012,8 +2242,8 @@
     <screens>
         <name>Prompt_User_to_Review_Error</name>
         <label>Prompt User to Review Error</label>
-        <locationX>842</locationX>
-        <locationY>2522</locationY>
+        <locationX>578</locationX>
+        <locationY>4736</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -2075,6 +2305,146 @@
         </connector>
     </start>
     <status>Active</status>
+    <subflows>
+        <name>Create_Contract_Record</name>
+        <label>Create Contract Record</label>
+        <locationX>1955</locationX>
+        <locationY>3476</locationY>
+        <connector>
+            <targetReference>Did_Create_Contract_Record_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Contract</flowName>
+        <inputAssignments>
+            <name>AccountRecord</name>
+            <value>
+                <elementReference>AccountRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OpportunityRecord</name>
+            <value>
+                <elementReference>OpportunityRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OpportunityContactRole</name>
+            <value>
+                <elementReference>PrimaryOpportunityContactRole</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgram</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>ContractRecord</assignToReference>
+            <name>ContractRecord</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>CreateContractErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Create_Onboarding_Record</name>
+        <label>Create Onboarding Record</label>
+        <locationX>2351</locationX>
+        <locationY>3692</locationY>
+        <connector>
+            <targetReference>Did_Create_Onboarding_Record_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</flowName>
+        <inputAssignments>
+            <name>ContractRecord</name>
+            <value>
+                <elementReference>ContractRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OpportunityRecord</name>
+            <value>
+                <elementReference>OpportunityRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>AccountRecord</name>
+            <value>
+                <elementReference>AccountRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>CreateOnboardingErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>OnboardingRecord</assignToReference>
+            <name>OnboardingRecord</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Create_Opportunity_Contact_Roles</name>
+        <label>Create Opportunity Contact Roles</label>
+        <locationX>1328</locationX>
+        <locationY>3044</locationY>
+        <connector>
+            <targetReference>Did_Create_Opportunity_Contact_Roles_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Opportunity_Contact_Role</flowName>
+        <inputAssignments>
+            <name>opportunityContactRecordsJSON</name>
+            <value>
+                <elementReference>OpportunityContactRecordsJSON</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>OpportunityContactCreateErrorMessages</assignToReference>
+            <name>CreateRecordsErrorMessages</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Create_Opportunity_Record</name>
+        <label>Create Opportunity Record</label>
+        <locationX>916</locationX>
+        <locationY>2720</locationY>
+        <connector>
+            <targetReference>Did_Create_Opportunity_Record_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Opportunity</flowName>
+        <inputAssignments>
+            <name>AccountRecord</name>
+            <value>
+                <elementReference>AccountRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OpportunityRecord</name>
+            <value>
+                <elementReference>OpportunityRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>CreateOpportunityErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>OpportunityRecord</assignToReference>
+            <name>OpportunityRecord</name>
+        </outputAssignments>
+    </subflows>
     <subflows>
         <name>Evaluate_OnboardingOrchestrator</name>
         <label>Evaluate Onboarding Orchestrator</label>
@@ -2144,10 +2514,10 @@
     <subflows>
         <name>Experience_Create_Opportunity_Contacts</name>
         <label>Experience - Create Opportunity Contacts</label>
-        <locationX>578</locationX>
-        <locationY>2306</locationY>
+        <locationX>1328</locationX>
+        <locationY>2936</locationY>
         <connector>
-            <targetReference>Queue_Opportunity_Create_Chain</targetReference>
+            <targetReference>Create_Opportunity_Contact_Roles</targetReference>
         </connector>
         <flowName>EXP_Opportunity_Contacts_SCR_CREATE_Opportunity_Contacts</flowName>
         <inputAssignments>
@@ -2186,10 +2556,10 @@
     <subflows>
         <name>Experience_Create_or_Update_Contacts</name>
         <label>Experience - Create or Update Contacts</label>
-        <locationX>578</locationX>
-        <locationY>2198</locationY>
+        <locationX>916</locationX>
+        <locationY>2612</locationY>
         <connector>
-            <targetReference>Experience_Create_Opportunity_Contacts</targetReference>
+            <targetReference>Create_Opportunity_Record</targetReference>
         </connector>
         <flowName>EXP_Contact_SCR_Create_Contact</flowName>
         <inputAssignments>
@@ -2270,9 +2640,33 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <name>Get_Primary_Opportunity_Contact</name>
+        <label>Get Primary Opportunity Contact</label>
+        <locationX>1625</locationX>
+        <locationY>3260</locationY>
+        <connector>
+            <targetReference>Did_Get_Primary_Opportunity_Contact_Fail</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Primary_Opportunity_Contact</flowName>
+        <inputAssignments>
+            <name>OpportunityRecord</name>
+            <value>
+                <elementReference>OpportunityRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>GetPrimaryOpportunityContactErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>PrimaryOpportunityContactRole</assignToReference>
+            <name>OpportunityContactRecord</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Get_Vendor_Program</name>
         <label>Get Vendor Program</label>
-        <locationX>710</locationX>
+        <locationX>842</locationX>
         <locationY>1898</locationY>
         <connector>
             <targetReference>Did_Get_Vendor_Program_Fail</targetReference>
@@ -2308,9 +2702,10 @@
     <subflows>
         <name>Handle_Get_Available_Vendors_Fault</name>
         <label>Handle Get Available Vendors Fault</label>
-        <locationX>578</locationX>
-        <locationY>566</locationY>
+        <locationX>3143</locationX>
+        <locationY>782</locationY>
         <connector>
+            <isGoTo>true</isGoTo>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
@@ -2377,7 +2772,7 @@
         <inputAssignments>
             <name>UserFacingMessageOverride</name>
             <value>
-                <stringValue>We couldn't load available vendor options. Please try again or contact support.</stringValue>
+                <stringValue>We couldn&apos;t load available vendor options. Please try again or contact support.</stringValue>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -2388,9 +2783,10 @@
     <subflows>
         <name>Handle_Get_Default_Vendor_Program_Fault</name>
         <label>Handle Get Default Vendor Program Fault</label>
-        <locationX>446</locationX>
-        <locationY>1898</locationY>
+        <locationX>578</locationX>
+        <locationY>2114</locationY>
         <connector>
+            <isGoTo>true</isGoTo>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
@@ -2457,7 +2853,7 @@
         <inputAssignments>
             <name>UserFacingMessageOverride</name>
             <value>
-                <stringValue>We couldn't resolve the default vendor program. Please review your selection and try again.</stringValue>
+                <stringValue>We couldn&apos;t resolve the default vendor program. Please review your selection and try again.</stringValue>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -2468,8 +2864,8 @@
     <subflows>
         <name>Handle_Get_Vendor_Program_Output_Error</name>
         <label>Handle Get Vendor Program Output Error</label>
-        <locationX>578</locationX>
-        <locationY>1998</locationY>
+        <locationX>239</locationX>
+        <locationY>2504</locationY>
         <connector>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
         </connector>
@@ -2537,87 +2933,7 @@
         <inputAssignments>
             <name>UserFacingMessageOverride</name>
             <value>
-                <stringValue>We couldn't resolve the selected vendor program. Please try again.</stringValue>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>UserFacingMessage</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>Handle_Queue_Opportunity_Create_Chain_Fault</name>
-        <label>Handle Queue Opportunity Create Chain Fault</label>
-        <locationX>578</locationX>
-        <locationY>2414</locationY>
-        <connector>
-            <targetReference>Prompt_User_to_Review_Error</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
-        <inputAssignments>
-            <name>ContextKey</name>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>DefaultErrorMessage</name>
-            <value>
-                <stringValue>Async onboarding create queue execution failed.</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>FaultMessage</name>
-            <value>
-                <elementReference>errorMessage</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>FollowUpType</name>
-            <value>
-                <stringValue>In-App</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>InitialStatus</name>
-            <value>
-                <stringValue>Failed</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>LogWithoutOnboarding</name>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>SourceElementApiName</name>
-            <value>
-                <stringValue>Queue_Opportunity_Create_Chain</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>SourceElementLabel</name>
-            <value>
-                <stringValue>Queue Opportunity Create Chain</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>SourceFlowApiName</name>
-            <value>
-                <stringValue>EXP_Opportunity_SCR_Create_Record</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>InterviewGuid</name>
-            <value>
-                <elementReference>$Flow.InterviewGuid</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>UserFacingMessageOverride</name>
-            <value>
-                <stringValue>We couldn't queue the onboarding request. Please try again or contact support.</stringValue>
+                <stringValue>We couldn&apos;t resolve the selected vendor program. Please try again.</stringValue>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -2627,9 +2943,9 @@
     </subflows>
     <subflows>
         <name>Handle_Queue_Opportunity_Create_Chain_Output_Error</name>
-        <label>Handle Queue Opportunity Create Chain Output Error</label>
-        <locationX>578</locationX>
-        <locationY>2522</locationY>
+        <label>Handle Opportunity Create Chain Output Error</label>
+        <locationX>916</locationX>
+        <locationY>4544</locationY>
         <connector>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
         </connector>
@@ -2643,7 +2959,7 @@
         <inputAssignments>
             <name>DefaultErrorMessage</name>
             <value>
-                <stringValue>Async onboarding create queue request failed.</stringValue>
+                <stringValue>Opportunity create chain output validation failed.</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -2673,13 +2989,13 @@
         <inputAssignments>
             <name>SourceElementApiName</name>
             <value>
-                <stringValue>Queue_Opportunity_Create_Chain</stringValue>
+                <stringValue>Create_Opportunity_Chain</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
             <name>SourceElementLabel</name>
             <value>
-                <stringValue>Queue Opportunity Create Chain Output</stringValue>
+                <stringValue>Create Opportunity Chain Output</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -2697,7 +3013,7 @@
         <inputAssignments>
             <name>UserFacingMessageOverride</name>
             <value>
-                <stringValue>The onboarding request could not be accepted for processing. Please try again.</stringValue>
+                <stringValue>The onboarding request could not be completed. Please try again.</stringValue>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -2708,9 +3024,10 @@
     <subflows>
         <name>Handle_Update_Account_Record_Fault</name>
         <label>Handle Update Account Record Fault</label>
-        <locationX>578</locationX>
-        <locationY>2090</locationY>
+        <locationX>2879</locationX>
+        <locationY>2720</locationY>
         <connector>
+            <isGoTo>true</isGoTo>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
@@ -2723,7 +3040,7 @@
         <inputAssignments>
             <name>DefaultErrorMessage</name>
             <value>
-                <stringValue>Account update failed before queueing onboarding creation.</stringValue>
+                <stringValue>Account update failed before creating onboarding records.</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -2777,7 +3094,7 @@
         <inputAssignments>
             <name>UserFacingMessageOverride</name>
             <value>
-                <stringValue>We couldn't save account updates needed for onboarding. Please review and retry.</stringValue>
+                <stringValue>We couldn&apos;t save account updates needed for onboarding. Please review and retry.</stringValue>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -2831,6 +3148,35 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>ContractRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contract</objectType>
+    </variables>
+    <variables>
+        <name>CreateContractErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CreateOnboardingErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CreateOpportunityErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>currentItem_CompletedProgramDealerNDA</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -2855,6 +3201,13 @@
     </variables>
     <variables>
         <name>FinalNextAction</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>GetPrimaryOpportunityContactErrorMessage</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -2899,6 +3252,21 @@
         </value>
     </variables>
     <variables>
+        <name>OnboardingRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding__c</objectType>
+    </variables>
+    <variables>
+        <name>OpportunityContactCreateErrorMessages</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>OpportunityContactRecordsJSON</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -2929,6 +3297,14 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>PrimaryOpportunityContactRole</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>OpportunityContactRole</objectType>
+    </variables>
+    <variables>
         <name>ProgramDealerComplete</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
@@ -2941,13 +3317,6 @@
     <variables>
         <name>QueueChainMessage</name>
         <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>QueueChainQueued</name>
-        <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>

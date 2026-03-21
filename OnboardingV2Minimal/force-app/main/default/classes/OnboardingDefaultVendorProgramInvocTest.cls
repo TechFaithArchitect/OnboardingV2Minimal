@@ -30,6 +30,11 @@ private class OnboardingDefaultVendorProgramInvocTest {
     OnboardingDefaultVendorProgramInvocable.VendorProgramResult r = results[0];
     System.assertNotEquals(null, r.vendorProgramRecord, 'Expected configured vendor program match');
     System.assertEquals(vc.Id, r.vendorProgramRecord.Id, 'Should return the configured vendor program');
+    System.assertEquals(
+      null,
+      r.vendorProgramRecord.Contract_Record_Type__c,
+      'Invocable must hydrate Contract_Record_Type__c (null in test data is expected, missing-query exception is not).'
+    );
     System.assert(String.isBlank(r.errorMessage), 'No error when program found');
   }
 

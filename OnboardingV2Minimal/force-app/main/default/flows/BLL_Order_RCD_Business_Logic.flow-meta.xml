@@ -133,6 +133,7 @@
         <connector>
             <targetReference>Get_Onboarding_Records</targetReference>
         </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Status</field>
@@ -143,7 +144,6 @@
         </filters>
         <object>Order</object>
         <recordTriggerType>Update</recordTriggerType>
-        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>

@@ -13,6 +13,28 @@
         </customErrorMessages>
     </customErrors>
     <decisions>
+        <name>Decide_If_Duplicate_Exists</name>
+        <label>Decide If Duplicate Exists</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Duplicate Found</defaultConnectorLabel>
+        <rules>
+            <name>Duplicate_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_Onboarding_By_Contract_Vendor.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Reject_Duplicate_Onboarding</targetReference>
+            </connector>
+            <label>Duplicate Found</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Should_Check_Duplicate</name>
         <label>Should Check Duplicate</label>
         <locationX>0</locationX>
@@ -60,28 +82,6 @@
                 <targetReference>Get_Existing_Onboarding_By_Contract_Vendor</targetReference>
             </connector>
             <label>Create Or Key Changed</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Decide_If_Duplicate_Exists</name>
-        <label>Decide If Duplicate Exists</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>No Duplicate Found</defaultConnectorLabel>
-        <rules>
-            <name>Duplicate_Found</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Existing_Onboarding_By_Contract_Vendor.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Reject_Duplicate_Onboarding</targetReference>
-            </connector>
-            <label>Duplicate Found</label>
         </rules>
     </decisions>
     <description>Business Logic Layer - Onboarding - Record Trigger - Prevent Duplicates by Contract and Vendor Program</description>

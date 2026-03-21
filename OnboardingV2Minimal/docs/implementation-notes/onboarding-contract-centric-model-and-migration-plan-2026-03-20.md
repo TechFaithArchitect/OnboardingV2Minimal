@@ -69,6 +69,12 @@ Keep easy Agreement access:
   - New before-save flow `BLL_Onboarding_RCD_Prevent_Duplicates` now blocks exact duplicate onboarding rows for the same `Contract__c` + `Vendor_Customization__c`.
   - Deployment reference for step 2/3 controls: `0AfRL00000dSzWj0AK`.
   - Async-path variant was evaluated but blocked by Salesforce record-triggered scheduled-path constraints for this `CreateAndUpdate` flow shape without narrowing entry criteria.
+- Phase 2 follow-up (contract-first runtime owner) completed and deployed:
+  - Active screen flow `EXP_Opportunity_SCR_Create_Record` now orchestrates `Opportunity -> OpportunityContactRole -> Contract -> Onboarding` synchronously in Flow using existing `DOMAIN_OmniSObject_*` subflows (no Apex chain invocation on this path).
+  - `BLL_Opportunity_RCD_Logical_Process` no longer creates onboarding from opportunity create (prevents opportunity-centric fallback ownership).
+  - `DOMAIN_OmniSObject_SFL_CREATE_Contract` now returns existing contract output on non-create branch and scopes lookup to `Opportunity_to_Contract__c`.
+  - `DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records` now skips contract creation when onboarding already has `Contract__c`, preventing duplicate draft contracts.
+  - Deployment references: `0AfRL00000dT5vV0AS` (sequencing baseline), `0AfRL00000dT1QV0A0` (primary OCR fallback in contract flow), `0AfRL00000dT3k20AC` (Apex chain synchronous default), `0AfRL00000dSy4S0AS` (Apex action removed from active flow path and replaced with direct synchronous subflow chain).
 - Remaining: Phase 3 legacy migration/backfill.
 
 ## Phase 1 - Routing Safety (No Data Migration Yet)

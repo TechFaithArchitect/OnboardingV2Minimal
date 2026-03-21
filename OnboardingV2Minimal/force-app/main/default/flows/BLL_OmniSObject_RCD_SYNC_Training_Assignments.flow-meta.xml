@@ -126,49 +126,6 @@
         </connector>
     </assignments>
     <decisions>
-        <name>Should_Process_Training_Assignment_Change</name>
-        <label>Should Process Training Assignment Change</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>No Relevant Change</defaultConnectorLabel>
-        <rules>
-            <name>Create_Or_Relevant_Field_Change</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record__Prior.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Status__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Contact__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Onboarding__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Get_Onboarding_Records</targetReference>
-            </connector>
-            <label>Create Or Relevant Field Change</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Did_Evaluate_Changed_Onboarding_Requirement_Fail</name>
         <label>Did Evaluate Changed Onboarding Requirement Fail</label>
         <locationX>0</locationX>
@@ -482,6 +439,49 @@
             <label>Evaluate Account Subjects For Single Onboarding</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Should_Process_Training_Assignment_Change</name>
+        <label>Should Process Training Assignment Change</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Relevant Change</defaultConnectorLabel>
+        <rules>
+            <name>Create_Or_Relevant_Field_Change</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Contact__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Onboarding__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Onboarding_Records</targetReference>
+            </connector>
+            <label>Create Or Relevant Field Change</label>
+        </rules>
+    </decisions>
     <description>Business Logic Layer - OmniSObject - Record Trigger - SYNC - Training Assignments</description>
     <environments>Default</environments>
     <interviewLabel>BLL - OmniSObject - RCD - Sync Training Assignments {!$Flow.CurrentDateTime}</interviewLabel>
@@ -726,7 +726,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -797,7 +796,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -868,7 +866,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -939,7 +936,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -1007,7 +1003,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>
@@ -1078,7 +1073,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-
         <inputAssignments>
             <name>SourceFlowApiName</name>
             <value>

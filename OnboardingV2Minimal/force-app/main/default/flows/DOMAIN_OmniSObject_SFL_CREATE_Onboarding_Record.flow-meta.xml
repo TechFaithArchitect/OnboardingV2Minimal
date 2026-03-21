@@ -73,7 +73,7 @@
             <assignToReference>OnboardingRecord.Account__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>OpportunityRecord.AccountId</elementReference>
+                <elementReference>ContractRecord.AccountId</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -418,7 +418,7 @@
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>OpportunityRecord.AccountId</leftValueReference>
+                <leftValueReference>OpportunityRecord.Id</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -516,7 +516,7 @@
         <inputAssignments>
             <field>Account__c</field>
             <value>
-                <elementReference>OpportunityRecord.AccountId</elementReference>
+                <elementReference>AccountRecord.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -529,12 +529,6 @@
             <field>Contract__c</field>
             <value>
                 <elementReference>ContractRecord.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Opportunity__c</field>
-            <value>
-                <elementReference>ResolvedOpportunityId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -705,6 +699,14 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>AccountRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Account</objectType>
+    </variables>
     <variables>
         <name>AgreementRecord</name>
         <dataType>SObject</dataType>

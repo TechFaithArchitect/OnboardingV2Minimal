@@ -236,6 +236,31 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Did_Resolve_RecordType_Id</name>
+        <label>Did Resolve RecordType Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Missing_RecordType_Mapping_Error</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Resolved</defaultConnectorLabel>
+        <rules>
+            <name>Resolved</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Resolved_Onboarding_Requirement_RecordType_Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
+            </connector>
+            <label>Resolved</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Does_RecordType_DeveloperName_Match_Requirement</name>
         <label>Does RecordType DeveloperName Match Requirement</label>
         <locationX>0</locationX>
@@ -290,31 +315,6 @@
                 <targetReference>Fail_Fast_Missing_RecordType_Mapping</targetReference>
             </connector>
             <label>Missing Mapping Detected</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Did_Resolve_RecordType_Id</name>
-        <label>Did Resolve RecordType Id</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Assign_Missing_RecordType_Mapping_Error</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Not Resolved</defaultConnectorLabel>
-        <rules>
-            <name>Resolved</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Resolved_Onboarding_Requirement_RecordType_Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_Variables_to_Onboarding_Requirement_Record</targetReference>
-            </connector>
-            <label>Resolved</label>
         </rules>
     </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements</description>

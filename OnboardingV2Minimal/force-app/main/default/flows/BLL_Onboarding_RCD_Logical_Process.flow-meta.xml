@@ -3,6 +3,22 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Capture_Align_Onboarding_Opportunity_Fault</name>
+        <label>Capture Align Onboarding Opportunity Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Handle_Align_Onboarding_Opportunity_Fault</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Set_Execution_Path_Communication_Update</name>
         <label>Set Execution Path Communication Update</label>
         <locationX>0</locationX>
@@ -32,22 +48,6 @@
         </assignmentItems>
         <connector>
             <targetReference>Get_Vendor_Program</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Capture_Align_Onboarding_Opportunity_Fault</name>
-        <label>Capture Align Onboarding Opportunity Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Handle_Align_Onboarding_Opportunity_Fault</targetReference>
         </connector>
     </assignments>
     <decisions>
@@ -176,6 +176,38 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Did_Get_Contract_Record_For_Alignment_Fail</name>
+        <label>Did Get Contract Record For Alignment Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Should_Align_Onboarding_Opportunity_From_Contract</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
+        <rules>
+            <name>Get_Contract_Record_For_Alignment_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Get_Contract_Record_For_Alignment_Fault</targetReference>
+            </connector>
+            <label>Get Contract Record For Alignment Failed</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Route_After_Vendor_Program</name>
         <label>Route After Vendor Program</label>
         <locationX>0</locationX>
@@ -210,6 +242,50 @@
                 <targetReference>Determine_Send_Training</targetReference>
             </connector>
             <label>Communication Update Path</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_Align_Onboarding_Opportunity_From_Contract</name>
+        <label>Should Align Onboarding Opportunity From Contract</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No Action Needed</defaultConnectorLabel>
+        <rules>
+            <name>Contract_Opportunity_Missing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ContractRecord.Opportunity_to_Contract__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Handle_Contract_Opportunity_Missing</targetReference>
+            </connector>
+            <label>Contract Opportunity Missing</label>
+        </rules>
+        <rules>
+            <name>Opportunity_Mismatch</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ContractRecord.Opportunity_to_Contract__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Opportunity__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>ContractRecord.Opportunity_to_Contract__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Align_Onboarding_Opportunity</targetReference>
+            </connector>
+            <label>Opportunity Mismatch</label>
         </rules>
     </decisions>
     <decisions>
@@ -303,82 +379,6 @@
                 <targetReference>Get_Contract_Record_For_Alignment</targetReference>
             </connector>
             <label>Contract Is Present And Context Changed</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Did_Get_Contract_Record_For_Alignment_Fail</name>
-        <label>Did Get Contract Record For Alignment Fail</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Should_Align_Onboarding_Opportunity_From_Contract</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No Fault</defaultConnectorLabel>
-        <rules>
-            <name>Get_Contract_Record_For_Alignment_Failed</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>errorMessage</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>errorMessage</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue></stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Handle_Get_Contract_Record_For_Alignment_Fault</targetReference>
-            </connector>
-            <label>Get Contract Record For Alignment Failed</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Should_Align_Onboarding_Opportunity_From_Contract</name>
-        <label>Should Align Onboarding Opportunity From Contract</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnectorLabel>No Action Needed</defaultConnectorLabel>
-        <rules>
-            <name>Contract_Opportunity_Missing</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ContractRecord.Opportunity_to_Contract__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Handle_Contract_Opportunity_Missing</targetReference>
-            </connector>
-            <label>Contract Opportunity Missing</label>
-        </rules>
-        <rules>
-            <name>Opportunity_Mismatch</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ContractRecord.Opportunity_to_Contract__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Opportunity__c</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <elementReference>ContractRecord.Opportunity_to_Contract__c</elementReference>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Align_Onboarding_Opportunity</targetReference>
-            </connector>
-            <label>Opportunity Mismatch</label>
         </rules>
     </decisions>
     <description>Business Logic Layer - Onboarding - RCD - Logical Process</description>
@@ -606,8 +606,56 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <name>Handle_Get_Contract_Record_For_Alignment_Fault</name>
-        <label>Handle Get Contract Record For Alignment Fault</label>
+        <name>Get_Vendor_Program</name>
+        <label>Get Vendor Program</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Route_After_Vendor_Program</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Vendor_Program</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>VendorProgramRecord</assignToReference>
+            <name>VendorProgramRecord</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Get_Vendor_Program_Requirements</name>
+        <label>Get Vendor Program Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Onboarding_Requirements</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_GET_Vendor_Program_Requirements</flowName>
+        <inputAssignments>
+            <name>VendorProgramRecord</name>
+            <value>
+                <elementReference>VendorProgramRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>VendorProgramRequirementRecordCollection</assignToReference>
+            <name>VPRCollection</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Align_Onboarding_Opportunity_Fault</name>
+        <label>Handle Align Onboarding Opportunity Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
@@ -620,7 +668,7 @@
         <inputAssignments>
             <name>DefaultErrorMessage</name>
             <value>
-                <stringValue>Onboarding contract lookup for opportunity alignment failed.</stringValue>
+                <stringValue>Onboarding opportunity alignment update failed.</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -638,13 +686,13 @@
         <inputAssignments>
             <name>SourceElementApiName</name>
             <value>
-                <stringValue>Get_Contract_Record_For_Alignment</stringValue>
+                <stringValue>Align_Onboarding_Opportunity</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
             <name>SourceElementLabel</name>
             <value>
-                <stringValue>Get_Contract_Record_For_Alignment</stringValue>
+                <stringValue>Align_Onboarding_Opportunity</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -716,8 +764,8 @@
         </inputAssignments>
     </subflows>
     <subflows>
-        <name>Handle_Align_Onboarding_Opportunity_Fault</name>
-        <label>Handle Align Onboarding Opportunity Fault</label>
+        <name>Handle_Get_Contract_Record_For_Alignment_Fault</name>
+        <label>Handle Get Contract Record For Alignment Fault</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
@@ -730,7 +778,7 @@
         <inputAssignments>
             <name>DefaultErrorMessage</name>
             <value>
-                <stringValue>Onboarding opportunity alignment update failed.</stringValue>
+                <stringValue>Onboarding contract lookup for opportunity alignment failed.</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -748,13 +796,13 @@
         <inputAssignments>
             <name>SourceElementApiName</name>
             <value>
-                <stringValue>Align_Onboarding_Opportunity</stringValue>
+                <stringValue>Get_Contract_Record_For_Alignment</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
             <name>SourceElementLabel</name>
             <value>
-                <stringValue>Align_Onboarding_Opportunity</stringValue>
+                <stringValue>Get_Contract_Record_For_Alignment</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -769,54 +817,6 @@
                 <elementReference>$Flow.InterviewGuid</elementReference>
             </value>
         </inputAssignments>
-    </subflows>
-    <subflows>
-        <name>Get_Vendor_Program</name>
-        <label>Get Vendor Program</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Route_After_Vendor_Program</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Vendor_Program</flowName>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>$Record</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>VendorProgramRecord</assignToReference>
-            <name>VendorProgramRecord</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>Get_Vendor_Program_Requirements</name>
-        <label>Get Vendor Program Requirements</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Create_Onboarding_Requirements</targetReference>
-        </connector>
-        <flowName>DOMAIN_OmniSObject_SFL_GET_Vendor_Program_Requirements</flowName>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>errorMessage</assignToReference>
-            <name>errorMessage</name>
-        </outputAssignments>
-        <outputAssignments>
-            <assignToReference>VendorProgramRequirementRecordCollection</assignToReference>
-            <name>VPRCollection</name>
-        </outputAssignments>
     </subflows>
     <variables>
         <name>BREDispatchAllowedOnboardingCreated</name>
@@ -840,6 +840,14 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>ContractRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contract</objectType>
+    </variables>
+    <variables>
         <name>errorMessage</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -852,14 +860,6 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>ContractRecord</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>Contract</objectType>
     </variables>
     <variables>
         <name>VendorProgramRecord</name>

@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Create_Group_Membership_in_LearnUpon</name>
+        <label>Create Group Membership in LearnUpon</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <actionName>LearnUponP__learnUponNewGroupAssignmentHelper</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Update_Onboarding_Record</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Capture_Create_Group_Membership_Fault</targetReference>
+        </faultConnector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>group_id</name>
+            <value>
+                <elementReference>TrainingCode</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>learnupon_portal</name>
+            <value>
+                <stringValue>testingperfectvision</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>user_id</name>
+            <value>
+                <elementReference>ContactRecord.LearnUponP__LU_User_ID__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>LearnUponP__learnUponNewGroupAssignmentHelper</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Capture_Create_Group_Membership_Fault</name>
         <label>Capture Create Group Membership Fault</label>
@@ -26,43 +63,6 @@
             </value>
         </assignmentItems>
     </assignments>
-    <actionCalls>
-        <name>Create_Group_Membership_in_LearnUpon</name>
-        <label>Create Group Membership in LearnUpon</label>
-        <locationX>50</locationX>
-        <locationY>350</locationY>
-        <actionName>LearnUponP__learnUponNewGroupAssignmentHelper</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>Update_Onboarding_Record</targetReference>
-        </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
-        <inputParameters>
-            <name>group_id</name>
-            <value>
-                <elementReference>TrainingCode</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>learnupon_portal</name>
-            <value>
-                <stringValue>testingperfectvision</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>user_id</name>
-            <value>
-                <elementReference>ContactRecord.LearnUponP__LU_User_ID__c</elementReference>
-            </value>
-        </inputParameters>
-        <faultConnector>
-            <targetReference>Capture_Create_Group_Membership_Fault</targetReference>
-        </faultConnector>
-        <nameSegment>LearnUponP__learnUponNewGroupAssignmentHelper</nameSegment>
-        <offset>0</offset>
-    </actionCalls>
-    <apiVersion>63.0</apiVersion>
-    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <decisions>
         <name>LearnUpon_User_Id_Available</name>
         <label>LearnUpon User Id Available</label>

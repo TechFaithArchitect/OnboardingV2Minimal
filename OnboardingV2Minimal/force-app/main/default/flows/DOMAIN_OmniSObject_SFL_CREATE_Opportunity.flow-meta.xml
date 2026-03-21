@@ -3,32 +3,6 @@
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Capture_Create_Opportunity_Fault</name>
-        <label>Capture Create Opportunity Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Capture_Update_Opportunity_Fault</name>
-        <label>Capture Update Opportunity Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>Add_Changed_Opportunity_to_OpportunityRecordCollectionToUpdate</name>
         <label>Add Changed Opportunity to OpportunityRecordCollectionToUpdate</label>
         <locationX>3086</locationX>
@@ -76,6 +50,32 @@
             <isGoTo>true</isGoTo>
             <targetReference>Add_Opportunity_Record_to_OpportunityRecordCollectionToUpdate</targetReference>
         </connector>
+    </assignments>
+    <assignments>
+        <name>Capture_Create_Opportunity_Fault</name>
+        <label>Capture Create Opportunity Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Capture_Update_Opportunity_Fault</name>
+        <label>Capture Update Opportunity Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
     </assignments>
     <collectionProcessors>
         <name>Filter_Opportunity_Records</name>

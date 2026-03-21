@@ -1,4 +1,6 @@
 public with sharing class ExperienceOpportunityCreateAsyncService {
+    private class FlowOutputException extends Exception {}
+
     public class QueueRequest {
         @InvocableVariable(required=true label='Account Record')
         public Account AccountRecord;
@@ -29,7 +31,7 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
 
     @InvocableMethod(
         label='Queue Opportunity Create Chain'
-        description='Queues post-screen processing for Contact, Opportunity, and Opportunity Contact Role creation using existing DOMAIN flows.'
+        description='Runs the post-screen Opportunity/OCR/Contract/Onboarding create chain synchronously by default; optional async queueing remains available when CreateContactsInQueue is true.'
     )
     public static List<QueueResult> queueOpportunityCreateChain(List<QueueRequest> requests) {
         List<QueueResult> results = new List<QueueResult>();
@@ -53,19 +55,38 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
                 continue;
             }
 
-            Id jobId = System.enqueueJob(
-                new OpportunityCreateChainQueueable(
+            if (requestItem.CreateContactsInQueue == true) {
+                Id jobId = System.enqueueJob(
+                    new OpportunityCreateChainQueueable(
+                        cloneAccount(requestItem.AccountRecord),
+                        cloneOpportunity(requestItem.OpportunityRecord),
+                        cloneVendorProgram(requestItem.VendorProgramRecord),
+                        requestItem.ContactsToCreateJSONString,
+                        requestItem.OpportunityContactRecordsJSON,
+                        requestItem.CreateContactsInQueue
+                    )
+                );
+
+                resultItem.queued = true;
+                resultItem.message = 'Queued async create chain job: ' + String.valueOf(jobId);
+            } else {
+                List<String> stageErrors = executeCreateChain(
                     cloneAccount(requestItem.AccountRecord),
                     cloneOpportunity(requestItem.OpportunityRecord),
                     cloneVendorProgram(requestItem.VendorProgramRecord),
                     requestItem.ContactsToCreateJSONString,
                     requestItem.OpportunityContactRecordsJSON,
                     requestItem.CreateContactsInQueue
-                )
-            );
+                );
 
-            resultItem.queued = true;
-            resultItem.message = 'Queued async create chain job: ' + String.valueOf(jobId);
+                if (stageErrors.isEmpty()) {
+                    resultItem.queued = true;
+                    resultItem.message = 'Create chain completed synchronously.';
+                } else {
+                    resultItem.queued = false;
+                    resultItem.message = 'Create chain failed: ' + String.join(stageErrors, ' | ');
+                }
+            }
             results.add(resultItem);
         }
 
@@ -115,49 +136,20 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
                 + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id)
             );
 
-            List<String> stageErrors = new List<String>();
-            Opportunity createdOpportunity;
-
-            if (createContactsInQueue == true && String.isNotBlank(contactsToCreateJson)) {
-                try {
-                    runCreateContactFlow(contactsToCreateJson);
-                } catch (Exception ex) {
-                    stageErrors.add('Contact create failed: ' + summarizeException(ex));
-                }
-            }
-
-            try {
-                createdOpportunity = runCreateOpportunityFlow(
-                    accountRecord,
-                    opportunityRecord,
-                    vendorProgramRecord
-                );
-                if (createdOpportunity == null || createdOpportunity.Id == null) {
-                    stageErrors.add('Opportunity create returned no OpportunityRecord.Id.');
-                }
-            } catch (Exception ex) {
-                stageErrors.add('Opportunity create failed: ' + summarizeException(ex));
-            }
-
-            if (
-                createdOpportunity != null &&
-                createdOpportunity.Id != null &&
-                String.isNotBlank(opportunityContactsJson)
-            ) {
-                try {
-                    runCreateOpportunityContactRoleFlow(
-                        applyOpportunityId(opportunityContactsJson, createdOpportunity.Id)
-                    );
-                } catch (Exception ex) {
-                    stageErrors.add('Opportunity contact role create failed: ' + summarizeException(ex));
-                }
-            }
+            List<String> stageErrors = executeCreateChain(
+                accountRecord,
+                opportunityRecord,
+                vendorProgramRecord,
+                contactsToCreateJson,
+                opportunityContactsJson,
+                createContactsInQueue
+            );
 
             if (!stageErrors.isEmpty()) {
                 AsyncFailureTelemetryFinalizer.logHandledFailure(
                     'ExperienceOpportunityCreateAsyncService.OpportunityCreateChainQueueable',
                     'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
-                    + ', OpportunityId=' + String.valueOf(createdOpportunity == null ? null : createdOpportunity.Id),
+                    + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id),
                     null,
                     'Queue execution completed with handled stage errors: ' + String.join(stageErrors, ' | ')
                 );
@@ -171,6 +163,118 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
             return 'Unknown exception.';
         }
         return ex.getTypeName() + ': ' + ex.getMessage();
+    }
+
+    @TestVisible
+    private static List<String> executeCreateChain(
+        Account accountRecord,
+        Opportunity opportunityRecord,
+        Vendor_Customization__c vendorProgramRecord,
+        String contactsToCreateJson,
+        String opportunityContactsJson,
+        Boolean createContactsInQueue
+    ) {
+        List<String> stageErrors = new List<String>();
+        Opportunity createdOpportunity;
+        OpportunityContactRole primaryOpportunityContact;
+        Contract contractRecord;
+        Onboarding__c onboardingRecord;
+        Vendor_Customization__c resolvedVendorProgramRecord = vendorProgramRecord;
+
+        if (createContactsInQueue == true && String.isNotBlank(contactsToCreateJson)) {
+            try {
+                runCreateContactFlow(contactsToCreateJson);
+            } catch (Exception ex) {
+                stageErrors.add('Contact create failed: ' + summarizeException(ex));
+            }
+        }
+
+        try {
+            resolvedVendorProgramRecord = resolveVendorProgramForCreate(opportunityRecord, vendorProgramRecord);
+        } catch (Exception ex) {
+            stageErrors.add('Vendor program resolution failed: ' + summarizeException(ex));
+        }
+
+        try {
+            resolvedVendorProgramRecord = hydrateVendorProgramForContractCreate(resolvedVendorProgramRecord);
+        } catch (Exception ex) {
+            stageErrors.add('Vendor program hydration failed: ' + summarizeException(ex));
+        }
+
+        try {
+            createdOpportunity = runCreateOpportunityFlow(
+                accountRecord,
+                opportunityRecord,
+                resolvedVendorProgramRecord
+            );
+            if (createdOpportunity == null || createdOpportunity.Id == null) {
+                stageErrors.add('Opportunity create returned no OpportunityRecord.Id.');
+            }
+        } catch (Exception ex) {
+            stageErrors.add('Opportunity create failed: ' + summarizeException(ex));
+        }
+
+        if (
+            createdOpportunity != null &&
+            createdOpportunity.Id != null &&
+            String.isNotBlank(opportunityContactsJson)
+        ) {
+            try {
+                runCreateOpportunityContactRoleFlow(
+                    applyOpportunityId(opportunityContactsJson, createdOpportunity.Id)
+                );
+            } catch (Exception ex) {
+                stageErrors.add('Opportunity contact role create failed: ' + summarizeException(ex));
+            }
+        }
+
+        if (createdOpportunity != null && createdOpportunity.Id != null) {
+            try {
+                primaryOpportunityContact = runGetPrimaryOpportunityContactFlow(createdOpportunity);
+            } catch (Exception ex) {
+                stageErrors.add('Primary opportunity contact lookup failed: ' + summarizeException(ex));
+            }
+        }
+
+        if (createdOpportunity != null && createdOpportunity.Id != null) {
+            try {
+                contractRecord = runCreateContractFlow(
+                    accountRecord,
+                    createdOpportunity,
+                    resolvedVendorProgramRecord,
+                    primaryOpportunityContact
+                );
+                if (contractRecord == null || contractRecord.Id == null) {
+                    stageErrors.add('Contract create returned no ContractRecord.Id.');
+                }
+            } catch (Exception ex) {
+                stageErrors.add('Contract create failed: ' + summarizeException(ex));
+            }
+        }
+
+        if (
+            createdOpportunity != null &&
+            createdOpportunity.Id != null &&
+            contractRecord != null &&
+            contractRecord.Id != null
+        ) {
+            try {
+                onboardingRecord = runCreateOnboardingFlow(
+                    createdOpportunity,
+                    resolvedVendorProgramRecord,
+                    contractRecord
+                );
+                if (onboardingRecord == null || onboardingRecord.Id == null) {
+                    stageErrors.add('Onboarding create returned no OnboardingRecord.Id.');
+                }
+            } catch (Exception ex) {
+                stageErrors.add('Onboarding create failed: ' + summarizeException(ex));
+            }
+        } else if (createdOpportunity != null && createdOpportunity.Id != null) {
+            stageErrors.add('Onboarding create skipped because contract was not resolved.');
+        }
+
+        return stageErrors;
     }
 
     @TestVisible
@@ -253,7 +357,16 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
             String.isNotBlank(vendorProgramRecord.Business_Vertical__c)
         ) {
             List<Vendor_Customization__c> vendorMatches = [
-                SELECT Id, Name, Vendor__c, Retail_Option__c, Business_Vertical__c
+                SELECT Id,
+                    Name,
+                    Vendor__c,
+                    Retail_Option__c,
+                    Business_Vertical__c,
+                    Associated_Agreement_Template__c,
+                    Contract_Record_Type__c,
+                    Contract_Record_Type__r.RecordTypeId__c,
+                    Opportunity__c,
+                    Opportunity__r.Program_Base_App_Selection__c
                 FROM Vendor_Customization__c
                 WHERE Vendor__c = :vendorProgramRecord.Vendor__c
                   AND Retail_Option__c = :vendorProgramRecord.Retail_Option__c
@@ -275,7 +388,16 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
         }
 
         List<Vendor_Customization__c> perfectVisionMatches = [
-            SELECT Id, Name, Vendor__c
+            SELECT Id,
+                Name,
+                Vendor__c,
+                Retail_Option__c,
+                Business_Vertical__c,
+                Associated_Agreement_Template__c,
+                Contract_Record_Type__c,
+                Contract_Record_Type__r.RecordTypeId__c,
+                Opportunity__c,
+                Opportunity__r.Program_Base_App_Selection__c
             FROM Vendor_Customization__c
             WHERE Vendor__r.Name = 'PerfectVision'
               AND Name = :programSelection
@@ -285,6 +407,38 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
 
         if (!perfectVisionMatches.isEmpty()) {
             return perfectVisionMatches[0];
+        }
+
+        return vendorProgramRecord;
+    }
+
+    @TestVisible
+    private static Vendor_Customization__c hydrateVendorProgramForContractCreate(
+        Vendor_Customization__c vendorProgramRecord
+    ) {
+        if (vendorProgramRecord == null || vendorProgramRecord.Id == null) {
+            return vendorProgramRecord;
+        }
+
+        List<Vendor_Customization__c> hydrated = [
+            SELECT Id,
+                Name,
+                Vendor__c,
+                Retail_Option__c,
+                Business_Vertical__c,
+                Associated_Agreement_Template__c,
+                Contract_Record_Type__c,
+                Contract_Record_Type__r.RecordTypeId__c,
+                Opportunity__c,
+                Opportunity__r.Program_Base_App_Selection__c
+            FROM Vendor_Customization__c
+            WHERE Id = :vendorProgramRecord.Id
+            WITH SECURITY_ENFORCED
+            LIMIT 1
+        ];
+
+        if (!hydrated.isEmpty()) {
+            return hydrated[0];
         }
 
         return vendorProgramRecord;
@@ -315,6 +469,111 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
             inputs
         );
         interview.start();
+    }
+
+    @TestVisible
+    private static OpportunityContactRole runGetPrimaryOpportunityContactFlow(Opportunity opportunityRecord) {
+        Map<String, Object> inputs = new Map<String, Object>{
+            'OpportunityRecord' => opportunityRecord
+        };
+
+        Flow.Interview interview = Flow.Interview.createInterview(
+            'DOMAIN_OmniSObject_SFL_GET_Primary_Opportunity_Contact',
+            inputs
+        );
+        interview.start();
+
+        Object outputValue = interview.getVariableValue('OpportunityContactRecord');
+        if (outputValue == null) {
+            return null;
+        }
+
+        if (outputValue instanceof OpportunityContactRole) {
+            return (OpportunityContactRole) outputValue;
+        }
+
+        if (outputValue instanceof SObject) {
+            return (OpportunityContactRole) outputValue;
+        }
+
+        return null;
+    }
+
+    @TestVisible
+    private static Contract runCreateContractFlow(
+        Account accountRecord,
+        Opportunity opportunityRecord,
+        Vendor_Customization__c vendorProgramRecord,
+        OpportunityContactRole opportunityContactRoleRecord
+    ) {
+        Map<String, Object> inputs = new Map<String, Object>{
+            'AccountRecord' => accountRecord,
+            'OpportunityRecord' => opportunityRecord,
+            'VendorProgram' => vendorProgramRecord,
+            'OpportunityContactRole' => opportunityContactRoleRecord
+        };
+
+        Flow.Interview interview = Flow.Interview.createInterview(
+            'DOMAIN_OmniSObject_SFL_CREATE_Contract',
+            inputs
+        );
+        interview.start();
+
+        Object outputValue = interview.getVariableValue('ContractRecord');
+        Object errorValue = interview.getVariableValue('errorMessage');
+        if (outputValue == null) {
+            if (errorValue != null && String.isNotBlank(String.valueOf(errorValue))) {
+                throw new FlowOutputException(
+                    'DOMAIN_OmniSObject_SFL_CREATE_Contract returned no ContractRecord. '
+                    + String.valueOf(errorValue)
+                );
+            }
+            return null;
+        }
+
+        if (outputValue instanceof Contract) {
+            return (Contract) outputValue;
+        }
+
+        if (outputValue instanceof SObject) {
+            return (Contract) outputValue;
+        }
+
+        return null;
+    }
+
+    @TestVisible
+    private static Onboarding__c runCreateOnboardingFlow(
+        Opportunity opportunityRecord,
+        Vendor_Customization__c vendorProgramRecord,
+        Contract contractRecord
+    ) {
+        Map<String, Object> inputs = new Map<String, Object>{
+            'OpportunityRecord' => opportunityRecord,
+            'VendorProgramRecord' => vendorProgramRecord,
+            'ContractRecord' => contractRecord
+        };
+
+        Flow.Interview interview = Flow.Interview.createInterview(
+            'DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record',
+            inputs
+        );
+        interview.start();
+
+        Object outputValue = interview.getVariableValue('OnboardingRecord');
+        if (outputValue == null) {
+            return null;
+        }
+
+        if (outputValue instanceof Onboarding__c) {
+            return (Onboarding__c) outputValue;
+        }
+
+        if (outputValue instanceof SObject) {
+            return (Onboarding__c) outputValue;
+        }
+
+        return null;
     }
 
     @TestVisible

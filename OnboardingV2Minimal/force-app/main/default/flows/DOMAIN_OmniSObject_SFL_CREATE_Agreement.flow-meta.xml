@@ -63,6 +63,32 @@
     <apiVersion>62.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <name>Assign_Error_Message_for_Contract</name>
+        <label>Assign Error Message for Contract</label>
+        <locationX>842</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>To Send Adobe Agreement You Must Have a Contract</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_Error_Message_for_Vendor_Program</name>
+        <label>Assign Error Message for Vendor Program</label>
+        <locationX>578</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>To Send Adobe Agreement You Must Have a Vendor Program</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Capture_Load_and_Send_Agreement_Template_Fault</name>
         <label>Capture Load and Send Agreement Template Fault</label>
         <locationX>0</locationX>
@@ -98,32 +124,6 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Assign_Error_Message_for_Contract</name>
-        <label>Assign Error Message for Contract</label>
-        <locationX>842</locationX>
-        <locationY>242</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>To Send Adobe Agreement You Must Have a Contract</stringValue>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Assign_Error_Message_for_Vendor_Program</name>
-        <label>Assign Error Message for Vendor Program</label>
-        <locationX>578</locationX>
-        <locationY>350</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>To Send Adobe Agreement You Must Have a Vendor Program</stringValue>
             </value>
         </assignmentItems>
     </assignments>

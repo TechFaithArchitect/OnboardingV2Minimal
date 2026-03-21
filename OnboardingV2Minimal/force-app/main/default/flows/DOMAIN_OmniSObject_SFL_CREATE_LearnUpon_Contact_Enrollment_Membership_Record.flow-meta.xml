@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <assignments>
-        <name>Capture_Create_User_In_LearnUpon_Fault</name>
-        <label>Capture Create User In LearnUpon Fault</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
     <actionCalls>
         <name>Create_User_In_LearnUpon</name>
         <label>Create User In LearnUpon</label>
@@ -23,6 +10,9 @@
         <connector>
             <targetReference>Wait_2_Minutes</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Capture_Create_User_In_LearnUpon_Fault</targetReference>
+        </faultConnector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
             <name>email</name>
@@ -60,14 +50,24 @@
                 <elementReference>ContactRecord.Id</elementReference>
             </value>
         </inputParameters>
-        <faultConnector>
-            <targetReference>Capture_Create_User_In_LearnUpon_Fault</targetReference>
-        </faultConnector>
         <nameSegment>LearnUponP__learnUponCreateNewUserHelper</nameSegment>
         <offset>0</offset>
     </actionCalls>
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Capture_Create_User_In_LearnUpon_Fault</name>
+        <label>Capture Create User In LearnUpon Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Are_Required_Inputs_Provided</name>
         <label>Are Required Inputs Provided</label>

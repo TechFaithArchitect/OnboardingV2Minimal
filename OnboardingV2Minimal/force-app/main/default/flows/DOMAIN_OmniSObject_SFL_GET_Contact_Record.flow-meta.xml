@@ -337,20 +337,6 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>Loop_Signers</name>
-        <label>Loop Signers</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <collectionReference>FilterForSigners_Collection_Filter</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Assign_Relationship_Owner_Contact_Id_to_List</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Get_Signer_Account_Contact_Relationships_By_Id</targetReference>
-        </noMoreValuesConnector>
-    </loops>
-    <loops>
         <name>Loop_Signer_Account_Contact_Relationships</name>
         <label>Loop Signer Account Contact Relationships</label>
         <locationX>0</locationX>
@@ -362,6 +348,20 @@
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Get_Contact_Records_via_Account_Contact_Relationship</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Signers</name>
+        <label>Loop Signers</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>FilterForSigners_Collection_Filter</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Relationship_Owner_Contact_Id_to_List</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_Signer_Account_Contact_Relationships_By_Id</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -531,27 +531,6 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Signer_Account_Contact_Relationships_By_Id</name>
-        <label>Get Signer Account Contact Relationships by Id</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Loop_Signer_Account_Contact_Relationships</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>In</operator>
-            <value>
-                <elementReference>SignerRelationshipIdList</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>AccountContactRelation</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <name>Get_Contact_Records_via_Account_Record</name>
         <label>Get Contact Records via Account Record</label>
         <locationX>0</locationX>
@@ -570,6 +549,27 @@
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Signer_Account_Contact_Relationships_By_Id</name>
+        <label>Get Signer Account Contact Relationships by Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Signer_Account_Contact_Relationships</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>SignerRelationshipIdList</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>AccountContactRelation</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
@@ -668,18 +668,18 @@
         </value>
     </variables>
     <variables>
-        <name>SignerRelationshipIdList</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
         <name>OpportunityContactRole</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>OpportunityContactRole</objectType>
+    </variables>
+    <variables>
+        <name>SignerRelationshipIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
 </Flow>
