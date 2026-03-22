@@ -17,11 +17,7 @@ This document summarizes the Jest test coverage status for LWC components in the
 
 These components have complete test coverage:
 
-1. **`onboardingStatusRulesManager`** - 100% coverage
-   - Empty component, minimal code to test
-   - Tests verify component renders
-
-2. **`onboardingRuleModal`** - 100% coverage
+1. **`onboardingRuleModal`** - 100% coverage
    - Empty component, minimal code to test
    - Tests verify component renders
 

@@ -3,10 +3,6 @@
     <label>Any Expired</label>
     <protected>false</protected>
     <values>
-        <field>Condition_Type__c</field>
-        <value xsi:type="xsd:string">ANY_EXPIRED</value>
-    </values>
-    <values>
         <field>Is_Active__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
@@ -17,5 +13,9 @@
     <values>
         <field>Target_Onboarding_Status__c</field>
         <value xsi:type="xsd:string">Expired</value>
+    </values>
+    <values>
+        <field>Predicate_Config__c</field>
+        <value xsi:type="xsd:string">{&quot;op&quot;:&quot;reqAnyNormalizedEquals&quot;,&quot;normalized&quot;:&quot;Expired&quot;}</value>
     </values>
 </CustomMetadata>

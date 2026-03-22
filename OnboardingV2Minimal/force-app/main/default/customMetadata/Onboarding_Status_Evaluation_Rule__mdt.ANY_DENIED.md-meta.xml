@@ -3,10 +3,6 @@
     <label>Any Denied</label>
     <protected>false</protected>
     <values>
-        <field>Condition_Type__c</field>
-        <value xsi:type="xsd:string">ANY_DENIED</value>
-    </values>
-    <values>
         <field>Is_Active__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
@@ -21,5 +17,9 @@
     <values>
         <field>Target_Opportunity_Stage__c</field>
         <value xsi:type="xsd:string">Denied</value>
+    </values>
+    <values>
+        <field>Predicate_Config__c</field>
+        <value xsi:type="xsd:string">{&quot;op&quot;:&quot;reqAnyNormalizedEquals&quot;,&quot;normalized&quot;:&quot;Denied&quot;}</value>
     </values>
 </CustomMetadata>

@@ -8,10 +8,9 @@ This document outlines the key areas that need attention to complete and perfect
 **Status**: Many test files exist but contain only placeholder TODOs
 
 **Components Needing Real Tests**:
-1. ❌ `onboardingStatusRulesManager` - Only placeholder test
-2. ❌ `onboardingRuleModal` - Only placeholder test
-3. ❌ `twilioSettings` - New component, needs tests (per implementation-status.md)
-4. ❌ `onboardingWorkQueue` - Enhanced component, needs tests for filters/pagination/sorting
+1. ❌ `onboardingRuleModal` - Only placeholder test
+2. ❌ `twilioSettings` - New component, needs tests (per implementation-status.md)
+3. ❌ `onboardingWorkQueue` - Enhanced component, needs tests for filters/pagination/sorting
 
 **Action Items**:
 - [ ] Install Jest dependencies (`npm install`)

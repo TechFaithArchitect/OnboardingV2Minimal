@@ -31,7 +31,8 @@ Object: `Onboarding_Status_Evaluation_Rule__mdt`
 
 Use this to decide final onboarding status.
 
-- `Condition_Type__c`: rule condition key
+- `Predicate_Config__c`: JSON condition evaluated by Apex (see technical predicate doc)
+- `Condition_Type__c` (optional): short label for admins or a future rules UI; not used for evaluation
 - `Rule_Order__c`: evaluation order (first match wins)
 - `Target_Onboarding_Status__c`: value to write on onboarding
 - `Target_Opportunity_Stage__c`: optional opportunity stage update

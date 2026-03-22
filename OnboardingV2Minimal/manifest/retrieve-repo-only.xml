@@ -133,8 +133,6 @@
         <members>TestECCFactory</members>
         <members>TestOnboardingFactory</members>
         <members>TestOnboardingRequirementFactory</members>
-        <members>TestOnboardingRulesEngineFactory</members>
-        <members>TestOnboardingRulesFactory</members>
         <members>TestPermissionFactory</members>
         <members>TestProductFactory</members>
         <members>TestRequiredCredentialFactory</members>
@@ -439,8 +437,6 @@
         <members>Onboarding_Requirement_Subject__c</members>
         <members>Onboarding_Requirement__c</members>
         <members>Onboarding_Status_Normalization__mdt</members>
-        <members>Onboarding_Status_Rule__c</members>
-        <members>Onboarding_Status_Rules_Engine__c</members>
         <members>Onboarding_Status_Tracking_Config__mdt</members>
         <members>Opportunity</members>
         <members>OpportunityContactRole</members>
@@ -542,8 +538,6 @@
     <types>
         <members>Communication_Template__c</members>
         <members>Onboarding_Requirement__c</members>
-        <members>Onboarding_Status_Rule__c</members>
-        <members>Onboarding_Status_Rules_Engine__c</members>
         <members>Onboarding__c</members>
         <members>Order__c</members>
         <members>POE_External_Contact_Credential__c</members>
@@ -569,7 +563,6 @@
         <members>onboardingPathSelector</members>
         <members>onboardingRecentActivity</members>
         <members>onboardingRuleModal</members>
-        <members>onboardingStatusRulesManager</members>
         <members>onboardingVendorProgramGrid</members>
         <members>onboardingWorkQueue</members>
         <members>overrideAuditPanel</members>

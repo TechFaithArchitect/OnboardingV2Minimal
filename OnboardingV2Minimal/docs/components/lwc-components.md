@@ -16,8 +16,7 @@ Components present in this repo (`force-app/main/default/lwc/`).
 - `onboardingOrderStatusViewer` - Order/training status summary
 - `onboardingECC` - External contact credential detail view
 
-## Status Rules (Admin)
-- `onboardingStatusRulesManager` - Status rules manager shell
+## Rules / modals (Admin)
 - `onboardingRuleModal` - Modal wrapper for rule edits
 
 ## Program Dates & Related

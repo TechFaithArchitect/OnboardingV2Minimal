@@ -3,10 +3,6 @@
     <label>Pending Sales</label>
     <protected>false</protected>
     <values>
-        <field>Condition_Type__c</field>
-        <value xsi:type="xsd:string">PENDING_SALES</value>
-    </values>
-    <values>
         <field>Is_Active__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
@@ -17,5 +13,9 @@
     <values>
         <field>Target_Onboarding_Status__c</field>
         <value xsi:type="xsd:string">Pending Sales</value>
+    </values>
+    <values>
+        <field>Predicate_Config__c</field>
+        <value xsi:type="xsd:string">{&quot;all&quot;:[{&quot;op&quot;:&quot;notReqAnyNormalizedEquals&quot;,&quot;normalized&quot;:&quot;Denied&quot;},{&quot;op&quot;:&quot;notAllRequirementsTerminal&quot;},{&quot;op&quot;:&quot;assignedTeamEquals&quot;,&quot;team&quot;:&quot;Sales&quot;}]}</value>
     </values>
 </CustomMetadata>

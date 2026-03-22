@@ -242,7 +242,7 @@ private class OnboardingStatusEvaluatorTest {
   }
 
   @IsTest
-  static void testEvaluateConditionBranchCoverage() {
+  static void testPredicateJsonBranchCoverage() {
     OnboardingStatusEvaluatorService.EvaluationContext deniedCtx = buildContext(
       'Onboarding',
       'New',
@@ -253,13 +253,16 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('ANY_DENIED', deniedCtx),
-      'ANY_DENIED should match when one normalized status is Denied'
+      evalPredicateJson('{"op":"reqAnyNormalizedEquals","normalized":"Denied"}', deniedCtx),
+      'reqAnyNormalizedEquals Denied should match'
     );
     System.assertEquals(
       false,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('IN_PROCESS_DEFAULT', deniedCtx),
-      'IN_PROCESS_DEFAULT should fail when denied exists'
+      evalPredicateJson(
+        '{"all":[{"op":"notReqAnyNormalizedEquals","normalized":"Denied"},{"op":"notAllRequirementsTerminal"}]}',
+        deniedCtx
+      ),
+      'in-process composite should fail when denied exists'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext allCompleteCtx = buildContext(
@@ -274,16 +277,13 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('ALL_SETUP_COMPLETE', allCompleteCtx),
-      'ALL_SETUP_COMPLETE should match Signed/Complete/Ignore set'
+      evalPredicateJson('{"op":"allRequirementsTerminal"}', allCompleteCtx),
+      'allRequirementsTerminal should match Signed/Complete/Ignore set'
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest(
-        'AGREEMENT_SIGNED_AND_CONTRACT_COMPLETE',
-        allCompleteCtx
-      ),
-      'AGREEMENT_SIGNED_AND_CONTRACT_COMPLETE should match signed agreement + complete contract'
+      evalPredicateJson('{"op":"agreementAndContractCompleteOthersIgnored"}', allCompleteCtx),
+      'agreementAndContractCompleteOthersIgnored should match signed agreement + complete contract'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext expiredCtx = buildContext(
@@ -296,8 +296,8 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('ANY_EXPIRED', expiredCtx),
-      'ANY_EXPIRED should match when one normalized status is Expired'
+      evalPredicateJson('{"op":"reqAnyNormalizedEquals","normalized":"Expired"}', expiredCtx),
+      'reqAnyNormalizedEquals Expired should match'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext canceledOpenOppCtx = buildContext(
@@ -310,11 +310,8 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       false,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest(
-        'ANY_CANCELED',
-        canceledOpenOppCtx
-      ),
-      'ANY_CANCELED should not hold canceled state when opportunity is reopened'
+      evalPredicateJson('{"op":"anyRequirementCanceledWithStageGate"}', canceledOpenOppCtx),
+      'canceled requirement should not match when opportunity stage is open'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext canceledClosedOppCtx = buildContext(
@@ -327,11 +324,8 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest(
-        'ANY_CANCELED',
-        canceledClosedOppCtx
-      ),
-      'ANY_CANCELED should match when requirement is canceled and opportunity is canceled/lost'
+      evalPredicateJson('{"op":"anyRequirementCanceledWithStageGate"}', canceledClosedOppCtx),
+      'canceled requirement should match when opportunity is canceled/lost'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext outForSignatureCtx = buildContext(
@@ -344,11 +338,11 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest(
-        'ONLY_AGREEMENT_OUT_FOR_SIGNATURE',
+      evalPredicateJson(
+        '{"op":"onlyRequirementTypeNormalizedInSet","requirementType":"Agreement","allowedNormalized":["Out for signature"]}',
         outForSignatureCtx
       ),
-      'ONLY_AGREEMENT_OUT_FOR_SIGNATURE should match when agreement is the only non-ignore requirement'
+      'onlyRequirementTypeNormalizedInSet should match sole agreement out for signature'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext agreementSignedOnlyCtx = buildContext(
@@ -361,11 +355,11 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest(
-        'ONLY_AGREEMENT_SIGNED',
+      evalPredicateJson(
+        '{"op":"onlyRequirementTypeNormalizedInSet","requirementType":"Agreement","allowedNormalized":["Signed","Setup Complete"]}',
         agreementSignedOnlyCtx
       ),
-      'ONLY_AGREEMENT_SIGNED should treat Setup Complete as signed-equivalent'
+      'onlyRequirementTypeNormalizedInSet should treat Setup Complete as signed-equivalent'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext pendingSalesCtx = buildContext(
@@ -378,13 +372,19 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('PENDING_SALES', pendingSalesCtx),
-      'PENDING_SALES should match for Sales team and incomplete, non-denied requirements'
+      evalPredicateJson(
+        '{"all":[{"op":"notReqAnyNormalizedEquals","normalized":"Denied"},{"op":"notAllRequirementsTerminal"},{"op":"assignedTeamEquals","team":"Sales"}]}',
+        pendingSalesCtx
+      ),
+      'pending sales composite should match'
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('IN_PROCESS_DEFAULT', pendingSalesCtx),
-      'IN_PROCESS_DEFAULT should match incomplete, non-denied requirements'
+      evalPredicateJson(
+        '{"all":[{"op":"notReqAnyNormalizedEquals","normalized":"Denied"},{"op":"notAllRequirementsTerminal"}]}',
+        pendingSalesCtx
+      ),
+      'in-process default composite should match incomplete, non-denied requirements'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext canceledOppCtx = buildContext(
@@ -397,20 +397,139 @@ private class OnboardingStatusEvaluatorTest {
     );
     System.assertEquals(
       true,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('OPPORTUNITY_CANCELED', canceledOppCtx),
-      'OPPORTUNITY_CANCELED should match canceled/lost opportunity stages'
+      evalPredicateJson('{"op":"opportunityStageCanceled"}', canceledOppCtx),
+      'opportunityStageCanceled should match canceled/lost opportunity stages'
     );
 
     System.assertEquals(
       false,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('UNKNOWN_CONDITION', pendingSalesCtx),
-      'Unknown condition type should not match'
+      evalPredicateJson('{"op":"unknownOp"}', pendingSalesCtx),
+      'Unknown op should not match'
     );
     System.assertEquals(
       false,
-      OnboardingStatusEvaluatorService.evaluateConditionForTest('', pendingSalesCtx),
-      'Blank condition type should not match'
+      evalPredicateJson('{}', pendingSalesCtx),
+      'Missing op should not match'
     );
+  }
+
+  @IsTest
+  static void testBlankPredicateConfigDoesNotMatch() {
+    OnboardingStatusEvaluatorService.EvaluationContext ctx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{ buildReq('Agreement', 'Denied') }
+    );
+    Onboarding_Status_Evaluation_Rule__mdt rule = new Onboarding_Status_Evaluation_Rule__mdt(
+      DeveloperName = 'TestBlankPredicate',
+      Predicate_Config__c = null,
+      Condition_Type__c = 'ANY_DENIED'
+    );
+    System.assertEquals(
+      false,
+      OnboardingStatusPredicateInterpreter.ruleMatchesRule(rule, ctx),
+      'Blank Predicate_Config__c must not match regardless of Condition_Type__c'
+    );
+  }
+
+  @IsTest
+  static void testPredicateJsonRepresentativeContexts() {
+    assertPredicateTrue(
+      buildContext(
+        'Onboarding',
+        'New',
+        'Prospecting',
+        new List<OnboardingStatusEvaluatorService.RequirementInfo>{ buildReq('Agreement', 'Denied') }
+      ),
+      '{"op":"reqAnyNormalizedEquals","normalized":"Denied"}'
+    );
+    assertPredicateTrue(
+      buildContext(
+        'Onboarding',
+        'New',
+        'Prospecting',
+        new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+          buildReq('Agreement', 'Signed'),
+          buildReq('Contract', 'Complete'),
+          buildReq('Training', 'Ignore')
+        }
+      ),
+      '{"op":"allRequirementsTerminal"}'
+    );
+    assertPredicateTrue(
+      buildContext(
+        'Onboarding',
+        'Canceled',
+        'Closed Lost',
+        new List<OnboardingStatusEvaluatorService.RequirementInfo>{ buildReq('Agreement', 'Canceled') }
+      ),
+      '{"op":"anyRequirementCanceledWithStageGate"}'
+    );
+    assertPredicateTrue(
+      buildContext(
+        'Onboarding',
+        'New',
+        'Prospecting',
+        new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+          buildReq('Agreement', 'In Process')
+        }
+      ),
+      '{"all":[{"op":"notReqAnyNormalizedEquals","normalized":"Denied"},{"op":"notAllRequirementsTerminal"}]}'
+    );
+    assertPredicateTrue(
+      buildContext(
+        'Sales',
+        'New',
+        'Prospecting',
+        new List<OnboardingStatusEvaluatorService.RequirementInfo>{ buildReq('Agreement', 'In Process') }
+      ),
+      '{"all":[{"op":"notReqAnyNormalizedEquals","normalized":"Denied"},{"op":"notAllRequirementsTerminal"},{"op":"assignedTeamEquals","team":"Sales"}]}'
+    );
+  }
+
+  @IsTest
+  static void testInjectedRuleEngineShortCircuitsEvaluation() {
+    Onboarding__c onb = [SELECT Id FROM Onboarding__c LIMIT 1];
+    OnboardingStatusEvaluatorService.setRuleEngineForTest(new FalseRuleEngine());
+
+    Test.startTest();
+    OnboardingStatusEvaluatorService.EvaluationResult result = OnboardingStatusEvaluatorService.evaluate(
+      onb.Id
+    );
+    Test.stopTest();
+
+    OnboardingStatusEvaluatorService.setRuleEngineForTest(null);
+
+    System.assertEquals(false, result.shouldUpdate, 'Stub engine should prevent rule match');
+  }
+
+  private static Boolean evalPredicateJson(
+    String predicateJson,
+    OnboardingStatusEvaluatorService.EvaluationContext ctx
+  ) {
+    Object root = JSON.deserializeUntyped(predicateJson);
+    return OnboardingStatusPredicateInterpreter.evaluateNode(root, ctx);
+  }
+
+  private static void assertPredicateTrue(
+    OnboardingStatusEvaluatorService.EvaluationContext ctx,
+    String predicateJson
+  ) {
+    System.assertEquals(
+      true,
+      evalPredicateJson(predicateJson, ctx),
+      'Predicate should match for this context: ' + predicateJson
+    );
+  }
+
+  private class FalseRuleEngine implements IOnboardingStatusRuleEngine {
+    public Boolean ruleApplies(
+      Onboarding_Status_Evaluation_Rule__mdt rule,
+      OnboardingStatusEvaluatorService.EvaluationContext context
+    ) {
+      return false;
+    }
   }
 
   private static OnboardingStatusEvaluatorService.EvaluationContext buildContext(

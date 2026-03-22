@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>OnboardingStatusEvaluatorInvocable</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>OnboardingStatusEvaluatorService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Onboarding_Status_Rule_Config</name>
+    </customPermissions>
+    <description>Custom permission for onboarding status rule configuration (future LWC / process). Apex classes included for Flow and tooling that reference the evaluator. Editing Custom Metadata records still requires org-level Setup access.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Onboarding Status Rule Config</label>
+</PermissionSet>

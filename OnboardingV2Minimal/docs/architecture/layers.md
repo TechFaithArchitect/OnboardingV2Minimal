@@ -33,7 +33,6 @@ The onboarding system follows a three-layer architecture pattern that separates 
 
 - `onboardingWorkQueue` - Work queue list
 - `onboardingDealerOnboardingModal` - Start dealer onboarding modal
-- `onboardingStatusRulesManager` - Status rules admin UI
 - `recordCollectionEditor` - Record collection editor
 
 **Communication:**

@@ -3,10 +3,6 @@
     <label>Opportunity Canceled</label>
     <protected>false</protected>
     <values>
-        <field>Condition_Type__c</field>
-        <value xsi:type="xsd:string">OPPORTUNITY_CANCELED</value>
-    </values>
-    <values>
         <field>Is_Active__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
@@ -17,5 +13,9 @@
     <values>
         <field>Target_Onboarding_Status__c</field>
         <value xsi:type="xsd:string">Canceled</value>
+    </values>
+    <values>
+        <field>Predicate_Config__c</field>
+        <value xsi:type="xsd:string">{&quot;op&quot;:&quot;opportunityStageCanceled&quot;}</value>
     </values>
 </CustomMetadata>

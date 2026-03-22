@@ -3,10 +3,6 @@
     <label>All Setup Complete</label>
     <protected>false</protected>
     <values>
-        <field>Condition_Type__c</field>
-        <value xsi:type="xsd:string">ALL_SETUP_COMPLETE</value>
-    </values>
-    <values>
         <field>Is_Active__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>
@@ -17,5 +13,9 @@
     <values>
         <field>Target_Onboarding_Status__c</field>
         <value xsi:type="xsd:string">Setup Complete</value>
+    </values>
+    <values>
+        <field>Predicate_Config__c</field>
+        <value xsi:type="xsd:string">{&quot;op&quot;:&quot;allRequirementsTerminal&quot;}</value>
     </values>
 </CustomMetadata>

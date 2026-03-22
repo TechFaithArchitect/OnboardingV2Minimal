@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Intended for users who maintain onboarding status evaluation rules (CMDT Predicate_Config__c or future LWC). Does not grant Setup by itself; assign with profiles/permission sets that allow Custom Metadata access as needed.</description>
+    <isLicensed>false</isLicensed>
+    <label>Onboarding Status Rule Config</label>
+</CustomPermission>

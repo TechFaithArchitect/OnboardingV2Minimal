@@ -175,60 +175,6 @@ public class TestDataFactory {
         return TestDataFactoryWrapper.createECCScenario(doInsert);
     }
 
-    // ------------------------------------------------------------------------------------------
-    // ONBOARDING RULES BUILDERS
-    // ------------------------------------------------------------------------------------------
-    public static TestDataFactoryWrapper.OnboardingRulesSetupWrapper createAllOnboardingRule(
-        Onboarding__c onboarding,
-        Integer ruleCount,
-        String expectedStatus,
-        Boolean createRequirements,
-        Boolean doInsert
-    ) {
-        return TestDataFactoryWrapper.createAllOnboardingRule(onboarding, ruleCount, expectedStatus, createRequirements, doInsert);
-    }
-
-    public static TestDataFactoryWrapper.OnboardingRulesSetupWrapper createAnyOnboardingRule(
-        Onboarding__c onboarding,
-        Integer ruleCount,
-        String targetStatus,
-        Boolean createRequirements,
-        Boolean doInsert
-    ) {
-        return TestDataFactoryWrapper.createAnyOnboardingRule(onboarding, ruleCount, targetStatus, createRequirements, doInsert);
-    }
-
-    public static TestDataFactoryWrapper.OnboardingRulesSetupWrapper createCustomOnboardingRule(
-        Onboarding__c onboarding,
-        List<String> expectedStatuses,
-        String customLogic,
-        String targetStatus,
-        Boolean overrideStatus,
-        Boolean createRequirements,
-        Integer ruleCount
-    ) {
-        return TestDataFactoryWrapper.createCustomOnboardingRule(
-            onboarding, expectedStatuses, customLogic, targetStatus, overrideStatus, createRequirements, ruleCount
-        );
-    }
-
-    public static Onboarding_Status_Rule__c createOnboardingStatusRule(Boolean doInsert) {
-        // Create a parent rule engine first since Parent_Rule__c may be required
-        Onboarding_Status_Rules_Engine__c parentEngine = TestOnboardingRulesEngineFactory.create(doInsert);
-        Vendor_Program_Requirement__c requirement = TestVendorProgramRequirementFactory.create(doInsert);
-        
-        Onboarding_Status_Rule__c onboardingStatusRule = TestOnboardingRulesFactory.create(
-            false,
-            parentEngine,
-            requirement,
-            'New',
-            1
-        );
-        onboardingStatusRule.Active__c = true;
-        TestDataFactoryUtil.maybeInsert(onboardingStatusRule, doInsert);
-        return onboardingStatusRule;
-    }
-
     public static Vendor_Program_Group__c createVendorProgramGroup(Boolean doInsert) {
         return TestDataFactoryWrapper.createVendorProgramGroup(doInsert);
     }

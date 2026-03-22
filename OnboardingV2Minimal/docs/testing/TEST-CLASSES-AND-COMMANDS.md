@@ -37,7 +37,6 @@ This document lists test classes present in this repo and provides commands to r
 
 ### Test Factories (for test data)
 - `TestAVOFactory`, `TestAccountFactory`, `TestOnboardingFactory`, `TestOnboardingRequirementFactory`
-- `TestOnboardingRulesEngineFactory`, `TestOnboardingRulesFactory`
 - `TestVendorFactory`, `TestVendorProgramFactory`, `TestVendorProgramGroupFactory`, etc.
 
 ## Commands to Run Tests

@@ -1,21 +1,15 @@
 /**
- * Service for evaluating Onboarding Status based on requirement statuses and CMDT rules.
- * Uses Onboarding_Status_Normalization__mdt for per-requirement status and
- * Onboarding_Status_Evaluation_Rule__mdt for evaluation rules.
+ * Orchestrates onboarding status evaluation: loads context, applies normalization (CMDT),
+ * runs rules via IOnboardingStatusRuleEngine (default: JSON Predicate_Config__c on evaluation CMDT).
  */
 public with sharing class OnboardingStatusEvaluatorService {
-  private static final String IGNORE = 'Ignore';
-  private static final String DENIED = 'Denied';
-  private static final String CANCELED = 'Canceled';
-  private static final String CANCELLED = 'Cancelled';
-  private static final String EXPIRED = 'Expired';
-  private static final String SETUP_COMPLETE = 'Setup Complete';
-  private static final String OUT_FOR_SIGNATURE = 'Out for signature';
-  private static final String SIGNED = 'Signed';
-  private static final String COMPLETE = 'Complete';
-  private static final String AGREEMENT = 'Agreement';
-  private static final String CONTRACT = 'Contract';
-  private static final String SALES = 'Sales';
+  @TestVisible
+  private static IOnboardingStatusRuleEngine ruleEngine = new OnboardingStatusCmdtRuleEngine();
+
+  @TestVisible
+  static void setRuleEngineForTest(IOnboardingStatusRuleEngine engine) {
+    ruleEngine = engine == null ? new OnboardingStatusCmdtRuleEngine() : engine;
+  }
 
   public class EvaluationContext {
     public Onboarding__c onboarding;
@@ -38,10 +32,6 @@ public with sharing class OnboardingStatusEvaluatorService {
     public Boolean shouldUpdate;
   }
 
-  /**
-   * Evaluate onboarding status and return target status/stage.
-   * Rules are evaluated in Rule_Order__c; first match wins.
-   */
   public static EvaluationResult evaluate(Id onboardingId) {
     if (onboardingId == null) {
       return emptyResult();
@@ -53,9 +43,6 @@ public with sharing class OnboardingStatusEvaluatorService {
     return resultsById.get(onboardingId);
   }
 
-  /**
-   * Bulk evaluate onboarding status for a set of onboarding ids.
-   */
   public static Map<Id, EvaluationResult> evaluateBulk(Set<Id> onboardingIds) {
     Map<Id, EvaluationResult> resultsById = new Map<Id, EvaluationResult>();
     if (onboardingIds == null || onboardingIds.isEmpty()) {
@@ -64,7 +51,11 @@ public with sharing class OnboardingStatusEvaluatorService {
 
     Map<Id, EvaluationContext> contextByOnboardingId = loadContexts(onboardingIds);
     List<Onboarding_Status_Evaluation_Rule__mdt> rules = [
-      SELECT Condition_Type__c, Target_Onboarding_Status__c, Target_Opportunity_Stage__c
+      SELECT
+        DeveloperName,
+        Predicate_Config__c,
+        Target_Onboarding_Status__c,
+        Target_Opportunity_Stage__c
       FROM Onboarding_Status_Evaluation_Rule__mdt
       WHERE Is_Active__c = true
       ORDER BY Rule_Order__c ASC
@@ -79,7 +70,7 @@ public with sharing class OnboardingStatusEvaluatorService {
 
       EvaluationResult matched = null;
       for (Onboarding_Status_Evaluation_Rule__mdt rule : rules) {
-        if (evaluateCondition(rule.Condition_Type__c, ctx)) {
+        if (ruleEngine.ruleApplies(rule, ctx)) {
           matched = new EvaluationResult();
           matched.targetOnboardingStatus = rule.Target_Onboarding_Status__c;
           matched.targetOpportunityStage = rule.Target_Opportunity_Stage__c;
@@ -94,9 +85,6 @@ public with sharing class OnboardingStatusEvaluatorService {
     return resultsById;
   }
 
-  /**
-   * Evaluate and apply: update Onboarding and Opportunity if needed.
-   */
   public static EvaluationResult evaluateAndApply(Id onboardingId) {
     if (onboardingId == null) {
       return emptyResult();
@@ -109,9 +97,6 @@ public with sharing class OnboardingStatusEvaluatorService {
     return resultsById.get(onboardingId);
   }
 
-  /**
-   * Bulk evaluate and apply: update Onboarding and Opportunity where needed.
-   */
   public static Map<Id, EvaluationResult> evaluateAndApplyBulk(Set<Id> onboardingIds) {
     Map<Id, EvaluationResult> resultsById = evaluateBulk(onboardingIds);
     if (resultsById.isEmpty()) {
@@ -208,14 +193,6 @@ public with sharing class OnboardingStatusEvaluatorService {
     return resultsById;
   }
 
-  private static EvaluationContext loadContext(Id onboardingId) {
-    if (onboardingId == null) {
-      return null;
-    }
-    Map<Id, EvaluationContext> contexts = loadContexts(new Set<Id>{ onboardingId });
-    return contexts.get(onboardingId);
-  }
-
   private static Map<Id, EvaluationContext> loadContexts(Set<Id> onboardingIds) {
     Map<Id, EvaluationContext> contextByOnboardingId = new Map<Id, EvaluationContext>();
     if (onboardingIds == null || onboardingIds.isEmpty()) {
@@ -249,7 +226,7 @@ public with sharing class OnboardingStatusEvaluatorService {
       ]);
     }
 
-    Map<String, String> normMap = loadNormalizationMap();
+    Map<String, String> normMap = OnboardingStatusNormalizationService.loadActiveNormalizationMap();
 
     for (Onboarding__c onboarding : onboardingById.values()) {
       EvaluationContext ctx = new EvaluationContext();
@@ -278,190 +255,16 @@ public with sharing class OnboardingStatusEvaluatorService {
       ri.requirementType = r.Requirement_Type__c;
       ri.status = r.Status__c;
       ri.isOverridden = r.Is_Overridden__c == true;
-      String key = keyFor(r.Requirement_Type__c, r.Status__c);
-      ri.normalizedStatus = normMap.get(key);
-      if (ri.normalizedStatus == null) {
-        ri.normalizedStatus = r.Status__c;
-      }
+      ri.normalizedStatus = OnboardingStatusNormalizationService.normalize(
+        r.Requirement_Type__c,
+        r.Status__c,
+        normMap
+      );
       ctx.requirements.add(ri);
       ctx.normalizedByReqType.put(r.Requirement_Type__c, ri.normalizedStatus);
     }
 
     return contextByOnboardingId;
-  }
-
-  private static Map<String, String> loadNormalizationMap() {
-    Map<String, String> m = new Map<String, String>();
-    for (
-      Onboarding_Status_Normalization__mdt n : [
-        SELECT Requirement_Type__c, Status__c, Normalized_Status__c
-        FROM Onboarding_Status_Normalization__mdt
-        WHERE Active__c = true
-      ]
-    ) {
-      m.put(keyFor(n.Requirement_Type__c, n.Status__c), n.Normalized_Status__c);
-    }
-    return m;
-  }
-
-  private static String keyFor(String reqType, String status) {
-    return (reqType == null ? '' : reqType) +
-      '|' +
-      (status == null ? '' : status);
-  }
-
-  private static Boolean evaluateCondition(String conditionType, EvaluationContext ctx) {
-    if (String.isBlank(conditionType)) {
-      return false;
-    }
-
-    switch on conditionType {
-      when 'ANY_DENIED' {
-        return hasAnyNormalized(ctx, DENIED);
-      }
-      when 'ALL_SETUP_COMPLETE' {
-        return allRequirementsSetupComplete(ctx);
-      }
-      when 'ANY_CANCELED' {
-        return hasAnyCanceled(ctx);
-      }
-      when 'ANY_EXPIRED' {
-        return hasAnyNormalized(ctx, EXPIRED);
-      }
-      when 'ONLY_AGREEMENT_OUT_FOR_SIGNATURE' {
-        return onlyAgreementHasStatus(ctx, OUT_FOR_SIGNATURE);
-      }
-      when 'ONLY_AGREEMENT_SIGNED' {
-        return onlyAgreementHasStatus(ctx, SIGNED) ||
-          onlyAgreementHasStatus(ctx, SETUP_COMPLETE);
-      }
-      when 'AGREEMENT_SIGNED_AND_CONTRACT_COMPLETE' {
-        return agreementSignedAndContractComplete(ctx);
-      }
-      when 'PENDING_SALES' {
-        return !hasAnyNormalized(ctx, DENIED) &&
-          !allRequirementsSetupComplete(ctx) &&
-          SALES.equals(ctx.onboarding.Assigned_Team__c);
-      }
-      when 'IN_PROCESS_DEFAULT' {
-        return !hasAnyNormalized(ctx, DENIED) && !allRequirementsSetupComplete(ctx);
-      }
-      when 'OPPORTUNITY_CANCELED' {
-        return ctx.opportunity != null &&
-          isCanceledStage(ctx.opportunity.StageName);
-      }
-      when else {
-        return false;
-      }
-    }
-  }
-
-  @TestVisible
-  private static Boolean evaluateConditionForTest(
-    String conditionType,
-    EvaluationContext ctx
-  ) {
-    return evaluateCondition(conditionType, ctx);
-  }
-
-  private static Boolean hasAnyNormalized(EvaluationContext ctx, String status) {
-    for (RequirementInfo r : ctx.requirements) {
-      if (status.equalsIgnoreCase(r.normalizedStatus)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static Boolean hasAnyCanceled(EvaluationContext ctx) {
-    if (
-      !hasAnyNormalized(ctx, CANCELED) &&
-      !hasAnyNormalized(ctx, CANCELLED)
-    ) {
-      return false;
-    }
-
-    // Cancellation can be cleared by reopening/changing Opportunity stage.
-    return ctx.opportunity == null || isCanceledStage(ctx.opportunity.StageName);
-  }
-
-  private static Boolean allRequirementsSetupComplete(EvaluationContext ctx) {
-    if (ctx.requirements.isEmpty()) {
-      return false;
-    }
-    for (RequirementInfo r : ctx.requirements) {
-      String n = r.normalizedStatus;
-      if (n == null || n == '') {
-        return false;
-      }
-      if (
-        !SETUP_COMPLETE.equalsIgnoreCase(n) &&
-        !IGNORE.equalsIgnoreCase(n) &&
-        !SIGNED.equalsIgnoreCase(n) &&
-        !COMPLETE.equalsIgnoreCase(n)
-      ) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private static Boolean onlyAgreementHasStatus(EvaluationContext ctx, String status) {
-    Boolean agreementHas = false;
-    for (RequirementInfo r : ctx.requirements) {
-      if (AGREEMENT.equalsIgnoreCase(r.requirementType)) {
-        if (status.equalsIgnoreCase(r.normalizedStatus)) {
-          agreementHas = true;
-        } else {
-          return false;
-        }
-      } else {
-        String n = r.normalizedStatus;
-        if (n != null && n != '' && !IGNORE.equalsIgnoreCase(n)) {
-          return false;
-        }
-      }
-    }
-    return agreementHas;
-  }
-
-  private static Boolean agreementSignedAndContractComplete(EvaluationContext ctx) {
-    String agreementNorm = ctx.normalizedByReqType.get(AGREEMENT);
-    String contractNorm = ctx.normalizedByReqType.get(CONTRACT);
-    if (
-      agreementNorm == null ||
-      (!SIGNED.equalsIgnoreCase(agreementNorm) &&
-        !SETUP_COMPLETE.equalsIgnoreCase(agreementNorm))
-    ) {
-      return false;
-    }
-    if (
-      contractNorm == null ||
-      (!COMPLETE.equalsIgnoreCase(contractNorm) &&
-        !SETUP_COMPLETE.equalsIgnoreCase(contractNorm))
-    ) {
-      return false;
-    }
-    for (RequirementInfo r : ctx.requirements) {
-      if (AGREEMENT.equalsIgnoreCase(r.requirementType) ||
-        CONTRACT.equalsIgnoreCase(r.requirementType)) {
-        continue;
-      }
-      String n = r.normalizedStatus;
-      if (n != null && n != '' && !IGNORE.equalsIgnoreCase(n)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private static Boolean isCanceledStage(String stage) {
-    return stage != null &&
-      (
-        stage.equalsIgnoreCase('Canceled') ||
-        stage.equalsIgnoreCase('Cancelled') ||
-        stage.equalsIgnoreCase('Closed Lost')
-      );
   }
 
   private static EvaluationResult emptyResult() {

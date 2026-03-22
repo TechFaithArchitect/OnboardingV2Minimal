@@ -20,22 +20,6 @@ Creates a vendor program with program group membership.
 sf apex run --file scripts/sample-data/seed-vendor-program.apex
 ```
 
-### seed-status-rules.apex
-
-Creates sample status evaluation rules (if needed for testing).
-
-**What it creates**:
-- Vendor Program Group (if needed)
-- Vendor Program Requirements (if needed)
-- Sample `Onboarding_Status_Evaluation_Rule__mdt` records (if applicable)
-
-**Usage**:
-```bash
-sf apex run --file scripts/sample-data/seed-status-rules.apex
-```
-
-**Note**: Status evaluation is driven by Flow and `Onboarding_Status_Normalization__mdt` (per-requirement).
-
 ## Verifying Setup
 
 ### Vendor Program
