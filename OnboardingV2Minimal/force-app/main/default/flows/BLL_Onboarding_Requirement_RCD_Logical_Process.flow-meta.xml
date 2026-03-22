@@ -32,6 +32,22 @@
             <assignToReference>errorMessage</assignToReference>
             <name>errorMessage</name>
         </outputParameters>
+        <outputParameters>
+            <assignToReference>EvaluateStatus_TargetOnboardingStatus</assignToReference>
+            <name>targetOnboardingStatus</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>EvaluateStatus_MatchedRuleDeveloperName</assignToReference>
+            <name>matchedRuleDeveloperName</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>EvaluateStatus_MatchedRuleOrder</assignToReference>
+            <name>matchedRuleOrder</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>EvaluateStatus_ShouldUpdate</assignToReference>
+            <name>shouldUpdate</name>
+        </outputParameters>
     </actionCalls>
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
@@ -602,6 +618,34 @@
     </variables>
     <variables>
         <name>errorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EvaluateStatus_MatchedRuleDeveloperName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EvaluateStatus_MatchedRuleOrder</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EvaluateStatus_ShouldUpdate</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>EvaluateStatus_TargetOnboardingStatus</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>

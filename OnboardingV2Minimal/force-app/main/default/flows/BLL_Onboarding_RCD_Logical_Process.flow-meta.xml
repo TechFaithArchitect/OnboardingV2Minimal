@@ -2,6 +2,150 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <actionCalls>
+        <name>Dispatch_Setup_Complete_Communication</name>
+        <label>Dispatch Setup Complete Communication</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingRecordFlowSupport</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Apply_Onboarding_Next_Step_Rules</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>eventKey</name>
+            <value>
+                <stringValue>SetupComplete</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onboardingId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>vendorProgramId</name>
+            <value>
+                <elementReference>$Record.Vendor_Customization__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingRecordFlowSupport</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Dispatch_Training_Communication</name>
+        <label>Dispatch Training Communication</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingRecordFlowSupport</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Determine_Send_Setup_Complete</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>eventKey</name>
+            <value>
+                <stringValue>LearnUponTriggered</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onboardingId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>vendorProgramId</name>
+            <value>
+                <elementReference>$Record.Vendor_Customization__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingRecordFlowSupport</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Apply_Onboarding_Next_Step_Rules</name>
+        <label>Apply Onboarding Next Step Rules</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingNextStepRuleInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Should_Run_Contract_Opportunity_Alignment</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>onboardingId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingNextStepRuleInvocable</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Evaluate_BRE_Setup_Complete_Gate</name>
+        <label>Evaluate BRE Setup Complete Gate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingRecordBREGateInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Should_Dispatch_Setup_Complete_By_BRE</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>eventKey</name>
+            <value>
+                <stringValue>SetupComplete</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>vendorProgramId</name>
+            <value>
+                <elementReference>$Record.Vendor_Customization__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingRecordBREGateInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>BREDispatchAllowedSetupComplete</assignToReference>
+            <name>dispatchAllowed</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Evaluate_BRE_Training_Gate</name>
+        <label>Evaluate BRE Training Gate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingRecordBREGateInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Should_Dispatch_Training_By_BRE</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>eventKey</name>
+            <value>
+                <stringValue>LearnUponTriggered</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>vendorProgramId</name>
+            <value>
+                <elementReference>$Record.Vendor_Customization__c</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingRecordBREGateInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>BREDispatchAllowedTraining</assignToReference>
+            <name>dispatchAllowed</name>
+        </outputParameters>
+    </actionCalls>
     <assignments>
         <name>Capture_Align_Onboarding_Opportunity_Fault</name>
         <label>Capture Align Onboarding Opportunity Fault</label>
@@ -294,7 +438,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Should_Run_Contract_Opportunity_Alignment</targetReference>
+            <targetReference>Apply_Onboarding_Next_Step_Rules</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Blocked By BRE</defaultConnectorLabel>
         <rules>
@@ -460,126 +604,6 @@
                 <elementReference>VendorProgramRequirementRecordCollection</elementReference>
             </value>
         </inputAssignments>
-    </subflows>
-    <subflows>
-        <name>Dispatch_Setup_Complete_Communication</name>
-        <label>Dispatch Setup Complete Communication</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Should_Run_Contract_Opportunity_Alignment</targetReference>
-        </connector>
-        <flowName>BLL_Onboarding_SFL_Dispatch_Communication_By_Event</flowName>
-        <inputAssignments>
-            <name>EventKey</name>
-            <value>
-                <stringValue>SetupComplete</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>$Record</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputAssignments>
-    </subflows>
-    <subflows>
-        <name>Dispatch_Training_Communication</name>
-        <label>Dispatch Training Communication</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Determine_Send_Setup_Complete</targetReference>
-        </connector>
-        <flowName>BLL_Onboarding_SFL_Dispatch_Communication_By_Event</flowName>
-        <inputAssignments>
-            <name>EventKey</name>
-            <value>
-                <stringValue>LearnUponTriggered</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>OnboardingRecord</name>
-            <value>
-                <elementReference>$Record</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputAssignments>
-    </subflows>
-    <subflows>
-        <name>Evaluate_BRE_Setup_Complete_Gate</name>
-        <label>Evaluate BRE Setup Complete Gate</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Should_Dispatch_Setup_Complete_By_BRE</targetReference>
-        </connector>
-        <flowName>BLL_BRE_Evaluate_Business_Rules</flowName>
-        <inputAssignments>
-            <name>EventKey</name>
-            <value>
-                <stringValue>SetupComplete</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>RuleContext</name>
-            <value>
-                <stringValue>CommunicationDispatch</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>BREDispatchAllowedSetupComplete</assignToReference>
-            <name>DispatchAllowed</name>
-        </outputAssignments>
-    </subflows>
-    <subflows>
-        <name>Evaluate_BRE_Training_Gate</name>
-        <label>Evaluate BRE Training Gate</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Should_Dispatch_Training_By_BRE</targetReference>
-        </connector>
-        <flowName>BLL_BRE_Evaluate_Business_Rules</flowName>
-        <inputAssignments>
-            <name>EventKey</name>
-            <value>
-                <stringValue>LearnUponTriggered</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>RuleContext</name>
-            <value>
-                <stringValue>CommunicationDispatch</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <name>VendorProgramRecord</name>
-            <value>
-                <elementReference>VendorProgramRecord</elementReference>
-            </value>
-        </inputAssignments>
-        <outputAssignments>
-            <assignToReference>BREDispatchAllowedTraining</assignToReference>
-            <name>DispatchAllowed</name>
-        </outputAssignments>
     </subflows>
     <subflows>
         <name>Get_Contract_Record_For_Alignment</name>

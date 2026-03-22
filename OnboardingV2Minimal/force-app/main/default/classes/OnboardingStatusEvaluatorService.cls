@@ -13,6 +13,7 @@ public with sharing class OnboardingStatusEvaluatorService {
 
   public class EvaluationContext {
     public Onboarding__c onboarding;
+    /** Linked opportunity for cancel/stage predicates only; not used for Contract/Agreement reads. */
     public Opportunity opportunity;
     public List<RequirementInfo> requirements;
     public Map<String, String> normalizedByReqType;
@@ -36,6 +37,10 @@ public with sharing class OnboardingStatusEvaluatorService {
     public String targetOnboardingStatus;
     public String targetOpportunityStage;
     public Boolean shouldUpdate;
+    /** First matching Onboarding_Status_Evaluation_Rule__mdt.DeveloperName (null if no rule matched). */
+    public String matchedRuleDeveloperName;
+    /** Rule_Order__c of the matched rule as a string (null if no rule matched). */
+    public String matchedRuleOrder;
   }
 
   public static EvaluationResult evaluate(Id onboardingId) {
@@ -59,6 +64,7 @@ public with sharing class OnboardingStatusEvaluatorService {
     List<Onboarding_Status_Evaluation_Rule__mdt> rules = [
       SELECT
         DeveloperName,
+        Rule_Order__c,
         Predicate_Config__c,
         Target_Onboarding_Status__c,
         Target_Opportunity_Stage__c
@@ -81,6 +87,10 @@ public with sharing class OnboardingStatusEvaluatorService {
           matched.targetOnboardingStatus = rule.Target_Onboarding_Status__c;
           matched.targetOpportunityStage = rule.Target_Opportunity_Stage__c;
           matched.shouldUpdate = true;
+          matched.matchedRuleDeveloperName = rule.DeveloperName;
+          matched.matchedRuleOrder = rule.Rule_Order__c == null
+            ? null
+            : String.valueOf(rule.Rule_Order__c);
           break;
         }
       }
@@ -125,11 +135,13 @@ public with sharing class OnboardingStatusEvaluatorService {
       return resultsById;
     }
 
+    // Omit WITH SECURITY_ENFORCED: same automation/FLS gap as requirement rows — if the running user
+    // cannot read Onboarding__c via enforced SOQL, the map misses the Id and onboarding DML is skipped
+    // while evaluateBulk still returned a target status (silent no-op).
     Map<Id, Onboarding__c> onboardingById = new Map<Id, Onboarding__c>([
       SELECT Id, Onboarding_Status__c, Opportunity__c
       FROM Onboarding__c
       WHERE Id IN :evaluableOnboardingIds
-      WITH SECURITY_ENFORCED
     ]);
 
     Map<Id, String> targetStageByOpportunityId = new Map<Id, String>();
@@ -139,6 +151,13 @@ public with sharing class OnboardingStatusEvaluatorService {
       EvaluationResult result = resultsById.get(onboardingId);
       Onboarding__c existingOnboarding = onboardingById.get(onboardingId);
       if (existingOnboarding == null) {
+        LoggingUtil.warn(
+          'OnboardingStatusEvaluatorService.evaluateAndApplyBulk: onboarding ' +
+            String.valueOf(onboardingId) +
+            ' not returned by apply-path SOQL (access/FLS); skipping Onboarding_Status__c DML though target status was "' +
+            String.valueOf(result.targetOnboardingStatus) +
+            '".'
+        );
         continue;
       }
 
@@ -170,7 +189,6 @@ public with sharing class OnboardingStatusEvaluatorService {
         SELECT Id, StageName
         FROM Opportunity
         WHERE Id IN :targetStageByOpportunityId.keySet()
-        WITH SECURITY_ENFORCED
       ]) {
         String targetStage = targetStageByOpportunityId.get(existingOpportunity.Id);
         if (
@@ -218,7 +236,6 @@ public with sharing class OnboardingStatusEvaluatorService {
       SELECT Id, Onboarding_Status__c, Assigned_Team__c, Opportunity__c, Vendor_Customization__c
       FROM Onboarding__c
       WHERE Id IN :onboardingIds
-      WITH SECURITY_ENFORCED
     ]);
     if (onboardingById.isEmpty()) {
       return contextByOnboardingId;
@@ -237,7 +254,6 @@ public with sharing class OnboardingStatusEvaluatorService {
         SELECT Id, StageName, IsClosed, IsWon
         FROM Opportunity
         WHERE Id IN :opportunityIds
-        WITH SECURITY_ENFORCED
       ]);
     }
 
@@ -293,11 +309,12 @@ public with sharing class OnboardingStatusEvaluatorService {
       contextByOnboardingId.put(onboarding.Id, ctx);
     }
 
+    // Omit WITH SECURITY_ENFORCED (same rationale as Vendor_Program_Requirement__c above): flows and
+    // integration users must evaluate status from every child requirement row, not a partial set.
     for (Onboarding_Requirement__c r : [
       SELECT Id, Onboarding__c, Requirement_Type__c, Status__c, Is_Overridden__c
       FROM Onboarding_Requirement__c
       WHERE Onboarding__c IN :contextByOnboardingId.keySet()
-      WITH SECURITY_ENFORCED
     ]) {
       EvaluationContext ctx = contextByOnboardingId.get(r.Onboarding__c);
       if (ctx == null) {
@@ -306,16 +323,15 @@ public with sharing class OnboardingStatusEvaluatorService {
 
       RequirementInfo ri = new RequirementInfo();
       ri.id = r.Id;
-      ri.requirementType = r.Requirement_Type__c;
+      String reqType = r.Requirement_Type__c == null ? null : r.Requirement_Type__c.trim();
+      ri.requirementType = reqType;
       ri.status = r.Status__c;
       ri.isOverridden = r.Is_Overridden__c == true;
-      ri.normalizedStatus = OnboardingStatusNormalizationService.normalize(
-        r.Requirement_Type__c,
-        r.Status__c,
-        normMap
-      );
+      ri.normalizedStatus = OnboardingStatusNormalizationService.normalize(reqType, r.Status__c, normMap);
       ctx.requirements.add(ri);
-      ctx.normalizedByReqType.put(r.Requirement_Type__c, ri.normalizedStatus);
+      if (String.isNotBlank(reqType)) {
+        ctx.normalizedByReqType.put(reqType, ri.normalizedStatus);
+      }
     }
 
     return contextByOnboardingId;

@@ -36,16 +36,6 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Onboarding_Status__c</fieldItem>
-                <identifier>RecordOnboarding_Status_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Contract__c</fieldItem>
@@ -58,18 +48,18 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Agreement__c</fieldItem>
-                <identifier>RecordAgreement_cField</identifier>
+                <fieldItem>Record.Opportunity__c</fieldItem>
+                <identifier>RecordOpportunity_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Opportunity__c</fieldItem>
-                <identifier>RecordOpportunity_cField</identifier>
+                <fieldItem>Record.Vendor_Customization__c</fieldItem>
+                <identifier>RecordVendor_Customization_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-80527ebc-dc09-4a6a-92c9-72c4bc12b14e</name>
@@ -78,30 +68,24 @@
     <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>readonly</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.LearnUpon_Training_Status__c</fieldItem>
-                <identifier>RecordLearnUpon_Training_Status_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldItem>Record.Contract__r.Status</fieldItem>
                 <identifier>RecordContract_rStatusField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Agreement__r.echosign_dev1__Status__c</fieldItem>
-                <identifier>RecordAgreement_rechosign_dev1_Status_cField</identifier>
+                <fieldItem>Record.Opportunity__r.StageName</fieldItem>
+                <identifier>RecordOpportunity_rStageNameField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Opportunity__r.StageName</fieldItem>
-                <identifier>RecordOpportunity_rStageNameField</identifier>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Onboarding_Status__c</fieldItem>
+                <identifier>RecordOnboarding_Status_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-286d592d-7319-4a35-b664-18a914e74e2a</name>
@@ -174,6 +158,10 @@
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
+                    <name>enablePicklistTelemetry</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>fieldApiNamesCsv</name>
                     <value>Requirement_Type__c,Status__c,Completed__c,Is_Overridden__c,Override_Action__c,Override_Approved_By__c,Override_Reason__c,Override_Approved_On__c</value>
                 </componentInstanceProperties>
@@ -229,6 +217,10 @@
                 <componentInstanceProperties>
                     <name>relationshipFieldApiNamesCsv</name>
                 </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>useGraphqlReadPath</name>
+                    <value>false</value>
+                </componentInstanceProperties>
                 <componentName>objectRelatedList</componentName>
                 <identifier>c_objectRelatedList</identifier>
             </componentInstance>
@@ -254,6 +246,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>enableInlineEdit</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>enablePicklistTelemetry</name>
                     <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -312,6 +308,10 @@
                 <componentInstanceProperties>
                     <name>relationshipFieldApiNamesCsv</name>
                     <value>Parent.Requirement_Type__c,Field,OldValue,NewValue,CreatedBy.Name,CreatedDate</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>useGraphqlReadPath</name>
+                    <value>false</value>
                 </componentInstanceProperties>
                 <componentName>objectRelatedList</componentName>
                 <identifier>c_objectRelatedList2</identifier>
@@ -654,6 +654,10 @@
                     <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
+                    <name>enablePicklistTelemetry</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>excludeRowsWhereCsv</name>
                     <value>IsActive=False</value>
                 </componentInstanceProperties>
@@ -711,6 +715,10 @@
                     <name>relationshipFieldApiNamesCsv</name>
                     <value>Contact.Name</value>
                 </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>useGraphqlReadPath</name>
+                    <value>false</value>
+                </componentInstanceProperties>
                 <componentName>objectRelatedList</componentName>
                 <identifier>c_objectRelatedList3</identifier>
             </componentInstance>
@@ -736,6 +744,10 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>enableInlineEdit</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>enablePicklistTelemetry</name>
                     <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -795,8 +807,104 @@
                     <name>relationshipFieldApiNamesCsv</name>
                     <value>Contact.Name</value>
                 </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>useGraphqlReadPath</name>
+                    <value>false</value>
+                </componentInstanceProperties>
                 <componentName>objectRelatedList</componentName>
                 <identifier>c_objectRelatedList4</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>childComponent</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>childObjectApiName</name>
+                    <value>echosign_dev1__SIGN_Agreement__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>columnFieldApiNamesCsv</name>
+                    <value>Name,echosign_dev1__Status__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>columnsJson</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>defaultFieldValuesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>enableInlineEdit</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>enablePicklistTelemetry</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>excludeRowsWhereCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>fieldApiNamesCsv</name>
+                    <value>Name,echosign_dev1__Status__c,echosign_dev1__DateSent__c,echosign_dev1__DateSigned__c,LastModifiedDate</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>headerTitleOverride</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>itemCountLabelOverride</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>linkFieldApiName</name>
+                    <value>Name</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>modalTitle</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>newActionBehavior</name>
+                    <value>auto</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectApiName</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>objectLabel</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderByField</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>orderDirection</name>
+                    <value>DESC</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentFieldApiName</name>
+                    <value>echosign_dev1__Contract__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>parentRecordIdSourceFieldApiName</name>
+                    <value>Contract__c</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>readOnlyFieldApiNamesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>readOnlyTreatAsTextFieldApiNamesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relationshipApiName</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relationshipFieldApiNamesCsv</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>useGraphqlReadPath</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>objectRelatedList</componentName>
+                <identifier>c_objectRelatedList5</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

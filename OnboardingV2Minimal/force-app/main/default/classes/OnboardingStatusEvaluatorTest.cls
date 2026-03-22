@@ -122,6 +122,16 @@ private class OnboardingStatusEvaluatorTest {
       results[0].targetOnboardingStatus,
       'Should return evaluated target status without DML'
     );
+    System.assertEquals(
+      'ALL_SETUP_COMPLETE',
+      results[0].matchedRuleDeveloperName,
+      'Invocable should surface which CMDT rule won for support/debug'
+    );
+    System.assertEquals(
+      30,
+      Decimal.valueOf(results[0].matchedRuleOrder),
+      'Matched rule order should match ALL_SETUP_COMPLETE CMDT'
+    );
     System.assert(String.isBlank(results[0].errorMessage), 'No error expected');
 
     Onboarding__c onbAfter = [
@@ -269,7 +279,7 @@ private class OnboardingStatusEvaluatorTest {
   }
 
   @IsTest
-  static void testAllRequirementsTerminalRequiresRowPerTemplateType() {
+  static void testAllRequirementsTerminalSkipsTemplateTypesWithNoOnboardingRow() {
     OnboardingStatusEvaluatorService.EvaluationContext ctx = buildContext(
       'Onboarding',
       'New',
@@ -279,9 +289,51 @@ private class OnboardingStatusEvaluatorTest {
     ctx.applicableProgramRequirementTypesLowercase = new Set<String>{ 'agreement', 'contract' };
 
     System.assertEquals(
+      true,
+      evalPredicateJson('{"op":"allRequirementsTerminal"}', ctx),
+      'Template type with no onboarding row must not block when another template type has terminal rows'
+    );
+  }
+
+  @IsTest
+  static void testAllRequirementsTerminalFalseWhenOnlyOffTemplateRowsAndNotTerminal() {
+    OnboardingStatusEvaluatorService.EvaluationContext ctx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Training', 'In Process')
+      }
+    );
+    ctx.applicableProgramRequirementTypesLowercase = new Set<String>{ 'agreement', 'contract' };
+
+    System.assertEquals(
       false,
       evalPredicateJson('{"op":"allRequirementsTerminal"}', ctx),
-      'Missing onboarding row for a template type must prevent allRequirementsTerminal'
+      'When template keys match no rows, fall back requires every onboarding row to be terminal'
+    );
+  }
+
+  @IsTest
+  static void testAllRequirementsTerminalFallbackWhenProgramTypesMismatchRequirementRows() {
+    OnboardingStatusEvaluatorService.EvaluationContext ctx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Signed'),
+        buildReq('Contract', 'Complete')
+      }
+    );
+    ctx.applicableProgramRequirementTypesLowercase = new Set<String>{
+      'bogus_template_type',
+      'another_bad_key'
+    };
+
+    System.assertEquals(
+      true,
+      evalPredicateJson('{"op":"allRequirementsTerminal"}', ctx),
+      'When VPR types do not match any row, fall back to all rows terminal for Setup Complete'
     );
   }
 
@@ -390,9 +442,9 @@ private class OnboardingStatusEvaluatorTest {
     );
   }
 
-  /** Missing onboarding row for an active template type must prevent Setup Complete (service + SOQL path). */
+  /** Extra active template type with no onboarding row must not block Setup Complete (service + SOQL path). */
   @IsTest
-  static void testIntegrationSetupCompleteRequiresOnboardingRowPerActiveProgramType() {
+  static void testIntegrationSetupCompleteWhenSecondTemplateTypeHasNoOnboardingRow() {
     TestDataFactoryWrapper.VendorCustomizationWrapper programWrap = TestVendorProgramFactory.createVendorWithCustomization(
       true
     );
@@ -449,15 +501,15 @@ private class OnboardingStatusEvaluatorTest {
     OnboardingStatusEvaluatorService.EvaluationResult result = OnboardingStatusEvaluatorService.evaluate(onb.Id);
     Test.stopTest();
 
-    System.assertNotEquals(
+    System.assertEquals(
       'Setup Complete',
       result.targetOnboardingStatus,
-      'Active template requires two types; only one onboarding requirement row must not yield Setup Complete'
+      'One terminal row plus a template type with no row should still match ALL_SETUP_COMPLETE'
     );
   }
 
   @IsTest
-  static void testSetupCompleteRequiresEachTemplateRequirementRow() {
+  static void testSetupCompleteWhenSecondProgramTypeHasNoRequirementRow() {
     List<String> vprTypes = TestDataFactoryUtil.getPicklistValues(
       Vendor_Program_Requirement__c.SObjectType,
       'Requirement_Type__c'
@@ -497,10 +549,10 @@ private class OnboardingStatusEvaluatorTest {
     OnboardingStatusEvaluatorService.EvaluationResult result = OnboardingStatusEvaluatorService.evaluate(onb.Id);
     Test.stopTest();
 
-    System.assertNotEquals(
+    System.assertEquals(
       'Setup Complete',
       result.targetOnboardingStatus,
-      'Template lists two types; missing second onboarding requirement row must prevent Setup Complete'
+      'Missing row for a second template type must not block Setup Complete when existing rows are terminal'
     );
   }
 
@@ -582,7 +634,62 @@ private class OnboardingStatusEvaluatorTest {
     System.assertEquals(
       false,
       evalPredicateJson('{"op":"agreementSignedContractNotStartedOthersIgnored"}', noContractCtx),
-      'PIR gate requires a Contract row'
+      'PIR gate requires at least one Contract requirement row in an early milestone (Draft, New, Not Started, or In Approval Process normalized)'
+    );
+
+    OnboardingStatusEvaluatorService.EvaluationContext pirContractInApprovalCtx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Signed'),
+        buildReq('Contract', 'In Approval Process'),
+        buildReq('Training', 'In Process')
+      }
+    );
+    System.assertEquals(
+      true,
+      evalPredicateJson(
+        '{"op":"agreementSignedContractNotStartedOthersIgnored"}',
+        pirContractInApprovalCtx
+      ),
+      'Contract requirement normalized In Approval Process should satisfy PIR contract gate when synced from linked Contract'
+    );
+
+    OnboardingStatusEvaluatorService.EvaluationContext pirContractDraftCtx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Signed'),
+        buildReq('Contract', 'Draft')
+      }
+    );
+    System.assertEquals(
+      true,
+      evalPredicateJson(
+        '{"op":"agreementSignedContractNotStartedOthersIgnored"}',
+        pirContractDraftCtx
+      ),
+      'Contract Draft (default create state) should satisfy PIR gate same as Not Started'
+    );
+
+    OnboardingStatusEvaluatorService.EvaluationContext pirContractNewCtx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Signed'),
+        buildReq('Contract', 'New')
+      }
+    );
+    System.assertEquals(
+      true,
+      evalPredicateJson(
+        '{"op":"agreementSignedContractNotStartedOthersIgnored"}',
+        pirContractNewCtx
+      ),
+      'Contract New should satisfy PIR gate before flows sync to Not Started'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext expiredCtx = buildContext(
@@ -610,7 +717,7 @@ private class OnboardingStatusEvaluatorTest {
     System.assertEquals(
       false,
       evalPredicateJson('{"op":"anyRequirementCanceledWithStageGate"}', canceledOpenOppCtx),
-      'canceled requirement should not match when opportunity stage is open'
+      'canceled requirement should not match when opportunity stage is still open'
     );
 
     OnboardingStatusEvaluatorService.EvaluationContext canceledClosedOppCtx = buildContext(
@@ -1222,7 +1329,11 @@ private class OnboardingStatusEvaluatorTest {
       Assigned_Team__c = assignedTeam,
       Onboarding_Status__c = onboardingStatus
     );
-    ctx.opportunity = new Opportunity(StageName = opportunityStage);
+    if (opportunityStage == null) {
+      ctx.opportunity = null;
+    } else {
+      ctx.opportunity = new Opportunity(StageName = opportunityStage);
+    }
     ctx.requirements = requirements;
     ctx.normalizedByReqType = new Map<String, String>();
     ctx.applicableProgramRequirementTypesLowercase = new Set<String>();

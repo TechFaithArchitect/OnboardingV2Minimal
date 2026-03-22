@@ -15,6 +15,9 @@ public with sharing class OnboardingStatusPredicateInterpreter {
   private static final String AGREEMENT = 'Agreement';
   private static final String CONTRACT = 'Contract';
   private static final String NOT_STARTED = 'Not Started';
+  private static final String IN_APPROVAL_PROCESS = 'In Approval Process';
+  private static final String DRAFT = 'Draft';
+  private static final String NEW_STATUS = 'New';
 
   public static Boolean ruleMatchesRule(
     Onboarding_Status_Evaluation_Rule__mdt rule,
@@ -104,7 +107,7 @@ public with sharing class OnboardingStatusPredicateInterpreter {
         return !allRequirementsSetupComplete(ctx);
       }
       when 'anyrequirementcanceledwithstagegate' {
-        return hasAnyCanceled(ctx);
+        return hasAnyCanceledWithStageGate(ctx);
       }
       when 'onlyrequirementtypenormalizedinset' {
         return onlyRequirementTypeNormalizedInSet(
@@ -127,7 +130,7 @@ public with sharing class OnboardingStatusPredicateInterpreter {
       }
       when 'opportunitystagecanceled' {
         return ctx.opportunity != null &&
-          isCanceledStage(ctx.opportunity.StageName);
+          isCanceledOpportunityStage(ctx.opportunity.StageName);
       }
       when else {
         return false;
@@ -211,14 +214,19 @@ public with sharing class OnboardingStatusPredicateInterpreter {
     return false;
   }
 
-  private static Boolean hasAnyCanceled(OnboardingStatusEvaluatorService.EvaluationContext ctx) {
+  /**
+   * Canceled requirement rows only drive onboarding Canceled when the linked Opportunity is absent
+   * or already in a canceled/lost stage — avoids treating in-flight deals as hard-canceled from a stray row.
+   */
+  private static Boolean hasAnyCanceledWithStageGate(OnboardingStatusEvaluatorService.EvaluationContext ctx) {
     if (
       !hasAnyNormalized(ctx, CANCELED) &&
       !hasAnyNormalized(ctx, CANCELLED)
     ) {
       return false;
     }
-    return ctx.opportunity == null || isCanceledStage(ctx.opportunity.StageName);
+    return ctx.opportunity == null ||
+      isCanceledOpportunityStage(ctx.opportunity.StageName);
   }
 
   private static Boolean allRequirementsSetupComplete(
@@ -231,21 +239,32 @@ public with sharing class OnboardingStatusPredicateInterpreter {
     if (applicable == null || applicable.isEmpty()) {
       return everyOnboardingRequirementRowTerminal(ctx.requirements);
     }
+    // Template types with no onboarding row yet are skipped (do not block). Otherwise a program that
+    // lists e.g. Training on Vendor_Program_Requirement__c but never creates that row prevents
+    // Setup Complete forever when Agreement+Contract are done. At least one template type must have
+    // ≥1 row, and every row for every template type that *does* have rows must be terminal.
+    Boolean sawAtLeastOneTemplateRow = false;
     for (String typeKey : applicable) {
       List<OnboardingStatusEvaluatorService.RequirementInfo> rows = requirementsMatchingTypeKey(
         ctx.requirements,
         typeKey
       );
       if (rows.isEmpty()) {
-        return false;
+        continue;
       }
+      sawAtLeastOneTemplateRow = true;
       for (OnboardingStatusEvaluatorService.RequirementInfo r : rows) {
         if (!isTerminalNormalizedStatus(r.normalizedStatus)) {
           return false;
         }
       }
     }
-    return true;
+    if (sawAtLeastOneTemplateRow) {
+      return true;
+    }
+    // Program template Requirement_Type__c values did not match any onboarding row (picklist drift,
+    // typos, or org-specific labels). Do not block Setup Complete forever — fall back to "all rows terminal".
+    return everyOnboardingRequirementRowTerminal(ctx.requirements);
   }
 
   private static List<OnboardingStatusEvaluatorService.RequirementInfo> requirementsMatchingTypeKey(
@@ -289,8 +308,10 @@ public with sharing class OnboardingStatusPredicateInterpreter {
   }
 
   /**
-   * Every Agreement row Signed or Setup Complete; every Contract row normalized Not Started;
-   * other requirement types are ignored (any normalized values).
+   * Every Agreement row Signed or Setup Complete; every Contract requirement row normalized
+   * to an early contract milestone (Not Started or In Approval Process after CMDT + sync).
+   * Other types ignored. Evaluator reads only Onboarding_Requirement__c — keep Contract rows in
+   * sync with linked Contract via flows/automation; do not mirror Contract.Status here.
    */
   private static Boolean agreementSignedContractNotStartedOthersIgnored(
     OnboardingStatusEvaluatorService.EvaluationContext ctx
@@ -315,12 +336,26 @@ public with sharing class OnboardingStatusPredicateInterpreter {
       } else if (CONTRACT.equalsIgnoreCase(r.requirementType)) {
         sawContract = true;
         String n = r.normalizedStatus;
-        if (String.isBlank(n) || !NOT_STARTED.equalsIgnoreCase(n)) {
+        if (String.isBlank(n) || !contractRequirementNormalizedAllowsPendingInitialReview(n)) {
           contractOk = false;
         }
       }
     }
     return sawAgreement && agreementOk && sawContract && contractOk;
+  }
+
+  /**
+   * Pre-PIR contract requirement shapes. Includes Draft/New: Contract requirements often default to
+   * Draft or New before flows sync to Not Started; excluding them forced a fall-through to In Process.
+   */
+  private static Boolean contractRequirementNormalizedAllowsPendingInitialReview(String normalized) {
+    if (String.isBlank(normalized)) {
+      return false;
+    }
+    return NOT_STARTED.equalsIgnoreCase(normalized) ||
+      IN_APPROVAL_PROCESS.equalsIgnoreCase(normalized) ||
+      DRAFT.equalsIgnoreCase(normalized) ||
+      NEW_STATUS.equalsIgnoreCase(normalized);
   }
 
   private static Boolean agreementSignedAndContractComplete(
@@ -364,7 +399,7 @@ public with sharing class OnboardingStatusPredicateInterpreter {
     return true;
   }
 
-  private static Boolean isCanceledStage(String stage) {
+  private static Boolean isCanceledOpportunityStage(String stage) {
     return stage != null &&
       (
         stage.equalsIgnoreCase('Canceled') ||

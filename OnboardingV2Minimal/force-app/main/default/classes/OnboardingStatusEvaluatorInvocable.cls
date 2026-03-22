@@ -24,6 +24,18 @@ public with sharing class OnboardingStatusEvaluatorInvocable {
     @InvocableVariable(label='Should Update')
     public Boolean shouldUpdate;
 
+    @InvocableVariable(
+      label='Matched Rule Developer Name'
+      description='Onboarding_Status_Evaluation_Rule__mdt.DeveloperName for the first rule whose predicate matched (blank if none).'
+    )
+    public String matchedRuleDeveloperName;
+
+    @InvocableVariable(
+      label='Matched Rule Order'
+      description='Rule_Order__c of the matched rule (blank if none). Use with Developer Name to debug why a status was chosen.'
+    )
+    public String matchedRuleOrder;
+
     @InvocableVariable(label='Error Message')
     public String errorMessage;
   }
@@ -84,9 +96,12 @@ public with sharing class OnboardingStatusEvaluatorInvocable {
           if (eval == null) {
             res.errorMessage = 'Onboarding Record Id was not found: ' + onboardingId;
           } else {
+            res.errorMessage = '';
             res.targetOnboardingStatus = eval.targetOnboardingStatus;
             res.targetOpportunityStage = eval.targetOpportunityStage;
             res.shouldUpdate = eval.shouldUpdate;
+            res.matchedRuleDeveloperName = eval.matchedRuleDeveloperName;
+            res.matchedRuleOrder = eval.matchedRuleOrder;
           }
           results.add(res);
           continue;
@@ -101,6 +116,7 @@ public with sharing class OnboardingStatusEvaluatorInvocable {
           anyShouldUpdate = anyShouldUpdate || eval.shouldUpdate == true;
         }
 
+        res.errorMessage = '';
         res.shouldUpdate = anyShouldUpdate;
         results.add(res);
       }

@@ -26,12 +26,15 @@ public with sharing class OnboardingStatusNormalizationService {
     }
     String k = keyFor(requirementType, rawStatus);
     String n = normalizationMap.get(k);
-    return n != null ? n : rawStatus;
+    if (n != null) {
+      return n;
+    }
+    return rawStatus == null ? null : rawStatus.trim();
   }
 
   public static String keyFor(String reqType, String status) {
-    return (reqType == null ? '' : reqType) +
-      '|' +
-      (status == null ? '' : status);
+    String rt = reqType == null ? '' : reqType.trim();
+    String st = status == null ? '' : status.trim();
+    return rt + '|' + st;
   }
 }
