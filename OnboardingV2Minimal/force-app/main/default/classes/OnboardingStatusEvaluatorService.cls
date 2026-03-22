@@ -199,6 +199,15 @@ public with sharing class OnboardingStatusEvaluatorService {
     return resultsById;
   }
 
+  @TestVisible
+  static EvaluationContext loadEvaluationContextForTest(Id onboardingId) {
+    if (onboardingId == null) {
+      return null;
+    }
+    Map<Id, EvaluationContext> byId = loadContexts(new Set<Id>{ onboardingId });
+    return byId.get(onboardingId);
+  }
+
   private static Map<Id, EvaluationContext> loadContexts(Set<Id> onboardingIds) {
     Map<Id, EvaluationContext> contextByOnboardingId = new Map<Id, EvaluationContext>();
     if (onboardingIds == null || onboardingIds.isEmpty()) {
@@ -241,6 +250,8 @@ public with sharing class OnboardingStatusEvaluatorService {
 
     Map<Id, Set<String>> applicableTypesByVendorId = new Map<Id, Set<String>>();
     if (!vendorProgramIds.isEmpty()) {
+      // Program template rows are vendor configuration (not PII). Omit WITH SECURITY_ENFORCED so
+      // automation and tests see the same template as admins; flows should grant object access where needed.
       for (Vendor_Program_Requirement__c vpr : [
         SELECT Vendor_Program__c, Requirement_Type__c
         FROM Vendor_Program_Requirement__c
@@ -248,7 +259,6 @@ public with sharing class OnboardingStatusEvaluatorService {
           Vendor_Program__c IN :vendorProgramIds
           AND Active__c = true
           AND Is_Required__c = true
-        WITH SECURITY_ENFORCED
       ]) {
         if (vpr.Vendor_Program__c == null || String.isBlank(vpr.Requirement_Type__c)) {
           continue;

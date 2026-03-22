@@ -38,27 +38,52 @@ public class TestVendorProgramRequirementFactory {
         return vendorProgramRequirement;
     }
 
+    /**
+     * Explicit requirement type / flags for tests that need multiple program requirements on one vendor program
+     * (e.g. onboarding status template scoping).
+     */
+    public static Vendor_Program_Requirement__c createForProgram(
+        Vendor_Customization__c vendorProgram,
+        String requirementType,
+        Integer sequence,
+        Boolean active,
+        Boolean isRequired,
+        Boolean doInsert
+    ) {
+        Vendor_Customization__c vp = vendorProgram;
+        if (vp == null) {
+            vp = TestVendorProgramFactory.createVendorWithCustomization(doInsert).customization;
+        }
+
+        String rt = requirementType;
+        if (String.isBlank(rt)) {
+            rt = TestDataFactoryUtil.getDefaultPicklistValue(
+                Vendor_Program_Requirement__c.SObjectType,
+                'Requirement_Type__c'
+            );
+            if (String.isBlank(rt)) {
+                rt = TestDataFactoryUtil.getFirstPicklistValue(
+                    Vendor_Program_Requirement__c.SObjectType,
+                    'Requirement_Type__c'
+                );
+            }
+        }
+
+        Vendor_Program_Requirement__c vpr = new Vendor_Program_Requirement__c(
+            Vendor_Program__c = vp.Id,
+            Requirement_Type__c = rt,
+            Is_Required__c = isRequired != null ? isRequired : true,
+            Active__c = active != null ? active : true,
+            Sequence__c = sequence != null ? sequence : 1
+        );
+        TestDataFactoryUtil.maybeInsert(vpr, doInsert);
+        return vpr;
+    }
+
     private static Vendor_Program_Requirement__c buildRequirement(
         Vendor_Customization__c vendorProgram,
         Boolean isActive
     ) {
-        String requirementType = TestDataFactoryUtil.getDefaultPicklistValue(
-            Vendor_Program_Requirement__c.SObjectType,
-            'Requirement_Type__c'
-        );
-        if (String.isBlank(requirementType)) {
-            requirementType = TestDataFactoryUtil.getFirstPicklistValue(
-                Vendor_Program_Requirement__c.SObjectType,
-                'Requirement_Type__c'
-            );
-        }
-
-        return new Vendor_Program_Requirement__c(
-            Vendor_Program__c = vendorProgram != null ? vendorProgram.Id : null,
-            Is_Required__c = true,
-            Active__c = isActive != null ? isActive : true,
-            Sequence__c = 1,
-            Requirement_Type__c = requirementType
-        );
+        return createForProgram(vendorProgram, null, 1, isActive != null ? isActive : true, true, false);
     }
 }

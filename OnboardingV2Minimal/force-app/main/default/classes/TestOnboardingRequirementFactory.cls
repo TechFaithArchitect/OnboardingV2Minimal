@@ -10,6 +10,30 @@ public class TestOnboardingRequirementFactory {
         String status,
         Vendor_Program_Requirement__c vendorProgramRequirement
     ) {
+        return create(
+            doInsert,
+            completed,
+            isOverridden,
+            onboarding,
+            requirementType,
+            sequence,
+            status,
+            vendorProgramRequirement,
+            null
+        );
+    }
+
+    public static Onboarding_Requirement__c create(
+        Boolean doInsert,
+        Boolean completed,
+        Boolean isOverridden,
+        Onboarding__c onboarding,
+        String requirementType,
+        Integer sequence,
+        String status,
+        Vendor_Program_Requirement__c vendorProgramRequirement,
+        Id recordTypeId
+    ) {
         Onboarding_Requirement__c onboardingRequirement = new Onboarding_Requirement__c(
             Completed__c = completed != null ? completed : false,
             Is_Overridden__c = isOverridden != null ? isOverridden : false,
@@ -17,6 +41,10 @@ public class TestOnboardingRequirementFactory {
             Sequence__c = sequence != null ? sequence : 1,
             Vendor_Program_Requirement__c = vendorProgramRequirement != null ? vendorProgramRequirement.Id : null
         );
+
+        if (recordTypeId != null) {
+            onboardingRequirement.RecordTypeId = recordTypeId;
+        }
 
         if (String.isNotBlank(requirementType)) {
             onboardingRequirement.Requirement_Type__c = requirementType;

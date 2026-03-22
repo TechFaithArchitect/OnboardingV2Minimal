@@ -4,6 +4,12 @@
  */
 @IsTest
 private class OnboardingStatusEvaluatorTest {
+  /** Pair discovered via DML so tests work when Requirement_Type__c is record-type–scoped. */
+  private class IntegrationProgramTypeCandidate {
+    String requirementType;
+    Id recordTypeId;
+  }
+
   @TestSetup
   static void setup() {
     Account acc = new Account(Name = 'Test Account');
@@ -276,6 +282,177 @@ private class OnboardingStatusEvaluatorTest {
       false,
       evalPredicateJson('{"op":"allRequirementsTerminal"}', ctx),
       'Missing onboarding row for a template type must prevent allRequirementsTerminal'
+    );
+  }
+
+  /**
+   * Full-path test: Vendor_Program_Requirement__c drives the active template; inactive program rows
+   * do not expand the template, so stray onboarding requirements of that type must not block Setup Complete.
+   * Program types are discovered via insert probe so sandboxes with record-type–restricted picklists still pass.
+   */
+  @IsTest
+  static void testIntegrationSetupCompleteIgnoresInactiveProgramRequirementTypes() {
+    TestDataFactoryWrapper.VendorCustomizationWrapper programWrap = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+    Vendor_Customization__c vendorProgram = programWrap.customization;
+    Account acc = TestDataFactory.createAccount('OnbStatusTemplateInt', true);
+    Onboarding__c onb = TestOnboardingFactory.create(acc, vendorProgram, true);
+
+    List<IntegrationProgramTypeCandidate> good = integrationDiscoverProgramTypesThatInsertOnOnboarding(
+      vendorProgram,
+      onb.Id,
+      3,
+      25
+    );
+    System.assert(
+      good.size() >= 3,
+      'Could not find 3 program requirement types that insert as Onboarding_Requirement__c in this org (record types / picklists).'
+    );
+
+    // Insert probes run before startTest (separate governor bucket); startTest resets SOQL/DML for template rows + evaluate.
+    Test.startTest();
+
+    Vendor_Program_Requirement__c vprA = TestVendorProgramRequirementFactory.createForProgram(
+      vendorProgram,
+      good[0].requirementType,
+      1,
+      true,
+      true,
+      false
+    );
+    Vendor_Program_Requirement__c vprB = TestVendorProgramRequirementFactory.createForProgram(
+      vendorProgram,
+      good[1].requirementType,
+      2,
+      true,
+      true,
+      false
+    );
+    Vendor_Program_Requirement__c vprStray = TestVendorProgramRequirementFactory.createForProgram(
+      vendorProgram,
+      good[2].requirementType,
+      3,
+      false,
+      false,
+      false
+    );
+    insert new List<Vendor_Program_Requirement__c>{ vprA, vprB, vprStray };
+
+    onb.Onboarding_Status__c = 'In Process';
+    update onb;
+
+    Map<String, String> normMap = OnboardingStatusNormalizationService.loadActiveNormalizationMap();
+
+    TestOnboardingRequirementFactory.create(true, false, false, onb, good[0].requirementType, 1, null, vprA, good[0].recordTypeId);
+    TestOnboardingRequirementFactory.create(true, false, false, onb, good[1].requirementType, 2, null, vprB, good[1].recordTypeId);
+    TestOnboardingRequirementFactory.create(true, false, false, onb, good[2].requirementType, 3, null, vprStray, good[2].recordTypeId);
+
+    for (Onboarding_Requirement__c r : [
+      SELECT Id, Requirement_Type__c, Vendor_Program_Requirement__c
+      FROM Onboarding_Requirement__c
+      WHERE Onboarding__c = :onb.Id
+    ]) {
+      if (r.Vendor_Program_Requirement__c == vprStray.Id) {
+        integrationForceInProgressLikeStatus(r.Id, r.Requirement_Type__c, normMap);
+      } else {
+        integrationForceTerminalStatus(r.Id, r.Requirement_Type__c, normMap);
+      }
+    }
+
+    OnboardingStatusEvaluatorService.EvaluationContext probeCtx = OnboardingStatusEvaluatorService.loadEvaluationContextForTest(
+      onb.Id
+    );
+    System.assertNotEquals(null, probeCtx, 'loadEvaluationContextForTest');
+    System.assertEquals(
+      2,
+      probeCtx.applicableProgramRequirementTypesLowercase.size(),
+      'Expected two active required program types on vendor template; applicable=' +
+      probeCtx.applicableProgramRequirementTypesLowercase
+    );
+    System.assertEquals(
+      true,
+      OnboardingStatusPredicateInterpreter.evaluateNode(
+        JSON.deserializeUntyped('{"op":"allRequirementsTerminal"}'),
+        probeCtx
+      ),
+      integrationDebugEvaluationContext(probeCtx)
+    );
+
+    OnboardingStatusEvaluatorService.EvaluationResult result = OnboardingStatusEvaluatorService.evaluate(onb.Id);
+    Test.stopTest();
+
+    System.assertEquals(true, result.shouldUpdate, 'Evaluator should return a CMDT match');
+    System.assertEquals(
+      'Setup Complete',
+      result.targetOnboardingStatus,
+      'Only active required program types count; inactive VPR row must not expand the template'
+    );
+  }
+
+  /** Missing onboarding row for an active template type must prevent Setup Complete (service + SOQL path). */
+  @IsTest
+  static void testIntegrationSetupCompleteRequiresOnboardingRowPerActiveProgramType() {
+    TestDataFactoryWrapper.VendorCustomizationWrapper programWrap = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+    Vendor_Customization__c vendorProgram = programWrap.customization;
+    Account acc = TestDataFactory.createAccount('OnbStatusMissingRowInt', true);
+    Onboarding__c onb = TestOnboardingFactory.create(acc, vendorProgram, true);
+
+    List<IntegrationProgramTypeCandidate> good = integrationDiscoverProgramTypesThatInsertOnOnboarding(
+      vendorProgram,
+      onb.Id,
+      2,
+      20
+    );
+    System.assert(
+      good.size() >= 2,
+      'Could not find 2 program requirement types that insert as Onboarding_Requirement__c in this org.'
+    );
+
+    // Same as testIntegrationSetupCompleteIgnoresInactiveProgramRequirementTypes: discovery before startTest for governor isolation.
+    Test.startTest();
+
+    Vendor_Program_Requirement__c vprA = TestVendorProgramRequirementFactory.createForProgram(
+      vendorProgram,
+      good[0].requirementType,
+      1,
+      true,
+      true,
+      false
+    );
+    Vendor_Program_Requirement__c vprB = TestVendorProgramRequirementFactory.createForProgram(
+      vendorProgram,
+      good[1].requirementType,
+      2,
+      true,
+      true,
+      false
+    );
+    insert new List<Vendor_Program_Requirement__c>{ vprA, vprB };
+
+    onb.Onboarding_Status__c = 'In Process';
+    update onb;
+
+    Map<String, String> normMap = OnboardingStatusNormalizationService.loadActiveNormalizationMap();
+
+    TestOnboardingRequirementFactory.create(true, false, false, onb, good[0].requirementType, 1, null, vprA, good[0].recordTypeId);
+    Onboarding_Requirement__c onlyReq = [
+      SELECT Id, Requirement_Type__c
+      FROM Onboarding_Requirement__c
+      WHERE Onboarding__c = :onb.Id
+      LIMIT 1
+    ];
+    integrationForceTerminalStatus(onlyReq.Id, good[0].requirementType, normMap);
+
+    OnboardingStatusEvaluatorService.EvaluationResult result = OnboardingStatusEvaluatorService.evaluate(onb.Id);
+    Test.stopTest();
+
+    System.assertNotEquals(
+      'Setup Complete',
+      result.targetOnboardingStatus,
+      'Active template requires two types; only one onboarding requirement row must not yield Setup Complete'
     );
   }
 
@@ -606,6 +783,368 @@ private class OnboardingStatusEvaluatorTest {
       }
     }
     return 'Agreement';
+  }
+
+  /**
+   * Program-template picklist values are not always insertable on Onboarding_Requirement__c (record types).
+   * Probe with a disposable inactive VPR + onboarding row; cap DML (org limit 150) via intersection + two-phase probes.
+   */
+  private static List<IntegrationProgramTypeCandidate> integrationDiscoverProgramTypesThatInsertOnOnboarding(
+    Vendor_Customization__c vendorProgram,
+    Id onboardingId,
+    Integer wantCount,
+    Integer maxTypeProbes
+  ) {
+    List<String> vprTypes = TestDataFactoryUtil.getPicklistValues(
+      Vendor_Program_Requirement__c.SObjectType,
+      'Requirement_Type__c'
+    );
+    Set<String> vprLower = new Set<String>();
+    for (String x : vprTypes) {
+      if (x != null) {
+        vprLower.add(x.toLowerCase());
+      }
+    }
+    List<String> programTypes = new List<String>();
+    for (
+      String o : TestDataFactoryUtil.getPicklistValues(
+        Onboarding_Requirement__c.SObjectType,
+        'Requirement_Type__c'
+      )
+    ) {
+      if (o != null && vprLower.contains(o.toLowerCase())) {
+        programTypes.add(o);
+      }
+    }
+    if (programTypes.isEmpty()) {
+      programTypes = vprTypes;
+    }
+    List<String> statusProbeOrder = integrationOnboardingStatusProbeOrderCapped(7);
+    List<Schema.RecordTypeInfo> rtOrder = integrationSortedAvailableOnboardingRequirementRecordTypes();
+    List<IntegrationProgramTypeCandidate> out = new List<IntegrationProgramTypeCandidate>();
+    Set<String> seenTypeLower = new Set<String>();
+    if (
+      statusProbeOrder.isEmpty() ||
+      onboardingId == null ||
+      wantCount <= 0 ||
+      rtOrder.isEmpty()
+    ) {
+      return out;
+    }
+    Integer typeProbes = 0;
+    Integer typeCap = maxTypeProbes != null && maxTypeProbes > 0 ? maxTypeProbes : 25;
+    for (String t : programTypes) {
+      if (out.size() >= wantCount) {
+        break;
+      }
+      if (typeProbes >= typeCap || !integrationDiscoveryHasDmlHeadroom(62)) {
+        break;
+      }
+      typeProbes++;
+      Vendor_Program_Requirement__c vpr = TestVendorProgramRequirementFactory.createForProgram(
+        vendorProgram,
+        t,
+        800 + typeProbes,
+        false,
+        false,
+        true
+      );
+      Boolean foundForType = false;
+      Integer perTypeAttempts = 16;
+      try {
+        for (String st : statusProbeOrder) {
+          if (foundForType || perTypeAttempts <= 0 || !integrationDiscoveryHasDmlHeadroom(55)) {
+            break;
+          }
+          if (String.isBlank(st)) {
+            continue;
+          }
+          perTypeAttempts--;
+          Onboarding_Requirement__c rowNoRt = new Onboarding_Requirement__c(
+            Onboarding__c = onboardingId,
+            Vendor_Program_Requirement__c = vpr.Id,
+            Requirement_Type__c = t,
+            Status__c = st,
+            Is_Overridden__c = false
+          );
+          Database.SaveResult srNo = Database.insert(rowNoRt, false);
+          if (srNo.isSuccess()) {
+            if (!seenTypeLower.contains(t.toLowerCase())) {
+              IntegrationProgramTypeCandidate c = new IntegrationProgramTypeCandidate();
+              c.requirementType = t;
+              c.recordTypeId = null;
+              out.add(c);
+              seenTypeLower.add(t.toLowerCase());
+            }
+            delete new Onboarding_Requirement__c(Id = srNo.getId());
+            foundForType = true;
+            break;
+          }
+        }
+        if (!foundForType) {
+          Integer rtSeen = 0;
+          for (
+            Schema.RecordTypeInfo rti : integrationRecordTypesOrderedForRequirementType(rtOrder, t)
+          ) {
+            if (rtSeen >= 5) {
+              break;
+            }
+            rtSeen++;
+            if (foundForType || perTypeAttempts <= 0 || !integrationDiscoveryHasDmlHeadroom(55)) {
+              break;
+            }
+            Id rtId = rti.getRecordTypeId();
+            for (String st : statusProbeOrder) {
+              if (foundForType || perTypeAttempts <= 0 || !integrationDiscoveryHasDmlHeadroom(55)) {
+                break;
+              }
+              if (String.isBlank(st)) {
+                continue;
+              }
+              perTypeAttempts--;
+              Onboarding_Requirement__c row = new Onboarding_Requirement__c(
+                RecordTypeId = rtId,
+                Onboarding__c = onboardingId,
+                Vendor_Program_Requirement__c = vpr.Id,
+                Requirement_Type__c = t,
+                Status__c = st,
+                Is_Overridden__c = false
+              );
+              Database.SaveResult sr = Database.insert(row, false);
+              if (sr.isSuccess()) {
+                if (!seenTypeLower.contains(t.toLowerCase())) {
+                  IntegrationProgramTypeCandidate c = new IntegrationProgramTypeCandidate();
+                  c.requirementType = t;
+                  c.recordTypeId = rtId;
+                  out.add(c);
+                  seenTypeLower.add(t.toLowerCase());
+                }
+                delete new Onboarding_Requirement__c(Id = sr.getId());
+                foundForType = true;
+                break;
+              }
+            }
+          }
+        }
+      } finally {
+        delete vpr;
+      }
+    }
+    return out;
+  }
+
+  private static List<Schema.RecordTypeInfo> integrationRecordTypesOrderedForRequirementType(
+    List<Schema.RecordTypeInfo> baseOrder,
+    String requirementType
+  ) {
+    if (String.isBlank(requirementType) || baseOrder == null || baseOrder.isEmpty()) {
+      return baseOrder;
+    }
+    String tNorm = requirementType.toLowerCase().replaceAll('[^a-z0-9]', '');
+    List<Schema.RecordTypeInfo> head = new List<Schema.RecordTypeInfo>();
+    List<Schema.RecordTypeInfo> tail = new List<Schema.RecordTypeInfo>();
+    for (Schema.RecordTypeInfo rti : baseOrder) {
+      String dNorm = rti.getDeveloperName().toLowerCase().replaceAll('[^a-z0-9]', '');
+      if (
+        tNorm.length() > 2 &&
+        (dNorm.contains(tNorm) || tNorm.contains(dNorm))
+      ) {
+        head.add(rti);
+      } else {
+        tail.add(rti);
+      }
+    }
+    head.addAll(tail);
+    return head;
+  }
+
+  private static List<Schema.RecordTypeInfo> integrationSortedAvailableOnboardingRequirementRecordTypes() {
+    Map<String, Schema.RecordTypeInfo> byDev = new Map<String, Schema.RecordTypeInfo>();
+    for (
+      Schema.RecordTypeInfo rti : Onboarding_Requirement__c.SObjectType.getDescribe().getRecordTypeInfos()
+    ) {
+      if (!rti.isAvailable() || rti.getRecordTypeId() == null) {
+        continue;
+      }
+      byDev.put(rti.getDeveloperName(), rti);
+    }
+    List<String> keys = new List<String>(byDev.keySet());
+    keys.sort();
+    List<Schema.RecordTypeInfo> ordered = new List<Schema.RecordTypeInfo>();
+    for (String k : keys) {
+      ordered.add(byDev.get(k));
+    }
+    return ordered;
+  }
+
+  private static List<String> integrationOnboardingStatusProbeOrder() {
+    List<String> raw = TestDataFactoryUtil.getPicklistValues(
+      Onboarding_Requirement__c.SObjectType,
+      'Status__c'
+    );
+    List<String> preferredFirst = new List<String>{
+      'Not Started',
+      'In Process',
+      'Signed',
+      'Complete',
+      'Incomplete',
+      'Pending',
+      'New'
+    };
+    List<String> out = new List<String>();
+    Set<String> usedLower = new Set<String>();
+    for (String p : preferredFirst) {
+      for (String r : raw) {
+        if (r != null && p.equalsIgnoreCase(r) && !usedLower.contains(r.toLowerCase())) {
+          out.add(r);
+          usedLower.add(r.toLowerCase());
+          break;
+        }
+      }
+    }
+    for (String r : raw) {
+      if (r != null && !usedLower.contains(r.toLowerCase())) {
+        out.add(r);
+        usedLower.add(r.toLowerCase());
+      }
+    }
+    return out;
+  }
+
+  private static List<String> integrationOnboardingStatusProbeOrderCapped(Integer maxValues) {
+    List<String> full = integrationOnboardingStatusProbeOrder();
+    if (maxValues == null || maxValues < 1 || full.size() <= maxValues) {
+      return full;
+    }
+    List<String> capped = new List<String>();
+    for (Integer i = 0; i < full.size() && capped.size() < maxValues; i++) {
+      capped.add(full[i]);
+    }
+    return capped;
+  }
+
+  /** True if enough DML remains for probe + later integration setup (inserts + status forcing). */
+  private static Boolean integrationDiscoveryHasDmlHeadroom(Integer minRemaining) {
+    return Limits.getLimitDmlStatements() - Limits.getDmlStatements() > minRemaining;
+  }
+
+  private static String integrationDebugEvaluationContext(
+    OnboardingStatusEvaluatorService.EvaluationContext ctx
+  ) {
+    List<String> parts = new List<String>{
+      'applicable=' + String.valueOf(ctx.applicableProgramRequirementTypesLowercase)
+    };
+    for (OnboardingStatusEvaluatorService.RequirementInfo r : ctx.requirements) {
+      parts.add(
+        (r.requirementType == null ? '?' : r.requirementType) +
+          '/' +
+          (r.status == null ? '?' : r.status) +
+          '->' +
+          (r.normalizedStatus == null ? '?' : r.normalizedStatus)
+      );
+    }
+    return String.join(parts, ' | ');
+  }
+
+  private static Boolean integrationIsTerminalNormalized(String n) {
+    if (String.isBlank(n)) {
+      return false;
+    }
+    return n.equalsIgnoreCase('Signed') ||
+      n.equalsIgnoreCase('Complete') ||
+      n.equalsIgnoreCase('Setup Complete') ||
+      n.equalsIgnoreCase('Ignore');
+  }
+
+  private static Boolean integrationIsDeniedOrCanceledLike(String n) {
+    if (String.isBlank(n)) {
+      return false;
+    }
+    return n.equalsIgnoreCase('Denied') ||
+      n.equalsIgnoreCase('Expired') ||
+      n.equalsIgnoreCase('Canceled') ||
+      n.equalsIgnoreCase('Cancelled');
+  }
+
+  private static void integrationForceTerminalStatus(
+    Id requirementId,
+    String requirementType,
+    Map<String, String> normMap
+  ) {
+    System.assert(requirementId != null, 'integrationForceTerminalStatus: requirement id required');
+    System.assert(
+      String.isNotBlank(requirementType),
+      'integrationForceTerminalStatus: requirement type required'
+    );
+    for (
+      String st : TestDataFactoryUtil.getPicklistValues(
+        Onboarding_Requirement__c.SObjectType,
+        'Status__c'
+      )
+    ) {
+      if (String.isBlank(st)) {
+        continue;
+      }
+      Database.SaveResult ur = Database.update(
+        new Onboarding_Requirement__c(Id = requirementId, Status__c = st),
+        false
+      );
+      if (!ur.isSuccess()) {
+        continue;
+      }
+      String n = OnboardingStatusNormalizationService.normalize(requirementType, st, normMap);
+      if (integrationIsTerminalNormalized(n)) {
+        return;
+      }
+    }
+    System.assert(
+      false,
+      'Could not set a terminal normalized status for requirement type ' + requirementType
+    );
+  }
+
+  /** Avoid normalized Denied/Canceled/Expired so ANY_DENIED does not win before ALL_SETUP_COMPLETE. */
+  private static void integrationForceInProgressLikeStatus(
+    Id requirementId,
+    String requirementType,
+    Map<String, String> normMap
+  ) {
+    System.assert(requirementId != null, 'integrationForceInProgressLikeStatus: requirement id required');
+    System.assert(
+      String.isNotBlank(requirementType),
+      'integrationForceInProgressLikeStatus: requirement type required'
+    );
+    for (
+      String st : TestDataFactoryUtil.getPicklistValues(
+        Onboarding_Requirement__c.SObjectType,
+        'Status__c'
+      )
+    ) {
+      if (String.isBlank(st)) {
+        continue;
+      }
+      Database.SaveResult ur = Database.update(
+        new Onboarding_Requirement__c(Id = requirementId, Status__c = st),
+        false
+      );
+      if (!ur.isSuccess()) {
+        continue;
+      }
+      String n = OnboardingStatusNormalizationService.normalize(requirementType, st, normMap);
+      if (String.isBlank(n)) {
+        continue;
+      }
+      if (integrationIsDeniedOrCanceledLike(n)) {
+        continue;
+      }
+      if (!integrationIsTerminalNormalized(n)) {
+        return;
+      }
+    }
+    System.assert(
+      false,
+      'Could not set an in-progress normalized status for requirement type ' + requirementType
+    );
   }
 
   private static Boolean evalPredicateJson(
