@@ -86,7 +86,7 @@ This section describes how the application *behaves* as implied by metadata and 
 | Component | Role |
 |-----------|------|
 | **`OnboardingStatusNormalizationService`** | Loads active **`Onboarding_Status_Normalization__mdt`** map; normalizes requirement raw status. |
-| **`OnboardingStatusEvaluatorService`** | Loads onboarding, requirements, opportunity; builds **`EvaluationContext`**; queries rules once per bulk call; uses injectable **`IOnboardingStatusRuleEngine`**; **`evaluateAndApply*`** DMLs onboarding + **one opportunity stage per opp** (first onboarding in bulk wins for stage). |
+| **`OnboardingStatusEvaluatorService`** | Loads onboarding, requirements, opportunity, and **active required `Vendor_Program_Requirement__c` types** for the onboarding’s vendor program; builds **`EvaluationContext`**; queries rules once per bulk call; uses injectable **`IOnboardingStatusRuleEngine`**; **`evaluateAndApply*`** DMLs onboarding + **one opportunity stage per opp** (first onboarding in bulk wins for stage). |
 | **`OnboardingStatusCmdtRuleEngine`** | Default engine: **`OnboardingStatusPredicateInterpreter.ruleMatchesRule`**. |
 | **`OnboardingStatusPredicateInterpreter`** | Parses **`Predicate_Config__c`** JSON (`all` / `any` / `op`); blank JSON never matches. New **semantic** = new `op` branch in **one** class (see [onboarding-status-predicate-config.md](onboarding-status-predicate-config.md)). |
 | **`OnboardingStatusEvaluatorInvocable`** | Flow entry (`evaluate` / `evaluateAndApply`). |

@@ -242,6 +242,92 @@ private class OnboardingStatusEvaluatorTest {
   }
 
   @IsTest
+  static void testAllRequirementsTerminalIgnoresTypesNotOnProgramTemplate() {
+    OnboardingStatusEvaluatorService.EvaluationContext ctx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Signed'),
+        buildReq('Contract', 'Complete'),
+        buildReq('Training', 'Denied')
+      }
+    );
+    ctx.applicableProgramRequirementTypesLowercase = new Set<String>{ 'agreement', 'contract' };
+
+    System.assertEquals(
+      true,
+      evalPredicateJson('{"op":"allRequirementsTerminal"}', ctx),
+      'Non-template requirement types must not block allRequirementsTerminal'
+    );
+  }
+
+  @IsTest
+  static void testAllRequirementsTerminalRequiresRowPerTemplateType() {
+    OnboardingStatusEvaluatorService.EvaluationContext ctx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{ buildReq('Agreement', 'Signed') }
+    );
+    ctx.applicableProgramRequirementTypesLowercase = new Set<String>{ 'agreement', 'contract' };
+
+    System.assertEquals(
+      false,
+      evalPredicateJson('{"op":"allRequirementsTerminal"}', ctx),
+      'Missing onboarding row for a template type must prevent allRequirementsTerminal'
+    );
+  }
+
+  @IsTest
+  static void testSetupCompleteRequiresEachTemplateRequirementRow() {
+    List<String> vprTypes = TestDataFactoryUtil.getPicklistValues(
+      Vendor_Program_Requirement__c.SObjectType,
+      'Requirement_Type__c'
+    );
+    System.assert(vprTypes.size() >= 2, 'Org needs at least two program requirement types for this test');
+    System.assert(programRequirementTypesIncludeAgreement(vprTypes), 'Program template picklist must include Agreement');
+    String secondProgramType = null;
+    for (String t : vprTypes) {
+      if (!t.equalsIgnoreCase('Agreement')) {
+        secondProgramType = t;
+        break;
+      }
+    }
+    System.assertNotEquals(null, secondProgramType);
+
+    Vendor_Customization__c vp = [SELECT Id FROM Vendor_Customization__c LIMIT 1];
+    insert new List<Vendor_Program_Requirement__c>{
+      new Vendor_Program_Requirement__c(
+        Vendor_Program__c = vp.Id,
+        Requirement_Type__c = agreementProgramRequirementApiValue(vprTypes),
+        Active__c = true,
+        Is_Required__c = true,
+        Sequence__c = 1
+      ),
+      new Vendor_Program_Requirement__c(
+        Vendor_Program__c = vp.Id,
+        Requirement_Type__c = secondProgramType,
+        Active__c = true,
+        Is_Required__c = true,
+        Sequence__c = 2
+      )
+    };
+
+    Onboarding__c onb = [SELECT Id FROM Onboarding__c LIMIT 1];
+
+    Test.startTest();
+    OnboardingStatusEvaluatorService.EvaluationResult result = OnboardingStatusEvaluatorService.evaluate(onb.Id);
+    Test.stopTest();
+
+    System.assertNotEquals(
+      'Setup Complete',
+      result.targetOnboardingStatus,
+      'Template lists two types; missing second onboarding requirement row must prevent Setup Complete'
+    );
+  }
+
+  @IsTest
   static void testPredicateJsonBranchCoverage() {
     OnboardingStatusEvaluatorService.EvaluationContext deniedCtx = buildContext(
       'Onboarding',
@@ -504,6 +590,24 @@ private class OnboardingStatusEvaluatorTest {
     System.assertEquals(false, result.shouldUpdate, 'Stub engine should prevent rule match');
   }
 
+  private static Boolean programRequirementTypesIncludeAgreement(List<String> vprTypes) {
+    for (String t : vprTypes) {
+      if (t != null && t.equalsIgnoreCase('Agreement')) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static String agreementProgramRequirementApiValue(List<String> vprTypes) {
+    for (String t : vprTypes) {
+      if (t != null && t.equalsIgnoreCase('Agreement')) {
+        return t;
+      }
+    }
+    return 'Agreement';
+  }
+
   private static Boolean evalPredicateJson(
     String predicateJson,
     OnboardingStatusEvaluatorService.EvaluationContext ctx
@@ -546,6 +650,7 @@ private class OnboardingStatusEvaluatorTest {
     ctx.opportunity = new Opportunity(StageName = opportunityStage);
     ctx.requirements = requirements;
     ctx.normalizedByReqType = new Map<String, String>();
+    ctx.applicableProgramRequirementTypesLowercase = new Set<String>();
     for (OnboardingStatusEvaluatorService.RequirementInfo req : requirements) {
       ctx.normalizedByReqType.put(req.requirementType, req.normalizedStatus);
     }

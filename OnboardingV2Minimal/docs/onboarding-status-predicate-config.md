@@ -16,11 +16,11 @@ Rules live on **`Onboarding_Status_Evaluation_Rule__mdt`**. Field **`Predicate_C
 |------|----------------|--------|
 | `reqAnyNormalizedEquals` | `normalized` | Any requirement’s normalized status equals value (case-insensitive). |
 | `notReqAnyNormalizedEquals` | `normalized` | Negation of above. |
-| `allRequirementsTerminal` | — | Every requirement normalized is one of: Setup Complete, Ignore, Signed, Complete. |
+| `allRequirementsTerminal` | — | When **`Vendor_Program_Requirement__c`** defines active, **required** rows for the onboarding’s **`Vendor_Customization__c`**, each of those **requirement types** must have at least one **`Onboarding_Requirement__c`** row whose **normalized** status is one of: Setup Complete, Ignore, Signed, Complete. Types not on that program template are ignored. If there is no qualifying program template (no vendor program, or no active required rows), **every** onboarding requirement row must be terminal (previous behavior). |
 | `notAllRequirementsTerminal` | — | Negation of above. |
 | `anyRequirementCanceledWithStageGate` | — | Any normalized Canceled/Cancelled, and opportunity null or canceled/lost stage. |
 | `onlyRequirementTypeNormalizedInSet` | `requirementType`, `allowedNormalized` (array) | Rows of that type share one normalized value in the allowed set; other types only Ignore/empty. |
-| `agreementAndContractCompleteOthersIgnored` | — | Agreement Signed or Setup Complete, contract Complete or Setup Complete, other types only Ignore/empty. |
+| `agreementAndContractCompleteOthersIgnored` | — | Agreement Signed or Setup Complete, contract Complete or Setup Complete. Other requirement rows must be Ignore/empty **only if** their type is on the program template (same scoping as `allRequirementsTerminal`); off-template rows are ignored. |
 | `assignedTeamEquals` | `team` | `Onboarding__c.Assigned_Team__c` equals `team` (case-insensitive). |
 | `opportunityStageCanceled` | — | Opportunity stage is Canceled / Cancelled / Closed Lost. |
 

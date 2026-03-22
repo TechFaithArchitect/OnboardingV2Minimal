@@ -16,6 +16,12 @@ public with sharing class OnboardingStatusEvaluatorService {
     public Opportunity opportunity;
     public List<RequirementInfo> requirements;
     public Map<String, String> normalizedByReqType;
+    /**
+     * Lowercase Requirement_Type__c values from active, required Vendor_Program_Requirement__c rows
+     * for this onboarding's Vendor_Customization__c. When empty, terminal checks use every
+     * Onboarding_Requirement__c row (no program template or none qualified).
+     */
+    public Set<String> applicableProgramRequirementTypesLowercase;
   }
 
   public class RequirementInfo {
@@ -200,7 +206,7 @@ public with sharing class OnboardingStatusEvaluatorService {
     }
 
     Map<Id, Onboarding__c> onboardingById = new Map<Id, Onboarding__c>([
-      SELECT Id, Onboarding_Status__c, Assigned_Team__c, Opportunity__c
+      SELECT Id, Onboarding_Status__c, Assigned_Team__c, Opportunity__c, Vendor_Customization__c
       FROM Onboarding__c
       WHERE Id IN :onboardingIds
       WITH SECURITY_ENFORCED
@@ -226,6 +232,35 @@ public with sharing class OnboardingStatusEvaluatorService {
       ]);
     }
 
+    Set<Id> vendorProgramIds = new Set<Id>();
+    for (Onboarding__c onboarding : onboardingById.values()) {
+      if (onboarding.Vendor_Customization__c != null) {
+        vendorProgramIds.add(onboarding.Vendor_Customization__c);
+      }
+    }
+
+    Map<Id, Set<String>> applicableTypesByVendorId = new Map<Id, Set<String>>();
+    if (!vendorProgramIds.isEmpty()) {
+      for (Vendor_Program_Requirement__c vpr : [
+        SELECT Vendor_Program__c, Requirement_Type__c
+        FROM Vendor_Program_Requirement__c
+        WHERE
+          Vendor_Program__c IN :vendorProgramIds
+          AND Active__c = true
+          AND Is_Required__c = true
+        WITH SECURITY_ENFORCED
+      ]) {
+        if (vpr.Vendor_Program__c == null || String.isBlank(vpr.Requirement_Type__c)) {
+          continue;
+        }
+        String key = vpr.Requirement_Type__c.trim().toLowerCase();
+        if (!applicableTypesByVendorId.containsKey(vpr.Vendor_Program__c)) {
+          applicableTypesByVendorId.put(vpr.Vendor_Program__c, new Set<String>());
+        }
+        applicableTypesByVendorId.get(vpr.Vendor_Program__c).add(key);
+      }
+    }
+
     Map<String, String> normMap = OnboardingStatusNormalizationService.loadActiveNormalizationMap();
 
     for (Onboarding__c onboarding : onboardingById.values()) {
@@ -236,6 +271,15 @@ public with sharing class OnboardingStatusEvaluatorService {
         : opportunityById.get(onboarding.Opportunity__c);
       ctx.requirements = new List<RequirementInfo>();
       ctx.normalizedByReqType = new Map<String, String>();
+      ctx.applicableProgramRequirementTypesLowercase = new Set<String>();
+      if (
+        onboarding.Vendor_Customization__c != null &&
+        applicableTypesByVendorId.containsKey(onboarding.Vendor_Customization__c)
+      ) {
+        ctx.applicableProgramRequirementTypesLowercase.addAll(
+          applicableTypesByVendorId.get(onboarding.Vendor_Customization__c)
+        );
+      }
       contextByOnboardingId.put(onboarding.Id, ctx);
     }
 

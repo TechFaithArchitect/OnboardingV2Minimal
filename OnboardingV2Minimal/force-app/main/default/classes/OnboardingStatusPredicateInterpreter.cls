@@ -223,21 +223,65 @@ public with sharing class OnboardingStatusPredicateInterpreter {
     if (ctx.requirements.isEmpty()) {
       return false;
     }
-    for (OnboardingStatusEvaluatorService.RequirementInfo r : ctx.requirements) {
-      String n = r.normalizedStatus;
-      if (n == null || n == '') {
+    Set<String> applicable = ctx.applicableProgramRequirementTypesLowercase;
+    if (applicable == null || applicable.isEmpty()) {
+      return everyOnboardingRequirementRowTerminal(ctx.requirements);
+    }
+    for (String typeKey : applicable) {
+      List<OnboardingStatusEvaluatorService.RequirementInfo> rows = requirementsMatchingTypeKey(
+        ctx.requirements,
+        typeKey
+      );
+      if (rows.isEmpty()) {
         return false;
       }
-      if (
-        !SETUP_COMPLETE.equalsIgnoreCase(n) &&
-        !IGNORE.equalsIgnoreCase(n) &&
-        !SIGNED.equalsIgnoreCase(n) &&
-        !COMPLETE.equalsIgnoreCase(n)
-      ) {
+      for (OnboardingStatusEvaluatorService.RequirementInfo r : rows) {
+        if (!isTerminalNormalizedStatus(r.normalizedStatus)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private static List<OnboardingStatusEvaluatorService.RequirementInfo> requirementsMatchingTypeKey(
+    List<OnboardingStatusEvaluatorService.RequirementInfo> reqs,
+    String typeKeyLower
+  ) {
+    List<OnboardingStatusEvaluatorService.RequirementInfo> out = new List<OnboardingStatusEvaluatorService.RequirementInfo>();
+    if (reqs == null || String.isBlank(typeKeyLower)) {
+      return out;
+    }
+    for (OnboardingStatusEvaluatorService.RequirementInfo r : reqs) {
+      if (r.requirementType != null && typeKeyLower.equals(r.requirementType.trim().toLowerCase())) {
+        out.add(r);
+      }
+    }
+    return out;
+  }
+
+  private static Boolean everyOnboardingRequirementRowTerminal(
+    List<OnboardingStatusEvaluatorService.RequirementInfo> reqs
+  ) {
+    if (reqs == null || reqs.isEmpty()) {
+      return false;
+    }
+    for (OnboardingStatusEvaluatorService.RequirementInfo r : reqs) {
+      if (!isTerminalNormalizedStatus(r.normalizedStatus)) {
         return false;
       }
     }
     return true;
+  }
+
+  private static Boolean isTerminalNormalizedStatus(String n) {
+    if (n == null || n == '') {
+      return false;
+    }
+    return SETUP_COMPLETE.equalsIgnoreCase(n) ||
+      IGNORE.equalsIgnoreCase(n) ||
+      SIGNED.equalsIgnoreCase(n) ||
+      COMPLETE.equalsIgnoreCase(n);
   }
 
   private static Boolean agreementSignedAndContractComplete(
@@ -259,9 +303,18 @@ public with sharing class OnboardingStatusPredicateInterpreter {
     ) {
       return false;
     }
+    Set<String> applicable = ctx.applicableProgramRequirementTypesLowercase;
     for (OnboardingStatusEvaluatorService.RequirementInfo r : ctx.requirements) {
       if (AGREEMENT.equalsIgnoreCase(r.requirementType) ||
         CONTRACT.equalsIgnoreCase(r.requirementType)) {
+        continue;
+      }
+      if (
+        applicable != null &&
+        !applicable.isEmpty() &&
+        (r.requirementType == null ||
+          !applicable.contains(r.requirementType.trim().toLowerCase()))
+      ) {
         continue;
       }
       String n = r.normalizedStatus;
