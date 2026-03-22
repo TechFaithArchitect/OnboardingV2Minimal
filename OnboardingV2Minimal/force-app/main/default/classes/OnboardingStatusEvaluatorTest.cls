@@ -549,6 +549,42 @@ private class OnboardingStatusEvaluatorTest {
       'agreementAndContractCompleteOthersIgnored should match signed agreement + complete contract'
     );
 
+    OnboardingStatusEvaluatorService.EvaluationContext pirCtx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Signed'),
+        buildReq('Contract', 'Not Started'),
+        buildReq('Training', 'In Process'),
+        buildReq('Business License', 'In Process')
+      }
+    );
+    System.assertEquals(
+      true,
+      evalPredicateJson('{"op":"agreementSignedContractNotStartedOthersIgnored"}', pirCtx),
+      'PIR gate should ignore non-Agreement/Contract rows'
+    );
+    System.assertEquals(
+      false,
+      evalPredicateJson('{"op":"agreementSignedContractNotStartedOthersIgnored"}', allCompleteCtx),
+      'PIR gate should not match when contract is complete'
+    );
+    OnboardingStatusEvaluatorService.EvaluationContext noContractCtx = buildContext(
+      'Onboarding',
+      'New',
+      'Prospecting',
+      new List<OnboardingStatusEvaluatorService.RequirementInfo>{
+        buildReq('Agreement', 'Signed'),
+        buildReq('Training', 'Not Started')
+      }
+    );
+    System.assertEquals(
+      false,
+      evalPredicateJson('{"op":"agreementSignedContractNotStartedOthersIgnored"}', noContractCtx),
+      'PIR gate requires a Contract row'
+    );
+
     OnboardingStatusEvaluatorService.EvaluationContext expiredCtx = buildContext(
       'Onboarding',
       'New',

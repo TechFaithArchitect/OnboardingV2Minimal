@@ -16,6 +16,6 @@
     </values>
     <values>
         <field>Predicate_Config__c</field>
-        <value xsi:type="xsd:string">{&quot;op&quot;:&quot;onlyRequirementTypeNormalizedInSet&quot;,&quot;requirementType&quot;:&quot;Agreement&quot;,&quot;allowedNormalized&quot;:[&quot;Signed&quot;,&quot;Setup Complete&quot;]}</value>
+        <value xsi:type="xsd:string">{&quot;op&quot;:&quot;agreementSignedContractNotStartedOthersIgnored&quot;}</value>
     </values>
 </CustomMetadata>

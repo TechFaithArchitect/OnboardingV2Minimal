@@ -14,6 +14,7 @@ public with sharing class OnboardingStatusPredicateInterpreter {
   private static final String COMPLETE = 'Complete';
   private static final String AGREEMENT = 'Agreement';
   private static final String CONTRACT = 'Contract';
+  private static final String NOT_STARTED = 'Not Started';
 
   public static Boolean ruleMatchesRule(
     Onboarding_Status_Evaluation_Rule__mdt rule,
@@ -114,6 +115,9 @@ public with sharing class OnboardingStatusPredicateInterpreter {
       }
       when 'agreementandcontractcompleteothersignored' {
         return agreementSignedAndContractComplete(ctx);
+      }
+      when 'agreementsignedcontractnotstartedothersignored' {
+        return agreementSignedContractNotStartedOthersIgnored(ctx);
       }
       when 'assignedteamequals' {
         String team = stringVal(m.get('team'));
@@ -282,6 +286,41 @@ public with sharing class OnboardingStatusPredicateInterpreter {
       IGNORE.equalsIgnoreCase(n) ||
       SIGNED.equalsIgnoreCase(n) ||
       COMPLETE.equalsIgnoreCase(n);
+  }
+
+  /**
+   * Every Agreement row Signed or Setup Complete; every Contract row normalized Not Started;
+   * other requirement types are ignored (any normalized values).
+   */
+  private static Boolean agreementSignedContractNotStartedOthersIgnored(
+    OnboardingStatusEvaluatorService.EvaluationContext ctx
+  ) {
+    if (ctx.requirements == null || ctx.requirements.isEmpty()) {
+      return false;
+    }
+    Boolean sawAgreement = false;
+    Boolean agreementOk = true;
+    Boolean sawContract = false;
+    Boolean contractOk = true;
+    for (OnboardingStatusEvaluatorService.RequirementInfo r : ctx.requirements) {
+      if (AGREEMENT.equalsIgnoreCase(r.requirementType)) {
+        sawAgreement = true;
+        String n = r.normalizedStatus;
+        if (
+          String.isBlank(n) ||
+          (!SIGNED.equalsIgnoreCase(n) && !SETUP_COMPLETE.equalsIgnoreCase(n))
+        ) {
+          agreementOk = false;
+        }
+      } else if (CONTRACT.equalsIgnoreCase(r.requirementType)) {
+        sawContract = true;
+        String n = r.normalizedStatus;
+        if (String.isBlank(n) || !NOT_STARTED.equalsIgnoreCase(n)) {
+          contractOk = false;
+        }
+      }
+    }
+    return sawAgreement && agreementOk && sawContract && contractOk;
   }
 
   private static Boolean agreementSignedAndContractComplete(

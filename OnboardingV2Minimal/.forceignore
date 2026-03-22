@@ -1,0 +1,17 @@
+# =============================================================================
+# Full-package deploy exclusions (sf project deploy start --source-dir force-app)
+# =============================================================================
+# When metadata references an object, field, or BRE artifact that is missing or
+# special in a target org, we EXCLUDE it here rather than adding dependencies to
+# the repo without an explicit product/architecture decision.
+#
+# Before removing a line: ensure the dependency exists in this package (or the
+# org is intentionally the source of truth) and full deploy is re-verified.
+# Before adding new exclusions: prefer fixing real drift; document the reason.
+# Do NOT add net-new CustomObject / Apex to the repo just to silence deploy
+# errors without stakeholder approval.
+# =============================================================================
+
+# BRE: cannot deploy over an active expression-set version. Deactivate in Setup
+# (or retrieve/merge from org) before dropping this line.
+**/CommunicationDispatchResolver.expressionSetDefinition-meta.xml

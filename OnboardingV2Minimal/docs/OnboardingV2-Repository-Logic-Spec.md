@@ -101,7 +101,7 @@ This section describes how the application *behaves* as implied by metadata and 
 | 25 | Expired |
 | 30 | Setup Complete |
 | 40 | Paperwork Sent |
-| 50 | Pending Initial Review |
+| 50 | Pending Initial Review (`agreementSignedContractNotStartedOthersIgnored`) |
 | 60 | In Process |
 | 70 | Pending Sales |
 | 80 | In Process |
@@ -111,6 +111,14 @@ This section describes how the application *behaves* as implied by metadata and 
 ### 3.3.1 Flow hygiene
 
 Onboarding **`Onboarding_Status__c`** should not be derived from large Flow decision trees. **Grep** shows triggers use field **change detection** and **queries** only; status **assignment** for business outcomes should go through **`OnboardingStatusEvaluatorInvocable`**. Order flow **`BLL_Order_RCD_Business_Logic`** also invokes the evaluator—keep that pattern for cross-object updates.
+
+### 3.3.2 Full-package deploy and `.forceignore`
+
+`sf project deploy start --source-dir force-app` uses **`.forceignore`** at the project root (next to `sfdx-project.json`) to skip metadata that would fail in common sandboxes—for example a BRE expression set whose **active** version cannot be overwritten by API deploy (see comments in that file for the current list).
+
+**Policy:** If a deploy error indicates a **missing object or class dependency**, do **not** add that dependency to the repo to “fix” deploy until product/engineering agrees it belongs in this package. Instead, either (a) keep or add a **`.forceignore`** pattern with a short comment, (b) remove orphaned metadata (e.g. tabs with no object), or (c) align the org manually and then merge retrieve—whichever matches the intended source of truth.
+
+Current exclusions are documented in **`.forceignore`** itself. Remove an exclusion only when the dependency is present in-repo (or the org-only artifact is deactivated/retired as required) and a full deploy has been re-run successfully.
 
 ### 3.4 Vendor eligibility (Apex)
 

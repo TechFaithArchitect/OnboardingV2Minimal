@@ -21,6 +21,7 @@ Rules live on **`Onboarding_Status_Evaluation_Rule__mdt`**. Field **`Predicate_C
 | `anyRequirementCanceledWithStageGate` | — | Any normalized Canceled/Cancelled, and opportunity null or canceled/lost stage. |
 | `onlyRequirementTypeNormalizedInSet` | `requirementType`, `allowedNormalized` (array) | Rows of that type share one normalized value in the allowed set; other types only Ignore/empty. |
 | `agreementAndContractCompleteOthersIgnored` | — | Agreement Signed or Setup Complete, contract Complete or Setup Complete. Other requirement rows must be Ignore/empty **only if** their type is on the program template (same scoping as `allRequirementsTerminal`); off-template rows are ignored. |
+| `agreementSignedContractNotStartedOthersIgnored` | — | Every **Agreement** row normalized Signed or Setup Complete; every **Contract** row normalized **Not Started** (after `Onboarding_Status_Normalization__mdt`). Other requirement types are ignored. Requires at least one Agreement and one Contract row. |
 | `assignedTeamEquals` | `team` | `Onboarding__c.Assigned_Team__c` equals `team` (case-insensitive). |
 | `opportunityStageCanceled` | — | Opportunity stage is Canceled / Cancelled / Closed Lost. |
 
@@ -50,6 +51,14 @@ Rules live on **`Onboarding_Status_Evaluation_Rule__mdt`**. Field **`Predicate_C
   {"op":"assignedTeamEquals","team":"Sales"}
 ]}
 ```
+
+**Pending Initial Review (Agreement signed, Contract not started; other types ignored)**
+
+```json
+{"op":"agreementSignedContractNotStartedOthersIgnored"}
+```
+
+Contract status must normalize to exactly `Not Started` (see `Onboarding_Status_Normalization__mdt` for `Contract` + picklist value).
 
 ## Adding a new rule shape
 

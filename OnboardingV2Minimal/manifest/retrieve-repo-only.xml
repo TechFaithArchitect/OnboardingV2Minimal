@@ -383,7 +383,6 @@
         <members>Dealer_Insurance_Detail__c</members>
         <members>Dealer_Insurance__c</members>
         <members>Dispatch_Update_Configuration__mdt</members>
-        <members>ERP_Setup__c</members>
         <members>Email_Template_Catalog__mdt</members>
         <members>Employee_Record__c</members>
         <members>Encryption_Keys__mdt</members>
@@ -547,7 +546,6 @@
         <members>Territory_Assignments__c</members>
         <members>Territory_Role_Assignment__c</members>
         <members>Vendor_Customization__c</members>
-        <members>Vendor_Program_Recipient_Group__c</members>
         <members>Vendor_Program_Requirement__c</members>
         <members>Vendor__c</members>
         <name>CustomTab</name>
@@ -565,7 +563,6 @@
         <members>onboardingRuleModal</members>
         <members>onboardingVendorProgramGrid</members>
         <members>onboardingWorkQueue</members>
-        <members>overrideAuditPanel</members>
         <members>programDatesQuickAction</members>
         <members>programDatesRelatedList</members>
         <members>programDatesRelatedListWrapper</members>
