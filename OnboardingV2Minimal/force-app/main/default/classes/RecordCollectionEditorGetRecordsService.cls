@@ -1,5 +1,7 @@
 public with sharing class RecordCollectionEditorGetRecordsService {
 
+    private static final String PRINCIPAL_OWNER_ACR_ROLE = 'Principal Owner';
+
     public class GetRecordsJsonRequest {
         @InvocableVariable(required=true label='Config Key')
         public String configKey;
@@ -55,15 +57,57 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                     recordsType.getDescribe().fields.getMap();
 
                 if ('CONTACT_ON_OPPORTUNITY'.equals(req.configKey) && recordsType == Contact.SObjectType) {
+                    Set<Id> contactIds = new Set<Id>();
+                    Map<Id, Id> contactIdToAccountId = new Map<Id, Id>();
+                    for (SObject con : req.records) {
+                        Id contactId = (Id) con.get('Id');
+                        Id accountId = (Id) con.get('AccountId');
+                        if (contactId == null) {
+                            continue;
+                        }
+                        contactIds.add(contactId);
+                        if (accountId != null) {
+                            contactIdToAccountId.put(contactId, accountId);
+                        }
+                    }
+
+                    Set<Id> principalOwnerContactIds = new Set<Id>();
+                    if (!contactIds.isEmpty() && !contactIdToAccountId.isEmpty()) {
+                        for (AccountContactRelation acr : [
+                            SELECT ContactId, AccountId
+                            FROM AccountContactRelation
+                            WHERE
+                                ContactId IN :contactIds
+                                AND AccountId IN :contactIdToAccountId.values()
+                                AND IsActive = TRUE
+                                AND Roles INCLUDES (:PRINCIPAL_OWNER_ACR_ROLE)
+                            WITH SECURITY_ENFORCED
+                        ]) {
+                            if (contactIdToAccountId.get(acr.ContactId) == acr.AccountId) {
+                                principalOwnerContactIds.add(acr.ContactId);
+                            }
+                        }
+                    }
+
+                    Boolean primaryAssigned = false;
                     List<Map<String, Object>> output = new List<Map<String, Object>>();
                     for (SObject con : req.records) {
                         Id contactId = (Id) con.get('Id');
-                        if (contactId == null) continue;
-                        output.add(new Map<String, Object>{
-                            'ContactId' => contactId,
-                            'Role' => null,
-                            'IsPrimary' => false
-                        });
+                        if (contactId == null) {
+                            continue;
+                        }
+                        Boolean isPrincipalOwner = principalOwnerContactIds.contains(contactId);
+                        Boolean isPrimary = isPrincipalOwner && !primaryAssigned;
+                        if (isPrimary) {
+                            primaryAssigned = true;
+                        }
+                        output.add(
+                            new Map<String, Object>{
+                                'ContactId' => contactId,
+                                'Role' => isPrincipalOwner ? PRINCIPAL_OWNER_ACR_ROLE : null,
+                                'IsPrimary' => isPrimary
+                            }
+                        );
                     }
                     res.recordsJson = JSON.serialize(output);
                     results.add(res);

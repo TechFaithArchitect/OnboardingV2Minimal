@@ -3,6 +3,7 @@ import getConfig from '@salesforce/apex/RecordCollectionEditorConfigService.getC
 import labelPrincipalOwnerConflict from '@salesforce/label/c.Principal_Owner_Conflict';
 import labelAuthorizedSignerPermissionDenied from '@salesforce/label/c.RecordCollectionEditor_AuthorizedSignerPermissionDenied';
 import labelFixFieldErrors from '@salesforce/label/c.RecordCollectionEditor_FixFieldErrors';
+import labelExactlyOnePrimaryContact from '@salesforce/label/c.RecordCollectionEditor_ExactlyOnePrimaryContact';
 
 export default class RecordCollectionEditor extends LightningElement {
     @api heading = 'Records';
@@ -158,6 +159,7 @@ export default class RecordCollectionEditor extends LightningElement {
                 relationshipFieldStates
             };
         });
+        this.normalizePrimaryContactSelection();
         this.syncOutputRecords();
         this.refreshAllRolePicklistOptions();
     }
@@ -276,7 +278,7 @@ export default class RecordCollectionEditor extends LightningElement {
             return;
         }
 
-        const rowsCopy = this.rows.map((row) => {
+        let rowsCopy = this.rows.map((row) => {
             if (row.clientId !== clientId) return row;
             if (isRelationship) {
                 const updatedRelStates = (row.relationshipFieldStates || []).map((fs) => {
@@ -295,6 +297,10 @@ export default class RecordCollectionEditor extends LightningElement {
             });
             return { ...row, fieldStates: updatedFieldStates };
         });
+
+        if (this.configKey === 'CONTACT_ON_OPPORTUNITY') {
+            this.applyExclusivePrimaryContactRules(rowsCopy, clientId, fieldApiName, newFieldValue, isRelationship);
+        }
 
         this.rows = rowsCopy;
         if (isRelationship && this.roleConstraints?.roleFieldApiName === fieldApiName) {
@@ -411,6 +417,87 @@ export default class RecordCollectionEditor extends LightningElement {
         return options;
     }
 
+    /**
+     * CONTACT_ON_OPPORTUNITY: at most one Primary; if none checked but Role is Principal Owner, check Primary on that row.
+     */
+    normalizePrimaryContactSelection() {
+        if (this.configKey !== 'CONTACT_ON_OPPORTUNITY' || !this.rows?.length) {
+            return;
+        }
+        const indicesWithPrimary = [];
+        this.rows.forEach((row, idx) => {
+            const primaryFs = (row.fieldStates || []).find((fs) => fs.fieldApiName === 'IsPrimary');
+            if (primaryFs && (primaryFs.checked === true || primaryFs.checked === 'true')) {
+                indicesWithPrimary.push(idx);
+            }
+        });
+        let keepIdx = indicesWithPrimary.length > 0 ? indicesWithPrimary[0] : -1;
+        let rowsOut = this.rows.map((row, idx) => ({
+            ...row,
+            fieldStates: (row.fieldStates || []).map((fs) =>
+                fs.fieldApiName === 'IsPrimary'
+                    ? {
+                          ...fs,
+                          checked: keepIdx >= 0 ? idx === keepIdx : false,
+                          errorMessage: null,
+                          formElementClass: 'slds-form-element'
+                      }
+                    : fs
+            )
+        }));
+        if (keepIdx < 0) {
+            const poIdx = rowsOut.findIndex((row) => {
+                const roleFs = (row.fieldStates || []).find((fs) => fs.fieldApiName === 'Role');
+                return roleFs && String(roleFs.value || '') === 'Principal Owner';
+            });
+            if (poIdx >= 0) {
+                rowsOut = rowsOut.map((row, idx) => ({
+                    ...row,
+                    fieldStates: (row.fieldStates || []).map((fs) =>
+                        fs.fieldApiName === 'IsPrimary'
+                            ? { ...fs, checked: idx === poIdx, errorMessage: null, formElementClass: 'slds-form-element' }
+                            : fs
+                    )
+                }));
+            }
+        }
+        this.rows = rowsOut;
+    }
+
+    applyExclusivePrimaryContactRules(rowsCopy, clientId, fieldApiName, newFieldValue, isRelationship) {
+        if (isRelationship || !rowsCopy?.length) {
+            return;
+        }
+
+        const setPrimaryChecked = (targetClientId, checked) => {
+            const idx = rowsCopy.findIndex((r) => r.clientId === targetClientId);
+            if (idx < 0) return;
+            const row = rowsCopy[idx];
+            rowsCopy[idx] = {
+                ...row,
+                fieldStates: (row.fieldStates || []).map((fs) =>
+                    fs.fieldApiName === 'IsPrimary'
+                        ? { ...fs, checked, errorMessage: null, formElementClass: 'slds-form-element' }
+                        : fs
+                )
+            };
+        };
+
+        if (fieldApiName === 'IsPrimary' && (newFieldValue === true || newFieldValue === 'true')) {
+            rowsCopy.forEach((row) => {
+                if (row.clientId !== clientId) {
+                    setPrimaryChecked(row.clientId, false);
+                }
+            });
+        } else if (fieldApiName === 'Role' && String(newFieldValue || '') === 'Principal Owner') {
+            rowsCopy.forEach((row) => {
+                setPrimaryChecked(row.clientId, row.clientId === clientId);
+            });
+        } else if (fieldApiName === 'Role' && String(newFieldValue || '') !== 'Principal Owner') {
+            setPrimaryChecked(clientId, false);
+        }
+    }
+
     refreshAllRolePicklistOptions() {
         const rc = this.roleConstraints;
         if (!rc || !rc.roleFieldApiName || !this.relationshipFieldConfigs.length) return;
@@ -471,7 +558,7 @@ export default class RecordCollectionEditor extends LightningElement {
                 }
             }
         }
-        const updatedRows = this.rows.map((row, index) => {
+        let updatedRows = this.rows.map((row, index) => {
             const updatedFieldStates = row.fieldStates.map((fieldState) => {
                 const isBlank = fieldState.isCheckbox
                     ? (fieldState.required && (fieldState.checked !== true && fieldState.checked !== 'true'))
@@ -510,6 +597,38 @@ export default class RecordCollectionEditor extends LightningElement {
 
             return { ...row, fieldStates: updatedFieldStates, relationshipFieldStates: updatedRelStates };
         });
+
+        let primaryValidationMessage = null;
+        if (this.configKey === 'CONTACT_ON_OPPORTUNITY') {
+            let primaryCount = 0;
+            updatedRows.forEach((row) => {
+                const p = (row.fieldStates || []).find((fs) => fs.fieldApiName === 'IsPrimary');
+                if (p && (p.checked === true || p.checked === 'true')) {
+                    primaryCount += 1;
+                }
+            });
+            if (primaryCount !== 1) {
+                primaryValidationMessage = labelExactlyOnePrimaryContact;
+                errors.push(primaryValidationMessage);
+            }
+        }
+
+        if (primaryValidationMessage) {
+            updatedRows = updatedRows.map((row) => ({
+                ...row,
+                fieldStates: (row.fieldStates || []).map((fs) => {
+                    if (fs.fieldApiName !== 'IsPrimary') {
+                        return fs;
+                    }
+                    const mergedMsg = primaryValidationMessage || fs.errorMessage;
+                    return {
+                        ...fs,
+                        errorMessage: mergedMsg,
+                        formElementClass: mergedMsg ? 'slds-form-element slds-has-error' : 'slds-form-element'
+                    };
+                })
+            }));
+        }
 
         this.rows = updatedRows;
         this.hasValidationError = errors.length > 0;

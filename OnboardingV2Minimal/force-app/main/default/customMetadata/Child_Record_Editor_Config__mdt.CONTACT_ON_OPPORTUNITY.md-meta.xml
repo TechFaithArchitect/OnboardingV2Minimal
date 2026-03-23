@@ -16,7 +16,7 @@
     </values>
     <values>
         <field>Fields_JSON__c</field>
-        <value xsi:type="xsd:string">[{"fieldApiName":"ContactId","label":"Contact","required":true,"type":"lookup","readOnly":true},{"fieldApiName":"Role","label":"Role","required":true},{"fieldApiName":"IsPrimary","label":"Primary Contact","required":false,"type":"checkbox"}]</value>
+        <value xsi:type="xsd:string">[{"fieldApiName":"ContactId","label":"Contact","required":true,"type":"lookup","readOnly":true},{"fieldApiName":"Role","label":"Role","required":true},{"fieldApiName":"IsPrimary","label":"Primary Contact","required":true,"type":"checkbox"}]</value>
     </values>
     <values>
         <field>Relationship_Object_API_Name__c</field>

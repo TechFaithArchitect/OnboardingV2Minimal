@@ -10745,4 +10745,12 @@ Once information is provided and Windstream agent confirms the customer number, 
         <shortDescription>Please fix field errors before continuing</shortDescription>
         <value>Please correct the errors below before continuing.</value>
     </labels>
+    <labels>
+        <fullName>RecordCollectionEditor_ExactlyOnePrimaryContact</fullName>
+        <categories>Record Collection Editor</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Opportunity contacts editor must have exactly one primary</shortDescription>
+        <value>Select exactly one Primary Contact.</value>
+    </labels>
 </CustomLabels>

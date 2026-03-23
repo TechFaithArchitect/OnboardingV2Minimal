@@ -153,4 +153,45 @@ private class RecordCollectionEditorConfigServiceTest {
         System.assert(results[0].recordsJson.contains('"Roles":"Owner"'), 'Expected serialized role value.');
         System.assert(results[0].recordsJson.contains('"Email":"grace@example.com"'), 'Expected serialized child field value.');
     }
+
+    @IsTest
+    static void getRecordsJsonForEditor_contactOnOpportunity_defaultsPrincipalOwnerPrimary() {
+        Account accountRecord = new Account(Name = 'OCR PO Account');
+        insert accountRecord;
+
+        Contact contactRecord = new Contact(FirstName = 'Pat', LastName = 'Owner', AccountId = accountRecord.Id);
+        insert contactRecord;
+
+        AccountContactRelation acr = [
+            SELECT Id, Roles
+            FROM AccountContactRelation
+            WHERE AccountId = :accountRecord.Id AND ContactId = :contactRecord.Id
+            LIMIT 1
+        ];
+        acr.Roles = 'Principal Owner';
+        update acr;
+
+        RecordCollectionEditorGetRecordsService.GetRecordsJsonRequest requestItem =
+            new RecordCollectionEditorGetRecordsService.GetRecordsJsonRequest();
+        requestItem.configKey = 'CONTACT_ON_OPPORTUNITY';
+        requestItem.records = new List<SObject>{
+            [SELECT Id, AccountId FROM Contact WHERE Id = :contactRecord.Id]
+        };
+
+        List<RecordCollectionEditorGetRecordsService.GetRecordsJsonResult> results =
+            RecordCollectionEditorGetRecordsService.getRecordsJsonForEditor(
+                new List<RecordCollectionEditorGetRecordsService.GetRecordsJsonRequest>{ requestItem }
+            );
+
+        System.assertEquals(1, results.size(), 'Expected one serialization result.');
+        System.assertEquals(null, results[0].errorMessage, results[0].errorMessage);
+        System.assert(
+            results[0].recordsJson.contains('"IsPrimary":true'),
+            'Expected Principal Owner contact to default as primary: ' + results[0].recordsJson
+        );
+        System.assert(
+            results[0].recordsJson.contains('"Role":"Principal Owner"'),
+            'Expected Principal Owner role prefilled: ' + results[0].recordsJson
+        );
+    }
 }

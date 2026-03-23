@@ -4,7 +4,7 @@
     <protected>false</protected>
     <values>
         <field>Fields_JSON__c</field>
-        <value xsi:type="xsd:string">[{&quot;fieldApiName&quot;:&quot;ContactId&quot;,&quot;label&quot;:&quot;Contact&quot;,&quot;required&quot;:true,&quot;type&quot;:&quot;lookup&quot;,&quot;readOnly&quot;:true},{&quot;fieldApiName&quot;:&quot;Role&quot;,&quot;label&quot;:&quot;Role&quot;,&quot;required&quot;:true},{&quot;fieldApiName&quot;:&quot;IsPrimary&quot;,&quot;label&quot;:&quot;Primary Contact&quot;,&quot;required&quot;:false,&quot;type&quot;:&quot;checkbox&quot;}]</value>
+        <value xsi:type="xsd:string">[{&quot;fieldApiName&quot;:&quot;ContactId&quot;,&quot;label&quot;:&quot;Contact&quot;,&quot;required&quot;:true,&quot;type&quot;:&quot;lookup&quot;,&quot;readOnly&quot;:true},{&quot;fieldApiName&quot;:&quot;Role&quot;,&quot;label&quot;:&quot;Role&quot;,&quot;required&quot;:true},{&quot;fieldApiName&quot;:&quot;IsPrimary&quot;,&quot;label&quot;:&quot;Primary Contact&quot;,&quot;required&quot;:true,&quot;type&quot;:&quot;checkbox&quot;}]</value>
     </values>
     <values>
         <field>Object_API_Name__c</field>
