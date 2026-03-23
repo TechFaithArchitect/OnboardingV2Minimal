@@ -19,6 +19,19 @@ private class OnboardingNextStepRuleInvocableTest {
     return ids;
   }
 
+  /** Ensures auto-create can set Contract.RecordTypeId (avoids profile default e.g. System Admin NDA). */
+  private static void assignContractRecordTypeToVendorProgramForTest(Vendor_Customization__c vp) {
+    List<Id> rts = availableContractRecordTypeIdsForTest();
+    System.assert(!rts.isEmpty(), 'Test requires at least one Contract record type in the org.');
+    Contract_Record_Type_Reference__c cref = new Contract_Record_Type_Reference__c(
+      Name = 'Test CRT VP ' + String.valueOf(DateTime.now().getTime()),
+      RecordTypeId__c = String.valueOf(rts[0])
+    );
+    insert cref;
+    vp.Contract_Record_Type__c = cref.Id;
+    update vp;
+  }
+
   @isTest
   static void invocable_nullAndEmptyRequests() {
     System.assertEquals(
@@ -172,6 +185,7 @@ private class OnboardingNextStepRuleInvocableTest {
       null,
       true
     );
+    assignContractRecordTypeToVendorProgramForTest(vp2);
     Opportunity opp = new Opportunity(
       Name = 'Snap Opp',
       AccountId = acc.Id,
@@ -219,6 +233,130 @@ private class OnboardingNextStepRuleInvocableTest {
   }
 
   @isTest
+  static void applyRuleSnapshotsForTest_createsSiblingWhenVpOmitsContractRecordTypeLookup() {
+    Account acc = TestAccountFactory.create('SnapNoCrtLookup', true);
+    Contact accContact = TestContactFactory.create('P', 'NL', acc, true);
+    TestDataFactoryWrapper.VendorCustomizationWrapper vpw = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+    Vendor_Customization__c vp2 = TestVendorProgramFactory.createCustomizationOnly(
+      vpw.vendor,
+      'Draft',
+      true,
+      null,
+      true
+    );
+    Opportunity opp = new Opportunity(
+      Name = 'Snap Opp No CRT Lookup',
+      AccountId = acc.Id,
+      StageName = 'Prospecting',
+      CloseDate = Date.today().addDays(30),
+      Program_Base_App_Selection__c = 'Program Base Application - with Chuzo'
+    );
+    insert opp;
+    insert new OpportunityContactRole(
+      OpportunityId = opp.Id,
+      ContactId = accContact.Id,
+      Role = opportunityContactRoleRoleForTest(),
+      IsPrimary = true
+    );
+    Onboarding__c onb = new Onboarding__c(
+      Account__c = acc.Id,
+      Vendor_Customization__c = vpw.customization.Id,
+      Opportunity__c = opp.Id,
+      Onboarding_Status__c = 'Setup Complete'
+    );
+    insert onb;
+
+    OnboardingNextStepRuleService.RuleSnapshot snap = new OnboardingNextStepRuleService.RuleSnapshot();
+    snap.developerName = 'Test_Rule_NoCrtLkp';
+    snap.action = 'Auto Create';
+    snap.scopeKey = String.valueOf(vp2.Id);
+    snap.fieldApiName = 'Opportunity__r.Program_Base_App_Selection__c';
+    snap.expectedValue = 'Program Base Application - with Chuzo';
+    snap.operator = 'Equals';
+
+    OnboardingNextStepRuleService.applyRuleSnapshotsForTest(
+      onb.Id,
+      new List<OnboardingNextStepRuleService.RuleSnapshot>{ snap }
+    );
+
+    System.assertEquals(
+      2,
+      [SELECT COUNT() FROM Onboarding__c WHERE Account__c = :acc.Id],
+      'Sibling still created when VP has no Contract_Record_Type__c; Contract.RecordTypeId omitted (profile default applies)'
+    );
+  }
+
+  @isTest
+  static void applyRuleSnapshotsForTest_skipsSiblingWhenVendorProgramContractRtUnresolved() {
+    Account acc = TestAccountFactory.create('SnapBadRef', true);
+    Contact accContact = TestContactFactory.create('P', 'O', acc, true);
+    TestDataFactoryWrapper.VendorCustomizationWrapper vpw = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+    Vendor_Customization__c vp2 = TestVendorProgramFactory.createCustomizationOnly(
+      vpw.vendor,
+      'Draft',
+      true,
+      null,
+      true
+    );
+    Contract_Record_Type_Reference__c cref = new Contract_Record_Type_Reference__c(
+      Name = 'Empty RT Ref ' + String.valueOf(DateTime.now().getTime())
+    );
+    insert cref;
+    vp2.Contract_Record_Type__c = cref.Id;
+    update vp2;
+    Opportunity opp = new Opportunity(
+      Name = 'Snap Opp Bad Ref',
+      AccountId = acc.Id,
+      StageName = 'Prospecting',
+      CloseDate = Date.today().addDays(30),
+      Program_Base_App_Selection__c = 'Program Base Application - with Chuzo'
+    );
+    insert opp;
+    insert new OpportunityContactRole(
+      OpportunityId = opp.Id,
+      ContactId = accContact.Id,
+      Role = opportunityContactRoleRoleForTest(),
+      IsPrimary = true
+    );
+    Onboarding__c onb = new Onboarding__c(
+      Account__c = acc.Id,
+      Vendor_Customization__c = vpw.customization.Id,
+      Opportunity__c = opp.Id,
+      Onboarding_Status__c = 'Setup Complete'
+    );
+    insert onb;
+
+    OnboardingNextStepRuleService.RuleSnapshot snap = new OnboardingNextStepRuleService.RuleSnapshot();
+    snap.developerName = 'Test_Rule_BadRef';
+    snap.action = 'Auto Create';
+    snap.scopeKey = String.valueOf(vp2.Id);
+    snap.fieldApiName = 'Opportunity__r.Program_Base_App_Selection__c';
+    snap.expectedValue = 'Program Base Application - with Chuzo';
+    snap.operator = 'Equals';
+
+    OnboardingNextStepRuleService.ApplyOutcome outcome = new OnboardingNextStepRuleService.ApplyOutcome();
+    OnboardingNextStepRuleService.applyRuleSnapshotsForTest(
+      onb.Id,
+      new List<OnboardingNextStepRuleService.RuleSnapshot>{ snap },
+      outcome
+    );
+
+    System.assert(
+      outcome.warningMessage != null && outcome.warningMessage.contains('Contract Record Type'),
+      outcome.warningMessage
+    );
+    System.assertEquals(
+      1,
+      [SELECT COUNT() FROM Onboarding__c WHERE Account__c = :acc.Id],
+      'No sibling when vendor program Contract Record Type cannot be resolved (would default to profile NDA)'
+    );
+  }
+
+  @isTest
   static void applyRuleSnapshotsForTest_createsLinkedOnboardingUsingAcrPrincipalOwner() {
     Account acc = TestAccountFactory.create('SnapACR', true);
     Contact accContact = TestContactFactory.create('A', 'CR', acc, true);
@@ -240,6 +378,7 @@ private class OnboardingNextStepRuleInvocableTest {
       null,
       true
     );
+    assignContractRecordTypeToVendorProgramForTest(vp2);
     Opportunity opp = new Opportunity(
       Name = 'Snap Opp ACR',
       AccountId = acc.Id,

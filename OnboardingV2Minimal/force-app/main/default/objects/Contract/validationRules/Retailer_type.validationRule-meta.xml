@@ -9,7 +9,6 @@ AND(
 OR(
 RecordType.Name = &quot;Viasat&quot;,
 RecordType.Name = &quot;MDP&quot;,
-RecordType.Name = &quot;New Dealer Application (DOM)&quot;,
 RecordType.Name = &quot;Frontier&quot;,
 RecordType.Name = &quot;Windstream&quot;,
 RecordType.Name = &quot;Windstream D2D&quot;)))</errorConditionFormula>

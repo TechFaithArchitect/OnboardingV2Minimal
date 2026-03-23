@@ -3,8 +3,19 @@
  * Auto Create: inserts a sibling Onboarding__c for Scope_Key__c (target Vendor_Customization__c) when the
  * field path (from the triggering onboarding row) matches Expected_Value__c with Operator__c Equals.
  * Each auto-created onboarding gets a new Draft Contract on the same Account and Opportunity as the source.
+ *
+ * Runs without sharing so CMDT-driven reads (target Vendor_Customization__c, contract record-type reference) are not
+ * hidden from the running user. Sibling Contract uses SYSTEM_MODE insert first for the vendor-program RecordType, then
+ * aligns RecordTypeId after insert if needed; Retailer_Type__c is copied from Vendor_Customization__c.Retail_Option__c
+ * so validation (e.g. required Retailer type on New Dealer Application (DOM)) matches DOMAIN_OmniSObject_SFL_CREATE_Contract.
+ * If the vendor-program record type cannot be inserted, we do not fall back to a default-type contract (which would
+ * silently violate the vendor program). Onboarding__c remains insert as user.
+ *
+ * If Contract.RecordTypeId is left unset, Salesforce applies the running user profile default Contract record type
+ * (e.g. System Administrator often defaults to NDA). We avoid creating a misleading sibling when the vendor program
+ * has Contract_Record_Type__c set but RecordTypeId cannot be resolved from Contract_Record_Type_Reference__c.
  */
-public with sharing class OnboardingNextStepRuleService {
+public without sharing class OnboardingNextStepRuleService {
   /** Test and production use: in-memory view of a CMDT rule row. */
   public class RuleSnapshot {
     public String developerName;
@@ -23,6 +34,12 @@ public with sharing class OnboardingNextStepRuleService {
 
   @TestVisible
   private class ForcedTestException extends Exception {
+  }
+
+  private class VendorProgramContractRtResolve {
+    Id recordTypeId;
+    boolean hasContractRecordTypeLookup;
+    String retailOption;
   }
 
   private static final String STATUS_SETUP_COMPLETE = 'Setup Complete';
@@ -267,10 +284,13 @@ public with sharing class OnboardingNextStepRuleService {
 
   /**
    * New Draft contract, same Account and Opportunity as the source onboarding (contract-centric sibling).
-   * Contract RecordTypeId comes from the target vendor program (Vendor_Customization__c.Contract_Record_Type__r.RecordTypeId__c)
-   * when configured; otherwise falls back to the source contract's RecordTypeId. Reuses ContractTerm and Principal Owner from
-   * the source contract when present; otherwise resolves Contract.Principal_Owner__c from (1) primary OpportunityContactRole,
-   * then (2) AccountContactRelation with Roles including Principal Owner.
+   * Order of operations: (1) Load Contract RecordTypeId from targetVendorProgramId (CMDT Scope_Key__c =
+   * sibling Vendor_Customization__c Id)—the new Onboarding row does not exist yet and is not used for this lookup.
+   * (2) Insert Contract. (3) Insert sibling Onboarding__c with that Contract and targetVendorProgramId.
+   * Vendor-program RecordType uses SYSTEM_MODE insert first, then verify/correct RecordTypeId after insert, because
+   * insert as user can leave RecordTypeId unset and apply the user profile default (e.g. System Admin → NDA).
+   * Reuses ContractTerm and Principal Owner from the source contract when present; otherwise resolves
+   * Contract.Principal_Owner__c from primary OpportunityContactRole or AccountContactRelation Principal Owner.
    */
   private static Id insertSiblingContract(Onboarding__c source, Id targetVendorProgramId, ApplyOutcome outcome) {
     if (source.Account__c == null) {
@@ -282,11 +302,29 @@ public with sharing class OnboardingNextStepRuleService {
 
     Id principalOwnerId;
     Integer contractTermMonths = 12;
-    Id recordTypeId = resolveContractRecordTypeIdForVendorProgram(targetVendorProgramId);
+    VendorProgramContractRtResolve rtResolve = resolveVendorProgramContractRecordType(targetVendorProgramId);
+    String retailerTypeFromVp = rtResolve.retailOption;
+    if (rtResolve.hasContractRecordTypeLookup && rtResolve.recordTypeId == null) {
+      String msg =
+        'The linked onboarding and its contract were not created: the target vendor program has Contract Record Type configured, but Contract_Record_Type_Reference__c.RecordTypeId__c could not be read or parsed. ' +
+        'Leaving Contract.RecordTypeId blank would apply your user profile default Contract record type (System Administrator is often NDA), which does not match the vendor program.';
+      LoggingUtil.warn('OnboardingNextStepRuleService.insertSiblingContract: ' + msg);
+      appendOutcomeWarning(outcome, msg);
+      return null;
+    }
+
+    Id recordTypeFromTarget = rtResolve.recordTypeId;
+    if (recordTypeFromTarget == null) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.insertSiblingContract: target Vendor_Customization__c has no Contract_Record_Type__c; ' +
+          'Contract.RecordTypeId will be omitted so Salesforce applies the running user profile default (System Administrator is typically NDA). ' +
+          'Set Contract Record Type on the vendor program for an explicit record type.'
+      );
+    }
 
     if (source.Contract__c != null) {
       List<Contract> templates = [
-        SELECT Principal_Owner__c, ContractTerm, RecordTypeId
+        SELECT Principal_Owner__c, ContractTerm
         FROM Contract
         WHERE Id = :source.Contract__c
         LIMIT 1
@@ -296,9 +334,6 @@ public with sharing class OnboardingNextStepRuleService {
         principalOwnerId = t.Principal_Owner__c;
         if (t.ContractTerm != null) {
           contractTermMonths = t.ContractTerm;
-        }
-        if (recordTypeId == null && t.RecordTypeId != null) {
-          recordTypeId = t.RecordTypeId;
         }
       }
     }
@@ -310,40 +345,264 @@ public with sharing class OnboardingNextStepRuleService {
       }
     }
 
-    Contract sibling = new Contract(
-      AccountId = source.Account__c,
+    DmlException lastDex = null;
+
+    if (recordTypeFromTarget != null) {
+      Id contractId;
+      try {
+        contractId = insertDraftContractSystemMode(
+          source.Account__c,
+          source.Opportunity__c,
+          principalOwnerId,
+          contractTermMonths,
+          recordTypeFromTarget,
+          retailerTypeFromVp
+        );
+      } catch (DmlException dexSys) {
+        lastDex = dexSys;
+        LoggingUtil.warn(
+          'OnboardingNextStepRuleService.insertSiblingContract: SYSTEM_MODE insert failed for vendor-program Contract RecordType ' +
+            String.valueOf(recordTypeFromTarget) +
+            ': ' +
+            dexSys.getDmlMessage(0) +
+            '. Retrying as user.'
+        );
+        try {
+          contractId = insertDraftContractAsUser(
+            source.Account__c,
+            source.Opportunity__c,
+            principalOwnerId,
+            contractTermMonths,
+            recordTypeFromTarget,
+            retailerTypeFromVp
+          );
+        } catch (DmlException dexUsr) {
+          lastDex = dexUsr;
+          contractId = null;
+          LoggingUtil.warn(
+            'OnboardingNextStepRuleService.insertSiblingContract: insert as user also failed for vendor-program Contract RecordType ' +
+              String.valueOf(recordTypeFromTarget) +
+              ': ' +
+              dexUsr.getDmlMessage(0)
+          );
+        }
+      }
+      if (contractId != null) {
+        alignContractRecordTypeIfNeeded(contractId, recordTypeFromTarget, outcome);
+        return contractId;
+      }
+      String abortMsg =
+        'The linked onboarding and its contract were not created: the sibling contract could not be inserted with the vendor program record type (check validation rules and required fields such as Retailer_Type__c / Vendor_Customization__c.Retail_Option__c). ' +
+        (lastDex != null ? lastDex.getDmlMessage(0) : '');
+      LoggingUtil.warn('OnboardingNextStepRuleService.insertSiblingContract: ' + abortMsg);
+      appendOutcomeWarning(outcome, abortMsg);
+      return null;
+    }
+
+    try {
+      return insertDraftContractAsUser(
+        source.Account__c,
+        source.Opportunity__c,
+        principalOwnerId,
+        contractTermMonths,
+        null,
+        retailerTypeFromVp
+      );
+    } catch (DmlException dex) {
+      lastDex = dex;
+    }
+
+    try {
+      Id contractId = insertDraftContractSystemMode(
+        source.Account__c,
+        source.Opportunity__c,
+        principalOwnerId,
+        contractTermMonths,
+        null,
+        retailerTypeFromVp
+      );
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.insertSiblingContract: sibling Contract created with default RecordType (SYSTEM_MODE) after failures with vendor-program type.'
+      );
+      return contractId;
+    } catch (DmlException dex3) {
+      lastDex = dex3;
+    }
+
+    LoggingUtil.warn(
+      'OnboardingNextStepRuleService.insertSiblingContract: all Contract insert attempts failed: ' +
+        (lastDex != null ? lastDex.getMessage() : 'unknown')
+    );
+    throw lastDex;
+  }
+
+  /**
+   * User-mode insert can succeed but omit RecordTypeId (profile default, e.g. NDA). Re-query and update when wrong.
+   */
+  private static void alignContractRecordTypeIfNeeded(Id contractId, Id expectedRecordTypeId, ApplyOutcome outcome) {
+    if (contractId == null || expectedRecordTypeId == null) {
+      return;
+    }
+    Contract row = [SELECT RecordTypeId FROM Contract WHERE Id = :contractId LIMIT 1];
+    if (row.RecordTypeId == expectedRecordTypeId) {
+      return;
+    }
+    LoggingUtil.warn(
+      'OnboardingNextStepRuleService.alignContractRecordTypeIfNeeded: Contract ' +
+        String.valueOf(contractId) +
+        ' has RecordTypeId ' +
+        String.valueOf(row.RecordTypeId) +
+        ' but vendor program requires ' +
+        String.valueOf(expectedRecordTypeId) +
+        '; correcting.'
+    );
+    try {
+      update as user new Contract(Id = contractId, RecordTypeId = expectedRecordTypeId);
+    } catch (DmlException dex) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.alignContractRecordTypeIfNeeded: update as user failed: ' + dex.getDmlMessage(0)
+      );
+      Database.update(
+        new List<Contract>{ new Contract(Id = contractId, RecordTypeId = expectedRecordTypeId) },
+        true,
+        AccessLevel.SYSTEM_MODE
+      );
+    }
+    row = [SELECT RecordTypeId FROM Contract WHERE Id = :contractId LIMIT 1];
+    if (row.RecordTypeId != expectedRecordTypeId) {
+      String msg =
+        'Contract ' +
+        String.valueOf(contractId) +
+        ' record type could not be aligned to the vendor program (' +
+        String.valueOf(expectedRecordTypeId) +
+        ').';
+      appendOutcomeWarning(outcome, msg);
+      LoggingUtil.warn('OnboardingNextStepRuleService.alignContractRecordTypeIfNeeded: ' + msg);
+    }
+  }
+
+  private static Contract buildDraftContract(
+    Id accountId,
+    Id opportunityId,
+    Id principalOwnerId,
+    Integer contractTermMonths,
+    Id recordTypeId,
+    String retailerType
+  ) {
+    Contract c = new Contract(
+      AccountId = accountId,
       Status = 'Draft',
       StartDate = Date.today(),
       ContractTerm = contractTermMonths,
       Principal_Owner__c = principalOwnerId,
-      Opportunity_to_Contract__c = source.Opportunity__c
+      Opportunity_to_Contract__c = opportunityId
     );
     if (recordTypeId != null) {
-      sibling.RecordTypeId = recordTypeId;
+      c.RecordTypeId = recordTypeId;
+      if (String.isNotBlank(retailerType)) {
+        c.Retailer_Type__c = retailerType;
+      }
     }
-    insert as user sibling;
-    return sibling.Id;
+    return c;
   }
 
-  /** Contract.RecordTypeId from Vendor_Customization__c.Contract_Record_Type__r.RecordTypeId__c (text Id). */
-  private static Id resolveContractRecordTypeIdForVendorProgram(Id vendorCustomizationId) {
+  private static Id insertDraftContractAsUser(
+    Id accountId,
+    Id opportunityId,
+    Id principalOwnerId,
+    Integer contractTermMonths,
+    Id recordTypeId,
+    String retailerType
+  ) {
+    Contract c = buildDraftContract(
+      accountId,
+      opportunityId,
+      principalOwnerId,
+      contractTermMonths,
+      recordTypeId,
+      retailerType
+    );
+    insert as user c;
+    return c.Id;
+  }
+
+  private static Id insertDraftContractSystemMode(
+    Id accountId,
+    Id opportunityId,
+    Id principalOwnerId,
+    Integer contractTermMonths,
+    Id recordTypeId,
+    String retailerType
+  ) {
+    Contract c = buildDraftContract(
+      accountId,
+      opportunityId,
+      principalOwnerId,
+      contractTermMonths,
+      recordTypeId,
+      retailerType
+    );
+    Database.insert(new List<Contract>{ c }, true, AccessLevel.SYSTEM_MODE);
+    return c.Id;
+  }
+
+  /**
+   * Contract.RecordTypeId from Vendor_Customization__c → Contract_Record_Type__c → RecordTypeId__c (text).
+   * If the relationship subquery does not hydrate, loads Contract_Record_Type_Reference__c by lookup Id.
+   */
+  private static VendorProgramContractRtResolve resolveVendorProgramContractRecordType(Id vendorCustomizationId) {
+    VendorProgramContractRtResolve out = new VendorProgramContractRtResolve();
     if (vendorCustomizationId == null) {
-      return null;
+      return out;
     }
     List<Vendor_Customization__c> rows = [
-      SELECT Contract_Record_Type__r.RecordTypeId__c
+      SELECT Contract_Record_Type__c, Contract_Record_Type__r.RecordTypeId__c, Retail_Option__c
       FROM Vendor_Customization__c
       WHERE Id = :vendorCustomizationId
       LIMIT 1
     ];
     if (rows.isEmpty()) {
-      return null;
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.resolveVendorProgramContractRecordType: Vendor_Customization__c not found ' +
+          String.valueOf(vendorCustomizationId)
+      );
+      return out;
     }
     Vendor_Customization__c row = rows[0];
-    if (row.Contract_Record_Type__r == null) {
-      return null;
+    out.retailOption = row.Retail_Option__c;
+    out.hasContractRecordTypeLookup = row.Contract_Record_Type__c != null;
+    String raw = null;
+    if (row.Contract_Record_Type__r != null) {
+      raw = row.Contract_Record_Type__r.RecordTypeId__c;
     }
-    return tryParseId(row.Contract_Record_Type__r.RecordTypeId__c);
+    if (String.isBlank(raw) && row.Contract_Record_Type__c != null) {
+      List<Contract_Record_Type_Reference__c> refs = [
+        SELECT RecordTypeId__c
+        FROM Contract_Record_Type_Reference__c
+        WHERE Id = :row.Contract_Record_Type__c
+        LIMIT 1
+      ];
+      if (!refs.isEmpty()) {
+        raw = refs[0].RecordTypeId__c;
+      }
+    }
+    if (String.isBlank(raw) && out.hasContractRecordTypeLookup) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.resolveVendorProgramContractRecordType: Vendor_Customization__c ' +
+          String.valueOf(vendorCustomizationId) +
+          ' has Contract_Record_Type__c=' +
+          String.valueOf(row.Contract_Record_Type__c) +
+          ' but RecordTypeId__c is blank on the reference.'
+      );
+    }
+    out.recordTypeId = tryParseId(raw);
+    if (out.recordTypeId == null && String.isNotBlank(raw)) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.resolveVendorProgramContractRecordType: could not parse RecordTypeId__c text: ' +
+          raw
+      );
+    }
+    return out;
   }
 
   /**
@@ -401,10 +660,15 @@ public with sharing class OnboardingNextStepRuleService {
     if (String.isBlank(raw)) {
       return null;
     }
+    String t = raw.trim();
     try {
-      return (Id) raw.trim();
+      return Id.valueOf(t);
     } catch (Exception ignored) {
-      return null;
+      try {
+        return (Id) t;
+      } catch (Exception ignored2) {
+        return null;
+      }
     }
   }
 }
