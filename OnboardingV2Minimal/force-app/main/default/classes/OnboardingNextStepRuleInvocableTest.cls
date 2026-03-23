@@ -1,5 +1,14 @@
 @isTest
 private class OnboardingNextStepRuleInvocableTest {
+  private static String opportunityContactRoleRoleForTest() {
+    for (Schema.PicklistEntry entry : OpportunityContactRole.Role.getDescribe().getPicklistValues()) {
+      if (entry.isActive()) {
+        return entry.getValue();
+      }
+    }
+    return 'Decision Maker';
+  }
+
   @isTest
   static void invocable_nullAndEmptyRequests() {
     System.assertEquals(
@@ -21,6 +30,7 @@ private class OnboardingNextStepRuleInvocableTest {
     );
     System.assertEquals(1, results.size());
     System.assertEquals('', results[0].errorMessage);
+    System.assertEquals('', results[0].warningMessage);
   }
 
   @isTest
@@ -73,7 +83,9 @@ private class OnboardingNextStepRuleInvocableTest {
       );
       System.assertEquals(2, results.size());
       System.assertEquals('', results[0].errorMessage);
+      System.assertEquals('', results[0].warningMessage);
       System.assert(String.isNotBlank(results[1].errorMessage), results[1].errorMessage);
+      System.assertEquals('', results[1].warningMessage);
     } finally {
       OnboardingNextStepRuleService.forceThrowForTest = false;
     }
@@ -140,8 +152,6 @@ private class OnboardingNextStepRuleInvocableTest {
   static void applyRuleSnapshotsForTest_createsLinkedOnboardingWhenMatch() {
     Account acc = TestAccountFactory.create('SnapMatch', true);
     Contact accContact = TestContactFactory.create('Principal', 'Owner', acc, true);
-    accContact.Principal_Owner__c = true;
-    update accContact;
     TestDataFactoryWrapper.VendorCustomizationWrapper vpw = TestVendorProgramFactory.createVendorWithCustomization(
       true
     );
@@ -160,6 +170,12 @@ private class OnboardingNextStepRuleInvocableTest {
       Program_Base_App_Selection__c = 'Program Base Application - with Chuzo'
     );
     insert opp;
+    insert new OpportunityContactRole(
+      OpportunityId = opp.Id,
+      ContactId = accContact.Id,
+      Role = opportunityContactRoleRoleForTest(),
+      IsPrimary = true
+    );
     Onboarding__c onb = new Onboarding__c(
       Account__c = acc.Id,
       Vendor_Customization__c = vpw.customization.Id,
@@ -190,6 +206,118 @@ private class OnboardingNextStepRuleInvocableTest {
     ];
     System.assertEquals(1, linked.size(), 'Expected one auto-created onboarding for target vendor program');
     System.assertNotEquals(null, linked[0].Contract__c, 'Auto-created onboarding should have its own Contract');
+  }
+
+  @isTest
+  static void applyRuleSnapshotsForTest_createsLinkedOnboardingUsingAcrPrincipalOwner() {
+    Account acc = TestAccountFactory.create('SnapACR', true);
+    Contact accContact = TestContactFactory.create('A', 'CR', acc, true);
+    AccountContactRelation acr = [
+      SELECT Id, Roles
+      FROM AccountContactRelation
+      WHERE AccountId = :acc.Id AND ContactId = :accContact.Id
+      LIMIT 1
+    ];
+    acr.Roles = 'Principal Owner';
+    update acr;
+    TestDataFactoryWrapper.VendorCustomizationWrapper vpw = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+    Vendor_Customization__c vp2 = TestVendorProgramFactory.createCustomizationOnly(
+      vpw.vendor,
+      'Draft',
+      true,
+      null,
+      true
+    );
+    Opportunity opp = new Opportunity(
+      Name = 'Snap Opp ACR',
+      AccountId = acc.Id,
+      StageName = 'Prospecting',
+      CloseDate = Date.today().addDays(30),
+      Program_Base_App_Selection__c = 'Program Base Application - with Chuzo'
+    );
+    insert opp;
+    Onboarding__c onb = new Onboarding__c(
+      Account__c = acc.Id,
+      Vendor_Customization__c = vpw.customization.Id,
+      Opportunity__c = opp.Id,
+      Onboarding_Status__c = 'Setup Complete'
+    );
+    insert onb;
+
+    OnboardingNextStepRuleService.RuleSnapshot snap = new OnboardingNextStepRuleService.RuleSnapshot();
+    snap.developerName = 'Test_Rule_ACR';
+    snap.action = 'Auto Create';
+    snap.scopeKey = String.valueOf(vp2.Id);
+    snap.fieldApiName = 'Opportunity__r.Program_Base_App_Selection__c';
+    snap.expectedValue = 'Program Base Application - with Chuzo';
+    snap.operator = 'Equals';
+
+    OnboardingNextStepRuleService.applyRuleSnapshotsForTest(
+      onb.Id,
+      new List<OnboardingNextStepRuleService.RuleSnapshot>{ snap }
+    );
+
+    System.assertEquals(
+      1,
+      [SELECT COUNT() FROM Onboarding__c WHERE Account__c = :acc.Id AND Vendor_Customization__c = :vp2.Id]
+    );
+  }
+
+  @isTest
+  static void applyRuleSnapshotsForTest_warningWhenNoPrimaryResponsibleContact() {
+    Account acc = TestAccountFactory.create('SnapNoResp', true);
+    TestDataFactoryWrapper.VendorCustomizationWrapper vpw = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+    Vendor_Customization__c vp2 = TestVendorProgramFactory.createCustomizationOnly(
+      vpw.vendor,
+      'Draft',
+      true,
+      null,
+      true
+    );
+    Opportunity opp = new Opportunity(
+      Name = 'Snap Opp No Resp',
+      AccountId = acc.Id,
+      StageName = 'Prospecting',
+      CloseDate = Date.today().addDays(30),
+      Program_Base_App_Selection__c = 'Program Base Application - with Chuzo'
+    );
+    insert opp;
+    Onboarding__c onb = new Onboarding__c(
+      Account__c = acc.Id,
+      Vendor_Customization__c = vpw.customization.Id,
+      Opportunity__c = opp.Id,
+      Onboarding_Status__c = 'Setup Complete'
+    );
+    insert onb;
+
+    OnboardingNextStepRuleService.RuleSnapshot snap = new OnboardingNextStepRuleService.RuleSnapshot();
+    snap.developerName = 'Test_Rule_NoResp';
+    snap.action = 'Auto Create';
+    snap.scopeKey = String.valueOf(vp2.Id);
+    snap.fieldApiName = 'Opportunity__r.Program_Base_App_Selection__c';
+    snap.expectedValue = 'Program Base Application - with Chuzo';
+    snap.operator = 'Equals';
+
+    OnboardingNextStepRuleService.ApplyOutcome outcome = new OnboardingNextStepRuleService.ApplyOutcome();
+    OnboardingNextStepRuleService.applyRuleSnapshotsForTest(
+      onb.Id,
+      new List<OnboardingNextStepRuleService.RuleSnapshot>{ snap },
+      outcome
+    );
+
+    System.assert(
+      outcome.warningMessage != null && outcome.warningMessage.contains('Primary Responsible Contact'),
+      outcome.warningMessage
+    );
+    System.assertEquals(
+      1,
+      [SELECT COUNT() FROM Onboarding__c WHERE Account__c = :acc.Id],
+      'Sibling onboarding should not be created without a primary responsible contact'
+    );
   }
 
   @isTest

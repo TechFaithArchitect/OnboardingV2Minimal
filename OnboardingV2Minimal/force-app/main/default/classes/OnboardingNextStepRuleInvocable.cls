@@ -11,6 +11,11 @@ public with sharing class OnboardingNextStepRuleInvocable {
   public class Result {
     @InvocableVariable(label='Error Message' description='Blank when processing finished without throwing.')
     public String errorMessage;
+    @InvocableVariable(
+      label='Warning Message'
+      description='When rules matched but a linked onboarding/contract was skipped (e.g. no primary Opportunity Contact Role or Account Principal Owner).'
+    )
+    public String warningMessage;
   }
 
   @InvocableMethod(
@@ -26,10 +31,15 @@ public with sharing class OnboardingNextStepRuleInvocable {
       Result r = new Result();
       if (req == null || req.onboardingId == null) {
         r.errorMessage = '';
+        r.warningMessage = '';
         out.add(r);
         continue;
       }
-      r.errorMessage = OnboardingNextStepRuleService.applyAfterSetupCompleteSwallowingFaults(req.onboardingId);
+      OnboardingNextStepRuleService.ApplyOutcome outcome = OnboardingNextStepRuleService.applyAfterSetupCompleteSwallowingFaultsWithOutcome(
+        req.onboardingId
+      );
+      r.errorMessage = outcome.errorMessage == null ? '' : outcome.errorMessage;
+      r.warningMessage = outcome.warningMessage == null ? '' : outcome.warningMessage;
       out.add(r);
     }
     return out;

@@ -15,6 +15,12 @@ public with sharing class OnboardingNextStepRuleService {
     public String operator;
   }
 
+  /** Populated by applyAfterSetupCompleteSwallowingFaultsWithOutcome for Flow (errors + user-facing warnings). */
+  public class ApplyOutcome {
+    public String errorMessage;
+    public String warningMessage;
+  }
+
   @TestVisible
   private class ForcedTestException extends Exception {
   }
@@ -23,15 +29,25 @@ public with sharing class OnboardingNextStepRuleService {
   private static final String ACTION_AUTO_CREATE = 'Auto Create';
   private static final String OP_EQUALS = 'Equals';
   private static final Pattern SAFE_FIELD_PATH = Pattern.compile('^[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$');
+  private static final String ACR_ROLE_PRINCIPAL_OWNER = 'Principal Owner';
 
   @TestVisible
   static Boolean forceThrowForTest = false;
 
   /** Same as applyAfterSetupComplete but never throws; returns an error message for Flow/debug or blank on success. */
   public static String applyAfterSetupCompleteSwallowingFaults(Id onboardingId) {
+    ApplyOutcome o = applyAfterSetupCompleteSwallowingFaultsWithOutcome(onboardingId);
+    return o.errorMessage == null ? '' : o.errorMessage;
+  }
+
+  /**
+   * Never throws. ApplyOutcome.errorMessage is set when an exception occurs;
+   * ApplyOutcome.warningMessage when a rule matched but linked onboarding/contract could not be created (e.g. no primary responsible contact).
+   */
+  public static ApplyOutcome applyAfterSetupCompleteSwallowingFaultsWithOutcome(Id onboardingId) {
+    ApplyOutcome outcome = new ApplyOutcome();
     try {
-      applyAfterSetupComplete(onboardingId);
-      return '';
+      applyAfterSetupComplete(onboardingId, outcome);
     } catch (Exception ex) {
       LoggingUtil.warn(
         'OnboardingNextStepRuleService.applyAfterSetupCompleteSwallowingFaults failed for Onboarding=' +
@@ -39,11 +55,16 @@ public with sharing class OnboardingNextStepRuleService {
           ': ' +
           ex.getMessage()
       );
-      return ex.getMessage();
+      outcome.errorMessage = ex.getMessage();
     }
+    return outcome;
   }
 
   public static void applyAfterSetupComplete(Id onboardingId) {
+    applyAfterSetupComplete(onboardingId, null);
+  }
+
+  private static void applyAfterSetupComplete(Id onboardingId, ApplyOutcome outcome) {
     if (onboardingId == null) {
       return;
     }
@@ -54,15 +75,20 @@ public with sharing class OnboardingNextStepRuleService {
     if (rules.isEmpty()) {
       return;
     }
-    applyRuleSnapshots(onboardingId, rules);
+    applyRuleSnapshots(onboardingId, rules, outcome);
   }
 
   @TestVisible
   static void applyRuleSnapshotsForTest(Id onboardingId, List<RuleSnapshot> rules) {
+    applyRuleSnapshotsForTest(onboardingId, rules, null);
+  }
+
+  @TestVisible
+  static void applyRuleSnapshotsForTest(Id onboardingId, List<RuleSnapshot> rules, ApplyOutcome outcome) {
     if (onboardingId == null || rules == null || rules.isEmpty()) {
       return;
     }
-    applyRuleSnapshots(onboardingId, rules);
+    applyRuleSnapshots(onboardingId, rules, outcome);
   }
 
   private static List<RuleSnapshot> loadActiveRulesFromCmdt() {
@@ -92,7 +118,7 @@ public with sharing class OnboardingNextStepRuleService {
     return out;
   }
 
-  private static void applyRuleSnapshots(Id onboardingId, List<RuleSnapshot> rules) {
+  private static void applyRuleSnapshots(Id onboardingId, List<RuleSnapshot> rules, ApplyOutcome outcome) {
     Set<String> selectFields = new Set<String>{
       'Id',
       'Account__c',
@@ -174,7 +200,7 @@ public with sharing class OnboardingNextStepRuleService {
         continue;
       }
 
-      createLinkedOnboardingIfNeeded(onboarding, targetVendorProgramId);
+      createLinkedOnboardingIfNeeded(onboarding, targetVendorProgramId, outcome);
     }
   }
 
@@ -203,7 +229,11 @@ public with sharing class OnboardingNextStepRuleService {
     return null;
   }
 
-  private static void createLinkedOnboardingIfNeeded(Onboarding__c source, Id targetVendorProgramId) {
+  private static void createLinkedOnboardingIfNeeded(
+    Onboarding__c source,
+    Id targetVendorProgramId,
+    ApplyOutcome outcome
+  ) {
     if (targetVendorProgramId == null || source.Vendor_Customization__c == targetVendorProgramId) {
       return;
     }
@@ -221,7 +251,7 @@ public with sharing class OnboardingNextStepRuleService {
       return;
     }
 
-    Id newContractId = insertSiblingContract(source);
+    Id newContractId = insertSiblingContract(source, outcome);
     if (newContractId == null) {
       return;
     }
@@ -238,9 +268,10 @@ public with sharing class OnboardingNextStepRuleService {
   /**
    * New Draft contract, same Account and Opportunity as the source onboarding (contract-centric sibling).
    * Reuses RecordType, ContractTerm, and Principal Owner from the source contract when present; otherwise
-   * resolves Principal_Owner__c from Contacts on the Account.
+   * resolves Contract.Principal_Owner__c from (1) OpportunityContactRole where IsPrimary = true, then
+   * (2) AccountContactRelation with Roles including Principal Owner.
    */
-  private static Id insertSiblingContract(Onboarding__c source) {
+  private static Id insertSiblingContract(Onboarding__c source, ApplyOutcome outcome) {
     if (source.Account__c == null) {
       LoggingUtil.warn(
         'OnboardingNextStepRuleService.insertSiblingContract: source onboarding has no Account__c; skipped.'
@@ -270,30 +301,10 @@ public with sharing class OnboardingNextStepRuleService {
     }
 
     if (principalOwnerId == null) {
-      List<Contact> principals = [
-        SELECT Id
-        FROM Contact
-        WHERE AccountId = :source.Account__c AND Principal_Owner__c = TRUE
-        LIMIT 1
-      ];
-      if (principals.isEmpty()) {
-        principals = [
-          SELECT Id
-          FROM Contact
-          WHERE AccountId = :source.Account__c
-          ORDER BY CreatedDate ASC
-          LIMIT 1
-        ];
-      }
-      if (principals.isEmpty()) {
-        LoggingUtil.warn(
-          'OnboardingNextStepRuleService.insertSiblingContract: no Contact on Account ' +
-            String.valueOf(source.Account__c) +
-            '; Principal_Owner__c is required on Contract. Skipped auto-onboarding.'
-        );
+      principalOwnerId = resolvePrincipalOwnerForSiblingContract(source, outcome);
+      if (principalOwnerId == null) {
         return null;
       }
-      principalOwnerId = principals[0].Id;
     }
 
     Contract sibling = new Contract(
@@ -309,6 +320,57 @@ public with sharing class OnboardingNextStepRuleService {
     }
     insert as user sibling;
     return sibling.Id;
+  }
+
+  /**
+   * (1) OpportunityContactRole on the opportunity with IsPrimary = true,
+   * (2) AccountContactRelation with Roles including Principal Owner.
+   */
+  private static Id resolvePrincipalOwnerForSiblingContract(Onboarding__c source, ApplyOutcome outcome) {
+    if (source.Opportunity__c != null) {
+      List<OpportunityContactRole> primaryOcr = [
+        SELECT ContactId
+        FROM OpportunityContactRole
+        WHERE OpportunityId = :source.Opportunity__c AND IsPrimary = TRUE
+        LIMIT 1
+      ];
+      if (!primaryOcr.isEmpty() && primaryOcr[0].ContactId != null) {
+        return primaryOcr[0].ContactId;
+      }
+    }
+
+    String principalOwnerRole = ACR_ROLE_PRINCIPAL_OWNER;
+    List<AccountContactRelation> rels = [
+      SELECT ContactId
+      FROM AccountContactRelation
+      WHERE
+        AccountId = :source.Account__c
+        AND IsActive = TRUE
+        AND Roles INCLUDES (:principalOwnerRole)
+      LIMIT 1
+    ];
+    if (!rels.isEmpty()) {
+      return rels[0].ContactId;
+    }
+
+    String msg =
+      'The linked onboarding and its contract were not created for source Onboarding ' +
+      String.valueOf(source.Id) +
+      ' because no Primary Responsible Contact was found. Mark a contact as primary on the Opportunity Contact Role for the related Opportunity, ' +
+      'or assign the Principal Owner role on an Account Contact Relationship for this account.';
+    LoggingUtil.warn('OnboardingNextStepRuleService: ' + msg);
+    appendOutcomeWarning(outcome, msg);
+    return null;
+  }
+
+  private static void appendOutcomeWarning(ApplyOutcome outcome, String msg) {
+    if (outcome == null || String.isBlank(msg)) {
+      return;
+    }
+    if (String.isNotBlank(outcome.warningMessage)) {
+      outcome.warningMessage += '\n';
+    }
+    outcome.warningMessage += msg;
   }
 
   private static Id tryParseId(String raw) {
