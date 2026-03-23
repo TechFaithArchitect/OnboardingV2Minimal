@@ -9,6 +9,16 @@ private class OnboardingNextStepRuleInvocableTest {
     return 'Decision Maker';
   }
 
+  private static List<Id> availableContractRecordTypeIdsForTest() {
+    List<Id> ids = new List<Id>();
+    for (Schema.RecordTypeInfo ri : Schema.SObjectType.Contract.getRecordTypeInfosByDeveloperName().values()) {
+      if (ri.isAvailable()) {
+        ids.add(ri.getRecordTypeId());
+      }
+    }
+    return ids;
+  }
+
   @isTest
   static void invocable_nullAndEmptyRequests() {
     System.assertEquals(
@@ -336,6 +346,19 @@ private class OnboardingNextStepRuleInvocableTest {
       null,
       true
     );
+    List<Id> contractRts = availableContractRecordTypeIdsForTest();
+    Id targetVpContractRecordTypeId = contractRts.isEmpty()
+      ? null
+      : (contractRts.size() > 1 ? contractRts[1] : contractRts[0]);
+    if (targetVpContractRecordTypeId != null) {
+      Contract_Record_Type_Reference__c cref = new Contract_Record_Type_Reference__c(
+        Name = 'CRT SnapTpl ' + String.valueOf(DateTime.now().getTime()),
+        RecordTypeId__c = String.valueOf(targetVpContractRecordTypeId)
+      );
+      insert cref;
+      vp2.Contract_Record_Type__c = cref.Id;
+      update vp2;
+    }
     Opportunity opp = new Opportunity(
       Name = 'Snap Opp Tpl',
       AccountId = acc.Id,
@@ -352,6 +375,9 @@ private class OnboardingNextStepRuleInvocableTest {
       Principal_Owner__c = accContact.Id,
       Opportunity_to_Contract__c = opp.Id
     );
+    if (!contractRts.isEmpty()) {
+      srcContract.RecordTypeId = contractRts[0];
+    }
     insert srcContract;
     Onboarding__c onb = new Onboarding__c(
       Account__c = acc.Id,
@@ -383,12 +409,19 @@ private class OnboardingNextStepRuleInvocableTest {
     System.assertEquals(1, linked.size());
     System.assertNotEquals(srcContract.Id, linked[0].Contract__c);
     Contract created = [
-      SELECT ContractTerm, Opportunity_to_Contract__c
+      SELECT ContractTerm, Opportunity_to_Contract__c, RecordTypeId
       FROM Contract
       WHERE Id = :linked[0].Contract__c
     ];
     System.assertEquals(18, created.ContractTerm);
     System.assertEquals(opp.Id, created.Opportunity_to_Contract__c);
+    if (targetVpContractRecordTypeId != null) {
+      System.assertEquals(
+        targetVpContractRecordTypeId,
+        created.RecordTypeId,
+        'Sibling contract RecordType should follow target Vendor_Customization Contract Record Type'
+      );
+    }
   }
 
   @isTest

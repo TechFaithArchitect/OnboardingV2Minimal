@@ -251,7 +251,7 @@ public with sharing class OnboardingNextStepRuleService {
       return;
     }
 
-    Id newContractId = insertSiblingContract(source, outcome);
+    Id newContractId = insertSiblingContract(source, targetVendorProgramId, outcome);
     if (newContractId == null) {
       return;
     }
@@ -267,11 +267,12 @@ public with sharing class OnboardingNextStepRuleService {
 
   /**
    * New Draft contract, same Account and Opportunity as the source onboarding (contract-centric sibling).
-   * Reuses RecordType, ContractTerm, and Principal Owner from the source contract when present; otherwise
-   * resolves Contract.Principal_Owner__c from (1) OpportunityContactRole where IsPrimary = true, then
-   * (2) AccountContactRelation with Roles including Principal Owner.
+   * Contract RecordTypeId comes from the target vendor program (Vendor_Customization__c.Contract_Record_Type__r.RecordTypeId__c)
+   * when configured; otherwise falls back to the source contract's RecordTypeId. Reuses ContractTerm and Principal Owner from
+   * the source contract when present; otherwise resolves Contract.Principal_Owner__c from (1) primary OpportunityContactRole,
+   * then (2) AccountContactRelation with Roles including Principal Owner.
    */
-  private static Id insertSiblingContract(Onboarding__c source, ApplyOutcome outcome) {
+  private static Id insertSiblingContract(Onboarding__c source, Id targetVendorProgramId, ApplyOutcome outcome) {
     if (source.Account__c == null) {
       LoggingUtil.warn(
         'OnboardingNextStepRuleService.insertSiblingContract: source onboarding has no Account__c; skipped.'
@@ -281,7 +282,7 @@ public with sharing class OnboardingNextStepRuleService {
 
     Id principalOwnerId;
     Integer contractTermMonths = 12;
-    Id recordTypeId;
+    Id recordTypeId = resolveContractRecordTypeIdForVendorProgram(targetVendorProgramId);
 
     if (source.Contract__c != null) {
       List<Contract> templates = [
@@ -296,7 +297,9 @@ public with sharing class OnboardingNextStepRuleService {
         if (t.ContractTerm != null) {
           contractTermMonths = t.ContractTerm;
         }
-        recordTypeId = t.RecordTypeId;
+        if (recordTypeId == null && t.RecordTypeId != null) {
+          recordTypeId = t.RecordTypeId;
+        }
       }
     }
 
@@ -320,6 +323,27 @@ public with sharing class OnboardingNextStepRuleService {
     }
     insert as user sibling;
     return sibling.Id;
+  }
+
+  /** Contract.RecordTypeId from Vendor_Customization__c.Contract_Record_Type__r.RecordTypeId__c (text Id). */
+  private static Id resolveContractRecordTypeIdForVendorProgram(Id vendorCustomizationId) {
+    if (vendorCustomizationId == null) {
+      return null;
+    }
+    List<Vendor_Customization__c> rows = [
+      SELECT Contract_Record_Type__r.RecordTypeId__c
+      FROM Vendor_Customization__c
+      WHERE Id = :vendorCustomizationId
+      LIMIT 1
+    ];
+    if (rows.isEmpty()) {
+      return null;
+    }
+    Vendor_Customization__c row = rows[0];
+    if (row.Contract_Record_Type__r == null) {
+      return null;
+    }
+    return tryParseId(row.Contract_Record_Type__r.RecordTypeId__c);
   }
 
   /**
