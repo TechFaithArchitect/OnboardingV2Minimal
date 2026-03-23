@@ -139,6 +139,9 @@ private class OnboardingNextStepRuleInvocableTest {
   @isTest
   static void applyRuleSnapshotsForTest_createsLinkedOnboardingWhenMatch() {
     Account acc = TestAccountFactory.create('SnapMatch', true);
+    Contact accContact = TestContactFactory.create('Principal', 'Owner', acc, true);
+    accContact.Principal_Owner__c = true;
+    update accContact;
     TestDataFactoryWrapper.VendorCustomizationWrapper vpw = TestVendorProgramFactory.createVendorWithCustomization(
       true
     );
@@ -181,11 +184,83 @@ private class OnboardingNextStepRuleInvocableTest {
     Test.stopTest();
 
     List<Onboarding__c> linked = [
-      SELECT Id, Vendor_Customization__c
+      SELECT Id, Vendor_Customization__c, Contract__c
       FROM Onboarding__c
       WHERE Account__c = :acc.Id AND Vendor_Customization__c = :vp2.Id
     ];
     System.assertEquals(1, linked.size(), 'Expected one auto-created onboarding for target vendor program');
+    System.assertNotEquals(null, linked[0].Contract__c, 'Auto-created onboarding should have its own Contract');
+  }
+
+  @isTest
+  static void applyRuleSnapshotsForTest_siblingContractDistinctFromSourceContract() {
+    Account acc = TestAccountFactory.create('SnapTpl', true);
+    Contact accContact = TestContactFactory.create('Pri', 'OwnTpl', acc, true);
+    accContact.Principal_Owner__c = true;
+    update accContact;
+    TestDataFactoryWrapper.VendorCustomizationWrapper vpw = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+    Vendor_Customization__c vp2 = TestVendorProgramFactory.createCustomizationOnly(
+      vpw.vendor,
+      'Draft',
+      true,
+      null,
+      true
+    );
+    Opportunity opp = new Opportunity(
+      Name = 'Snap Opp Tpl',
+      AccountId = acc.Id,
+      StageName = 'Prospecting',
+      CloseDate = Date.today().addDays(30),
+      Program_Base_App_Selection__c = 'Program Base Application - with Chuzo'
+    );
+    insert opp;
+    Contract srcContract = new Contract(
+      AccountId = acc.Id,
+      StartDate = Date.today().addDays(-1),
+      ContractTerm = 18,
+      Status = 'Draft',
+      Principal_Owner__c = accContact.Id,
+      Opportunity_to_Contract__c = opp.Id
+    );
+    insert srcContract;
+    Onboarding__c onb = new Onboarding__c(
+      Account__c = acc.Id,
+      Vendor_Customization__c = vpw.customization.Id,
+      Opportunity__c = opp.Id,
+      Contract__c = srcContract.Id,
+      Onboarding_Status__c = 'Setup Complete'
+    );
+    insert onb;
+
+    OnboardingNextStepRuleService.RuleSnapshot snap = new OnboardingNextStepRuleService.RuleSnapshot();
+    snap.developerName = 'Test_Rule_Tpl';
+    snap.action = 'Auto Create';
+    snap.scopeKey = String.valueOf(vp2.Id);
+    snap.fieldApiName = 'Opportunity__r.Program_Base_App_Selection__c';
+    snap.expectedValue = 'Program Base Application - with Chuzo';
+    snap.operator = 'Equals';
+
+    OnboardingNextStepRuleService.applyRuleSnapshotsForTest(
+      onb.Id,
+      new List<OnboardingNextStepRuleService.RuleSnapshot>{ snap }
+    );
+
+    List<Onboarding__c> linked = [
+      SELECT Contract__c
+      FROM Onboarding__c
+      WHERE Account__c = :acc.Id AND Vendor_Customization__c = :vp2.Id
+    ];
+    System.assertEquals(1, linked.size());
+    System.assertNotEquals(srcContract.Id, linked[0].Contract__c);
+    Contract created = [
+      SELECT ContractTerm, Opportunity_to_Contract__c
+      FROM Contract
+      WHERE Id = :linked[0].Contract__c
+    ];
+    System.assertEquals(18, created.ContractTerm);
+    System.assertEquals(opp.Id, created.Opportunity_to_Contract__c);
   }
 
   @isTest

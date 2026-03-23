@@ -2,6 +2,7 @@
  * Evaluates active Onboarding_Next_Step_Rule__mdt when onboarding reaches Setup Complete.
  * Auto Create: inserts a sibling Onboarding__c for Scope_Key__c (target Vendor_Customization__c) when the
  * field path (from the triggering onboarding row) matches Expected_Value__c with Operator__c Equals.
+ * Each auto-created onboarding gets a new Draft Contract on the same Account and Opportunity as the source.
  */
 public with sharing class OnboardingNextStepRuleService {
   /** Test and production use: in-memory view of a CMDT rule row. */
@@ -220,13 +221,94 @@ public with sharing class OnboardingNextStepRuleService {
       return;
     }
 
+    Id newContractId = insertSiblingContract(source);
+    if (newContractId == null) {
+      return;
+    }
+
     Onboarding__c linkedOnb = new Onboarding__c(
       Account__c = source.Account__c,
       Vendor_Customization__c = targetVendorProgramId,
       Opportunity__c = source.Opportunity__c,
-      Contract__c = source.Contract__c
+      Contract__c = newContractId
     );
     insert as user linkedOnb;
+  }
+
+  /**
+   * New Draft contract, same Account and Opportunity as the source onboarding (contract-centric sibling).
+   * Reuses RecordType, ContractTerm, and Principal Owner from the source contract when present; otherwise
+   * resolves Principal_Owner__c from Contacts on the Account.
+   */
+  private static Id insertSiblingContract(Onboarding__c source) {
+    if (source.Account__c == null) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.insertSiblingContract: source onboarding has no Account__c; skipped.'
+      );
+      return null;
+    }
+
+    Id principalOwnerId;
+    Integer contractTermMonths = 12;
+    Id recordTypeId;
+
+    if (source.Contract__c != null) {
+      List<Contract> templates = [
+        SELECT Principal_Owner__c, ContractTerm, RecordTypeId
+        FROM Contract
+        WHERE Id = :source.Contract__c
+        LIMIT 1
+      ];
+      if (!templates.isEmpty()) {
+        Contract t = templates[0];
+        principalOwnerId = t.Principal_Owner__c;
+        if (t.ContractTerm != null) {
+          contractTermMonths = t.ContractTerm;
+        }
+        recordTypeId = t.RecordTypeId;
+      }
+    }
+
+    if (principalOwnerId == null) {
+      List<Contact> principals = [
+        SELECT Id
+        FROM Contact
+        WHERE AccountId = :source.Account__c AND Principal_Owner__c = TRUE
+        LIMIT 1
+      ];
+      if (principals.isEmpty()) {
+        principals = [
+          SELECT Id
+          FROM Contact
+          WHERE AccountId = :source.Account__c
+          ORDER BY CreatedDate ASC
+          LIMIT 1
+        ];
+      }
+      if (principals.isEmpty()) {
+        LoggingUtil.warn(
+          'OnboardingNextStepRuleService.insertSiblingContract: no Contact on Account ' +
+            String.valueOf(source.Account__c) +
+            '; Principal_Owner__c is required on Contract. Skipped auto-onboarding.'
+        );
+        return null;
+      }
+      principalOwnerId = principals[0].Id;
+    }
+
+    Contract sibling = new Contract(
+      AccountId = source.Account__c,
+      Status = 'Draft',
+      StartDate = Date.today(),
+      ContractTerm = contractTermMonths,
+      Principal_Owner__c = principalOwnerId,
+      Opportunity_to_Contract__c = source.Opportunity__c
+    );
+    if (recordTypeId != null) {
+      sibling.RecordTypeId = recordTypeId;
+    }
+    insert as user sibling;
+    return sibling.Id;
   }
 
   private static Id tryParseId(String raw) {
