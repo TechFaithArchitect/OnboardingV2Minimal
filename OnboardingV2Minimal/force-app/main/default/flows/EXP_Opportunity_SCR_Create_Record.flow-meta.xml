@@ -901,7 +901,12 @@
     <formulas>
         <name>ShowVendorOpportunityPath</name>
         <dataType>Boolean</dataType>
-        <expression>{!Select_One}=&apos;VendorProgram&apos;</expression>
+        <expression>OR(({!Select_One} = &apos;VendorProgram&apos;), {!ShowVendorSelector}, {!FinalNextAction} = &apos;CREATE_VENDOR_PROGRAM_ONBOARDING&apos;)</expression>
+    </formulas>
+    <formulas>
+        <name>IsCoreOnboardingCompleteForOrchestrator</name>
+        <dataType>Boolean</dataType>
+        <expression>AND({!HasChuzoOnboardingForOpportunity}, {!HasNDAOnboardingForOpportunity})</expression>
     </formulas>
     <interviewLabel>EXP - {!$Flow.CurrentDateTime}</interviewLabel>
     <label>EXP - Opportunity - SCR - Create Record</label>
@@ -1151,12 +1156,19 @@
                 </width>
             </styleProperties>
             <visibilityRule>
-                <conditionLogic>and</conditionLogic>
+                <conditionLogic>1 OR 2</conditionLogic>
                 <conditions>
                     <leftValueReference>ShowVerifyAccount</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>FinalNextAction</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>CREATE_VENDOR_PROGRAM_ONBOARDING</stringValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -1363,12 +1375,19 @@
                 </width>
             </styleProperties>
             <visibilityRule>
-                <conditionLogic>and</conditionLogic>
+                <conditionLogic>1 OR 2</conditionLogic>
                 <conditions>
                     <leftValueReference>ShowVerifyAccount</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>FinalNextAction</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>CREATE_VENDOR_PROGRAM_ONBOARDING</stringValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -1411,6 +1430,13 @@
                         <stringValue>OFFER_CHUZO_CREATE</stringValue>
                     </rightValue>
                 </conditions>
+                <conditions>
+                    <leftValueReference>ShowAgreementChoice</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
             </visibilityRule>
         </fields>
         <fields>
@@ -1437,6 +1463,13 @@
                     <operator>EqualTo</operator>
                     <rightValue>
                         <stringValue>OFFER_CHUZO_CREATE</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>ShowAgreementChoice</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -1537,6 +1570,13 @@
                             </rightValue>
                         </conditions>
                         <conditions>
+                            <leftValueReference>ShowAgreementChoice</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <booleanValue>true</booleanValue>
+                            </rightValue>
+                        </conditions>
+                        <conditions>
                             <leftValueReference>IsUserSpecial</leftValueReference>
                             <operator>EqualTo</operator>
                             <rightValue>
@@ -1612,6 +1652,13 @@
                             <operator>EqualTo</operator>
                             <rightValue>
                                 <stringValue>OFFER_CHUZO_CREATE</stringValue>
+                            </rightValue>
+                        </conditions>
+                        <conditions>
+                            <leftValueReference>ShowAgreementChoice</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <booleanValue>true</booleanValue>
                             </rightValue>
                         </conditions>
                         <conditions>
@@ -1951,7 +1998,7 @@
                 </width>
             </styleProperties>
             <visibilityRule>
-                <conditionLogic>(1 AND 3) OR 2</conditionLogic>
+                <conditionLogic>(1 AND 3) OR 2 OR 4</conditionLogic>
                 <conditions>
                     <leftValueReference>OfferVendorOnboarding.reactiveValue</leftValueReference>
                     <operator>EqualTo</operator>
@@ -1971,6 +2018,13 @@
                     <operator>EqualTo</operator>
                     <rightValue>
                         <stringValue>OFFER_CHUZO_CREATE</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>FinalNextAction</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>CREATE_VENDOR_PROGRAM_ONBOARDING</stringValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -2154,7 +2208,7 @@
                 </width>
             </styleProperties>
             <visibilityRule>
-                <conditionLogic>(1 AND 2) OR 3</conditionLogic>
+                <conditionLogic>(1 AND 2) OR 3 OR 4</conditionLogic>
                 <conditions>
                     <leftValueReference>OfferVendorOnboarding.reactiveValue</leftValueReference>
                     <operator>EqualTo</operator>
@@ -2174,6 +2228,13 @@
                     <operator>EqualTo</operator>
                     <rightValue>
                         <stringValue>NO_ACTION</stringValue>
+                    </rightValue>
+                </conditions>
+                <conditions>
+                    <leftValueReference>FinalNextAction</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <stringValue>CREATE_VENDOR_PROGRAM_ONBOARDING</stringValue>
                     </rightValue>
                 </conditions>
             </visibilityRule>
@@ -2488,6 +2549,12 @@
             <name>IsUserSpecial</name>
             <value>
                 <elementReference>IsUserSpecial</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>IsCoreOnboardingComplete</name>
+            <value>
+                <elementReference>IsCoreOnboardingCompleteForOrchestrator</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>

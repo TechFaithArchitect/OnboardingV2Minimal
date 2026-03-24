@@ -176,52 +176,17 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Onboarding_Record_Collection_Via_Account_Id</name>
-        <label>Assign Onboarding Record Collection Via Account Id</label>
+        <name>Complete_Onboarding_Account_BRE_Flag_Scan</name>
+        <label>Complete Onboarding Account BRE Flag Scan</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>OnboardingRecordCollection</assignToReference>
+            <assignToReference>TotalOnboardingRecords</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>OnboardingRecordCollection</elementReference>
+                <elementReference>TotalOnboardingRecords</elementReference>
             </value>
         </assignmentItems>
-        <connector>
-            <targetReference>Loop_Onboarding_Records_Found</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Onboarding_Record_Collection_Via_Account_Record</name>
-        <label>Assign Onboarding Record Collection Via Account Record</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>OnboardingRecordCollection</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Get_Onboarding_Records_Via_Account_Record</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_Onboarding_Records_Found</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Assign_Onboarding_Record_Collection_Via_Account_Record_List</name>
-        <label>Assign Onboarding Record Collection Via Account Record List</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>OnboardingRecordCollection</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Get_Onboarding_Records_Via_Account_Record_List</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Loop_Onboarding_Records_Found</targetReference>
-        </connector>
     </assignments>
     <assignments>
         <name>Assign_Onboarding_Record_Collection_Via_Agreement_Id</name>
@@ -1021,7 +986,7 @@
             <name>Yes_HasAnyOboardingForAccount</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>currentItem_HasAnyOnboardingRecordForAccount_Filter</leftValueReference>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Id</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -1046,7 +1011,7 @@
             <name>Yes_HasChuzoOnboardingForOpportunity</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract__r.Contract_Type__c</leftValueReference>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract_Type__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Program Base Application - with Chuzo</stringValue>
@@ -1078,7 +1043,7 @@
             <name>Yes_HasNDAOnboardingForOpportunity</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract__r.Contract_Type__c</leftValueReference>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract_Type__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>NDA</stringValue>
@@ -1195,6 +1160,9 @@
         <nextValueConnector>
             <targetReference>HasChuzoOnboardingForOpportunity_Decision</targetReference>
         </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Complete_Onboarding_Account_BRE_Flag_Scan</targetReference>
+        </noMoreValuesConnector>
     </loops>
     <loops>
         <name>Loop_Opportunity_Record_Collection</name>
@@ -1347,7 +1315,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Onboarding_Record_Collection_Via_Account_Record</targetReference>
+            <targetReference>Loop_Onboarding_Records_Found</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1359,7 +1327,12 @@
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Onboarding__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputReference>OnboardingRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Account__c</queriedFields>
+        <queriedFields>Onboarding_Status__c</queriedFields>
+        <queriedFields>Contract__c</queriedFields>
+        <queriedFields>Contract_Type__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Onboarding_Records_Via_Account_Record_List</name>
@@ -1368,7 +1341,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Onboarding_Record_Collection_Via_Account_Record_List</targetReference>
+            <targetReference>Loop_Onboarding_Records_Found</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1380,7 +1353,12 @@
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Onboarding__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputReference>OnboardingRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Account__c</queriedFields>
+        <queriedFields>Onboarding_Status__c</queriedFields>
+        <queriedFields>Contract__c</queriedFields>
+        <queriedFields>Contract_Type__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Onboarding_Records_Via_AccountId</name>
@@ -1389,7 +1367,7 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Onboarding_Record_Collection_Via_Account_Id</targetReference>
+            <targetReference>Loop_Onboarding_Records_Found</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1401,7 +1379,12 @@
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Onboarding__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputReference>OnboardingRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Account__c</queriedFields>
+        <queriedFields>Onboarding_Status__c</queriedFields>
+        <queriedFields>Contract__c</queriedFields>
+        <queriedFields>Contract_Type__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Onboarding_Records_Via_Agreement_Record</name>

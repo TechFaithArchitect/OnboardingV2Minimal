@@ -106,6 +106,32 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Error_Contact_Not_Found_For_Training_Assignments</name>
+        <label>Assign Error Contact Not Found For Training Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error: Contact record for primary opportunity contact could not be loaded for training assignment creation</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Assign_Error_Missing_Opportunity_Contact_For_Training</name>
+        <label>Assign Error Missing Opportunity Contact For Training</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Error: Primary opportunity contact is required to create training assignments</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Capture_Update_Onboarding_Record_Fault</name>
         <label>Capture Update Onboarding Record Fault</label>
         <locationX>0</locationX>
@@ -213,8 +239,73 @@
             </connector>
             <label>Type is Contract</label>
         </rules>
+        <rules>
+            <name>Type_is_Training</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OnboardingRequirementRecord.Requirement_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Training</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Has_Contact_Id_For_Training_Assignments</targetReference>
+            </connector>
+            <label>Type is Training</label>
+        </rules>
     </decisions>
-    <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Related Onboarding Requirement Records</description>
+    <decisions>
+        <name>Has_Contact_Id_For_Training_Assignments</name>
+        <label>Has Contact Id For Training Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Error_Missing_Opportunity_Contact_For_Training</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Contact Id on Opportunity Contact Role</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Contact_Id_Present</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OpportunityContactRoleRecord.ContactId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Contact_For_Training_Assignments</targetReference>
+            </connector>
+            <label>Yes - Contact Id Present</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Was_Contact_Found_For_Training_Assignments</name>
+        <label>Was Contact Found For Training Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Error_Contact_Not_Found_For_Training_Assignments</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Contact Record Found</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Contact_Record_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ContactRecord.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Training_Assignment_Records</targetReference>
+            </connector>
+            <label>Yes - Contact Record Found</label>
+        </rules>
+    </decisions>
+    <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Related Onboarding Requirement Records. Training-type requirements invoke DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records using the primary opportunity contact.</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Related {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Related Onboarding Requirement Records</label>
@@ -237,6 +328,28 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Contact_For_Training_Assignments</name>
+        <label>Get Contact For Training Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Was_Contact_Found_For_Training_Assignments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OpportunityContactRoleRecord.ContactId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Contact</object>
+        <outputReference>ContactRecord</outputReference>
+        <queriedFields>Id</queriedFields>
+    </recordLookups>
     <recordUpdates>
         <name>Update_Onboarding_Record</name>
         <label>Update Onboarding Record</label>
@@ -334,6 +447,35 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <name>Create_Training_Assignment_Records</name>
+        <label>Create Training Assignment Records</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records</flowName>
+        <inputAssignments>
+            <name>ContactRecord</name>
+            <value>
+                <elementReference>ContactRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>VendorCustomizationId</name>
+            <value>
+                <elementReference>VendorProgramRecord.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <name>Get_Contract_Record</name>
         <label>Get Contract Record</label>
         <locationX>0</locationX>
@@ -372,6 +514,14 @@
         <isInput>false</isInput>
         <isOutput>true</isOutput>
         <objectType>echosign_dev1__SIGN_Agreement__c</objectType>
+    </variables>
+    <variables>
+        <name>ContactRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Contact</objectType>
     </variables>
     <variables>
         <name>ContractRecord</name>

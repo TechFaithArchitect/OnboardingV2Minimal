@@ -717,31 +717,6 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Is_Training_Requirement_External</name>
-        <label>Is Training Requirement External</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>Loop_Training_Requirement_Record</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No - Training Requirement is Not External</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Training_Requirement_is_External</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_Training_Requirement_Record.Training_Type__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>External</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_External_Training_Requirement_Id_To_Collection</targetReference>
-            </connector>
-            <label>Yes - Training Requirement is External</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Onboarding_Record_Found</name>
         <label>Onboarding Record Found</label>
         <locationX>0</locationX>
@@ -763,7 +738,7 @@
             <label>Yes - Onboarding Record Found</label>
         </rules>
     </decisions>
-    <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Training Assignment Records</description>
+    <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Training Assignment Records. Vendor program junction path processes all linked Training_Requirement__c records (any Training_Type__c) for assignment and onboarding link creation.</description>
     <environments>Default</environments>
     <formulas>
         <name>ExternalCanonicalAssignmentKey</name>
@@ -827,7 +802,7 @@
         <collectionReference>TrainingRequirementRecordCollection</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Is_Training_Requirement_External</targetReference>
+            <targetReference>Assign_External_Training_Requirement_Id_To_Collection</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Has_External_Training_Requirements</targetReference>
