@@ -339,7 +339,7 @@
         <inputAssignments>
             <name>PolicyKey</name>
             <value>
-                <elementReference>$Record.Approval_Policy_Key__c</elementReference>
+                <elementReference>VendorProgramRecord.Approval_Policy_Key__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

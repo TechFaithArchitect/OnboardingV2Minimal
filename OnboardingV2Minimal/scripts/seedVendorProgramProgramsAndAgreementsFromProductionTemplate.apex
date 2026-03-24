@@ -17,7 +17,7 @@ opts.vendorNames = new Set<String>{
 
 // Also seed credential + training data to keep ECC model complete in one run.
 VendorProgramSeedService.Result result = VendorProgramSeedService.seedProgramsAndAgreements(opts);
-result.mergeFrom(VendorProgramSeedService.seedVendorProgramRequirements(opts)); // Approval_Policy_Key__c: optional 5th column per requirement row; otherwise unchanged on update.
+result.mergeFrom(VendorProgramSeedService.seedVendorProgramRequirements(opts));
 result.mergeFrom(VendorProgramSeedService.seedCredentialData(opts));
 result.mergeFrom(VendorProgramSeedService.seedTrainingSystems(opts));
 result.mergeFrom(VendorProgramSeedService.seedTrainingRequirements(opts));

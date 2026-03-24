@@ -925,7 +925,7 @@ public with sharing class VendorProgramSeedService {
 
         Set<Id> targetProgramIds = targetProgramById.keySet();
         List<SObject> existingRows = Database.query(
-            'SELECT Id, Vendor_Program__c, Requirement_Type__c, Sequence__c, Is_Required__c, Active__c, Approval_Policy_Key__c, CreatedDate ' +
+            'SELECT Id, Vendor_Program__c, Requirement_Type__c, Sequence__c, Is_Required__c, Active__c, CreatedDate ' +
             'FROM Vendor_Program_Requirement__c ' +
             'WHERE Vendor_Program__c IN :targetProgramIds ' +
             'ORDER BY Vendor_Program__c ASC, Requirement_Type__c ASC, CreatedDate ASC, Id ASC'
@@ -1012,9 +1012,6 @@ public with sharing class VendorProgramSeedService {
                     nr.put('Sequence__c', sequence);
                     nr.put('Is_Required__c', isRequired);
                     nr.put('Active__c', active);
-                    if (requirementFieldMap.containsKey('Approval_Policy_Key__c') && reqRow.size() > 4) {
-                        nr.put('Approval_Policy_Key__c', reqRow[4]);
-                    }
                     inserts.add(nr);
                 } else {
                     Boolean changed = false;
@@ -1023,13 +1020,6 @@ public with sharing class VendorProgramSeedService {
                     if (existingSequence != sequence) { existing.put('Sequence__c', sequence); changed = true; }
                     if ((Boolean) existing.get('Is_Required__c') != isRequired) { existing.put('Is_Required__c', isRequired); changed = true; }
                     if ((Boolean) existing.get('Active__c') != active) { existing.put('Active__c', active); changed = true; }
-                    if (requirementFieldMap.containsKey('Approval_Policy_Key__c') && reqRow.size() > 4) {
-                        Object desiredAp = reqRow[4];
-                        if (existing.get('Approval_Policy_Key__c') != desiredAp) {
-                            existing.put('Approval_Policy_Key__c', desiredAp);
-                            changed = true;
-                        }
-                    }
                     if (changed) updates.add(existing);
                 }
             }
@@ -3061,7 +3051,7 @@ public with sharing class VendorProgramSeedService {
 
     /**
      * Optional per-programRef Vendor_Program_Requirement__c rows (OnboardV2 / production-aligned).
-     * Row shape: {Requirement_Type__c, Sequence__c, Is_Required__c, Active__c} or add index 4 for Approval_Policy_Key__c.
+     * Row shape: {Requirement_Type__c, Sequence__c, Is_Required__c, Active__c}.
      * Program refs without an entry use getDefaultVendorProgramRequirementTypeRows() (or input-label rows).
      */
     private static Map<String, List<List<Object>>> getVendorProgramRequirementRowsByProgramRef() {

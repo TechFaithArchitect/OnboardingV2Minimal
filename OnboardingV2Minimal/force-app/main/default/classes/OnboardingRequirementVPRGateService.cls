@@ -5,9 +5,8 @@
  * Onboarding__c.Onboarding_Status__c is Approved (post-approval resume); before approval, creation stops
  * before that row. After approval, that row is included and the batch still stops after it (later types
  * wait for the next run, same as before).
- * CMDT lookup uses Policy_Key__c + Requirement_Type__c (VPR picklist). Effective policy key per VPR is
- * VPR.Approval_Policy_Key__c when set; otherwise Vendor_Customization__c (vendor program).Approval_Policy_Key__c.
- * Programs with no key on the program and no VPR override do not match CMDT.
+ * CMDT lookup uses Vendor_Customization__c.Approval_Policy_Key__c + Vendor_Program_Requirement__c.Requirement_Type__c.
+ * Programs with no approval policy key on the vendor program record do not match CMDT.
  */
 public with sharing class OnboardingRequirementVPRGateService {
   @TestVisible
@@ -56,7 +55,7 @@ public with sharing class OnboardingRequirementVPRGateService {
       allVpr = testAllVprOverride;
     } else {
       allVpr = [
-        SELECT Id, Sequence__c, Requirement_Type__c, Approval_Policy_Key__c, Vendor_Program__c
+        SELECT Id, Sequence__c, Requirement_Type__c, Vendor_Program__c
         FROM Vendor_Program_Requirement__c
         WHERE Vendor_Program__c = :vendorProgramId
         ORDER BY Sequence__c ASC NULLS LAST, Id ASC
@@ -205,19 +204,13 @@ public with sharing class OnboardingRequirementVPRGateService {
     String vendorProgramPolicyKey,
     Map<String, Vendor_Program_Approval_Policy__mdt> policyByKeyAndType
   ) {
-    if (vpr == null) {
-      return null;
-    }
-    String effectiveKey = !String.isBlank(vpr.Approval_Policy_Key__c)
-      ? vpr.Approval_Policy_Key__c.trim()
-      : vendorProgramPolicyKey;
-    if (String.isBlank(effectiveKey)) {
+    if (vpr == null || String.isBlank(vendorProgramPolicyKey)) {
       return null;
     }
     String reqType = vpr.Requirement_Type__c == null ? null : String.valueOf(vpr.Requirement_Type__c);
     if (String.isBlank(reqType)) {
       return null;
     }
-    return policyByKeyAndType.get(mapKey(effectiveKey, reqType.trim()));
+    return policyByKeyAndType.get(mapKey(vendorProgramPolicyKey.trim(), reqType.trim()));
   }
 }

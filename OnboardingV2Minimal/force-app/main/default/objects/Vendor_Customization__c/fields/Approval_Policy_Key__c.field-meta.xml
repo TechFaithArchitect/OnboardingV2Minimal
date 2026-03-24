@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Approval_Policy_Key__c</fullName>
-    <description>Matches Vendor_Program_Approval_Policy__mdt.Policy_Key__c for this vendor program. When set, VPR rows with a blank Approval_Policy_Key__c use this value with Requirement_Type__c to resolve CMDT for the onboarding requirement gate.</description>
+    <description>Matches Vendor_Program_Approval_Policy__mdt.Policy_Key__c for this vendor program. Used with each Vendor_Program_Requirement__c Requirement_Type__c to resolve CMDT for the onboarding requirement gate and to stamp Onboarding_Requirement__c when created.</description>
     <externalId>false</externalId>
     <label>Approval Policy Key</label>
     <length>80</length>

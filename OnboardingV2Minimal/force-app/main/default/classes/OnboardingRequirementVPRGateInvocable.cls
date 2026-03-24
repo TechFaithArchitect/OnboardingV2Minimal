@@ -33,7 +33,7 @@ public with sharing class OnboardingRequirementVPRGateInvocable {
 
   @InvocableMethod(
     label='Filter Vendor Program Requirements for Onboarding Gate'
-    description='Skips VPRs that already have an onboarding requirement. Resolves CMDT Policy_Key from VPR.Approval_Policy_Key__c or Vendor_Customization__c.Approval_Policy_Key__c with Requirement_Type__c; when Block_Action__c matches, defers that row until Onboarding_Status__c is Approved, then creates it and stops the batch after that row.'
+    description='Skips VPRs that already have an onboarding requirement. Resolves CMDT from Vendor_Customization__c.Approval_Policy_Key__c with each VPR Requirement_Type__c; when Block_Action__c matches, defers that row until Onboarding_Status__c is Approved, then creates it and stops the batch after that row.'
   )
   public static List<Result> filterForGate(List<Request> requests) {
     List<Result> results = new List<Result>();

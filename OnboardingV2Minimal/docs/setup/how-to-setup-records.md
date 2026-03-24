@@ -24,7 +24,7 @@ This guide describes how to set up records for the onboarding system **as implem
 3. Vendor_Program_Group__c
 4. Vendor_Customization__c (Vendor Program)
 5. Vendor_Program_Group_Member__c
-6. Vendor_Program_Requirement__c (with Fulfillment_Policy_Key__c, Approval_Policy_Key__c)
+6. Vendor_Program_Requirement__c (with Fulfillment_Policy_Key__c)
 7. (Optional) Onboarding_Fulfillment_Policy__mdt (for new subject models)
 8. (Optional) Vendor_Program_Approval_Policy__mdt (for approval-gated requirements)
 9. (Optional) Onboarding_Status_Normalization__mdt (for new requirement types/status mappings; used by BRE)
@@ -86,6 +86,7 @@ Groups organize vendor programs. Vendor Programs link to groups for program grou
    - **Vendor__c**: Link to Vendor__c
    - **Vendor_Program_Group__c**: Link to the Vendor Program Group
    - **Active__c**: Checked
+   - **Approval Policy Key** (`Approval_Policy_Key__c`): (Optional) Matches **Vendor_Program_Approval_Policy__mdt.Policy_Key__c** for this program (onboarding gate and BRE policy resolution)
 3. Save
 
 ---
@@ -112,7 +113,6 @@ Links the Vendor Program to the group.
    - **Vendor_Program__c**: Link to the Vendor Program (Vendor_Customization__c)
    - **Requirement_Type__c**: From global value set (e.g., Training, Background Check, Contract, Agreement)
    - **Fulfillment_Policy_Key__c**: See table below
-   - **Approval_Policy_Key__c**: (Optional) Key matching **Vendor_Program_Approval_Policy__mdt** if this requirement requires approval
    - **Active__c**: Checked
    - **Is_Required__c**: Checked if mandatory
    - **Sequence__c**: Display order
@@ -147,11 +147,11 @@ The four policies (`ACCOUNT_ONLY`, `ALL_CONTACTS`, `PRINCIPAL_OWNER`, `PRIMARY_C
 
 ## Step 8: (Optional) Vendor_Program_Approval_Policy__mdt
 
-Used when requirements need approval before completion. **Vendor_Program_Requirement__c.Approval_Policy_Key__c** references the **Policy_Key__c** of these records.
+Used when requirements need approval before completion. **Vendor_Customization__c** (Vendor Program) **Approval_Policy_Key__c** matches the **Policy_Key__c** of these records together with each requirement’s **Requirement_Type__c**.
 
 1. Go to **Setup** → **Custom Metadata Types** → **Vendor Program Approval Policy** → **Manage Records**
 2. Create a record (example: `VERIZON_FIOS` for Agreement type):
-   - **Policy Key**: Unique key (e.g., `VERIZON_FIOS`) – referenced by `Vendor_Program_Requirement__c.Approval_Policy_Key__c`
+   - **Policy Key**: Unique key (e.g., `VERIZON_FIOS`) – same value as **Vendor_Customization__c.Approval_Policy_Key__c** on programs that use this policy
    - **Type**: Requirement type (e.g., Agreement, Contract)
    - **Approval Required**: Checked if approval is required
    - **Approval Process DevName**: Salesforce approval process API name
@@ -283,12 +283,20 @@ FROM Vendor_Customization__c
 WHERE Name = 'Sample Vendor Program'
 ```
 
-### Requirements with Fulfillment and Approval Policy
+### Requirements with Fulfillment Policy
 
 ```soql
-SELECT Id, Name, Requirement_Type__c, Fulfillment_Policy_Key__c, Approval_Policy_Key__c, Active__c
+SELECT Id, Name, Requirement_Type__c, Fulfillment_Policy_Key__c, Active__c
 FROM Vendor_Program_Requirement__c
 WHERE Vendor_Program__r.Name = 'Sample Vendor Program'
+```
+
+### Vendor Program approval policy key
+
+```soql
+SELECT Id, Name, Approval_Policy_Key__c
+FROM Vendor_Customization__c
+WHERE Name = 'Sample Vendor Program'
 ```
 
 ### Status Normalization (Custom Metadata)
