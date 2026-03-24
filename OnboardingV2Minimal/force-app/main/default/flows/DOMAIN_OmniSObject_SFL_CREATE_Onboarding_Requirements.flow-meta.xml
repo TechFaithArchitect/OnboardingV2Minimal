@@ -342,7 +342,7 @@
             <label>Approval Gate Deferred More Requirements</label>
         </rules>
     </decisions>
-    <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements</description>
+    <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements. When Approval_Gate_Deferred_Remain is true, sets onboarding to Pending Approval and submits Onboarding__c for approval so remaining VPR rows can be created after final approval (BLL resume).</description>
     <environments>Default</environments>
     <formulas>
         <name>Missing_RecordType_Mapping_Error_Message</name>
@@ -535,7 +535,16 @@
                 <booleanValue>true</booleanValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Onboarding_Status__c</field>
+            <value>
+                <stringValue>Pending Approval</stringValue>
+            </value>
+        </inputAssignments>
         <object>Onboarding__c</object>
+        <connector>
+            <targetReference>Submit_Onboarding_For_Agreement_Approval</targetReference>
+        </connector>
     </recordUpdates>
     <recordUpdates>
         <name>Update_Onboarding_Record_with_Incomplete_Subject_Creation</name>
@@ -588,6 +597,19 @@
             <assignToReference>errorMessage</assignToReference>
             <name>errorMessage</name>
         </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Submit_Onboarding_For_Agreement_Approval</name>
+        <label>Submit Onboarding For Agreement Approval</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>DOMAIN_OmniSObject_SFL_Submit_for_Approval</flowName>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
     </subflows>
     <variables>
         <name>Approval_Gate_Deferred_Remain</name>

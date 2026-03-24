@@ -46,6 +46,63 @@ private class OnboardingRequirementVPRGateServiceTest {
   }
 
   @IsTest
+  static void blockAction_blankPolicyKey_matchesCmdtByRequirementType() {
+    Id onboardId = fakeId(Onboarding__c.SObjectType);
+    Id progId = fakeId(Vendor_Customization__c.SObjectType);
+
+    Vendor_Program_Requirement__c v0 = new Vendor_Program_Requirement__c(
+      Id = fakeId(Vendor_Program_Requirement__c.SObjectType, 0),
+      Sequence__c = 1,
+      Requirement_Type__c = 'Contract',
+      Approval_Policy_Key__c = null,
+      Vendor_Program__c = progId
+    );
+    Vendor_Program_Requirement__c v1 = new Vendor_Program_Requirement__c(
+      Id = fakeId(Vendor_Program_Requirement__c.SObjectType, 1),
+      Sequence__c = 2,
+      Requirement_Type__c = 'Agreement',
+      Approval_Policy_Key__c = null,
+      Vendor_Program__c = progId
+    );
+    Vendor_Program_Requirement__c v2 = new Vendor_Program_Requirement__c(
+      Id = fakeId(Vendor_Program_Requirement__c.SObjectType, 2),
+      Sequence__c = 3,
+      Requirement_Type__c = 'Training',
+      Approval_Policy_Key__c = null,
+      Vendor_Program__c = progId
+    );
+
+    OnboardingRequirementVPRGateService.testPoliciesOverride = new List<Vendor_Program_Approval_Policy__mdt>{
+      new Vendor_Program_Approval_Policy__mdt(
+        Policy_Key__c = 'VERIZON_FIOS',
+        Type__c = 'Agreement',
+        Block_Action__c = true,
+        Active__c = true,
+        Priority__c = 10
+      )
+    };
+    OnboardingRequirementVPRGateService.testAllVprOverride = new List<Vendor_Program_Requirement__c>{
+      v0,
+      v1,
+      v2
+    };
+    OnboardingRequirementVPRGateService.testExistingVprIdsOverride = new Set<Id>();
+
+    try {
+      OnboardingRequirementVPRGateService.GateOutcome o = OnboardingRequirementVPRGateService.buildGateOutcome(
+        onboardId,
+        progId
+      );
+      System.assertEquals(1, o.vendorProgramRequirementsToCreate.size());
+      System.assertEquals(v0.Id, o.vendorProgramRequirementsToCreate[0].Id);
+      System.assertEquals(true, o.deferredRequirementsRemain);
+      System.assertEquals(true, o.gateStoppedThisBatch);
+    } finally {
+      OnboardingRequirementVPRGateService.clearTestStubs();
+    }
+  }
+
+  @IsTest
   static void blockAction_stopsAfterFirstNewAndDefersRest() {
     Id onboardId = fakeId(Onboarding__c.SObjectType);
     Id progId = fakeId(Vendor_Customization__c.SObjectType);
@@ -82,8 +139,58 @@ private class OnboardingRequirementVPRGateServiceTest {
         onboardId,
         progId
       );
+      System.assertEquals(0, o.vendorProgramRequirementsToCreate.size());
+      System.assertEquals(true, o.deferredRequirementsRemain);
+      System.assertEquals(true, o.gateStoppedThisBatch);
+    } finally {
+      OnboardingRequirementVPRGateService.clearTestStubs();
+    }
+  }
+
+  @IsTest
+  static void blockAction_whenOnboardingApproved_includesBlockingRow() {
+    Id onboardId = fakeId(Onboarding__c.SObjectType);
+    Id progId = fakeId(Vendor_Customization__c.SObjectType);
+
+    Id contractVprId = fakeId(Vendor_Program_Requirement__c.SObjectType, 1);
+    Vendor_Program_Requirement__c vAgreement = new Vendor_Program_Requirement__c(
+      Id = fakeId(Vendor_Program_Requirement__c.SObjectType, 2),
+      Sequence__c = 2,
+      Requirement_Type__c = 'Agreement',
+      Approval_Policy_Key__c = 'VERIZON_FIOS',
+      Vendor_Program__c = progId
+    );
+    Vendor_Program_Requirement__c vTraining = new Vendor_Program_Requirement__c(
+      Id = fakeId(Vendor_Program_Requirement__c.SObjectType, 3),
+      Sequence__c = 3,
+      Requirement_Type__c = 'Training',
+      Approval_Policy_Key__c = null,
+      Vendor_Program__c = progId
+    );
+
+    OnboardingRequirementVPRGateService.testPoliciesOverride = new List<Vendor_Program_Approval_Policy__mdt>{
+      new Vendor_Program_Approval_Policy__mdt(
+        Policy_Key__c = 'VERIZON_FIOS',
+        Type__c = 'Agreement',
+        Block_Action__c = true,
+        Active__c = true,
+        Priority__c = 10
+      )
+    };
+    OnboardingRequirementVPRGateService.testAllVprOverride = new List<Vendor_Program_Requirement__c>{
+      vAgreement,
+      vTraining
+    };
+    OnboardingRequirementVPRGateService.testExistingVprIdsOverride = new Set<Id>{ contractVprId };
+    OnboardingRequirementVPRGateService.testOnboardingStatusOverride = 'Approved';
+
+    try {
+      OnboardingRequirementVPRGateService.GateOutcome o = OnboardingRequirementVPRGateService.buildGateOutcome(
+        onboardId,
+        progId
+      );
       System.assertEquals(1, o.vendorProgramRequirementsToCreate.size());
-      System.assertEquals(v1.Id, o.vendorProgramRequirementsToCreate[0].Id);
+      System.assertEquals(vAgreement.Id, o.vendorProgramRequirementsToCreate[0].Id);
       System.assertEquals(true, o.deferredRequirementsRemain);
       System.assertEquals(true, o.gateStoppedThisBatch);
     } finally {
