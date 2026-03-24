@@ -308,7 +308,7 @@ public with sharing class OnboardingStatusPredicateInterpreter {
   }
 
   /**
-   * Every Agreement row Signed or Setup Complete; every Contract requirement row normalized
+   * Every Agreement row Signed, Complete, or Setup Complete; every Contract requirement row normalized
    * to an early contract milestone (Not Started or In Approval Process after CMDT + sync).
    * Other types ignored. Evaluator reads only Onboarding_Requirement__c — keep Contract rows in
    * sync with linked Contract via flows/automation; do not mirror Contract.Status here.
@@ -329,7 +329,9 @@ public with sharing class OnboardingStatusPredicateInterpreter {
         String n = r.normalizedStatus;
         if (
           String.isBlank(n) ||
-          (!SIGNED.equalsIgnoreCase(n) && !SETUP_COMPLETE.equalsIgnoreCase(n))
+          (!SIGNED.equalsIgnoreCase(n) &&
+            !SETUP_COMPLETE.equalsIgnoreCase(n) &&
+            !COMPLETE.equalsIgnoreCase(n))
         ) {
           agreementOk = false;
         }
@@ -366,7 +368,8 @@ public with sharing class OnboardingStatusPredicateInterpreter {
     if (
       agreementNorm == null ||
       (!SIGNED.equalsIgnoreCase(agreementNorm) &&
-        !SETUP_COMPLETE.equalsIgnoreCase(agreementNorm))
+        !SETUP_COMPLETE.equalsIgnoreCase(agreementNorm) &&
+        !COMPLETE.equalsIgnoreCase(agreementNorm))
     ) {
       return false;
     }

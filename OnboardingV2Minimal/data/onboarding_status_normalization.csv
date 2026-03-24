@@ -1,153 +1,98 @@
 Requirement_Type__c,Status__c,Active__c,Normalized_Status__c
-Agreement,Denied,TRUE,Denied
-Agreement,Expired,TRUE,Denied
-Agreement,Failed,TRUE,Denied
+Agreement,Accepted,TRUE,Complete
+Agreement,Approved,TRUE,Complete
 Agreement,Canceled,TRUE,Canceled
-Agreement,Cancelled,TRUE,Canceled
-Agreement,Not Required,TRUE,Ignore
-Agreement,Not required,TRUE,Ignore
-Agreement,N/A,TRUE,Ignore
-Auto Insurance,Denied,TRUE,Denied
-Auto Insurance,Expired,TRUE,Denied
-Auto Insurance,Failed,TRUE,Denied
-Auto Insurance,Canceled,TRUE,Canceled
-Auto Insurance,Cancelled,TRUE,Canceled
-Auto Insurance,Not Required,TRUE,Ignore
-Auto Insurance,Not required,TRUE,Ignore
-Auto Insurance,N/A,TRUE,Ignore
-Background Check,Denied,TRUE,Denied
-Background Check,Expired,TRUE,Denied
+Agreement,Canceled / Declined,TRUE,Canceled
+Agreement,Complete,TRUE,Complete
+Agreement,Created,TRUE,Created
+Agreement,Delivered,TRUE,Complete
+Agreement,Draft,TRUE,Draft
+Agreement,Expired,TRUE,Denied
+Agreement,Form-Filled,TRUE,Complete
+Agreement,Incomplete,TRUE,Incomplete
+Agreement,Not Started,TRUE,Not Started
+Agreement,Out for Acceptance,TRUE,Out for Acceptance
+Agreement,Out for Approval,TRUE,Out for Approval
+Agreement,Out for Delivery,TRUE,Out for Delivery
+Agreement,Out for Form-Filling,TRUE,Out for Form-Filling
+Agreement,Out for Signature,TRUE,Out for Signature
+Agreement,Pre-Send,TRUE,Pre-Send
+Agreement,Send in Progress,TRUE,Send in Progress
+Agreement,Signed,TRUE,Signed
+Agreement,Waiting for Counter-Acceptance,TRUE,Waiting for Counter-Acceptance
+Agreement,Waiting for Counter-Approval,TRUE,Waiting for Counter-Approval
+Agreement,Waiting for Counter-Delivery,TRUE,Waiting for Counter-Delivery
+Agreement,Waiting for Counter-Form-Filling,TRUE,Waiting for Counter-Form-Filling
+Agreement,Waiting for Counter-Signature,TRUE,Waiting for Counter-Signature
+Agreement,Waiting for my Delegation,TRUE,Waiting for my Delegation
+Auto Insurance,Complete,TRUE,Complete
+Auto Insurance,Incomplete,TRUE,Incomplete
+Auto Insurance,Not Started,TRUE,Not Started
+Background Check,Complete,TRUE,Complete
 Background Check,Failed,TRUE,Denied
-Background Check,Canceled,TRUE,Canceled
-Background Check,Cancelled,TRUE,Canceled
-Background Check,Not Required,TRUE,Ignore
-Background Check,Not required,TRUE,Ignore
-Background Check,N/A,TRUE,Ignore
-Business License,Denied,TRUE,Denied
-Business License,Expired,TRUE,Denied
-Business License,Failed,TRUE,Denied
-Business License,Canceled,TRUE,Canceled
-Business License,Cancelled,TRUE,Canceled
-Business License,Not Required,TRUE,Ignore
-Business License,Not required,TRUE,Ignore
-Business License,N/A,TRUE,Ignore
-Chuzo Agreement,Denied,TRUE,Denied
-Chuzo Agreement,Expired,TRUE,Denied
-Chuzo Agreement,Failed,TRUE,Denied
-Chuzo Agreement,Canceled,TRUE,Canceled
-Chuzo Agreement,Cancelled,TRUE,Canceled
-Chuzo Agreement,Not Required,TRUE,Ignore
-Chuzo Agreement,Not required,TRUE,Ignore
-Chuzo Agreement,N/A,TRUE,Ignore
+Background Check,Incomplete,TRUE,Incomplete
+Background Check,Not Started,TRUE,Not Started
+Background Check,Requested,TRUE,Requested
+Background Check,Waived,TRUE,Ignore
+Business License,Complete,TRUE,Complete
+Business License,Incomplete,TRUE,Incomplete
+Business License,Not Started,TRUE,Not Started
+Chuzo Agreement,Complete,TRUE,Complete
+Chuzo Agreement,Incomplete,TRUE,Incomplete
+Chuzo Agreement,Not Started,TRUE,Not Started
+Compliance,Approved,TRUE,Approved
+Compliance,Approved Conditionally,TRUE,Complete
 Compliance,Denied,TRUE,Denied
-Compliance,Expired,TRUE,Denied
-Compliance,Failed,TRUE,Denied
-Compliance,Canceled,TRUE,Canceled
-Compliance,Cancelled,TRUE,Canceled
-Compliance,Not Required,TRUE,Ignore
-Compliance,Not required,TRUE,Ignore
-Compliance,N/A,TRUE,Ignore
-Contract,Denied,TRUE,Denied
-Contract,Expired,TRUE,Denied
-Contract,Failed,TRUE,Denied
+Compliance,In Progress,TRUE,In Progress
+Compliance,Not Started,TRUE,Not Started
 Contract,Canceled,TRUE,Canceled
-Contract,Cancelled,TRUE,Canceled
-Contract,Not Required,TRUE,Ignore
-Contract,Not required,TRUE,Ignore
-Contract,N/A,TRUE,Ignore
-Credit Check,Denied,TRUE,Denied
-Credit Check,Expired,TRUE,Denied
+Contract,Complete,TRUE,Complete
+Contract,Denied,TRUE,Denied
+Contract,Draft,TRUE,Draft
+Contract,Incomplete,TRUE,Incomplete
+Contract,New,TRUE,New
+Contract,Not Started,TRUE,Not Started
+Credit Check,Complete,TRUE,Complete
 Credit Check,Failed,TRUE,Denied
-Credit Check,Canceled,TRUE,Canceled
-Credit Check,Cancelled,TRUE,Canceled
-Credit Check,Not Required,TRUE,Ignore
-Credit Check,Not required,TRUE,Ignore
-Credit Check,N/A,TRUE,Ignore
-Driver's License,Denied,TRUE,Denied
-Driver's License,Expired,TRUE,Denied
-Driver's License,Failed,TRUE,Denied
-Driver's License,Canceled,TRUE,Canceled
-Driver's License,Cancelled,TRUE,Canceled
-Driver's License,Not Required,TRUE,Ignore
-Driver's License,Not required,TRUE,Ignore
-Driver's License,N/A,TRUE,Ignore
-Employment Form,Denied,TRUE,Denied
-Employment Form,Expired,TRUE,Denied
-Employment Form,Failed,TRUE,Denied
-Employment Form,Canceled,TRUE,Canceled
-Employment Form,Cancelled,TRUE,Canceled
-Employment Form,Not Required,TRUE,Ignore
-Employment Form,Not required,TRUE,Ignore
-Employment Form,N/A,TRUE,Ignore
-ERP Setup,Denied,TRUE,Denied
-ERP Setup,Expired,TRUE,Denied
-ERP Setup,Failed,TRUE,Denied
-ERP Setup,Canceled,TRUE,Canceled
-ERP Setup,Cancelled,TRUE,Canceled
-ERP Setup,Not Required,TRUE,Ignore
-ERP Setup,Not required,TRUE,Ignore
-ERP Setup,N/A,TRUE,Ignore
-General Liability Insurance,Denied,TRUE,Denied
-General Liability Insurance,Expired,TRUE,Denied
-General Liability Insurance,Failed,TRUE,Denied
-General Liability Insurance,Canceled,TRUE,Canceled
-General Liability Insurance,Cancelled,TRUE,Canceled
-General Liability Insurance,Not Required,TRUE,Ignore
-General Liability Insurance,Not required,TRUE,Ignore
-General Liability Insurance,N/A,TRUE,Ignore
-Interview,Denied,TRUE,Denied
-Interview,Expired,TRUE,Denied
-Interview,Failed,TRUE,Denied
-Interview,Canceled,TRUE,Canceled
-Interview,Cancelled,TRUE,Canceled
-Interview,Not Required,TRUE,Ignore
-Interview,Not required,TRUE,Ignore
-Interview,N/A,TRUE,Ignore
-Net Terms,Denied,TRUE,Denied
-Net Terms,Expired,TRUE,Denied
-Net Terms,Failed,TRUE,Denied
-Net Terms,Canceled,TRUE,Canceled
-Net Terms,Cancelled,TRUE,Canceled
-Net Terms,Not Required,TRUE,Ignore
-Net Terms,Not required,TRUE,Ignore
-Net Terms,N/A,TRUE,Ignore
-Personal Guarantee,Denied,TRUE,Denied
-Personal Guarantee,Expired,TRUE,Denied
-Personal Guarantee,Failed,TRUE,Denied
-Personal Guarantee,Canceled,TRUE,Canceled
-Personal Guarantee,Cancelled,TRUE,Canceled
-Personal Guarantee,Not Required,TRUE,Ignore
-Personal Guarantee,Not required,TRUE,Ignore
-Personal Guarantee,N/A,TRUE,Ignore
-SubAgent License Agreement,Denied,TRUE,Denied
-SubAgent License Agreement,Expired,TRUE,Denied
-SubAgent License Agreement,Failed,TRUE,Denied
-SubAgent License Agreement,Canceled,TRUE,Canceled
-SubAgent License Agreement,Cancelled,TRUE,Canceled
-SubAgent License Agreement,Not Required,TRUE,Ignore
-SubAgent License Agreement,Not required,TRUE,Ignore
-SubAgent License Agreement,N/A,TRUE,Ignore
-Terms & Conditions,Denied,TRUE,Denied
-Terms & Conditions,Expired,TRUE,Denied
-Terms & Conditions,Failed,TRUE,Denied
-Terms & Conditions,Canceled,TRUE,Canceled
-Terms & Conditions,Cancelled,TRUE,Canceled
-Terms & Conditions,Not Required,TRUE,Ignore
-Terms & Conditions,Not required,TRUE,Ignore
-Terms & Conditions,N/A,TRUE,Ignore
-Training,Denied,TRUE,Denied
-Training,Expired,TRUE,Denied
-Training,Failed,TRUE,Denied
-Training,Canceled,TRUE,Canceled
-Training,Cancelled,TRUE,Canceled
-Training,Not Required,TRUE,Ignore
-Training,Not required,TRUE,Ignore
-Training,N/A,TRUE,Ignore
-Worker's Compensation Insurance,Denied,TRUE,Denied
-Worker's Compensation Insurance,Expired,TRUE,Denied
-Worker's Compensation Insurance,Failed,TRUE,Denied
-Worker's Compensation Insurance,Canceled,TRUE,Canceled
-Worker's Compensation Insurance,Cancelled,TRUE,Canceled
-Worker's Compensation Insurance,Not Required,TRUE,Ignore
-Worker's Compensation Insurance,Not required,TRUE,Ignore
-Worker's Compensation Insurance,N/A,TRUE,Ignore
+Credit Check,Incomplete,TRUE,Incomplete
+Credit Check,Not Started,TRUE,Not Started
+Credit Check,Requested,TRUE,Requested
+Credit Check,Waived,TRUE,Ignore
+Driver's License,Complete,TRUE,Complete
+Driver's License,Incomplete,TRUE,Incomplete
+Driver's License,Not Started,TRUE,Not Started
+ERP Setup,Complete,TRUE,Complete
+ERP Setup,Incomplete,TRUE,Incomplete
+ERP Setup,Not Started,TRUE,Not Started
+Employment Form,Approved Box 1,TRUE,Complete
+Employment Form,Approved Box 2,TRUE,Complete
+Employment Form,Incomplete,TRUE,Incomplete
+Employment Form,Not Started,TRUE,Not Started
+Employment Form,Onboarding Approved,TRUE,Complete
+Employment Form,Pending Validation,TRUE,Pending Validation
+General Liability Insurance,Complete,TRUE,Complete
+General Liability Insurance,Incomplete,TRUE,Incomplete
+General Liability Insurance,Not Started,TRUE,Not Started
+Net Terms,Complete,TRUE,Complete
+Net Terms,Incomplete,TRUE,Incomplete
+Net Terms,Not Started,TRUE,Not Started
+Personal Guarantee,Complete,TRUE,Complete
+Personal Guarantee,Incomplete,TRUE,Incomplete
+Personal Guarantee,Not Started,TRUE,Not Started
+Terms & Conditions,Complete,TRUE,Complete
+Terms & Conditions,Incomplete,TRUE,Incomplete
+Terms & Conditions,Not Started,TRUE,Not Started
+Training,Completed,TRUE,Complete
+Training,In Progress,TRUE,In Progress
+Training,Incomplete,TRUE,Incomplete
+Training,Not Started,TRUE,Not Started
+Training,Passed,TRUE,Complete
+Vendor Order Entry,Approved Box 1,TRUE,Complete
+Vendor Order Entry,Approved Box 2,TRUE,Complete
+Vendor Order Entry,Incomplete,TRUE,Incomplete
+Vendor Order Entry,Not Started,TRUE,Not Started
+Vendor Order Entry,Onboarding Approved,TRUE,Complete
+Vendor Order Entry,Pending Validation,TRUE,Pending Validation
+Worker's Compensation Insurance,Complete,TRUE,Complete
+Worker's Compensation Insurance,Incomplete,TRUE,Incomplete
+Worker's Compensation Insurance,Not Started,TRUE,Not Started

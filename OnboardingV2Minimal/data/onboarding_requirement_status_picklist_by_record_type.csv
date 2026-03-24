@@ -1,0 +1,104 @@
+RecordType_ApiName,RecordType_Label,Requirement_Type__c,Status__c
+Agreement_Requirements,Agreement Requirements,Agreement,Accepted
+Agreement_Requirements,Agreement Requirements,Agreement,Approved
+Agreement_Requirements,Agreement Requirements,Agreement,Canceled
+Agreement_Requirements,Agreement Requirements,Agreement,Canceled / Declined
+SubAgent_License_Agreement,SubAgent License Agreement,Agreement,Complete
+Agreement_Requirements,Agreement Requirements,Agreement,Created
+Agreement_Requirements,Agreement Requirements,Agreement,Delivered
+Agreement_Requirements,Agreement Requirements,Agreement,Draft
+Agreement_Requirements,Agreement Requirements,Agreement,Expired
+Agreement_Requirements,Agreement Requirements,Agreement,Form-Filled
+SubAgent_License_Agreement,SubAgent License Agreement,Agreement,Incomplete
+SubAgent_License_Agreement,SubAgent License Agreement,Agreement,Not Started
+Agreement_Requirements,Agreement Requirements,Agreement,Out for Acceptance
+Agreement_Requirements,Agreement Requirements,Agreement,Out for Approval
+Agreement_Requirements,Agreement Requirements,Agreement,Out for Delivery
+Agreement_Requirements,Agreement Requirements,Agreement,Out for Form-Filling
+Agreement_Requirements,Agreement Requirements,Agreement,Out for Signature
+Agreement_Requirements,Agreement Requirements,Agreement,Pre-Send
+Agreement_Requirements,Agreement Requirements,Agreement,Send in Progress
+Agreement_Requirements,Agreement Requirements,Agreement,Signed
+Agreement_Requirements,Agreement Requirements,Agreement,Waiting for Counter-Acceptance
+Agreement_Requirements,Agreement Requirements,Agreement,Waiting for Counter-Approval
+Agreement_Requirements,Agreement Requirements,Agreement,Waiting for Counter-Delivery
+Agreement_Requirements,Agreement Requirements,Agreement,Waiting for Counter-Form-Filling
+Agreement_Requirements,Agreement Requirements,Agreement,Waiting for Counter-Signature
+Agreement_Requirements,Agreement Requirements,Agreement,Waiting for my Delegation
+Auto_Insurance_Requirements,Auto Insurance Requirements,Auto Insurance,Complete
+Auto_Insurance_Requirements,Auto Insurance Requirements,Auto Insurance,Incomplete
+Auto_Insurance_Requirements,Auto Insurance Requirements,Auto Insurance,Not Started
+Background_Check,Background Check,Background Check,Complete
+Background_Check,Background Check,Background Check,Failed
+Background_Check,Background Check,Background Check,Incomplete
+Background_Check,Background Check,Background Check,Not Started
+Background_Check,Background Check,Background Check,Requested
+Background_Check,Background Check,Background Check,Waived
+Business_License,Business License,Business License,Complete
+Business_License,Business License,Business License,Incomplete
+Business_License,Business License,Business License,Not Started
+Chuzo_Agreement,Chuzo Agreement,Chuzo Agreement,Complete
+Chuzo_Agreement,Chuzo Agreement,Chuzo Agreement,Incomplete
+Chuzo_Agreement,Chuzo Agreement,Chuzo Agreement,Not Started
+Compliance,Compliance,Compliance,Approved
+Compliance,Compliance,Compliance,Approved Conditionally
+Compliance,Compliance,Compliance,Denied
+Compliance,Compliance,Compliance,In Progress
+Compliance,Compliance,Compliance,Not Started
+Contract,Contract,Contract,Canceled
+Contract,Contract,Contract,Complete
+Contract,Contract,Contract,Denied
+Contract,Contract,Contract,Draft
+Contract,Contract,Contract,Incomplete
+Contract,Contract,Contract,New
+Contract,Contract,Contract,Not Started
+Credit_Check,Credit Check,Credit Check,Complete
+Credit_Check,Credit Check,Credit Check,Failed
+Credit_Check,Credit Check,Credit Check,Incomplete
+Credit_Check,Credit Check,Credit Check,Not Started
+Credit_Check,Credit Check,Credit Check,Requested
+Credit_Check,Credit Check,Credit Check,Waived
+Drivers_License,Driver's License,Driver's License,Complete
+Drivers_License,Driver's License,Driver's License,Incomplete
+Drivers_License,Driver's License,Driver's License,Not Started
+ERP_Setup,ERP Setup,ERP Setup,Complete
+ERP_Setup,ERP Setup,ERP Setup,Incomplete
+ERP_Setup,ERP Setup,ERP Setup,Not Started
+Employment_Form,Employment Form,Employment Form,Approved Box 1
+Interview,Interview,Employment Form,Approved Box 1
+Employment_Form,Employment Form,Employment Form,Approved Box 2
+Interview,Interview,Employment Form,Approved Box 2
+Employment_Form,Employment Form,Employment Form,Incomplete
+Interview,Interview,Employment Form,Incomplete
+Employment_Form,Employment Form,Employment Form,Not Started
+Interview,Interview,Employment Form,Not Started
+Employment_Form,Employment Form,Employment Form,Onboarding Approved
+Interview,Interview,Employment Form,Onboarding Approved
+Employment_Form,Employment Form,Employment Form,Pending Validation
+Interview,Interview,Employment Form,Pending Validation
+General_Liability_Insurance_Requirement,General Liability Insurance Requirement,General Liability Insurance,Complete
+General_Liability_Insurance_Requirement,General Liability Insurance Requirement,General Liability Insurance,Incomplete
+General_Liability_Insurance_Requirement,General Liability Insurance Requirement,General Liability Insurance,Not Started
+Net_Terms,Net Terms,Net Terms,Complete
+Net_Terms,Net Terms,Net Terms,Incomplete
+Net_Terms,Net Terms,Net Terms,Not Started
+Personal_Guarantee,Personal Guarantee,Personal Guarantee,Complete
+Personal_Guarantee,Personal Guarantee,Personal Guarantee,Incomplete
+Personal_Guarantee,Personal Guarantee,Personal Guarantee,Not Started
+Terms_Conditions,Terms & Conditions,Terms & Conditions,Complete
+Terms_Conditions,Terms & Conditions,Terms & Conditions,Incomplete
+Terms_Conditions,Terms & Conditions,Terms & Conditions,Not Started
+Training,Training,Training,Completed
+Training,Training,Training,In Progress
+Training,Training,Training,Incomplete
+Training,Training,Training,Not Started
+Training,Training,Training,Passed
+Vendor_Order_Entry,Vendor Order Entry,Vendor Order Entry,Approved Box 1
+Vendor_Order_Entry,Vendor Order Entry,Vendor Order Entry,Approved Box 2
+Vendor_Order_Entry,Vendor Order Entry,Vendor Order Entry,Incomplete
+Vendor_Order_Entry,Vendor Order Entry,Vendor Order Entry,Not Started
+Vendor_Order_Entry,Vendor Order Entry,Vendor Order Entry,Onboarding Approved
+Vendor_Order_Entry,Vendor Order Entry,Vendor Order Entry,Pending Validation
+Workers_Compensation_Insurance,Worker's Compensation Insurance,Worker's Compensation Insurance,Complete
+Workers_Compensation_Insurance,Worker's Compensation Insurance,Worker's Compensation Insurance,Incomplete
+Workers_Compensation_Insurance,Worker's Compensation Insurance,Worker's Compensation Insurance,Not Started

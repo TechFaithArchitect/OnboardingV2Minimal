@@ -25,11 +25,7 @@
     <picklistValues>
         <picklist>Status__c</picklist>
         <values>
-            <fullName>Approved Box 1</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Approved Box 2</fullName>
+            <fullName>Complete</fullName>
             <default>false</default>
         </values>
         <values>
@@ -39,14 +35,6 @@
         <values>
             <fullName>Not Started</fullName>
             <default>true</default>
-        </values>
-        <values>
-            <fullName>Onboarding Approved</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Pending Validation</fullName>
-            <default>false</default>
         </values>
     </picklistValues>
 </RecordType>

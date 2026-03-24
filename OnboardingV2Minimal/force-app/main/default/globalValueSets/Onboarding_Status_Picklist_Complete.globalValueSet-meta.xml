@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>New</fullName>
+        <default>false</default>
+        <label>New</label>
+    </customValue>
+    <customValue>
+        <fullName>Not Started</fullName>
+        <default>false</default>
+        <label>Not Started</label>
+    </customValue>
+    <customValue>
+        <fullName>Paperwork Sent</fullName>
+        <default>false</default>
+        <label>Paperwork Sent</label>
+    </customValue>
+    <customValue>
+        <fullName>Pending Initial Review</fullName>
+        <default>false</default>
+        <label>Pending Initial Review</label>
+    </customValue>
+    <customValue>
+        <fullName>In Process</fullName>
+        <default>false</default>
+        <label>In Process</label>
+    </customValue>
+    <customValue>
+        <fullName>Pending Sales</fullName>
+        <default>false</default>
+        <label>Pending Sales</label>
+    </customValue>
+    <customValue>
+        <fullName>Setup Complete</fullName>
+        <default>false</default>
+        <label>Setup Complete</label>
+    </customValue>
+    <customValue>
+        <fullName>Scheduled</fullName>
+        <default>false</default>
+        <label>Scheduled</label>
+    </customValue>
+    <customValue>
+        <fullName>Completed</fullName>
+        <default>false</default>
+        <label>Completed</label>
+    </customValue>
+    <customValue>
+        <fullName>No Show</fullName>
+        <default>false</default>
+        <label>No Show</label>
+    </customValue>
+    <customValue>
+        <fullName>Rescheduled</fullName>
+        <default>false</default>
+        <label>Rescheduled</label>
+    </customValue>
+    <customValue>
+        <fullName>Draft</fullName>
+        <default>false</default>
+        <label>Draft</label>
+    </customValue>
+    <customValue>
+        <fullName>Pre-Send</fullName>
+        <default>false</default>
+        <label>Pre-Send</label>
+    </customValue>
+    <customValue>
+        <fullName>Send in Progress</fullName>
+        <default>false</default>
+        <label>Send in Progress</label>
+    </customValue>
+    <customValue>
+        <fullName>Canceled / Declined</fullName>
+        <default>false</default>
+        <label>Canceled / Declined</label>
+    </customValue>
+    <customValue>
+        <fullName>Created</fullName>
+        <default>false</default>
+        <label>Created</label>
+    </customValue>
+    <customValue>
+        <fullName>Out for Signature</fullName>
+        <default>false</default>
+        <label>Out for Signature</label>
+    </customValue>
+    <customValue>
+        <fullName>Waiting for Counter-Signature</fullName>
+        <default>false</default>
+        <label>Waiting for Counter-Signature</label>
+    </customValue>
+    <customValue>
+        <fullName>Signed</fullName>
+        <default>false</default>
+        <label>Signed</label>
+    </customValue>
+    <customValue>
+        <fullName>Out for Approval</fullName>
+        <default>false</default>
+        <label>Out for Approval</label>
+    </customValue>
+    <customValue>
+        <fullName>Waiting for Counter-Approval</fullName>
+        <default>false</default>
+        <label>Waiting for Counter-Approval</label>
+    </customValue>
+    <customValue>
+        <fullName>Passed</fullName>
+        <default>false</default>
+        <label>Passed</label>
+    </customValue>
+    <customValue>
+        <fullName>In Progress</fullName>
+        <default>false</default>
+        <label>In Progress</label>
+    </customValue>
+    <customValue>
+        <fullName>Approved</fullName>
+        <default>false</default>
+        <label>Approved</label>
+    </customValue>
+    <customValue>
+        <fullName>Out for Form-Filling</fullName>
+        <default>false</default>
+        <label>Out for Form-Filling</label>
+    </customValue>
+    <customValue>
+        <fullName>Waiting for Counter-Form-Filling</fullName>
+        <default>false</default>
+        <label>Waiting for Counter-Form-Filling</label>
+    </customValue>
+    <customValue>
+        <fullName>Form-Filled</fullName>
+        <default>false</default>
+        <label>Form-Filled</label>
+    </customValue>
+    <customValue>
+        <fullName>Out for Acceptance</fullName>
+        <default>false</default>
+        <label>Out for Acceptance</label>
+    </customValue>
+    <customValue>
+        <fullName>Waiting for Counter-Acceptance</fullName>
+        <default>false</default>
+        <label>Waiting for Counter-Acceptance</label>
+    </customValue>
+    <customValue>
+        <fullName>Accepted</fullName>
+        <default>false</default>
+        <label>Accepted</label>
+    </customValue>
+    <customValue>
+        <fullName>Out for Delivery</fullName>
+        <default>false</default>
+        <label>Out for Delivery</label>
+    </customValue>
+    <customValue>
+        <fullName>Waiting for Counter-Delivery</fullName>
+        <default>false</default>
+        <label>Waiting for Counter-Delivery</label>
+    </customValue>
+    <customValue>
+        <fullName>Delivered</fullName>
+        <default>false</default>
+        <label>Delivered</label>
+    </customValue>
+    <customValue>
+        <fullName>Waiting for my Delegation</fullName>
+        <default>false</default>
+        <label>Waiting for my Delegation</label>
+    </customValue>
+    <customValue>
+        <fullName>Incomplete</fullName>
+        <default>false</default>
+        <label>Incomplete</label>
+    </customValue>
+    <customValue>
+        <fullName>Complete</fullName>
+        <default>false</default>
+        <label>Complete</label>
+    </customValue>
+    <customValue>
+        <fullName>Approved Conditionally</fullName>
+        <default>false</default>
+        <label>Approved Conditionally</label>
+    </customValue>
+    <customValue>
+        <fullName>Requested</fullName>
+        <default>false</default>
+        <label>Requested</label>
+    </customValue>
+    <customValue>
+        <fullName>Failed</fullName>
+        <default>false</default>
+        <label>Failed</label>
+    </customValue>
+    <customValue>
+        <fullName>Waived</fullName>
+        <default>false</default>
+        <label>Waived</label>
+    </customValue>
+    <customValue>
+        <fullName>Pending Validation</fullName>
+        <default>false</default>
+        <label>Pending Validation</label>
+    </customValue>
+    <customValue>
+        <fullName>Approved Box 1</fullName>
+        <default>false</default>
+        <label>Approved Box 1</label>
+    </customValue>
+    <customValue>
+        <fullName>Approved Box 2</fullName>
+        <default>false</default>
+        <label>Approved Box 2</label>
+    </customValue>
+    <customValue>
+        <fullName>Onboarding Approved</fullName>
+        <default>false</default>
+        <label>Onboarding Approved</label>
+    </customValue>
+    <customValue>
+        <fullName>Denied</fullName>
+        <default>false</default>
+        <label>Denied</label>
+    </customValue>
+    <customValue>
+        <fullName>Canceled</fullName>
+        <default>false</default>
+        <label>Canceled</label>
+    </customValue>
+    <customValue>
+        <fullName>Expired</fullName>
+        <default>false</default>
+        <label>Expired</label>
+    </customValue>
+    <description>These are the complete set of options for Onboarding Requirements</description>
+    <masterLabel>Onboarding Status Picklist Complete</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>
