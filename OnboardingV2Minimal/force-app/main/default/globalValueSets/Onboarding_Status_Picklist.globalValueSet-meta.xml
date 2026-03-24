@@ -36,6 +36,16 @@
         <label>Setup Complete</label>
     </customValue>
     <customValue>
+        <fullName>Pending Approval</fullName>
+        <default>false</default>
+        <label>Pending Approval</label>
+    </customValue>
+    <customValue>
+        <fullName>Approved</fullName>
+        <default>false</default>
+        <label>Approved</label>
+    </customValue>
+    <customValue>
         <fullName>Denied</fullName>
         <default>false</default>
         <label>Denied</label>

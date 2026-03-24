@@ -1,0 +1,13 @@
+PV ID: {!Account.P10_Invoice_Account__c}
+
+Dealership Name: {!Account.Name}
+
+Owner Name: {!Account.OwnerFullName}
+
+Program Territory: {!Account.Territory__c}
+
+Program Region: {!Account.Region__c}
+
+Approval Process: {!ApprovalRequest.Process_Name}
+Approval Status: {!ApprovalRequest.Status}
+Approval Request: {!ApprovalRequest.External_URL}

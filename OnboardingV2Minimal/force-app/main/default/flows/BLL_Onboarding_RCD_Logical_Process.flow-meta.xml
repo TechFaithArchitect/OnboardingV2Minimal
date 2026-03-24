@@ -146,6 +146,40 @@
             <name>dispatchAllowed</name>
         </outputParameters>
     </actionCalls>
+    <actionCalls>
+        <name>Filter_VPR_For_Approval_Gate</name>
+        <label>Filter VPR For Approval Gate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingRequirementVPRGateInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Create_Onboarding_Requirements</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>onboardingId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>vendorProgramId</name>
+            <value>
+                <elementReference>VendorProgramRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingRequirementVPRGateInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>VendorProgramRequirementRecordCollection</assignToReference>
+            <name>vendorProgramRequirements</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>DeferredRequirementsRemain</assignToReference>
+            <name>deferredRequirementsRemain</name>
+        </outputParameters>
+    </actionCalls>
     <assignments>
         <name>Capture_Align_Onboarding_Opportunity_Fault</name>
         <label>Capture Align Onboarding Opportunity Fault</label>
@@ -253,6 +287,70 @@
                 <targetReference>Set_Execution_Path_Communication_Update</targetReference>
             </connector>
             <label>Onboarding Communication Update</label>
+        </rules>
+        <rules>
+            <name>Resume_Onboarding_Requirements_After_Approval</name>
+            <conditionLogic>((1 AND 2 AND 3) OR (4 AND 5 AND 6)) AND 7 AND 8</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Onboarding_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Onboarding_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Onboarding_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Pending Approval</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Onb_Reqs_Awaiting_Approval__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Onb_Reqs_Awaiting_Approval__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Onb_Reqs_Awaiting_Approval__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Creation_of_Record_Completed__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Vendor_Customization__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Execution_Path_Create</targetReference>
+            </connector>
+            <label>Resume Onboarding Requirements After Approval</label>
         </rules>
     </decisions>
     <decisions>
@@ -604,6 +702,12 @@
                 <elementReference>VendorProgramRequirementRecordCollection</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>Approval_Gate_Deferred_Remain</name>
+            <value>
+                <elementReference>DeferredRequirementsRemain</elementReference>
+            </value>
+        </inputAssignments>
     </subflows>
     <subflows>
         <name>Get_Contract_Record_For_Alignment</name>
@@ -659,7 +763,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Create_Onboarding_Requirements</targetReference>
+            <targetReference>Filter_VPR_For_Approval_Gate</targetReference>
         </connector>
         <flowName>DOMAIN_OmniSObject_SFL_GET_Vendor_Program_Requirements</flowName>
         <inputAssignments>
@@ -858,6 +962,13 @@
     </variables>
     <variables>
         <name>BREDispatchAllowedTraining</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>DeferredRequirementsRemain</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>

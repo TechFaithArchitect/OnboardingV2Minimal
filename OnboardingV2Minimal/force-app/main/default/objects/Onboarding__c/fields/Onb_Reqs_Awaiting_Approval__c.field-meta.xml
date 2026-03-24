@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Onb_Reqs_Awaiting_Approval__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>When true, additional Vendor_Program_Requirement__c rows are waiting to become Onboarding_Requirement__c until agreement (or other CMDT Block_Action) approval completes.</description>
+    <label>Onboarding Reqs Awaiting Approval</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

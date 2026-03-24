@@ -209,7 +209,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Update_Onboarding_Record_with_Completion</targetReference>
+            <targetReference>Route_After_Successful_Subject_Creation</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
@@ -315,6 +315,31 @@
                 <targetReference>Fail_Fast_Missing_RecordType_Mapping</targetReference>
             </connector>
             <label>Missing Mapping Detected</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Route_After_Successful_Subject_Creation</name>
+        <label>Route After Successful Subject Creation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Onboarding_Record_with_Completion</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>All Requirements Created This Run</defaultConnectorLabel>
+        <rules>
+            <name>Approval_Gate_Deferred_More_Requirements</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Approval_Gate_Deferred_Remain</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Onboarding_Partial_Approval_Gate</targetReference>
+            </connector>
+            <label>Approval Gate Deferred More Requirements</label>
         </rules>
     </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Onboarding Requirements</description>
@@ -474,6 +499,42 @@
                 <booleanValue>true</booleanValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Onb_Reqs_Awaiting_Approval__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Onboarding__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Onboarding_Partial_Approval_Gate</name>
+        <label>Update Onboarding Partial Approval Gate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Update_Onboarding_Record_with_Completion_Fault</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Creation_of_Record_Completed__c</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Onb_Reqs_Awaiting_Approval__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
         <object>Onboarding__c</object>
     </recordUpdates>
     <recordUpdates>
@@ -528,6 +589,13 @@
             <name>errorMessage</name>
         </outputAssignments>
     </subflows>
+    <variables>
+        <name>Approval_Gate_Deferred_Remain</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>errorMessage</name>
         <dataType>String</dataType>

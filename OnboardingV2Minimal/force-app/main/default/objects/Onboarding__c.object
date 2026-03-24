@@ -130,7 +130,7 @@
         <actionName>View</actionName>
         <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Onboarding_Record_Page</content>
-        <formFactor>Large</formFactor>
+        <formFactor>Small</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>
@@ -138,7 +138,7 @@
         <actionName>View</actionName>
         <comment>Action override created by Lightning App Builder during activation.</comment>
         <content>Onboarding_Record_Page</content>
-        <formFactor>Small</formFactor>
+        <formFactor>Large</formFactor>
         <skipRecordTypeSelect>false</skipRecordTypeSelect>
         <type>Flexipage</type>
     </actionOverrides>
@@ -149,7 +149,7 @@
     <allowInChatterGroups>true</allowInChatterGroups>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <description>Central object tracking an onboarding request for a Dealer (Account) and Vendor Program combination. Each record represents one dealer&apos;s onboarding journey for a specific vendor program, tracking status, requirements, and progress. Example: When Account &quot;ABC Dealer Services&quot; starts onboarding for Vendor Program &quot;Verizon Fios D2D&quot;, an Onboarding record is created with Account__c=&quot;ABC Dealer Services&quot; and Vendor_Customization__c=&quot;Verizon Fios D2D&quot;. The Onboarding_Status__c field is updated from onboarding requirement data using custom metadata (Onboarding_Status_Normalization__mdt, Onboarding_Status_Evaluation_Rule__mdt) and OnboardingStatusEvaluatorService, invoked from automation when requirements change. External overrides can temporarily disable automatic status updates for manual control.</description>
+    <description>This is the onboarding object that relates all required onboarding objects to a particular onboarding request.</description>
     <enableActivities>true</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>true</enableFeeds>

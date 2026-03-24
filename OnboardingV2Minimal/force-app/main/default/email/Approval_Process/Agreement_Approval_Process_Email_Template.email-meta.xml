@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Agreement Approval Process Email Notification</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Agreement Approval Process Email Template</name>
+    <style>none</style>
+    <subject>Approval Required for {!Account.Name} with Vendor: {!Onboarding__c.Vendor__c}</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
