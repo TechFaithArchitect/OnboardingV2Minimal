@@ -300,7 +300,6 @@
         <members>Background_Check__c</members>
         <members>Child_Record_Editor_Config__mdt</members>
         <members>Chuzo_Agreement__c</members>
-        <members>Chuzo_Creditcard_Encryption_Key__mdt</members>
         <members>Chuzo_Provider_Phone_Numbers__mdt</members>
         <members>Chuzo_Settings__c</members>
         <members>Chuzo_Update_SF_Maps_PG__e</members>

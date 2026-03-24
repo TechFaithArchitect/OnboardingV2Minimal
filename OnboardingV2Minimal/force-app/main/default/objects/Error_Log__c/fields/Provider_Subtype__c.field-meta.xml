@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Provider_Subtype__c</fullName>
+    <description>Secondary axis for filtering (feature area within onboarding).</description>
+    <label>Provider Subtype</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>Agreement</fullName>
+                <default>false</default>
+                <label>Agreement</label>
+            </value>
+            <value>
+                <fullName>Beam</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Beam</label>
+            </value>
+            <value>
+                <fullName>BRE</fullName>
+                <default>false</default>
+                <label>BRE</label>
+            </value>
+            <value>
+                <fullName>Communication Dispatch</fullName>
+                <default>false</default>
+                <label>Communication Dispatch</label>
+            </value>
+            <value>
+                <fullName>Experience Create Record</fullName>
+                <default>false</default>
+                <label>Experience Create Record</label>
+            </value>
+            <value>
+                <fullName>General</fullName>
+                <default>false</default>
+                <label>General</label>
+            </value>
+            <value>
+                <fullName>Onboarding Automation</fullName>
+                <default>true</default>
+                <label>Onboarding Automation</label>
+            </value>
+            <value>
+                <fullName>Onboarding Requirements</fullName>
+                <default>false</default>
+                <label>Onboarding Requirements</label>
+            </value>
+            <value>
+                <fullName>Record Collection Editor</fullName>
+                <default>false</default>
+                <label>Record Collection Editor</label>
+            </value>
+            <value>
+                <fullName>Requirement Subjects</fullName>
+                <default>false</default>
+                <label>Requirement Subjects</label>
+            </value>
+            <value>
+                <fullName>Stream</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Stream</label>
+            </value>
+            <value>
+                <fullName>Training Sync</fullName>
+                <default>false</default>
+                <label>Training Sync</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

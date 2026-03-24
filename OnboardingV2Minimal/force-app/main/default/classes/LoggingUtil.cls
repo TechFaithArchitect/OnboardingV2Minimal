@@ -123,6 +123,13 @@ public with sharing class LoggingUtil {
         cachedRedactionEnabled = DEFAULT_REDACT_PII;
     }
 
+    /**
+     * Redacts common PII patterns before persisting diagnostics (e.g. Error_Log__c).
+     */
+    public static String redactPii(String msg) {
+        return sanitize(msg);
+    }
+
     private static String sanitize(String msg) {
         String safe = msg == null ? 'null' : msg;
         if (!shouldRedactPii()) {

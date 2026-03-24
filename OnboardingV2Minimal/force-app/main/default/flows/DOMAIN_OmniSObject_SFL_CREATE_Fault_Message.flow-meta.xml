@@ -28,13 +28,6 @@
                 <elementReference>ResolvedTriggerReasonFormula</elementReference>
             </value>
         </assignmentItems>
-        <assignmentItems>
-            <assignToReference>UserFacingMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>ResolvedUserFacingMessageWithReferenceFormula</elementReference>
-            </value>
-        </assignmentItems>
     </assignments>
     <assignments>
         <name>Finalize_Fault_Without_Queue</name>
@@ -62,13 +55,6 @@
                 <elementReference>ResolvedTriggerReasonFormula</elementReference>
             </value>
         </assignmentItems>
-        <assignmentItems>
-            <assignToReference>UserFacingMessage</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>ResolvedUserFacingMessageWithReferenceFormula</elementReference>
-            </value>
-        </assignmentItems>
     </assignments>
     <decisions>
         <name>Should_Queue_Communication_Fault</name>
@@ -80,40 +66,10 @@
         </defaultConnector>
         <defaultConnectorLabel>Skip Queue</defaultConnectorLabel>
         <rules>
-            <name>Has_Onboarding_Record</name>
+            <name>Eligible_For_Follow_Up_Queue</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>OnboardingRecord</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Queue_Communication_Fault</targetReference>
-            </connector>
-            <label>Has Onboarding Record</label>
-        </rules>
-        <rules>
-            <name>Has_Onboarding_Id</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>ResolvedOnboardingId</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Queue_Communication_Fault</targetReference>
-            </connector>
-            <label>Has Onboarding Id</label>
-        </rules>
-        <rules>
-            <name>Log_Without_Onboarding</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>LogWithoutOnboarding</leftValueReference>
+                <leftValueReference>ShouldAttemptFollowUpQueue</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -122,7 +78,7 @@
             <connector>
                 <targetReference>Queue_Communication_Fault</targetReference>
             </connector>
-            <label>Log Without Onboarding</label>
+            <label>Eligible For Follow Up Queue</label>
         </rules>
     </decisions>
     <description>DOMAIN LAYER - OmniSObject - SFL - CREATE - Fault Message</description>
@@ -264,6 +220,26 @@
   {!ResolvedUserFacingMessageFormula} &amp; &quot; Reference: &quot; &amp; LEFT({!InterviewGuid}, 8)
 )</expression>
     </formulas>
+    <formulas>
+        <name>IsTerminalInAppFailedFault</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+  {!ResolvedFollowUpType} = &quot;In-App&quot;,
+  {!ResolvedInitialStatus} = &quot;Failed&quot;
+)</expression>
+    </formulas>
+    <formulas>
+        <name>ShouldAttemptFollowUpQueue</name>
+        <dataType>Boolean</dataType>
+        <expression>AND(
+  NOT({!IsTerminalInAppFailedFault}),
+  OR(
+    NOT(ISBLANK({!OnboardingRecord.Id})),
+    NOT(ISBLANK({!ResolvedOnboardingId})),
+    {!LogWithoutOnboarding}
+  )
+)</expression>
+    </formulas>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Fault Message {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - CREATE - Fault Message</label>
     <processMetadataValues>
@@ -285,11 +261,81 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <actionCalls>
+        <name>Insert_Onboarding_Error_Log</name>
+        <label>Insert Onboarding Error Log</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>OnboardingErrorLogInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Should_Queue_Communication_Fault</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>contextKey</name>
+            <value>
+                <elementReference>ResolvedContextKey</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>interviewGuid</name>
+            <value>
+                <elementReference>InterviewGuid</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>onboardingId</name>
+            <value>
+                <elementReference>ResolvedOnboardingId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>opportunityId</name>
+            <value>
+                <elementReference>OpportunityId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sourceElementApiName</name>
+            <value>
+                <elementReference>ResolvedSourceElementApiName</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sourceFlowApiName</name>
+            <value>
+                <elementReference>ResolvedSourceFlowApiName</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>technicalDetail</name>
+            <value>
+                <elementReference>ResolvedAdminFaultMessageFormula</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>userMessageBase</name>
+            <value>
+                <elementReference>ResolvedUserFacingMessageFormula</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingErrorLogInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>ErrorLogId</assignToReference>
+            <name>errorLogId</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>UserFacingMessage</assignToReference>
+            <name>userFacingMessage</name>
+        </outputParameters>
+    </actionCalls>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Should_Queue_Communication_Fault</targetReference>
+            <targetReference>Insert_Onboarding_Error_Log</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -454,6 +500,20 @@
     </variables>
     <variables>
         <name>UserFacingMessageOverride</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>ErrorLogId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>OpportunityId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>

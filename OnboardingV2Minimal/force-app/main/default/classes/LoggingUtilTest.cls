@@ -1,6 +1,16 @@
 @IsTest
 private class LoggingUtilTest {
     @IsTest
+    static void redactPii_publicMethod_matchesSanitizeForTest() {
+        LoggingUtil.resetTestOverrides();
+        LoggingUtil.setTestRedactionEnabled(true);
+        String raw = 'Contact support@example.com for help.';
+        String viaPublic = LoggingUtil.redactPii(raw);
+        String viaTestHook = LoggingUtil.sanitizeForTest(raw);
+        System.assertEquals(viaTestHook, viaPublic);
+    }
+
+    @IsTest
     static void sanitizeForTest_redactsPiiWhenEnabled() {
         LoggingUtil.resetTestOverrides();
         LoggingUtil.setTestLoggingEnabled(true);

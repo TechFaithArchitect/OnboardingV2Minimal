@@ -2,6 +2,9 @@ public with sharing class RecordCollectionEditorGetRecordsService {
 
     private static final String PRINCIPAL_OWNER_ACR_ROLE = 'Principal Owner';
 
+    @TestVisible
+    private static Boolean forceOuterExceptionForTest = false;
+
     public class GetRecordsJsonRequest {
         @InvocableVariable(required=true label='Config Key')
         public String configKey;
@@ -31,6 +34,9 @@ public with sharing class RecordCollectionEditorGetRecordsService {
         for (GetRecordsJsonRequest req : requests) {
             GetRecordsJsonResult res = new GetRecordsJsonResult();
             try {
+                if (forceOuterExceptionForTest) {
+                    throw new IllegalArgumentException('forced editor failure for test');
+                }
                 if (req == null || String.isBlank(req.configKey) || req.records == null || req.records.isEmpty()) {
                     res.errorMessage = 'configKey and records are required.';
                     results.add(res);
@@ -265,12 +271,23 @@ public with sharing class RecordCollectionEditorGetRecordsService {
 
                 res.recordsJson = JSON.serialize(output);
             } catch (Exception e) {
-                String errorRef = buildErrorReference();
+                String technical =
+                    RecordCollectionEditorGetRecordsService.class.getName() +
+                    ' | ' + e.getTypeName() + ': ' + e.getMessage() +
+                    '\n' + e.getStackTraceString();
+                OnboardingErrorLogService.FaultInput faultIn = new OnboardingErrorLogService.FaultInput();
+                faultIn.technicalDetail = technical;
+                faultIn.userMessageBase = 'Unable to prepare records for editor.';
+                faultIn.errorLogType = 'Apex';
+                faultIn.providerSubtypeOverrideText = 'Record Collection Editor';
+                faultIn.sourceFlowApiName = RecordCollectionEditorGetRecordsService.class.getName();
+                faultIn.sourceElementApiName = RecordCollectionEditorGetRecordsService.class.getName();
+                OnboardingErrorLogService.FaultOutcome outcome = OnboardingErrorLogService.persistFault(faultIn);
+                res.errorMessage = outcome.userFacingMessage;
                 LoggingUtil.error(
                     'RecordCollectionEditorGetRecordsService.getRecordsJsonForEditor [' +
-                    errorRef + ']: ' + e.getMessage()
+                    outcome.errorLogId + ']: ' + e.getMessage()
                 );
-                res.errorMessage = 'Unable to prepare records for editor. Reference ' + errorRef + '.';
             }
             results.add(res);
         }
@@ -306,9 +323,4 @@ public with sharing class RecordCollectionEditorGetRecordsService {
         }
     }
 
-    private static String buildErrorReference() {
-        Long nowMs = DateTime.now().getTime();
-        String randPart = String.valueOf(Math.abs(Crypto.getRandomInteger()));
-        return 'RCE-' + String.valueOf(nowMs).right(6) + '-' + randPart.left(4);
-    }
 }
