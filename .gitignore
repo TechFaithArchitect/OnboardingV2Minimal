@@ -1,0 +1,3 @@
+# Salesforce CLI caches (often created next to the git root)
+.sfdx/
+.sf/
