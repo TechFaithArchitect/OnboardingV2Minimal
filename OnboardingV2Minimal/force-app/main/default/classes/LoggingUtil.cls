@@ -51,16 +51,29 @@ public with sharing class LoggingUtil {
         System.debug(platformLevel, prefix() + sanitize(msg));
     }
 
-    private static Boolean shouldLog(Integer severityLevel) {
-        return isLoggingEnabled() && severityLevel <= getVerbosityLevel();
+    /**
+     * Must return primitive boolean: nullable Boolean + ! in callers causes NPE (e.g. true && null yields null, !null throws).
+     */
+    private static boolean shouldLog(Integer severityLevel) {
+        if (severityLevel == null) {
+            return false;
+        }
+        if (!isLoggingEnabled()) {
+            return false;
+        }
+        Integer level = getVerbosityLevel();
+        if (level == null) {
+            return false;
+        }
+        return severityLevel <= level;
     }
 
-    private static Boolean isLoggingEnabled() {
+    private static boolean isLoggingEnabled() {
         if (testLoggingEnabledOverride != null) {
-            return testLoggingEnabledOverride;
+            return testLoggingEnabledOverride == true;
         }
         ensureConfigLoaded();
-        return cachedLoggingEnabled;
+        return cachedLoggingEnabled == true;
     }
 
     private static Integer getVerbosityLevel() {
@@ -71,12 +84,12 @@ public with sharing class LoggingUtil {
         return cachedVerbosityLevel;
     }
 
-    private static Boolean shouldRedactPii() {
+    private static boolean shouldRedactPii() {
         if (testRedactionEnabledOverride != null) {
-            return testRedactionEnabledOverride;
+            return testRedactionEnabledOverride == true;
         }
         ensureConfigLoaded();
-        return cachedRedactionEnabled;
+        return cachedRedactionEnabled == true;
     }
 
     private static void ensureConfigLoaded() {

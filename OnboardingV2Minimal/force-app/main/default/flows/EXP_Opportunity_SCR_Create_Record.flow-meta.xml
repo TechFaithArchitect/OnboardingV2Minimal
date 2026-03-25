@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <actionCalls>
+        <name>Enqueue_Deferred_Onboarding_Tail</name>
+        <label>Enqueue Deferred Onboarding Tail</label>
+        <locationX>2214</locationX>
+        <locationY>4340</locationY>
+        <actionName>OnboardingEnqueueOnboardingTailInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Did_Enqueue_Onboarding_Tail_Fail</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>contractId</name>
+            <value>
+                <elementReference>ContractRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>opportunityId</name>
+            <value>
+                <elementReference>OpportunityRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>vendorProgramId</name>
+            <value>
+                <elementReference>VendorProgramRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>accountId</name>
+            <value>
+                <elementReference>AccountRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>correlationKey</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingEnqueueOnboardingTailInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>OnboardingTail_Enqueue_Error</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
         <name>Get_Available_Vendors</name>
         <label>Get Available Vendors</label>
         <locationX>578</locationX>
@@ -8,7 +56,7 @@
         <actionName>VendorOnboardingJsonAdapter</actionName>
         <actionType>apex</actionType>
         <connector>
-            <targetReference>Create_Opportunity_Screenflow</targetReference>
+            <targetReference>Telemetry_After_Vendor_Apex</targetReference>
         </connector>
         <faultConnector>
             <targetReference>Capture_Get_Available_Vendors_Fault</targetReference>
@@ -31,7 +79,7 @@
         <name>Get_Default_Vendor_Program</name>
         <label>Get Default Vendor Program</label>
         <locationX>314</locationX>
-        <locationY>1898</locationY>
+        <locationY>2114</locationY>
         <actionName>OnboardingDefaultVendorProgramInvocable</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -58,13 +106,197 @@
             <name>errorMessage</name>
         </outputParameters>
     </actionCalls>
+    <actionCalls>
+        <name>Get_Onboarding_Performance_Routing</name>
+        <label>Get Onboarding Performance Routing</label>
+        <locationX>2500</locationX>
+        <locationY>4124</locationY>
+        <actionName>OnboardingPerformanceRoutingInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Route_Onboarding_Tail</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>reserved</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingPerformanceRoutingInvocable</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>OnboardingPerf_DeferOnboardingTail</assignToReference>
+            <name>deferOnboardingTail</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Telemetry_After_Create_Opportunity</name>
+        <label>Telemetry — After Create Opportunity</label>
+        <locationX>1343</locationX>
+        <locationY>3260</locationY>
+        <actionName>OnboardingFlowSegmentTelemetryInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Experience_Create_Opportunity_Contacts</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>segmentKey</name>
+            <value>
+                <stringValue>AfterCreateOpportunity</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>interviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>contextRecordId</name>
+            <value>
+                <elementReference>OpportunityRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingFlowSegmentTelemetryInvocable</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Telemetry_After_Main_Screen</name>
+        <label>Telemetry — After Main Screen</label>
+        <locationX>578</locationX>
+        <locationY>890</locationY>
+        <actionName>OnboardingFlowSegmentTelemetryInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Assign_Non_Standard_Universal_Values_from_Screenflow</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>segmentKey</name>
+            <value>
+                <stringValue>AfterMainScreen</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>interviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>contextRecordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingFlowSegmentTelemetryInvocable</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Telemetry_After_Vendor_Apex</name>
+        <label>Telemetry — After Vendor Apex</label>
+        <locationX>578</locationX>
+        <locationY>674</locationY>
+        <actionName>OnboardingFlowSegmentTelemetryInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Create_Opportunity_Screenflow</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>segmentKey</name>
+            <value>
+                <stringValue>AfterVendorApex</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>interviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>contextRecordId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingFlowSegmentTelemetryInvocable</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Telemetry_Before_Create_Onboarding</name>
+        <label>Telemetry — Before Create Onboarding</label>
+        <locationX>2786</locationX>
+        <locationY>4340</locationY>
+        <actionName>OnboardingFlowSegmentTelemetryInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Create_Onboarding_Record</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>segmentKey</name>
+            <value>
+                <stringValue>BeforeCreateOnboarding</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>interviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>contextRecordId</name>
+            <value>
+                <elementReference>ContractRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingFlowSegmentTelemetryInvocable</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Telemetry_Before_Create_Opportunity</name>
+        <label>Telemetry — Before Create Opportunity</label>
+        <locationX>921</locationX>
+        <locationY>2936</locationY>
+        <actionName>OnboardingFlowSegmentTelemetryInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Create_Opportunity_Record</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>segmentKey</name>
+            <value>
+                <stringValue>BeforeCreateOpportunity</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>interviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>contextRecordId</name>
+            <value>
+                <elementReference>AccountRecord.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>OnboardingFlowSegmentTelemetryInvocable</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
         <name>Assign_Create_Contract_Error_From_Null_Output</name>
         <label>Assign Create Contract Error From Null Output</label>
-        <locationX>1823</locationX>
-        <locationY>3692</locationY>
+        <locationX>1818</locationX>
+        <locationY>4124</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -79,8 +311,8 @@
     <assignments>
         <name>Assign_Create_Contract_Error_From_Output</name>
         <label>Assign Create Contract Error From Output</label>
-        <locationX>1559</locationX>
-        <locationY>3692</locationY>
+        <locationX>1554</locationX>
+        <locationY>4124</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -95,8 +327,8 @@
     <assignments>
         <name>Assign_Create_Onboarding_Error_From_Null_Output</name>
         <label>Assign Create Onboarding Error From Null Output</label>
-        <locationX>2351</locationX>
-        <locationY>3908</locationY>
+        <locationX>2786</locationX>
+        <locationY>4664</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -105,14 +337,15 @@
             </value>
         </assignmentItems>
         <connector>
+            <isGoTo>true</isGoTo>
             <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Create_Onboarding_Error_From_Output</name>
         <label>Assign Create Onboarding Error From Output</label>
-        <locationX>2087</locationX>
-        <locationY>3908</locationY>
+        <locationX>2522</locationX>
+        <locationY>4664</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -121,14 +354,15 @@
             </value>
         </assignmentItems>
         <connector>
+            <isGoTo>true</isGoTo>
             <targetReference>Handle_Queue_Opportunity_Create_Chain_Output_Error</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Create_Opportunity_Contact_Roles_Error</name>
         <label>Assign Create Opportunity Contact Roles Error</label>
-        <locationX>1031</locationX>
-        <locationY>3260</locationY>
+        <locationX>1026</locationX>
+        <locationY>3692</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -143,8 +377,8 @@
     <assignments>
         <name>Assign_Create_Opportunity_Error_From_Null_Output</name>
         <label>Assign Create Opportunity Error From Null Output</label>
-        <locationX>767</locationX>
-        <locationY>2936</locationY>
+        <locationX>762</locationX>
+        <locationY>3260</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -159,8 +393,8 @@
     <assignments>
         <name>Assign_Create_Opportunity_Error_From_Output</name>
         <label>Assign Create Opportunity Error From Output</label>
-        <locationX>503</locationX>
-        <locationY>2936</locationY>
+        <locationX>498</locationX>
+        <locationY>3260</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -173,10 +407,27 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Enqueue_Onboarding_Tail_Error</name>
+        <label>Assign Enqueue Onboarding Tail Error</label>
+        <locationX>2082</locationX>
+        <locationY>4556</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>OnboardingTail_Enqueue_Error</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Prompt_User_to_Review_Error</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Get_Primary_Opportunity_Contact_Error</name>
         <label>Assign Get Primary Opportunity Contact Error</label>
-        <locationX>1295</locationX>
-        <locationY>3476</locationY>
+        <locationX>1290</locationX>
+        <locationY>3908</locationY>
         <assignmentItems>
             <assignToReference>QueueChainMessage</assignToReference>
             <operator>Assign</operator>
@@ -192,7 +443,7 @@
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_NDA_Program_Base_App</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - NDA/Program Base App</label>
         <locationX>446</locationX>
-        <locationY>1298</locationY>
+        <locationY>1514</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Type__c</assignToReference>
             <operator>Assign</operator>
@@ -208,7 +459,7 @@
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Not_Sending_Documents</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - Not Sending Documents</label>
         <locationX>710</locationX>
-        <locationY>1598</locationY>
+        <locationY>1814</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Documents_Ready__c</assignToReference>
             <operator>Assign</operator>
@@ -231,7 +482,7 @@
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Sending_Documents</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - Sending Documents</label>
         <locationX>446</locationX>
-        <locationY>1598</locationY>
+        <locationY>1814</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Documents_Ready__c</assignToReference>
             <operator>Assign</operator>
@@ -254,7 +505,7 @@
         <name>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Vendor</name>
         <label>Assign Non Standard Opportunity Variables from Screenflow - Vendor</label>
         <locationX>710</locationX>
-        <locationY>1298</locationY>
+        <locationY>1514</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Type__c</assignToReference>
             <operator>Assign</operator>
@@ -270,7 +521,7 @@
         <name>Assign_Non_Standard_Universal_Values_from_Screenflow</name>
         <label>Assign Non Standard Universal Values from Screenflow</label>
         <locationX>578</locationX>
-        <locationY>782</locationY>
+        <locationY>998</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.RecordTypeId</assignToReference>
             <operator>Assign</operator>
@@ -293,7 +544,7 @@
         <name>Assign_ProgramPath_Offer</name>
         <label>Assign ProgramPath_Offer</label>
         <locationX>314</locationX>
-        <locationY>998</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -309,7 +560,7 @@
         <name>Assign_ProgramPath_Offer_Special</name>
         <label>Assign ProgramPath_Offer_Special</label>
         <locationX>842</locationX>
-        <locationY>998</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -325,7 +576,7 @@
         <name>Assign_ProgramPath_Prompt</name>
         <label>Assign ProgramPath_Prompt</label>
         <locationX>50</locationX>
-        <locationY>998</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -341,7 +592,7 @@
         <name>Assign_ProgramPath_Prompt_Special</name>
         <label>Assign ProgramPath_Prompt_Special</label>
         <locationX>578</locationX>
-        <locationY>998</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -357,7 +608,7 @@
         <name>Assign_Vendor_Program</name>
         <label>Assign Vendor Program</label>
         <locationX>1106</locationX>
-        <locationY>998</locationY>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>OpportunityRecord.Program_Base_App_Selection__c</assignToReference>
             <operator>Assign</operator>
@@ -372,7 +623,7 @@
     <assignments>
         <name>Capture_Get_Available_Vendors_Fault</name>
         <label>Capture Get Available Vendors Fault</label>
-        <locationX>3143</locationX>
+        <locationX>3490</locationX>
         <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
@@ -389,7 +640,7 @@
         <name>Capture_Get_Default_Vendor_Program_Fault</name>
         <label>Capture Get Default Vendor Program Fault</label>
         <locationX>578</locationX>
-        <locationY>2006</locationY>
+        <locationY>2222</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
@@ -404,8 +655,8 @@
     <assignments>
         <name>Capture_Update_Account_Record_Fault</name>
         <label>Capture Update Account Record Fault</label>
-        <locationX>2879</locationX>
-        <locationY>2612</locationY>
+        <locationX>3226</locationX>
+        <locationY>2828</locationY>
         <assignmentItems>
             <assignToReference>errorMessage</assignToReference>
             <operator>Assign</operator>
@@ -477,7 +728,7 @@
         <name>Can_Send_Documents</name>
         <label>Can Send Documents</label>
         <locationX>578</locationX>
-        <locationY>1490</locationY>
+        <locationY>1706</locationY>
         <defaultConnector>
             <targetReference>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Not_Sending_Documents</targetReference>
         </defaultConnector>
@@ -508,10 +759,10 @@
     <decisions>
         <name>Did_Create_Contract_Record_Fail</name>
         <label>Did Create Contract Record Fail</label>
-        <locationX>1955</locationX>
-        <locationY>3584</locationY>
+        <locationX>2027</locationX>
+        <locationY>4016</locationY>
         <defaultConnector>
-            <targetReference>Create_Onboarding_Record</targetReference>
+            <targetReference>Get_Onboarding_Performance_Routing</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
@@ -555,8 +806,8 @@
     <decisions>
         <name>Did_Create_Onboarding_Record_Fail</name>
         <label>Did Create Onboarding Record Fail</label>
-        <locationX>2351</locationX>
-        <locationY>3800</locationY>
+        <locationX>2786</locationX>
+        <locationY>4556</locationY>
         <defaultConnector>
             <targetReference>Prompt_User_to_Refresh_Sceen</targetReference>
         </defaultConnector>
@@ -602,8 +853,8 @@
     <decisions>
         <name>Did_Create_Opportunity_Contact_Roles_Fail</name>
         <label>Did Create Opportunity Contact Roles Fail</label>
-        <locationX>1328</locationX>
-        <locationY>3152</locationY>
+        <locationX>1343</locationX>
+        <locationY>3584</locationY>
         <defaultConnector>
             <targetReference>Get_Primary_Opportunity_Contact</targetReference>
         </defaultConnector>
@@ -634,10 +885,10 @@
     <decisions>
         <name>Did_Create_Opportunity_Record_Fail</name>
         <label>Did Create Opportunity Record Fail</label>
-        <locationX>916</locationX>
-        <locationY>2828</locationY>
+        <locationX>921</locationX>
+        <locationY>3152</locationY>
         <defaultConnector>
-            <targetReference>Experience_Create_Opportunity_Contacts</targetReference>
+            <targetReference>Telemetry_After_Create_Opportunity</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Fault</defaultConnectorLabel>
         <rules>
@@ -679,10 +930,42 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Did_Enqueue_Onboarding_Tail_Fail</name>
+        <label>Did Enqueue Onboarding Tail Fail</label>
+        <locationX>2214</locationX>
+        <locationY>4448</locationY>
+        <defaultConnector>
+            <targetReference>Prompt_User_to_Refresh_Sceen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Enqueue OK</defaultConnectorLabel>
+        <rules>
+            <name>Enqueue_Onboarding_Tail_Has_Error</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OnboardingTail_Enqueue_Error</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>OnboardingTail_Enqueue_Error</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Enqueue_Onboarding_Tail_Error</targetReference>
+            </connector>
+            <label>Enqueue Error</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Did_Get_Primary_Opportunity_Contact_Fail</name>
         <label>Did Get Primary Opportunity Contact Fail</label>
-        <locationX>1625</locationX>
-        <locationY>3368</locationY>
+        <locationX>1659</locationX>
+        <locationY>3800</locationY>
         <defaultConnector>
             <targetReference>Create_Contract_Record</targetReference>
         </defaultConnector>
@@ -714,7 +997,7 @@
         <name>Did_Get_Vendor_Program_Fail</name>
         <label>Did Get Vendor Program Fail</label>
         <locationX>578</locationX>
-        <locationY>2396</locationY>
+        <locationY>2612</locationY>
         <defaultConnector>
             <targetReference>Update_Account_Record</targetReference>
         </defaultConnector>
@@ -746,7 +1029,7 @@
         <name>Is_VendorProgramRecord_Empty</name>
         <label>Is VendorProgramRecord Empty</label>
         <locationX>578</locationX>
-        <locationY>1790</locationY>
+        <locationY>2006</locationY>
         <defaultConnector>
             <targetReference>Get_Vendor_Program</targetReference>
         </defaultConnector>
@@ -771,7 +1054,7 @@
         <name>Program_Base_App_Selection</name>
         <label>Program Base App Selection</label>
         <locationX>578</locationX>
-        <locationY>890</locationY>
+        <locationY>1106</locationY>
         <defaultConnector>
             <targetReference>Assign_Vendor_Program</targetReference>
         </defaultConnector>
@@ -841,7 +1124,7 @@
         <name>Program_Type_Variable_Selection</name>
         <label>Program Type Variable Selection</label>
         <locationX>578</locationX>
-        <locationY>1190</locationY>
+        <locationY>1406</locationY>
         <defaultConnector>
             <targetReference>Assign_Non_Standard_Opportunity_Variables_from_Screenflow_Vendor</targetReference>
         </defaultConnector>
@@ -862,6 +1145,31 @@
             <label>NDA/Program Base Application (DOM)</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Route_Onboarding_Tail</name>
+        <label>Route Onboarding Tail</label>
+        <locationX>2500</locationX>
+        <locationY>4232</locationY>
+        <defaultConnector>
+            <targetReference>Telemetry_Before_Create_Onboarding</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Inline DOMAIN Onboarding</defaultConnectorLabel>
+        <rules>
+            <name>Defer_Onboarding_Tail</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OnboardingPerf_DeferOnboardingTail</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Enqueue_Deferred_Onboarding_Tail</targetReference>
+            </connector>
+            <label>Defer Onboarding Tail</label>
+        </rules>
+    </decisions>
     <description>EXPERIENCE LAYER - Opportunity Object - Screenflow - Create Record</description>
     <dynamicChoiceSets>
         <name>OwnerPicklist</name>
@@ -880,6 +1188,11 @@
         <picklistObject>Opportunity</picklistObject>
     </dynamicChoiceSets>
     <environments>Default</environments>
+    <formulas>
+        <name>IsCoreOnboardingCompleteForOrchestrator</name>
+        <dataType>Boolean</dataType>
+        <expression>AND({!HasChuzoOnboardingForOpportunity}, {!HasNDAOnboardingForOpportunity})</expression>
+    </formulas>
     <formulas>
         <name>IsUserSpecial</name>
         <dataType>Boolean</dataType>
@@ -903,12 +1216,7 @@
         <dataType>Boolean</dataType>
         <expression>OR(({!Select_One} = &apos;VendorProgram&apos;), {!ShowVendorSelector}, {!FinalNextAction} = &apos;CREATE_VENDOR_PROGRAM_ONBOARDING&apos;)</expression>
     </formulas>
-    <formulas>
-        <name>IsCoreOnboardingCompleteForOrchestrator</name>
-        <dataType>Boolean</dataType>
-        <expression>AND({!HasChuzoOnboardingForOpportunity}, {!HasNDAOnboardingForOpportunity})</expression>
-    </formulas>
-    <interviewLabel>EXP - {!$Flow.CurrentDateTime}</interviewLabel>
+    <interviewLabel>EXP - Opportunity - SCR - Create Record {!$Flow.CurrentDateTime}</interviewLabel>
     <label>EXP - Opportunity - SCR - Create Record</label>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -960,8 +1268,8 @@
     <recordUpdates>
         <name>Update_Account_Record</name>
         <label>Update Account Record</label>
-        <locationX>916</locationX>
-        <locationY>2504</locationY>
+        <locationX>921</locationX>
+        <locationY>2720</locationY>
         <connector>
             <targetReference>Experience_Create_or_Update_Contacts</targetReference>
         </connector>
@@ -1055,12 +1363,12 @@
         <name>Create_Opportunity_Screenflow</name>
         <label>Create Opportunity Screenflow</label>
         <locationX>578</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Assign_Non_Standard_Universal_Values_from_Screenflow</targetReference>
+            <targetReference>Telemetry_After_Main_Screen</targetReference>
         </connector>
         <fields>
             <name>AccountInformationHeader</name>
@@ -2245,8 +2553,8 @@
     <screens>
         <name>Prompt_User_to_Refresh_Sceen</name>
         <label>Prompt User to Refresh Sceen</label>
-        <locationX>2615</locationX>
-        <locationY>3908</locationY>
+        <locationX>2500</locationX>
+        <locationY>5006</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -2304,7 +2612,7 @@
         <name>Prompt_User_to_Review_Error</name>
         <label>Prompt User to Review Error</label>
         <locationX>578</locationX>
-        <locationY>4736</locationY>
+        <locationY>5750</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -2365,12 +2673,12 @@
             <targetReference>Get_Account_Record</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <subflows>
         <name>Create_Contract_Record</name>
         <label>Create Contract Record</label>
-        <locationX>1955</locationX>
-        <locationY>3476</locationY>
+        <locationX>2027</locationX>
+        <locationY>3908</locationY>
         <connector>
             <targetReference>Did_Create_Contract_Record_Fail</targetReference>
         </connector>
@@ -2411,8 +2719,8 @@
     <subflows>
         <name>Create_Onboarding_Record</name>
         <label>Create Onboarding Record</label>
-        <locationX>2351</locationX>
-        <locationY>3692</locationY>
+        <locationX>2786</locationX>
+        <locationY>4448</locationY>
         <connector>
             <targetReference>Did_Create_Onboarding_Record_Fail</targetReference>
         </connector>
@@ -2453,8 +2761,8 @@
     <subflows>
         <name>Create_Opportunity_Contact_Roles</name>
         <label>Create Opportunity Contact Roles</label>
-        <locationX>1328</locationX>
-        <locationY>3044</locationY>
+        <locationX>1343</locationX>
+        <locationY>3476</locationY>
         <connector>
             <targetReference>Did_Create_Opportunity_Contact_Roles_Fail</targetReference>
         </connector>
@@ -2473,8 +2781,8 @@
     <subflows>
         <name>Create_Opportunity_Record</name>
         <label>Create Opportunity Record</label>
-        <locationX>916</locationX>
-        <locationY>2720</locationY>
+        <locationX>921</locationX>
+        <locationY>3044</locationY>
         <connector>
             <targetReference>Did_Create_Opportunity_Record_Fail</targetReference>
         </connector>
@@ -2581,8 +2889,8 @@
     <subflows>
         <name>Experience_Create_Opportunity_Contacts</name>
         <label>Experience - Create Opportunity Contacts</label>
-        <locationX>1328</locationX>
-        <locationY>2936</locationY>
+        <locationX>1343</locationX>
+        <locationY>3368</locationY>
         <connector>
             <targetReference>Create_Opportunity_Contact_Roles</targetReference>
         </connector>
@@ -2623,10 +2931,10 @@
     <subflows>
         <name>Experience_Create_or_Update_Contacts</name>
         <label>Experience - Create or Update Contacts</label>
-        <locationX>916</locationX>
-        <locationY>2612</locationY>
+        <locationX>921</locationX>
+        <locationY>2828</locationY>
         <connector>
-            <targetReference>Create_Opportunity_Record</targetReference>
+            <targetReference>Telemetry_Before_Create_Opportunity</targetReference>
         </connector>
         <flowName>EXP_Contact_SCR_Create_Contact</flowName>
         <inputAssignments>
@@ -2709,8 +3017,8 @@
     <subflows>
         <name>Get_Primary_Opportunity_Contact</name>
         <label>Get Primary Opportunity Contact</label>
-        <locationX>1625</locationX>
-        <locationY>3260</locationY>
+        <locationX>1659</locationX>
+        <locationY>3692</locationY>
         <connector>
             <targetReference>Did_Get_Primary_Opportunity_Contact_Fail</targetReference>
         </connector>
@@ -2734,7 +3042,7 @@
         <name>Get_Vendor_Program</name>
         <label>Get Vendor Program</label>
         <locationX>842</locationX>
-        <locationY>1898</locationY>
+        <locationY>2114</locationY>
         <connector>
             <targetReference>Did_Get_Vendor_Program_Fail</targetReference>
         </connector>
@@ -2769,7 +3077,7 @@
     <subflows>
         <name>Handle_Get_Available_Vendors_Fault</name>
         <label>Handle Get Available Vendors Fault</label>
-        <locationX>3143</locationX>
+        <locationX>3490</locationX>
         <locationY>782</locationY>
         <connector>
             <isGoTo>true</isGoTo>
@@ -2851,7 +3159,7 @@
         <name>Handle_Get_Default_Vendor_Program_Fault</name>
         <label>Handle Get Default Vendor Program Fault</label>
         <locationX>578</locationX>
-        <locationY>2114</locationY>
+        <locationY>2330</locationY>
         <connector>
             <isGoTo>true</isGoTo>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
@@ -2931,8 +3239,8 @@
     <subflows>
         <name>Handle_Get_Vendor_Program_Output_Error</name>
         <label>Handle Get Vendor Program Output Error</label>
-        <locationX>239</locationX>
-        <locationY>2504</locationY>
+        <locationX>234</locationX>
+        <locationY>2720</locationY>
         <connector>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
         </connector>
@@ -3011,8 +3319,8 @@
     <subflows>
         <name>Handle_Queue_Opportunity_Create_Chain_Output_Error</name>
         <label>Handle Opportunity Create Chain Output Error</label>
-        <locationX>916</locationX>
-        <locationY>4544</locationY>
+        <locationX>921</locationX>
+        <locationY>5558</locationY>
         <connector>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
         </connector>
@@ -3091,8 +3399,8 @@
     <subflows>
         <name>Handle_Update_Account_Record_Fault</name>
         <label>Handle Update Account Record Fault</label>
-        <locationX>2879</locationX>
-        <locationY>2720</locationY>
+        <locationX>3226</locationX>
+        <locationY>2936</locationY>
         <connector>
             <isGoTo>true</isGoTo>
             <targetReference>Prompt_User_to_Review_Error</targetReference>
@@ -3319,12 +3627,29 @@
         </value>
     </variables>
     <variables>
+        <name>OnboardingPerf_DeferOnboardingTail</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
         <name>OnboardingRecord</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding__c</objectType>
+    </variables>
+    <variables>
+        <name>OnboardingTail_Enqueue_Error</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>OpportunityContactCreateErrorMessages</name>

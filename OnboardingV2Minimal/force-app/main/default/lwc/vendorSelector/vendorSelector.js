@@ -2,7 +2,18 @@ import { LightningElement, api, track } from 'lwc';
 
 export default class VendorSelector extends LightningElement {
     @api recordId;
-    @api vendorOptionsJson;
+
+    _vendorOptionsJson;
+
+    @api
+    get vendorOptionsJson() {
+        return this._vendorOptionsJson;
+    }
+
+    set vendorOptionsJson(value) {
+        this._vendorOptionsJson = value;
+        this.parseVendorOptions();
+    }
 
     @track vendorOptions = [];
     @track vendors = [];
@@ -14,6 +25,10 @@ export default class VendorSelector extends LightningElement {
     @track selectedBusinessVertical = null;
 
     connectedCallback() {
+        this.parseVendorOptions();
+    }
+
+    parseVendorOptions() {
         try {
             this.vendorOptions = JSON.parse(this.vendorOptionsJson || '[]');
 
@@ -28,8 +43,14 @@ export default class VendorSelector extends LightningElement {
                 label: name,
                 value: id
             }));
+            this.selectedVendorId = null;
+            this.selectedRetailOption = null;
+            this.selectedBusinessVertical = null;
+            this.retailOptions = [];
+            this.businessVerticals = [];
         } catch (err) {
-            // Silently fail - vendor options will be empty
+            this.vendorOptions = [];
+            this.vendors = [];
         }
     }
 
