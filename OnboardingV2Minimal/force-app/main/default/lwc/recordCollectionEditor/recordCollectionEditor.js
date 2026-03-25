@@ -374,6 +374,34 @@ export default class RecordCollectionEditor extends LightningElement {
         return (values || []).map((v) => ({ label: v, value: v }));
     }
 
+    /** Multi-select picklist values from ACR/Contact role fields (semicolon-separated). */
+    rolePicklistTokenize(val) {
+        if (val == null || val === '') return [];
+        return String(val)
+            .split(';')
+            .map((s) => s.trim())
+            .filter(Boolean);
+    }
+
+    rolePicklistIncludesPrincipalOwner(val) {
+        return this.rolePicklistTokenize(val).includes('Principal Owner');
+    }
+
+    getRelationshipRoleValue(row) {
+        const api = this.roleConstraints?.roleFieldApiName;
+        if (!api || !row?.relationshipFieldStates) return null;
+        const fs = row.relationshipFieldStates.find((x) => x.fieldApiName === api);
+        return fs ? fs.value : null;
+    }
+
+    rowIndicatesPrincipalOwner(row) {
+        if (this.rolePicklistIncludesPrincipalOwner(this.getRelationshipRoleValue(row))) {
+            return true;
+        }
+        const contactRole = (row.fieldStates || []).find((fs) => fs.fieldApiName === 'Role');
+        return this.rolePicklistIncludesPrincipalOwner(contactRole?.value);
+    }
+
     getFilteredPicklistOptions(fieldConfig) {
         return this.getFilteredPicklistOptionsForRow(fieldConfig, null, -1);
     }
@@ -446,10 +474,7 @@ export default class RecordCollectionEditor extends LightningElement {
             )
         }));
         if (keepIdx < 0) {
-            const poIdx = rowsOut.findIndex((row) => {
-                const roleFs = (row.fieldStates || []).find((fs) => fs.fieldApiName === 'Role');
-                return roleFs && String(roleFs.value || '') === 'Principal Owner';
-            });
+            const poIdx = rowsOut.findIndex((row) => this.rowIndicatesPrincipalOwner(row));
             if (poIdx >= 0) {
                 rowsOut = rowsOut.map((row, idx) => ({
                     ...row,
@@ -465,7 +490,16 @@ export default class RecordCollectionEditor extends LightningElement {
     }
 
     applyExclusivePrimaryContactRules(rowsCopy, clientId, fieldApiName, newFieldValue, isRelationship) {
-        if (isRelationship || !rowsCopy?.length) {
+        if (!rowsCopy?.length || this.configKey !== 'CONTACT_ON_OPPORTUNITY') {
+            return;
+        }
+
+        const rc = this.roleConstraints;
+        const isAcrRoleField =
+            isRelationship === true && rc && rc.roleFieldApiName && fieldApiName === rc.roleFieldApiName;
+        const isContactRoleField = !isRelationship && fieldApiName === 'Role';
+
+        if (isRelationship && !isAcrRoleField) {
             return;
         }
 
@@ -483,18 +517,21 @@ export default class RecordCollectionEditor extends LightningElement {
             };
         };
 
-        if (fieldApiName === 'IsPrimary' && (newFieldValue === true || newFieldValue === 'true')) {
+        if (!isRelationship && fieldApiName === 'IsPrimary' && (newFieldValue === true || newFieldValue === 'true')) {
             rowsCopy.forEach((row) => {
                 if (row.clientId !== clientId) {
                     setPrimaryChecked(row.clientId, false);
                 }
             });
-        } else if (fieldApiName === 'Role' && String(newFieldValue || '') === 'Principal Owner') {
+            return;
+        }
+
+        const poSelected =
+            (isAcrRoleField || isContactRoleField) && this.rolePicklistIncludesPrincipalOwner(newFieldValue);
+        if (poSelected) {
             rowsCopy.forEach((row) => {
                 setPrimaryChecked(row.clientId, row.clientId === clientId);
             });
-        } else if (fieldApiName === 'Role' && String(newFieldValue || '') !== 'Principal Owner') {
-            setPrimaryChecked(clientId, false);
         }
     }
 
