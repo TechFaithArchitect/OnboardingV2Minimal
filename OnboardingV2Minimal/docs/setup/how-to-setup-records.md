@@ -1,6 +1,8 @@
 # How to Setup Records (End-to-End)
 
-This guide describes how to set up records for the onboarding system **as implemented in this repo and deployed to OnboardV2**. It covers only setup required by **active flows last modified after Jan 1, 2026** (85 flows in OnboardV2 org). Objects and CMDTs used only by older flows, Apex, or UI components are excluded.
+This guide describes how to set up records for the onboarding system **as implemented in this repo and deployed to OnboardV2**. It covers only setup required by **active flows last modified after Jan 1, 2026** (verify the live count in your org with Tooling API or `sf` if needed—numbers drift as flows change). Objects and CMDTs used only by older flows, Apex, or UI components are excluded.
+
+**Keeping this guide accurate:** When you add global picklist values (e.g. **Requirement_Type_Values**), new **Onboarding_Requirement__c** record types, or new automation, update the [Vendor program playbook – Amazon Leo](./vendor-program-amazon-leo-playbook.md) mapping table and the verification queries below.
 
 ---
 
@@ -273,6 +275,21 @@ Before the program can be used:
 
 ---
 
+## Multi-program vendors (e.g. Contractor Base + Amazon Leo)
+
+Some vendors ship **more than one onboarding “track”** (separate opportunity name, contract type, requirement set, and comms). In OnboardV2 that usually means **multiple `Vendor_Customization__c` (Vendor Program) records** on the same **Vendor__c**, each with its **own `Vendor_Program_Requirement__c` rows**, **training junctions**, and **optional CMDT** (approval policy key, comm policies).
+
+1. **Clone the pattern**: Create Program B the same way as Program A (Steps 2–6). Do not overload one program with mutually exclusive rows unless your flows explicitly support branching.
+2. **Opportunity wiring**: Each business process should set **Vendor_Customization__c** on the Opportunity to the program whose requirements you want spawned (`DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record` / related record-triggered flows).
+3. **O&O vs non-O&O branching** (when one requirement only applies to a subset of accounts): the metadata model does not encode “if Account.O&O then require Drug Screen” by itself. Practical options:
+   - **Two vendor programs** (e.g. `Amazon Leo – O&O` vs `Amazon Leo – Dealer`) with different **Vendor_Program_Requirement__c** lists; route in App Builder / experience or set **Vendor_Customization__c** from automation when the Opportunity is created.
+   - **Automation** (Flow/Apex) that creates or cancels requirement rows after the Account flag is known.
+   - Extending the platform (global value set + record types + BRE rules) when the variation is stable and org-wide.
+
+For a worked example and a line-by-line map from the **Amazon Leo** business requirements document to this model—including **gaps** where the BRD expects ACH, W9, Drug Screen, or AX as first-class requirement types—see **[Vendor program playbook – Amazon Leo](./vendor-program-amazon-leo-playbook.md)**.
+
+---
+
 ## Verification Queries
 
 ### Vendor Program
@@ -376,6 +393,7 @@ sf apex run --file scripts/sample-data/seed-vendor-program.apex
 
 ## Related Documentation
 
+- [Vendor program playbook – Amazon Leo](./vendor-program-amazon-leo-playbook.md) – BRD-to-metadata mapping and gaps
 - [Installation Guide](./installation.md) – Deployment
 - [Sample Data Setup](./sample-data.md) – Seed script details
 - [Data Model](../architecture/data-model.md) – Object relationships
