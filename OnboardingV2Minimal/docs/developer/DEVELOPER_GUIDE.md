@@ -13,7 +13,7 @@
 
 - `EXP_*`: screen flows and guided UX orchestration
 - `BLL_*`: business logic and record-triggered orchestration
-- `DOMAIN_*` / `DOM_*`: reusable subflow units
+- `DOMAIN_*` : reusable subflow units
 
 Follow this layering for new automation to avoid circular dependencies and flow sprawl.
 
@@ -57,8 +57,3 @@ CLI baseline:
 - `ObjectRelatedListController.cls`
 - `EXP_Opportunity_SCR_Create_Record.flow-meta.xml`
 - `BLL_Onboarding_RCD_Logical_Process.flow-meta.xml`
-
-## Generated Reference Catalogs
-
-- Full flow responsibility list and domain input/output contracts: [FLOW_CATALOG.md](./FLOW_CATALOG.md)
-- Full Apex class list: [APEX_CLASS_INVENTORY.md](./APEX_CLASS_INVENTORY.md)

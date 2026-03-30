@@ -8,7 +8,7 @@ It is built as a layered automation system:
 
 - Experience flows (`EXP_*`) for guided user execution
 - Business logic flows (`BLL_*`) for orchestration and policy
-- Domain flows (`DOMAIN_*` and `DOM_*`) for reusable data operations
+- Domain flows (`DOMAIN_*`) for reusable data operations
 - Apex services for rules, resilience, async orchestration, and API-backed components
 
 ## Business Outcomes It Enables
@@ -16,7 +16,7 @@ It is built as a layered automation system:
 - Standardized onboarding across vendor programs
 - Reduced manual handoffs through flow orchestration and policy metadata
 - Consistent status progression driven by normalized requirement evidence
-- Improved operational resiliency via fault logging and isolated async tails
+- Improved operational resiliency via fault logging, follow-up queueing, and isolated async tails
 - Faster cycle times for sales and onboarding teams through guided screen flows
 
 ## Current Capability Highlights
