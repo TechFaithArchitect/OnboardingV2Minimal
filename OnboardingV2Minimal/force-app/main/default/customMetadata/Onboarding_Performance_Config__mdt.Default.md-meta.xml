@@ -7,10 +7,6 @@
         <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
-        <field>Enable_Flow_Segment_Telemetry__c</field>
-        <value xsi:type="xsd:boolean">true</value>
-    </values>
-    <values>
         <field>Publish_Chain_Progress_Events__c</field>
         <value xsi:type="xsd:boolean">true</value>
     </values>

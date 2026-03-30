@@ -305,9 +305,7 @@
         <members>Chuzo_Update_SF_Maps_PG__e</members>
         <members>Claim__c</members>
         <members>Clearing_House__c</members>
-        <members>Collection_Team_Page__c</members>
         <members>Commercial_L_I_Information__c</members>
-        <members>Commercial_MSO__c</members>
         <members>Communication_Dispatch_Policy__mdt</members>
         <members>Communication_Event_Policy__mdt</members>
         <members>Communication_Template__c</members>
@@ -322,10 +320,8 @@
         <members>CustomCharge_Products__c</members>
         <members>Custom_Charge__c</members>
         <members>DIRECTV_Zip_Restriction__c</members>
-        <members>Deactivate_Chuzo_Only_Agent__e</members>
         <members>DealerMDU__c</members>
         <members>Dealer_Compliance__c</members>
-        <members>Dealer_Insurance_Detail__c</members>
         <members>Dealer_Insurance__c</members>
         <members>Dispatch_Update_Configuration__mdt</members>
         <members>Email_Template_Catalog__mdt</members>
@@ -345,13 +341,11 @@
         <members>FollowUpRetryTrigger__e</members>
         <members>Follow_Up_Queue__c</members>
         <members>Follow_Up_Rule__mdt</members>
-        <members>Follow_Up_Suppression__mdt</members>
         <members>Fraud_Validation_Rules__c</members>
         <members>Fraud_Validation_Statistics__c</members>
         <members>GLK_Territory_Account__e</members>
         <members>HRT_Territory_Account__e</members>
         <members>In_App_Checklist_Settings__c</members>
-        <members>Infrastructure_Ship_to_Sales__c</members>
         <members>Interview__c</members>
         <members>LAN_Territory_Account__e</members>
         <members>L_I_Information__c</members>
@@ -390,9 +384,6 @@
         <members>POE_Callout_Config_API__mdt</members>
         <members>POE_ChuzoLoginNotification__mdt</members>
         <members>POE_Chuzo_Regular_Expressions__mdt</members>
-        <members>POE_Clicker_Call_Center_Track__c</members>
-        <members>POE_Clicker_Event_Track__c</members>
-        <members>POE_Clicker_Retail_Track__c</members>
         <members>POE_ClientProductOrder__c</members>
         <members>POE_ClientProduct__c</members>
         <members>POE_DealerEvent__c</members>
@@ -416,11 +407,9 @@
         <members>Process_Approval__c</members>
         <members>Product__c</members>
         <members>ProductxZipCode__c</members>
-        <members>Program_Compliance__c</members>
         <members>Program_Dates__c</members>
         <members>Program_Sales_Restriction__c</members>
         <members>Quota__c</members>
-        <members>Referral_Code__c</members>
         <members>Requirement_Field_Validation_Rule__mdt</members>
         <members>STX_Territory_Account__e</members>
         <members>SWT_Territory_Account__e</members>

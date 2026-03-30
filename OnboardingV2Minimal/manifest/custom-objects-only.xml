@@ -6,28 +6,19 @@
         <members>Chuzo_Agreement__c</members>
         <members>Chuzo_Settings__c</members>
         <members>Clearing_House__c</members>
-        <members>Collection_Team_Page__c</members>
         <members>Commercial_L_I_Information__c</members>
-        <members>Commercial_MSO__c</members>
         <members>Contract_Record_Type_Reference__c</members>
         <members>Credit_Check__c</members>
-        <members>Deactivate_Chuzo_Only_Agent__e</members>
         <members>Dealer_Compliance__c</members>
-        <members>Dealer_Insurance_Detail__c</members>
         <members>Dealer_Insurance__c</members>
         <members>ERP_Setup__c</members>
         <members>FSL_Settings__c</members>
-        <members>Infrastructure_Ship_to_Sales__c</members>
         <members>Labor_Form__c</members>
         <members>License__c</members>
         <members>Net_Terms__c</members>
         <members>Onboarding_Status_Change__c</members>
-        <members>POE_Clicker_Event_Track__c</members>
-        <members>POE_Clicker_Retail_Track__c</members>
         <members>POE_Dealer_Code__c</members>
         <members>Personal_Guarantee__c</members>
-        <members>Program_Compliance__c</members>
-        <members>Referral_Code__c</members>
         <members>Typeform_Responses__c</members>
         <members>Vendor_Order_Entry_Platform__c</members>
         <name>CustomObject</name>
