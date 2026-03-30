@@ -1,53 +1,76 @@
-# Onboarding V2 Documentation
+# OnboardingV2 Documentation
 
-Documentation for the Onboarding V2 MVP system—a rules-driven onboarding workflow for managing dealer onboarding against vendor program requirements.
+This is a complete rebuilt documentation set generated from the current repository implementation.
 
-## Terminology
+## Documentation Map
 
-- **Dealer**: Account record participating in onboarding
-- **Vendor Program**: Vendor-specific program configuration (`Vendor_Customization__c`)
-- **Program Specialist (Sales)**: Internal sales selling programs to Dealers; initiates onboarding
-- **Program Manager**: Internal owner selling us to Vendors; configures vendor program requirements
-- **Onboarding Manager (Account Services)**: Works with Dealers to complete requirements and move status forward
+### Executive
+- [Executive Summary](./executive/EXECUTIVE_SUMMARY.md)
 
-## Table of Contents
+### Technical
+- [System Overview](./technical/SYSTEM_OVERVIEW.md)
+- [Automation Catalog](./technical/AUTOMATION_CATALOG.md)
+- [Data Model](./technical/DATA_MODEL.md)
+- [Configuration and Rules](./technical/CONFIGURATION_AND_RULES.md)
+- [Integrations](./technical/INTEGRATIONS.md)
+- [Security and Access](./technical/SECURITY_AND_ACCESS.md)
+- [Test and Quality](./technical/TEST_AND_QUALITY.md)
 
-### Architecture
-- [System Overview](./architecture/overview.md) - High-level architecture and design patterns
-- [Layered Architecture](./architecture/layers.md) - Application, Business Logic, and Domain layers
-- [Apex Patterns](./architecture/apex-patterns.md) - Apex architectural patterns
-- [Data Model](./architecture/data-model.md) - Custom objects, relationships, and data flow
-- [Variable Library](./VARIABLE_LIBRARY.md) - Variable naming conventions
+### Business and User Guides
+- [Business Process Guide](./business/BUSINESS_PROCESS_GUIDE.md)
+- [Business User Guide](./business/BUSINESS_USER_GUIDE.md)
+- [Sales User Guide](./sales/SALES_USER_GUIDE.md)
 
-### Components
-- [Apex Classes](./components/apex-classes.md) - Service layer, invocables, and business logic
-- [Lightning Web Components](./components/lwc-components.md) - UI components in this repo
-- [Flows](./components/flows.md) - Salesforce Flow automation
-- [Triggers](./components/triggers.md) - Apex triggers
+### Operations
+- [Admin Operations Runbook](./admin/ADMIN_OPERATIONS_RUNBOOK.md)
+- [Deployment Runbook](./admin/DEPLOYMENT_RUNBOOK.md)
+- [Gearset Include List](./admin/GEARSET_INCLUDE_LIST.md)
+- [UAT Flow Deactivation Candidates](./admin/UAT_FLOW_DEACTIVATION_CANDIDATES.md)
+- [Support and Troubleshooting](./support/SUPPORT_AND_TROUBLESHOOTING.md)
 
-### Processes
-- [Onboarding Process](./processes/onboarding-process.md) - Main onboarding workflow
-- [Status Evaluation](./processes/status-evaluation.md) - Rules-based status evaluation
-- [Account Onboarding Quick Action](./processes/account-onboarding-quick-action.md) - Quick action flow
+### Engineering
+- [Developer Guide](./developer/DEVELOPER_GUIDE.md)
+- [Contributing Standards](./developer/CONTRIBUTING_STANDARDS.md)
+- [Flow Catalog](./developer/FLOW_CATALOG.md)
+- [Apex Class Inventory](./developer/APEX_CLASS_INVENTORY.md)
 
-### Objects
-- [Custom Objects](./objects/custom-objects.md) - Custom objects and their purposes
+### Reference
+- [Glossary](./reference/GLOSSARY.md)
+- [Known Gaps and Backlog](./reference/KNOWN_GAPS_AND_BACKLOG.md)
 
-### Setup & Configuration
-- [Installation](./setup/installation.md) - Deployment and setup
-- [Configuration](./setup/configuration.md) - Configuration guide
-- [Sample Data](./setup/sample-data.md) - Sample data setup
+## Scope Baseline
 
-### User Guides
-- [Getting Started](./user-guides/getting-started.md) - Quick start for end users
-- [Onboarding Workflow](./user-guides/onboarding-workflow.md) - Step-by-step process
-- [Managing Requirements](./user-guides/managing-requirements.md) - Requirement management
-- [Troubleshooting](./user-guides/troubleshooting.md) - Common issues and solutions
+This documentation reflects the current source in:
 
-### Security & Performance
-- [Security Model](./security/security-model.md) - Security architecture
-- [Optimization Guide](./performance/optimization-guide.md) - Performance best practices
+- `force-app/main/default`
+- `scripts`
+- `config`
 
-### Deployment & Testing
-- [Pre-Production Checklist](./deployment/pre-production-checklist.md) - Production readiness
-- [Test Classes and Commands](./testing/TEST-CLASSES-AND-COMMANDS.md) - Running tests
+Key current footprint:
+
+- 89 Flows
+- 131 Apex classes
+- 39 Apex test classes
+- 27 test factory classes
+- 78 object metadata folders
+- 151 custom metadata records
+
+## Architecture Pattern Summary
+
+- `EXP_*` flows provide screen and guided user interactions.
+- `BLL_*` flows implement business logic, orchestration, and trigger-based automation.
+- `DOMAIN_*` and `DOM_*` flows provide reusable CRUD/get/evaluate/create units.
+- Apex services provide policy engines, resilience tooling, async orchestration, adapters, and reusable UI APIs.
+
+## Primary Application
+
+- Salesforce app metadata: `Onboarding.app-meta.xml`
+
+## Change Control
+
+When automation or data model changes, update at minimum:
+
+- `technical/SYSTEM_OVERVIEW.md`
+- `technical/AUTOMATION_CATALOG.md`
+- `technical/DATA_MODEL.md`
+- Persona guides affected by behavior changes

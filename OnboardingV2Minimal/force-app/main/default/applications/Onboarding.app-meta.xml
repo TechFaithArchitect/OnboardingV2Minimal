@@ -25,7 +25,6 @@
     <tabs>Vendor_Program_Requirement__c</tabs>
     <tabs>Onboarding_Requirement__c</tabs>
     <tabs>Communication_Template__c</tabs>
-    <tabs>Territory_Role_Assignment__c</tabs>
     <tabs>Required_Credential__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Onboarding_UtilityBar</utilityBar>
@@ -42,9 +41,6 @@
         </mappings>
         <mappings>
             <tab>Required_Credential__c</tab>
-        </mappings>
-        <mappings>
-            <tab>Territory_Role_Assignment__c</tab>
         </mappings>
         <mappings>
             <tab>Vendor_Customization__c</tab>

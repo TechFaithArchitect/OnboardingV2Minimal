@@ -130,12 +130,6 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
         }
 
         public void execute(QueueableContext context) {
-            AsyncFailureTelemetryFinalizer.attach(
-                'ExperienceOpportunityCreateAsyncService.OpportunityCreateChainQueueable',
-                'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
-                + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id)
-            );
-
             List<String> stageErrors = executeCreateChain(
                 accountRecord,
                 opportunityRecord,
@@ -146,12 +140,11 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
             );
 
             if (!stageErrors.isEmpty()) {
-                AsyncFailureTelemetryFinalizer.logHandledFailure(
-                    'ExperienceOpportunityCreateAsyncService.OpportunityCreateChainQueueable',
-                    'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
-                    + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id),
-                    null,
-                    'Queue execution completed with handled stage errors: ' + String.join(stageErrors, ' | ')
+                LoggingUtil.error(
+                    'ExperienceOpportunityCreateAsyncService.OpportunityCreateChainQueueable handled stage errors. '
+                    + 'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
+                    + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id)
+                    + ', Errors=' + String.join(stageErrors, ' | ')
                 );
             }
         }

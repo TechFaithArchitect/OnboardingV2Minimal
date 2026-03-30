@@ -63,11 +63,6 @@ public with sharing class RecordCollectionEditorAsyncService {
         }
 
         public void execute(QueueableContext context) {
-            AsyncFailureTelemetryFinalizer.attach(
-                'RecordCollectionEditorAsyncService.CreateRecordsQueueable',
-                'ConfigKey=' + String.valueOf(configKey)
-            );
-
             try {
                 RecordCollectionEditorConfigService.CreateFromJsonRequest requestItem =
                     new RecordCollectionEditorConfigService.CreateFromJsonRequest();
@@ -77,11 +72,10 @@ public with sharing class RecordCollectionEditorAsyncService {
                     new List<RecordCollectionEditorConfigService.CreateFromJsonRequest>{ requestItem }
                 );
             } catch (Exception ex) {
-                AsyncFailureTelemetryFinalizer.logHandledFailure(
-                    'RecordCollectionEditorAsyncService.CreateRecordsQueueable',
-                    'ConfigKey=' + String.valueOf(configKey),
-                    ex,
-                    'Record collection queue execution failed'
+                LoggingUtil.error(
+                    'RecordCollectionEditorAsyncService.CreateRecordsQueueable failed. '
+                    + 'ConfigKey=' + String.valueOf(configKey)
+                    + ', Exception=' + ex.getTypeName() + ': ' + ex.getMessage()
                 );
             }
         }

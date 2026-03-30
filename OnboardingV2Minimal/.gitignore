@@ -4,3 +4,7 @@
 
 # Local org auth
 .localdevserver/
+
+# One-off Production Field Service metadata snapshots (not deployed from this repo)
+retrieve-prod-fsl-snapshot/
+OnboardingV2Minimal/docs
