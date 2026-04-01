@@ -3,22 +3,39 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Assign_Communication_Template_Via_Vendor_Program_to_CommunicationTemplateRecord</name>
-        <label>Assign Communication Template Via Vendor Program to CommunicationTemplateRecord</label>
+        <name>Assign_Assigned_Template_Id</name>
+        <label>Assign Assigned Template Id</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>CommunicationTemplateRecord</assignToReference>
-            <operator>Assign</operator>
+            <assignToReference>TemplateIdCollection</assignToReference>
+            <operator>Add</operator>
             <value>
-                <elementReference>Get_Communcation_Template_via_Vendor_Program</elementReference>
+                <elementReference>Loop_Template_Assignments.Communication_Template__c</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Loop_Template_Assignments</targetReference>
+        </connector>
     </assignments>
-    <description>DOMAIN LAYER - OmniSObject - SFL - GET - Communication Template</description>
+    <description>DOMAIN LAYER - OmniSObject - SFL - GET - Communication Template (assignment model)</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - GET - Communication Template {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - GET - Communication Template</label>
+    <loops>
+        <name>Loop_Template_Assignments</name>
+        <label>Loop Template Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>TemplateAssignmentRecordCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Assigned_Template_Id</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_Communication_Template_By_Assignment</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -39,13 +56,13 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>Get_Communcation_Template_via_Vendor_Program</name>
-        <label>Get Communcation Template via Vendor Program</label>
+        <name>Get_Communication_Template_Assignments</name>
+        <label>Get Communication Template Assignments</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Communication_Template_Via_Vendor_Program_to_CommunicationTemplateRecord</targetReference>
+            <targetReference>Loop_Template_Assignments</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -55,6 +72,25 @@
                 <elementReference>VendorProgramRecord.Id</elementReference>
             </value>
         </filters>
+        <object>Communication_Template_Assignment__c</object>
+        <outputReference>TemplateAssignmentRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Communication_Template__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Communication_Template_By_Assignment</name>
+        <label>Get Communication Template By Assignment</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>TemplateIdCollection</elementReference>
+            </value>
+        </filters>
         <filters>
             <field>Communication_Type__c</field>
             <operator>EqualTo</operator>
@@ -62,15 +98,26 @@
                 <elementReference>CommunicationType</elementReference>
             </value>
         </filters>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Communication_Template__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <outputReference>CommunicationTemplateRecord</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Email_Template_Id__c</queriedFields>
+        <queriedFields>Communication_Type__c</queriedFields>
+        <queriedFields>Recipient_Type__c</queriedFields>
     </recordLookups>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Communcation_Template_via_Vendor_Program</targetReference>
+            <targetReference>Get_Communication_Template_Assignments</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -87,6 +134,21 @@
         <dataType>Picklist</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TemplateAssignmentRecordCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Communication_Template_Assignment__c</objectType>
+    </variables>
+    <variables>
+        <name>TemplateIdCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

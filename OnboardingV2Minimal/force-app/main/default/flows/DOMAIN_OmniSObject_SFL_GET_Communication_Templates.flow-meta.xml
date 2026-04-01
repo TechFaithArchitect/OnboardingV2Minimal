@@ -2,17 +2,33 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Assigned_Template_Id</name>
+        <label>Assign Assigned Template Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>TemplateIdCollection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Template_Assignments.Communication_Template__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Template_Assignments</targetReference>
+        </connector>
+    </assignments>
     <decisions>
-        <name>Determine_Recipient_Filter_Strategy</name>
-        <label>Determine Recipient Filter Strategy</label>
+        <name>Determine_Assignment_Recipient_Filter_Strategy</name>
+        <label>Determine Assignment Recipient Filter Strategy</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Get_Communication_Templates</targetReference>
+            <targetReference>Get_Assigned_Communication_Templates</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Recipient Type Filter</defaultConnectorLabel>
         <rules>
-            <name>Filter_by_Recipient_Type</name>
+            <name>Filter_by_Recipient_Type_Assignment</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>RecipientType</leftValueReference>
@@ -29,15 +45,61 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Communication_Templates_By_Recipient_Type</targetReference>
+                <targetReference>Get_Assigned_Communication_Templates_By_Recipient_Type</targetReference>
             </connector>
             <label>Filter by Recipient Type</label>
         </rules>
     </decisions>
-    <description>DOMAIN LAYER - OmniSObject - SFL - GET - Communication Templates (ordered collection)</description>
+    <decisions>
+        <name>Has_Template_Assignments</name>
+        <label>Has Template Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Assigned_Communication_Templates</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Assignments</defaultConnectorLabel>
+        <rules>
+            <name>Assignments_Found</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>TemplateAssignmentRecordCollection</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TemplateAssignmentRecordCollection</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Template_Assignments</targetReference>
+            </connector>
+            <label>Assignments Found</label>
+        </rules>
+    </decisions>
+    <description>DOMAIN LAYER - OmniSObject - SFL - GET - Communication Templates (assignment model)</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - GET - Communication Templates {!$Flow.CurrentDateTime}</interviewLabel>
     <label>DOMAIN - OmniSObject - SFL - GET - Communication Templates</label>
+    <loops>
+        <name>Loop_Template_Assignments</name>
+        <label>Loop Template Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>TemplateAssignmentRecordCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Assigned_Template_Id</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Determine_Assignment_Recipient_Filter_Strategy</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -58,17 +120,17 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>Get_Communication_Templates</name>
-        <label>Get Communication Templates</label>
+        <name>Get_Assigned_Communication_Templates</name>
+        <label>Get Assigned Communication Templates</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Vendor_Program__c</field>
-            <operator>EqualTo</operator>
+            <field>Id</field>
+            <operator>In</operator>
             <value>
-                <elementReference>VendorProgramRecord.Id</elementReference>
+                <elementReference>TemplateIdCollection</elementReference>
             </value>
         </filters>
         <filters>
@@ -97,17 +159,17 @@
         <sortOrder>Asc</sortOrder>
     </recordLookups>
     <recordLookups>
-        <name>Get_Communication_Templates_By_Recipient_Type</name>
-        <label>Get Communication Templates By Recipient Type</label>
+        <name>Get_Assigned_Communication_Templates_By_Recipient_Type</name>
+        <label>Get Assigned Communication Templates By Recipient Type</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Vendor_Program__c</field>
-            <operator>EqualTo</operator>
+            <field>Id</field>
+            <operator>In</operator>
             <value>
-                <elementReference>VendorProgramRecord.Id</elementReference>
+                <elementReference>TemplateIdCollection</elementReference>
             </value>
         </filters>
         <filters>
@@ -142,11 +204,34 @@
         <sortField>Send_Order__c</sortField>
         <sortOrder>Asc</sortOrder>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Template_Assignments</name>
+        <label>Get Template Assignments</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Has_Template_Assignments</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Vendor_Program__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>VendorProgramRecord.Id</elementReference>
+            </value>
+        </filters>
+        <object>Communication_Template_Assignment__c</object>
+        <outputReference>TemplateAssignmentRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Communication_Template__c</queriedFields>
+        <queriedFields>Vendor_Program__c</queriedFields>
+    </recordLookups>
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Determine_Recipient_Filter_Strategy</targetReference>
+            <targetReference>Get_Template_Assignments</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -170,6 +255,21 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>TemplateAssignmentRecordCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Communication_Template_Assignment__c</objectType>
+    </variables>
+    <variables>
+        <name>TemplateIdCollection</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

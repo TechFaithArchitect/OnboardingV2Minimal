@@ -1,23 +1,96 @@
 @IsTest
 private class OnbReqParentBulkEvalInvocableTest {
+  private static String getOpportunityStageName() {
+    List<Schema.PicklistEntry> entries = Opportunity.StageName.getDescribe().getPicklistValues();
+    return entries.isEmpty() ? 'Prospecting' : entries[0].getValue();
+  }
+
+  private static String discoverInsertableRequirementType(Id onboardingId) {
+    List<String> values = TestDataFactoryUtil.getPicklistValues(
+      Onboarding_Requirement__c.SObjectType,
+      'Requirement_Type__c'
+    );
+    List<String> ordered = new List<String>();
+    for (String value : values) {
+      if (
+        value != null &&
+        !value.equalsIgnoreCase('Agreement') &&
+        !value.equalsIgnoreCase('Contract') &&
+        !value.equalsIgnoreCase('Training')
+      ) {
+        ordered.add(value);
+      }
+    }
+    for (String value : values) {
+      if (value != null && !ordered.contains(value)) {
+        ordered.add(value);
+      }
+    }
+
+    for (String candidate : ordered) {
+      Database.SaveResult probeResult = Database.insert(
+        new Onboarding_Requirement__c(
+          Onboarding__c = onboardingId,
+          Requirement_Type__c = candidate,
+          Status__c = 'Draft',
+          Is_Overridden__c = false
+        ),
+        false
+      );
+      if (probeResult.isSuccess()) {
+        delete new Onboarding_Requirement__c(Id = probeResult.getId());
+        return candidate;
+      }
+    }
+    return null;
+  }
+
   @TestSetup
   static void setupData() {
     Account acc = new Account(Name = 'Bulk Eval Account');
     insert acc;
 
-    Onboarding__c onb = new Onboarding__c(Account__c = acc.Id);
+    Opportunity opp = new Opportunity(
+      Name = 'Bulk Eval Opp',
+      AccountId = acc.Id,
+      StageName = getOpportunityStageName(),
+      CloseDate = Date.today().addDays(30)
+    );
+    insert opp;
+
+    TestDataFactoryWrapper.VendorCustomizationWrapper vpWrap = TestVendorProgramFactory.createVendorWithCustomization(
+      true
+    );
+
+    Onboarding__c onb = new Onboarding__c(
+      Account__c = acc.Id,
+      Opportunity__c = opp.Id,
+      Vendor_Customization__c = vpWrap.customization.Id,
+      Onboarding_Status__c = 'Setup Complete',
+      Assigned_Team__c = 'Onboarding'
+    );
     insert onb;
+
+    String requirementType = discoverInsertableRequirementType(onb.Id);
+    System.assertNotEquals(
+      null,
+      requirementType,
+      'Expected at least one insertable onboarding requirement type for this org context.'
+    );
 
     Onboarding_Requirement__c reqSetupComplete = new Onboarding_Requirement__c(
       Onboarding__c = onb.Id,
+      Requirement_Type__c = requirementType,
       Completed__c = false
     );
     Onboarding_Requirement__c reqPendingSales = new Onboarding_Requirement__c(
       Onboarding__c = onb.Id,
+      Requirement_Type__c = requirementType,
       Completed__c = false
     );
     Onboarding_Requirement__c reqDenied = new Onboarding_Requirement__c(
       Onboarding__c = onb.Id,
+      Requirement_Type__c = requirementType,
       Completed__c = false
     );
     insert new List<Onboarding_Requirement__c>{ reqSetupComplete, reqPendingSales, reqDenied };
@@ -92,14 +165,33 @@ private class OnbReqParentBulkEvalInvocableTest {
 
   @IsTest
   static void evaluate_noChangeDoesNotUpdate() {
+    Id onboardingId = [
+      SELECT Onboarding__c
+      FROM Onboarding_Requirement__c
+      LIMIT 1
+    ].Onboarding__c;
+    Onboarding__c onboardingRecord = [
+      SELECT Id, Account__c
+      FROM Onboarding__c
+      WHERE Id = :onboardingId
+      LIMIT 1
+    ];
+    String requirementType = discoverInsertableRequirementType(onboardingRecord.Id);
+    System.assertNotEquals(
+      null,
+      requirementType,
+      'Expected at least one insertable onboarding requirement type for this org context.'
+    );
+
     Onboarding_Requirement__c reqNoChange = new Onboarding_Requirement__c(
-      Onboarding__c = [SELECT Id FROM Onboarding__c LIMIT 1].Id,
+      Onboarding__c = onboardingRecord.Id,
+      Requirement_Type__c = requirementType,
       Completed__c = false
     );
     insert reqNoChange;
     insert new Onboarding_Requirement_Subject__c(
       Onboarding_Requirement__c = reqNoChange.Id,
-      Account__c = [SELECT Account__c FROM Onboarding__c LIMIT 1].Account__c,
+      Account__c = onboardingRecord.Account__c,
       Status__c = 'Setup Complete',
       Unique_Key__c = reqNoChange.Id + '|nochange'
     );

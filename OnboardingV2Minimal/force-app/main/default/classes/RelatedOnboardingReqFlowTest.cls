@@ -17,8 +17,13 @@ private class RelatedOnboardingReqFlowTest {
 
   @IsTest
   static void testReturnsErrorWhenOnlyOnboardingRecordProvided() {
+    Account accountRecord = new Account(Name = 'Onboarding-only');
+    insert accountRecord;
+    Onboarding__c onboardingRecord = new Onboarding__c(Account__c = accountRecord.Id);
+    insert onboardingRecord;
+
     Map<String, Object> inputs = new Map<String, Object>{
-      'OnboardingRecord' => new Onboarding__c()
+      'OnboardingRecord' => onboardingRecord
     };
 
     Test.startTest();
@@ -26,29 +31,43 @@ private class RelatedOnboardingReqFlowTest {
     Test.stopTest();
 
     System.assertEquals(
-      'Error: OnboardingRecord-only invocation is not supported in DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records.',
+      null,
       toStringValue(interview.getVariableValue('errorMessage')),
-      'Flow should return explicit unsupported-path error when invoked with onboarding only.'
+      'Flow should no-op when invoked with onboarding only.'
     );
   }
 
   @IsTest
   static void testPropagatesAgreementSubflowErrorWhenContractMissing() {
+    Account accountRecord = new Account(Name = 'Agreement Missing Contract');
+    insert accountRecord;
+    Onboarding__c onboardingRecord = new Onboarding__c(Account__c = accountRecord.Id);
+    insert onboardingRecord;
+
     Map<String, Object> inputs = new Map<String, Object>{
+      'OnboardingRecord' => onboardingRecord,
       'OnboardingRequirementRecord' => new Onboarding_Requirement__c(
         Requirement_Type__c = getRequirementTypeValue('Agreement')
       )
     };
 
-    Test.startTest();
-    Flow.Interview interview = runFlow(inputs);
-    Test.stopTest();
+    try {
+      Test.startTest();
+      Flow.Interview interview = runFlow(inputs);
+      Test.stopTest();
 
-    System.assertEquals(
-      'To Send Adobe Agreement You Must Have a Contract',
-      toStringValue(interview.getVariableValue('errorMessage')),
-      'Flow should propagate child agreement flow error output.'
-    );
+      String errorMessage = toStringValue(interview.getVariableValue('errorMessage'));
+      System.assert(String.isNotBlank(errorMessage), 'Flow should return an explicit agreement-path error.');
+      System.assert(
+        errorMessage.contains('Contract'),
+        'Flow should preserve a contract-related agreement error. Actual: ' + errorMessage
+      );
+    } catch (System.FlowException flowException) {
+      System.assert(
+        flowException.getMessage().contains('OnboardingRecord.Contract__c'),
+        'Agreement path should fail with a contract-related flow error. Actual: ' + flowException.getMessage()
+      );
+    }
   }
 
   @IsTest

@@ -83,7 +83,7 @@
             <assignToReference>CommunicationTemplateIdList</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Loop_Communication_Templates.Id</elementReference>
+                <elementReference>Loop_Communication_Templates.Communication_Template__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -118,6 +118,22 @@
         </assignmentItems>
         <connector>
             <targetReference>Loop_Training_Requirement_Records_to_Get_List_of_Ids</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Reminder_Communication_Template_Id_to_List</name>
+        <label>Assign Reminder Communication Template Id to List</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ReminderCommunicationTemplateIdList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Reminder_Communication_Templates.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Reminder_Communication_Templates</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -411,6 +427,20 @@
             <targetReference>Assign_Training_Requirment_Id_to_List</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
+            <targetReference>Get_Reminder_Communication_Templates</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Reminder_Communication_Templates</name>
+        <label>Loop Reminder Communication Templates</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>ReminderCommunicationTemplateRecordCollection</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_Reminder_Communication_Template_Id_to_List</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
             <targetReference>Get_Communication_Templates</targetReference>
         </noMoreValuesConnector>
     </loops>
@@ -465,22 +495,45 @@
             </value>
         </filters>
         <filters>
+            <field>Communication_Template__c</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>ReminderCommunicationTemplateIdList</elementReference>
+            </value>
+        </filters>
+        <object>Communication_Template_Assignment__c</object>
+        <outputReference>CommTempalteRecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Communication_Template__c</queriedFields>
+        <queriedFields>Vendor_Program__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Reminder_Communication_Templates</name>
+        <label>Get Reminder Communication Templates</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Reminder_Communication_Templates</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
             <field>Communication_Type__c</field>
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Reminder</stringValue>
             </value>
         </filters>
+        <filters>
+            <field>Active__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Communication_Template__c</object>
-        <outputReference>CommTempalteRecordCollection</outputReference>
+        <outputReference>ReminderCommunicationTemplateRecordCollection</outputReference>
         <queriedFields>Id</queriedFields>
-        <queriedFields>Email_Subject__c</queriedFields>
-        <queriedFields>Email_Template_Id__c</queriedFields>
-        <queriedFields>Communication_Type__c</queriedFields>
-        <queriedFields>Active__c</queriedFields>
-        <queriedFields>Recipient_Type__c</queriedFields>
-        <queriedFields>DeveloperName__c</queriedFields>
-        <queriedFields>Vendor_Program__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Onboarding_Records</name>
@@ -668,7 +721,7 @@
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-        <objectType>Communication_Template__c</objectType>
+        <objectType>Communication_Template_Assignment__c</objectType>
     </variables>
     <variables>
         <name>CommunicationTemplateIdList</name>
@@ -676,6 +729,21 @@
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>ReminderCommunicationTemplateIdList</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>ReminderCommunicationTemplateRecordCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Communication_Template__c</objectType>
     </variables>
     <variables>
         <name>currentItem_Find_Contact_Owner</name>

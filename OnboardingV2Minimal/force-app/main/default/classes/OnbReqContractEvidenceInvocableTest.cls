@@ -26,25 +26,92 @@ private class OnbReqContractEvidenceInvocableTest {
     return contractRecord;
   }
 
+  private static Vendor_Customization__c createVendorProgram() {
+    return TestVendorProgramFactory.createVendorWithCustomization(true).customization;
+  }
+
+  private static String discoverInsertableRequirementType(Id onboardingId) {
+    List<String> values = TestDataFactoryUtil.getPicklistValues(
+      Onboarding_Requirement__c.SObjectType,
+      'Requirement_Type__c'
+    );
+    List<String> ordered = new List<String>();
+    for (String value : values) {
+      if (
+        value != null &&
+        !value.equalsIgnoreCase('Agreement') &&
+        !value.equalsIgnoreCase('Contract') &&
+        !value.equalsIgnoreCase('Training')
+      ) {
+        ordered.add(value);
+      }
+    }
+    for (String value : values) {
+      if (value != null && !ordered.contains(value)) {
+        ordered.add(value);
+      }
+    }
+
+    for (String candidate : ordered) {
+      Database.SaveResult probeResult = Database.insert(
+        new Onboarding_Requirement__c(
+          Onboarding__c = onboardingId,
+          Requirement_Type__c = candidate,
+          Status__c = 'Draft',
+          Is_Overridden__c = false
+        ),
+        false
+      );
+      if (probeResult.isSuccess()) {
+        delete new Onboarding_Requirement__c(Id = probeResult.getId());
+        return candidate;
+      }
+    }
+    return null;
+  }
+
   @IsTest
   static void evaluate_updatesOnlyMatchingContractAndType() {
     Account accountRecord = TestDataFactory.createAccount('OnbReq Contract Scope', true);
     Contact primaryContact = TestDataFactory.createContact('Primary', 'Owner', true, accountRecord);
+    Vendor_Customization__c vendorProgram = createVendorProgram();
 
     Contract contractA = createContract(accountRecord, primaryContact);
     Contract contractB = createContract(accountRecord, primaryContact);
 
-    Onboarding__c onboardingA = new Onboarding__c(Account__c = accountRecord.Id, Contract__c = contractA.Id);
-    Onboarding__c onboardingB = new Onboarding__c(Account__c = accountRecord.Id, Contract__c = contractB.Id);
+    Onboarding__c onboardingA = new Onboarding__c(
+      Account__c = accountRecord.Id,
+      Contract__c = contractA.Id,
+      Opportunity__c = contractA.Opportunity_to_Contract__c,
+      Vendor_Customization__c = vendorProgram.Id,
+      Onboarding_Status__c = 'Setup Complete',
+      Assigned_Team__c = 'Onboarding'
+    );
+    Onboarding__c onboardingB = new Onboarding__c(
+      Account__c = accountRecord.Id,
+      Contract__c = contractB.Id,
+      Opportunity__c = contractB.Opportunity_to_Contract__c,
+      Vendor_Customization__c = vendorProgram.Id,
+      Onboarding_Status__c = 'Setup Complete',
+      Assigned_Team__c = 'Onboarding'
+    );
     insert new List<Onboarding__c>{ onboardingA, onboardingB };
 
+    String requirementType = discoverInsertableRequirementType(onboardingA.Id);
+    System.assertNotEquals(
+      null,
+      requirementType,
+      'Expected at least one insertable onboarding requirement type for this org context.'
+    );
     Onboarding_Requirement__c reqA = new Onboarding_Requirement__c(
       Onboarding__c = onboardingA.Id,
+      Requirement_Type__c = requirementType,
       Status__c = 'Draft',
       Completed__c = false
     );
     Onboarding_Requirement__c reqB = new Onboarding_Requirement__c(
       Onboarding__c = onboardingB.Id,
+      Requirement_Type__c = requirementType,
       Status__c = 'Draft',
       Completed__c = false
     );
@@ -165,15 +232,27 @@ private class OnbReqContractEvidenceInvocableTest {
     Account accountRecord = TestDataFactory.createAccount('OnbReq Branch Coverage', true);
     Contact primaryContact = TestDataFactory.createContact('Primary', 'Branch', true, accountRecord);
     Contract contractRecord = createContract(accountRecord, primaryContact);
+    Vendor_Customization__c vendorProgram = createVendorProgram();
 
     Onboarding__c onboardingRecord = new Onboarding__c(
       Account__c = accountRecord.Id,
-      Contract__c = contractRecord.Id
+      Contract__c = contractRecord.Id,
+      Opportunity__c = contractRecord.Opportunity_to_Contract__c,
+      Vendor_Customization__c = vendorProgram.Id,
+      Onboarding_Status__c = 'Setup Complete',
+      Assigned_Team__c = 'Onboarding'
     );
     insert onboardingRecord;
 
+    String requirementType = discoverInsertableRequirementType(onboardingRecord.Id);
+    System.assertNotEquals(
+      null,
+      requirementType,
+      'Expected at least one insertable onboarding requirement type for this org context.'
+    );
     Onboarding_Requirement__c requirementRecord = new Onboarding_Requirement__c(
       Onboarding__c = onboardingRecord.Id,
+      Requirement_Type__c = requirementType,
       Status__c = 'Draft',
       Completed__c = false
     );

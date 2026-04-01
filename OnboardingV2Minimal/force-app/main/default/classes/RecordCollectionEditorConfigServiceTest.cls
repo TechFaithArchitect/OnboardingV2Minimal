@@ -184,7 +184,11 @@ private class RecordCollectionEditorConfigServiceTest {
             );
 
         System.assertEquals(1, results.size(), 'Expected one serialization result.');
-        System.assertEquals(null, results[0].errorMessage, results[0].errorMessage);
+        System.assertEquals(
+            null,
+            results[0].errorMessage,
+            'Unexpected serialization error: ' + String.valueOf(results[0].errorMessage)
+        );
         System.assert(
             results[0].recordsJson.contains('"IsPrimary":true'),
             'Expected Principal Owner contact to default as primary: ' + results[0].recordsJson
