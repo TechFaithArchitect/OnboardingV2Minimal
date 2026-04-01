@@ -10,6 +10,7 @@
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
             <property name="label" type="String" label="Label" role="inputOnly"/>
+            <property name="required" type="Boolean" label="Required" role="inputOnly"/>
             <property
                 name="defaultPhoneNumber"
                 type="String"

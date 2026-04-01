@@ -10,8 +10,8 @@ export default class ReactStylePhoneInput extends LightningElement {
     @track showError = false;
     @api isValid = false;
     @api label = 'Phone Number';
-    @api required = false;
     @api disabled = false;
+    _required = false;
     _defaultPhoneNumber = '';
     @track showDropdown = false;
     @track searchTerm = '';
@@ -52,6 +52,15 @@ export default class ReactStylePhoneInput extends LightningElement {
     set defaultPhoneNumber(val) {
         this._defaultPhoneNumber = val || '';
         this.applyDefaultPhoneNumber();
+    }
+
+    @api
+    get required() {
+        return this._required;
+    }
+
+    set required(val) {
+        this._required = val === true || val === 'true';
     }
 
     applyDefaultPhoneNumber() {
@@ -95,24 +104,30 @@ export default class ReactStylePhoneInput extends LightningElement {
 
     @api
     validate() {
-        let rawNumber = this.phoneNumber.replace(/[^\d+]/g, '');
+        const rawInput = (this.phoneNumber || '').replace(/[^\d+]/g, '');
+        const hasUserInput = rawInput.length > 0;
+        if (!hasUserInput) {
+            this.showError = false;
+            this.isValid = !this.required;
+            return {
+                isValid: !this.required,
+                errorMessage: this.required ? 'Phone number is required.' : ''
+            };
+        }
 
+        let rawNumber = rawInput;
         if (!rawNumber.startsWith('+')) {
             rawNumber = this.selectedCountry.dialCode + rawNumber;
         }
 
-        console.log('Phone Input:', this.phoneNumber);
-        console.log('Cleaned Input:', rawNumber);
-        console.log('Selected Country ISO2:', this.selectedCountry.iso2);
-
         const expectedLength = this.selectedCountry.dialCode === '+1' ? 10 : 7; 
 
-        if (!rawNumber || rawNumber.length < expectedLength) {
+        if (rawNumber.length < expectedLength) {
             this.showError = false; 
             this.isValid = false;
             return {
                 isValid: false,
-                errorMessage: '',
+                errorMessage: 'Invalid phone number.',
             };
         }
 
@@ -120,9 +135,6 @@ export default class ReactStylePhoneInput extends LightningElement {
             const phoneUtil = window.libphonenumber.PhoneNumberUtil.getInstance();
             const parsed = phoneUtil.parseAndKeepRawInput(rawNumber, this.selectedCountry.iso2);
             const valid = phoneUtil.isValidNumber(parsed);
-
-            console.log('Parsed:', parsed);
-            console.log('Is valid:', valid);
 
             this.showError = !valid;
             this.isValid = valid;
@@ -140,7 +152,6 @@ export default class ReactStylePhoneInput extends LightningElement {
                 errorMessage: 'Invalid phone number.',
             };
         }
-        console.log('Returning to Flow:', { isValid: valid });
     }
  
 
