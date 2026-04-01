@@ -4,6 +4,11 @@
 
 This is the metadata include baseline for deploying this repository through a Gearset pipeline.
 
+## Quick Rule
+
+If you are unsure whether to include a metadata type, include it when the release changes behavior users can feel (flows, classes, CMDT, objects/fields, permission sets).  
+If a type is unrelated to your ticket, keep it out to reduce deployment risk.
+
 ## Include Metadata Types
 
 Use this as the default include set from `force-app/main/default`:

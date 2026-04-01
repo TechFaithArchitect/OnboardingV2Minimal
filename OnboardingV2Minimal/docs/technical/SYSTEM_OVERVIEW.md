@@ -1,5 +1,15 @@
 # System Overview
 
+## Plain-English Summary
+
+Think of the system as a pipeline:
+
+1. A user starts onboarding in a screen flow.
+2. The system creates onboarding records and requirements.
+3. Evidence updates those requirements.
+4. Rules compute final onboarding status.
+5. Communication rules decide if and who gets email.
+
 ## Architecture Style
 
 OnboardingV2 follows a layered automation model inside Salesforce:
@@ -18,9 +28,7 @@ This yields modular behavior while keeping Flow as the orchestration surface.
 1. User runs `EXP_Opportunity_SCR_Create_Record`.
 2. Flow resolves vendor options and program path decisions.
 3. Core records are created: Opportunity, OCR, Contract.
-4. Onboarding tail runs either:
-- inline in sync path, or
-- deferred via `OnboardingEnqueueOnboardingTailInvocable` -> `OnboardingChainTailQueueable`.
+4. Onboarding tail runs either inline (sync) or deferred via `OnboardingEnqueueOnboardingTailInvocable` -> `OnboardingChainTailQueueable`.
 5. Tail executes `DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record`.
 
 Deferred behavior is controlled by `Onboarding_Performance_Config__mdt.Default.Defer_Onboarding_Tail__c` (currently `true`).

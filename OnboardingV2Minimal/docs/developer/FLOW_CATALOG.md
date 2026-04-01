@@ -2,6 +2,9 @@
 
 Generated from `force-app/main/default/flows` metadata.
 
+Use this as a lookup table (API name -> responsibility).  
+If you are new to the architecture, start with [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) and [SYSTEM_OVERVIEW.md](../technical/SYSTEM_OVERVIEW.md).
+
 ## Coverage
 
 - Total flows in repo: 85

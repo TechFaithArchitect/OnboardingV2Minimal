@@ -1,11 +1,29 @@
 # Test and Quality
 
-## Current Testing Footprint
+## What “Good” Looks Like
 
-- Apex classes: 131
-- Apex test classes: 39
-- Test factory classes: 27
-- LWC Jest configured via `@salesforce/sfdx-lwc-jest`
+- Users can create onboarding records without flow failures.
+- Requirements and subjects are created once (no duplicate fan-out).
+- Status moves correctly when evidence changes.
+- No new unexplained `Error_Log__c` spikes after release.
+
+## Current testing footprint (from source)
+
+Numbers change as classes are added or removed. **Authoritative totals** for the checkout in front of you:
+
+```bash
+npm run doc:metrics
+```
+
+Recent baseline (example output shape):
+
+- **Total** `.cls` files in `force-app/main/default/classes`
+- **`*Test.cls`** name pattern count (common “test class” file name)
+- **`Test*Factory*.cls`** pattern count (test data helpers)
+
+Richer taxonomy (production vs test categories, invocable counts): [Apex Class Inventory](../developer/APEX_CLASS_INVENTORY.md).
+
+**LWC:** Jest is configured via `@salesforce/sfdx-lwc-jest` in `package.json` (`npm run test:unit`).
 
 ## Existing Quality Tooling
 

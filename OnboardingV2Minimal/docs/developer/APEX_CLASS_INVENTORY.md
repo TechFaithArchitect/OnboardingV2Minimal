@@ -1,5 +1,8 @@
 # Apex Class Inventory
 
+Use this file to find classes quickly.  
+If you are new, read [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) first so the class list has context.
+
 ## Summary
 
 - Total classes: 103

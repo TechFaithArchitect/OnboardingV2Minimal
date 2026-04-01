@@ -4,6 +4,8 @@
 
 OnboardingV2 is a Salesforce-native onboarding platform that manages account onboarding through configurable requirements, subject-level responsibility, evidence-driven status transitions, and operational communication workflows.
 
+In plain language: it helps teams onboard dealers/accounts the same way every time, with less manual chasing and clearer status tracking.
+
 It is built as a layered automation system:
 
 - Experience flows (`EXP_*`) for guided user execution

@@ -1,5 +1,12 @@
 # Security and Access
 
+**Persona-to-permission-set mapping and onboarding guidance:** [Persona and permission sets](./PERSONA_AND_PERMISSION_SETS.md).
+
+## Plain-English Summary
+
+Users should only have the permission sets needed for their job.  
+Automation should respect user/security context and log errors instead of failing silently.
+
 ## Access Model
 
 OnboardingV2 uses permission-set-based access controls for operational personas.

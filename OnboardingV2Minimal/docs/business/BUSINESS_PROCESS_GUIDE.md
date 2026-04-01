@@ -2,7 +2,23 @@
 
 ## Purpose
 
-This guide describes how onboarding operations execute from business perspective across sales, onboarding, compliance, and account services teams.
+This guide explains the onboarding process in plain business terms: who starts it, what records are created, how tasks are assigned, and how completion is determined.
+
+## Quick Example (One Realistic Story)
+
+Use this as a mental model:
+
+1. Sales runs the onboarding create flow from an Opportunity.
+2. The system creates Onboarding + Requirement records.
+3. The system assigns each requirement to either the account, all contacts, principal owner, or primary contact (based on policy).
+4. As evidence comes in (training, contract/agreement, credentials), requirement status updates.
+5. When all required work is complete, onboarding moves to `Setup Complete`.
+
+## Related documentation
+
+- [Sales User Guide](./SALES_USER_GUIDE.md) — create flow and validations
+- [Business User Guide](./BUSINESS_USER_GUIDE.md) — day-to-day monitoring and field guides
+- [Support and Troubleshooting](../support/SUPPORT_AND_TROUBLESHOOTING.md) — triage when outcomes are wrong
 
 ## End-to-End Process
 
@@ -20,11 +36,7 @@ This guide describes how onboarding operations execute from business perspective
 ### 3) Requirement Generation
 
 - Vendor program requirements are expanded to onboarding requirement rows.
-- Requirement subjects are expanded based on fulfillment policy model:
-- account-only
-- all contacts
-- principal owner
-- primary contact or account
+- Requirement subjects are expanded based on policy (`ACCOUNT_ONLY`, `ALL_CONTACTS`, `PRINCIPAL_OWNER`, or `PRIMARY_CONTACT_OR_ACCOUNT`).
 
 ### 4) Evidence Collection and Status Progression
 
@@ -40,10 +52,10 @@ This guide describes how onboarding operations execute from business perspective
 
 ## Responsibility Model
 
-- Sales: intake initiation, contact role alignment, program path setup
-- Onboarding specialists: requirement progression and lifecycle monitoring
-- Compliance and finance: specialized requirement review outcomes
-- Account services and customer service: status continuity and support handoff
+- Sales: starts intake and sets the correct primary contact.
+- Onboarding specialists: track requirements and move work to completion.
+- Compliance and finance: handle specialized review outcomes.
+- Account services and customer service: maintain continuity and support handoff.
 
 ## Lifecycle Outcomes
 

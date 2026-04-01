@@ -1,5 +1,8 @@
 # Automation Catalog
 
+This is a reference list, not a step-by-step guide.  
+If you are new, read [SYSTEM_OVERVIEW.md](./SYSTEM_OVERVIEW.md) first, then come back here.
+
 ## Catalog Method
 
 This catalog is derived from current flow metadata and Apex entry points.

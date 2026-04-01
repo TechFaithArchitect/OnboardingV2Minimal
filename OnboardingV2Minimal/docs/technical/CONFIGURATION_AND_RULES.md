@@ -1,5 +1,15 @@
 # Configuration and Rules
 
+## If You Are New To This File
+
+Most behavior is controlled by metadata, not hardcoded logic.
+
+Remember these three quick mappings:
+
+- Fulfillment policy metadata = who a requirement is assigned to.
+- Status metadata = how requirement evidence becomes onboarding status.
+- Communication metadata = when to send and to whom.
+
 ## Configuration Philosophy
 
 Business behavior is intentionally metadata-driven where practical, so policy changes can occur without deploying new Apex or redesigning core flows.

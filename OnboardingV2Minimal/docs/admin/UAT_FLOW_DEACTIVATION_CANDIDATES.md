@@ -1,5 +1,8 @@
 # UAT Flow Deactivation Candidates
 
+Use this list as a retirement checklist for UAT only.  
+Each item below is active in UAT but intentionally inactive in OnboardV2 source.
+
 ## Rule Used
 
 A flow belongs on this list only when:

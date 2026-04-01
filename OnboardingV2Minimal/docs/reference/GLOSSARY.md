@@ -1,5 +1,7 @@
 # Glossary
 
+Use this page when you see object/API names in other docs and want a plain-English meaning.
+
 ## Core Terms
 
 - **Onboarding Record**: `Onboarding__c`, top-level lifecycle record for an account and vendor program.
@@ -15,7 +17,7 @@
 
 ## Flow Prefixes
 
-- **EXP**: Experience or user-facing screen flow.
+- **EXP**: **Screen flow** (guided, user-facing steps in Lightning). Despite the letters “exp,” this is **not** the same thing as **Experience Cloud** (Digital Experience sites)—those are a separate Salesforce product area. Most `EXP_*` flows run in the internal Lightning app.
 - **BLL**: Business logic and orchestration flow.
 - **DOMAIN**: Reusable domain subflow.
 

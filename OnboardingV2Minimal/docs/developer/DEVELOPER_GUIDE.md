@@ -1,5 +1,14 @@
 # Developer Guide
 
+## First Day Setup (Developer)
+
+1. Read [System Overview](../technical/SYSTEM_OVERVIEW.md) to understand execution paths.
+2. Skim [Object catalog](../technical/OBJECT_CATALOG.md) and [Onboarding UI and custom components](../reference/ONBOARDING_UI_AND_CUSTOM_COMPONENTS.md) so you know what users see.
+3. Read [FLOW_CATALOG.md](./FLOW_CATALOG.md) and [APEX_CLASS_INVENTORY.md](./APEX_CLASS_INVENTORY.md) for code location.
+4. Scan [Scripts README](../../scripts/README.md) before running repo scripts.
+5. Run local quality commands (`lint`, unit tests, prettier verify).
+6. Validate changed automation with one real end-to-end scenario before opening PR.
+
 ## Repository Structure
 
 - `force-app/main/default`: Salesforce metadata source
@@ -32,6 +41,10 @@ CLI baseline:
 - `sf project deploy start`
 - `sf project retrieve start`
 - `sf apex run test`
+
+Documentation metrics (flow/Apex/CMDT/object-folder counts for reconciling with [FLOW_CATALOG.md](./FLOW_CATALOG.md) / [APEX_CLASS_INVENTORY.md](./APEX_CLASS_INVENTORY.md)):
+
+- `npm run doc:metrics`
 
 ## Coding Patterns
 

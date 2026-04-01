@@ -8,10 +8,9 @@
 
 ## Medium Priority
 
-- Expand automated test coverage for:
-- negative flow fault scenarios
-- bulk update fan-out scenarios
-- permission-set constrained execution paths
+- Expand automated test coverage for negative flow fault scenarios.
+- Expand automated test coverage for bulk update fan-out scenarios.
+- Expand automated test coverage for permission-set constrained execution paths.
 - Continue reducing legacy references and historical fallback behavior after data cleanup scripts are available.
 
 ## Architecture Backlog
@@ -30,4 +29,4 @@
 
 - Add alert routing for repeated fault categories by subtype.
 - Define SLOs for onboarding cycle-time and error resolution.
-- Add periodic metadata drift audit between sandbox and production.
+- Add periodic metadata drift audit between sandbox and production (operational checklist started in [METADATA_DRIFT_CHECKLIST.md](../admin/METADATA_DRIFT_CHECKLIST.md)).

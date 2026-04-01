@@ -1,17 +1,25 @@
 # Data Model
 
+**New here?** This page is the **short story** of how onboarding records connect. For **every object** in source and whether it is “core” or “satellite,” read [Object catalog](./OBJECT_CATALOG.md). For **what you click** in Lightning, read [Onboarding UI and custom components](../reference/ONBOARDING_UI_AND_CUSTOM_COMPONENTS.md).
+
+## Quick Read (How records connect)
+
+One onboarding record has many requirements.  
+One requirement can have many subject rows (people/account responsible).  
+Evidence updates subjects first, then rolls up to requirement, then onboarding status.
+
 ## Core Domain Objects
 
-| Object | Role |
-|---|---|
-| `Onboarding__c` | Central onboarding process record for account/vendor program |
-| `Onboarding_Requirement__c` | Requirement row under onboarding |
-| `Onboarding_Requirement_Subject__c` | Subject responsibility row under requirement |
-| `Vendor_Program_Requirement__c` | Program requirement template |
-| `Vendor_Program_Training_Requirement__c` | Program training requirement template |
-| `Training_Assignment__c` | Contact-level training assignment |
-| `Training_Assignment_Onboarding__c` | Junction between assignment and onboarding |
-| `POE_External_Contact_Credential__c` | External credential evidence for contact |
+| Object                                   | Role                                                         |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| `Onboarding__c`                          | Central onboarding process record for account/vendor program |
+| `Onboarding_Requirement__c`              | Requirement row under onboarding                             |
+| `Onboarding_Requirement_Subject__c`      | Subject responsibility row under requirement                 |
+| `Vendor_Program_Requirement__c`          | Program requirement template                                 |
+| `Vendor_Program_Training_Requirement__c` | Program training requirement template                        |
+| `Training_Assignment__c`                 | Contact-level training assignment                            |
+| `Training_Assignment_Onboarding__c`      | Junction between assignment and onboarding                   |
+| `POE_External_Contact_Credential__c`     | External credential evidence for contact                     |
 
 ## Primary Relationships
 
@@ -68,3 +76,10 @@ Status transitions are normalized and evaluated through CMDT-driven logic, not h
 - `POE_External_Contact_Credential__c`
 
 Evidence updates drive subject-level updates first, then parent and onboarding roll-up.
+
+Example:
+
+1. Training completion updates `Training_Assignment__c`.
+2. Matching `Onboarding_Requirement_Subject__c` moves status.
+3. Parent `Onboarding_Requirement__c` recalculates.
+4. `Onboarding__c.Onboarding_Status__c` recalculates from rule order.
