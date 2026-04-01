@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Invoice_field_validation</fullName>
-    <active>true</active>
-    <errorConditionFormula>IF( AND( ISBLANK(Invoice__c),  ISPICKVAL(Stage__c,&apos;Invoiced&apos;)) ,TRUE,FALSE)</errorConditionFormula>
-    <errorMessage>Stage can only be changed when invoice field is filled</errorMessage>
-</ValidationRule>
