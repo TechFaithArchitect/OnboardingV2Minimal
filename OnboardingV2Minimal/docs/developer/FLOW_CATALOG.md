@@ -96,7 +96,7 @@ If you are new to the architecture, start with [DEVELOPER_GUIDE.md](./DEVELOPER_
 | `EXP_Contract_ACTION_Send_Adobe_Agreement` | `EXP` | `Active` | EXP - Contract - ACTION - Send Adobe Agreement \| Flow |
 | `EXP_Contract_SCR_Send_Adobe_Agreement` | `EXP` | `Active` | EXP - Contract - SCR - Send Adobe Agreement \| Flow |
 | `EXP_Opportunity_Contacts_SCR_CREATE_Opportunity_Contacts` | `EXP` | `Active` | EXP - Opportunity Contacts - SCR - CREATE - Opportunity Contacts \| Flow |
-| `EXP_Opportunity_SCR_Create_Record` | `EXP` | `Draft` | EXP - Opportunity - SCR - Create Record \| Flow |
+| `EXP_Opportunity_SCR_Create_Record` | `EXP` | `Active` | EXP - Opportunity - SCR - Create Record \| Flow |
 | `Onboarding_Subflow_Create_Related_Onboarding_Records` | `Onboarding` | `Active` | Onboarding - Subflow - Create Related Onboarding Records \| AutoLaunchedFlow |
 | `Opportunity_Subflow_Update_Onboarding_Records` | `Opportunity` | `Active` | Opportunity - Subflow - Update Onboarding Records \| AutoLaunchedFlow |
 

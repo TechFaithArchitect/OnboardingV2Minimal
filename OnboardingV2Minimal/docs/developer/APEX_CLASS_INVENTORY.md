@@ -34,7 +34,9 @@ If you are new, read [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) first so the cla
 | `ExceptionUtil.cls` | Production | Custom exception class for onboarding domain logic. |
 | `ExceptionUtilTest.cls` | Test | Unit tests for Exception Util. |
 | `ExpOppCreateAsyncServiceTest.cls` | Test | Unit tests for Exp Opp Create Async Service. |
-| `ExperienceOpportunityCreateAsyncService.cls` | Production | Service-layer logic for Experience Opportunity Create Async. |
+| `ExpOpportunityCreateAsyncService.cls` | Production | Service-layer logic for Experience Opportunity Create Async. |
+| `ExpOpportunityCreateRecord.cls` | Production | LWC facade for EXP opportunity create flow: loads BRE-gated context, saves contacts/ACR updates, and submits the async create chain payload. |
+| `ExpOpportunityCreateRecordTest.cls` | Test | Unit tests for Exp Opportunity Create Record facade. |
 | `FlowAdminGuardService.cls` | Production | Service-layer logic for Flow Admin Guard. |
 | `FlowAdminGuardServiceTest.cls` | Test | Unit tests for Flow Admin Guard Service. |
 | `IOnboardingStatusRuleEngine.cls` | Production | Pluggable rule engine for onboarding status evaluation (first matching CMDT row wins). |
@@ -49,13 +51,17 @@ If you are new, read [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) first so the cla
 | `OnbReqParentBulkEvalInvocableTest.cls` | Test | Unit tests for Onb Req Parent Bulk Eval Invocable. |
 | `OnbReqSubjectInvocableTest.cls` | Test | Unit tests for Onb Req Subject Invocable. |
 | `OnboardingChainTailQueueable.cls` | Production | Runs DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record outside the screen-flow interview to shorten user-visible wait. |
+| `OnboardingBackgroundRetryScheduler.cls` | Production | Scheduled processor for `Onboarding_Background_Job__c` retry records (every 10 minutes). |
+| `OnboardingBackgroundRetryService.cls` | Production | Durable onboarding background fault replay service: captures idempotent retry jobs, executes replay chain, and manages backoff/dead-letter status. |
+| `OnboardingBackgroundRetryServiceTest.cls` | Test | Unit tests for Onboarding Background Retry Service. |
+| `OnboardingBackgroundRetryWorker.cls` | Production | Queueable worker that processes due onboarding background retry jobs. |
 | `OnboardingDefaultVendorProgramInvocTest.cls` | Test | Test for OnboardingDefaultVendorProgramInvocable. |
 | `OnboardingDefaultVendorProgramInvocable.cls` | Production | Invocable action to resolve the default Vendor Program for a flow scenario (e.g., REQUIRE_NDA). |
 | `OnboardingDomainException.cls` | Production | Custom exception class for onboarding domain logic. |
 | `OnboardingEnqueueOnboardingTailInvocable.cls` | Production | Enqueues asynchronous run of DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record with freshly queried inputs. |
 | `OnboardingEnqueueOnboardingTailRequest.cls` | Production | Request DTO used by Onboarding Enqueue Onboarding Tail. |
 | `OnboardingEnqueueOnboardingTailResponse.cls` | Production | Response DTO used by Onboarding Enqueue Onboarding Tail. |
-| `OnboardingErrorLogInvocable.cls` | Production | Flow entry: inserts Error_Log__c with Type/Provider_Subtype categorization and returns user-facing text + log Id. |
+| `OnboardingErrorLogInvocable.cls` | Production | Flow entry: inserts `Error_Log__c` and queues idempotent onboarding background retry jobs when onboarding context is present. |
 | `OnboardingErrorLogInvocableTest.cls` | Test | Unit tests for Onboarding Error Log Invocable. |
 | `OnboardingErrorLogService.cls` | Production | Persists categorized rows to Error_Log__c for onboarding automation diagnostics. |
 | `OnboardingErrorLogServiceTest.cls` | Test | Unit tests for Onboarding Error Log Service. |

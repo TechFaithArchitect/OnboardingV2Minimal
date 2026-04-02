@@ -46,6 +46,34 @@ Use this page for the **compact triage matrix** and **standard resolution path**
 - Error Log Id
 - User profile/permission set context
 
+## Automatic Background Retry (Onboarding)
+
+OnboardV2 now auto-captures onboarding background faults into `Onboarding_Background_Job__c` and retries them with idempotency.
+
+- Capture source: `DOMAIN_OmniSObject_SFL_CREATE_Fault_Message` via `OnboardingErrorLogInvocable`.
+- Scope: any background fault that includes onboarding context (`OnboardingId` input or an onboarding/requirement id in `ContextKey`).
+- Idempotency key: `Operation_Type__c + Onboarding__c` (single replay lane per onboarding).
+- Operation currently replayed: `Replay Onboarding Background Chain`.
+- Retry schedule: immediate queue attempt plus scheduled retries every 10 minutes.
+- Backoff: 5, 10, 20, 40, then 60-minute cap until max attempts.
+- Terminal state: `Status__c = Dead` when `Attempt_Count__c >= Max_Attempts__c`.
+
+### How to Re-run a Failed Background Chain
+
+1. Open the `Onboarding_Background_Job__c` row for the onboarding.
+2. Correct root-cause config/data first (policy, picklist, mapping, etc.).
+3. Set:
+   - `Status__c = Pending`
+   - `Attempt_Count__c = 0`
+   - `Next_Run_At__c = NOW` (or blank)
+4. Save; the worker will pick it up automatically.
+
+### What to Check First
+
+- `Last_Error__c` on `Onboarding_Background_Job__c`
+- linked `Last_Error_Log__c`
+- source metadata (`Source_Flow_Api_Name__c`, `Source_Element_Api_Name__c`, `Context_Key__c`)
+
 ## Where to Look
 
 - `Error_Log__c` for technical failure detail
@@ -56,9 +84,20 @@ Use this page for the **compact triage matrix** and **standard resolution path**
 
 - Invalid or incomplete contact role responsibility setup
 - Missing or mismatched fulfillment policy mapping
+- New `Requirement_Type__c` value added without matching `Onboarding_Requirement__c` record type picklist assignment and flow record-type mapping
 - Metadata rule precedence changes causing different status outcome
 - Integration auth/config drift (Adobe/LearnUpon)
 - Permission set gaps after metadata updates
+
+## Restricted Picklist Error Pattern (Requirements)
+
+If debug shows:
+
+- `INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST: bad value for restricted picklist field: <value>`
+
+on `Create Onboarding Requirements`, treat this as a requirement-type onboarding configuration mismatch (global value set + record type + flow mapping). Use:
+
+- [Manual Vendor Program Setup - 4.1 Adding a brand-new Requirement Type](../admin/MANUAL_VENDOR_PROGRAM_SETUP.md#41-adding-a-brand-new-requirement-type-first-time-value)
 
 ## Standard Resolution Path
 

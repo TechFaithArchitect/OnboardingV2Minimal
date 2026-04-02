@@ -86,6 +86,30 @@ Create one row per template requirement that should spawn **`Onboarding_Requirem
 | `Source_Type__c`                       | Optional                                                | Documents template vs custom provenance for reporting.                                                                                                                                                                                 |
 | `Is_Inherited__c` / `Is_Overridden__c` | **Usually false** unless you maintain group inheritance | Leave at defaults for programs created fully manually on this record.                                                                                                                                                                  |
 
+### 4.1 Adding a brand-new Requirement Type (first-time value)
+
+Use this checklist when the requirement type value does not already exist in your org baseline.
+
+1. Add the new value to global value set **`Requirement_Type_Values`** and mark it active.
+2. Confirm the new value is available on both fields that use that value set:
+   - `Vendor_Program_Requirement__c.Requirement_Type__c`
+   - `Onboarding_Requirement__c.Requirement_Type__c`
+3. Ensure `Onboarding_Requirement__c` record type mapping exists for that requirement:
+   - Create/confirm a record type whose `DeveloperName` is the mapped target.
+   - In that record type, include the matching `Requirement_Type__c` picklist value (and set default as needed).
+4. Update flow mapping in `DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Requirements`:
+   - Formula `OnboardingRequirement_RecordType_DeveloperName` must map the requirement type label to the correct record type developer name.
+   - If you are normalizing legacy names, also update `Normalized_OnboardingRequirement_Type`.
+5. If status rollups are expected for the new requirement type, add `Onboarding_Status_Normalization__mdt` rows for that type/status combinations.
+6. If approval gating is expected for the new requirement type, add `Vendor_Program_Approval_Policy__mdt` rows for the active `Approval_Policy_Key__c` + new requirement type pair.
+7. Add the requirement row on `Vendor_Program_Requirement__c` for your program and run a non-rollback onboarding create test.
+
+If step 3 or step 4 is incomplete, onboarding requirement creation commonly fails with:
+
+- `INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST: bad value for restricted picklist field: <Requirement Type>`
+
+Recent examples: `Interview`, `SubAgent License Agreement`.
+
 **Contract vs agreement ordering:** Record-triggered automation can enforce **contract/agreement sequence** on requirement updates. If your program mixes contract- and agreement-type requirements, keep **`Sequence__c`** consistent with business intent so gating and sequence rules behave predictably.
 
 ## 5. Training links (optional)

@@ -28,6 +28,7 @@ Use these companion docs:
 - Metadata drift between orgs and source: [METADATA_DRIFT_CHECKLIST.md](./METADATA_DRIFT_CHECKLIST.md)
 - Release notes and smoke-test template: [RELEASE_NOTES_AND_SMOKE_TEST_TEMPLATE.md](./RELEASE_NOTES_AND_SMOKE_TEST_TEMPLATE.md)
 - Baseline setup (what to smoke-test after onboarding-related changes): [BASELINE_SETUP_GUIDE.md](../BASELINE_SETUP_GUIDE.md)
+- EXP create-record migration evidence (2026-04-02): [EXP_CREATE_RECORD_MIGRATION_2026-04-02.md](./EXP_CREATE_RECORD_MIGRATION_2026-04-02.md)
 
 ## Recommended Deploy Sequence
 
@@ -38,6 +39,59 @@ Use these companion docs:
 5. Deploy through Gearset.
 6. Run targeted Apex tests and smoke tests.
 7. Promote through remaining pipeline stages.
+
+## EXP Opportunity Create Record Canonicalization (April 2026)
+
+Use this checklist when promoting the new `expCreateRecord` experience as the canonical create path.
+
+1. Deploy canonical assets:
+   - `force-app/main/default/flows/EXP_Opportunity_SCR_Create_Record.flow-meta.xml`
+   - `force-app/main/default/lwc/expCreateRecord`
+   - `force-app/main/default/lwc/expFlowStepWrapper`
+   - `force-app/main/default/lwc/recordCollectionEditor`
+   - `ExpOpportunityCreateRecord.cls` (+ test)
+   - `ExpOpportunityCreateAsyncService.cls` (+ test)
+2. Remove legacy metadata:
+   - Remove superseded create-record flow definitions/versions from earlier cutovers.
+   - Remove superseded create-record Apex classes/tests from earlier cutovers.
+   - For exact historical names and evidence from April 2026 migration, see [EXP_CREATE_RECORD_MIGRATION_2026-04-02.md](./EXP_CREATE_RECORD_MIGRATION_2026-04-02.md).
+3. If legacy class deletion is blocked by old flow versions:
+   - Delete obsolete versions of `EXP_Opportunity_SCR_Create_Record` that still reference `Queue_Opportunity_Create_Chain`.
+   - If deletion is blocked by interview references, delete the blocking `FlowInterview` rows, then retry flow-version delete.
+4. Validate canonical presence in org:
+   - `FlowDefinition` includes only `EXP_Opportunity_SCR_Create_Record` for this path.
+   - Apex classes include only `ExpOpportunityCreateAsyncService`, `ExpOpportunityCreateRecord`, and `ExpOpportunityCreateRecordTest`.
+5. Run `RunLocalTests` in target org and archive results in release notes.
+
+## Onboarding Background Retry Queue (April 2026)
+
+Background onboarding faults are now auto-captured and replayed idempotently.
+
+Deploy/include:
+
+- `OnboardingBackgroundRetryService.cls`
+- `OnboardingBackgroundRetryWorker.cls`
+- `OnboardingBackgroundRetryScheduler.cls`
+- `Onboarding_Background_Job__c` (object + fields)
+- updated `OnboardingErrorLogInvocable.cls`
+
+Post-deploy checks:
+
+1. Confirm object exists and Admin profile has CRUD:
+   - `Onboarding_Background_Job__c`
+2. Confirm scheduler exists (created lazily on first captured fault):
+   - `Onboarding Background Retry Scheduler`
+3. Confirm captured faults create queue rows:
+   - `Status__c = Pending` initially
+   - retry lifecycle transitions to `Completed`, `Retryable Failed`, or `Dead`
+
+Operational note:
+
+- Replay operation is idempotent per onboarding (`Operation_Type__c + Onboarding__c`).
+- If root cause is fixed after a dead-letter state, reset the row to:
+  - `Status__c = Pending`
+  - `Attempt_Count__c = 0`
+  - `Next_Run_At__c = NOW` (or blank)
 
 ## Core Commands
 
