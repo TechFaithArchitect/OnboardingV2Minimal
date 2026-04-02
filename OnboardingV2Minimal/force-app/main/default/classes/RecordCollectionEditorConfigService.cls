@@ -9,6 +9,9 @@ public with sharing class RecordCollectionEditorConfigService {
         @AuraEnabled public String columnSize;
         @AuraEnabled public List<String> picklistValues;
         @AuraEnabled public String lookupObjectApiName;
+        @AuraEnabled public String controllingFieldApiName;
+        @AuraEnabled public String addressPrefix;
+        @AuraEnabled public Boolean showAddressLookup;
     }
 
     public class RecordCollectionConfig {
@@ -112,6 +115,15 @@ public with sharing class RecordCollectionEditorConfigService {
                     continue;
                 }
 
+                String configuredType = (String) rawField.get('type');
+                if (!String.isBlank(configuredType) && configuredType.trim().toLowerCase() == 'address') {
+                    FieldConfig addressConfig = buildAddressFieldConfig(rawField);
+                    if (addressConfig != null) {
+                        fieldConfigs.add(addressConfig);
+                    }
+                    continue;
+                }
+
                 Schema.SObjectField sfield = fieldMap.get(fieldApiName);
                 if (sfield == null) {
                     continue;
@@ -133,15 +145,17 @@ public with sharing class RecordCollectionEditorConfigService {
                 fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
 
                 fc.columnSize = (String) rawField.get('columnSize');
-
-                String configuredType = (String) rawField.get('type');
                 if (!String.isBlank(configuredType)) {
                     fc.dataType = configuredType;
                 } else {
                     fc.dataType = mapDescribeToDataType(dfr);
                 }
+                fc.controllingFieldApiName = (String) rawField.get('controllingFieldApiName');
 
-                if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
+                List<String> configuredPicklistValues = parsePicklistValues(rawField.get('picklistValues'));
+                if (configuredPicklistValues != null && !configuredPicklistValues.isEmpty()) {
+                    fc.picklistValues = configuredPicklistValues;
+                } else if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
                     fc.picklistValues = new List<String>();
                     for (Schema.PicklistEntry pe : dfr.getPicklistValues()) {
                         fc.picklistValues.add(pe.getValue());
@@ -194,7 +208,11 @@ public with sharing class RecordCollectionEditorConfigService {
                         fc.columnSize = (String) rawField.get('columnSize');
                         String configuredType = (String) rawField.get('type');
                         fc.dataType = !String.isBlank(configuredType) ? configuredType : mapDescribeToDataType(dfr);
-                        if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
+                        fc.controllingFieldApiName = (String) rawField.get('controllingFieldApiName');
+                        List<String> configuredPicklistValues = parsePicklistValues(rawField.get('picklistValues'));
+                        if (configuredPicklistValues != null && !configuredPicklistValues.isEmpty()) {
+                            fc.picklistValues = configuredPicklistValues;
+                        } else if (dfr.getType() == Schema.DisplayType.Picklist || dfr.getType() == Schema.DisplayType.MultiPicklist) {
                             fc.picklistValues = new List<String>();
                             for (Schema.PicklistEntry pe : dfr.getPicklistValues()) {
                                 fc.picklistValues.add(pe.getValue());
@@ -642,6 +660,35 @@ public with sharing class RecordCollectionEditorConfigService {
         return String.valueOf(parentId) + '|' + String.valueOf(childId);
     }
 
+    private static FieldConfig buildAddressFieldConfig(Map<String, Object> rawField) {
+        String fieldApiName = (String) rawField.get('fieldApiName');
+        if (String.isBlank(fieldApiName)) {
+            return null;
+        }
+
+        String addressPrefix = (String) rawField.get('addressPrefix');
+        if (String.isBlank(addressPrefix) && fieldApiName.endsWith('Address')) {
+            Integer suffixLength = 'Address'.length();
+            addressPrefix = fieldApiName.substring(0, fieldApiName.length() - suffixLength);
+        }
+        if (String.isBlank(addressPrefix)) {
+            return null;
+        }
+
+        FieldConfig fc = new FieldConfig();
+        fc.fieldApiName = fieldApiName;
+        fc.label = (String) (rawField.containsKey('label') && rawField.get('label') != null
+            ? rawField.get('label')
+            : addressPrefix + ' Address');
+        fc.dataType = 'address';
+        fc.required = parseBoolean(rawField.get('required'), false);
+        fc.readOnly = parseBoolean(rawField.get('readOnly'), false);
+        fc.columnSize = (String) rawField.get('columnSize');
+        fc.addressPrefix = addressPrefix;
+        fc.showAddressLookup = parseBoolean(rawField.get('showAddressLookup'), true);
+        return fc;
+    }
+
     private static Object convertRelationshipFieldValue(Schema.SObjectType sobjectType, String fieldName, Object fVal) {
         if (fVal == null) return null;
         if (fVal instanceof Boolean || fVal instanceof Date || fVal instanceof DateTime) return fVal;
@@ -689,6 +736,31 @@ public with sharing class RecordCollectionEditorConfigService {
         if (normalized == 'true') return true;
         if (normalized == 'false') return false;
         return defaultValue;
+    }
+
+    private static List<String> parsePicklistValues(Object rawValue) {
+        List<String> values = new List<String>();
+        if (rawValue == null) {
+            return values;
+        }
+        try {
+            List<Object> items = (List<Object>) rawValue;
+            for (Object item : items) {
+                if (item == null) {
+                    continue;
+                }
+                String value = String.valueOf(item);
+                if (String.isNotBlank(value)) {
+                    values.add(value);
+                }
+            }
+        } catch (Exception ex) {
+            String fallbackValue = String.valueOf(rawValue);
+            if (String.isNotBlank(fallbackValue)) {
+                values.add(fallbackValue);
+            }
+        }
+        return values;
     }
 
     private static String mapDescribeToDataType(Schema.DescribeFieldResult dfr) {

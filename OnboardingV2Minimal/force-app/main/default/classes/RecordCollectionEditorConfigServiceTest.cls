@@ -198,4 +198,41 @@ private class RecordCollectionEditorConfigServiceTest {
             'Expected Principal Owner role prefilled: ' + results[0].recordsJson
         );
     }
+
+    @IsTest
+    static void getConfig_supportsAddressAndConfiguredPicklists() {
+        RecordCollectionEditorConfigService.RecordCollectionConfig accountConfig =
+            RecordCollectionEditorConfigService.getConfig('ACCOUNT_CREATE_RECORD');
+
+        System.assertEquals('Account', accountConfig.objectApiName, 'Expected Account config.');
+        System.assertEquals('Id', accountConfig.parentFieldApiName, 'Expected Id parent field for account update.');
+
+        RecordCollectionEditorConfigService.FieldConfig billingAddressConfig;
+        for (RecordCollectionEditorConfigService.FieldConfig fieldConfig : accountConfig.fields) {
+            if (fieldConfig.fieldApiName == 'BillingAddress') {
+                billingAddressConfig = fieldConfig;
+                break;
+            }
+        }
+
+        System.assertNotEquals(null, billingAddressConfig, 'Expected BillingAddress field config.');
+        System.assertEquals('address', billingAddressConfig.dataType, 'Expected address data type.');
+        System.assertEquals('Billing', billingAddressConfig.addressPrefix, 'Expected Billing address prefix.');
+        System.assertEquals(true, billingAddressConfig.showAddressLookup, 'Expected address lookup enabled.');
+
+        RecordCollectionEditorConfigService.RecordCollectionConfig opportunityConfig =
+            RecordCollectionEditorConfigService.getConfig('OPPORTUNITY_CREATE_RECORD');
+        RecordCollectionEditorConfigService.FieldConfig documentsReadyConfig;
+        for (RecordCollectionEditorConfigService.FieldConfig fieldConfig : opportunityConfig.fields) {
+            if (fieldConfig.fieldApiName == 'Documents_Ready__c') {
+                documentsReadyConfig = fieldConfig;
+                break;
+            }
+        }
+
+        System.assertNotEquals(null, documentsReadyConfig, 'Expected documents-ready field config.');
+        System.assertEquals('picklist', documentsReadyConfig.dataType, 'Expected explicit picklist type.');
+        System.assertEquals(true, documentsReadyConfig.picklistValues.contains('Yes'), 'Expected Yes option.');
+        System.assertEquals(true, documentsReadyConfig.picklistValues.contains('No'), 'Expected No option.');
+    }
 }
