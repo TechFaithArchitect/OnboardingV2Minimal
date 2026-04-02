@@ -1,4 +1,4 @@
-public with sharing class ExperienceOpportunityCreateAsyncService {
+public with sharing class ExpOpportunityCreateAsyncService {
     private class FlowOutputException extends Exception {}
 
     public class QueueRequest {
@@ -141,7 +141,7 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
 
             if (!stageErrors.isEmpty()) {
                 LoggingUtil.error(
-                    'ExperienceOpportunityCreateAsyncService.OpportunityCreateChainQueueable handled stage errors. '
+                    'ExpOpportunityCreateAsyncService.OpportunityCreateChainQueueable handled stage errors. '
                     + 'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
                     + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id)
                     + ', Errors=' + String.join(stageErrors, ' | ')
@@ -253,6 +253,7 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
         ) {
             try {
                 onboardingRecord = runCreateOnboardingFlow(
+                    accountRecord,
                     createdOpportunity,
                     resolvedVendorProgramRecord,
                     contractRecord
@@ -537,11 +538,13 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
 
     @TestVisible
     private static Onboarding__c runCreateOnboardingFlow(
+        Account accountRecord,
         Opportunity opportunityRecord,
         Vendor_Customization__c vendorProgramRecord,
         Contract contractRecord
     ) {
         Map<String, Object> inputs = new Map<String, Object>{
+            'AccountRecord' => accountRecord,
             'OpportunityRecord' => opportunityRecord,
             'VendorProgramRecord' => vendorProgramRecord,
             'ContractRecord' => contractRecord
@@ -554,7 +557,14 @@ public with sharing class ExperienceOpportunityCreateAsyncService {
         interview.start();
 
         Object outputValue = interview.getVariableValue('OnboardingRecord');
+        Object errorValue = interview.getVariableValue('errorMessage');
         if (outputValue == null) {
+            if (errorValue != null && String.isNotBlank(String.valueOf(errorValue))) {
+                throw new FlowOutputException(
+                    'DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record returned no OnboardingRecord. '
+                    + String.valueOf(errorValue)
+                );
+            }
             return null;
         }
 
