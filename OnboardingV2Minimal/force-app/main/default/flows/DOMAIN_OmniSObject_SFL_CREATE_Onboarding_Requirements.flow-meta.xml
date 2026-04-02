@@ -142,7 +142,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
+            <targetReference>Handle_Create_Onboarding_Requirements_Fault</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -619,6 +619,68 @@
         <outputAssignments>
             <assignToReference>errorMessage</assignToReference>
             <name>errorMessage</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
+        <name>Handle_Create_Onboarding_Requirements_Fault</name>
+        <label>Handle Create Onboarding Requirements Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Onboarding_Record_with_Incomplete_Subject_Creation</targetReference>
+        </connector>
+        <flowName>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</flowName>
+        <inputAssignments>
+            <name>ContextKey</name>
+            <value>
+                <elementReference>OnboardingRecord.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>DefaultErrorMessage</name>
+            <value>
+                <stringValue>Onboarding requirement creation failed.</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>FaultMessage</name>
+            <value>
+                <elementReference>errorMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>InterviewGuid</name>
+            <value>
+                <elementReference>$Flow.InterviewGuid</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OnboardingRecord</name>
+            <value>
+                <elementReference>OnboardingRecord</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementApiName</name>
+            <value>
+                <stringValue>Create_Onboarding_Requirements</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceElementLabel</name>
+            <value>
+                <stringValue>Create_Onboarding_Requirements</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>SourceFlowApiName</name>
+            <value>
+                <stringValue>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Requirements</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>errorMessage</assignToReference>
+            <name>ResolvedFaultMessage</name>
         </outputAssignments>
     </subflows>
     <subflows>

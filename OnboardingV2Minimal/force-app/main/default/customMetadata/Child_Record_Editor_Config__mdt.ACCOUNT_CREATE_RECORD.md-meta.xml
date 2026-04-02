@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+>
+    <label>Account Create Record</label>
+    <protected>false</protected>
+    <values>
+        <field>Object_API_Name__c</field>
+        <value xsi:type="xsd:string">Account</value>
+    </values>
+    <values>
+        <field>Parent_Field_API_Name__c</field>
+        <value xsi:type="xsd:string">Id</value>
+    </values>
+    <values>
+        <field>Fields_JSON__c</field>
+        <value xsi:type="xsd:string">[{"fieldApiName":"Name","label":"Account Name","required":true,"columnSize":"1-of-2"},{"fieldApiName":"Phone","label":"Account Primary Phone","type":"tel","required":true,"columnSize":"1-of-2"},{"fieldApiName":"BillingAddress","label":"Billing Address","type":"address","required":true,"addressPrefix":"Billing","showAddressLookup":true,"columnSize":"1-of-1"},{"fieldApiName":"ShippingAddress","label":"Shipping Address","type":"address","required":true,"addressPrefix":"Shipping","showAddressLookup":true,"columnSize":"1-of-1"}]</value>
+    </values>
+    <values>
+        <field>Relationship_Object_API_Name__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Relationship_Parent_Field__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Relationship_Child_Field__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Relationship_Fields_JSON__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Role_Constraints_JSON__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+</CustomMetadata>

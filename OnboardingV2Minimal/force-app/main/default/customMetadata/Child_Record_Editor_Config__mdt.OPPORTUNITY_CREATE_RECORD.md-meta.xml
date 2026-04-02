@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+>
+    <label>Opportunity Create Record</label>
+    <protected>false</protected>
+    <values>
+        <field>Object_API_Name__c</field>
+        <value xsi:type="xsd:string">Opportunity</value>
+    </values>
+    <values>
+        <field>Parent_Field_API_Name__c</field>
+        <value xsi:type="xsd:string">AccountId</value>
+    </values>
+    <values>
+        <field>Fields_JSON__c</field>
+        <value xsi:type="xsd:string">[{"fieldApiName":"CloseDate","label":"Close Date","type":"date","required":true,"columnSize":"1-of-3"},{"fieldApiName":"StageName","label":"Stage","required":true,"columnSize":"1-of-3"},{"fieldApiName":"Program_Type__c","label":"Program Type","required":true,"columnSize":"1-of-3"},{"fieldApiName":"LeadSource","label":"Lead Source","required":true,"columnSize":"1-of-2"},{"fieldApiName":"Opportunity__c","label":"Opportunity Source","required":true,"controllingFieldApiName":"LeadSource","columnSize":"1-of-2"},{"fieldApiName":"Owner__c","label":"Opportunity Owner","required":true,"columnSize":"1-of-2"},{"fieldApiName":"Type","label":"Type","required":false,"columnSize":"1-of-2"},{"fieldApiName":"NextStep","label":"Next Step","type":"text","required":false,"columnSize":"1-of-1"},{"fieldApiName":"Next_Step_Date__c","label":"Next Step Date","type":"date","required":false,"columnSize":"1-of-3"},{"fieldApiName":"Documents_Ready__c","label":"Are You Ready to Send Documents for Onboarding?","type":"picklist","picklistValues":["Yes","No"],"required":true,"columnSize":"1-of-2"}]</value>
+    </values>
+    <values>
+        <field>Relationship_Object_API_Name__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Relationship_Parent_Field__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Relationship_Child_Field__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Relationship_Fields_JSON__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+    <values>
+        <field>Role_Constraints_JSON__c</field>
+        <value xsi:type="xsd:string"></value>
+    </values>
+</CustomMetadata>

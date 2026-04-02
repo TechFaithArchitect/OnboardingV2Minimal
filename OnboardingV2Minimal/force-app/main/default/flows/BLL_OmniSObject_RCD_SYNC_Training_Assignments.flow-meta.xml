@@ -446,15 +446,8 @@
         <locationY>0</locationY>
         <defaultConnectorLabel>No Relevant Change</defaultConnectorLabel>
         <rules>
-            <name>Create_Or_Relevant_Field_Change</name>
+            <name>Relevant_Field_Change</name>
             <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record__Prior.Id</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
             <conditions>
                 <leftValueReference>$Record.Status__c</leftValueReference>
                 <operator>IsChanged</operator>
@@ -479,7 +472,7 @@
             <connector>
                 <targetReference>Get_Onboarding_Records</targetReference>
             </connector>
-            <label>Create Or Relevant Field Change</label>
+            <label>Relevant Field Change</label>
         </rules>
     </decisions>
     <description>Business Logic Layer - OmniSObject - Record Trigger - SYNC - Training Assignments</description>

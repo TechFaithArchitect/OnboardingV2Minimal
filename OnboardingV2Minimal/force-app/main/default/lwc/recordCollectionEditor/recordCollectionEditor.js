@@ -1,5 +1,6 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import getConfig from '@salesforce/apex/RecordCollectionEditorConfigService.getConfig';
+import { getObjectInfo, getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
 import labelPrincipalOwnerConflict from '@salesforce/label/c.Principal_Owner_Conflict';
 import labelAuthorizedSignerPermissionDenied from '@salesforce/label/c.RecordCollectionEditor_AuthorizedSignerPermissionDenied';
 import labelFixFieldErrors from '@salesforce/label/c.RecordCollectionEditor_FixFieldErrors';
@@ -13,6 +14,8 @@ export default class RecordCollectionEditor extends LightningElement {
     @api existingRecordsJson;
     @api minRows = 1;
     @api maxRows;
+    @api hideRowContainer = false;
+    @api hideRowSubheading = false;
 
     @api recordsToCreate;
     @api hasValidationError = false;
@@ -25,14 +28,33 @@ export default class RecordCollectionEditor extends LightningElement {
     @track parentFieldApiNameFromConfig;
     @track roleConstraints = null;
     @track canAssignAuthorizedSigner = true;
+    @track objectApiName;
+    @track objectDefaultRecordTypeId;
+    @track picklistFieldValuesByApiName = {};
 
     _configLoadError;
+
+    @wire(getObjectInfo, { objectApiName: '$objectApiName' })
+    wiredObjectInfo({ data }) {
+        this.objectDefaultRecordTypeId = data?.defaultRecordTypeId || null;
+    }
+
+    @wire(getPicklistValuesByRecordType, {
+        objectApiName: '$objectApiName',
+        recordTypeId: '$objectDefaultRecordTypeId'
+    })
+    wiredPicklistValues({ data }) {
+        this.picklistFieldValuesByApiName = data?.picklistFieldValues || {};
+        this.refreshDynamicPicklistOptions();
+        this.refreshAddressOptions();
+    }
 
     @wire(getConfig, { developerName: '$configKey' })
     wiredConfig(configWireResult) {
         const { error: configLoadError, data: configData } = configWireResult;
 
         if (configData) {
+            this.objectApiName = configData.objectApiName;
             this.fieldConfigs = configData.fields || [];
             this.relationshipFieldConfigs = configData.relationshipFields || [];
             this.parentFieldApiNameFromConfig = configData.parentFieldApiName;
@@ -87,23 +109,49 @@ export default class RecordCollectionEditor extends LightningElement {
         }
         const records = Array.isArray(parsed) ? parsed : [parsed];
         const label = (this.recordLabel || 'Row').trim();
-        this.rows = records.map((rec, idx) => {
+        const seededRows = records.map((rec, idx) => {
             const childData = rec.child || rec;
             const relData = rec.relationship || {};
             const recordId = childData.Id || null;
 
             const fieldStates = this.fieldConfigs.map((fc) => {
                 const dataType = fc.dataType || 'text';
-                const isPhoneField = dataType === 'tel' || dataType === 'phone';
-                const isCheckbox = dataType === 'checkbox';
-                const isPicklist = dataType === 'picklist' || (fc.picklistValues && fc.picklistValues.length > 0);
-                const isLookup = dataType === 'lookup';
+                const normalizedType = String(dataType).toLowerCase();
+                const isPhoneField = normalizedType === 'tel' || normalizedType === 'phone';
+                const isCheckbox = normalizedType === 'checkbox';
+                const isPicklist = normalizedType === 'picklist' || (fc.picklistValues && fc.picklistValues.length > 0);
+                const isLookup = normalizedType === 'lookup';
+                const isAddress = normalizedType === 'address';
                 const columnSize = fc.columnSize || '1-of-2';
                 const columnClass =
                     columnSize === '1-of-4' || columnSize === 'quarter'
                         ? 'slds-col slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-4 slds-p-right_small slds-p-bottom_small'
                         : 'slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_small slds-p-bottom_small';
-                const val = childData[fc.fieldApiName];
+                const val = isAddress ? null : childData[fc.fieldApiName];
+                const addressPrefix = isAddress ? fc.addressPrefix : null;
+                const addressValue = isAddress
+                    ? this.normalizeAddressValue({
+                        street: childData[`${addressPrefix}Street`],
+                        city: childData[`${addressPrefix}City`],
+                        province:
+                            childData[`${addressPrefix}StateCode`] ??
+                            childData[`${addressPrefix}State`],
+                        postalCode: childData[`${addressPrefix}PostalCode`],
+                        country:
+                            childData[`${addressPrefix}CountryCode`] ??
+                            childData[`${addressPrefix}Country`]
+                    })
+                    : null;
+                const countryOptions = isAddress ? this.getAddressCountryOptions(addressPrefix) : null;
+                const normalizedCountry = isAddress
+                    ? this.normalizeAddressPicklistSelection(countryOptions, addressValue.country)
+                    : null;
+                const provinceOptions = isAddress
+                    ? this.getAddressProvinceOptions(addressPrefix, normalizedCountry)
+                    : null;
+                const normalizedProvince = isAddress
+                    ? this.normalizeAddressPicklistSelection(provinceOptions, addressValue.province)
+                    : null;
                 return {
                     fieldApiName: fc.fieldApiName,
                     label: fc.label,
@@ -114,9 +162,19 @@ export default class RecordCollectionEditor extends LightningElement {
                     isCheckbox,
                     isPicklist,
                     isLookup,
-                    isTextOrDateInput: !isPhoneField && !isCheckbox && !isPicklist && !isLookup,
+                    isAddress,
+                    isTextOrDateInput: !isPhoneField && !isCheckbox && !isPicklist && !isLookup && !isAddress,
                     picklistOptions: isPicklist ? this.toPicklistOptions(fc.picklistValues) : [],
                     lookupObjectApiName: fc.lookupObjectApiName,
+                    addressPrefix,
+                    showAddressLookup: fc.showAddressLookup === true,
+                    street: isAddress ? addressValue.street : undefined,
+                    city: isAddress ? addressValue.city : undefined,
+                    province: isAddress ? normalizedProvince : undefined,
+                    postalCode: isAddress ? addressValue.postalCode : undefined,
+                    country: isAddress ? normalizedCountry : undefined,
+                    countryOptions: isAddress ? countryOptions : undefined,
+                    provinceOptions: isAddress ? provinceOptions : undefined,
                     columnClass,
                     value: val !== undefined && val !== null ? String(val) : null,
                     checked: isCheckbox ? (val === true || val === 'true') : undefined,
@@ -154,11 +212,13 @@ export default class RecordCollectionEditor extends LightningElement {
             return {
                 clientId: `row-${idx}-${Date.now()}`,
                 recordId,
+                isFirstRow: idx === 0,
                 subheading: `${label} ${idx + 1}`,
                 fieldStates,
                 relationshipFieldStates
             };
         });
+        this.rows = seededRows.map((row) => this.refreshRowPicklistOptionsForRow(row, true));
         this.normalizePrimaryContactSelection();
         this.syncOutputRecords();
         this.refreshAllRolePicklistOptions();
@@ -181,15 +241,20 @@ export default class RecordCollectionEditor extends LightningElement {
         const rowIndex = this.rows.length;
         const fieldStatesForRow = this.fieldConfigs.map((fieldConfig) => {
             const dataType = fieldConfig.dataType || 'text';
-            const isPhoneField = dataType === 'tel' || dataType === 'phone';
-            const isCheckbox = dataType === 'checkbox';
-            const isPicklist = dataType === 'picklist' || (fieldConfig.picklistValues && fieldConfig.picklistValues.length > 0);
-            const isLookup = dataType === 'lookup';
+            const normalizedType = String(dataType).toLowerCase();
+            const isPhoneField = normalizedType === 'tel' || normalizedType === 'phone';
+            const isCheckbox = normalizedType === 'checkbox';
+            const isPicklist = normalizedType === 'picklist' || (fieldConfig.picklistValues && fieldConfig.picklistValues.length > 0);
+            const isLookup = normalizedType === 'lookup';
+            const isAddress = normalizedType === 'address';
             const columnSize = fieldConfig.columnSize || '1-of-2';
             const columnClass =
                 columnSize === '1-of-4' || columnSize === 'quarter'
                     ? 'slds-col slds-size_1-of-1 slds-small-size_1-of-2 slds-medium-size_1-of-4 slds-p-right_small slds-p-bottom_small'
                     : 'slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_small slds-p-bottom_small';
+            const addressPrefix = isAddress ? fieldConfig.addressPrefix : null;
+            const countryOptions = isAddress ? this.getAddressCountryOptions(addressPrefix) : null;
+            const provinceOptions = isAddress ? this.getAddressProvinceOptions(addressPrefix, null) : null;
             return {
                 fieldApiName: fieldConfig.fieldApiName,
                 label: fieldConfig.label,
@@ -200,9 +265,19 @@ export default class RecordCollectionEditor extends LightningElement {
                 isCheckbox,
                 isPicklist,
                 isLookup,
-                isTextOrDateInput: !isPhoneField && !isCheckbox && !isPicklist && !isLookup,
+                isAddress,
+                isTextOrDateInput: !isPhoneField && !isCheckbox && !isPicklist && !isLookup && !isAddress,
                 picklistOptions: isPicklist ? this.toPicklistOptions(fieldConfig.picklistValues) : [],
                 lookupObjectApiName: fieldConfig.lookupObjectApiName,
+                addressPrefix,
+                showAddressLookup: isAddress ? fieldConfig.showAddressLookup === true : false,
+                street: isAddress ? '' : undefined,
+                city: isAddress ? '' : undefined,
+                province: isAddress ? '' : undefined,
+                postalCode: isAddress ? '' : undefined,
+                country: isAddress ? '' : undefined,
+                countryOptions: isAddress ? countryOptions : undefined,
+                provinceOptions: isAddress ? provinceOptions : undefined,
                 columnClass,
                 value: null,
                 checked: isCheckbox ? false : undefined,
@@ -239,15 +314,18 @@ export default class RecordCollectionEditor extends LightningElement {
         newRow.relationshipFieldStates = relationshipFieldStatesForRow;
 
         const label = (this.recordLabel || 'Row').trim();
+        const baseRow = {
+            clientId: `row-${rowIndex}-${Date.now()}`,
+            recordId,
+            isFirstRow: rowIndex === 0,
+            subheading: `${label} ${rowIndex + 1}`,
+            fieldStates: fieldStatesForRow,
+            relationshipFieldStates: relationshipFieldStatesForRow
+        };
+        const hydratedRow = this.refreshRowPicklistOptionsForRow(baseRow, true);
         this.rows = [
             ...this.rows,
-            {
-                clientId: `row-${rowIndex}-${Date.now()}`,
-                recordId,
-                subheading: `${label} ${rowIndex + 1}`,
-                fieldStates: fieldStatesForRow,
-                relationshipFieldStates: relationshipFieldStatesForRow
-            }
+            hydratedRow
         ];
     }
 
@@ -265,8 +343,15 @@ export default class RecordCollectionEditor extends LightningElement {
         const clientId = targetEl?.dataset?.clientId ?? targetEl?.closest?.('[data-client-id]')?.dataset?.clientId;
         const fieldApiName = targetEl?.dataset?.fieldApiName ?? targetEl?.closest?.('[data-field-api-name]')?.dataset?.fieldApiName;
         const isRelationship = targetEl?.dataset?.relationship === 'true' || targetEl?.closest?.('[data-relationship="true"]')?.dataset?.relationship === 'true';
+        const currentRow = this.rows.find((row) => row.clientId === clientId);
+        const currentFieldState = isRelationship
+            ? currentRow?.relationshipFieldStates?.find((fs) => fs.fieldApiName === fieldApiName)
+            : currentRow?.fieldStates?.find((fs) => fs.fieldApiName === fieldApiName);
+        const isAddressField = currentFieldState?.isAddress === true;
         let newFieldValue;
-        if (event.detail && Object.prototype.hasOwnProperty.call(event.detail, 'recordId')) {
+        if (isAddressField) {
+            newFieldValue = this.normalizeAddressValue(event.detail);
+        } else if (event.detail && Object.prototype.hasOwnProperty.call(event.detail, 'recordId')) {
             newFieldValue = event.detail.recordId;
         } else if (event.detail && Object.prototype.hasOwnProperty.call(event.detail, 'checked')) {
             newFieldValue = event.detail.checked;
@@ -291,6 +376,34 @@ export default class RecordCollectionEditor extends LightningElement {
             }
             const updatedFieldStates = row.fieldStates.map((fieldState) => {
                 if (fieldState.fieldApiName !== fieldApiName) return fieldState;
+                if (fieldState.isAddress) {
+                    const normalizedAddress = this.normalizeAddressValue(newFieldValue);
+                    const countryOptions = this.getAddressCountryOptions(fieldState.addressPrefix);
+                    const normalizedCountry = this.normalizeAddressPicklistSelection(
+                        countryOptions,
+                        normalizedAddress.country
+                    );
+                    const provinceOptions = this.getAddressProvinceOptions(
+                        fieldState.addressPrefix,
+                        normalizedCountry
+                    );
+                    const normalizedProvince = this.normalizeAddressPicklistSelection(
+                        provinceOptions,
+                        normalizedAddress.province
+                    );
+                    return {
+                        ...fieldState,
+                        street: normalizedAddress.street,
+                        city: normalizedAddress.city,
+                        province: normalizedProvince,
+                        postalCode: normalizedAddress.postalCode,
+                        country: normalizedCountry,
+                        countryOptions,
+                        provinceOptions,
+                        errorMessage: null,
+                        formElementClass: 'slds-form-element'
+                    };
+                }
                 const updated = { ...fieldState, value: newFieldValue, errorMessage: null, formElementClass: 'slds-form-element' };
                 if (fieldState.isCheckbox) updated.checked = newFieldValue;
                 return updated;
@@ -302,6 +415,7 @@ export default class RecordCollectionEditor extends LightningElement {
             this.applyExclusivePrimaryContactRules(rowsCopy, clientId, fieldApiName, newFieldValue, isRelationship);
         }
 
+        rowsCopy = rowsCopy.map((row) => this.refreshRowPicklistOptionsForRow(row, true));
         this.rows = rowsCopy;
         if (isRelationship && this.roleConstraints?.roleFieldApiName === fieldApiName) {
             this.refreshAllRolePicklistOptions();
@@ -319,6 +433,26 @@ export default class RecordCollectionEditor extends LightningElement {
                 childRecord.Id = row.recordId;
             }
             row.fieldStates.forEach((fieldState) => {
+                if (fieldState.isAddress) {
+                    const addressPrefix = fieldState.addressPrefix;
+                    if (!addressPrefix) {
+                        return;
+                    }
+                    const addressValues = {
+                        [`${addressPrefix}Street`]: fieldState.street,
+                        [`${addressPrefix}City`]: fieldState.city,
+                        [`${addressPrefix}State`]: fieldState.province,
+                        [`${addressPrefix}PostalCode`]: fieldState.postalCode,
+                        [`${addressPrefix}Country`]: fieldState.country
+                    };
+                    Object.keys(addressValues).forEach((fieldName) => {
+                        const value = addressValues[fieldName];
+                        if (value !== undefined && value !== null && (typeof value !== 'string' || value !== '')) {
+                            childRecord[fieldName] = value;
+                        }
+                    });
+                    return;
+                }
                 const val = fieldState.isCheckbox ? (fieldState.checked === true || fieldState.checked === 'true') : fieldState.value;
                 if (val !== undefined && val !== null && (typeof val !== 'string' || val !== '')) {
                     childRecord[fieldState.fieldApiName] = val;
@@ -347,6 +481,7 @@ export default class RecordCollectionEditor extends LightningElement {
         });
 
         this.recordsToCreate = JSON.stringify(outputRecords);
+        this.notifyStateChange();
     }
 
     get showAddRowButton() {
@@ -354,6 +489,10 @@ export default class RecordCollectionEditor extends LightningElement {
             return true;
         }
         return this.rows.length < this.maxRows;
+    }
+
+    get showActionRow() {
+        return this.showAddRowButton || this.canShowRemoveButton;
     }
 
     get canShowRemoveButton() {
@@ -370,8 +509,337 @@ export default class RecordCollectionEditor extends LightningElement {
         return label ? `Remove ${label}` : 'Remove row';
     }
 
+    get hasHeading() {
+        return this.hasValue(this.heading);
+    }
+
+    get hideRowContainerEnabled() {
+        return this.toBoolean(this.hideRowContainer);
+    }
+
+    get hideRowSubheadingEnabled() {
+        return this.toBoolean(this.hideRowSubheading);
+    }
+
+    get rowContainerClass() {
+        return this.hideRowContainerEnabled
+            ? 'slds-m-bottom_small'
+            : 'slds-box slds-m-bottom_small';
+    }
+
+    refreshAddressOptions() {
+        if (!Array.isArray(this.rows) || this.rows.length === 0) {
+            return;
+        }
+
+        let changed = false;
+        const updatedRows = this.rows.map((row) => {
+            const updatedFieldStates = (row.fieldStates || []).map((fieldState) => {
+                if (!fieldState.isAddress) {
+                    return fieldState;
+                }
+
+                const countryOptions = this.getAddressCountryOptions(fieldState.addressPrefix);
+                const normalizedCountry = this.normalizeAddressPicklistSelection(
+                    countryOptions,
+                    fieldState.country
+                );
+                const provinceOptions = this.getAddressProvinceOptions(
+                    fieldState.addressPrefix,
+                    normalizedCountry
+                );
+                const normalizedProvince = this.normalizeAddressPicklistSelection(
+                    provinceOptions,
+                    fieldState.province
+                );
+
+                const nextState = {
+                    ...fieldState,
+                    country: normalizedCountry,
+                    province: normalizedProvince,
+                    countryOptions,
+                    provinceOptions
+                };
+                if (
+                    nextState.country !== fieldState.country ||
+                    nextState.province !== fieldState.province ||
+                    nextState.countryOptions !== fieldState.countryOptions ||
+                    nextState.provinceOptions !== fieldState.provinceOptions
+                ) {
+                    changed = true;
+                }
+                return nextState;
+            });
+            return { ...row, fieldStates: updatedFieldStates };
+        });
+
+        if (!changed) {
+            return;
+        }
+
+        this.rows = updatedRows;
+        this.syncOutputRecords();
+    }
+
+    getAddressCountryOptions(addressPrefix) {
+        if (!this.hasValue(addressPrefix)) {
+            return null;
+        }
+        const fieldApiName = `${addressPrefix}CountryCode`;
+        const fieldPicklist = this.picklistFieldValuesByApiName?.[fieldApiName];
+        const values = fieldPicklist?.values || [];
+        if (!Array.isArray(values) || values.length === 0) {
+            return null;
+        }
+        return values.map((entry) => ({ label: entry.label, value: entry.value }));
+    }
+
+    getAddressProvinceOptions(addressPrefix, selectedCountryCode) {
+        if (!this.hasValue(addressPrefix)) {
+            return null;
+        }
+        const fieldApiName = `${addressPrefix}StateCode`;
+        const fieldPicklist = this.picklistFieldValuesByApiName?.[fieldApiName];
+        const values = fieldPicklist?.values || [];
+        if (!Array.isArray(values) || values.length === 0) {
+            return null;
+        }
+
+        let filteredValues = values;
+        const controllerValues = fieldPicklist?.controllerValues || null;
+        const controllerIndex =
+            controllerValues && this.hasValue(selectedCountryCode)
+                ? controllerValues[selectedCountryCode]
+                : undefined;
+        if (controllerIndex !== undefined) {
+            filteredValues = values.filter((entry) => {
+                if (!Array.isArray(entry.validFor) || entry.validFor.length === 0) {
+                    return true;
+                }
+                return entry.validFor.includes(controllerIndex);
+            });
+        }
+
+        return filteredValues.map((entry) => ({ label: entry.label, value: entry.value }));
+    }
+
+    refreshDynamicPicklistOptions() {
+        if (!Array.isArray(this.rows) || this.rows.length === 0) {
+            return;
+        }
+
+        let changed = false;
+        const updatedRows = this.rows.map((row) => {
+            const refreshedRow = this.refreshRowPicklistOptionsForRow(row, true);
+            if (refreshedRow !== row) {
+                changed = true;
+            }
+            return refreshedRow;
+        });
+
+        if (!changed) {
+            return;
+        }
+
+        this.rows = updatedRows;
+        this.syncOutputRecords();
+    }
+
+    refreshRowPicklistOptionsForRow(row, clearInvalidSelection) {
+        if (!row || !Array.isArray(row.fieldStates) || row.fieldStates.length === 0) {
+            return row;
+        }
+
+        let rowChanged = false;
+        const updatedFieldStates = row.fieldStates.map((fieldState) => {
+            if (!fieldState?.isPicklist || fieldState.isAddress) {
+                return fieldState;
+            }
+
+            const fieldConfig = this.fieldConfigs.find(
+                (configItem) => configItem.fieldApiName === fieldState.fieldApiName
+            );
+            if (!fieldConfig) {
+                return fieldState;
+            }
+
+            const nextOptions = this.getPicklistOptionsForFieldConfig(fieldConfig, row.fieldStates);
+            let nextValue = fieldState.value;
+            const hasCurrentValue = this.hasValue(nextValue);
+            const valueStillValid = hasCurrentValue
+                ? nextOptions.some((option) => option.value === nextValue)
+                : true;
+
+            if (clearInvalidSelection && hasCurrentValue && !valueStillValid) {
+                nextValue = null;
+            }
+
+            const optionsChanged = !this.arePicklistOptionsEqual(fieldState.picklistOptions, nextOptions);
+            const valueChanged = nextValue !== fieldState.value;
+            if (!optionsChanged && !valueChanged) {
+                return fieldState;
+            }
+
+            rowChanged = true;
+            return {
+                ...fieldState,
+                picklistOptions: nextOptions,
+                value: nextValue,
+                errorMessage: valueChanged ? null : fieldState.errorMessage,
+                formElementClass: valueChanged ? 'slds-form-element' : fieldState.formElementClass
+            };
+        });
+
+        if (!rowChanged) {
+            return row;
+        }
+
+        return {
+            ...row,
+            fieldStates: updatedFieldStates
+        };
+    }
+
+    getPicklistOptionsForFieldConfig(fieldConfig, rowFieldStates) {
+        const fallbackOptions = this.toPicklistOptions(fieldConfig?.picklistValues);
+        if (!fieldConfig || !this.hasValue(fieldConfig.fieldApiName)) {
+            return fallbackOptions;
+        }
+
+        const picklistMetadata = this.picklistFieldValuesByApiName?.[fieldConfig.fieldApiName];
+        const metadataValues = Array.isArray(picklistMetadata?.values) ? picklistMetadata.values : [];
+        const metadataOptions = metadataValues
+            .filter((entry) => entry && entry.active !== false)
+            .map((entry) => ({ label: entry.label, value: entry.value }));
+
+        let resolvedOptions = metadataOptions.length > 0 ? metadataOptions : fallbackOptions;
+
+        const controllingFieldApiName = fieldConfig.controllingFieldApiName;
+        if (
+            this.hasValue(controllingFieldApiName) &&
+            metadataValues.length > 0 &&
+            picklistMetadata &&
+            picklistMetadata.controllerValues
+        ) {
+            const controllingValue = this.getRowFieldStateValue(
+                rowFieldStates,
+                controllingFieldApiName
+            );
+            if (!this.hasValue(controllingValue)) {
+                return [];
+            }
+
+            const controllerIndex = picklistMetadata.controllerValues[controllingValue];
+            if (controllerIndex === undefined || controllerIndex === null) {
+                return [];
+            }
+
+            resolvedOptions = metadataValues
+                .filter((entry) => {
+                    if (entry?.active === false) {
+                        return false;
+                    }
+                    if (!Array.isArray(entry.validFor) || entry.validFor.length === 0) {
+                        return true;
+                    }
+                    return entry.validFor.includes(controllerIndex);
+                })
+                .map((entry) => ({ label: entry.label, value: entry.value }));
+        }
+
+        return resolvedOptions;
+    }
+
+    getRowFieldStateValue(rowFieldStates, fieldApiName) {
+        if (!Array.isArray(rowFieldStates) || !this.hasValue(fieldApiName)) {
+            return null;
+        }
+        const state = rowFieldStates.find((fieldState) => fieldState.fieldApiName === fieldApiName);
+        return state ? state.value : null;
+    }
+
+    arePicklistOptionsEqual(first, second) {
+        const firstOptions = Array.isArray(first) ? first : [];
+        const secondOptions = Array.isArray(second) ? second : [];
+        if (firstOptions.length !== secondOptions.length) {
+            return false;
+        }
+
+        for (let index = 0; index < firstOptions.length; index += 1) {
+            const firstOption = firstOptions[index];
+            const secondOption = secondOptions[index];
+            if (!firstOption || !secondOption) {
+                return false;
+            }
+            if (firstOption.value !== secondOption.value || firstOption.label !== secondOption.label) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    normalizeAddressPicklistSelection(options, rawValue) {
+        const normalizedRaw = this.hasValue(rawValue) ? String(rawValue).trim() : '';
+        if (!this.hasValue(normalizedRaw)) {
+            return '';
+        }
+        if (!Array.isArray(options) || options.length === 0) {
+            return normalizedRaw;
+        }
+
+        const directMatch = options.find((option) => option.value === normalizedRaw);
+        if (directMatch) {
+            return directMatch.value;
+        }
+
+        const labelMatch = options.find(
+            (option) => String(option.label).toLowerCase() === normalizedRaw.toLowerCase()
+        );
+        if (labelMatch) {
+            return labelMatch.value;
+        }
+
+        return normalizedRaw;
+    }
+
     toPicklistOptions(values) {
         return (values || []).map((v) => ({ label: v, value: v }));
+    }
+
+    normalizeAddressValue(rawAddress) {
+        const source = rawAddress || {};
+        return {
+            street: source.street || '',
+            city: source.city || '',
+            province: source.province || '',
+            postalCode: source.postalCode || '',
+            country: source.country || ''
+        };
+    }
+
+    hasCompleteAddressValue(fieldState) {
+        if (!fieldState) {
+            return false;
+        }
+        return this.hasValue(fieldState.street) &&
+            this.hasValue(fieldState.city) &&
+            this.hasValue(fieldState.province) &&
+            this.hasValue(fieldState.postalCode) &&
+            this.hasValue(fieldState.country);
+    }
+
+    hasValue(value) {
+        return value !== undefined && value !== null && String(value).trim() !== '';
+    }
+
+    toBoolean(value) {
+        if (value === true || value === false) {
+            return value;
+        }
+        if (value === null || value === undefined || value === '') {
+            return false;
+        }
+        return String(value).toLowerCase() === 'true';
     }
 
     /** Multi-select picklist values from ACR/Contact role fields (semicolon-separated). */
@@ -570,6 +1038,20 @@ export default class RecordCollectionEditor extends LightningElement {
             return String(val).split(';').map((s) => s.trim()).filter(Boolean);
         };
         const roleFieldApiName = (rc && rc.roleFieldApiName) ? rc.roleFieldApiName : null;
+        const phoneValidationByKey = new Map();
+        this.template.querySelectorAll('c-react-style-phone-input').forEach((inputCmp) => {
+            const clientId = inputCmp?.dataset?.clientId;
+            const fieldApiName = inputCmp?.dataset?.fieldApiName;
+            if (!clientId || !fieldApiName) {
+                return;
+            }
+            const validationResult = inputCmp.validate ? inputCmp.validate() : { isValid: true };
+            phoneValidationByKey.set(
+                `${clientId}|${fieldApiName}`,
+                validationResult?.isValid !== false
+            );
+        });
+
         let duplicatePrincipalOwnerRows = [];
         let restrictedAuthorizedSignerRows = [];
         if (requiresPermissionRoles.length > 0 && !this.canAssignAuthorizedSigner) {
@@ -597,13 +1079,24 @@ export default class RecordCollectionEditor extends LightningElement {
         }
         let updatedRows = this.rows.map((row, index) => {
             const updatedFieldStates = row.fieldStates.map((fieldState) => {
-                const isBlank = fieldState.isCheckbox
+                const isBlank = fieldState.isAddress
+                    ? (fieldState.required && !this.hasCompleteAddressValue(fieldState))
+                    : fieldState.isCheckbox
                     ? (fieldState.required && (fieldState.checked !== true && fieldState.checked !== 'true'))
                     : (fieldState.value === null || fieldState.value === undefined || fieldState.value === '');
-                const fieldErrorMessage = fieldState.required && isBlank
+                let fieldErrorMessage = fieldState.required && isBlank
                     ? `${fieldState.label || fieldState.fieldApiName} is required.`
                     : null;
-                if (fieldErrorMessage) errors.push(`Row ${index + 1}: ${fieldState.label || fieldState.fieldApiName} is required.`);
+                if (!fieldErrorMessage && fieldState.isPhoneField) {
+                    const phoneKey = `${row.clientId}|${fieldState.fieldApiName}`;
+                    const phoneValid = phoneValidationByKey.has(phoneKey)
+                        ? phoneValidationByKey.get(phoneKey)
+                        : true;
+                    if (!phoneValid) {
+                        fieldErrorMessage = `${fieldState.label || fieldState.fieldApiName} is invalid.`;
+                    }
+                }
+                if (fieldErrorMessage) errors.push(`Row ${index + 1}: ${fieldErrorMessage}`);
                 return {
                     ...fieldState,
                     errorMessage: fieldErrorMessage,
@@ -683,5 +1176,57 @@ export default class RecordCollectionEditor extends LightningElement {
     validate() {
         this.syncOutputRecords();
         return this.runClientValidation();
+    }
+
+    @api
+    getRecordsJson() {
+        this.syncOutputRecords();
+        return this.recordsToCreate;
+    }
+
+    @api
+    hasRequiredValues() {
+        if (this.isLoading || this._configLoadError || !Array.isArray(this.rows) || this.rows.length === 0) {
+            return false;
+        }
+
+        return this.rows.every((row) => {
+            const fieldsComplete = (row.fieldStates || []).every((fieldState) => {
+                if (!fieldState.required) {
+                    return true;
+                }
+                if (fieldState.isAddress) {
+                    return this.hasCompleteAddressValue(fieldState);
+                }
+                if (fieldState.isCheckbox) {
+                    return fieldState.checked === true || fieldState.checked === 'true';
+                }
+                return this.hasValue(fieldState.value);
+            });
+            if (!fieldsComplete) {
+                return false;
+            }
+
+            return (row.relationshipFieldStates || []).every((fieldState) => {
+                if (!fieldState.required) {
+                    return true;
+                }
+                if (fieldState.isCheckbox) {
+                    return fieldState.checked === true || fieldState.checked === 'true';
+                }
+                return this.hasValue(fieldState.value);
+            });
+        });
+    }
+
+    notifyStateChange() {
+        this.dispatchEvent(new CustomEvent('statechange', {
+            detail: {
+                hasRequiredValues: this.hasRequiredValues(),
+                recordsJson: this.recordsToCreate || '[]'
+            },
+            bubbles: true,
+            composed: true
+        }));
     }
 }

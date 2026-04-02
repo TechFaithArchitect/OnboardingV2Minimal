@@ -1,8 +1,10 @@
 <template>
     <lightning-card>
-        <div class="slds-text-heading_medium slds-p-horizontal_medium slds-p-top_medium slds-m-bottom_small">
-            {heading}
-        </div>
+        <template if:true={hasHeading}>
+            <div class="slds-text-heading_medium slds-p-horizontal_medium slds-p-top_medium slds-m-bottom_small">
+                {heading}
+            </div>
+        </template>
         <template if:true={isLoading}>
             <div class="slds-p-around_medium">
                 <lightning-spinner alternative-text="Loading configuration"></lightning-spinner>
@@ -20,11 +22,17 @@
 
             <template if:true={hasRows}>
                 <div class="slds-p-around_medium">
+                    <slot name="content-top"></slot>
                     <template for:each={rows} for:item="row">
-                        <div key={row.clientId} class="slds-box slds-m-bottom_small">
-                            <div class="slds-text-heading_small slds-m-bottom_small">
-                                {row.subheading}
-                            </div>
+                        <div key={row.clientId} class={rowContainerClass}>
+                            <template if:true={row.isFirstRow}>
+                                <slot name="row-top"></slot>
+                            </template>
+                            <template if:false={hideRowSubheadingEnabled}>
+                                <div class="slds-text-heading_small slds-m-bottom_small">
+                                    {row.subheading}
+                                </div>
+                            </template>
                             <div class="slds-grid slds-wrap slds-gutters">
                                 <template for:each={row.fieldStates} for:item="fieldState">
                                     <div
@@ -53,6 +61,29 @@
                                                 disabled={fieldState.readOnly}
                                                 onchange={handleFieldChange}
                                             ></lightning-input>
+                                        </template>
+                                        <template if:true={fieldState.isAddress}>
+                                            <lightning-input-address
+                                                data-client-id={row.clientId}
+                                                data-field-api-name={fieldState.fieldApiName}
+                                                address-label={fieldState.label}
+                                                street-label="Street"
+                                                city-label="City"
+                                                province-label="State/Province"
+                                                postal-code-label="Zip/Postal Code"
+                                                country-label="Country"
+                                                street={fieldState.street}
+                                                city={fieldState.city}
+                                                province={fieldState.province}
+                                                postal-code={fieldState.postalCode}
+                                                country={fieldState.country}
+                                                country-options={fieldState.countryOptions}
+                                                province-options={fieldState.provinceOptions}
+                                                required={fieldState.required}
+                                                disabled={fieldState.readOnly}
+                                                show-address-lookup={fieldState.showAddressLookup}
+                                                onchange={handleFieldChange}
+                                            ></lightning-input-address>
                                         </template>
                                         <template if:true={fieldState.isPicklist}>
                                             <lightning-combobox
@@ -170,26 +201,28 @@
                 </div>
             </template>
 
-            <div class="slds-p-around_medium">
-                <template if:true={showAddRowButton}>
-                    <lightning-button
-                        label={addButtonLabel}
-                        variant="brand-outline"
-                        onclick={handleAddRow}
-                        class="slds-m-right_small"
-                    ></lightning-button>
-                </template>
-                <template if:true={canShowRemoveButton}>
-                    <lightning-button
-                        label={removeButtonLabel}
-                        variant="base"
-                        icon-name="utility:delete"
-                        icon-position="left"
-                        onclick={handleRemoveLastRow}
-                        class="slds-text-color_error"
-                    ></lightning-button>
-                </template>
-            </div>
+            <template if:true={showActionRow}>
+                <div class="slds-p-around_medium">
+                    <template if:true={showAddRowButton}>
+                        <lightning-button
+                            label={addButtonLabel}
+                            variant="brand-outline"
+                            onclick={handleAddRow}
+                            class="slds-m-right_small"
+                        ></lightning-button>
+                    </template>
+                    <template if:true={canShowRemoveButton}>
+                        <lightning-button
+                            label={removeButtonLabel}
+                            variant="base"
+                            icon-name="utility:delete"
+                            icon-position="left"
+                            onclick={handleRemoveLastRow}
+                            class="slds-text-color_error"
+                        ></lightning-button>
+                    </template>
+                </div>
+            </template>
         </template>
     </lightning-card>
 </template>

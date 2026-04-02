@@ -1,0 +1,9 @@
+:host {
+    display: block;
+}
+
+.step-header_plain {
+    border: 0;
+    background: transparent;
+    padding: 0;
+}

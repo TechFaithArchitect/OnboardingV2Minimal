@@ -365,7 +365,7 @@
         <inputAssignments>
             <field>Owner__c</field>
             <value>
-                <elementReference>OpportunityRecord.Opportunity_Owner__c</elementReference>
+                <elementReference>OpportunityRecord.Owner__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

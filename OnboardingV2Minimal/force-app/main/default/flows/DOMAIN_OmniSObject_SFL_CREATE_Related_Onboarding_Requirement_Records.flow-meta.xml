@@ -132,6 +132,19 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <name>Capture_Create_Training_Assignment_Records_Subflow_Fault</name>
+        <label>Capture Create Training Assignment Records Subflow Fault</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>errorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
         <name>Capture_Update_Onboarding_Record_Fault</name>
         <label>Capture Update Onboarding Record Fault</label>
         <locationX>0</locationX>
@@ -451,6 +464,9 @@
         <label>Create Training Assignment Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Capture_Create_Training_Assignment_Records_Subflow_Fault</targetReference>
+        </faultConnector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records</flowName>
         <inputAssignments>
             <name>ContactRecord</name>

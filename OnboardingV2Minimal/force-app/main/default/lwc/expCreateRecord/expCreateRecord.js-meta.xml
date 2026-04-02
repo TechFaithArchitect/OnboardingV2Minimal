@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>EXP Create Record</masterLabel>
+    <description>Reusable step-based record creation wizard for flow-driven onboarding and related create flows.</description>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property
+                name="recordId"
+                type="String"
+                label="Account Id"
+                description="Current Account Id"
+                role="inputOnly"
+                required="true"
+            />
+            <property name="flowAccountId" type="String" label="Flow Account Id" role="inputOnly" />
+            <property name="opportunityCloseDate" type="String" label="Opportunity Close Date" role="inputOnly" />
+            <property name="opportunityStageName" type="String" label="Opportunity Stage" role="inputOnly" />
+            <property name="opportunityProgramType" type="String" label="Opportunity Program Type" role="inputOnly" />
+            <property
+                name="opportunityProgramBaseSelection"
+                type="String"
+                label="Opportunity Program Base Selection"
+                role="inputOnly"
+            />
+            <property
+                name="opportunityDocumentsReady"
+                type="Boolean"
+                label="Opportunity Documents Ready"
+                role="inputOnly"
+            />
+            <property name="opportunityLeadSource" type="String" label="Opportunity Lead Source" role="inputOnly" />
+            <property name="opportunitySource" type="String" label="Opportunity Source" role="inputOnly" />
+            <property name="opportunityNextStep" type="String" label="Opportunity Next Step" role="inputOnly" />
+            <property name="opportunityNextStepDate" type="String" label="Opportunity Next Step Date" role="inputOnly" />
+            <property name="opportunityOwnerRole" type="String" label="Opportunity Owner Role" role="inputOnly" />
+            <property
+                name="opportunityRecordTypeId"
+                type="String"
+                label="Opportunity Record Type Id"
+                role="inputOnly"
+            />
+            <property name="opportunityType" type="String" label="Opportunity Type" role="inputOnly" />
+            <property name="flowFinalNextAction" type="String" label="Flow Final Next Action" role="inputOnly" />
+            <property
+                name="flowShowAgreementChoice"
+                type="Boolean"
+                label="Flow Show Agreement Choice"
+                role="inputOnly"
+            />
+            <property
+                name="flowShowPersonalGuarantee"
+                type="Boolean"
+                label="Flow Show Personal Guarantee"
+                role="inputOnly"
+            />
+            <property
+                name="flowShowVendorSelector"
+                type="Boolean"
+                label="Flow Show Vendor Selector"
+                role="inputOnly"
+            />
+            <property
+                name="flowShowVerifyAccount"
+                type="Boolean"
+                label="Flow Show Verify Account"
+                role="inputOnly"
+            />
+            <property name="flowIsUserSpecial" type="Boolean" label="Flow Is User Special" role="inputOnly" />
+            <property
+                name="flowAvailableVendorOptionString"
+                type="String"
+                label="Flow Available Vendor Option String"
+                role="inputOnly"
+            />
+            <property
+                name="flowHasAnyOnboardingForAccount"
+                type="Boolean"
+                label="Flow Has Any Onboarding For Account"
+                role="inputOnly"
+            />
+            <property
+                name="flowHasChuzoOnboardingForOpportunity"
+                type="Boolean"
+                label="Flow Has Chuzo Onboarding For Opportunity"
+                role="inputOnly"
+            />
+            <property
+                name="flowHasNdaOnboardingForOpportunity"
+                type="Boolean"
+                label="Flow Has NDA Onboarding For Opportunity"
+                role="inputOnly"
+            />
+            <property
+                name="flowHasNonChuzoOnboardingForOpportunity"
+                type="Boolean"
+                label="Flow Has Non Chuzo Onboarding For Opportunity"
+                role="inputOnly"
+            />
+            <property
+                name="flowOpportunityRecordTypeId"
+                type="String"
+                label="Flow Opportunity Record Type Id"
+                role="inputOnly"
+            />
+            <property name="flowRuleErrorMessage" type="String" label="Flow Rule Error Message" role="inputOnly" />
+            <property name="accountStepHeading" type="String" label="Account Step Heading" role="inputOnly" />
+            <property name="accountStepHelperText" type="String" label="Account Step Helper Text" role="inputOnly" />
+            <property
+                name="accountStepVariant"
+                type="String"
+                label="Account Step Banner Style"
+                role="inputOnly"
+                datasource="default,shade,info,warning,error,success"
+            />
+            <property name="opportunityStepHeading" type="String" label="Opportunity Step Heading" role="inputOnly" />
+            <property
+                name="opportunityStepHelperText"
+                type="String"
+                label="Opportunity Step Helper Text"
+                role="inputOnly"
+            />
+            <property
+                name="opportunityStepVariant"
+                type="String"
+                label="Opportunity Step Banner Style"
+                role="inputOnly"
+                datasource="default,shade,info,warning,error,success"
+            />
+            <property name="contactsStepHeading" type="String" label="Contacts Step Heading" role="inputOnly" />
+            <property
+                name="contactsStepHelperText"
+                type="String"
+                label="Contacts Step Helper Text"
+                role="inputOnly"
+            />
+            <property
+                name="contactsStepVariant"
+                type="String"
+                label="Contacts Step Banner Style"
+                role="inputOnly"
+                datasource="default,shade,info,warning,error,success"
+            />
+            <property name="ocrStepHeading" type="String" label="OCR Step Heading" role="inputOnly" />
+            <property name="ocrStepHelperText" type="String" label="OCR Step Helper Text" role="inputOnly" />
+            <property
+                name="ocrStepVariant"
+                type="String"
+                label="OCR Step Banner Style"
+                role="inputOnly"
+                datasource="default,shade,info,warning,error,success"
+            />
+            <property
+                name="stepHeadingVariant"
+                type="String"
+                label="Default Step Banner Style"
+                role="inputOnly"
+                datasource="default,shade,info,warning,error,success"
+            />
+            <property
+                name="debugMode"
+                type="Boolean"
+                label="Enable Temporary Diagnostics"
+                role="inputOnly"
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

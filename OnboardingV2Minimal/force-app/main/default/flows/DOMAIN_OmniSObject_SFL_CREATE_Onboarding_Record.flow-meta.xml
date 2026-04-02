@@ -532,6 +532,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Opportunity__c</field>
+            <value>
+                <elementReference>ResolvedOpportunityId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Vendor_Customization__c</field>
             <value>
                 <elementReference>VendorProgramRecord.Id</elementReference>

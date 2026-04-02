@@ -48,9 +48,11 @@ export default class VendorSelector extends LightningElement {
             this.selectedBusinessVertical = null;
             this.retailOptions = [];
             this.businessVerticals = [];
+            this.notifySelectionChange();
         } catch (err) {
             this.vendorOptions = [];
             this.vendors = [];
+            this.notifySelectionChange();
         }
     }
 
@@ -70,6 +72,7 @@ export default class VendorSelector extends LightningElement {
         }));
 
         this.businessVerticals = [];
+        this.notifySelectionChange();
     }
 
     handleRetailChange(event) {
@@ -93,10 +96,12 @@ export default class VendorSelector extends LightningElement {
             label: v,
             value: v
         }));
+        this.notifySelectionChange();
     }
 
     handleVerticalChange(event) {
         this.selectedBusinessVertical = event.detail.value;
+        this.notifySelectionChange();
     }
 
     @api get outputVendorId() {
@@ -114,5 +119,25 @@ export default class VendorSelector extends LightningElement {
 
     @api get outputBusinessVertical() {
         return this.selectedBusinessVertical;
+    }
+
+    hasValue(value) {
+        return value !== null && value !== undefined && String(value).trim() !== '';
+    }
+
+    notifySelectionChange() {
+        this.dispatchEvent(new CustomEvent('selectionchange', {
+            detail: {
+                selectedVendorId: this.selectedVendorId,
+                selectedRetailOption: this.selectedRetailOption,
+                selectedBusinessVertical: this.selectedBusinessVertical,
+                hasRequiredValues:
+                    this.hasValue(this.selectedVendorId) &&
+                    this.hasValue(this.selectedRetailOption) &&
+                    this.hasValue(this.selectedBusinessVertical)
+            },
+            bubbles: true,
+            composed: true
+        }));
     }
 }
