@@ -49,6 +49,15 @@ public with sharing class OnboardingErrorLogInvocable {
 
         @InvocableVariable(label='Insert Succeeded')
         public Boolean insertSucceeded;
+
+        @InvocableVariable(label='Retry Queued')
+        public Boolean retryQueued;
+
+        @InvocableVariable(label='Retry Job Id')
+        public String retryJobId;
+
+        @InvocableVariable(label='Retry Message')
+        public String retryMessage;
     }
 
     @InvocableMethod(
@@ -87,6 +96,28 @@ public with sharing class OnboardingErrorLogInvocable {
             res.errorLogId = outcome.errorLogId == null ? null : String.valueOf(outcome.errorLogId);
             res.userFacingMessage = outcome.userFacingMessage;
             res.insertSucceeded = outcome.insertSucceeded == true;
+
+            OnboardingBackgroundRetryService.CaptureInput retryInput =
+                new OnboardingBackgroundRetryService.CaptureInput();
+            retryInput.onboardingIdText = req.onboardingId;
+            retryInput.contextKey = req.contextKey;
+            retryInput.sourceFlowApiName = req.sourceFlowApiName;
+            retryInput.sourceElementApiName = req.sourceElementApiName;
+            retryInput.interviewGuid = req.interviewGuid;
+            retryInput.technicalDetail = req.technicalDetail;
+            retryInput.errorLogIdText = res.errorLogId;
+
+            OnboardingBackgroundRetryService.CaptureOutcome retryOutcome =
+                OnboardingBackgroundRetryService.captureFault(retryInput);
+            if (retryOutcome != null) {
+                res.retryQueued = retryOutcome.queued == true;
+                res.retryJobId = retryOutcome.jobId == null ? null : String.valueOf(retryOutcome.jobId);
+                res.retryMessage = retryOutcome.message;
+            } else {
+                res.retryQueued = false;
+                res.retryJobId = null;
+                res.retryMessage = null;
+            }
             results.add(res);
         }
         return results;

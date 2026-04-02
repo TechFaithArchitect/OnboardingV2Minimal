@@ -124,6 +124,8 @@ private class OnboardingErrorLogInvocableTest {
         Test.stopTest();
 
         System.assertEquals(true, res.insertSucceeded);
+        System.assertEquals(true, res.retryQueued, 'Expected onboarding retry capture to queue.');
+        System.assertNotEquals(null, res.retryJobId, 'Expected retry job id.');
         Error_Log__c row = [
             SELECT Onboarding__c, Opportunity__c, Type__c, Provider_Subtype__c
             FROM Error_Log__c
@@ -133,5 +135,19 @@ private class OnboardingErrorLogInvocableTest {
         System.assertEquals(opp.Id, row.Opportunity__c);
         System.assertEquals('Integration', row.Type__c);
         System.assertEquals('General', row.Provider_Subtype__c);
+
+        Onboarding_Background_Job__c retryJob = [
+            SELECT Onboarding__c, Operation_Type__c, Status__c, Last_Error_Log__c
+            FROM Onboarding_Background_Job__c
+            WHERE Id = :res.retryJobId
+            LIMIT 1
+        ];
+        System.assertEquals(onb.Id, retryJob.Onboarding__c);
+        System.assertEquals(
+            OnboardingBackgroundRetryService.OP_REPLAY_ONBOARDING_BACKGROUND_CHAIN,
+            retryJob.Operation_Type__c
+        );
+        System.assertEquals(OnboardingBackgroundRetryService.STATUS_PENDING, retryJob.Status__c);
+        System.assertEquals(res.errorLogId, String.valueOf(retryJob.Last_Error_Log__c));
     }
 }
