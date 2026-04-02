@@ -2,12 +2,12 @@
 private class ExpOppCreateAsyncServiceTest {
     @IsTest
     static void returnsErrorWhenRequiredInputsMissing() {
-        ExperienceOpportunityCreateAsyncService.QueueRequest requestItem =
-            new ExperienceOpportunityCreateAsyncService.QueueRequest();
+        ExpOpportunityCreateAsyncService.QueueRequest requestItem =
+            new ExpOpportunityCreateAsyncService.QueueRequest();
 
-        List<ExperienceOpportunityCreateAsyncService.QueueResult> results =
-            ExperienceOpportunityCreateAsyncService.queueOpportunityCreateChain(
-                new List<ExperienceOpportunityCreateAsyncService.QueueRequest>{ requestItem }
+        List<ExpOpportunityCreateAsyncService.QueueResult> results =
+            ExpOpportunityCreateAsyncService.queueOpportunityCreateChain(
+                new List<ExpOpportunityCreateAsyncService.QueueRequest>{ requestItem }
             );
 
         System.assertEquals(1, results.size(), 'Expected one result item.');
@@ -26,8 +26,8 @@ private class ExpOppCreateAsyncServiceTest {
             CloseDate = Date.today().addDays(30)
         );
 
-        ExperienceOpportunityCreateAsyncService.QueueRequest requestItem =
-            new ExperienceOpportunityCreateAsyncService.QueueRequest();
+        ExpOpportunityCreateAsyncService.QueueRequest requestItem =
+            new ExpOpportunityCreateAsyncService.QueueRequest();
         requestItem.AccountRecord = new Account(Id = accountRecord.Id);
         requestItem.OpportunityRecord = opportunityRecord;
         requestItem.ContactsToCreateJSONString = '[]';
@@ -35,9 +35,9 @@ private class ExpOppCreateAsyncServiceTest {
         requestItem.CreateContactsInQueue = true;
 
         Test.startTest();
-        List<ExperienceOpportunityCreateAsyncService.QueueResult> results =
-            ExperienceOpportunityCreateAsyncService.queueOpportunityCreateChain(
-                new List<ExperienceOpportunityCreateAsyncService.QueueRequest>{ requestItem }
+        List<ExpOpportunityCreateAsyncService.QueueResult> results =
+            ExpOpportunityCreateAsyncService.queueOpportunityCreateChain(
+                new List<ExpOpportunityCreateAsyncService.QueueRequest>{ requestItem }
             );
         Test.stopTest();
 
@@ -58,17 +58,17 @@ private class ExpOppCreateAsyncServiceTest {
             CloseDate = Date.today().addDays(30)
         );
 
-        ExperienceOpportunityCreateAsyncService.QueueRequest requestItem =
-            new ExperienceOpportunityCreateAsyncService.QueueRequest();
+        ExpOpportunityCreateAsyncService.QueueRequest requestItem =
+            new ExpOpportunityCreateAsyncService.QueueRequest();
         requestItem.AccountRecord = new Account(Id = accountRecord.Id);
         requestItem.OpportunityRecord = opportunityRecord;
         requestItem.ContactsToCreateJSONString = '[]';
         requestItem.OpportunityContactRecordsJSON = '[]';
 
         Test.startTest();
-        List<ExperienceOpportunityCreateAsyncService.QueueResult> results =
-            ExperienceOpportunityCreateAsyncService.queueOpportunityCreateChain(
-                new List<ExperienceOpportunityCreateAsyncService.QueueRequest>{ requestItem }
+        List<ExpOpportunityCreateAsyncService.QueueResult> results =
+            ExpOpportunityCreateAsyncService.queueOpportunityCreateChain(
+                new List<ExpOpportunityCreateAsyncService.QueueRequest>{ requestItem }
             );
         Test.stopTest();
 
@@ -89,7 +89,7 @@ private class ExpOppCreateAsyncServiceTest {
         Id opportunityId = (Id) '006000000000000AAA';
         String payload = '[{"ContactId":"003000000000000AAA","Role":"Owner","IsPrimary":true}]';
 
-        String resultPayload = ExperienceOpportunityCreateAsyncService.applyOpportunityId(payload, opportunityId);
+        String resultPayload = ExpOpportunityCreateAsyncService.applyOpportunityId(payload, opportunityId);
 
         System.assert(resultPayload.contains('"OpportunityId":"006000000000000AAA"'),
             'Payload should include injected OpportunityId.');
