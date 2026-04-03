@@ -166,7 +166,7 @@ public with sharing class CommunicationTemplateBulkSendAction {
         }
 
         Map<String, Id> orgWideByAddress = new Map<String, Id>();
-        if (!senderAddresses.isEmpty()) {
+        if (!senderAddresses.isEmpty() && Schema.sObjectType.OrgWideEmailAddress.isAccessible()) {
           for (OrgWideEmailAddress orgWide : [
             SELECT Id, Address
             FROM OrgWideEmailAddress

@@ -40,6 +40,12 @@ public with sharing class OnboardingDefaultVendorProgramInvocable {
     }
 
     try {
+      if (!Schema.sObjectType.Onboarding_Default_Vendor_Program__mdt.isAccessible()) {
+        result.errorMessage = 'You do not have access to Onboarding Default Vendor Program configuration.';
+        results.add(result);
+        return results;
+      }
+
       List<Onboarding_Default_Vendor_Program__mdt> configs = [
         SELECT Vendor_Name__c, Vendor_Program_Name_Contains__c
         FROM Onboarding_Default_Vendor_Program__mdt

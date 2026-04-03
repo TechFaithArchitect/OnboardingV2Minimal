@@ -122,7 +122,14 @@ public with sharing class OnbReqParentBulkEvalInvocable {
     }
 
     Map<Id, Onboarding_Requirement__c> pendingStatusFallbackById = new Map<Id, Onboarding_Requirement__c>();
-    Database.SaveResult[] firstPassResults = Database.update(updates, false);
+    List<SObject> sanitizedFirstPassUpdates = Security.stripInaccessible(
+      AccessType.UPDATABLE,
+      updates
+    ).getRecords();
+    Database.SaveResult[] firstPassResults = Database.update(
+      (List<Onboarding_Requirement__c>) sanitizedFirstPassUpdates,
+      false
+    );
 
     for (Integer i = 0; i < firstPassResults.size(); i++) {
       Database.SaveResult saveResult = firstPassResults[i];
@@ -197,7 +204,14 @@ public with sharing class OnbReqParentBulkEvalInvocable {
         break;
       }
 
-      Database.SaveResult[] retryResults = Database.update(retryUpdates, false);
+      List<SObject> sanitizedRetryUpdates = Security.stripInaccessible(
+        AccessType.UPDATABLE,
+        retryUpdates
+      ).getRecords();
+      Database.SaveResult[] retryResults = Database.update(
+        (List<Onboarding_Requirement__c>) sanitizedRetryUpdates,
+        false
+      );
       for (Integer i = 0; i < retryResults.size(); i++) {
         Database.SaveResult retryResult = retryResults[i];
         Id requirementId = retryIds[i];
@@ -247,7 +261,14 @@ public with sharing class OnbReqParentBulkEvalInvocable {
     }
 
     if (!completedOnlyUpdates.isEmpty()) {
-      Database.SaveResult[] completedOnlyResults = Database.update(completedOnlyUpdates, false);
+      List<SObject> sanitizedCompletedOnlyUpdates = Security.stripInaccessible(
+        AccessType.UPDATABLE,
+        completedOnlyUpdates
+      ).getRecords();
+      Database.SaveResult[] completedOnlyResults = Database.update(
+        (List<Onboarding_Requirement__c>) sanitizedCompletedOnlyUpdates,
+        false
+      );
       for (Integer i = 0; i < completedOnlyResults.size(); i++) {
         Database.SaveResult completedOnlyResult = completedOnlyResults[i];
         Id requirementId = completedOnlyIds[i];

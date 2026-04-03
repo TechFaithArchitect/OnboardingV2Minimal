@@ -46,6 +46,10 @@ public with sharing class OnboardingPerformanceSettings {
         deferOnboardingTail = false;
         publishChainProgressEvents = true;
         try {
+            if (!Schema.sObjectType.Onboarding_Performance_Config__mdt.isAccessible()) {
+                loaded = true;
+                return;
+            }
             List<Onboarding_Performance_Config__mdt> rows = [
                 SELECT
                     Defer_Onboarding_Tail__c,

@@ -58,6 +58,7 @@ public with sharing class OnboardingRequirementVPRGateService {
         SELECT Id, Sequence__c, Requirement_Type__c, Vendor_Program__c
         FROM Vendor_Program_Requirement__c
         WHERE Vendor_Program__c = :vendorProgramId
+        WITH SECURITY_ENFORCED
         ORDER BY Sequence__c ASC NULLS LAST, Id ASC
       ];
     }
@@ -70,6 +71,7 @@ public with sharing class OnboardingRequirementVPRGateService {
         SELECT Vendor_Program_Requirement__c
         FROM Onboarding_Requirement__c
         WHERE Onboarding__c = :onboardingId AND Vendor_Program_Requirement__c != NULL
+        WITH SECURITY_ENFORCED
       ]) {
         existingVprIds.add(orow.Vendor_Program_Requirement__c);
       }
@@ -132,6 +134,7 @@ public with sharing class OnboardingRequirementVPRGateService {
       SELECT Approval_Policy_Key__c
       FROM Vendor_Customization__c
       WHERE Id = :vendorProgramId
+      WITH SECURITY_ENFORCED
       LIMIT 1
     ];
     if (rows.isEmpty() || String.isBlank(rows[0].Approval_Policy_Key__c)) {
@@ -151,6 +154,7 @@ public with sharing class OnboardingRequirementVPRGateService {
       SELECT Onboarding_Status__c
       FROM Onboarding__c
       WHERE Id = :onboardingId
+      WITH SECURITY_ENFORCED
       LIMIT 1
     ];
     if (obRows.isEmpty()) {
@@ -162,6 +166,9 @@ public with sharing class OnboardingRequirementVPRGateService {
   private static List<Vendor_Program_Approval_Policy__mdt> loadPoliciesForGate() {
     if (Test.isRunningTest() && testPoliciesOverride != null) {
       return testPoliciesOverride;
+    }
+    if (!Schema.sObjectType.Vendor_Program_Approval_Policy__mdt.isAccessible()) {
+      return new List<Vendor_Program_Approval_Policy__mdt>();
     }
     return [
       SELECT Policy_Key__c, Type__c, Block_Action__c, Active__c, Priority__c

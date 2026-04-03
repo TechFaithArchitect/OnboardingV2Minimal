@@ -4,6 +4,9 @@
 public with sharing class OnboardingStatusNormalizationService {
   public static Map<String, String> loadActiveNormalizationMap() {
     Map<String, String> m = new Map<String, String>();
+    if (!Schema.sObjectType.Onboarding_Status_Normalization__mdt.isAccessible()) {
+      return m;
+    }
     for (
       Onboarding_Status_Normalization__mdt n : [
         SELECT Requirement_Type__c, Status__c, Normalized_Status__c

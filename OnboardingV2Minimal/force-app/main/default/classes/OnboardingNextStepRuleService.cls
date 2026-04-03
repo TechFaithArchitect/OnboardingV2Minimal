@@ -110,6 +110,12 @@ public without sharing class OnboardingNextStepRuleService {
 
   private static List<RuleSnapshot> loadActiveRulesFromCmdt() {
     List<RuleSnapshot> out = new List<RuleSnapshot>();
+    if (!Schema.SObjectType.Onboarding_Next_Step_Rule__mdt.isAccessible()) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.loadActiveRulesFromCmdt: missing read access to Onboarding_Next_Step_Rule__mdt; skipping rule load.'
+      );
+      return out;
+    }
     for (Onboarding_Next_Step_Rule__mdt r : [
       SELECT
         DeveloperName,
@@ -121,6 +127,7 @@ public without sharing class OnboardingNextStepRuleService {
         Sequence__c
       FROM Onboarding_Next_Step_Rule__mdt
       WHERE Active__c = TRUE
+      WITH USER_MODE
       ORDER BY Sequence__c NULLS LAST, DeveloperName
     ]) {
       RuleSnapshot s = new RuleSnapshot();
@@ -136,6 +143,12 @@ public without sharing class OnboardingNextStepRuleService {
   }
 
   private static void applyRuleSnapshots(Id onboardingId, List<RuleSnapshot> rules, ApplyOutcome outcome) {
+    if (!Schema.SObjectType.Onboarding__c.isAccessible()) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.applyRuleSnapshots: missing read access to Onboarding__c; skipping evaluation.'
+      );
+      return;
+    }
     Set<String> selectFields = new Set<String>{
       'Id',
       'Account__c',
@@ -164,6 +177,12 @@ public without sharing class OnboardingNextStepRuleService {
       return;
     }
     if (onboarding.Account__c == null) {
+      return;
+    }
+    if (!Schema.SObjectType.Vendor_Customization__c.isAccessible()) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.applyRuleSnapshots: missing read access to Vendor_Customization__c; skipping target program checks.'
+      );
       return;
     }
 
@@ -206,6 +225,7 @@ public without sharing class OnboardingNextStepRuleService {
         SELECT Id
         FROM Vendor_Customization__c
         WHERE Id = :targetVendorProgramId
+        WITH USER_MODE
         LIMIT 1
       ];
       if (targetVp.isEmpty()) {
@@ -254,6 +274,12 @@ public without sharing class OnboardingNextStepRuleService {
     if (targetVendorProgramId == null || source.Vendor_Customization__c == targetVendorProgramId) {
       return;
     }
+    if (!Schema.SObjectType.Onboarding__c.isAccessible()) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.createLinkedOnboardingIfNeeded: missing read access to Onboarding__c; cannot detect existing sibling.'
+      );
+      return;
+    }
 
     List<Onboarding__c> existing = [
       SELECT Id
@@ -262,6 +288,7 @@ public without sharing class OnboardingNextStepRuleService {
         Account__c = :source.Account__c
         AND Vendor_Customization__c = :targetVendorProgramId
         AND Opportunity__c = :source.Opportunity__c
+      WITH USER_MODE
       LIMIT 1
     ];
     if (!existing.isEmpty()) {
@@ -323,10 +350,17 @@ public without sharing class OnboardingNextStepRuleService {
     }
 
     if (source.Contract__c != null) {
+      if (!Schema.SObjectType.Contract.isAccessible()) {
+        LoggingUtil.warn(
+          'OnboardingNextStepRuleService.insertSiblingContract: missing read access to Contract; cannot read template contract fields.'
+        );
+        return null;
+      }
       List<Contract> templates = [
         SELECT Principal_Owner__c, ContractTerm
         FROM Contract
         WHERE Id = :source.Contract__c
+        WITH USER_MODE
         LIMIT 1
       ];
       if (!templates.isEmpty()) {
@@ -443,7 +477,13 @@ public without sharing class OnboardingNextStepRuleService {
     if (contractId == null || expectedRecordTypeId == null) {
       return;
     }
-    Contract row = [SELECT RecordTypeId FROM Contract WHERE Id = :contractId LIMIT 1];
+    if (!Schema.SObjectType.Contract.isAccessible()) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.alignContractRecordTypeIfNeeded: missing read access to Contract; skipping alignment verification.'
+      );
+      return;
+    }
+    Contract row = [SELECT RecordTypeId FROM Contract WHERE Id = :contractId WITH USER_MODE LIMIT 1];
     if (row.RecordTypeId == expectedRecordTypeId) {
       return;
     }
@@ -468,7 +508,7 @@ public without sharing class OnboardingNextStepRuleService {
         AccessLevel.SYSTEM_MODE
       );
     }
-    row = [SELECT RecordTypeId FROM Contract WHERE Id = :contractId LIMIT 1];
+    row = [SELECT RecordTypeId FROM Contract WHERE Id = :contractId WITH USER_MODE LIMIT 1];
     if (row.RecordTypeId != expectedRecordTypeId) {
       String msg =
         'Contract ' +
@@ -555,10 +595,17 @@ public without sharing class OnboardingNextStepRuleService {
     if (vendorCustomizationId == null) {
       return out;
     }
+    if (!Schema.SObjectType.Vendor_Customization__c.isAccessible()) {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.resolveVendorProgramContractRecordType: missing read access to Vendor_Customization__c.'
+      );
+      return out;
+    }
     List<Vendor_Customization__c> rows = [
       SELECT Contract_Record_Type__c, Contract_Record_Type__r.RecordTypeId__c, Retail_Option__c
       FROM Vendor_Customization__c
       WHERE Id = :vendorCustomizationId
+      WITH USER_MODE
       LIMIT 1
     ];
     if (rows.isEmpty()) {
@@ -576,10 +623,17 @@ public without sharing class OnboardingNextStepRuleService {
       raw = row.Contract_Record_Type__r.RecordTypeId__c;
     }
     if (String.isBlank(raw) && row.Contract_Record_Type__c != null) {
+      if (!Schema.SObjectType.Contract_Record_Type_Reference__c.isAccessible()) {
+        LoggingUtil.warn(
+          'OnboardingNextStepRuleService.resolveVendorProgramContractRecordType: missing read access to Contract_Record_Type_Reference__c.'
+        );
+        return out;
+      }
       List<Contract_Record_Type_Reference__c> refs = [
         SELECT RecordTypeId__c
         FROM Contract_Record_Type_Reference__c
         WHERE Id = :row.Contract_Record_Type__c
+        WITH USER_MODE
         LIMIT 1
       ];
       if (!refs.isEmpty()) {
@@ -611,29 +665,43 @@ public without sharing class OnboardingNextStepRuleService {
    */
   private static Id resolvePrincipalOwnerForSiblingContract(Onboarding__c source, ApplyOutcome outcome) {
     if (source.Opportunity__c != null) {
-      List<OpportunityContactRole> primaryOcr = [
-        SELECT ContactId
-        FROM OpportunityContactRole
-        WHERE OpportunityId = :source.Opportunity__c AND IsPrimary = TRUE
-        LIMIT 1
-      ];
-      if (!primaryOcr.isEmpty() && primaryOcr[0].ContactId != null) {
-        return primaryOcr[0].ContactId;
+      if (Schema.SObjectType.OpportunityContactRole.isAccessible()) {
+        List<OpportunityContactRole> primaryOcr = [
+          SELECT ContactId
+          FROM OpportunityContactRole
+          WHERE OpportunityId = :source.Opportunity__c AND IsPrimary = TRUE
+          WITH USER_MODE
+          LIMIT 1
+        ];
+        if (!primaryOcr.isEmpty() && primaryOcr[0].ContactId != null) {
+          return primaryOcr[0].ContactId;
+        }
+      } else {
+        LoggingUtil.warn(
+          'OnboardingNextStepRuleService.resolvePrincipalOwnerForSiblingContract: missing read access to OpportunityContactRole; skipping primary OCR lookup.'
+        );
       }
     }
 
     String principalOwnerRole = ACR_ROLE_PRINCIPAL_OWNER;
-    List<AccountContactRelation> rels = [
-      SELECT ContactId
-      FROM AccountContactRelation
-      WHERE
-        AccountId = :source.Account__c
-        AND IsActive = TRUE
-        AND Roles INCLUDES (:principalOwnerRole)
-      LIMIT 1
-    ];
-    if (!rels.isEmpty()) {
-      return rels[0].ContactId;
+    if (Schema.SObjectType.AccountContactRelation.isAccessible()) {
+      List<AccountContactRelation> rels = [
+        SELECT ContactId
+        FROM AccountContactRelation
+        WHERE
+          AccountId = :source.Account__c
+          AND IsActive = TRUE
+          AND Roles INCLUDES (:principalOwnerRole)
+        WITH USER_MODE
+        LIMIT 1
+      ];
+      if (!rels.isEmpty()) {
+        return rels[0].ContactId;
+      }
+    } else {
+      LoggingUtil.warn(
+        'OnboardingNextStepRuleService.resolvePrincipalOwnerForSiblingContract: missing read access to AccountContactRelation; skipping principal-owner relationship lookup.'
+      );
     }
 
     String msg =

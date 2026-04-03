@@ -58,6 +58,7 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
             SELECT Id, Account__c, Opportunity__c, Onboarding_Status__c
             FROM Onboarding__c
             WHERE Id IN :onboardingIds
+            WITH SECURITY_ENFORCED
         ]);
 
         Map<Id, Account_Vendor_Program_Onboarding__c> avoByOnboardingId =
@@ -67,6 +68,7 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
                    Status__c, Is_Active__c, Reason_for_Return__c
             FROM Account_Vendor_Program_Onboarding__c
             WHERE Onboarding__c IN :onboardingIds
+            WITH SECURITY_ENFORCED
         ]) {
             avoByOnboardingId.put(avo.Onboarding__c, avo);
         }
@@ -85,6 +87,7 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
                 FROM OpportunityContactRole
                 WHERE OpportunityId IN :opportunityIds
                   AND IsPrimary = true
+                WITH SECURITY_ENFORCED
                 ORDER BY LastModifiedDate DESC
             ]) {
                 if (!ALLOWED_PRIMARY_CONTACT_ROLES.contains(ocr.Role)) {
@@ -170,7 +173,14 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
         }
 
         if (!toInsert.isEmpty()) {
-            Database.SaveResult[] insertResults = Database.insert(toInsert, false);
+            List<SObject> sanitizedForCreate = Security.stripInaccessible(
+                AccessType.CREATABLE,
+                toInsert
+            ).getRecords();
+            Database.SaveResult[] insertResults = Database.insert(
+                (List<Account_Vendor_Program_Onboarding__c>) sanitizedForCreate,
+                false
+            );
             for (Integer i = 0; i < insertResults.size(); i++) {
                 Id onboardingId = insertOnboardingIds[i];
                 Response res = responseByOnboardingId.get(onboardingId);
@@ -186,7 +196,14 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
         }
 
         if (!toUpdate.isEmpty()) {
-            Database.SaveResult[] updateResults = Database.update(toUpdate, false);
+            List<SObject> sanitizedForUpdate = Security.stripInaccessible(
+                AccessType.UPDATABLE,
+                toUpdate
+            ).getRecords();
+            Database.SaveResult[] updateResults = Database.update(
+                (List<Account_Vendor_Program_Onboarding__c>) sanitizedForUpdate,
+                false
+            );
             for (Integer i = 0; i < updateResults.size(); i++) {
                 Id onboardingId = updateOnboardingIds[i];
                 Response res = responseByOnboardingId.get(onboardingId);

@@ -310,7 +310,14 @@ public with sharing class OnbReqContractEvidenceInvocable {
       orderedTargets.add(target);
     }
 
-    Database.SaveResult[] saveResults = Database.update(updates, false);
+    List<SObject> sanitizedForUpdate = Security.stripInaccessible(
+      AccessType.UPDATABLE,
+      updates
+    ).getRecords();
+    Database.SaveResult[] saveResults = Database.update(
+      (List<Onboarding_Requirement_Subject__c>) sanitizedForUpdate,
+      false
+    );
     for (Integer i = 0; i < saveResults.size(); i++) {
       Database.SaveResult saveResult = saveResults[i];
       SubjectTarget target = orderedTargets[i];
@@ -441,7 +448,14 @@ public with sharing class OnbReqContractEvidenceInvocable {
       return;
     }
 
-    Database.SaveResult[] saveResults = Database.update(updates, false);
+    List<SObject> sanitizedForUpdate = Security.stripInaccessible(
+      AccessType.UPDATABLE,
+      updates
+    ).getRecords();
+    Database.SaveResult[] saveResults = Database.update(
+      (List<Onboarding__c>) sanitizedForUpdate,
+      false
+    );
     for (Integer i = 0; i < saveResults.size(); i++) {
       Database.SaveResult saveResult = saveResults[i];
       Onboarding__c attempted = updates[i];

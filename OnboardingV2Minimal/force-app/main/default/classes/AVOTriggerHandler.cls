@@ -32,6 +32,9 @@ public with sharing class AVOTriggerHandler {
         if (onboardingIdsNeedingCheck.isEmpty()) {
             return;
         }
+        if (!Schema.sObjectType.Onboarding_Requirement__c.isAccessible()) {
+            return;
+        }
 
         Map<Id, Integer> openRequirementCountByOnboarding = new Map<Id, Integer>();
         for (AggregateResult aggregateResult : [

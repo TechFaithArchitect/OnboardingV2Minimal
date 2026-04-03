@@ -61,17 +61,20 @@ public with sharing class OnboardingStatusEvaluatorService {
     }
 
     Map<Id, EvaluationContext> contextByOnboardingId = loadContexts(onboardingIds);
-    List<Onboarding_Status_Evaluation_Rule__mdt> rules = [
-      SELECT
-        DeveloperName,
-        Rule_Order__c,
-        Predicate_Config__c,
-        Target_Onboarding_Status__c,
-        Target_Opportunity_Stage__c
-      FROM Onboarding_Status_Evaluation_Rule__mdt
-      WHERE Is_Active__c = true
-      ORDER BY Rule_Order__c ASC
-    ];
+    List<Onboarding_Status_Evaluation_Rule__mdt> rules = new List<Onboarding_Status_Evaluation_Rule__mdt>();
+    if (Schema.sObjectType.Onboarding_Status_Evaluation_Rule__mdt.isAccessible()) {
+      rules = [
+        SELECT
+          DeveloperName,
+          Rule_Order__c,
+          Predicate_Config__c,
+          Target_Onboarding_Status__c,
+          Target_Opportunity_Stage__c
+        FROM Onboarding_Status_Evaluation_Rule__mdt
+        WHERE Is_Active__c = true
+        ORDER BY Rule_Order__c ASC
+      ];
+    }
 
     for (Id onboardingId : onboardingIds) {
       EvaluationContext ctx = contextByOnboardingId.get(onboardingId);
@@ -135,13 +138,11 @@ public with sharing class OnboardingStatusEvaluatorService {
       return resultsById;
     }
 
-    // Omit WITH SECURITY_ENFORCED: same automation/FLS gap as requirement rows — if the running user
-    // cannot read Onboarding__c via enforced SOQL, the map misses the Id and onboarding DML is skipped
-    // while evaluateBulk still returned a target status (silent no-op).
     Map<Id, Onboarding__c> onboardingById = new Map<Id, Onboarding__c>([
       SELECT Id, Onboarding_Status__c, Opportunity__c
       FROM Onboarding__c
       WHERE Id IN :evaluableOnboardingIds
+      WITH SECURITY_ENFORCED
     ]);
 
     Map<Id, String> targetStageByOpportunityId = new Map<Id, String>();
@@ -189,6 +190,7 @@ public with sharing class OnboardingStatusEvaluatorService {
         SELECT Id, StageName
         FROM Opportunity
         WHERE Id IN :targetStageByOpportunityId.keySet()
+        WITH SECURITY_ENFORCED
       ]) {
         String targetStage = targetStageByOpportunityId.get(existingOpportunity.Id);
         if (
@@ -236,6 +238,7 @@ public with sharing class OnboardingStatusEvaluatorService {
       SELECT Id, Onboarding_Status__c, Assigned_Team__c, Opportunity__c, Vendor_Customization__c
       FROM Onboarding__c
       WHERE Id IN :onboardingIds
+      WITH SECURITY_ENFORCED
     ]);
     if (onboardingById.isEmpty()) {
       return contextByOnboardingId;
@@ -254,6 +257,7 @@ public with sharing class OnboardingStatusEvaluatorService {
         SELECT Id, StageName, IsClosed, IsWon
         FROM Opportunity
         WHERE Id IN :opportunityIds
+        WITH SECURITY_ENFORCED
       ]);
     }
 
@@ -266,8 +270,6 @@ public with sharing class OnboardingStatusEvaluatorService {
 
     Map<Id, Set<String>> applicableTypesByVendorId = new Map<Id, Set<String>>();
     if (!vendorProgramIds.isEmpty()) {
-      // Program template rows are vendor configuration (not PII). Omit WITH SECURITY_ENFORCED so
-      // automation and tests see the same template as admins; flows should grant object access where needed.
       for (Vendor_Program_Requirement__c vpr : [
         SELECT Vendor_Program__c, Requirement_Type__c
         FROM Vendor_Program_Requirement__c
@@ -275,6 +277,7 @@ public with sharing class OnboardingStatusEvaluatorService {
           Vendor_Program__c IN :vendorProgramIds
           AND Active__c = true
           AND Is_Required__c = true
+        WITH SECURITY_ENFORCED
       ]) {
         if (vpr.Vendor_Program__c == null || String.isBlank(vpr.Requirement_Type__c)) {
           continue;
@@ -309,12 +312,11 @@ public with sharing class OnboardingStatusEvaluatorService {
       contextByOnboardingId.put(onboarding.Id, ctx);
     }
 
-    // Omit WITH SECURITY_ENFORCED (same rationale as Vendor_Program_Requirement__c above): flows and
-    // integration users must evaluate status from every child requirement row, not a partial set.
     for (Onboarding_Requirement__c r : [
       SELECT Id, Onboarding__c, Requirement_Type__c, Status__c, Is_Overridden__c
       FROM Onboarding_Requirement__c
       WHERE Onboarding__c IN :contextByOnboardingId.keySet()
+      WITH SECURITY_ENFORCED
     ]) {
       EvaluationContext ctx = contextByOnboardingId.get(r.Onboarding__c);
       if (ctx == null) {

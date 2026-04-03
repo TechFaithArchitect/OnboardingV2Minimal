@@ -28,6 +28,9 @@ public with sharing class VendorOnboardingEligibilityRuleEngine {
 
     if (cachedRulesByVendorName == null) {
       cachedRulesByVendorName = new Map<String, Rule>();
+      if (!Schema.sObjectType.Vendor_Onboarding_Eligibility_Rule__mdt.isAccessible()) {
+        return cachedRulesByVendorName;
+      }
       for (Vendor_Onboarding_Eligibility_Rule__mdt metadataRule : [
         SELECT Vendor_Name__c, Block_Mode__c, Use_Prerequisites__c
         FROM Vendor_Onboarding_Eligibility_Rule__mdt

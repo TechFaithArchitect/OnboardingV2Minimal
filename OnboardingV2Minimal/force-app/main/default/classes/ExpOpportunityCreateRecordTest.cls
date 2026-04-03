@@ -146,7 +146,7 @@ private class ExpOpportunityCreateRecordTest {
         System.assertEquals(false, response.showAgreementChoice);
         System.assertEquals(true, response.showVendorSelector);
         System.assertEquals(true, response.showVerifyAccount);
-        System.assertEquals(true, response.isUserSpecial);
+        System.assertEquals(false, response.isUserSpecial);
         System.assertEquals(true, response.hasAnyOnboardingForAccount);
         System.assertEquals(true, response.hasNdaOnboardingForOpportunity);
         System.assertEquals(
@@ -155,6 +155,31 @@ private class ExpOpportunityCreateRecordTest {
         );
         System.assertEquals('012FLOW000000000AAA', response.opportunityRecordTypeId);
         System.assertEquals('Flow supplied rule message.', response.ruleErrorMessage);
+
+        resetOverrides();
+    }
+
+    @IsTest
+    static void loadContext_resolvesSpecialFlagFromPermissionSetWhenNoOverride() {
+        resetOverrides();
+        Account accountRecord = createAccountRecord(' Permission Set Resolution Account');
+        seedLoadContextOverrides(false);
+        ExpOpportunityCreateRecord.testIsUserSpecialOverride = null;
+
+        Integer assignmentCount = [
+            SELECT COUNT()
+            FROM PermissionSetAssignment
+            WHERE AssigneeId = :UserInfo.getUserId()
+            AND PermissionSet.Name = 'Onboarding_Can_Send_Special_Chuzo_Agreement'
+        ];
+
+        Test.startTest();
+        ExpOpportunityCreateRecord.LoadContextResponse response =
+            ExpOpportunityCreateRecord.loadContext(accountRecord.Id, null);
+        Test.stopTest();
+
+        System.assertEquals(true, response.success);
+        System.assertEquals(assignmentCount > 0, response.isUserSpecial);
 
         resetOverrides();
     }
@@ -183,6 +208,54 @@ private class ExpOpportunityCreateRecordTest {
 
         System.assertEquals(false, missingJsonResponse.success, 'Expected missing contacts JSON to fail.');
         System.assertEquals('Contacts JSON is required.', missingJsonResponse.errorMessage);
+    }
+
+    @IsTest
+    static void saveContacts_requiresResolvedAccountIdWhenJsonDoesNotContainOne() {
+        resetOverrides();
+        ExpOpportunityCreateRecord.SaveContactsRequest requestItem =
+            new ExpOpportunityCreateRecord.SaveContactsRequest();
+        requestItem.accountId = null;
+        requestItem.contactsJson = '[{"child":{"LastName":"No Account Id"}}]';
+
+        Test.startTest();
+        ExpOpportunityCreateRecord.SaveContactsResponse response =
+            ExpOpportunityCreateRecord.saveContactsAndPrepareOcr(requestItem);
+        Test.stopTest();
+
+        System.assertEquals(false, response.success);
+        System.assertEquals('Account Id is required.', response.errorMessage);
+        System.assertNotEquals(null, response.diagnostics);
+
+        resetOverrides();
+    }
+
+    @IsTest
+    static void saveContacts_resolvesLowercaseAccountIdFromContactsJson() {
+        resetOverrides();
+        Account accountRecord = createAccountRecord('Lowercase accountId parsing account');
+        ExpOpportunityCreateRecord.testUpsertErrorsByConfig = new Map<String, List<String>>{
+            CONFIG_CONTACT_ON_ACCOUNT => new List<String>{ 'Synthetic upsert failure for branch coverage.' }
+        };
+
+        ExpOpportunityCreateRecord.SaveContactsRequest requestItem =
+            new ExpOpportunityCreateRecord.SaveContactsRequest();
+        requestItem.accountId = null;
+        requestItem.contactsJson = '[{"accountId":"' + String.valueOf(accountRecord.Id) + '"}]';
+
+        Test.startTest();
+        ExpOpportunityCreateRecord.SaveContactsResponse response =
+            ExpOpportunityCreateRecord.saveContactsAndPrepareOcr(requestItem);
+        Test.stopTest();
+
+        System.assertEquals(false, response.success);
+        System.assertEquals(
+            'Synthetic upsert failure for branch coverage.',
+            response.errorMessage
+        );
+        System.assertNotEquals(null, response.diagnostics);
+
+        resetOverrides();
     }
 
     @IsTest
@@ -337,6 +410,68 @@ private class ExpOpportunityCreateRecordTest {
     }
 
     @IsTest
+    static void submit_usesSelectedVendorProgramIdAndAddressNormalizationPaths() {
+        resetOverrides();
+        Account accountRecord = createAccountRecord('Address Normalization Account');
+
+        ExpOpportunityCreateRecord.testUpsertErrorsByConfig = new Map<String, List<String>>{
+            CONFIG_CONTACT_ON_ACCOUNT => new List<String>()
+        };
+        ExpOpportunityCreateAsyncService.QueueResult queueResult =
+            new ExpOpportunityCreateAsyncService.QueueResult();
+        queueResult.queued = true;
+        queueResult.message = 'Create chain completed synchronously.';
+        ExpOpportunityCreateRecord.testQueueResultsOverride =
+            new List<ExpOpportunityCreateAsyncService.QueueResult>{ queueResult };
+
+        ExpOpportunityCreateRecord.SubmitRequest requestItem =
+            new ExpOpportunityCreateRecord.SubmitRequest();
+        requestItem.accountId = accountRecord.Id;
+        requestItem.accountName = 'Address Normalization Account Updated';
+        requestItem.accountPhone = '555-333-2222';
+        requestItem.billingStreet = '123 Billing St';
+        requestItem.billingCity = 'Billing City';
+        requestItem.billingState = 'California';
+        requestItem.billingPostalCode = '94105';
+        requestItem.billingCountry = 'United States';
+        requestItem.shippingStreet = '456 Shipping St';
+        requestItem.shippingCity = 'Shipping City';
+        requestItem.shippingState = 'FL';
+        requestItem.shippingPostalCode = '32065';
+        requestItem.shippingCountry = 'US';
+        requestItem.contactsJson = '[{"Contact":{"LastName":"Signer"}}]';
+        requestItem.opportunityContactsJson = '[{"OpportunityContactRole":{"Role":"Owner"}}]';
+        requestItem.selectedVendorProgramId = 'aDF000000000001';
+
+        Test.startTest();
+        ExpOpportunityCreateRecord.SubmitResponse response =
+            ExpOpportunityCreateRecord.submitCreateRecord(requestItem);
+        Test.stopTest();
+
+        System.assertEquals(true, response.success);
+        System.assertEquals('Create chain completed synchronously.', response.message);
+
+        Account updatedAccount = [
+            SELECT
+                Name,
+                Phone,
+                BillingCountry,
+                BillingState,
+                ShippingCountry,
+                ShippingState
+            FROM Account
+            WHERE Id = :accountRecord.Id
+            LIMIT 1
+        ];
+        System.assertEquals('Address Normalization Account Updated', updatedAccount.Name);
+        System.assertEquals('555-333-2222', updatedAccount.Phone);
+        System.assertNotEquals(null, updatedAccount.BillingCountry);
+        System.assertNotEquals(null, updatedAccount.ShippingCountry);
+
+        resetOverrides();
+    }
+
+    @IsTest
     static void submit_queueFailure_withFilledOpportunityAndVendorFields() {
         resetOverrides();
         Account accountRecord = createAccountRecord('Queue Filled Payload');
@@ -381,6 +516,87 @@ private class ExpOpportunityCreateRecordTest {
 
         System.assertEquals(false, response.success);
         System.assertNotEquals(null, response.errorMessage);
+
+        resetOverrides();
+    }
+
+    @IsTest
+    static void submit_blocksChuzoNoPersonalGuaranteeWithoutPermissionSet() {
+        resetOverrides();
+        Account accountRecord = createAccountRecord('Restricted Chuzo Path Account');
+
+        ExpOpportunityCreateRecord.testIsUserSpecialOverride = false;
+        ExpOpportunityCreateRecord.SubmitRequest requestItem =
+            new ExpOpportunityCreateRecord.SubmitRequest();
+        requestItem.accountId = accountRecord.Id;
+        requestItem.contactsJson = '[{"Contact":{"LastName":"Signer"}}]';
+        requestItem.opportunityContactsJson = '[{"OpportunityContactRole":{"Role":"Owner"}}]';
+        requestItem.opportunityProgramBaseSelection =
+            'Program Base Application - with Chuzo (No Personal Guarantee)';
+
+        Test.startTest();
+        ExpOpportunityCreateRecord.SubmitResponse response =
+            ExpOpportunityCreateRecord.submitCreateRecord(requestItem);
+        Test.stopTest();
+
+        System.assertEquals(false, response.success);
+        System.assertEquals(
+            'Program Base App with Chuzo (No Personal Guarantee) requires ' +
+            'Onboarding_Can_Send_Special_Chuzo_Agreement.',
+            response.errorMessage
+        );
+        System.assertNotEquals(null, response.diagnostics);
+
+        resetOverrides();
+    }
+
+    @IsTest
+    static void submit_chuzoNoPersonalGuarantee_respectsPermissionSetWhenNoOverride() {
+        resetOverrides();
+        Account accountRecord = createAccountRecord('Permission Set Submit Path Account');
+
+        ExpOpportunityCreateRecord.testIsUserSpecialOverride = null;
+        ExpOpportunityCreateRecord.testUpsertErrorsByConfig = new Map<String, List<String>>{
+            CONFIG_CONTACT_ON_ACCOUNT => new List<String>()
+        };
+        ExpOpportunityCreateAsyncService.QueueResult queueResult =
+            new ExpOpportunityCreateAsyncService.QueueResult();
+        queueResult.queued = true;
+        queueResult.message = 'Create chain completed synchronously.';
+        ExpOpportunityCreateRecord.testQueueResultsOverride =
+            new List<ExpOpportunityCreateAsyncService.QueueResult>{ queueResult };
+
+        Integer assignmentCount = [
+            SELECT COUNT()
+            FROM PermissionSetAssignment
+            WHERE AssigneeId = :UserInfo.getUserId()
+            AND PermissionSet.Name = 'Onboarding_Can_Send_Special_Chuzo_Agreement'
+        ];
+
+        ExpOpportunityCreateRecord.SubmitRequest requestItem =
+            new ExpOpportunityCreateRecord.SubmitRequest();
+        requestItem.accountId = accountRecord.Id;
+        requestItem.contactsJson = '[{"Contact":{"LastName":"Signer"}}]';
+        requestItem.opportunityContactsJson = '[{"OpportunityContactRole":{"Role":"Owner"}}]';
+        requestItem.opportunityProgramBaseSelection =
+            'Program Base Application - with Chuzo (No Personal Guarantee)';
+
+        Test.startTest();
+        ExpOpportunityCreateRecord.SubmitResponse response =
+            ExpOpportunityCreateRecord.submitCreateRecord(requestItem);
+        Test.stopTest();
+
+        if (assignmentCount > 0) {
+            System.assertEquals(true, response.success);
+            System.assertEquals('Create chain completed synchronously.', response.message);
+        } else {
+            System.assertEquals(false, response.success);
+            System.assertEquals(
+                'Program Base App with Chuzo (No Personal Guarantee) requires ' +
+                'Onboarding_Can_Send_Special_Chuzo_Agreement.',
+                response.errorMessage
+            );
+        }
 
         resetOverrides();
     }

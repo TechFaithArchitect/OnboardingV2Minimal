@@ -52,12 +52,16 @@ public with sharing class RecordCollectionEditorConfigService {
             if (String.isBlank(developerName)) {
                 throw new OnboardingDomainException('Config developer name is required.');
             }
+            if (!Schema.SObjectType.Child_Record_Editor_Config__mdt.isAccessible()) {
+                throw new OnboardingDomainException('Insufficient access to Child_Record_Editor_Config__mdt.');
+            }
 
             List<Child_Record_Editor_Config__mdt> records = [
                 SELECT Id, DeveloperName, Object_API_Name__c, Parent_Field_API_Name__c, Fields_JSON__c,
                     Relationship_Object_API_Name__c, Relationship_Fields_JSON__c, Role_Constraints_JSON__c
                 FROM Child_Record_Editor_Config__mdt
                 WHERE DeveloperName = :developerName
+                WITH USER_MODE
                 LIMIT 1
             ];
 
@@ -311,9 +315,14 @@ public with sharing class RecordCollectionEditorConfigService {
     @AuraEnabled(cacheable=false)
     public static Boolean getCanAssignAuthorizedSigner(String configKey) {
         if (String.isBlank(configKey)) return true;
+        if (!Schema.SObjectType.Child_Record_Editor_Config__mdt.isAccessible()) {
+            return true;
+        }
         List<Child_Record_Editor_Config__mdt> records = [
             SELECT Role_Constraints_JSON__c FROM Child_Record_Editor_Config__mdt
-            WHERE DeveloperName = :configKey LIMIT 1
+            WHERE DeveloperName = :configKey
+            WITH USER_MODE
+            LIMIT 1
         ];
         if (records.isEmpty()) return true;
         String jsonStr = records[0].Role_Constraints_JSON__c;
@@ -348,6 +357,11 @@ public with sharing class RecordCollectionEditorConfigService {
                 results.add(singleResult);
                 continue;
             }
+            if (!Schema.SObjectType.Child_Record_Editor_Config__mdt.isAccessible()) {
+                singleResult.errorMessages.add('Insufficient access to Child_Record_Editor_Config__mdt.');
+                results.add(singleResult);
+                continue;
+            }
 
             List<Child_Record_Editor_Config__mdt> configList = [
                 SELECT Id, Object_API_Name__c, Parent_Field_API_Name__c,
@@ -355,6 +369,7 @@ public with sharing class RecordCollectionEditorConfigService {
                     Role_Constraints_JSON__c
                 FROM Child_Record_Editor_Config__mdt
                 WHERE DeveloperName = :requestItem.configKey
+                WITH USER_MODE
                 LIMIT 1
             ];
 

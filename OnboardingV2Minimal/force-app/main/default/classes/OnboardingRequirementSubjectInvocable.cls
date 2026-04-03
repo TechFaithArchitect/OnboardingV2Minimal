@@ -59,7 +59,13 @@ public with sharing class OnboardingRequirementSubjectInvocable {
         }
 
         if (!toInsert.isEmpty()) {
-          insert toInsert;
+          List<SObject> sanitizedForCreate = Security.stripInaccessible(
+            AccessType.CREATABLE,
+            toInsert
+          ).getRecords();
+          if (!sanitizedForCreate.isEmpty()) {
+            insert (List<Onboarding_Requirement_Subject__c>) sanitizedForCreate;
+          }
         }
       } catch (Exception ex) {
         LoggingUtil.error(

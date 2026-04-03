@@ -63,7 +63,7 @@ public without sharing class OnboardingErrorLogService {
 
         Database.SaveResult sr;
         try {
-            sr = Database.insert(row, false);
+            sr = Database.insert(row, false, AccessLevel.USER_MODE);
         } catch (Exception ex) {
             outcome.userFacingMessage = userBase + ' Reference: logging unavailable.';
             LoggingUtil.error('OnboardingErrorLogService.persistFault insert threw: ' + ex.getMessage());
@@ -94,7 +94,7 @@ public without sharing class OnboardingErrorLogService {
             Request__c = truncate(LoggingUtil.redactPii(requestBody), MAX_REQUEST_CHARS)
         );
         try {
-            update requestPatch;
+            Database.update(requestPatch, false, AccessLevel.USER_MODE);
         } catch (Exception ex) {
             LoggingUtil.warn('OnboardingErrorLogService.persistFault request update failed: ' + ex.getMessage());
         }

@@ -98,12 +98,15 @@ public with sharing class LoggingUtil {
         }
 
         try {
-            List<Onboarding_Logging_Config__mdt> settings = [
-                SELECT Enabled__c, Minimum_Level__c, Redact_PII__c
-                FROM Onboarding_Logging_Config__mdt
-                WHERE DeveloperName = :DEFAULT_CONFIG_DEVELOPER_NAME
-                LIMIT 1
-            ];
+            List<Onboarding_Logging_Config__mdt> settings = new List<Onboarding_Logging_Config__mdt>();
+            if (Schema.sObjectType.Onboarding_Logging_Config__mdt.isAccessible()) {
+                settings = [
+                    SELECT Enabled__c, Minimum_Level__c, Redact_PII__c
+                    FROM Onboarding_Logging_Config__mdt
+                    WHERE DeveloperName = :DEFAULT_CONFIG_DEVELOPER_NAME
+                    LIMIT 1
+                ];
+            }
             if (!settings.isEmpty()) {
                 Onboarding_Logging_Config__mdt setting = settings[0];
                 cachedLoggingEnabled = setting.Enabled__c == null

@@ -219,6 +219,7 @@ public with sharing class CommunicationEventDispatchInvocable {
         AND IsActive = true
         AND IsDirect = true
         AND ContactId != null
+      WITH SECURITY_ENFORCED
     ]) {
       if (roleFilter != null) {
         String relationshipRoles = relationship.Roles == null
@@ -241,6 +242,7 @@ public with sharing class CommunicationEventDispatchInvocable {
       SELECT Name
       FROM Vendor_Customization__c
       WHERE Id = :vendorProgramId
+      WITH SECURITY_ENFORCED
       LIMIT 1
     ];
     if (rows.isEmpty() || String.isBlank(rows[0].Name)) {
@@ -261,6 +263,9 @@ public with sharing class CommunicationEventDispatchInvocable {
     String vendorProgramKey
   ) {
     if (String.isBlank(eventKey)) {
+      return new List<Communication_Event_Policy__mdt>();
+    }
+    if (!Schema.sObjectType.Communication_Event_Policy__mdt.isAccessible()) {
       return new List<Communication_Event_Policy__mdt>();
     }
 
@@ -327,6 +332,9 @@ public with sharing class CommunicationEventDispatchInvocable {
     if (communicationTypes.isEmpty() || String.isBlank(recipientType)) {
       return dispatchByType;
     }
+    if (!Schema.sObjectType.Communication_Dispatch_Policy__mdt.isAccessible()) {
+      return dispatchByType;
+    }
 
     if (!String.isBlank(vendorProgramKey)) {
       for (Communication_Dispatch_Policy__mdt specificPolicy : [
@@ -379,6 +387,7 @@ public with sharing class CommunicationEventDispatchInvocable {
       FROM Communication_Template_Assignment__c
       WHERE Vendor_Program__c = :vendorProgramId
         AND Active__c = true
+      WITH SECURITY_ENFORCED
     ]) {
       if (assignmentRow.Communication_Template__c != null) {
         assignedTemplateIds.add(assignmentRow.Communication_Template__c);
@@ -397,6 +406,7 @@ public with sharing class CommunicationEventDispatchInvocable {
           AND Active__c = true
           AND Communication_Type__c IN :communicationTypes
           AND Recipient_Type__c = :recipientType
+        WITH SECURITY_ENFORCED
       ]) {
         templateIds.add(templateRow.Id);
       }
@@ -412,6 +422,7 @@ public with sharing class CommunicationEventDispatchInvocable {
       WHERE Id IN :assignedTemplateIds
         AND Active__c = true
         AND Communication_Type__c IN :communicationTypes
+      WITH SECURITY_ENFORCED
     ]) {
       templateIds.add(templateRow.Id);
     }

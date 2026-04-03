@@ -43,14 +43,17 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                     continue;
                 }
 
-                List<Child_Record_Editor_Config__mdt> configList = [
-                    SELECT Id, Object_API_Name__c, Parent_Field_API_Name__c,
-                        Relationship_Object_API_Name__c, Relationship_Parent_Field__c, Relationship_Child_Field__c,
-                        Relationship_Fields_JSON__c, Fields_JSON__c
-                    FROM Child_Record_Editor_Config__mdt
-                    WHERE DeveloperName = :req.configKey
-                    LIMIT 1
-                ];
+                List<Child_Record_Editor_Config__mdt> configList = new List<Child_Record_Editor_Config__mdt>();
+                if (Schema.sObjectType.Child_Record_Editor_Config__mdt.isAccessible()) {
+                    configList = [
+                        SELECT Id, Object_API_Name__c, Parent_Field_API_Name__c,
+                            Relationship_Object_API_Name__c, Relationship_Parent_Field__c, Relationship_Child_Field__c,
+                            Relationship_Fields_JSON__c, Fields_JSON__c
+                        FROM Child_Record_Editor_Config__mdt
+                        WHERE DeveloperName = :req.configKey
+                        LIMIT 1
+                    ];
+                }
                 if (configList.isEmpty()) {
                     res.errorMessage = 'No config found for key: ' + req.configKey;
                     results.add(res);

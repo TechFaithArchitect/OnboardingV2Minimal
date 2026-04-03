@@ -14,7 +14,11 @@ public with sharing class ExpOpportunityCreateRecord {
     private static final String DEFAULT_PROGRAM_TYPE = 'NDA/Program Base App';
     private static final String DEFAULT_PROGRAM_BASE_SELECTION = 'Program Base Application - without Chuzo';
     private static final String DEFAULT_VENDOR_PATH_PROGRAM_BASE_SELECTION = 'Not Applicable';
+    private static final String PROGRAM_BASE_SELECTION_WITH_CHUZO_NO_PG =
+        'Program Base Application - with Chuzo (No Personal Guarantee)';
     private static final String DEFAULT_OPPORTUNITY_TYPE = 'New Business';
+    private static final String SPECIAL_CHUZO_PERMISSION_SET_API_NAME =
+        'Onboarding_Can_Send_Special_Chuzo_Agreement';
 
     @TestVisible
     private static String testVendorOptionsJson;
@@ -226,6 +230,7 @@ public with sharing class ExpOpportunityCreateRecord {
                     ShippingCountryCode
                 FROM Account
                 WHERE Id = :accountId
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
 
@@ -256,9 +261,7 @@ public with sharing class ExpOpportunityCreateRecord {
             response.hasChuzoOnboardingForOpportunity = onboardingFlags.hasChuzoOnboardingForOpportunity;
             response.hasNdaOnboardingForOpportunity = onboardingFlags.hasNdaOnboardingForOpportunity;
             response.hasNonChuzoOnboardingForOpportunity = onboardingFlags.hasNonChuzoOnboardingForOpportunity;
-            response.isUserSpecial = preloadedContext.containsKey('isUserSpecial')
-                ? asBoolean(preloadedContext.get('isUserSpecial'))
-                : resolveIsUserSpecial();
+            response.isUserSpecial = resolveIsUserSpecial();
 
             Map<String, Object> routing = resolveRouting(onboardingFlags, response.isUserSpecial, preloadedContext);
             response.finalNextAction = asString(routing.get('finalNextAction'));
@@ -438,6 +441,18 @@ public with sharing class ExpOpportunityCreateRecord {
         if (resolvedAccountId == null) {
             response.errorMessage = 'Account Id is required.';
             diagnostics.put('phase', 'validation_resolved_account_missing');
+            response.diagnostics = serializeDiagnostics(diagnostics);
+            return response;
+        }
+
+        if (
+            PROGRAM_BASE_SELECTION_WITH_CHUZO_NO_PG == request.opportunityProgramBaseSelection &&
+            resolveIsUserSpecial() != true
+        ) {
+            response.errorMessage =
+                'Program Base App with Chuzo (No Personal Guarantee) requires ' +
+                SPECIAL_CHUZO_PERMISSION_SET_API_NAME + '.';
+            diagnostics.put('phase', 'validation_special_chuzo_permission_missing');
             response.diagnostics = serializeDiagnostics(diagnostics);
             return response;
         }
@@ -782,7 +797,13 @@ public with sharing class ExpOpportunityCreateRecord {
             request.shippingCountry,
             request.shippingState
         );
-        update accountToUpdate;
+        List<SObject> sanitizedForUpdate = Security.stripInaccessible(
+            AccessType.UPDATABLE,
+            new List<Account>{ accountToUpdate }
+        ).getRecords();
+        if (!sanitizedForUpdate.isEmpty()) {
+            update (List<Account>) sanitizedForUpdate;
+        }
     }
 
     private static Id resolveEffectiveAccountId(Id explicitAccountId, String contactsJson) {
@@ -1076,6 +1097,7 @@ public with sharing class ExpOpportunityCreateRecord {
             FROM RecordType
             WHERE SobjectType = 'Opportunity'
               AND Name = :PROGRAM_OPPORTUNITY_RECORD_TYPE_NAME
+            WITH SECURITY_ENFORCED
             LIMIT 1
         ];
         return rows.isEmpty() ? null : String.valueOf(rows[0].Id);
@@ -1214,7 +1236,14 @@ public with sharing class ExpOpportunityCreateRecord {
         if (Test.isRunningTest() && testIsUserSpecialOverride != null) {
             return testIsUserSpecialOverride;
         }
-        return FeatureManagement.checkPermission('Onboarding_Allowed_to_Send_Special_Agreement');
+        Integer assignmentCount = [
+            SELECT COUNT()
+            FROM PermissionSetAssignment
+            WHERE AssigneeId = :UserInfo.getUserId()
+            AND PermissionSet.Name = :SPECIAL_CHUZO_PERMISSION_SET_API_NAME
+            WITH SECURITY_ENFORCED
+        ];
+        return assignmentCount > 0;
     }
 
     private static Map<String, Object> resolveContactFlowOverride(Boolean filterForSigners) {

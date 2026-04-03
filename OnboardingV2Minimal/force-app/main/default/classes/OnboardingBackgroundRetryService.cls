@@ -81,6 +81,10 @@ public without sharing class OnboardingBackgroundRetryService {
         outcome.idempotencyKey = idempotencyKey;
         outcome.operationType = resolution.operationType;
 
+        if (!Schema.sObjectType.Onboarding_Background_Job__c.isAccessible()) {
+            outcome.message = 'Missing read access to Onboarding_Background_Job__c.';
+            return outcome;
+        }
         Onboarding_Background_Job__c existing = null;
         List<Onboarding_Background_Job__c> existingRows = [
             SELECT Id, Attempt_Count__c, Status__c
@@ -131,6 +135,14 @@ public without sharing class OnboardingBackgroundRetryService {
             job.Attempt_Count__c = 0;
         }
 
+        if (existing == null && !Schema.sObjectType.Onboarding_Background_Job__c.isCreateable()) {
+            outcome.message = 'Missing create access to Onboarding_Background_Job__c.';
+            return outcome;
+        }
+        if (existing != null && !Schema.sObjectType.Onboarding_Background_Job__c.isUpdateable()) {
+            outcome.message = 'Missing update access to Onboarding_Background_Job__c.';
+            return outcome;
+        }
         Database.UpsertResult upsertResult = Database.upsert(
             job,
             Onboarding_Background_Job__c.Fields.Idempotency_Key__c,
@@ -163,6 +175,12 @@ public without sharing class OnboardingBackgroundRetryService {
             ? DEFAULT_BATCH_SIZE
             : Math.min(requestedBatchSize, 100);
 
+        if (
+            !Schema.sObjectType.Onboarding_Background_Job__c.isAccessible() ||
+            !Schema.sObjectType.Onboarding_Background_Job__c.isUpdateable()
+        ) {
+            return 0;
+        }
         DateTime now = System.now();
         List<Onboarding_Background_Job__c> jobs = [
             SELECT
@@ -196,7 +214,7 @@ public without sharing class OnboardingBackgroundRetryService {
             job.Status__c = STATUS_IN_PROGRESS;
             job.Last_Processed_At__c = now;
         }
-        update jobs;
+        Database.update(jobs, false, AccessLevel.SYSTEM_MODE);
 
         for (Onboarding_Background_Job__c job : jobs) {
             ReplayOutcome replay;
@@ -225,7 +243,7 @@ public without sharing class OnboardingBackgroundRetryService {
                 job.Next_Run_At__c = now.addMinutes(computeBackoffMinutes(attempts));
             }
         }
-        update jobs;
+        Database.update(jobs, false, AccessLevel.SYSTEM_MODE);
 
         if (!Test.isRunningTest() && hasDueJobs(now)) {
             try {
@@ -299,11 +317,15 @@ public without sharing class OnboardingBackgroundRetryService {
                 scopedRequirementId
             );
             if (requirementReplay.success == true) {
-                requirementsProcessed = [
-                    SELECT COUNT()
-                    FROM Onboarding_Requirement__c
-                    WHERE Onboarding__c = :onboardingId
-                ];
+                if (Schema.sObjectType.Onboarding_Requirement__c.isAccessible()) {
+                    requirementsProcessed = [
+                        SELECT COUNT()
+                        FROM Onboarding_Requirement__c
+                        WHERE Onboarding__c = :onboardingId
+                    ];
+                } else {
+                    replayWarnings.add('Missing read access to Onboarding_Requirement__c for replay count.');
+                }
                 if (!String.isBlank(requirementReplay.message)) {
                     replayWarnings.add(requirementReplay.message);
                 }
@@ -349,6 +371,9 @@ public without sharing class OnboardingBackgroundRetryService {
         Id onboardingId = onboarding == null ? null : onboarding.Id;
         if (onboardingId == null) {
             return failure('Onboarding Id is required for requirement replay.');
+        }
+        if (!Schema.sObjectType.Onboarding_Requirement__c.isAccessible()) {
+            return failure('Missing read access to Onboarding_Requirement__c for replay.');
         }
 
         OnboardingRequirementVPRGateService.GateOutcome gate = OnboardingRequirementVPRGateService.buildGateOutcome(
@@ -442,6 +467,9 @@ public without sharing class OnboardingBackgroundRetryService {
         if (onboarding == null || onboarding.Id == null || onboarding.Contract__c == null) {
             return null;
         }
+        if (!Schema.sObjectType.Contract.isAccessible()) {
+            return null;
+        }
 
         List<Contract> contracts = [
             SELECT Id, Opportunity_to_Contract__c
@@ -457,12 +485,15 @@ public without sharing class OnboardingBackgroundRetryService {
         if (contractOpportunityId == null || contractOpportunityId == onboarding.Opportunity__c) {
             return null;
         }
+        if (!Schema.sObjectType.Onboarding__c.isUpdateable()) {
+            return 'Missing update access to Onboarding__c for opportunity alignment replay.';
+        }
 
         try {
-            update new Onboarding__c(
+            Database.update(new Onboarding__c(
                 Id = onboarding.Id,
                 Opportunity__c = contractOpportunityId
-            );
+            ), false, AccessLevel.SYSTEM_MODE);
             return null;
         } catch (Exception ex) {
             return 'Onboarding opportunity alignment replay failed: ' + ex.getMessage();
@@ -521,6 +552,9 @@ public without sharing class OnboardingBackgroundRetryService {
     private static String replayCommunicationPath(Id onboardingId) {
         if (onboardingId == null) {
             return null;
+        }
+        if (!Schema.sObjectType.Onboarding__c.isAccessible()) {
+            return 'Missing read access to Onboarding__c for communication replay.';
         }
 
         List<Onboarding__c> onboardingRows = [
@@ -677,6 +711,9 @@ public without sharing class OnboardingBackgroundRetryService {
         }
 
         if (contextRequirementId != null) {
+            if (!Schema.sObjectType.Onboarding_Requirement__c.isAccessible()) {
+                return null;
+            }
             List<Onboarding_Requirement__c> reqRows = [
                 SELECT Id, Onboarding__c
                 FROM Onboarding_Requirement__c
@@ -746,6 +783,9 @@ public without sharing class OnboardingBackgroundRetryService {
     }
 
     private static Boolean hasDueJobs(DateTime now) {
+        if (!Schema.sObjectType.Onboarding_Background_Job__c.isAccessible()) {
+            return false;
+        }
         Integer countDue = [
             SELECT COUNT()
             FROM Onboarding_Background_Job__c
@@ -812,6 +852,9 @@ public without sharing class OnboardingBackgroundRetryService {
 
     private static void ensureScheduler() {
         String jobName = OnboardingBackgroundRetryScheduler.JOB_NAME;
+        if (!Schema.sObjectType.CronTrigger.isAccessible()) {
+            return;
+        }
         List<CronTrigger> existing = [
             SELECT Id
             FROM CronTrigger
