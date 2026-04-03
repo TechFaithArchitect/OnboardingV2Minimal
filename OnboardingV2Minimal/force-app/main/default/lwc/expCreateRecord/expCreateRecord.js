@@ -217,7 +217,7 @@ export default class ExpCreateRecord extends LightningElement {
                 this.flowShowVerifyAccount,
                 context.showVerifyAccount === true
             );
-            this.isUserSpecial = this.pickBoolean(this.flowIsUserSpecial, context.isUserSpecial === true);
+            this.isUserSpecial = context.isUserSpecial === true;
 
             this.opportunityRuntime = {
                 recordTypeId: this.pickValue(
@@ -472,7 +472,11 @@ export default class ExpCreateRecord extends LightningElement {
 
         const mappedPath = this.pathFromProgramBase(this.opportunityRuntime.programBaseSelection);
         if (this.showPathSelector) {
-            this.pathSelection = mappedPath || null;
+            const availablePathValues = this.pathOptions.map((option) => option.value);
+            this.pathSelection =
+                mappedPath && availablePathValues.includes(mappedPath)
+                    ? mappedPath
+                    : null;
             return;
         }
 
@@ -1095,10 +1099,18 @@ export default class ExpCreateRecord extends LightningElement {
         if (this.isOfferAction && !this.showAgreementChoice) {
             return PROGRAM_BASE_BY_PATH[PATH_VENDOR];
         }
-        if (this.pathSelection && PROGRAM_BASE_BY_PATH[this.pathSelection]) {
+        if (this.isValidPathSelection() && PROGRAM_BASE_BY_PATH[this.pathSelection]) {
             return PROGRAM_BASE_BY_PATH[this.pathSelection];
         }
         return this.opportunityRuntime.programBaseSelection;
+    }
+
+    isValidPathSelection() {
+        if (!this.hasValue(this.pathSelection)) {
+            return false;
+        }
+        const availablePathValues = this.pathOptions.map((option) => option.value);
+        return availablePathValues.includes(this.pathSelection);
     }
 
     getVendorSelection() {
@@ -1358,7 +1370,7 @@ export default class ExpCreateRecord extends LightningElement {
         if (this.currentStepIndex === STEP_OPPORTUNITY) {
             let ready = this.editorHasRequiredValues('opportunity');
             if (ready && this.showPathSelector) {
-                ready = this.hasValue(this.pathSelection);
+                ready = this.isValidPathSelection();
             }
             if (ready && this.shouldShowVendorSelector) {
                 const vendorSelection = this.getVendorSelection();
@@ -1448,7 +1460,6 @@ export default class ExpCreateRecord extends LightningElement {
         this.appendPreloadedEntry(payload, 'showPersonalGuarantee', this.flowShowPersonalGuarantee);
         this.appendPreloadedEntry(payload, 'showVendorSelector', this.flowShowVendorSelector);
         this.appendPreloadedEntry(payload, 'showVerifyAccount', this.flowShowVerifyAccount);
-        this.appendPreloadedEntry(payload, 'isUserSpecial', this.flowIsUserSpecial);
         this.appendPreloadedEntry(
             payload,
             'availableVendorOptionString',

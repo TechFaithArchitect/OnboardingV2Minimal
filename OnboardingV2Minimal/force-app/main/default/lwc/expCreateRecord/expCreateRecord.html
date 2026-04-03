@@ -74,15 +74,18 @@
                                 variant={resolvedOpportunityStepVariant}
                             ></c-exp-flow-step-wrapper>
                             <template if:true={showPathSelector}>
-                                <div slot="content-top" class="slds-m-bottom_small">
-                                    <lightning-radio-group
-                                        name="pathSelection"
-                                        label="Program Path"
-                                        value={pathSelection}
-                                        options={pathOptions}
-                                        type="radio"
-                                        onchange={handlePathSelectionChange}
-                                    ></lightning-radio-group>
+                                <div slot="row-top" class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <lightning-combobox
+                                            name="pathSelection"
+                                            label="Program Path"
+                                            value={pathSelection}
+                                            options={pathOptions}
+                                            placeholder="Select a Program Path"
+                                            required
+                                            onchange={handlePathSelectionChange}
+                                        ></lightning-combobox>
+                                    </div>
                                 </div>
                             </template>
                             <template if:true={shouldShowVendorSelector}>
