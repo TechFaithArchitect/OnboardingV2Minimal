@@ -141,7 +141,7 @@ public with sharing class VendorProgramSeedService {
 
         Map<String, Vendor__c> vendorByName = new Map<String, Vendor__c>();
         if (!vendorNames.isEmpty()) {
-            for (Vendor__c v : [SELECT Id, Name, Active__c FROM Vendor__c WHERE Name IN :vendorNames]) {
+            for (Vendor__c v : [SELECT Id, Name, Active__c FROM Vendor__c WHERE Name IN :vendorNames WITH USER_MODE]) {
                 vendorByName.put(v.Name, v);
             }
         }
@@ -166,7 +166,7 @@ public with sharing class VendorProgramSeedService {
 
         vendorByName.clear();
         if (!vendorNames.isEmpty()) {
-            for (Vendor__c v : [SELECT Id, Name, Active__c FROM Vendor__c WHERE Name IN :vendorNames]) {
+            for (Vendor__c v : [SELECT Id, Name, Active__c FROM Vendor__c WHERE Name IN :vendorNames WITH USER_MODE]) {
                 vendorByName.put(v.Name, v);
             }
         }
@@ -214,6 +214,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, Developer_Name__c, RecordTypeId__c
                 FROM Contract_Record_Type_Reference__c
                 WHERE Name IN :neededContractNames OR Developer_Name__c IN :neededContractDevs
+                WITH USER_MODE
             ]) {
                 if (!refByName.containsKey(ref.Name)) refByName.put(ref.Name, ref);
                 if (!String.isBlank(ref.Developer_Name__c) && !refByDev.containsKey(ref.Developer_Name__c)) refByDev.put(ref.Developer_Name__c, ref);
@@ -226,6 +227,7 @@ public with sharing class VendorProgramSeedService {
                 FROM RecordType
                 WHERE SobjectType = 'Contract'
                 AND (Name IN :neededContractNames OR DeveloperName IN :neededContractDevs)
+                WITH USER_MODE
             ]) {
                 if (!rtByName.containsKey(rt.Name)) rtByName.put(rt.Name, rt.Id);
                 if (!rtByDev.containsKey(rt.DeveloperName)) rtByDev.put(rt.DeveloperName, rt.Id);
@@ -291,6 +293,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, Developer_Name__c
                 FROM Contract_Record_Type_Reference__c
                 WHERE Name IN :neededContractNames OR Developer_Name__c IN :neededContractDevs
+                WITH USER_MODE
             ]) {
                 if (!contractByName.containsKey(ref.Name)) contractByName.put(ref.Name, ref.Id);
                 if (!String.isBlank(ref.Developer_Name__c) && !contractByDev.containsKey(ref.Developer_Name__c)) contractByDev.put(ref.Developer_Name__c, ref.Id);
@@ -318,6 +321,7 @@ public with sharing class VendorProgramSeedService {
                        Order_Entry_Platform__c
                 FROM Vendor_Customization__c
                 WHERE Vendor__c IN :vendorIds
+                WITH USER_MODE
             ]) {
                 String key = String.valueOf(vc.Vendor__c) + '|' + String.valueOf(vc.Contract_Record_Type__c)
                     + '|' + String.valueOf(vc.Retail_Option__c) + '|' + String.valueOf(vc.Business_Vertical__c)
@@ -467,6 +471,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Vendor__c, Contract_Record_Type__c, Label__c, Retail_Option__c, Business_Vertical__c
                 FROM Vendor_Customization__c
                 WHERE Vendor__c IN :vendorIds
+                WITH USER_MODE
                 ORDER BY CreatedDate ASC
             ]) {
                 String key = String.valueOf(vc.Vendor__c) + '|' + String.valueOf(vc.Contract_Record_Type__c)
@@ -504,6 +509,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, CreatedDate
                 FROM echosign_dev1__Agreement_Type__c
                 WHERE Name IN :agreementTypeNames
+                WITH USER_MODE
                 ORDER BY Name ASC, CreatedDate ASC, Id ASC
             ]) {
                 if (!agreementTypeIdByName.containsKey(t.Name)) {
@@ -536,6 +542,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, CreatedDate
                 FROM echosign_dev1__Agreement_Type__c
                 WHERE Name IN :agreementTypeNames
+                WITH USER_MODE
                 ORDER BY Name ASC, CreatedDate ASC, Id ASC
             ]) {
                 if (!agreementTypeIdByName.containsKey(t.Name)) {
@@ -554,6 +561,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, echosign_dev1__Agreement_Type__c
                 FROM echosign_dev1__Agreement_Template__c
                 WHERE Name IN :agreementNames
+                WITH USER_MODE
                 ORDER BY Name ASC, CreatedDate ASC, Id ASC
             ]) {
                 String templateIdentityKey = t.Name + '|' + String.valueOf(t.echosign_dev1__Agreement_Type__c);
@@ -625,6 +633,7 @@ public with sharing class VendorProgramSeedService {
                     SELECT Id, Name, echosign_dev1__Agreement_Type__c
                     FROM echosign_dev1__Agreement_Template__c
                     WHERE Name IN :agreementNames
+                    WITH USER_MODE
                     ORDER BY Name ASC, CreatedDate ASC, Id ASC
                 ]) {
                     String templateIdentityKey = t.Name + '|' + String.valueOf(t.echosign_dev1__Agreement_Type__c);
@@ -705,6 +714,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Associated_Agreement_Template__c
                 FROM Vendor_Customization__c
                 WHERE Id IN :desiredTemplateByProgramId.keySet()
+                WITH USER_MODE
             ]) {
                 Id desired = desiredTemplateByProgramId.get(vc.Id);
                 if (desired != null && vc.Associated_Agreement_Template__c != desired) {
