@@ -132,15 +132,15 @@
         </assignmentItems>
     </assignments>
     <assignments>
-        <name>Capture_Create_Training_Assignment_Records_Subflow_Fault</name>
-        <label>Capture Create Training Assignment Records Subflow Fault</label>
+        <name>Complete_Training_Related_Record_Creation</name>
+        <label>Complete Training Related Record Creation</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>errorMessage</assignToReference>
+            <assignToReference>OnboardingRecord.Id</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Flow.FaultMessage</elementReference>
+                <elementReference>OnboardingRecord.Id</elementReference>
             </value>
         </assignmentItems>
     </assignments>
@@ -318,6 +318,38 @@
             <label>Yes - Contact Record Found</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Did_Create_Training_Assignment_Records_Fail</name>
+        <label>Did Create Training Assignment Records Fail</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Complete_Training_Related_Record_Creation</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Error</defaultConnectorLabel>
+        <rules>
+            <name>Create_Training_Assignment_Records_Failed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>errorMessage</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue></stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Complete_Training_Related_Record_Creation</targetReference>
+            </connector>
+            <label>Create Training Assignment Records Failed</label>
+        </rules>
+    </decisions>
     <description>DOMAIN LAYER - OmniSObject - Subflow - CREATE - Related Onboarding Requirement Records. Training-type requirements invoke DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records using the primary opportunity contact.</description>
     <environments>Default</environments>
     <interviewLabel>DOMAIN - OmniSObject - SFL - CREATE - Related {!$Flow.CurrentDateTime}</interviewLabel>
@@ -464,9 +496,9 @@
         <label>Create Training Assignment Records</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <faultConnector>
-            <targetReference>Capture_Create_Training_Assignment_Records_Subflow_Fault</targetReference>
-        </faultConnector>
+        <connector>
+            <targetReference>Did_Create_Training_Assignment_Records_Fail</targetReference>
+        </connector>
         <flowName>DOMAIN_OmniSObject_SFL_CREATE_Training_Assignment_Records</flowName>
         <inputAssignments>
             <name>ContactRecord</name>
