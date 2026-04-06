@@ -19,7 +19,8 @@ public with sharing class PicklistHelper {
                 return options;
             }
             
-            Schema.DescribeSObjectResult objectDescribe = sObjectType.getDescribe();
+            Schema.DescribeSObjectResult objectDescribe =
+                sObjectType.getDescribe(SObjectDescribeOptions.DEFERRED);
             Schema.SObjectField field = objectDescribe.fields.getMap().get(fieldApiName);
             
             if (field == null) {
@@ -133,7 +134,8 @@ public with sharing class PicklistHelper {
                 return false;
             }
 
-            Schema.SObjectField field = sObjectType.getDescribe().fields.getMap().get(fieldApiName);
+            Schema.SObjectField field =
+                sObjectType.getDescribe(SObjectDescribeOptions.DEFERRED).fields.getMap().get(fieldApiName);
             if (field == null) {
                 return false;
             }
@@ -168,7 +170,8 @@ public with sharing class PicklistHelper {
                 return preferredValue;
             }
 
-            Schema.SObjectField field = sObjectType.getDescribe().fields.getMap().get(fieldApiName);
+            Schema.SObjectField field =
+                sObjectType.getDescribe(SObjectDescribeOptions.DEFERRED).fields.getMap().get(fieldApiName);
             if (field == null) {
                 return preferredValue;
             }

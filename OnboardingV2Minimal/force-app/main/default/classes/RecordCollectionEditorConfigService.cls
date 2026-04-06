@@ -1,3 +1,4 @@
+@SuppressWarnings('PMD.OperationWithLimitsInLoop,PMD.ApexSOQLInjection')
 public with sharing class RecordCollectionEditorConfigService {
 
     public class FieldConfig {
@@ -90,8 +91,7 @@ public with sharing class RecordCollectionEditorConfigService {
                 );
             }
 
-            Map<String, Schema.SObjectField> fieldMap =
-                sobjectType.getDescribe().fields.getMap();
+            Map<String, Schema.SObjectField> fieldMap = describeFieldMap(sobjectType);
 
             List<FieldConfig> fieldConfigs = new List<FieldConfig>();
 
@@ -181,8 +181,7 @@ public with sharing class RecordCollectionEditorConfigService {
             if (!String.isBlank(relObjectName) && !String.isBlank(relFieldsJson)) {
                 Schema.SObjectType relType = Schema.getGlobalDescribe().get(relObjectName);
                 if (relType != null) {
-                    Map<String, Schema.SObjectField> relFieldMap =
-                        relType.getDescribe().fields.getMap();
+                    Map<String, Schema.SObjectField> relFieldMap = describeFieldMap(relType);
                     List<Object> rawRelFields;
                     try {
                         rawRelFields =
@@ -281,7 +280,9 @@ public with sharing class RecordCollectionEditorConfigService {
                 rc.canAssignAuthorizedSigner = FeatureManagement.checkPermission(rc.authorizedSignerPermission);
             }
             rc.roleFieldApiName = (String) raw.get('roleFieldApiName');
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            return rc;
+        }
         return rc;
     }
 
@@ -346,6 +347,29 @@ public with sharing class RecordCollectionEditorConfigService {
             return results;
         }
 
+        Map<String, Schema.SObjectType> globalDescribe = Schema.getGlobalDescribe();
+        Map<String, Child_Record_Editor_Config__mdt> configByKey = new Map<String, Child_Record_Editor_Config__mdt>();
+        if (Schema.SObjectType.Child_Record_Editor_Config__mdt.isAccessible()) {
+            Set<String> configKeys = new Set<String>();
+            for (CreateFromJsonRequest requestItem : requests) {
+                if (requestItem != null && String.isNotBlank(requestItem.configKey)) {
+                    configKeys.add(requestItem.configKey);
+                }
+            }
+            if (!configKeys.isEmpty()) {
+                for (Child_Record_Editor_Config__mdt cmdt : [
+                    SELECT Id, DeveloperName, Object_API_Name__c, Parent_Field_API_Name__c,
+                        Relationship_Object_API_Name__c, Relationship_Parent_Field__c, Relationship_Child_Field__c,
+                        Role_Constraints_JSON__c
+                    FROM Child_Record_Editor_Config__mdt
+                    WHERE DeveloperName IN :configKeys
+                    WITH USER_MODE
+                ]) {
+                    configByKey.put(cmdt.DeveloperName, cmdt);
+                }
+            }
+        }
+
         for (CreateFromJsonRequest requestItem : requests) {
             CreateFromJsonResult singleResult = new CreateFromJsonResult();
             singleResult.createdRecords = new List<SObject>();
@@ -363,23 +387,12 @@ public with sharing class RecordCollectionEditorConfigService {
                 continue;
             }
 
-            List<Child_Record_Editor_Config__mdt> configList = [
-                SELECT Id, Object_API_Name__c, Parent_Field_API_Name__c,
-                    Relationship_Object_API_Name__c, Relationship_Parent_Field__c, Relationship_Child_Field__c,
-                    Role_Constraints_JSON__c
-                FROM Child_Record_Editor_Config__mdt
-                WHERE DeveloperName = :requestItem.configKey
-                WITH USER_MODE
-                LIMIT 1
-            ];
-
-            if (configList.isEmpty()) {
+            Child_Record_Editor_Config__mdt cmdt = configByKey.get(requestItem.configKey);
+            if (cmdt == null) {
                 singleResult.errorMessages.add('No Child_Record_Editor_Config__mdt found for key: ' + requestItem.configKey);
                 results.add(singleResult);
                 continue;
             }
-
-            Child_Record_Editor_Config__mdt cmdt = configList[0];
             String objectApiName = cmdt.Object_API_Name__c;
             if (String.isBlank(objectApiName)) {
                 singleResult.errorMessages.add('Object_API_Name__c must be populated for config: ' + requestItem.configKey);
@@ -387,7 +400,7 @@ public with sharing class RecordCollectionEditorConfigService {
                 continue;
             }
 
-            Schema.SObjectType sobjectType = Schema.getGlobalDescribe().get(objectApiName);
+            Schema.SObjectType sobjectType = globalDescribe.get(objectApiName);
             if (sobjectType == null) {
                 singleResult.errorMessages.add('Unknown object API name: ' + objectApiName);
                 results.add(singleResult);
@@ -423,7 +436,7 @@ public with sharing class RecordCollectionEditorConfigService {
                 }
             }
 
-            Map<String, Schema.SObjectField> childFieldMap = sobjectType.getDescribe().fields.getMap();
+            Map<String, Schema.SObjectField> childFieldMap = describeFieldMap(sobjectType);
 
             List<SObject> toInsert = new List<SObject>();
             List<SObject> toUpdate = new List<SObject>();
@@ -537,12 +550,11 @@ public with sharing class RecordCollectionEditorConfigService {
                 parentIdObj != null && String.isNotBlank(String.valueOf(parentIdObj))) {
 
                 Id parentId = Id.valueOf(String.valueOf(parentIdObj));
-                Schema.SObjectType relType = Schema.getGlobalDescribe().get(relObjectName);
+                Schema.SObjectType relType = globalDescribe.get(relObjectName);
                 if (relType != null) {
                     List<SObject> relRecordsToInsert = new List<SObject>();
                     List<SObject> relRecordsToUpdate = new List<SObject>();
-                    Map<String, Schema.SObjectField> relFieldMap =
-                        relType.getDescribe().fields.getMap();
+                    Map<String, Schema.SObjectField> relFieldMap = describeFieldMap(relType);
                     Schema.SObjectField startDateField = relFieldMap.get('StartDate');
                     if (!relFieldMap.containsKey(relParentField) || !relFieldMap.containsKey(relChildField)) {
                         singleResult.errorMessages.add(
@@ -711,7 +723,7 @@ public with sharing class RecordCollectionEditorConfigService {
         String strVal = String.valueOf(fVal);
         if (String.isBlank(strVal)) return null;
 
-        Schema.SObjectField sfield = sobjectType.getDescribe().fields.getMap().get(fieldName);
+        Schema.SObjectField sfield = describeFieldMap(sobjectType).get(fieldName);
         if (sfield == null) return fVal;
 
         Schema.DescribeFieldResult dfr = sfield.getDescribe();
@@ -776,6 +788,10 @@ public with sharing class RecordCollectionEditorConfigService {
             }
         }
         return values;
+    }
+
+    private static Map<String, Schema.SObjectField> describeFieldMap(Schema.SObjectType sobjectType) {
+        return sobjectType.getDescribe(SObjectDescribeOptions.DEFERRED).fields.getMap();
     }
 
     private static String mapDescribeToDataType(Schema.DescribeFieldResult dfr) {

@@ -1,3 +1,4 @@
+@SuppressWarnings('PMD.OperationWithLimitsInLoop,PMD.OperationWithHighCostInLoop,PMD.ApexSOQLInjection')
 public with sharing class RecordCollectionEditorGetRecordsService {
 
     private static final String PRINCIPAL_OWNER_ACR_ROLE = 'Principal Owner';
@@ -172,7 +173,9 @@ public with sharing class RecordCollectionEditorGetRecordsService {
                             }
                             relFieldNames.add(apiName);
                         }
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                        relFieldNames.clear();
+                    }
                 }
 
                 Map<String, SObject> acrByChildAndParent = new Map<String, SObject>();

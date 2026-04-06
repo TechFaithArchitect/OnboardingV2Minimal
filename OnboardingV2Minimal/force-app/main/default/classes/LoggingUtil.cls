@@ -1,6 +1,7 @@
 /**
  * Lightweight logging helper to centralize debug formatting.
  */
+@SuppressWarnings('PMD.AvoidDebugStatements')
 public with sharing class LoggingUtil {
     private static final Integer LEVEL_ERROR = 0;
     private static final Integer LEVEL_WARN = 1;

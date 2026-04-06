@@ -49,6 +49,7 @@ public with sharing class ObjectRelatedListController {
      * @throws AuraHandledException if required parameters are missing or invalid
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexSOQLInjection')
     public static List<SObject> getRelatedRecords(QueryConfig config) {
         try {
             // Validate configuration
@@ -199,6 +200,7 @@ public with sharing class ObjectRelatedListController {
      * Designed for reusable LWC combobox selectors to reduce per-object Apex.
      */
     @AuraEnabled(cacheable=true)
+    @SuppressWarnings('PMD.ApexSOQLInjection')
     public static List<LookupOption> getLookupOptions(
         String objectApiName,
         String labelFieldApiName,

@@ -35,39 +35,60 @@ public with sharing class OnbReqParentBulkEvalInvocable {
       return results;
     }
 
-    for (EvaluateRequest req : requests) {
-      EvaluateResult result = new EvaluateResult();
+    List<Set<Id>> requirementIdsByRequestIndex = new List<Set<Id>>();
+    Set<Id> allRequirementIds = new Set<Id>();
+    for (EvaluateRequest requestItem : requests) {
+      Set<Id> requirementIds = parseRequirementIds(requestItem);
+      requirementIdsByRequestIndex.add(requirementIds);
+      allRequirementIds.addAll(requirementIds);
+      results.add(new EvaluateResult());
+    }
+
+    Map<Id, Onboarding_Requirement__c> allRequirementsById = new Map<Id, Onboarding_Requirement__c>();
+    if (!allRequirementIds.isEmpty()) {
+      allRequirementsById = new Map<Id, Onboarding_Requirement__c>([
+        SELECT Id, Status__c, Completed__c
+        FROM Onboarding_Requirement__c
+        WHERE Id IN :allRequirementIds
+        WITH SECURITY_ENFORCED
+      ]);
+    }
+
+    Map<Id, StatusCounts> countsByRequirementId = new Map<Id, StatusCounts>();
+    if (!allRequirementsById.isEmpty()) {
+      for (Onboarding_Requirement_Subject__c subject : [
+        SELECT Id, Onboarding_Requirement__c, Status__c
+        FROM Onboarding_Requirement_Subject__c
+        WHERE Onboarding_Requirement__c IN :allRequirementsById.keySet()
+        WITH SECURITY_ENFORCED
+      ]) {
+        StatusCounts counts = countsByRequirementId.get(subject.Onboarding_Requirement__c);
+        if (counts == null) {
+          counts = new StatusCounts();
+          countsByRequirementId.put(subject.Onboarding_Requirement__c, counts);
+        }
+        counts.add(subject.Status__c);
+      }
+    }
+
+    for (Integer requestIndex = 0; requestIndex < requests.size(); requestIndex++) {
+      EvaluateResult result = results[requestIndex];
       try {
-        Set<Id> requirementIds = parseRequirementIds(req);
+        Set<Id> requirementIds = requirementIdsByRequestIndex[requestIndex];
         if (requirementIds.isEmpty()) {
           result.errorMessage = 'No onboarding requirement ids were passed.';
           result.processedCount = 0;
           result.updatedCount = 0;
           result.failedCount = 0;
-          results.add(result);
           continue;
         }
 
-        Map<Id, Onboarding_Requirement__c> requirementsById = new Map<Id, Onboarding_Requirement__c>([
-          SELECT Id, Status__c, Completed__c
-          FROM Onboarding_Requirement__c
-          WHERE Id IN :requirementIds
-          WITH SECURITY_ENFORCED
-        ]);
-
-        Map<Id, StatusCounts> countsByRequirementId = new Map<Id, StatusCounts>();
-        for (Onboarding_Requirement_Subject__c subject : [
-          SELECT Id, Onboarding_Requirement__c, Status__c
-          FROM Onboarding_Requirement_Subject__c
-          WHERE Onboarding_Requirement__c IN :requirementsById.keySet()
-          WITH SECURITY_ENFORCED
-        ]) {
-          StatusCounts counts = countsByRequirementId.get(subject.Onboarding_Requirement__c);
-          if (counts == null) {
-            counts = new StatusCounts();
-            countsByRequirementId.put(subject.Onboarding_Requirement__c, counts);
+        Map<Id, Onboarding_Requirement__c> requirementsById = new Map<Id, Onboarding_Requirement__c>();
+        for (Id requirementId : requirementIds) {
+          Onboarding_Requirement__c requirementRecord = allRequirementsById.get(requirementId);
+          if (requirementRecord != null) {
+            requirementsById.put(requirementId, requirementRecord);
           }
-          counts.add(subject.Status__c);
         }
 
         Map<Id, StatusOutcome> outcomesById = new Map<Id, StatusOutcome>();
@@ -105,12 +126,11 @@ public with sharing class OnbReqParentBulkEvalInvocable {
         result.updatedCount = 0;
         result.failedCount = 0;
       }
-      results.add(result);
     }
-
     return results;
   }
 
+  @SuppressWarnings('PMD.OperationWithLimitsInLoop')
   private static SaveSummary applyUpdatesWithStatusFallback(
     List<Onboarding_Requirement__c> updates,
     Map<Id, StatusOutcome> outcomesById,

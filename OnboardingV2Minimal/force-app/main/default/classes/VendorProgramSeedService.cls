@@ -807,7 +807,7 @@ public with sharing class VendorProgramSeedService {
 
         Map<String, Vendor__c> vendorByName = new Map<String, Vendor__c>();
         if (!vendorNames.isEmpty()) {
-            for (Vendor__c v : [SELECT Id, Name FROM Vendor__c WHERE Name IN :vendorNames]) {
+            for (Vendor__c v : [SELECT Id, Name FROM Vendor__c WHERE Name IN :vendorNames WITH USER_MODE]) {
                 vendorByName.put(v.Name, v);
             }
         }
@@ -819,6 +819,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, Developer_Name__c
                 FROM Contract_Record_Type_Reference__c
                 WHERE Name IN :neededContractNames OR Developer_Name__c IN :neededContractDevs
+                WITH USER_MODE
             ]) {
                 if (!contractByName.containsKey(ref.Name)) contractByName.put(ref.Name, ref.Id);
                 if (!String.isBlank(ref.Developer_Name__c) && !contractByDev.containsKey(ref.Developer_Name__c)) {
@@ -838,6 +839,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Vendor__c, Contract_Record_Type__c, Label__c, Retail_Option__c, Business_Vertical__c, CreatedDate
                 FROM Vendor_Customization__c
                 WHERE Vendor__c IN :vendorIds
+                WITH USER_MODE
                 ORDER BY CreatedDate ASC, Id ASC
             ]) {
                 String exactKey = String.valueOf(vc.Vendor__c) + '|' + String.valueOf(vc.Contract_Record_Type__c)
@@ -1114,7 +1116,7 @@ public with sharing class VendorProgramSeedService {
 
         Map<String, Vendor__c> vendorByName = new Map<String, Vendor__c>();
         if (!vendorNames.isEmpty()) {
-            for (Vendor__c v : [SELECT Id, Name FROM Vendor__c WHERE Name IN :vendorNames]) {
+            for (Vendor__c v : [SELECT Id, Name FROM Vendor__c WHERE Name IN :vendorNames WITH USER_MODE]) {
                 vendorByName.put(v.Name, v);
             }
         }
@@ -1139,6 +1141,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, Developer_Name__c
                 FROM Contract_Record_Type_Reference__c
                 WHERE Name IN :neededContractNames OR Developer_Name__c IN :neededContractDevs
+                WITH USER_MODE
             ]) {
                 if (!contractByName.containsKey(ref.Name)) contractByName.put(ref.Name, ref.Id);
                 if (!String.isBlank(ref.Developer_Name__c) && !contractByDev.containsKey(ref.Developer_Name__c)) contractByDev.put(ref.Developer_Name__c, ref.Id);
@@ -1150,12 +1153,12 @@ public with sharing class VendorProgramSeedService {
 
         Map<String, List<Vendor_Customization__c>> programsByExactKey = new Map<String, List<Vendor_Customization__c>>();
         Map<String, List<Vendor_Customization__c>> programsByVendorLabel = new Map<String, List<Vendor_Customization__c>>();
-        Map<String, List<Vendor_Customization__c>> programsByCoreKey = new Map<String, List<Vendor_Customization__c>>();
         if (!vendorIds.isEmpty()) {
             for (Vendor_Customization__c vc : [
                 SELECT Id, Vendor__c, Vendor__r.Name, Contract_Record_Type__c, Label__c, Retail_Option__c, Business_Vertical__c
                 FROM Vendor_Customization__c
                 WHERE Vendor__c IN :vendorIds
+                WITH USER_MODE
             ]) {
                 String exactKey = String.valueOf(vc.Vendor__c) + '|' + String.valueOf(vc.Contract_Record_Type__c)
                     + '|' + String.valueOf(vc.Retail_Option__c) + '|' + String.valueOf(vc.Business_Vertical__c)
@@ -1233,6 +1236,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Vendor__c, Vendor__r.Name, Label__c
                 FROM Vendor_Customization__c
                 WHERE Id IN :targetProgramIds
+                WITH USER_MODE
             ]) {
                 programById.put(vc.Id, vc);
             }
@@ -1246,6 +1250,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, Vendor_Customization__c, Active__c, Sort_Order__c, Unique_Key__c
                 FROM External_Contact_Credential_Type__c
                 WHERE Vendor_Customization__c IN :targetProgramIds
+                WITH USER_MODE
             ]) {
                 String key = String.valueOf(t.Vendor_Customization__c) + '|' + t.Name;
                 if (!existingTypeByKey.containsKey(key)) {
@@ -1352,6 +1357,7 @@ public with sharing class VendorProgramSeedService {
                 FROM External_Contact_Credential_Type__c
                 WHERE Vendor_Customization__c IN :targetProgramIds
                 AND Name IN :scopedTypeNames
+                WITH USER_MODE
             ]) {
                 String key = String.valueOf(t.Vendor_Customization__c) + '|' + t.Name;
                 if (!typeIdByProgramAndName.containsKey(key)) {
@@ -1369,6 +1375,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Vendor_Customization__c, External_Contact_Credential_Type__c, Is_Required__c, Sequence__c
                 FROM Required_Credential__c
                 WHERE Vendor_Customization__c IN :targetProgramIds
+                WITH USER_MODE
             ]) {
                 String key = String.valueOf(rc.Vendor_Customization__c) + '|' + String.valueOf(rc.External_Contact_Credential_Type__c);
                 if (!existingReqByKey.containsKey(key)) {
@@ -1455,6 +1462,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Vendor_Program__c, Credential_Type__c, Depends_On__c
                 FROM External_Credential_Type_Dependency__c
                 WHERE Vendor_Program__c IN :targetProgramIds
+                WITH USER_MODE
             ]) {
                 String key = String.valueOf(d.Vendor_Program__c) + '|' + String.valueOf(d.Credential_Type__c) + '|' + String.valueOf(d.Depends_On__c);
                 if (existingDepSeenKeys.contains(key)) {
@@ -1556,6 +1564,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Name, Active__c, System_Type__c, CreatedDate
             FROM Training_System__c
             WHERE Name IN :trainingSystemNames
+            WITH USER_MODE
             ORDER BY Name ASC, CreatedDate ASC, Id ASC
         ]) {
             String key = normalizeKeyPart(ts.Name);
@@ -1712,7 +1721,7 @@ public with sharing class VendorProgramSeedService {
 
         Map<String, Vendor__c> vendorByName = new Map<String, Vendor__c>();
         if (!vendorNames.isEmpty()) {
-            for (Vendor__c v : [SELECT Id, Name FROM Vendor__c WHERE Name IN :vendorNames]) {
+            for (Vendor__c v : [SELECT Id, Name FROM Vendor__c WHERE Name IN :vendorNames WITH USER_MODE]) {
                 vendorByName.put(v.Name, v);
             }
         }
@@ -1724,6 +1733,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, Developer_Name__c
                 FROM Contract_Record_Type_Reference__c
                 WHERE Name IN :neededContractNames OR Developer_Name__c IN :neededContractDevs
+                WITH USER_MODE
             ]) {
                 if (!contractByName.containsKey(ref.Name)) contractByName.put(ref.Name, ref.Id);
                 if (!String.isBlank(ref.Developer_Name__c) && !contractByDev.containsKey(ref.Developer_Name__c)) {
@@ -1743,6 +1753,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Vendor__c, Contract_Record_Type__c, Label__c, Retail_Option__c, Business_Vertical__c, CreatedDate
                 FROM Vendor_Customization__c
                 WHERE Vendor__c IN :vendorIds
+                WITH USER_MODE
                 ORDER BY CreatedDate ASC, Id ASC
             ]) {
                 String exactKey = String.valueOf(vc.Vendor__c) + '|' + String.valueOf(vc.Contract_Record_Type__c)
@@ -1845,6 +1856,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Name, CreatedDate
                 FROM Training_System__c
                 WHERE Name IN :trainingSystemNames
+                WITH USER_MODE
                 ORDER BY Name ASC, CreatedDate ASC, Id ASC
             ]) {
                 String key = normalizeKeyPart(ts.Name);
@@ -1866,6 +1878,7 @@ public with sharing class VendorProgramSeedService {
                 SELECT Id, Vendor_Customization__c, External_Contact_Credential_Type__r.Name
                 FROM Required_Credential__c
                 WHERE Vendor_Customization__c IN :targetProgramIds
+                WITH USER_MODE
             ]) {
                 String typeName = rc.External_Contact_Credential_Type__r == null
                     ? null
@@ -1899,6 +1912,7 @@ public with sharing class VendorProgramSeedService {
                    CreatedDate
             FROM Training_Requirement__c
             WHERE Vendor_Customization__c IN :targetProgramIds
+            WITH USER_MODE
             ORDER BY CreatedDate ASC, Id ASC
         ]) {
             existingById.put(tr.Id, tr);
@@ -1911,6 +1925,7 @@ public with sharing class VendorProgramSeedService {
                        CreatedDate
                 FROM Training_Requirement__c
                 WHERE External_Course_Code__c IN :externalCourseCodes
+                WITH USER_MODE
                 ORDER BY CreatedDate ASC, Id ASC
             ]) {
                 if (!existingById.containsKey(tr.Id)) existingById.put(tr.Id, tr);
@@ -2238,6 +2253,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Name, echosign_dev1__Agreement_Type__c, CreatedDate
             FROM echosign_dev1__Agreement_Template__c
             WHERE Name IN :agreementNames
+            WITH USER_MODE
             ORDER BY Name ASC, echosign_dev1__Agreement_Type__c ASC, CreatedDate ASC, Id ASC
         ]) {
             String key = t.Name + '|' + String.valueOf(t.echosign_dev1__Agreement_Type__c);
@@ -2260,6 +2276,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Associated_Agreement_Template__c
             FROM Vendor_Customization__c
             WHERE Associated_Agreement_Template__c IN :duplicateTemplateToCanonical.keySet()
+            WITH USER_MODE
         ]) {
             Id canonicalTemplateId = duplicateTemplateToCanonical.get(vc.Associated_Agreement_Template__c);
             if (canonicalTemplateId != null && canonicalTemplateId != vc.Associated_Agreement_Template__c) {
@@ -2286,6 +2303,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Name, CreatedDate
             FROM echosign_dev1__Agreement_Type__c
             WHERE Name IN :agreementTypeNames
+            WITH USER_MODE
             ORDER BY Name ASC, CreatedDate ASC, Id ASC
         ]) {
             if (!canonicalTypeIdByName.containsKey(t.Name)) {
@@ -2307,6 +2325,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, echosign_dev1__Agreement_Type__c
             FROM echosign_dev1__Agreement_Template__c
             WHERE echosign_dev1__Agreement_Type__c IN :duplicateTypeToCanonical.keySet()
+            WITH USER_MODE
         ]) {
             Id canonicalTypeId = duplicateTypeToCanonical.get(t.echosign_dev1__Agreement_Type__c);
             if (canonicalTypeId != null && canonicalTypeId != t.echosign_dev1__Agreement_Type__c) {
@@ -2333,6 +2352,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Vendor_Customization__c, Name, CreatedDate
             FROM External_Contact_Credential_Type__c
             WHERE Vendor_Customization__c IN :targetProgramIds
+            WITH USER_MODE
             ORDER BY Vendor_Customization__c ASC, Name ASC, CreatedDate ASC, Id ASC
         ]) {
             String key = String.valueOf(t.Vendor_Customization__c) + '|' + t.Name;
@@ -2356,6 +2376,7 @@ public with sharing class VendorProgramSeedService {
                 FROM Required_Credential__c
                 WHERE Vendor_Customization__c IN :targetProgramIds
                 AND External_Contact_Credential_Type__c IN :duplicateTypeToCanonical.keySet()
+                WITH USER_MODE
             ]) {
                 Id canonicalTypeId = duplicateTypeToCanonical.get(rc.External_Contact_Credential_Type__c);
                 if (canonicalTypeId != null && canonicalTypeId != rc.External_Contact_Credential_Type__c) {
@@ -2372,6 +2393,7 @@ public with sharing class VendorProgramSeedService {
                 WHERE Vendor_Program__c IN :targetProgramIds
                 AND (Credential_Type__c IN :duplicateTypeToCanonical.keySet()
                      OR Depends_On__c IN :duplicateTypeToCanonical.keySet())
+                WITH USER_MODE
             ]) {
                 Boolean changed = false;
                 Id canonicalCredentialTypeId = duplicateTypeToCanonical.get(d.Credential_Type__c);
@@ -2401,6 +2423,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Vendor_Customization__c, External_Contact_Credential_Type__c, CreatedDate
             FROM Required_Credential__c
             WHERE Vendor_Customization__c IN :targetProgramIds
+            WITH USER_MODE
             ORDER BY Vendor_Customization__c ASC, External_Contact_Credential_Type__c ASC, CreatedDate ASC, Id ASC
         ]) {
             String key = String.valueOf(rc.Vendor_Customization__c) + '|' + String.valueOf(rc.External_Contact_Credential_Type__c);
@@ -2425,6 +2448,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Vendor_Program__c, Credential_Type__c, Depends_On__c, CreatedDate
             FROM External_Credential_Type_Dependency__c
             WHERE Vendor_Program__c IN :targetProgramIds
+            WITH USER_MODE
             ORDER BY Vendor_Program__c ASC, Credential_Type__c ASC, Depends_On__c ASC, CreatedDate ASC, Id ASC
         ]) {
             String key =
@@ -2460,6 +2484,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Training_System__c
             FROM Training_Requirement__c
             WHERE Training_System__c IN :duplicateToCanonical.keySet()
+            WITH USER_MODE
         ]) {
             Id canonicalSystemId = duplicateToCanonical.get(tr.Training_System__c);
             if (canonicalSystemId != null && canonicalSystemId != tr.Training_System__c) {
@@ -2487,6 +2512,7 @@ public with sharing class VendorProgramSeedService {
                    Training_Code__c, External_Course_Code__c, External_Course_Name__c, CreatedDate
             FROM Training_Requirement__c
             WHERE Vendor_Customization__c IN :targetProgramIds
+            WITH USER_MODE
             ORDER BY CreatedDate ASC, Id ASC
         ]) {
             String key;
@@ -2522,6 +2548,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Vendor_Training_Requirement__c
             FROM Training_Assignment__c
             WHERE Vendor_Training_Requirement__c IN :duplicateToCanonical.keySet()
+            WITH USER_MODE
         ]) {
             Id canonicalId = duplicateToCanonical.get(ta.Vendor_Training_Requirement__c);
             if (canonicalId != null && canonicalId != ta.Vendor_Training_Requirement__c) {
@@ -2536,6 +2563,7 @@ public with sharing class VendorProgramSeedService {
             SELECT Id, Training_Requirement__c
             FROM POE_External_Contact_Credential__c
             WHERE Training_Requirement__c IN :duplicateToCanonical.keySet()
+            WITH USER_MODE
         ]) {
             Id canonicalId = duplicateToCanonical.get(ecc.Training_Requirement__c);
             if (canonicalId != null && canonicalId != ecc.Training_Requirement__c) {

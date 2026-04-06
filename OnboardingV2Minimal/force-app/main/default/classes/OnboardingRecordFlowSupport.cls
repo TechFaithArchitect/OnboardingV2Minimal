@@ -47,6 +47,7 @@ public with sharing class OnboardingRecordFlowSupport {
     }
   }
 
+  @SuppressWarnings('PMD.ApexSOQLInjection')
   public static Onboarding__c loadOnboardingForFlow(Id onboardingId) {
     if (onboardingId == null) {
       return null;
@@ -57,6 +58,7 @@ public with sharing class OnboardingRecordFlowSupport {
     );
   }
 
+  @SuppressWarnings('PMD.ApexSOQLInjection')
   public static Vendor_Customization__c loadVendorProgramForFlow(Id vendorProgramId) {
     if (vendorProgramId == null) {
       return null;

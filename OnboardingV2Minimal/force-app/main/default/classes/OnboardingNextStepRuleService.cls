@@ -42,6 +42,11 @@ public without sharing class OnboardingNextStepRuleService {
     String retailOption;
   }
 
+  private class RuleTargetMatch {
+    RuleSnapshot rule;
+    Id targetVendorProgramId;
+  }
+
   private static final String STATUS_SETUP_COMPLETE = 'Setup Complete';
   private static final String ACTION_AUTO_CREATE = 'Auto Create';
   private static final String OP_EQUALS = 'Equals';
@@ -164,11 +169,7 @@ public without sharing class OnboardingNextStepRuleService {
       }
     }
 
-    String soql =
-      'SELECT ' +
-      String.join(new List<String>(selectFields), ', ') +
-      ' FROM Onboarding__c WHERE Id = :onboardingId LIMIT 1';
-    List<Onboarding__c> rows = Database.query(soql);
+    List<Onboarding__c> rows = queryOnboardingWithDynamicFields(selectFields, onboardingId);
     if (rows.isEmpty()) {
       return;
     }
@@ -186,6 +187,8 @@ public without sharing class OnboardingNextStepRuleService {
       return;
     }
 
+    List<RuleTargetMatch> matchedRules = new List<RuleTargetMatch>();
+    Set<Id> matchedTargetVendorProgramIds = new Set<Id>();
     for (RuleSnapshot rule : rules) {
       if (rule == null || String.isBlank(rule.action)) {
         continue;
@@ -221,24 +224,47 @@ public without sharing class OnboardingNextStepRuleService {
         continue;
       }
 
-      List<Vendor_Customization__c> targetVp = [
-        SELECT Id
-        FROM Vendor_Customization__c
-        WHERE Id = :targetVendorProgramId
-        WITH USER_MODE
-        LIMIT 1
-      ];
-      if (targetVp.isEmpty()) {
+      RuleTargetMatch match = new RuleTargetMatch();
+      match.rule = rule;
+      match.targetVendorProgramId = targetVendorProgramId;
+      matchedRules.add(match);
+      matchedTargetVendorProgramIds.add(targetVendorProgramId);
+    }
+
+    if (matchedRules.isEmpty()) {
+      return;
+    }
+
+    Set<Id> existingTargetVendorProgramIds = new Set<Id>();
+    for (Vendor_Customization__c targetVp : [
+      SELECT Id
+      FROM Vendor_Customization__c
+      WHERE Id IN :matchedTargetVendorProgramIds
+      WITH USER_MODE
+    ]) {
+      existingTargetVendorProgramIds.add(targetVp.Id);
+    }
+
+    for (RuleTargetMatch match : matchedRules) {
+      if (!existingTargetVendorProgramIds.contains(match.targetVendorProgramId)) {
         LoggingUtil.warn(
           'OnboardingNextStepRuleService: rule ' +
-            String.valueOf(rule.developerName) +
+            String.valueOf(match.rule.developerName) +
             ' Scope_Key__c is not a Vendor_Customization__c Id in this org; skipped.'
         );
         continue;
       }
-
-      createLinkedOnboardingIfNeeded(onboarding, targetVendorProgramId, outcome);
+      createLinkedOnboardingIfNeeded(onboarding, match.targetVendorProgramId, outcome);
     }
+  }
+
+  @SuppressWarnings('PMD.ApexSOQLInjection')
+  private static List<Onboarding__c> queryOnboardingWithDynamicFields(Set<String> selectFields, Id onboardingId) {
+    String soql =
+      'SELECT ' +
+      String.join(new List<String>(selectFields), ', ') +
+      ' FROM Onboarding__c WHERE Id = :onboardingId LIMIT 1';
+    return Database.query(soql);
   }
 
   @TestVisible

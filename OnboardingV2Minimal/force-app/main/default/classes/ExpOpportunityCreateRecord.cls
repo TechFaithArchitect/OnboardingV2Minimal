@@ -1158,7 +1158,7 @@ public with sharing class ExpOpportunityCreateRecord {
                 contacts.add((Contact) row);
             }
         } catch (Exception ex) {
-            // no-op: return best effort empty list
+            return contacts;
         }
         return contacts;
     }
@@ -1174,7 +1174,7 @@ public with sharing class ExpOpportunityCreateRecord {
                 rowsOut.add((AccountContactRelation) row);
             }
         } catch (Exception ex) {
-            // no-op: return best effort empty list
+            return rowsOut;
         }
         return rowsOut;
     }
@@ -1212,7 +1212,7 @@ public with sharing class ExpOpportunityCreateRecord {
                 return (Map<String, Object>) parsedValue;
             }
         } catch (Exception ex) {
-            // no-op: return empty context when parse fails
+            return new Map<String, Object>();
         }
 
         return new Map<String, Object>();

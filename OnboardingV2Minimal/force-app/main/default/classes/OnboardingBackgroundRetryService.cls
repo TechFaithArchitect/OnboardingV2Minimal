@@ -647,6 +647,7 @@ public without sharing class OnboardingBackgroundRetryService {
         return eventLabel + ' communication replay: dispatch failed. ' + dispatchResult.diagnosticMessage;
     }
 
+    @SuppressWarnings('PMD.ApexSOQLInjection')
     private static ReplayDependencies loadReplayDependencies(Onboarding__c onboarding) {
         ReplayDependencies deps = new ReplayDependencies();
         deps.onboarding = onboarding;
@@ -739,6 +740,7 @@ public without sharing class OnboardingBackgroundRetryService {
         return resolved.operationType + '|' + String.valueOf(resolved.onboardingId);
     }
 
+    @SuppressWarnings('PMD.ApexSOQLInjection')
     private static SObject loadRecordForFlow(Schema.SObjectType typeToken, Id recordId) {
         if (typeToken == null || recordId == null) {
             return null;

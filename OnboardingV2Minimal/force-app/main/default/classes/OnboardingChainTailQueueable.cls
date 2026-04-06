@@ -1,7 +1,7 @@
 /**
  * Runs DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record outside the screen-flow interview to shorten user-visible wait.
  */
-public with sharing class OnboardingChainTailQueueable implements Queueable {
+public with sharing class OnboardingChainTailQueueable implements Queueable, Finalizer {
     private final Id contractId;
     private final Id opportunityId;
     private final Id vendorProgramId;
@@ -23,6 +23,7 @@ public with sharing class OnboardingChainTailQueueable implements Queueable {
     }
 
     public void execute(QueueableContext context) {
+        System.attachFinalizer(this);
         String contractStr = contractId == null ? null : String.valueOf(contractId);
         String opportunityStr = opportunityId == null ? null : String.valueOf(opportunityId);
         String accountStr = accountId == null ? null : String.valueOf(accountId);
@@ -103,6 +104,17 @@ public with sharing class OnboardingChainTailQueueable implements Queueable {
                 'OnboardingChainTailQueueable failed: ' + ex.getTypeName() + ' ' + ex.getMessage()
             );
         }
+    }
+
+    public void execute(FinalizerContext context) {
+        if (context == null || context.getResult() != ParentJobResult.UNHANDLED_EXCEPTION) {
+            return;
+        }
+        Exception ex = context.getException();
+        LoggingUtil.error(
+            'OnboardingChainTailQueueable finalizer captured unhandled exception: '
+            + (ex == null ? 'Unknown error.' : ex.getTypeName() + ': ' + ex.getMessage())
+        );
     }
 
     private static List<Opportunity> queryOpportunityFull(Id opportunityKey) {

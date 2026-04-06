@@ -68,10 +68,7 @@ public with sharing class OnboardingPerformanceSettings {
                 }
             }
         } catch (Exception ex) {
-            System.debug(
-                LoggingLevel.WARN,
-                '[Onboarding] OnboardingPerformanceSettings: ' + ex.getMessage()
-            );
+            LoggingUtil.warn('OnboardingPerformanceSettings: ' + ex.getMessage());
         }
         loaded = true;
     }
