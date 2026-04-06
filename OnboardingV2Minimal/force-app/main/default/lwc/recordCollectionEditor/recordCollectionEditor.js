@@ -11,7 +11,55 @@ export default class RecordCollectionEditor extends LightningElement {
     @api recordLabel = 'Row';
     @api configKey;
     @api parentId;
-    @api existingRecordsJson;
+
+    _apiExistingRecordsJson;
+
+    @api
+    get existingRecordsJson() {
+        return this._apiExistingRecordsJson;
+    }
+
+    set existingRecordsJson(value) {
+        const next = value === undefined || value === null ? '' : String(value);
+        const prev =
+            this._apiExistingRecordsJson === undefined || this._apiExistingRecordsJson === null
+                ? ''
+                : String(this._apiExistingRecordsJson);
+        this._apiExistingRecordsJson = value;
+        if (next === prev) {
+            return;
+        }
+        // expCreateRecord (and similar parents) assign existing-records-json from hydrateEditorState on
+        // every statechange — same payload the editor just emitted. Re-applying would rebuild rows and
+        // drop focus from the active input on each keystroke.
+        if (this.isParentEchoOfCurrentOutput(next)) {
+            return;
+        }
+        this.applyExistingRecordsJsonWhenConfigured();
+    }
+
+    isParentEchoOfCurrentOutput(incomingNextStr) {
+        if (!this.fieldConfigs || !this.fieldConfigs.length) {
+            return false;
+        }
+        const selfRaw = this.recordsToCreate;
+        if (selfRaw === undefined || selfRaw === null) {
+            return false;
+        }
+        const a = incomingNextStr.trim();
+        const b = String(selfRaw).trim();
+        if (!a || !b) {
+            return false;
+        }
+        if (a === b) {
+            return true;
+        }
+        try {
+            return JSON.stringify(JSON.parse(a)) === JSON.stringify(JSON.parse(b));
+        } catch {
+            return false;
+        }
+    }
     @api minRows = 1;
     @api maxRows;
     @api hideRowContainer = false;
@@ -66,11 +114,7 @@ export default class RecordCollectionEditor extends LightningElement {
                     : true;
             this.isLoading = false;
             if (!this.rows.length) {
-                if (this.existingRecordsJson && this.existingRecordsJson.trim()) {
-                    this.populateRowsFromExisting();
-                } else {
-                    this.initializeRows();
-                }
+                this.applyExistingRecordsJsonWhenConfigured();
             }
         } else if (configLoadError) {
             this._configLoadError = configLoadError;
@@ -88,6 +132,58 @@ export default class RecordCollectionEditor extends LightningElement {
             this.errorMessage = 'Config key is required.';
             this.isLoading = false;
         }
+    }
+
+    applyExistingRecordsJsonWhenConfigured() {
+        if (this.isLoading || !this.fieldConfigs || !this.fieldConfigs.length || !this.configKey) {
+            return;
+        }
+        this.errorMessage = null;
+        this.rows = [];
+        const json = this.existingRecordsJson;
+        const trimmed = json && String(json).trim();
+        if (trimmed) {
+            let treatAsEmptySeed = false;
+            try {
+                const parsed = JSON.parse(trimmed);
+                if (Array.isArray(parsed) && parsed.length === 0) {
+                    treatAsEmptySeed = true;
+                }
+            } catch {
+                // populateRowsFromExisting will surface invalid JSON
+            }
+            if (treatAsEmptySeed) {
+                this.initializeRows();
+            } else {
+                this.populateRowsFromExisting();
+            }
+        } else {
+            this.initializeRows();
+        }
+    }
+
+    applyDefaultPrincipalOwnerOnFirstContactRow(relationshipFieldStates, rowIndex) {
+        if (this.configKey !== 'CONTACT_ON_ACCOUNT' || rowIndex !== 0) {
+            return relationshipFieldStates;
+        }
+        const rc = this.roleConstraints;
+        if (!rc || !rc.roleFieldApiName) {
+            return relationshipFieldStates;
+        }
+        const singles = rc.singlePerAccountRoles || [];
+        if (!singles.includes('Principal Owner')) {
+            return relationshipFieldStates;
+        }
+        const roleField = rc.roleFieldApiName;
+        return relationshipFieldStates.map((fs) => {
+            if (fs.fieldApiName !== roleField) {
+                return fs;
+            }
+            if (fs.value !== undefined && fs.value !== null && fs.value !== '') {
+                return fs;
+            }
+            return { ...fs, value: 'Principal Owner' };
+        });
     }
 
     initializeRows() {
@@ -288,7 +384,7 @@ export default class RecordCollectionEditor extends LightningElement {
 
         const relColumnClass = 'slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-right_small slds-p-bottom_small';
         const newRow = { relationshipFieldStates: [] };
-        const relationshipFieldStatesForRow = this.relationshipFieldConfigs.map((fieldConfig) => {
+        const relationshipFieldStatesForRowRaw = this.relationshipFieldConfigs.map((fieldConfig) => {
             const isPicklist = fieldConfig.dataType === 'picklist' || (fieldConfig.picklistValues && fieldConfig.picklistValues.length > 0);
             const isCheckbox = fieldConfig.dataType === 'checkbox';
             const isLookup = fieldConfig.dataType === 'lookup';
@@ -311,6 +407,10 @@ export default class RecordCollectionEditor extends LightningElement {
                 formElementClass: 'slds-form-element'
             };
         });
+        const relationshipFieldStatesForRow = this.applyDefaultPrincipalOwnerOnFirstContactRow(
+            relationshipFieldStatesForRowRaw,
+            rowIndex
+        );
         newRow.relationshipFieldStates = relationshipFieldStatesForRow;
 
         const label = (this.recordLabel || 'Row').trim();

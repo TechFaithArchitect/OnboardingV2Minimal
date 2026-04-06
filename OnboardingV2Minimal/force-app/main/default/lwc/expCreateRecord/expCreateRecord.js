@@ -707,12 +707,34 @@ export default class ExpCreateRecord extends LightningElement {
             this.contactsExistingJson = saveContactsResult.contactRecordsJson || contactsJsonWithAccount;
             this.savedContactsJson = saveContactsResult.contactRecordsJson || contactsJsonWithAccount;
             this.opportunityContactSeedJson = saveContactsResult.opportunityContactSeedJson || '[]';
+
+            let ocrSeedRowCount = 0;
+            try {
+                const parsedSeed = JSON.parse(this.opportunityContactSeedJson);
+                ocrSeedRowCount = Array.isArray(parsedSeed) ? parsedSeed.length : 0;
+            } catch {
+                ocrSeedRowCount = 0;
+            }
+            if (ocrSeedRowCount < 1) {
+                this.errorMessage =
+                    'No signer contacts were found for the opportunity contact step after saving. On each contact, set the Account relationship Role to Principal Owner, Owner, or Authorized Signer, then try again.';
                 this.lastContactsSaveResponse = {
-                    success: true,
+                    success: false,
+                    errorMessage: this.errorMessage,
                     contactCount: saveContactsResult.contactCount,
                     signerContactCount: saveContactsResult.signerContactCount,
                     diagnostics: this.parseDiagnosticsPayload(saveContactsResult.diagnostics)
                 };
+                this.logDiagnostics('contacts_step_empty_ocr_seed', this.lastContactsSaveResponse);
+                return;
+            }
+
+            this.lastContactsSaveResponse = {
+                success: true,
+                contactCount: saveContactsResult.contactCount,
+                signerContactCount: saveContactsResult.signerContactCount,
+                diagnostics: this.parseDiagnosticsPayload(saveContactsResult.diagnostics)
+            };
             this.logDiagnostics('contacts_step_save_success', this.lastContactsSaveResponse);
             this.currentStepIndex = STEP_OCR;
             this.evaluateCurrentStepReadiness();
