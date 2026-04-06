@@ -190,7 +190,7 @@ Use these when reconciling what **source** expects versus what an org contains (
 - **`manifest/`** — package and destructive-change manifests (see folder README files per package).
 - **`scripts/deploy/`** — `sf` wrappers for validate, deploy, post-deploy checks, and the [hardening test sweep](../../scripts/deploy/run-best-practices-in-scope-tests.sh).
 - **`scripts/automation/`** — read-only audits (flow fault messaging, subflow error contracts, Apex entry sharing, PMD driver).
-- **`reports/best-practices-findings.md`** — prioritized hardening checklist and validation history.
+- **`docs/technical/best-practices-findings.md`** — prioritized hardening checklist and validation history.
 
 ## Incident Triage Procedure
 

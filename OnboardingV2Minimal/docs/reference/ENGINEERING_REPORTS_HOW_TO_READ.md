@@ -1,33 +1,15 @@
-# How to Read the `reports/` Markdown Files
+# How to Read Legacy `reports/` Markdown (optional, local)
 
-The [reports](../../reports/) folder holds **generated or semi-generated** markdown that compares **documentation** to **metadata** (or lists dependencies). It is aimed at **engineers and release owners**, not day-to-day business users.
+The **`reports/`** directory is **gitignored**. It was used for **generated or semi-generated** markdown that compared **documentation** to **metadata** (dependency snapshots, “docs vs class” coverage style lists). Nothing in `reports/` is required to **deploy** the Salesforce app.
 
-## Why these reports exist
+If you still generate those files locally, treat them as **point-in-time engineering deltas**, not user-facing documentation.
 
-They answer maintenance questions such as:
+## Principles
 
-- Does the **Flow catalog** mention every flow that exists in `force-app`?
-- Are there **classes** or **triggers** in the repo with **no** doc reference?
-- Which **objects** appear in dependency graphs or “missing from org” snapshots?
+1. **Dependency inventories** list references from docs or metadata to objects and integrations. Use them to find stale doc links or missing objects after a retrieve—not as a behavior spec.
+2. **“Coverage” style reports** compare doc mentions to what exists in source. A gap usually means “doc not updated yet” or “internal-only metadata,” not necessarily a prod bug.
+3. Prefer **in-repo sources of truth** for ongoing work: [FLOW_CATALOG.md](../developer/FLOW_CATALOG.md), [APEX_CLASS_INVENTORY.md](../developer/APEX_CLASS_INVENTORY.md), [OBJECT_CATALOG.md](../technical/OBJECT_CATALOG.md), and `npm run doc:metrics` (see [scripts/doc-metrics.js](../../scripts/doc-metrics.js)).
 
-## How to read a typical file
+## Operational hardening (tracked)
 
-1. **Open with your editor’s markdown preview**—tables are easier to scan.
-2. **Check the file name:**
-   - `docs-*-coverage.md` — items **in** metadata **and** referenced in docs (or the inverse for `*-removal`).
-   - `dependency-missing-*.md` — dependency graph found a reference to something **not** in the package.
-   - `object-dependency-inventory.md` — broad map of relationships.
-3. **Treat counts as a snapshot** — they go stale after refactors. Re-run the generating script if your team has one (see headers inside individual reports when present).
-
-## When should a new team member care?
-
-- **Onboarding a developer:** skim **`docs-class-coverage.md`** and **`docs-metadata-coverage.md`** once to learn how “complete” written catalogs are.
-- **Before a big delete:** use **`docs-*-removal.md`** and dependency reports to avoid removing still-referenced symbols.
-- **If docs seem wrong:** these files help find **drift**, not replace human judgment.
-
-## Entry points (also linked from [docs README](../README.md))
-
-- [Object dependency inventory](../../reports/object-dependency-inventory.md)
-- [Docs vs metadata coverage](../../reports/docs-metadata-coverage.md)
-- [Docs vs class coverage](../../reports/docs-class-coverage.md)
-- [Dependency missing objects summary](../../reports/dependency-missing-objects-summary.md)
+For security/tooling status and npm automation, use **[best-practices-findings.md](../technical/best-practices-findings.md)** under `docs/technical/`.
