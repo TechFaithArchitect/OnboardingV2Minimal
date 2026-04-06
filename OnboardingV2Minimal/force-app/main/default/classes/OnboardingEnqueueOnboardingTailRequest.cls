@@ -1,4 +1,4 @@
-public class OnboardingEnqueueOnboardingTailRequest {
+public inherited sharing class OnboardingEnqueueOnboardingTailRequest {
     @InvocableVariable(label='Contract Id')
     public String contractId;
 

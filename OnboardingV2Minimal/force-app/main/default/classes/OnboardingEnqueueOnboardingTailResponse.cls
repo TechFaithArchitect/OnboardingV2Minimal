@@ -1,4 +1,4 @@
-public class OnboardingEnqueueOnboardingTailResponse {
+public inherited sharing class OnboardingEnqueueOnboardingTailResponse {
     @InvocableVariable(label='Job Enqueued')
     public Boolean jobEnqueued;
 

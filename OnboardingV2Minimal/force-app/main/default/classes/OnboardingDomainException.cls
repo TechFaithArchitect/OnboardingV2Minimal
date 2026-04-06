@@ -1,1 +1,1 @@
-public class OnboardingDomainException extends Exception {}
+public with sharing class OnboardingDomainException extends Exception {}
