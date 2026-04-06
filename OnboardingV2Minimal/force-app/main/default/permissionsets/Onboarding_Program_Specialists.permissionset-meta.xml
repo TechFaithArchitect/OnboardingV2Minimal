@@ -4,6 +4,10 @@
         <apexClass>ContactECCController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>ObjectRelatedListController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>false</editable>
         <field>Training_Assignment__c.Contact__c</field>
