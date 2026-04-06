@@ -275,15 +275,23 @@ public with sharing class VendorOnboardingService {
    */
   @AuraEnabled(cacheable=true)
   public static List<VendorOptionDTO> getVendorOptions(Id accountId) {
-    if (accountId == null) {
-      return new List<VendorOptionDTO>();
+    try {
+      if (accountId == null) {
+        return new List<VendorOptionDTO>();
+      }
+
+      List<List<VendorOptionDTO>> allResults = getEligibleVendors(
+        new List<Id>{ accountId }
+      );
+
+      return allResults.isEmpty() ? new List<VendorOptionDTO>() : allResults[0];
+    } catch (Exception ex) {
+      throw ExceptionUtil.unexpectedAuraError(
+        'VendorOnboardingService.getVendorOptions',
+        ex,
+        'Unable to load vendor options.'
+      );
     }
-
-    List<List<VendorOptionDTO>> allResults = getEligibleVendors(
-      new List<Id>{ accountId }
-    );
-
-    return allResults.isEmpty() ? new List<VendorOptionDTO>() : allResults[0];
   }
   
   // ============================================

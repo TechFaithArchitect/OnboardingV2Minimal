@@ -204,6 +204,45 @@ private class VendorOnboardingServiceTest {
         }
     }
 
+    @isTest
+    static void testGetVendorOptionsNullReturnsEmpty() {
+        System.assertEquals(
+            0,
+            VendorOnboardingService.getVendorOptions(null).size(),
+            'Null account should return empty vendor list'
+        );
+    }
+
+    @isTest
+    static void testGetVendorOptionsMatchesEligibleForOneAccount() {
+        Account acct = new Account(Name = 'LWC Vendor Options Account');
+        insert acct;
+
+        Vendor__c vendor = new Vendor__c(Name = 'LWC Vendor', Active__c = true);
+        insert vendor;
+
+        Vendor_Customization__c vc = new Vendor_Customization__c(
+            Vendor__c = vendor.Id,
+            Status__c = getActiveVendorCustomizationStatus(),
+            Active__c = true,
+            Retail_Option__c = 'National Agent',
+            Business_Vertical__c = 'D2D'
+        );
+        insert vc;
+
+        Test.startTest();
+        List<VendorOptionDTO> fromLwc = VendorOnboardingService.getVendorOptions(acct.Id);
+        List<List<VendorOptionDTO>> fromCore = VendorOnboardingService.getEligibleVendors(
+            new List<Id>{ acct.Id }
+        );
+        Test.stopTest();
+
+        System.assertEquals(1, fromLwc.size(), 'getVendorOptions should mirror getEligibleVendors for one id');
+        System.assertEquals(1, fromCore.size());
+        System.assertEquals(fromCore[0].size(), fromLwc.size());
+        System.assertEquals(vendor.Id, fromLwc[0].vendorId);
+    }
+
     private static List<String> getPicklistValues(Schema.SObjectField fieldToken) {
         List<String> values = new List<String>();
         for (Schema.PicklistEntry entry : fieldToken.getDescribe().getPicklistValues()) {

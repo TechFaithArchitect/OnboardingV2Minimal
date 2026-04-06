@@ -333,7 +333,14 @@ public with sharing class RecordCollectionEditorConfigService {
             String perm = (String) raw.get('authorizedSignerPermission');
             if (String.isBlank(perm)) return true;
             return FeatureManagement.checkPermission(perm);
-        } catch (Exception e) { return true; }
+        } catch (Exception e) {
+            ExceptionUtil.unexpectedUserMessage(
+                'RecordCollectionEditorConfigService.getCanAssignAuthorizedSigner',
+                e,
+                null
+            );
+            return true;
+        }
     }
 
     @InvocableMethod(
