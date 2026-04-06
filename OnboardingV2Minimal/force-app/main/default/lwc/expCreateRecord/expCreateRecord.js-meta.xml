@@ -161,12 +161,6 @@
                 role="inputOnly"
                 datasource="default,shade,info,warning,error,success"
             />
-            <property
-                name="debugMode"
-                type="Boolean"
-                label="Enable Temporary Diagnostics"
-                role="inputOnly"
-            />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

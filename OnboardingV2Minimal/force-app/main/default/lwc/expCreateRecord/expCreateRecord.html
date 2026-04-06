@@ -21,143 +21,132 @@
                 </div>
             </template>
 
-            <lightning-card title="Create Record">
-                <div class="slds-p-around_medium">
-                    <template if:true={showDiagnosticsPanel}>
-                        <section class="diagnostics-section slds-box slds-theme_warning slds-m-bottom_medium">
-                            <div class="slds-text-title_caps slds-m-bottom_x-small">Temporary Diagnostics</div>
-                            <pre class="diagnostics-pre">{diagnosticsSummaryJson}</pre>
-                            <div class="slds-text-title_caps slds-m-top_small slds-m-bottom_x-small">Event Trace</div>
-                            <pre class="diagnostics-pre diagnostics-log">{diagnosticsLogJson}</pre>
-                        </section>
-                    </template>
+            <div class="slds-p-around_medium">
+                <section class={accountStepClass}>
+                    <c-record-collection-editor
+                        data-editor="account"
+                        onstatechange={handleEditorStateChange}
+                        heading=""
+                        record-label="Account"
+                        config-key="ACCOUNT_CREATE_RECORD"
+                        parent-id={resolvedAccountId}
+                        existing-records-json={accountExistingJson}
+                        min-rows="1"
+                        max-rows="1"
+                        hide-row-subheading="true"
+                    >
+                        <c-exp-flow-step-wrapper
+                            slot="content-top"
+                            heading={resolvedAccountStepHeading}
+                            helper-text={accountStepHelperText}
+                            variant={resolvedAccountStepVariant}
+                        ></c-exp-flow-step-wrapper>
+                    </c-record-collection-editor>
+                </section>
 
-                    <section class={accountStepClass}>
-                        <c-record-collection-editor
-                            data-editor="account"
-                            onstatechange={handleEditorStateChange}
-                            heading=""
-                            record-label="Account"
-                            config-key="ACCOUNT_CREATE_RECORD"
-                            parent-id={resolvedAccountId}
-                            existing-records-json={accountExistingJson}
-                            min-rows="1"
-                            max-rows="1"
-                            hide-row-subheading="true"
-                        >
-                            <c-exp-flow-step-wrapper
-                                slot="content-top"
-                                heading={resolvedAccountStepHeading}
-                                helper-text={accountStepHelperText}
-                                variant={resolvedAccountStepVariant}
-                            ></c-exp-flow-step-wrapper>
-                        </c-record-collection-editor>
-                    </section>
-
-                    <section class={opportunityStepClass}>
-                        <c-record-collection-editor
-                            data-editor="opportunity"
-                            onstatechange={handleEditorStateChange}
-                            heading=""
-                            record-label="Opportunity"
-                            config-key="OPPORTUNITY_CREATE_RECORD"
-                            parent-id={resolvedAccountId}
-                            existing-records-json={opportunityExistingJson}
-                            min-rows="1"
-                            max-rows="1"
-                            hide-row-subheading="true"
-                        >
-                            <c-exp-flow-step-wrapper
-                                slot="content-top"
-                                heading={resolvedOpportunityStepHeading}
-                                helper-text={opportunityStepHelperText}
-                                variant={resolvedOpportunityStepVariant}
-                            ></c-exp-flow-step-wrapper>
-                            <template if:true={showPathSelector}>
-                                <div slot="row-top" class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
-                                    <div class="slds-col slds-size_1-of-1">
-                                        <lightning-combobox
-                                            name="pathSelection"
-                                            label="Program Path"
-                                            value={pathSelection}
-                                            options={pathOptions}
-                                            placeholder="Select a Program Path"
-                                            required
-                                            onchange={handlePathSelectionChange}
-                                        ></lightning-combobox>
-                                    </div>
+                <section class={opportunityStepClass}>
+                    <c-record-collection-editor
+                        data-editor="opportunity"
+                        onstatechange={handleEditorStateChange}
+                        heading=""
+                        record-label="Opportunity"
+                        config-key="OPPORTUNITY_CREATE_RECORD"
+                        parent-id={resolvedAccountId}
+                        existing-records-json={opportunityExistingJson}
+                        min-rows="1"
+                        max-rows="1"
+                        hide-row-subheading="true"
+                    >
+                        <c-exp-flow-step-wrapper
+                            slot="content-top"
+                            heading={resolvedOpportunityStepHeading}
+                            helper-text={opportunityStepHelperText}
+                            variant={resolvedOpportunityStepVariant}
+                        ></c-exp-flow-step-wrapper>
+                        <template if:true={showPathSelector}>
+                            <div slot="row-top" class="slds-grid slds-wrap slds-gutters slds-m-bottom_small">
+                                <div class="slds-col slds-size_1-of-1">
+                                    <lightning-combobox
+                                        name="pathSelection"
+                                        label="Program Path"
+                                        value={pathSelection}
+                                        options={pathOptions}
+                                        placeholder="Select a Program Path"
+                                        required
+                                        onchange={handlePathSelectionChange}
+                                    ></lightning-combobox>
                                 </div>
-                            </template>
-                            <template if:true={shouldShowVendorSelector}>
-                                <div slot="row-top" class="slds-m-bottom_small">
-                                    <c-vendor-selector
-                                        data-id="vendor-selector"
-                                        onselectionchange={handleVendorSelectionChange}
-                                        record-id={resolvedAccountId}
-                                        vendor-options-json={availableVendorOptionString}
-                                    ></c-vendor-selector>
-                                </div>
-                            </template>
-                        </c-record-collection-editor>
-                    </section>
-
-                    <section class={contactsStepClass}>
-                        <c-record-collection-editor
-                            data-editor="contacts"
-                            onstatechange={handleEditorStateChange}
-                            heading=""
-                            record-label="Contact"
-                            config-key="CONTACT_ON_ACCOUNT"
-                            parent-id={resolvedAccountId}
-                            existing-records-json={contactsExistingJson}
-                            min-rows="1"
-                        >
-                            <c-exp-flow-step-wrapper
-                                slot="content-top"
-                                heading={resolvedContactsStepHeading}
-                                helper-text={contactsStepHelperText}
-                                variant={resolvedContactsStepVariant}
-                            ></c-exp-flow-step-wrapper>
-                        </c-record-collection-editor>
-                    </section>
-
-                    <section class={ocrStepClass}>
-                        <c-record-collection-editor
-                            data-editor="ocr"
-                            onstatechange={handleEditorStateChange}
-                            heading=""
-                            record-label="Contact Role"
-                            config-key="CONTACT_ON_OPPORTUNITY"
-                            existing-records-json={opportunityContactSeedJson}
-                            min-rows="1"
-                        >
-                            <c-exp-flow-step-wrapper
-                                slot="content-top"
-                                heading={resolvedOcrStepHeading}
-                                helper-text={ocrStepHelperText}
-                                variant={resolvedOcrStepVariant}
-                            ></c-exp-flow-step-wrapper>
-                        </c-record-collection-editor>
-                    </section>
-
-                    <div class="slds-m-top_medium slds-p-top_medium slds-border_top actions-row">
-                        <template if:true={showBackButton}>
-                            <lightning-button
-                                label="Back"
-                                onclick={handleBack}
-                                disabled={isSaving}
-                                class="slds-m-right_small"
-                            ></lightning-button>
+                            </div>
                         </template>
+                        <template if:true={shouldShowVendorSelector}>
+                            <div slot="row-top" class="slds-m-bottom_small">
+                                <c-vendor-selector
+                                    data-id="vendor-selector"
+                                    onselectionchange={handleVendorSelectionChange}
+                                    record-id={resolvedAccountId}
+                                    vendor-options-json={availableVendorOptionString}
+                                ></c-vendor-selector>
+                            </div>
+                        </template>
+                    </c-record-collection-editor>
+                </section>
+
+                <section class={contactsStepClass}>
+                    <c-record-collection-editor
+                        data-editor="contacts"
+                        onstatechange={handleEditorStateChange}
+                        heading=""
+                        record-label="Contact"
+                        config-key="CONTACT_ON_ACCOUNT"
+                        parent-id={resolvedAccountId}
+                        existing-records-json={contactsExistingJson}
+                        min-rows="1"
+                    >
+                        <c-exp-flow-step-wrapper
+                            slot="content-top"
+                            heading={resolvedContactsStepHeading}
+                            helper-text={contactsStepHelperText}
+                            variant={resolvedContactsStepVariant}
+                        ></c-exp-flow-step-wrapper>
+                    </c-record-collection-editor>
+                </section>
+
+                <section class={ocrStepClass}>
+                    <c-record-collection-editor
+                        data-editor="ocr"
+                        onstatechange={handleEditorStateChange}
+                        heading=""
+                        record-label="Contact Role"
+                        config-key="CONTACT_ON_OPPORTUNITY"
+                        existing-records-json={opportunityContactSeedJson}
+                        min-rows="1"
+                    >
+                        <c-exp-flow-step-wrapper
+                            slot="content-top"
+                            heading={resolvedOcrStepHeading}
+                            helper-text={ocrStepHelperText}
+                            variant={resolvedOcrStepVariant}
+                        ></c-exp-flow-step-wrapper>
+                    </c-record-collection-editor>
+                </section>
+
+                <div class="slds-m-top_medium slds-p-top_medium slds-border_top actions-row">
+                    <template if:true={showBackButton}>
                         <lightning-button
-                            variant="brand"
-                            label={primaryButtonLabel}
-                            onclick={handlePrimaryAction}
-                            disabled={isPrimaryActionDisabled}
+                            label="Back"
+                            onclick={handleBack}
+                            disabled={isSaving}
+                            class="slds-m-right_small"
                         ></lightning-button>
-                    </div>
+                    </template>
+                    <lightning-button
+                        variant="brand"
+                        label={primaryButtonLabel}
+                        onclick={handlePrimaryAction}
+                        disabled={isPrimaryActionDisabled}
+                    ></lightning-button>
                 </div>
-            </lightning-card>
+            </div>
         </template>
     </div>
 </template>

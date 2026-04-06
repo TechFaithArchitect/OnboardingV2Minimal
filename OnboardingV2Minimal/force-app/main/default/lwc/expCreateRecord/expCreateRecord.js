@@ -38,8 +38,6 @@ const STEP_OPPORTUNITY = 1;
 const STEP_CONTACTS = 2;
 const STEP_OCR = 3;
 const SALESFORCE_ID_PATTERN = /^[a-zA-Z0-9]{15}(?:[a-zA-Z0-9]{3})?$/;
-const DIAGNOSTIC_LOG_LIMIT = 50;
-
 export default class ExpCreateRecord extends LightningElement {
     @api recordId;
     @api flowAccountId;
@@ -69,7 +67,6 @@ export default class ExpCreateRecord extends LightningElement {
     @api flowHasNonChuzoOnboardingForOpportunity;
     @api flowOpportunityRecordTypeId;
     @api flowRuleErrorMessage;
-    @api debugMode;
 
     @api accountStepHeading = 'Account';
     @api accountStepHelperText;
@@ -121,13 +118,6 @@ export default class ExpCreateRecord extends LightningElement {
     @track runtimeAccountId;
     @track initialAccountId;
     @track isCurrentStepReady = false;
-    @track diagnosticsLogEntries = [];
-    @track lastContactsJsonResolution;
-    @track lastContactsSaveRequest;
-    @track lastContactsSaveResponse;
-    @track lastSubmitRequest;
-    @track lastSubmitResponse;
-    @track lastEditorStateEvent;
 
     connectedCallback() {
         this.initialize();
@@ -140,20 +130,10 @@ export default class ExpCreateRecord extends LightningElement {
     async initialize() {
         this.clearMessages();
         this.isLoading = true;
-        this.logDiagnostics('initialize_start', {
-            recordId: this.recordId,
-            flowAccountId: this.flowAccountId,
-            resolvedAccountId: this.resolvedAccountId
-        });
-
         try {
             const accountId = this.resolvedAccountId;
             if (!accountId) {
                 this.errorMessage = 'Account Id is required.';
-                this.logDiagnostics('initialize_missing_account_id', {
-                    recordId: this.recordId,
-                    flowAccountId: this.flowAccountId
-                });
                 return;
             }
             this.initialAccountId = accountId;
@@ -166,9 +146,6 @@ export default class ExpCreateRecord extends LightningElement {
             });
             if (!context || !context.success) {
                 this.errorMessage = (context && context.errorMessage) || 'Unable to load onboarding context.';
-                this.logDiagnostics('initialize_load_context_failed', {
-                    errorMessage: this.errorMessage
-                });
                 return;
             }
 
@@ -248,16 +225,8 @@ export default class ExpCreateRecord extends LightningElement {
             if (resolvedRuleErrorMessage) {
                 this.errorMessage = resolvedRuleErrorMessage;
             }
-            this.logDiagnostics('initialize_success', {
-                runtimeAccountId: this.runtimeAccountId,
-                contactsExistingJsonLength: this.stringLength(this.contactsExistingJson),
-                opportunityContactSeedJsonLength: this.stringLength(this.opportunityContactSeedJson)
-            });
         } catch (error) {
             this.errorMessage = this.reduceError(error, 'Unable to load onboarding context.');
-            this.logDiagnostics('initialize_exception', {
-                message: this.errorMessage
-            });
         } finally {
             this.isLoading = false;
         }
@@ -437,21 +406,6 @@ export default class ExpCreateRecord extends LightningElement {
         return this.resolveStepVariant(this.ocrStepVariant);
     }
 
-    get showDiagnosticsPanel() {
-        if (this.debugMode === undefined || this.debugMode === null || this.debugMode === '') {
-            return true;
-        }
-        return this.toBoolean(this.debugMode);
-    }
-
-    get diagnosticsSummaryJson() {
-        return this.safeStringify(this.buildDiagnosticsSummary(), 2);
-    }
-
-    get diagnosticsLogJson() {
-        return this.safeStringify(this.diagnosticsLogEntries, 2);
-    }
-
     setInitialPathSelection() {
         if (this.isVendorOnlyAction) {
             this.pathSelection = PATH_VENDOR;
@@ -510,18 +464,6 @@ export default class ExpCreateRecord extends LightningElement {
     }
 
     handleEditorStateChange(event) {
-        const editorKey = event?.target?.dataset?.editor;
-        const recordsJson = this.normalizeSerializedRecords(event?.detail?.recordsJson);
-        const eventSummary = {
-            editorKey,
-            hasRequiredValues: event?.detail?.hasRequiredValues === true,
-            recordsJsonLength: this.stringLength(recordsJson),
-            recordsJsonPreview: this.truncateForDiagnostics(recordsJson),
-            runtimeAccountId: this.runtimeAccountId,
-            resolvedAccountId: this.resolvedAccountId
-        };
-        this.lastEditorStateEvent = eventSummary;
-        this.logDiagnostics('editor_state_change', eventSummary);
         this.hydrateEditorState(event);
         this.evaluateCurrentStepReadiness();
     }
@@ -642,16 +584,12 @@ export default class ExpCreateRecord extends LightningElement {
         const contactsEditor = this.template.querySelector('c-record-collection-editor[data-editor="contacts"]');
         if (!contactsEditor) {
             this.errorMessage = 'Contacts editor is unavailable.';
-            this.logDiagnostics('contacts_step_missing_editor', {});
             return;
         }
 
         const contactsValidation = contactsEditor.validate ? contactsEditor.validate() : { isValid: true };
         if (!contactsValidation.isValid) {
             this.errorMessage = contactsValidation.errorMessage || 'Fix validation errors in Contacts before continuing.';
-            this.logDiagnostics('contacts_step_validation_failed', {
-                errorMessage: this.errorMessage
-            });
             return;
         }
 
@@ -663,23 +601,11 @@ export default class ExpCreateRecord extends LightningElement {
         }
         if (!accountId) {
             this.errorMessage = 'Account Id is required.';
-            this.logDiagnostics('contacts_step_missing_account_id', {
-                contactsJsonLength: this.stringLength(contactsJson),
-                contactsJsonPreview: this.truncateForDiagnostics(contactsJson),
-                resolvedAccountId: this.resolvedAccountId
-            });
             return;
         }
         this.runtimeAccountId = accountId;
         this.initialAccountId = this.initialAccountId || accountId;
         const contactsJsonWithAccount = this.ensureAccountIdOnContactsJson(contactsJson, accountId);
-        this.lastContactsSaveRequest = {
-            accountId,
-            resolvedAccountId: this.resolvedAccountId,
-            contactsJsonLength: this.stringLength(contactsJsonWithAccount),
-            contactsJsonPreview: this.truncateForDiagnostics(contactsJsonWithAccount)
-        };
-        this.logDiagnostics('contacts_step_save_request', this.lastContactsSaveRequest);
 
         this.isSaving = true;
         try {
@@ -695,12 +621,6 @@ export default class ExpCreateRecord extends LightningElement {
                     ? saveContactsResult.errorMessages.join(' | ')
                     : null;
                 this.errorMessage = detailedErrors || saveContactsResult?.errorMessage || 'Unable to save contacts.';
-                this.lastContactsSaveResponse = {
-                    success: false,
-                    errorMessage: this.errorMessage,
-                    diagnostics: this.parseDiagnosticsPayload(saveContactsResult?.diagnostics)
-                };
-                this.logDiagnostics('contacts_step_save_failed', this.lastContactsSaveResponse);
                 return;
             }
 
@@ -718,33 +638,13 @@ export default class ExpCreateRecord extends LightningElement {
             if (ocrSeedRowCount < 1) {
                 this.errorMessage =
                     'No signer contacts were found for the opportunity contact step after saving. On each contact, set the Account relationship Role to Principal Owner, Owner, or Authorized Signer, then try again.';
-                this.lastContactsSaveResponse = {
-                    success: false,
-                    errorMessage: this.errorMessage,
-                    contactCount: saveContactsResult.contactCount,
-                    signerContactCount: saveContactsResult.signerContactCount,
-                    diagnostics: this.parseDiagnosticsPayload(saveContactsResult.diagnostics)
-                };
-                this.logDiagnostics('contacts_step_empty_ocr_seed', this.lastContactsSaveResponse);
                 return;
             }
 
-            this.lastContactsSaveResponse = {
-                success: true,
-                contactCount: saveContactsResult.contactCount,
-                signerContactCount: saveContactsResult.signerContactCount,
-                diagnostics: this.parseDiagnosticsPayload(saveContactsResult.diagnostics)
-            };
-            this.logDiagnostics('contacts_step_save_success', this.lastContactsSaveResponse);
             this.currentStepIndex = STEP_OCR;
             this.evaluateCurrentStepReadiness();
         } catch (error) {
             this.errorMessage = this.reduceError(error, 'Unable to save contacts.');
-            this.lastContactsSaveResponse = {
-                success: false,
-                errorMessage: this.errorMessage
-            };
-            this.logDiagnostics('contacts_step_save_exception', this.lastContactsSaveResponse);
         } finally {
             this.isSaving = false;
         }
@@ -754,44 +654,36 @@ export default class ExpCreateRecord extends LightningElement {
         const ocrEditor = this.template.querySelector('c-record-collection-editor[data-editor="ocr"]');
         if (!ocrEditor) {
             this.errorMessage = 'Opportunity Contact Role editor is unavailable.';
-            this.logDiagnostics('ocr_step_missing_editor', {});
             return;
         }
 
         const ocrValidation = ocrEditor.validate ? ocrEditor.validate() : { isValid: true };
         if (!ocrValidation.isValid) {
             this.errorMessage = ocrValidation.errorMessage || 'Fix validation errors in Opportunity Contact Roles.';
-            this.logDiagnostics('ocr_step_validation_failed', {
-                errorMessage: this.errorMessage
-            });
             return;
         }
 
         const opportunityContactsJson = ocrEditor.recordsToCreate;
         if (!opportunityContactsJson) {
             this.errorMessage = 'Opportunity Contact Roles payload is empty.';
-            this.logDiagnostics('ocr_step_missing_payload', {});
             return;
         }
 
         const accountRecord = this.accountStepRecord || this.extractSingleEditorRecord('account');
         if (!accountRecord) {
             this.errorMessage = 'Account payload is unavailable.';
-            this.logDiagnostics('ocr_step_missing_account_payload', {});
             return;
         }
 
         const opportunityRecord = this.opportunityStepRecord || this.extractSingleEditorRecord('opportunity');
         if (!opportunityRecord) {
             this.errorMessage = 'Opportunity payload is unavailable.';
-            this.logDiagnostics('ocr_step_missing_opportunity_payload', {});
             return;
         }
 
         const documentsReady = this.parseDocumentsReady(opportunityRecord.Documents_Ready__c);
         if (documentsReady === null) {
             this.errorMessage = 'Select whether documents are ready for onboarding.';
-            this.logDiagnostics('ocr_step_missing_documents_ready', {});
             return;
         }
 
@@ -806,7 +698,6 @@ export default class ExpCreateRecord extends LightningElement {
 
         if (this.shouldShowVendorSelector && !vendorSelection.selectedVendorId) {
             this.errorMessage = 'Select a Vendor before finishing.';
-            this.logDiagnostics('ocr_step_missing_vendor', {});
             return;
         }
 
@@ -816,7 +707,6 @@ export default class ExpCreateRecord extends LightningElement {
         }
         if (!accountId) {
             this.errorMessage = 'Account Id is required.';
-            this.logDiagnostics('ocr_step_missing_account_id', {});
             return;
         }
         this.runtimeAccountId = accountId;
@@ -860,13 +750,6 @@ export default class ExpCreateRecord extends LightningElement {
                 selectedRetailOption: vendorSelection.selectedRetailOption,
                 selectedBusinessVertical: vendorSelection.selectedBusinessVertical
             };
-            this.lastSubmitRequest = {
-                accountId: submitRequest.accountId,
-                contactsJsonLength: this.stringLength(submitRequest.contactsJson),
-                contactsJsonPreview: this.truncateForDiagnostics(submitRequest.contactsJson),
-                opportunityContactsJsonLength: this.stringLength(submitRequest.opportunityContactsJson)
-            };
-            this.logDiagnostics('ocr_step_submit_request', this.lastSubmitRequest);
 
             const submitResult = await submitCreateRecord({ request: submitRequest });
             if (!submitResult || !submitResult.success) {
@@ -874,30 +757,13 @@ export default class ExpCreateRecord extends LightningElement {
                     ? submitResult.stageErrors.join(' | ')
                     : null;
                 this.errorMessage = stageError || submitResult?.errorMessage || 'Unable to create onboarding request.';
-                this.lastSubmitResponse = {
-                    success: false,
-                    errorMessage: this.errorMessage,
-                    diagnostics: this.parseDiagnosticsPayload(submitResult?.diagnostics)
-                };
-                this.logDiagnostics('ocr_step_submit_failed', this.lastSubmitResponse);
                 return;
             }
 
-            this.lastSubmitResponse = {
-                success: true,
-                message: submitResult.message,
-                diagnostics: this.parseDiagnosticsPayload(submitResult.diagnostics)
-            };
-            this.logDiagnostics('ocr_step_submit_success', this.lastSubmitResponse);
             this.successMessage = submitResult.message || 'Onboarding request has been completed.';
             this.finishFlowIfAvailable();
         } catch (error) {
             this.errorMessage = this.reduceError(error, 'Unable to complete create request.');
-            this.lastSubmitResponse = {
-                success: false,
-                errorMessage: this.errorMessage
-            };
-            this.logDiagnostics('ocr_step_submit_exception', this.lastSubmitResponse);
         } finally {
             this.isSaving = false;
         }
@@ -906,36 +772,14 @@ export default class ExpCreateRecord extends LightningElement {
     resolveContactsJson(contactsEditor) {
         const editorJson = this.getEditorRecordsJson(contactsEditor);
         if (this.hasValue(editorJson)) {
-            this.lastContactsJsonResolution = {
-                source: 'editor',
-                length: this.stringLength(editorJson),
-                preview: this.truncateForDiagnostics(editorJson)
-            };
             return editorJson;
         }
         if (this.hasValue(this.savedContactsJson)) {
-            const fromSaved = String(this.savedContactsJson).trim();
-            this.lastContactsJsonResolution = {
-                source: 'savedContactsJson',
-                length: this.stringLength(fromSaved),
-                preview: this.truncateForDiagnostics(fromSaved)
-            };
-            return fromSaved;
+            return String(this.savedContactsJson).trim();
         }
         if (this.hasValue(this.contactsExistingJson)) {
-            const fromExisting = String(this.contactsExistingJson).trim();
-            this.lastContactsJsonResolution = {
-                source: 'contactsExistingJson',
-                length: this.stringLength(fromExisting),
-                preview: this.truncateForDiagnostics(fromExisting)
-            };
-            return fromExisting;
+            return String(this.contactsExistingJson).trim();
         }
-        this.lastContactsJsonResolution = {
-            source: 'default_empty_array',
-            length: 2,
-            preview: '[]'
-        };
         return '[]';
     }
 
@@ -1276,96 +1120,6 @@ export default class ExpCreateRecord extends LightningElement {
 
     resolveStepVariant(variantValue) {
         return this.hasValue(variantValue) ? variantValue : this.stepHeadingVariant;
-    }
-
-    buildDiagnosticsSummary() {
-        return {
-            step: this.currentStepIndex,
-            isLoading: this.isLoading,
-            isSaving: this.isSaving,
-            isCurrentStepReady: this.isCurrentStepReady,
-            ids: {
-                recordId: this.recordId,
-                flowAccountId: this.flowAccountId,
-                runtimeAccountId: this.runtimeAccountId,
-                initialAccountId: this.initialAccountId,
-                accountStepRecordId: this.accountStepRecord?.Id || null,
-                resolvedAccountId: this.resolvedAccountId,
-                fromAccountExistingJson: this.extractRecordIdFromSerializedRecords(this.accountExistingJson),
-                fromContactsJson: this.extractAccountIdFromContactsJson(
-                    this.savedContactsJson || this.contactsExistingJson
-                )
-            },
-            jsonLengths: {
-                accountExistingJson: this.stringLength(this.accountExistingJson),
-                opportunityExistingJson: this.stringLength(this.opportunityExistingJson),
-                contactsExistingJson: this.stringLength(this.contactsExistingJson),
-                savedContactsJson: this.stringLength(this.savedContactsJson),
-                opportunityContactSeedJson: this.stringLength(this.opportunityContactSeedJson)
-            },
-            lastContactsJsonResolution: this.lastContactsJsonResolution,
-            lastEditorStateEvent: this.lastEditorStateEvent,
-            lastContactsSaveRequest: this.lastContactsSaveRequest,
-            lastContactsSaveResponse: this.lastContactsSaveResponse,
-            lastSubmitRequest: this.lastSubmitRequest,
-            lastSubmitResponse: this.lastSubmitResponse
-        };
-    }
-
-    stringLength(rawValue) {
-        if (rawValue === undefined || rawValue === null) {
-            return 0;
-        }
-        return String(rawValue).length;
-    }
-
-    truncateForDiagnostics(rawValue) {
-        if (!this.hasValue(rawValue)) {
-            return rawValue;
-        }
-        const normalized = String(rawValue);
-        const maxLength = 300;
-        if (normalized.length <= maxLength) {
-            return normalized;
-        }
-        return `${normalized.substring(0, maxLength)}...`;
-    }
-
-    logDiagnostics(eventName, payload) {
-        if (!this.showDiagnosticsPanel) {
-            return;
-        }
-        const entry = {
-            timestamp: new Date().toISOString(),
-            event: eventName,
-            payload: payload || {}
-        };
-        this.diagnosticsLogEntries = [
-            entry,
-            ...this.diagnosticsLogEntries
-        ].slice(0, DIAGNOSTIC_LOG_LIMIT);
-    }
-
-    safeStringify(value, spacing = 0) {
-        try {
-            return JSON.stringify(value, null, spacing);
-        } catch (e) {
-            return String(value);
-        }
-    }
-
-    parseDiagnosticsPayload(rawDiagnostics) {
-        if (!this.hasValue(rawDiagnostics)) {
-            return null;
-        }
-        if (typeof rawDiagnostics !== 'string') {
-            return rawDiagnostics;
-        }
-        try {
-            return JSON.parse(rawDiagnostics);
-        } catch (e) {
-            return rawDiagnostics;
-        }
     }
 
     toBoolean(value) {
