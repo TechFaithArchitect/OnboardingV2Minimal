@@ -11,7 +11,7 @@ During onboarding, the business needs **conditional decisions**: for example, �
 ### What you should know as a new user
 
 - **You will not “see BRE” as an object on the onboarding record.** You see **outcomes**: which branch the flow took, requirement behavior, or errors in **`Error_Log__c`**.
-- **`OnboardingRecordBREGateInvocable`** wraps the BRE flow so failures **do not roll back** the whole transaction— failures surface as controlled outcomes instead.
+- **`OnboardingRecordBREGateInvocable`** runs `BLL_BRE_Evaluate_Business_Rules` with **`RuleContext = CommunicationDispatch`** (same inputs the onboarding record flow uses for “may we send?”). It wraps that call in Apex so failures **do not roll back** the parent transaction—faults become `dispatchAllowed = false` and a **diagnostic** on the invocable result instead of an exception. Other BRE entry points (pure Flow subflows, different contexts) are not covered by this class.
 - **Next step** hints after certain gates are related to **`Onboarding_Next_Step_Rule__mdt`** (separate but often feels like “what the business rule implied should happen next”). See [FAQ — Admins: Next step rules](../support/FAQ_ADMINS.md#scenario-next-step-rules-onboarding_next_step_rule__mdt).
 
 ### Where to go deeper
@@ -45,6 +45,77 @@ When credential records **change**, automation (`BLL_External_Contact_Credential
 - [Object catalog](../technical/OBJECT_CATALOG.md) — Tier 3.
 - [Automation catalog](../technical/AUTOMATION_CATALOG.md) — rows for `POE_External_Contact_Credential__c`.
 - [Data model](../technical/DATA_MODEL.md) — evidence list.
+
+---
+
+### How to set up credentials (admin path)
+
+Use this order so config stays consistent:
+
+1. Create/update **credential types** (`External_Contact_Credential_Type__c`).
+2. Create/update **program-required credentials** (`Required_Credential__c`) that point to those types.
+3. Let automation create/update **contact evidence rows** (`POE_External_Contact_Credential__c`) and link rows (`Required_External_Contact_Credential__c`).
+4. Validate with one real onboarding test.
+
+Setup details:
+
+Step 1 — Configure `External_Contact_Credential_Type__c`
+
+- Set `Vendor_Customization__c` (required), `Active__c`, and `Sort_Order__c` (required).
+- Use `Unique_Key__c` if your org uses integration/dedupe patterns.
+
+Step 2 — Configure `Required_Credential__c`
+
+- Set `Vendor_Customization__c` (program), `External_Contact_Credential_Type__c`, and (recommended) `Sequence__c`.
+- Set `Is_Required__c` based on business policy.
+- Validation rules enforce that each required credential row is linked to a credential type.
+
+Step 3 — Let automation create evidence links (normal path)
+
+- `POE_External_Contact_Credential__c` (evidence rows) and `Required_External_Contact_Credential__c` (link rows) are usually populated/maintained by flow automation.
+- Key automation touchpoints: `DOMAIN_OmniSObject_SFL_GET_External_Contact_Credential_Types`, `DOMAIN_OmniSObject_SFL_CREATE_External_Contact_Credentials`, `DOMAIN_OmniSObject_SFL_CREATE_Required_External_Contact_Credenti`, `BLL_External_Contact_Credential_RCD_Logical_Process`.
+
+Step 4 — Validate end-to-end
+
+- Create a test onboarding for the target vendor program.
+- Confirm required credential records are present for that program.
+- Confirm expected ECC evidence rows exist for the responsible contact(s).
+- Update one ECC row to `Complete` and verify downstream requirement/subject status behavior.
+
+### Scenario playbooks (how in practice)
+
+#### Scenario 1: Add a new required credential for one vendor program
+
+Use this when a vendor adds a new compliance artifact.
+
+1. Add `External_Contact_Credential_Type__c` for that program (`Active__c = true`, set `Sort_Order__c`).
+2. Add `Required_Credential__c` pointing to that type.
+3. Run one onboarding create test and confirm expected ECC rows appear.
+4. Verify the new credential participates in requirement status progression.
+
+Expected result: new onboardings for that program include and track the new credential path.
+
+#### Scenario 2: Retire a credential type without deleting history
+
+Use this when a credential is no longer needed for future work.
+
+1. Set `External_Contact_Credential_Type__c.Active__c = false` (instead of deleting).
+2. Deactivate or remove associated `Required_Credential__c` rows for future runs.
+3. Leave historical `POE_External_Contact_Credential__c` rows intact for audit/reporting.
+4. Test a new onboarding to ensure retired type is not regenerated.
+
+Expected result: old records remain for history; new onboarding runs do not use the retired credential.
+
+#### Scenario 3: Credential is complete but requirement is still not complete
+
+Use this when users say “I marked the credential done but onboarding is stuck.”
+
+1. Verify the ECC row is on the correct contact and credential type.
+2. Verify the ECC status value is one your normalization/rules treat as complete.
+3. Verify required credential mapping exists for that vendor program.
+4. Check `Error_Log__c` for ECC evaluation faults.
+
+Expected result: you isolate whether the issue is data mismatch, mapping/config gap, or automation fault.
 
 ---
 

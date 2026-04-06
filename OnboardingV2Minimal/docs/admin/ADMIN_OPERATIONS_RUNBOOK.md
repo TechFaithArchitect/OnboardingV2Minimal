@@ -183,6 +183,15 @@ Runtime notes:
 3. If multiple active programs exist, set `Vendor_Program_Name_Contains__c`.
 4. Re-test flow and verify resolved vendor program on created onboarding.
 
+## Reference: manifests and deployment scripts
+
+Use these when reconciling what **source** expects versus what an org contains (aligns with [Deployment Runbook](./DEPLOYMENT_RUNBOOK.md)):
+
+- **`manifest/`** — package and destructive-change manifests (see folder README files per package).
+- **`scripts/deploy/`** — `sf` wrappers for validate, deploy, post-deploy checks, and the [hardening test sweep](../../scripts/deploy/run-best-practices-in-scope-tests.sh).
+- **`scripts/automation/`** — read-only audits (flow fault messaging, subflow error contracts, Apex entry sharing, PMD driver).
+- **`reports/best-practices-findings.md`** — prioritized hardening checklist and validation history.
+
 ## Incident Triage Procedure
 
 1. Gather record ids from user report.

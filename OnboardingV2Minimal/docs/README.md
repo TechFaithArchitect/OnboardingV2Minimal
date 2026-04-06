@@ -113,7 +113,7 @@ npm run doc:metrics
 
 - `EXP_*` flows provide screen and guided user interactions.
 - `BLL_*` flows implement business logic, orchestration, and trigger-based automation.
-- `DOMAIN_*` and `DOM_*` flows provide reusable CRUD/get/evaluate/create units.
+- `DOMAIN_*` flows provide reusable CRUD/get/evaluate/create units (this repo’s flows are `DOMAIN_*`, `BLL_*`, and `EXP_*` only).
 - Apex services provide policy engines, resilience tooling, async orchestration, adapters, and reusable UI APIs.
 
 ## Primary Application
@@ -154,6 +154,8 @@ When automation or data model changes, update at minimum:
 - `reference/ONBOARDING_UI_AND_CUSTOM_COMPONENTS.md` when shipping new LWCs or flexipage changes
 - `reference/BRE_AND_CREDENTIALS_FOR_NEW_USERS.md` when BRE or ECC behavior materially changes
 - `scripts/README.md` when adding operator-facing scripts
+- `technical/PERSONA_AND_PERMISSION_SETS.md` and `technical/SECURITY_AND_ACCESS.md` when permission sets or LWC-facing Apex classes change
+- `technical/TEST_AND_QUALITY.md` when adding or changing LWC Jest coverage
 - Persona guides affected by behavior changes
 - Relevant [FAQ](./support/FAQ_USERS.md) / [FAQ (admins)](./support/FAQ_ADMINS.md) answers if user-visible symptoms or admin checks change
 - [Baseline setup guide](./BASELINE_SETUP_GUIDE.md) (and [Baseline UI walkthrough](./BASELINE_UI_WALKTHROUGH.md) if click-path steps change) if the default onboarding story or baseline assumptions change

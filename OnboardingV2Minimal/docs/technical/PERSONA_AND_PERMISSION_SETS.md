@@ -27,6 +27,43 @@ If you are onboarding a new user:
 | `Onboarding_Can_Send_Special_Chuzo_Agreement` | Restricted agreement send                                         | Narrow exception for specific Chuzo agreement flow                                                 |
 | `Standard_User`                               | Org standard access baseline                                      | Often bundled with org policy — confirm whether still required in your org                         |
 
+## Source-of-truth details (metadata in repo)
+
+The tables below summarize **what ships in `force-app/main/default/permissionsets`**. Re-run after permission-set edits:
+
+```bash
+npm run audit:permissions:highrisk
+```
+
+That script **fails** if any set enables blocked **user** permissions (for example **Author Apex**, **Modify All Data**). It **prints** (but does not fail on) object rows with **`modifyAllRecords` true** — review those during access reviews.
+
+### Apex classes enabled by permission set
+
+Operational LWCs call server code **only if** the user’s effective permissions include the corresponding class. Inventory:
+
+| Permission set | `apexClass` entries (enabled) |
+| --- | --- |
+| `Onboarding_Program_Sales_Team` | `ContactECCController`, `ExpOpportunityCreateAsyncService`, `ExpOpportunityCreateRecord`, `ObjectRelatedListController`, `OnboardingProgressController`, `RecordCollectionEditorAsyncService`, `RecordCollectionEditorConfigService`, `RecordCollectionEditorGetRecordsService`, `VendorOnboardingDTO`, `VendorOptionDTO`, `VendorRetailOptionGroup`, `ers_DatatableController` |
+| `Onboarding_Account_Services` | `ContactECCController`, `ObjectRelatedListController`, `OnboardingOrderController`, `OnboardingProgressController`, `VendorFilterController`, `VendorOnboardingDTO`, `VendorOptionDTO`, `VendorRetailOptionGroup`, `ers_DatatableController` |
+| `Onboarding_Program_Specialists` | `ContactECCController`, `ObjectRelatedListController` |
+| `Onboarding_Compliance_Team` | `ContactECCController`, `ObjectRelatedListController`, `OnboardingProgressController`, `VendorFilterController`, `VendorOnboardingDTO`, `VendorOptionDTO`, `VendorRetailOptionGroup`, `ers_DatatableController` |
+| `Onboarding_Finance_Team` | Same class list as Compliance (plus finance custom permissions in metadata). |
+| `Onboarding_Customer_Service` | `ContactECCController`, `ObjectRelatedListController` |
+| `Onboarding_Can_Send_Special_Chuzo_Agreement` | `ContactECCController`, `ObjectRelatedListController`, `OnboardingProgressController`, `VendorOnboardingDTO`, `VendorOptionDTO`, `VendorRetailOptionGroup`, `ers_DatatableController` |
+| `Onboarding_Status_Rule_Config` | `OnboardingStatusEvaluatorInvocable`, `OnboardingStatusEvaluatorService` |
+| `Standard_User` | *(no `classAccesses` in this repo’s metadata — signing/template objects only; see below)* |
+
+**Screen flow create path:** `expCreateRecord` + `recordCollectionEditor` require **`ExpOpportunityCreateRecord`**, **`ExpOpportunityCreateAsyncService`** (async tail), **`RecordCollectionEditor*`** services, and lookup rows use **`ObjectRelatedListController`** — all granted on **`Onboarding_Program_Sales_Team`** as of the hardening pass.
+
+### Elevated object permissions (`modifyAllRecords` / broad `viewAllRecords`)
+
+- **`Standard_User`**: Adobe Sign package objects **`echosign_dev1__Agreement_Template__c`**, **`echosign_dev1__Library_Template__c`**, **`echosign_dev1__SIGN_Agreement__c`** use **`modifyAllRecords` true** (plus **`viewAllRecords` true** on those rows). Treat this set as a **signing/template capability bundle**, not a minimal read-only baseline; avoid assigning it broadly unless your policy requires users to maintain agreement templates across the org.
+- **`Onboarding_Account_Services`**: **`Order`** — **`modifyAllRecords` was narrowed to `false`** (April 2026 hardening) while retaining edit/delete/read where metadata allows; **`viewAllRecords` remains true** for visibility. If Account Services users must correct **any** order regardless of sharing, restore **`modifyAllRecords` true** deliberately and document the exception.
+
+### Org-level user permission toggles in these sets
+
+Several onboarding permission sets enable **`ActivateContract`**; **`Onboarding_Account_Services`** also enables **`ActivateOrder`**. No **`AuthorApex`** / **`ModifyAllData`** user permissions are enabled in source (verified by `audit:permissions:highrisk`).
+
 ## Suggested assignment patterns (verify in your org)
 
 - **Baseline testing:** At minimum, a **sales** test user and an **operations** test user so you can validate create vs manage paths separately.

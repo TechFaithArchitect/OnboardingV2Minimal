@@ -25,6 +25,16 @@ Richer taxonomy (production vs test categories, invocable counts): [Apex Class I
 
 **LWC:** Jest is configured via `@salesforce/sfdx-lwc-jest` in `package.json` (`npm run test:unit`).
 
+| LWC bundle | Apex / wires exercised in tests | Test file |
+| --- | --- | --- |
+| `expCreateRecord` | `ExpOpportunityCreateRecord.loadContext` (imperative; success + error paths) | `force-app/test/lwc/expCreateRecord.test.js` |
+| `recordCollectionEditor` | `RecordCollectionEditorConfigService.getConfig` (`@wire`; missing key + error) | `force-app/test/lwc/recordCollectionEditor.test.js` |
+| `objectRelatedList` | `ObjectRelatedListController.getRelatedRecords`, LDS picklist / record wires | `force-app/test/lwc/objectRelatedList.test.js` |
+| `programDatesRelatedList` | `getProgramDates`, LDS | `force-app/test/lwc/programDatesRelatedList.test.js` |
+| `programDatesQuickAction` | `getLookupOptions` | `force-app/test/lwc/programDatesQuickAction.test.js` |
+
+**Supporting mock:** `jest.config.js` maps `lightning/flowSupport` for screen-flow components under Jest (`force-app/test/jest-mocks/lightning/flowSupport.js`).
+
 ## Existing Quality Tooling
 
 From `package.json`:

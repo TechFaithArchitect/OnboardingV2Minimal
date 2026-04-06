@@ -102,6 +102,8 @@ sf org list
 sf config get target-org
 sf project deploy start --target-org <alias> --source-dir force-app
 sf apex run test --target-org <alias> --test-level RunLocalTests
+# Optional: consolidated hardening suite (class list in script)
+npm run test:apex:hardening -- <alias>
 ```
 
 For scoped deploys:
@@ -115,9 +117,9 @@ sf project deploy start --target-org <alias> --source-dir force-app/main/default
 
 Prepared for org-side cleanup (validate first, then execute):
 
-- [manifest/destructive-cleanup-onboardv2-2026-03-31/README.md](/Users/jasonmu/OnboardingV2Minimal/OnboardingV2Minimal/manifest/destructive-cleanup-onboardv2-2026-03-31/README.md)
-- [manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost.xml](/Users/jasonmu/OnboardingV2Minimal/OnboardingV2Minimal/manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost.xml)
-- [manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost-blocked-objects.xml](/Users/jasonmu/OnboardingV2Minimal/OnboardingV2Minimal/manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost-blocked-objects.xml)
+- [manifest/destructive-cleanup-onboardv2-2026-03-31/README.md](../../manifest/destructive-cleanup-onboardv2-2026-03-31/README.md)
+- [manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost.xml](../../manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost.xml)
+- [manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost-blocked-objects.xml](../../manifest/destructive-cleanup-onboardv2-2026-03-31/destructiveChangesPost-blocked-objects.xml)
 
 Current status:
 

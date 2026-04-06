@@ -28,6 +28,8 @@ These bundles are built for **`lightning__FlowScreen`** (unless noted):
 
 | Component                      | Plain-English role                                                                                                                                                                                                                  |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`expCreateRecord`**          | Primary **Opportunity / onboarding create** screen (`EXP_Opportunity_SCR_Create_Record`). Calls **`ExpOpportunityCreateRecord`** for context, saves, and submit; surfaces errors in-flow (banner), respects user mode from Apex.   |
+| **`expFlowStepWrapper`**       | Layout shell for multi-step EXP flows (hosts step content).                                                                                                                                                                         |
 | **`vendorSelector`**           | Picks a **vendor** during a flow; options usually come from Apex (`VendorOptionDTO` JSON) so eligibility rules stay consistent.                                                                                                     |
 | **`vendorProgramSelector`**    | Picks a **vendor program** (`Vendor_Customization__c`). Can appear on record or app surfaces too (metadata allows it).                                                                                                              |
 | **`recordCollectionEditor`**   | Lets the user **add or edit many child rows** on one screen (contacts, program dates, etc.). **Configuration** comes from **`Child_Record_Editor_Config__mdt`** via the `configKey` property—your admin defines field layout there. |
@@ -58,6 +60,12 @@ These have **`isExposed = false`** in metadata: **`onboardingWorkQueue`**, **`on
 1. **Blank component** — check **field- and object-level security** and **permission sets** ([Persona and permission sets](../technical/PERSONA_AND_PERMISSION_SETS.md)).
 2. **Wrong rows in `objectRelatedList`** — admin checks **child object**, **parent lookup field**, and **parent id source** in Lightning App Builder (see bundle description in `objectRelatedList.js-meta.xml`).
 3. **Flow screen misbehaves** — use [FAQ — Admins](../support/FAQ_ADMINS.md) and flow debug; **`recordCollectionEditor`** errors often trace to **`Child_Record_Editor_Config__mdt`** mismatch.
+
+## LWC security and Jest coverage (engineering)
+
+- **CRUD/FLS:** Custom UI relies on **Lightning Data Service** (`@salesforce/schema`, `lightning/ui*Api`) and **Apex `with sharing`** services. Blank or partial screens usually mean **missing object/field access** — start with [Persona and permission sets](../technical/PERSONA_AND_PERMISSION_SETS.md).
+- **Apex entry points used by LWCs:** `ObjectRelatedListController`, `RecordCollectionEditorConfigService`, `ExpOpportunityCreateRecord`, `ContactECCController`, `OnboardingOrderController`, etc. Permission sets in source must expose the classes each persona’s UI touches (see persona doc **Apex classes** table).
+- **Tests:** Jest lives under `force-app/test/lwc/`. Covered bundles include **`expCreateRecord`**, **`recordCollectionEditor`**, **`objectRelatedList`**, **`programDatesRelatedList`**, **`programDatesQuickAction`**. Run `npm run test:unit`.
 
 ## Source locations
 

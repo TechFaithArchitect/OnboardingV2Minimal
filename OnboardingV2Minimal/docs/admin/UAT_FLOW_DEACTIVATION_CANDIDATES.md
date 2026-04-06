@@ -21,6 +21,44 @@ Excluded by rule:
 - Compared by `DeveloperName`
 - Total matches for this rule: `61`
 
+## How To Execute This In UAT
+
+1. Confirm release window and notify testers that legacy flows may be turned off.
+2. Export current active flow state in UAT (for rollback reference).
+3. Deactivate each flow in the list below in UAT.
+4. Verify none of the listed flow definitions remain active.
+5. Run smoke checks for onboarding create, requirement generation, status updates, and communications.
+6. Record completion evidence in release notes (who, when, what verified).
+
+## Verification Checklist
+
+- All listed flows are inactive in UAT.
+- No required modern OnboardV2 flows were accidentally deactivated.
+- Key UAT business paths still work after deactivation.
+- Any deactivation exceptions are documented with owner and follow-up date.
+
+## Rollback Procedure
+
+1. Reactivate only the specific flow(s) needed to recover business operations.
+2. Re-run the failing scenario to confirm restoration.
+3. Open an issue to resolve root cause before re-attempting retirement.
+4. Update release notes with rollback reason and final state.
+
+## Scenario Playbooks
+
+### Scenario 1: A flow cannot be deactivated
+
+1. Confirm whether active dependencies/interviews still reference the flow.
+2. Resolve blockers (finish/cancel interviews or remove active references).
+3. Retry deactivation and re-verify active status.
+
+### Scenario 2: Business process breaks after deactivation
+
+1. Identify exact failing path and impacted flow(s).
+2. Reactivate minimum needed flow(s) as rollback.
+3. Validate immediate business recovery.
+4. Create follow-up to migrate dependency to supported OnboardV2 path.
+
 ## Deactivate In UAT
 
 - `Agreement_Orchestration_Sync_Onboarding_Records`

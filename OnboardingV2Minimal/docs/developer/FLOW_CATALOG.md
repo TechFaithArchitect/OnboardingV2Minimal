@@ -5,10 +5,30 @@ Generated from `force-app/main/default/flows` metadata.
 Use this as a lookup table (API name -> responsibility).  
 If you are new to the architecture, start with [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) and [SYSTEM_OVERVIEW.md](../technical/SYSTEM_OVERVIEW.md).
 
-## Coverage
+## Coverage and metadata snapshot
 
-- Total flows in repo: 85
-- Domain flows (`DOMAIN_*`): 52
+Counts below match `force-app/main/default/flows/*.flow-meta.xml` (refresh after adding or removing flows). Run `npm run doc:metrics` from the DX project root for the same headline totals.
+
+- **Total flows:** 84
+- **By prefix:** `DOMAIN_*` — 52 · `BLL_*` — 27 · `EXP_*` — 5
+- **`sfdx-project.json` `sourceApiVersion`:** 65.0  
+  Individual flow files may use another `apiVersion`; the distribution in source is approximately **65.0 — 32**, **66.0 — 25**, **64.0 — 14**, **63.0 — 11**, **62.0 — 2**.
+
+## Subflow pins (`flowName` in metadata)
+
+Parent flows call children via **`<flowName>Child_Api_Name</flowName>`**. That pins the **API name** only; at runtime Salesforce executes the **currently Active** version of that Flow Definition in the org.
+
+Snapshot from the same tree as this doc (2026-04-06):
+
+- **Subflow reference edges:** 158
+- **Distinct child API names invoked:** 46
+- **Highest fan-in callees (parent count):** `DOMAIN_OmniSObject_SFL_CREATE_Fault_Message` (16) · `DOMAIN_OmniSObject_SFL_GET_Onboarding_Records` (13) · `DOMAIN_OmniSObject_SFL_GET_Primary_Opportunity_Contact` (9) · `DOMAIN_OmniSObject_SFL_GET_Vendor_Program` (9) · `DOMAIN_OmniSObject_SFL_GET_Contact_Record` (8)
+
+To list every `flowName` edge locally:
+
+```bash
+rg '<flowName>' force-app/main/default/flows
+```
 
 ## All Flow Responsibilities
 
@@ -27,6 +47,7 @@ If you are new to the architecture, start with [DEVELOPER_GUIDE.md](./DEVELOPER_
 | `BLL_OmniSObject_RCD_SYNC_Training_Assignments` | `BLL` | `Active` | BLL - OmniSObject - RCD - SYNC - Training Assignments \| AutoLaunchedFlow \| Trigger: Training_Assignment__c CreateAndUpdate RecordAfterSave |
 | `BLL_Onboarding_RCD_Logical_Process` | `BLL` | `Active` | BLL - Onboarding - RCD - Logical Process \| AutoLaunchedFlow \| Trigger: Onboarding__c CreateAndUpdate RecordAfterSave |
 | `BLL_Onboarding_RCD_Prevent_Duplicates` | `BLL` | `Active` | BLL - Onboarding - RCD - Prevent Duplicates \| AutoLaunchedFlow \| Trigger: Onboarding__c CreateAndUpdate RecordBeforeSave |
+| `BLL_Onboarding_RCD_SYNC_Account_Vendor_Program_Onboarding` | `BLL` | `Active` | BLL - Onboarding - RCD - Sync Account Vendor Program Onboarding \| AutoLaunchedFlow \| Trigger: Onboarding__c CreateAndUpdate RecordAfterSave |
 | `BLL_Onboarding_Requirement_RCD_Logical_Process` | `BLL` | `Active` | BLL - Onboarding Requirement - RCD - Logical Process \| AutoLaunchedFlow \| Trigger: Onboarding_Requirement__c CreateAndUpdate RecordAfterSave |
 | `BLL_Onboarding_Requirement_Subject_RCD_Logical_Process` | `BLL` | `Active` | BLL - Onboarding Requirement Subject - RCD - Logical Process \| AutoLaunchedFlow \| Trigger: Onboarding_Requirement_Subject__c Update RecordAfterSave |
 | `BLL_Onboarding_SCD_Review_and_Assign_Missing_Training_Records` | `BLL` | `Active` | BLL - Onboarding - SCD - Review & Assign Missing Training Records \| AutoLaunchedFlow \| Trigger: Onboarding__c Scheduled |
@@ -97,8 +118,6 @@ If you are new to the architecture, start with [DEVELOPER_GUIDE.md](./DEVELOPER_
 | `EXP_Contract_SCR_Send_Adobe_Agreement` | `EXP` | `Active` | EXP - Contract - SCR - Send Adobe Agreement \| Flow |
 | `EXP_Opportunity_Contacts_SCR_CREATE_Opportunity_Contacts` | `EXP` | `Active` | EXP - Opportunity Contacts - SCR - CREATE - Opportunity Contacts \| Flow |
 | `EXP_Opportunity_SCR_Create_Record` | `EXP` | `Active` | EXP - Opportunity - SCR - Create Record \| Flow |
-| `Onboarding_Subflow_Create_Related_Onboarding_Records` | `Onboarding` | `Active` | Onboarding - Subflow - Create Related Onboarding Records \| AutoLaunchedFlow |
-| `Opportunity_Subflow_Update_Onboarding_Records` | `Opportunity` | `Active` | Opportunity - Subflow - Update Onboarding Records \| AutoLaunchedFlow |
 
 ## Domain Flow Contracts
 
