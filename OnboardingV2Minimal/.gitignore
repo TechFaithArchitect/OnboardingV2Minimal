@@ -7,4 +7,22 @@
 
 # One-off Production Field Service metadata snapshots (not deployed from this repo)
 retrieve-prod-fsl-snapshot/
-OnboardingV2Minimal/docs
+
+# macOS Finder artifacts
+.DS_Store
+
+# Local engineering / audit output (not application metadata)
+reports/
+implementation-notes/
+.analysis/
+coverage/
+*.zip
+
+# Ad-hoc destructive manifests and one-off org backfill scripts (keep under manifests/ in git only when shared)
+manifest/destructive-cleanup-*/
+manifest/destructive-expCreateRecord-*/
+manifest/destructive-delete-communication-*/
+scripts/apex/backfill_*.apex
+
+# npm
+node_modules/

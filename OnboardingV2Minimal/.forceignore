@@ -15,3 +15,12 @@
 # BRE: cannot deploy over an active expression-set version. Deactivate in Setup
 # (or retrieve/merge from org) before dropping this line.
 **/CommunicationDispatchResolver.expressionSetDefinition-meta.xml
+**/CoreGateScreenVisibilityResolver.expressionSetDefinition-meta.xml
+**/OnboardingOrchestrator_V2.expressionSetDefinition-meta.xml
+
+# Email: target org missing folder Approval_Process (or folder API name mismatch).
+**/email/Approval_Process/**
+
+**/jsconfig.json
+**/.eslintrc.json
+**/.DS_Store

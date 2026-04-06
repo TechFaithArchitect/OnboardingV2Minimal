@@ -13,7 +13,6 @@
     <members>DOMAIN_OmniSObject_ACTION_Send_Communication_Template</members>
     <members>DOMAIN_OmniSObject_SFL_CREATE_Agreement</members>
     <members>DOMAIN_OmniSObject_SFL_CREATE_Contract</members>
-    <members>DOMAIN_OmniSObject_SFL_CREATE_Follow_Up_Queue</members>
     <members>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record</members>
     <members>DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Requirements</members>
     <members>DOMAIN_OmniSObject_SFL_CREATE_Related_Onboarding_Requirement_Records</members>

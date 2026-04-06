@@ -79,14 +79,13 @@ Quick rule: if you are unsure where to look, start with the baseline doc and the
 - [Engineering Reports (how to read)](./reference/ENGINEERING_REPORTS_HOW_TO_READ.md)
 
 
-### Engineering reports (repo coverage)
+### Coverage / inventory markdown (local only)
 
-Generated or maintained markdown under `reports/` (metadata/class/trigger coverage vs docs, dependency snapshots). **How to interpret these files:** [Engineering reports (how to read)](./reference/ENGINEERING_REPORTS_HOW_TO_READ.md). Start with:
+Dependency and “docs vs metadata” diff reports under `reports/` are **not tracked in git** (see root `.gitignore`). Regenerate them in your workspace if your team still uses that workflow, or rely on [FLOW_CATALOG.md](./developer/FLOW_CATALOG.md), [APEX_CLASS_INVENTORY.md](./developer/APEX_CLASS_INVENTORY.md), and `npm run doc:metrics` from the DX project root. Historical notes: [Engineering reports (how to read)](./reference/ENGINEERING_REPORTS_HOW_TO_READ.md).
 
-- [Object dependency inventory](../reports/object-dependency-inventory.md)
-- [Docs vs metadata coverage](../reports/docs-metadata-coverage.md)
-- [Docs vs class coverage](../reports/docs-class-coverage.md)
-- [Dependency missing objects summary](../reports/dependency-missing-objects-summary.md)
+### Best practices & hardening status
+
+- [best-practices-findings.md](./technical/best-practices-findings.md) — checklist, automation pointers, and validation history.
 
 ## Scope Baseline
 
@@ -139,7 +138,8 @@ Docs span **intake → onboarding → requirements → status → communications
 | **Lightning components & record page**                                                             | [Onboarding UI and custom components](./reference/ONBOARDING_UI_AND_CUSTOM_COMPONENTS.md)                                                       |
 | **Business rules vs credentials**                                                                  | [BRE and credentials](./reference/BRE_AND_CREDENTIALS_FOR_NEW_USERS.md)                                                                         |
 | **Scripts in the repo**                                                                            | [Scripts README](../scripts/README.md)                                                                                                          |
-| **Understanding `reports/` markdown**                                                              | [Engineering reports how-to](./reference/ENGINEERING_REPORTS_HOW_TO_READ.md)                                                                    |
+| **Best practices / hardening checklist**                                                          | [best-practices-findings.md](./technical/best-practices-findings.md)                                                                           |
+| **Legacy `reports/` diff format (local only)**                                                      | [Engineering reports how-to](./reference/ENGINEERING_REPORTS_HOW_TO_READ.md)                                                                   |
 
 Further media (real screenshots, video) can still be tracked in [Known Gaps and Backlog](./reference/KNOWN_GAPS_AND_BACKLOG.md); the click-path runbook is ready for image paths.
 
@@ -156,6 +156,7 @@ When automation or data model changes, update at minimum:
 - `scripts/README.md` when adding operator-facing scripts
 - `technical/PERSONA_AND_PERMISSION_SETS.md` and `technical/SECURITY_AND_ACCESS.md` when permission sets or LWC-facing Apex classes change
 - `technical/TEST_AND_QUALITY.md` when adding or changing LWC Jest coverage
+- `technical/best-practices-findings.md` when hardening scope, automation, or validation history changes materially
 - Persona guides affected by behavior changes
 - Relevant [FAQ](./support/FAQ_USERS.md) / [FAQ (admins)](./support/FAQ_ADMINS.md) answers if user-visible symptoms or admin checks change
 - [Baseline setup guide](./BASELINE_SETUP_GUIDE.md) (and [Baseline UI walkthrough](./BASELINE_UI_WALKTHROUGH.md) if click-path steps change) if the default onboarding story or baseline assumptions change

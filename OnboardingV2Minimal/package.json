@@ -5,13 +5,23 @@
   "description": "Salesforce App",
   "scripts": {
     "lint": "eslint **/{aura,lwc}/**/*.js",
+    "lint:lwc": "eslint force-app/main/default/lwc --ext .js",
     "test": "npm run test:unit",
+    "test:lwc": "sfdx-lwc-jest",
+    "test:lwc:coverage": "sfdx-lwc-jest --coverage",
     "test:unit": "sfdx-lwc-jest",
     "test:unit:watch": "sfdx-lwc-jest --watch",
     "test:unit:debug": "sfdx-lwc-jest --debug",
     "test:unit:coverage": "sfdx-lwc-jest --coverage",
+    "pmd:apex": "bash scripts/automation/run-apex-pmd.sh",
+    "audit:flows": "bash scripts/automation/run-flow-audits.sh",
+    "audit:apex:sharing": "bash scripts/automation/audit-apex-entry-sharing.sh",
+    "audit:permissions:highrisk": "node scripts/automation/audit-permission-set-high-risk.js",
+    "quality:check": "npm run audit:apex:sharing && npm run pmd:apex && npm run lint:lwc && npm run test:lwc:coverage && npm run audit:flows",
+    "test:apex:hardening": "bash scripts/deploy/run-best-practices-in-scope-tests.sh",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --check \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
+    "doc:metrics": "node scripts/doc-metrics.js",
     "prepare": "husky || true",
     "precommit": "lint-staged"
   },
@@ -27,6 +37,7 @@
     "eslint-plugin-jest": "^28.14.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
+    "pmd-bin": "^2.22.0",
     "prettier": "^3.5.3",
     "prettier-plugin-apex": "^2.2.6"
   },
@@ -38,7 +49,7 @@
       "eslint"
     ],
     "**/lwc/**": [
-        "sfdx-lwc-jest -- --bail --findRelatedTests --passWithNoTests"
+      "sfdx-lwc-jest -- --bail --findRelatedTests --passWithNoTests"
     ]
   }
 }

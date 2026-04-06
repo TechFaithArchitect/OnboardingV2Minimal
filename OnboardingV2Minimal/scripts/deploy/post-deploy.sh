@@ -94,7 +94,7 @@ echo -e "${YELLOW}Step 5: Verifying LWC Components...${NC}"
 LWC_COUNT=$(find force-app/main/default/lwc -type d -mindepth 1 -maxdepth 1 2>/dev/null | wc -l | tr -d ' ')
 echo "  LWC Components Deployed: $LWC_COUNT"
 
-KEY_COMPONENTS=("accountProgramOnboardingModal" "onboardingHomeDashboard" "onboardingRequirementsPanel" "twilioSettings")
+KEY_COMPONENTS=("accountProgramOnboardingModal" "onboardingHomeDashboard" "onboardingRequirementsPanel")
 for COMP in "${KEY_COMPONENTS[@]}"; do
     if [ -d "force-app/main/default/lwc/$COMP" ]; then
         echo -e "    ${GREEN}✓${NC} $COMP exists"
@@ -110,7 +110,7 @@ echo "  The following must be configured manually:"
 echo "    1. Create Vendor Programs and Requirements"
 echo "    2. Load Onboarding_Status_Normalization__mdt and Onboarding_Status_Evaluation_Rule__mdt as needed"
 echo "    3. Create Communication_Template__c records (if used)"
-echo "    4. Configure Twilio settings and Follow_Up_Queue__c workflows"
+echo "    4. Configure communication dispatch policies/templates as needed"
 echo "    5. Add LWC components to Lightning record pages"
 echo ""
 echo "  See docs/setup/configuration.md for detailed instructions"
@@ -124,6 +124,6 @@ echo "Next steps:"
 echo "  1. Assign permission sets to users"
 echo "  2. Configure onboarding status CMDT and related automation (see docs/setup/configuration.md)"
 echo "  3. Add components to Lightning pages"
-echo "  4. Configure Twilio SMS settings"
+echo "  4. Configure communication dispatch policies/templates as needed"
 echo "  5. Run sample data scripts if needed (see docs/setup/sample-data.md)"
 echo ""

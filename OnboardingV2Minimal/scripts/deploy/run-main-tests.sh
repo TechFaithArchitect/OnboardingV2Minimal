@@ -5,7 +5,7 @@
 #
 # Examples:
 #   ./scripts/deploy/run-main-tests.sh OnboardV2
-#   ./scripts/deploy/run-main-tests.sh OnboardV2 --exclude FollowUpExecutionServiceTest
+#   ./scripts/deploy/run-main-tests.sh OnboardV2 --exclude AVOTriggerHandlerTest
 
 set -e
 
@@ -62,4 +62,3 @@ sf apex run test \
     echo "Check the output above for details."
     exit 1
 }
-

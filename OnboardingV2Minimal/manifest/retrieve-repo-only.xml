@@ -32,7 +32,6 @@
         <members>DOMAIN_OmniSObject_SFL_CREATE_Contract</members>
         <members>DOMAIN_OmniSObject_SFL_CREATE_Dealer_Training</members>
         <members>DOMAIN_OmniSObject_SFL_CREATE_Fault_Message</members>
-        <members>DOMAIN_OmniSObject_SFL_CREATE_Follow_Up_Queue</members>
         <members>DOMAIN_OmniSObject_SFL_CREATE_LearnUponContactEnrollment</members>
         <members>DOMAIN_OmniSObject_SFL_CREATE_LearnUpon_Contact_Enrollment_Membership_Record</members>
         <members>DOMAIN_OmniSObject_SFL_CREATE_LearnUpon_Group_Membership</members>
@@ -91,27 +90,15 @@
         <members>EmailTemplateSyncService</members>
         <members>EmailTemplateSyncServiceTest</members>
         <members>ExpOppCreateAsyncServiceTest</members>
-        <members>ExperienceOpportunityCreateAsyncService</members>
+        <members>ExpOpportunityCreateAsyncService</members>
         <members>FlowAdminGuardService</members>
         <members>FlowAdminGuardServiceTest</members>
-        <members>FollowUpDetectionService</members>
-        <members>FollowUpDetectionServiceTest</members>
-        <members>FollowUpExecutionService</members>
-        <members>FollowUpExecutionServiceTest</members>
-        <members>FollowUpFatigueService</members>
-        <members>FollowUpFatigueServiceTest</members>
-        <members>FollowUpMessagingService</members>
-        <members>FollowUpProcessorBatchSchedulerTest</members>
-        <members>FollowUpProcessorSchedulerTest</members>
-        <members>FollowUpProcessorTest</members>
-        <members>FollowUpRuleRepository</members>
         <members>LeadAssignmentServiceTest</members>
         <members>LoggingUtil</members>
         <members>ObjectRelatedListController</members>
         <members>OnbReqSubjectInvocableTest</members>
         <members>OnboardingDefaultVendorProgramInvocable</members>
         <members>OnboardingDefaultVendorProgramInvocableTest</members>
-        <members>OnboardingFollowUpInvocables</members>
         <members>OnboardingInvocables</members>
         <members>OnboardingInvocablesTest</members>
         <members>OnboardingRequirementSubjectInvocable</members>
@@ -283,7 +270,6 @@
         <members>Onboarding_Status_Normalization__mdt.worker_s_comp_complete</members>
         <members>Onboarding_Status_Normalization__mdt.worker_s_comp_incomplete</members>
         <members>Onboarding_Status_Normalization__mdt.worker_s_comp_not_started</members>
-        <members>Twilio_Configuration__mdt.Default</members>
         <members>Vendor_Program_Approval_Policy__mdt.verizon_fios_agreement</members>
         <name>CustomMetadata</name>
     </types>
@@ -296,7 +282,6 @@
         <members>Assigned_Postal_Code__c</members>
         <members>Audit_Question__c</members>
         <members>Audit_Response__c</members>
-        <members>Audit__c</members>
         <members>Background_Check__c</members>
         <members>Child_Record_Editor_Config__mdt</members>
         <members>Chuzo_Agreement__c</members>
@@ -338,9 +323,6 @@
         <members>FLA_Territory_Accounts__e</members>
         <members>FSL_Error_Alert__e</members>
         <members>FSL_Settings__c</members>
-        <members>FollowUpRetryTrigger__e</members>
-        <members>Follow_Up_Queue__c</members>
-        <members>Follow_Up_Rule__mdt</members>
         <members>Fraud_Validation_Rules__c</members>
         <members>Fraud_Validation_Statistics__c</members>
         <members>GLK_Territory_Account__e</members>
@@ -378,7 +360,6 @@
         <members>Onboarding_Status_Tracking_Config__mdt</members>
         <members>Opportunity</members>
         <members>OpportunityContactRole</members>
-        <members>Order__c</members>
         <members>Org_Wide_Email__mdt</members>
         <members>POE_ACI_Statistic__c</members>
         <members>POE_Callout_Config_API__mdt</members>
@@ -420,8 +401,6 @@
         <members>Site_Survey_Question__c</members>
         <members>Site_Survey_Response__c</members>
         <members>Territory_Assignments__c</members>
-        <members>Territory_Role_Assignment__c</members>
-        <members>Twilio_Configuration__mdt</members>
         <members>Typeform_Responses__c</members>
         <members>Vendor_Onboarding_Eligibility_Rule__mdt</members>
         <members>Vendor_Order_Entry_Platform__c</members>
@@ -472,13 +451,11 @@
         <members>Communication_Template__c</members>
         <members>Onboarding_Requirement__c</members>
         <members>Onboarding__c</members>
-        <members>Order__c</members>
         <members>POE_External_Contact_Credential__c</members>
         <members>Recipient_Group_Member__c</members>
         <members>Recipient_Group__c</members>
         <members>Required_Credential__c</members>
         <members>Territory_Assignments__c</members>
-        <members>Territory_Role_Assignment__c</members>
         <members>Vendor_Customization__c</members>
         <members>Vendor_Program_Requirement__c</members>
         <members>Vendor__c</members>
