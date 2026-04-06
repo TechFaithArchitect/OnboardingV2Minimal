@@ -1,5 +1,29 @@
 public with sharing class ExpOpportunityCreateAsyncService {
     private class FlowOutputException extends Exception {}
+    private class QueuePayload {
+        Account accountRecord;
+        Opportunity opportunityRecord;
+        Vendor_Customization__c vendorProgramRecord;
+        String contactsToCreateJson;
+        String opportunityContactsJson;
+        Boolean createContactsInQueue;
+
+        QueuePayload(
+            Account accountRecord,
+            Opportunity opportunityRecord,
+            Vendor_Customization__c vendorProgramRecord,
+            String contactsToCreateJson,
+            String opportunityContactsJson,
+            Boolean createContactsInQueue
+        ) {
+            this.accountRecord = accountRecord;
+            this.opportunityRecord = opportunityRecord;
+            this.vendorProgramRecord = vendorProgramRecord;
+            this.contactsToCreateJson = contactsToCreateJson;
+            this.opportunityContactsJson = opportunityContactsJson;
+            this.createContactsInQueue = createContactsInQueue;
+        }
+    }
 
     public class QueueRequest {
         @InvocableVariable(required=true label='Account Record')
@@ -39,7 +63,11 @@ public with sharing class ExpOpportunityCreateAsyncService {
             return results;
         }
 
-        for (QueueRequest requestItem : requests) {
+        List<QueuePayload> asyncPayloads = new List<QueuePayload>();
+        List<Integer> asyncResultIndexes = new List<Integer>();
+
+        for (Integer requestIndex = 0; requestIndex < requests.size(); requestIndex++) {
+            QueueRequest requestItem = requests[requestIndex];
             QueueResult resultItem = new QueueResult();
             resultItem.queued = false;
 
@@ -56,19 +84,17 @@ public with sharing class ExpOpportunityCreateAsyncService {
             }
 
             if (requestItem.CreateContactsInQueue == true) {
-                Id jobId = System.enqueueJob(
-                    new OpportunityCreateChainQueueable(
-                        cloneAccount(requestItem.AccountRecord),
-                        cloneOpportunity(requestItem.OpportunityRecord),
-                        cloneVendorProgram(requestItem.VendorProgramRecord),
-                        requestItem.ContactsToCreateJSONString,
-                        requestItem.OpportunityContactRecordsJSON,
-                        requestItem.CreateContactsInQueue
-                    )
-                );
-
+                asyncPayloads.add(new QueuePayload(
+                    cloneAccount(requestItem.AccountRecord),
+                    cloneOpportunity(requestItem.OpportunityRecord),
+                    cloneVendorProgram(requestItem.VendorProgramRecord),
+                    requestItem.ContactsToCreateJSONString,
+                    requestItem.OpportunityContactRecordsJSON,
+                    requestItem.CreateContactsInQueue
+                ));
+                asyncResultIndexes.add(requestIndex);
                 resultItem.queued = true;
-                resultItem.message = 'Queued async create chain job: ' + String.valueOf(jobId);
+                resultItem.message = 'Queued async create chain job: pending id.';
             } else {
                 List<String> stageErrors = executeCreateChain(
                     cloneAccount(requestItem.AccountRecord),
@@ -90,6 +116,13 @@ public with sharing class ExpOpportunityCreateAsyncService {
             results.add(resultItem);
         }
 
+        if (!asyncPayloads.isEmpty()) {
+            Id jobId = System.enqueueJob(new OpportunityCreateChainQueueable(asyncPayloads));
+            for (Integer resultIndex : asyncResultIndexes) {
+                results[resultIndex].message = 'Queued async create chain job: ' + String.valueOf(jobId);
+            }
+        }
+
         return results;
     }
 
@@ -105,48 +138,51 @@ public with sharing class ExpOpportunityCreateAsyncService {
         return source == null ? null : (Vendor_Customization__c) source.clone(true, true, false, false);
     }
 
-    private class OpportunityCreateChainQueueable implements Queueable {
-        private final Account accountRecord;
-        private final Opportunity opportunityRecord;
-        private final Vendor_Customization__c vendorProgramRecord;
-        private final String contactsToCreateJson;
-        private final String opportunityContactsJson;
-        private final Boolean createContactsInQueue;
+    private class OpportunityCreateChainQueueable implements Queueable, Finalizer {
+        private final List<QueuePayload> payloads;
 
-        OpportunityCreateChainQueueable(
-            Account accountRecord,
-            Opportunity opportunityRecord,
-            Vendor_Customization__c vendorProgramRecord,
-            String contactsToCreateJson,
-            String opportunityContactsJson,
-            Boolean createContactsInQueue
-        ) {
-            this.accountRecord = accountRecord;
-            this.opportunityRecord = opportunityRecord;
-            this.vendorProgramRecord = vendorProgramRecord;
-            this.contactsToCreateJson = contactsToCreateJson;
-            this.opportunityContactsJson = opportunityContactsJson;
-            this.createContactsInQueue = createContactsInQueue;
+        OpportunityCreateChainQueueable(List<QueuePayload> payloads) {
+            this.payloads = new List<QueuePayload>();
+            if (payloads != null) {
+                this.payloads.addAll(payloads);
+            }
         }
 
         public void execute(QueueableContext context) {
-            List<String> stageErrors = executeCreateChain(
-                accountRecord,
-                opportunityRecord,
-                vendorProgramRecord,
-                contactsToCreateJson,
-                opportunityContactsJson,
-                createContactsInQueue
-            );
-
-            if (!stageErrors.isEmpty()) {
-                LoggingUtil.error(
-                    'ExpOpportunityCreateAsyncService.OpportunityCreateChainQueueable handled stage errors. '
-                    + 'AccountId=' + String.valueOf(accountRecord == null ? null : accountRecord.Id)
-                    + ', RequestedOpportunityId=' + String.valueOf(opportunityRecord == null ? null : opportunityRecord.Id)
-                    + ', Errors=' + String.join(stageErrors, ' | ')
+            System.attachFinalizer(this);
+            for (QueuePayload payload : payloads) {
+                if (payload == null) {
+                    continue;
+                }
+                List<String> stageErrors = executeCreateChain(
+                    payload.accountRecord,
+                    payload.opportunityRecord,
+                    payload.vendorProgramRecord,
+                    payload.contactsToCreateJson,
+                    payload.opportunityContactsJson,
+                    payload.createContactsInQueue
                 );
+
+                if (!stageErrors.isEmpty()) {
+                    LoggingUtil.error(
+                        'ExpOpportunityCreateAsyncService.OpportunityCreateChainQueueable handled stage errors. '
+                        + 'AccountId=' + String.valueOf(payload.accountRecord == null ? null : payload.accountRecord.Id)
+                        + ', RequestedOpportunityId=' + String.valueOf(payload.opportunityRecord == null ? null : payload.opportunityRecord.Id)
+                        + ', Errors=' + String.join(stageErrors, ' | ')
+                    );
+                }
             }
+        }
+
+        public void execute(FinalizerContext context) {
+            if (context == null || context.getResult() != ParentJobResult.UNHANDLED_EXCEPTION) {
+                return;
+            }
+            Exception ex = context.getException();
+            LoggingUtil.error(
+                'ExpOpportunityCreateAsyncService.OpportunityCreateChainQueueable finalizer captured unhandled exception: '
+                + (ex == null ? 'Unknown error.' : ex.getTypeName() + ': ' + ex.getMessage())
+            );
         }
     }
 
@@ -284,6 +320,30 @@ public with sharing class ExpOpportunityCreateAsyncService {
         interview.start();
     }
 
+    /**
+     * Candidates for DOMAIN_OmniSObject_SFL_CREATE_Opportunity reuse detection (same Account +
+     * Vendor Program). Terminal stages (Closed Lost, Denied, Canceled) are excluded in the flow filter.
+     */
+    @TestVisible
+    private static List<Opportunity> loadExistingOpportunitiesForAccountAndVendorProgram(
+        Account accountRecord,
+        Vendor_Customization__c vendorProgramRecord
+    ) {
+        if (accountRecord == null || accountRecord.Id == null) {
+            return new List<Opportunity>();
+        }
+        if (vendorProgramRecord == null || vendorProgramRecord.Id == null) {
+            return new List<Opportunity>();
+        }
+        return [
+            SELECT Id, Vendor_Customization__c, StageName
+            FROM Opportunity
+            WHERE AccountId = :accountRecord.Id
+              AND Vendor_Customization__c = :vendorProgramRecord.Id
+            WITH SECURITY_ENFORCED
+        ];
+    }
+
     @TestVisible
     private static Opportunity runCreateOpportunityFlow(
         Account accountRecord,
@@ -306,10 +366,14 @@ public with sharing class ExpOpportunityCreateAsyncService {
             opportunityInput.Vendor_Customization__c = resolvedVendorProgramRecord.Id;
         }
 
+        List<Opportunity> opportunityRecordCollection =
+            loadExistingOpportunitiesForAccountAndVendorProgram(accountRecord, resolvedVendorProgramRecord);
+
         Map<String, Object> inputs = new Map<String, Object>{
             'AccountRecord' => accountRecord,
             'OpportunityRecord' => opportunityInput,
-            'VendorProgramRecord' => resolvedVendorProgramRecord
+            'VendorProgramRecord' => resolvedVendorProgramRecord,
+            'OpportunityRecordCollection' => opportunityRecordCollection
         };
 
         Flow.Interview interview = Flow.Interview.createInterview(

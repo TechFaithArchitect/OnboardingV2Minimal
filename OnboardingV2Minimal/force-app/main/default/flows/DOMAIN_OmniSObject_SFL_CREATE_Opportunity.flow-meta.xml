@@ -101,6 +101,20 @@
                 <stringValue>Closed Lost</stringValue>
             </rightValue>
         </conditions>
+        <conditions>
+            <leftValueReference>currentItem_Filter_Opportunity_Records.StageName</leftValueReference>
+            <operator>NotEqualTo</operator>
+            <rightValue>
+                <stringValue>Denied</stringValue>
+            </rightValue>
+        </conditions>
+        <conditions>
+            <leftValueReference>currentItem_Filter_Opportunity_Records.StageName</leftValueReference>
+            <operator>NotEqualTo</operator>
+            <rightValue>
+                <stringValue>Canceled</stringValue>
+            </rightValue>
+        </conditions>
         <connector>
             <targetReference>Did_We_Find_Opportunity_Records_Already_Created</targetReference>
         </connector>
