@@ -184,7 +184,11 @@ public with sharing class ExpOpportunityCreateRecord {
         Boolean hasChuzoOnboardingForOpportunity = false;
         Boolean hasNdaOnboardingForOpportunity = false;
         Boolean hasNonChuzoOnboardingForOpportunity = false;
+        Boolean hasActiveProgramBaseOrNdaPipeline = false;
     }
+
+    private static final String FINAL_ACTION_BLOCK_ACTIVE_ONBOARDING_PIPELINE =
+        'BLOCK_ACTIVE_ONBOARDING_PIPELINE';
 
     private class ContactPayload {
         List<Contact> contacts = new List<Contact>();
@@ -445,6 +449,15 @@ public with sharing class ExpOpportunityCreateRecord {
             return response;
         }
 
+        if (FINAL_ACTION_BLOCK_ACTIVE_ONBOARDING_PIPELINE == request.finalNextAction) {
+            response.errorMessage =
+                'You cannot start onboarding while another Program Base or NDA onboarding is already in progress. ' +
+                'Finish or cancel the existing onboarding, then try again.';
+            diagnostics.put('phase', 'validation_active_onboarding_pipeline');
+            response.diagnostics = serializeDiagnostics(diagnostics);
+            return response;
+        }
+
         if (
             PROGRAM_BASE_SELECTION_WITH_CHUZO_NO_PG == request.opportunityProgramBaseSelection &&
             resolveIsUserSpecial() != true
@@ -561,6 +574,8 @@ public with sharing class ExpOpportunityCreateRecord {
                 asBoolean(testOnboardingFlowOutputOverride.get('HasNDAOnboardingForOpportunity'));
             flags.hasNonChuzoOnboardingForOpportunity =
                 asBoolean(testOnboardingFlowOutputOverride.get('HasNonChuzoOnboardingForOpportunity'));
+            flags.hasActiveProgramBaseOrNdaPipeline =
+                asBoolean(testOnboardingFlowOutputOverride.get('HasActiveProgramBaseOrNdaPipeline'));
             return flags;
         }
 
@@ -577,6 +592,8 @@ public with sharing class ExpOpportunityCreateRecord {
             asBoolean(interview.getVariableValue('HasNDAOnboardingForOpportunity'));
         flags.hasNonChuzoOnboardingForOpportunity =
             asBoolean(interview.getVariableValue('HasNonChuzoOnboardingForOpportunity'));
+        flags.hasActiveProgramBaseOrNdaPipeline =
+            asBoolean(interview.getVariableValue('HasActiveProgramBaseOrNdaPipeline'));
 
         return flags;
     }
@@ -590,7 +607,8 @@ public with sharing class ExpOpportunityCreateRecord {
             preloadedContext.containsKey('hasAnyOnboardingForAccount') &&
             preloadedContext.containsKey('hasChuzoOnboardingForOpportunity') &&
             preloadedContext.containsKey('hasNdaOnboardingForOpportunity') &&
-            preloadedContext.containsKey('hasNonChuzoOnboardingForOpportunity')
+            preloadedContext.containsKey('hasNonChuzoOnboardingForOpportunity') &&
+            preloadedContext.containsKey('hasActiveProgramBaseOrNdaPipeline')
         ) {
             OnboardingFlags flags = new OnboardingFlags();
             flags.hasAnyOnboardingForAccount = asBoolean(preloadedContext.get('hasAnyOnboardingForAccount'));
@@ -598,6 +616,8 @@ public with sharing class ExpOpportunityCreateRecord {
             flags.hasNdaOnboardingForOpportunity = asBoolean(preloadedContext.get('hasNdaOnboardingForOpportunity'));
             flags.hasNonChuzoOnboardingForOpportunity =
                 asBoolean(preloadedContext.get('hasNonChuzoOnboardingForOpportunity'));
+            flags.hasActiveProgramBaseOrNdaPipeline =
+                asBoolean(preloadedContext.get('hasActiveProgramBaseOrNdaPipeline'));
             return flags;
         }
         return loadOnboardingFlags(accountRecord);
@@ -652,6 +672,7 @@ public with sharing class ExpOpportunityCreateRecord {
             'HasChuzoOnboardingForOpportunity' => flags.hasChuzoOnboardingForOpportunity,
             'HasNDAOnboardingForOpportunity' => flags.hasNdaOnboardingForOpportunity,
             'HasNonChuzoOnboardingForOpportunity' => flags.hasNonChuzoOnboardingForOpportunity,
+            'HasActiveProgramBaseOrNdaPipeline' => flags.hasActiveProgramBaseOrNdaPipeline,
             'IsUserSpecial' => isUserSpecial,
             'IsCoreOnboardingComplete' =>
                 (flags.hasChuzoOnboardingForOpportunity && flags.hasNdaOnboardingForOpportunity)

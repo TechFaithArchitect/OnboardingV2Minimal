@@ -80,6 +80,22 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <name>Assign_HasActiveProgramBaseOrNdaPipeline</name>
+        <label>Assign Has Active Program Base or NDA Pipeline</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>HasActiveProgramBaseOrNdaPipeline</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>HasChuzoOnboardingForOpportunity_Decision</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_HasAnyOnboardingForAccount</name>
         <label>Assign HasAnyOnboardingForAccount</label>
         <locationX>0</locationX>
@@ -513,6 +529,119 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Initialize_OnboardingIdList_For_ProgramBase_Bulk_Query</name>
+        <label>Initialize OnboardingIdList For Program Base Bulk Query</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>OnboardingIdListForProgramBaseRequirements</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyStringCollectionForFlowAssignments</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Collect_OnboardingIds_For_ProgramBase_Requirements</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Add_Onboarding_Id_To_List_For_Program_Base_Requirement_Bulk</name>
+        <label>Add Onboarding Id To List For Program Base Requirement Bulk</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>OnboardingIdListForProgramBaseRequirements</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Collect_OnboardingIds_For_ProgramBase_Requirements.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Collect_OnboardingIds_For_ProgramBase_Requirements</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Count_OnboardingIds_For_ProgramBase_Requirements</name>
+        <label>Assign Count OnboardingIds For Program Base Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Count_OnboardingIdListForProgramBaseRequirements</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>OnboardingIdListForProgramBaseRequirements</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Has_OnboardingIds_For_ProgramBase_Requirements</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_First_Program_Base_Background_Req_From_Loop</name>
+        <label>Assign First Program Base Background Req From Loop</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Program_Base_Background_Check_Requirement</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Extract_First_Program_Base_Background_Req</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Extract_First_Program_Base_Background_Req</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_First_Program_Base_Credit_Req_From_Loop</name>
+        <label>Assign First Program Base Credit Req From Loop</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Program_Base_Credit_Check_Requirement</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Extract_First_Program_Base_Credit_Req</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Extract_First_Program_Base_Credit_Req</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Clear_Program_Base_Req_Singletons_For_Current_Loop</name>
+        <label>Assign Clear Program Base Req Singletons For Current Loop</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Program_Base_Credit_Check_Requirement</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Program_Base_Background_Check_Requirement</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Active_Program_Base_Onboarding_Decision</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Empty_All_Program_Base_Credit_And_Background_Requirements</name>
+        <label>Assign Empty All Program Base Credit And Background Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>AllProgramBaseCreditAndBackgroundRequirements</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>EmptyOnboardingRequirementRecordCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_OnboardingRecordsForAccount_Filter</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Vendor_Program_Record_List</name>
         <label>Assign Vendor Program Record List</label>
         <locationX>0</locationX>
@@ -546,9 +675,348 @@
             </rightValue>
         </conditions>
         <connector>
-            <targetReference>Loop_OnboardingRecordsForAccount_Filter</targetReference>
+            <targetReference>Initialize_OnboardingIdList_For_ProgramBase_Bulk_Query</targetReference>
         </connector>
     </collectionProcessors>
+    <collectionProcessors>
+        <name>Filter_Program_Base_Background_Req_For_Current_Onboarding</name>
+        <elementSubtype>FilterCollectionProcessor</elementSubtype>
+        <label>Filter Program Base Background Req For Current Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNextValueToReference>currentItem_Filter_Program_Base_Background_Req_For_Current_Onboarding</assignNextValueToReference>
+        <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
+        <collectionReference>AllProgramBaseCreditAndBackgroundRequirements</collectionReference>
+        <conditionLogic>and</conditionLogic>
+        <conditions>
+            <leftValueReference>currentItem_Filter_Program_Base_Background_Req_For_Current_Onboarding.Onboarding__c</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <elementReference>Loop_OnboardingRecordsForAccount_Filter.Id</elementReference>
+            </rightValue>
+        </conditions>
+        <conditions>
+            <leftValueReference>currentItem_Filter_Program_Base_Background_Req_For_Current_Onboarding.Requirement_Type__c</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <stringValue>Background Check</stringValue>
+            </rightValue>
+        </conditions>
+        <connector>
+            <targetReference>Loop_Extract_First_Program_Base_Background_Req</targetReference>
+        </connector>
+    </collectionProcessors>
+    <collectionProcessors>
+        <name>Filter_Program_Base_Credit_Req_For_Current_Onboarding</name>
+        <elementSubtype>FilterCollectionProcessor</elementSubtype>
+        <label>Filter Program Base Credit Req For Current Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNextValueToReference>currentItem_Filter_Program_Base_Credit_Req_For_Current_Onboarding</assignNextValueToReference>
+        <collectionProcessorType>FilterCollectionProcessor</collectionProcessorType>
+        <collectionReference>AllProgramBaseCreditAndBackgroundRequirements</collectionReference>
+        <conditionLogic>and</conditionLogic>
+        <conditions>
+            <leftValueReference>currentItem_Filter_Program_Base_Credit_Req_For_Current_Onboarding.Onboarding__c</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <elementReference>Loop_OnboardingRecordsForAccount_Filter.Id</elementReference>
+            </rightValue>
+        </conditions>
+        <conditions>
+            <leftValueReference>currentItem_Filter_Program_Base_Credit_Req_For_Current_Onboarding.Requirement_Type__c</leftValueReference>
+            <operator>EqualTo</operator>
+            <rightValue>
+                <stringValue>Credit Check</stringValue>
+            </rightValue>
+        </conditions>
+        <connector>
+            <targetReference>Loop_Extract_First_Program_Base_Credit_Req</targetReference>
+        </connector>
+    </collectionProcessors>
+    <decisions>
+        <name>Active_Program_Base_Onboarding_Decision</name>
+        <label>Active Program Base Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Active_NDA_Onboarding_Decision</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Active Program Base</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Program_Base_Onboarding_Active</name>
+            <conditionLogic>1 AND 2 AND 3 AND 4 AND 5 AND (6 OR 7 OR 8)</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Setup Complete</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Denied</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Canceled</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Expired</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Program Base Application - with Chuzo</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Program Base Application - without Chuzo</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Program Base Application - with Chuzo (No Personal Guarantee)</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Filter_Program_Base_Credit_Req_For_Current_Onboarding</targetReference>
+            </connector>
+            <label>Yes - Program Base In Progress</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Has_OnboardingIds_For_ProgramBase_Requirements</name>
+        <label>Has OnboardingIds For Program Base Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Empty_All_Program_Base_Credit_And_Background_Requirements</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Onboarding Ids To Query</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Has_OnboardingIds_For_Bulk_Requirement_Query</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Count_OnboardingIdListForProgramBaseRequirements</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_All_Program_Base_Credit_And_Background_Requirements</targetReference>
+            </connector>
+            <label>Yes - Has Onboarding Ids For Bulk Requirement Query</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Program_Base_Background_Req_Singleton_Still_Empty</name>
+        <label>Program Base Background Req Singleton Still Empty</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Extract_First_Program_Base_Background_Req</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Already Captured Background Req</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Capture_First_Background_Req</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Program_Base_Background_Check_Requirement.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_First_Program_Base_Background_Req_From_Loop</targetReference>
+            </connector>
+            <label>Yes - Capture First Background Req</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Program_Base_Credit_Req_Singleton_Still_Empty</name>
+        <label>Program Base Credit Req Singleton Still Empty</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Extract_First_Program_Base_Credit_Req</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Already Captured Credit Req</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Capture_First_Credit_Req</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Program_Base_Credit_Check_Requirement.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_First_Program_Base_Credit_Req_From_Loop</targetReference>
+            </connector>
+            <label>Yes - Capture First Credit Req</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Program_Base_Credit_And_Background_Satisfied_Decision</name>
+        <label>Program Base Credit and Background Requirements Satisfied</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_HasActiveProgramBaseOrNdaPipeline</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Requirements Incomplete - Treat as Active Pipeline</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Both_Checks_Complete_Or_Waived</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4 OR 5) AND (6 OR 7 OR 8)</conditionLogic>
+            <conditions>
+                <leftValueReference>Program_Base_Credit_Check_Requirement.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Program_Base_Background_Check_Requirement.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Program_Base_Credit_Check_Requirement.Completed__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Program_Base_Credit_Check_Requirement.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Complete</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Program_Base_Credit_Check_Requirement.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Waived</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Program_Base_Background_Check_Requirement.Completed__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Program_Base_Background_Check_Requirement.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Complete</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Program_Base_Background_Check_Requirement.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Waived</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Active_NDA_Onboarding_Decision</targetReference>
+            </connector>
+            <label>Yes - Both Requirement Checks Satisfied</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Active_NDA_Onboarding_Decision</name>
+        <label>Active NDA Onboarding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>HasChuzoOnboardingForOpportunity_Decision</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Not Active NDA</defaultConnectorLabel>
+        <rules>
+            <name>Yes_NDA_Onboarding_Active</name>
+            <conditionLogic>1 AND 2 AND 3 AND 4 AND 5 AND 6</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Setup Complete</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Denied</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Canceled</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Onboarding_Status__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Expired</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_OnboardingRecordsForAccount_Filter.Contract_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>NDA</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_HasActiveProgramBaseOrNdaPipeline</targetReference>
+            </connector>
+            <label>Yes - NDA In Progress</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Are_Training_Assignment_Onboarding_Links_Found_for_Training_Assignment</name>
         <label>Are Training Assignment Onboarding Links Found for Training Assignment</label>
@@ -1158,10 +1626,52 @@
         <collectionReference>HasAnyOnboardingRecordForAccount_Filter</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>HasChuzoOnboardingForOpportunity_Decision</targetReference>
+            <targetReference>Assign_Clear_Program_Base_Req_Singletons_For_Current_Loop</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Complete_Onboarding_Account_BRE_Flag_Scan</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Collect_OnboardingIds_For_ProgramBase_Requirements</name>
+        <label>Loop Collect OnboardingIds For ProgramBase Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>HasAnyOnboardingRecordForAccount_Filter</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Add_Onboarding_Id_To_List_For_Program_Base_Requirement_Bulk</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Assign_Count_OnboardingIds_For_ProgramBase_Requirements</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Extract_First_Program_Base_Background_Req</name>
+        <label>Loop Extract First Program Base Background Req</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Filter_Program_Base_Background_Req_For_Current_Onboarding</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Program_Base_Background_Req_Singleton_Still_Empty</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Program_Base_Credit_And_Background_Satisfied_Decision</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_Extract_First_Program_Base_Credit_Req</name>
+        <label>Loop Extract First Program Base Credit Req</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Filter_Program_Base_Credit_Req_For_Current_Onboarding</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Program_Base_Credit_Req_Singleton_Still_Empty</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Filter_Program_Base_Background_Req_For_Current_Onboarding</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
@@ -1243,6 +1753,46 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_All_Program_Base_Credit_And_Background_Requirements</name>
+        <label>Get All Program Base Credit And Background Requirements</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_OnboardingRecordsForAccount_Filter</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 OR 3)</filterLogic>
+        <filters>
+            <field>Onboarding__c</field>
+            <operator>In</operator>
+            <value>
+                <elementReference>OnboardingIdListForProgramBaseRequirements</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Requirement_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Credit Check</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Requirement_Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Background Check</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Onboarding_Requirement__c</object>
+        <outputReference>AllProgramBaseCreditAndBackgroundRequirements</outputReference>
+        <queriedFields>Completed__c</queriedFields>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Onboarding__c</queriedFields>
+        <queriedFields>Requirement_Type__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+    </recordLookups>
     <recordLookups>
         <name>Get_Onboarding_Record_via_OnboardingRequirementRecord</name>
         <label>Get Onboarding Record via OnboardingRequirementRecord</label>
@@ -1788,6 +2338,38 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>AllProgramBaseCreditAndBackgroundRequirements</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>Count_OnboardingIdListForProgramBaseRequirements</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>currentItem_Filter_Program_Base_Background_Req_For_Current_Onboarding</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>currentItem_Filter_Program_Base_Credit_Req_For_Current_Onboarding</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
         <name>currentItem_HasAnyOnboardingRecordForAccount_Filter</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -1820,11 +2402,36 @@
         <objectType>Onboarding__c</objectType>
     </variables>
     <variables>
+        <name>EmptyOnboardingRequirementRecordCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>EmptyStringCollectionForFlowAssignments</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>errorMessage</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>HasActiveProgramBaseOrNdaPipeline</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <name>FindNotIncludedValues</name>
@@ -1884,6 +2491,13 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>OnboardingIdListForProgramBaseRequirements</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>OnboardingRecord</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
@@ -1911,6 +2525,22 @@
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>Program_Base_Background_Check_Requirement</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Onboarding_Requirement__c</objectType>
+    </variables>
+    <variables>
+        <name>Program_Base_Credit_Check_Requirement</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Onboarding_Requirement__c</objectType>
     </variables>

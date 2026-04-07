@@ -353,6 +353,57 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <name>Assign_Block_Active_Onboarding_Pipeline</name>
+        <label>Assign Block Active Onboarding Pipeline</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>FinalNextAction</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>BLOCK_ACTIVE_ONBOARDING_PIPELINE</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>You cannot start onboarding while another Program Base or NDA onboarding is already in progress. Finish or cancel the existing onboarding, then try again.</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ShowAgreementChoice</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ShowPersonalGuarantee</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ShowVendorSelector</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>ShowVerifyAccount</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Orchestrator_Outputs_Preserved</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Capture_Run_Vendor_Program_Approval_Policy_Fault</name>
         <label>Capture Run Vendor Program Approval Policy Fault</label>
         <locationX>0</locationX>
@@ -375,6 +426,31 @@
             <targetReference>Handle_Rule_Context_Fault</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <name>Gate_Onboarding_Pipeline_Not_Active</name>
+        <label>Gate Onboarding Pipeline Not Active</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Run_Onboarding_Orchestrator</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Continue Orchestrator</defaultConnectorLabel>
+        <rules>
+            <name>Block_Active_Program_Base_Or_NDA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>HasActiveProgramBaseOrNdaPipeline</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Block_Active_Onboarding_Pipeline</targetReference>
+            </connector>
+            <label>Block Active Program Base or NDA</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Decide_Onboarding_Orchestrator_Fallback_Scenario</name>
         <label>Decide Onboarding Orchestrator Fallback Scenario</label>
@@ -547,7 +623,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Run_Onboarding_Orchestrator</targetReference>
+                <targetReference>Gate_Onboarding_Pipeline_Not_Active</targetReference>
             </connector>
             <label>Onboarding Orchestrator</label>
         </rules>
@@ -766,6 +842,16 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>HasActiveProgramBaseOrNdaPipeline</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <name>HasChuzoOnboardingForOpportunity</name>

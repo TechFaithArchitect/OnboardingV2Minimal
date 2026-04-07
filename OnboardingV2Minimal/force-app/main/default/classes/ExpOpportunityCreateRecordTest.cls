@@ -46,7 +46,8 @@ private class ExpOpportunityCreateRecordTest {
             'HasAnyOboardingForAccount' => false,
             'HasChuzoOnboardingForOpportunity' => false,
             'HasNDAOnboardingForOpportunity' => false,
-            'HasNonChuzoOnboardingForOpportunity' => false
+            'HasNonChuzoOnboardingForOpportunity' => false,
+            'HasActiveProgramBaseOrNdaPipeline' => false
         };
         ExpOpportunityCreateRecord.testBreFlowOutputOverride = new Map<String, Object>{
             'FinalNextAction' => 'OFFER_CHUZO_CREATE',
@@ -131,6 +132,7 @@ private class ExpOpportunityCreateRecordTest {
                 'hasChuzoOnboardingForOpportunity' => false,
                 'hasNdaOnboardingForOpportunity' => true,
                 'hasNonChuzoOnboardingForOpportunity' => false,
+                'hasActiveProgramBaseOrNdaPipeline' => false,
                 'opportunityRecordTypeId' => '012FLOW000000000AAA',
                 'ruleErrorMessage' => 'Flow supplied rule message.'
             }
@@ -352,6 +354,30 @@ private class ExpOpportunityCreateRecordTest {
             'Opportunity contact roles are required.',
             missingOcrPayloadResponse.errorMessage
         );
+    }
+
+    @IsTest
+    static void submit_rejectsBlockedPipelineAction() {
+        resetOverrides();
+        Account accountRecord = createAccountRecord('Block Pipeline Account');
+        ExpOpportunityCreateRecord.SubmitRequest requestItem =
+            new ExpOpportunityCreateRecord.SubmitRequest();
+        requestItem.accountId = accountRecord.Id;
+        requestItem.contactsJson = '[{"Contact":{"LastName":"Signer"}}]';
+        requestItem.opportunityContactsJson = '[{"OpportunityContactRole":{"Role":"Owner"}}]';
+        requestItem.finalNextAction = 'BLOCK_ACTIVE_ONBOARDING_PIPELINE';
+
+        Test.startTest();
+        ExpOpportunityCreateRecord.SubmitResponse response =
+            ExpOpportunityCreateRecord.submitCreateRecord(requestItem);
+        Test.stopTest();
+
+        System.assertEquals(false, response.success, 'Expected blocked final action to fail submission.');
+        System.assert(
+            response.errorMessage != null && response.errorMessage.contains('cannot start onboarding'),
+            'Expected active onboarding pipeline message.'
+        );
+        resetOverrides();
     }
 
     @IsTest

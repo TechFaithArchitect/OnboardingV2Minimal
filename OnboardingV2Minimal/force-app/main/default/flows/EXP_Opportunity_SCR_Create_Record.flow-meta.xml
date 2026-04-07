@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Get_Available_Vendors</name>
-        <label>Get Available Vendors</label>
-        <locationX>578</locationX>
-        <locationY>566</locationY>
+        <name>Get_Available_Vendors_JSON</name>
+        <label>Get Available Vendors as JSON</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <actionName>VendorOnboardingJsonAdapter</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -26,6 +26,31 @@
     </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Get_Available_Vendors</name>
+        <label>Get Available Vendors</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Default Vendors Only</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Get_Available_Vendors</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ShowVendorSelector</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Available_Vendors_JSON</targetReference>
+            </connector>
+            <label>Yes - Get Available Vendors</label>
+        </rules>
+    </decisions>
     <description>EXPERIENCE LAYER - Opportunity Object - Screenflow - Create Record (single LWC orchestration with flow-driven visibility gates).</description>
     <environments>Default</environments>
     <formulas>
@@ -62,8 +87,8 @@
     <recordLookups>
         <name>Get_Opportunity_Record_Types</name>
         <label>Get Opportunity Record Types</label>
-        <locationX>578</locationX>
-        <locationY>350</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Evaluate_OnboardingOrchestrator</targetReference>
@@ -91,8 +116,8 @@
     <screens>
         <name>Create_Record</name>
         <label>Create Record</label>
-        <locationX>578</locationX>
-        <locationY>674</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -262,6 +287,12 @@
                     <elementReference>RuleErrorMessage</elementReference>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>flowHasActiveProgramBaseOrNdaPipeline</name>
+                <value>
+                    <elementReference>HasActiveProgramBaseOrNdaPipeline</elementReference>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <styleProperties>
@@ -277,7 +308,7 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account_Record</targetReference>
@@ -287,8 +318,8 @@
     <subflows>
         <name>Evaluate_OnboardingOrchestrator</name>
         <label>Evaluate Onboarding Orchestrator</label>
-        <locationX>578</locationX>
-        <locationY>458</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>Get_Available_Vendors</targetReference>
         </connector>
@@ -335,6 +366,12 @@
                 <elementReference>IsCoreOnboardingCompleteForOrchestrator</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>HasActiveProgramBaseOrNdaPipeline</name>
+            <value>
+                <elementReference>HasActiveProgramBaseOrNdaPipeline</elementReference>
+            </value>
+        </inputAssignments>
         <outputAssignments>
             <assignToReference>FinalNextAction</assignToReference>
             <name>FinalNextAction</name>
@@ -363,8 +400,8 @@
     <subflows>
         <name>Get_Account_Record</name>
         <label>Get Account Record</label>
-        <locationX>578</locationX>
-        <locationY>134</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>Get_Onboarding_Records</targetReference>
         </connector>
@@ -383,8 +420,8 @@
     <subflows>
         <name>Get_Onboarding_Records</name>
         <label>Get Onboarding Records</label>
-        <locationX>578</locationX>
-        <locationY>242</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>Get_Opportunity_Record_Types</targetReference>
         </connector>
@@ -411,6 +448,10 @@
             <assignToReference>HasNonChuzoOnboardingForOpportunity</assignToReference>
             <name>HasNonChuzoOnboardingForOpportunity</name>
         </outputAssignments>
+        <outputAssignments>
+            <assignToReference>HasActiveProgramBaseOrNdaPipeline</assignToReference>
+            <name>HasActiveProgramBaseOrNdaPipeline</name>
+        </outputAssignments>
     </subflows>
     <variables>
         <name>AccountRecord</name>
@@ -433,6 +474,16 @@
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>HasActiveProgramBaseOrNdaPipeline</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <name>HasAnyOnboardingForAccount</name>
@@ -466,84 +517,84 @@
         <name>opportunityCloseDate</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityDocumentsReady</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityLeadSource</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityNextStep</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityNextStepDate</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityOwnerRole</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityProgramBaseSelection</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityProgramType</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityRecordTypeId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunitySource</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityStageName</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
         <name>opportunityType</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

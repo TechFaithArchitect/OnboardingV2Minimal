@@ -9,6 +9,7 @@ const ACTION_PROMPT_PATH_SELECTION = 'PROMPT_PATH_SELECTION';
 const ACTION_REQUIRE_NDA = 'REQUIRE_NDA';
 const ACTION_NO_ACTION = 'NO_ACTION';
 const ACTION_CREATE_VENDOR_PROGRAM_ONBOARDING = 'CREATE_VENDOR_PROGRAM_ONBOARDING';
+const ACTION_BLOCK_ACTIVE_ONBOARDING_PIPELINE = 'BLOCK_ACTIVE_ONBOARDING_PIPELINE';
 
 const PATH_WITH_CHUZO = 'WITH_CHUZO';
 const PATH_WITH_CHUZO_NO_PG = 'WITH_CHUZO_NO_PG';
@@ -67,6 +68,7 @@ export default class ExpCreateRecord extends LightningElement {
     @api flowHasNonChuzoOnboardingForOpportunity;
     @api flowOpportunityRecordTypeId;
     @api flowRuleErrorMessage;
+    @api flowHasActiveProgramBaseOrNdaPipeline;
 
     @api accountStepHeading = 'Account';
     @api accountStepHelperText;
@@ -225,6 +227,10 @@ export default class ExpCreateRecord extends LightningElement {
             if (resolvedRuleErrorMessage) {
                 this.errorMessage = resolvedRuleErrorMessage;
             }
+            if (this.finalNextAction === ACTION_BLOCK_ACTIVE_ONBOARDING_PIPELINE && !this.errorMessage) {
+                this.errorMessage =
+                    'You cannot start onboarding while another onboarding is already in progress.';
+            }
         } catch (error) {
             this.errorMessage = this.reduceError(error, 'Unable to load onboarding context.');
         } finally {
@@ -243,6 +249,20 @@ export default class ExpCreateRecord extends LightningElement {
     get isVendorOnlyAction() {
         return this.finalNextAction === ACTION_CREATE_VENDOR_PROGRAM_ONBOARDING ||
             this.finalNextAction === ACTION_NO_ACTION;
+    }
+
+    get isOnboardingPipelineBlocked() {
+        return this.finalNextAction === ACTION_BLOCK_ACTIVE_ONBOARDING_PIPELINE;
+    }
+
+    get onboardingBlockedMessage() {
+        if (!this.isOnboardingPipelineBlocked) {
+            return '';
+        }
+        return (
+            this.errorMessage ||
+            'You cannot start onboarding while another onboarding is already in progress.'
+        );
     }
 
     get showPathSelector() {
@@ -1138,6 +1158,11 @@ export default class ExpCreateRecord extends LightningElement {
             return;
         }
 
+        if (this.isOnboardingPipelineBlocked) {
+            this.setCurrentStepReady(false);
+            return;
+        }
+
         if (this.currentStepIndex === STEP_ACCOUNT) {
             this.setCurrentStepReady(this.editorHasRequiredValues('account'));
             return;
@@ -1260,6 +1285,11 @@ export default class ExpCreateRecord extends LightningElement {
             payload,
             'hasNonChuzoOnboardingForOpportunity',
             this.flowHasNonChuzoOnboardingForOpportunity
+        );
+        this.appendPreloadedEntry(
+            payload,
+            'hasActiveProgramBaseOrNdaPipeline',
+            this.flowHasActiveProgramBaseOrNdaPipeline
         );
         this.appendPreloadedEntry(payload, 'opportunityRecordTypeId', this.flowOpportunityRecordTypeId);
         this.appendPreloadedEntry(payload, 'ruleErrorMessage', this.flowRuleErrorMessage);

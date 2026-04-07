@@ -108,6 +108,12 @@
                 role="inputOnly"
             />
             <property name="flowRuleErrorMessage" type="String" label="Flow Rule Error Message" role="inputOnly" />
+            <property
+                name="flowHasActiveProgramBaseOrNdaPipeline"
+                type="Boolean"
+                label="Flow Has Active Program Base or NDA Pipeline"
+                role="inputOnly"
+            />
             <property name="accountStepHeading" type="String" label="Account Step Heading" role="inputOnly" />
             <property name="accountStepHelperText" type="String" label="Account Step Helper Text" role="inputOnly" />
             <property
