@@ -341,6 +341,13 @@ export default class ExpCreateRecord extends LightningElement {
         return null;
     }
 
+    get resolvedOpportunityRecordTypeId() {
+        return this.pickValue(
+            this.opportunityRuntime && this.opportunityRuntime.recordTypeId,
+            this.pickValue(this.opportunityRecordTypeId, this.flowOpportunityRecordTypeId)
+        );
+    }
+
     get isAccountStep() {
         return this.currentStepIndex === STEP_ACCOUNT;
     }
@@ -764,7 +771,7 @@ export default class ExpCreateRecord extends LightningElement {
                 opportunityNextStep: opportunityRecord.NextStep,
                 opportunityNextStepDate: opportunityRecord.Next_Step_Date__c,
                 opportunityOwnerRole: opportunityRecord.Owner__c,
-                opportunityRecordTypeId: this.opportunityRuntime.recordTypeId,
+                opportunityRecordTypeId: this.resolvedOpportunityRecordTypeId,
                 opportunityType: opportunityRecord.Type,
                 selectedVendorId: vendorSelection.selectedVendorId,
                 selectedRetailOption: vendorSelection.selectedRetailOption,
