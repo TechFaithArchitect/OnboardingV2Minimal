@@ -28,6 +28,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
     static DEFAULT_NEW_ACTION_BEHAVIOR = 'auto';
     static NEW_ACTION_BEHAVIORS = ['auto', 'standard', 'modal', 'hidden'];
     static REFRESH_DEBOUNCE_MS = 200;
+    static RELATED_LIST_CHANGE_EVENT_NAME = 'objectrelatedlistchange';
 
     /** Parent record ID (e.g., Account Id) */
     @api recordId;
@@ -185,7 +186,11 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         }
         this.refreshDebounceHandle = setTimeout(() => {
             this.refreshDebounceHandle = undefined;
-            this.refreshList().catch(() => {});
+            this.refreshList()
+                .then(() => {
+                    this.dispatchPageRefresh();
+                })
+                .catch(() => {});
         }, ObjectRelatedList.REFRESH_DEBOUNCE_MS);
     }
 
@@ -195,6 +200,20 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         setTimeout(() => {
             this.suppressNextPageRefresh = false;
         }, 0);
+    }
+
+    dispatchRelatedListChange() {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        window.dispatchEvent(
+            new CustomEvent(ObjectRelatedList.RELATED_LIST_CHANGE_EVENT_NAME, {
+                detail: {
+                    objectApiName: this.targetObjectApiName,
+                    parentRecordId: this.effectiveParentRecordId
+                }
+            })
+        );
     }
 
     @wire(getRecord, { recordId: '$recordId', fields: '$parentRecordSourceFields' })
@@ -1182,16 +1201,43 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
 
         Promise.all(recordInputs.map((recordInput) => updateRecord(recordInput)))
             .then(() => {
+                this.rows = this.mergeDraftValuesIntoRows(this.rows, drafts);
                 this.showToast('Success', 'Records updated', 'success');
                 this.draftValues = [];
-                return this.refreshList();
-            })
-            .then(() => {
                 this.dispatchPageRefresh();
+                this.dispatchRelatedListChange();
+                this.refreshList().catch(() => {});
             })
             .catch((error) => {
                 this.showToast('Error updating records', this.reduceErrors(error).join(', '), 'error');
             });
+    }
+
+    mergeDraftValuesIntoRows(rows, drafts) {
+        if (!Array.isArray(rows) || rows.length === 0 || !Array.isArray(drafts) || drafts.length === 0) {
+            return Array.isArray(rows) ? rows : [];
+        }
+
+        const draftById = new Map();
+        drafts.forEach((draft) => {
+            const recordId = draft?.Id;
+            if (recordId) {
+                draftById.set(recordId, draft);
+            }
+        });
+
+        const mergedRows = rows.map((row) => {
+            const rowId = row?.Id;
+            if (!rowId || !draftById.has(rowId)) {
+                return row;
+            }
+            return {
+                ...row,
+                ...draftById.get(rowId)
+            };
+        });
+
+        return this.decorateRowsWithPicklistOptions(mergedRows);
     }
 
     handleNew() {
@@ -1221,6 +1267,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
         this.showToast('Success', `${label} record created.`, 'success');
         this.refreshList().then(() => {
             this.dispatchPageRefresh();
+            this.dispatchRelatedListChange();
         });
     }
 
@@ -1276,6 +1323,7 @@ export default class ObjectRelatedList extends NavigationMixin(LightningElement)
             })
             .then(() => {
                 this.dispatchPageRefresh();
+                this.dispatchRelatedListChange();
             })
             .catch((error) => {
                 this.showToast('Error deleting record', this.reduceErrors(error).join(', '), 'error');
