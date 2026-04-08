@@ -1,3 +1,4 @@
+@SuppressWarnings('PMD.OperationWithLimitsInLoop')
 public with sharing class CommunicationTemplateBulkSendAction {
 
   private static final Integer MAX_EMAILS_PER_SEND_CALL = 10;
@@ -55,6 +56,8 @@ public with sharing class CommunicationTemplateBulkSendAction {
     }
   }
 
+  // This invocable intentionally executes chunked sendEmail calls to stay inside
+  // Messaging invocation limits while preserving per-request error aggregation.
   @InvocableMethod(
     label='Send Communication Templates (Bulk)'
     description='Sends communication-template emails in bulk using Communication_Template__c + EmailTemplate. Returns aggregate send status.'

@@ -54,7 +54,7 @@ public with sharing class OnboardingRecordFlowSupport {
     }
     String cols = commaSeparatedQueryableFields(Onboarding__c.SObjectType);
     return (Onboarding__c) Database.query(
-      'SELECT ' + cols + ' FROM Onboarding__c WHERE Id = :onboardingId LIMIT 1'
+      'SELECT ' + cols + ' FROM Onboarding__c WHERE Id = :onboardingId WITH USER_MODE LIMIT 1'
     );
   }
 
@@ -67,7 +67,7 @@ public with sharing class OnboardingRecordFlowSupport {
     return (Vendor_Customization__c) Database.query(
       'SELECT ' +
         cols +
-        ' FROM Vendor_Customization__c WHERE Id = :vendorProgramId LIMIT 1'
+        ' FROM Vendor_Customization__c WHERE Id = :vendorProgramId WITH USER_MODE LIMIT 1'
     );
   }
 

@@ -18,6 +18,12 @@ public with sharing class ObjectRelatedListController {
     private static final Integer DEFAULT_OPTIONS_LIMIT = 500;
     private static final Integer MAX_OPTIONS_LIMIT = 2000;
     private static final String API_NAME_PATTERN = '^[A-Za-z][A-Za-z0-9_]*$';
+    private static final String ORDER_USAGE_RELATED_RECORDS = 'RelatedRecords';
+    private static final String ORDER_USAGE_LOOKUP_OPTIONS = 'LookupOptions';
+    private static final Map<String, Map<String, Schema.SObjectField>> DESCRIBE_FIELD_MAP_CACHE =
+        new Map<String, Map<String, Schema.SObjectField>>();
+    private static final Map<String, Set<String>> ORDER_ALLOWLIST_CACHE =
+        new Map<String, Set<String>>();
     
     /**
      * Query configuration wrapper class
@@ -86,7 +92,7 @@ public with sharing class ObjectRelatedListController {
                 );
             }
             Map<String, Schema.SObjectField> objectFieldMap =
-                objectDescribe.fields.getMap();
+                getDescribeFieldMap(objectDescribe);
             String validatedParentField = requireFieldPath(
                 objectDescribe,
                 config.parentFieldApiName,
@@ -107,23 +113,29 @@ public with sharing class ObjectRelatedListController {
             for (String field : config.fieldApiNames) {
                 if (String.isNotBlank(field)) {
                     String normalizedField = field.trim();
-                    if (normalizedField.contains('.')) {
-                        fields.add(
-                            requireFieldPath(
-                                objectDescribe,
-                                normalizedField,
-                                'Requested field'
-                            )
-                        );
-                    } else {
-                        fields.add(
-                            requireSimpleField(
-                                objectFieldMap,
-                                normalizedField,
-                                'Requested field',
-                                true
-                            )
-                        );
+                    try {
+                        if (normalizedField.contains('.')) {
+                            fields.add(
+                                requireFieldPath(
+                                    objectDescribe,
+                                    normalizedField,
+                                    'Requested field'
+                                )
+                            );
+                        } else {
+                            fields.add(
+                                requireSimpleField(
+                                    objectFieldMap,
+                                    normalizedField,
+                                    'Requested field',
+                                    true
+                                )
+                            );
+                        }
+                    } catch (OnboardingDomainException fieldException) {
+                        if (!isAccessibilityException(fieldException)) {
+                            throw fieldException;
+                        }
                     }
                 }
             }
@@ -132,13 +144,19 @@ public with sharing class ObjectRelatedListController {
             if (config.relationshipFieldApiNames != null) {
                 for (String relField : config.relationshipFieldApiNames) {
                     if (String.isNotBlank(relField)) {
-                        fields.add(
-                            requireFieldPath(
-                                objectDescribe,
-                                relField,
-                                'Relationship field'
-                            )
-                        );
+                        try {
+                            fields.add(
+                                requireFieldPath(
+                                    objectDescribe,
+                                    relField,
+                                    'Relationship field'
+                                )
+                            );
+                        } catch (OnboardingDomainException relationshipException) {
+                            if (!isAccessibilityException(relationshipException)) {
+                                throw relationshipException;
+                            }
+                        }
                     }
                 }
             }
@@ -163,6 +181,11 @@ public with sharing class ObjectRelatedListController {
                     config.orderByField,
                     'Order by field'
                 );
+                if (!isOrderByFieldAllowed(objectName, validatedOrderBy, ORDER_USAGE_RELATED_RECORDS)) {
+                    throw new OnboardingDomainException(
+                        'Unsupported orderBy field: ' + config.orderByField
+                    );
+                }
                 soql +=
                     ' ORDER BY ' + validatedOrderBy + ' ' + direction + ' NULLS LAST';
             }
@@ -225,7 +248,7 @@ public with sharing class ObjectRelatedListController {
 
             Schema.DescribeSObjectResult objectDescribe =
                 globalDescribe.get(objectApiName).getDescribe();
-            Map<String, Schema.SObjectField> fieldMap = objectDescribe.fields.getMap();
+            Map<String, Schema.SObjectField> fieldMap = getDescribeFieldMap(objectDescribe);
 
             if (!objectDescribe.isAccessible()) {
                 throw new OnboardingDomainException(
@@ -252,14 +275,18 @@ public with sharing class ObjectRelatedListController {
 
             String sortField = validatedLabelField;
             if (String.isNotBlank(orderByField)) {
-                String normalizedOrderBy = orderByField.trim();
-                if (
-                    Pattern.matches(API_NAME_PATTERN, normalizedOrderBy) &&
-                    fieldMap.containsKey(normalizedOrderBy) &&
-                    fieldMap.get(normalizedOrderBy).getDescribe().isAccessible()
-                ) {
-                    sortField = normalizedOrderBy;
+                String validatedOrderBy = requireSimpleField(
+                    fieldMap,
+                    orderByField,
+                    'Order by field',
+                    true
+                );
+                if (!isOrderByFieldAllowed(objectDescribe.getName(), validatedOrderBy, ORDER_USAGE_LOOKUP_OPTIONS)) {
+                    throw new OnboardingDomainException(
+                        'Unsupported orderBy field: ' + orderByField
+                    );
                 }
+                sortField = validatedOrderBy;
             }
             String direction = (orderDirection == ORDER_DESC) ? ORDER_DESC : ORDER_ASC;
 
@@ -344,7 +371,7 @@ public with sharing class ObjectRelatedListController {
 
             Boolean isLast = (i == parts.size() - 1);
             if (isLast) {
-                Map<String, Schema.SObjectField> fieldMap = currentDescribe.fields.getMap();
+                Map<String, Schema.SObjectField> fieldMap = getDescribeFieldMap(currentDescribe);
                 if (!fieldMap.containsKey(part)) {
                     throw new OnboardingDomainException('Invalid ' + label + ': ' + normalized);
                 }
@@ -352,9 +379,31 @@ public with sharing class ObjectRelatedListController {
                     throw new OnboardingDomainException(label + ' is not accessible: ' + normalized);
                 }
             } else {
-                currentDescribe = resolveRelationshipDescribe(currentDescribe, part);
-                if (currentDescribe == null) {
+                Schema.DescribeFieldResult relationshipField = null;
+                for (Schema.SObjectField sField : getDescribeFieldMap(currentDescribe).values()) {
+                    Schema.DescribeFieldResult candidate = sField.getDescribe();
+                    if (candidate.getType() != Schema.DisplayType.Reference) {
+                        continue;
+                    }
+                    if (candidate.getRelationshipName() != part) {
+                        continue;
+                    }
+                    relationshipField = candidate;
+                    break;
+                }
+                if (relationshipField == null) {
                     throw new OnboardingDomainException('Invalid ' + label + ': ' + normalized);
+                }
+                if (!relationshipField.isAccessible()) {
+                    throw new OnboardingDomainException(label + ' is not accessible: ' + normalized);
+                }
+                List<Schema.SObjectType> referenceTypes = relationshipField.getReferenceTo();
+                if (referenceTypes == null || referenceTypes.isEmpty()) {
+                    throw new OnboardingDomainException('Invalid ' + label + ': ' + normalized);
+                }
+                currentDescribe = referenceTypes[0].getDescribe();
+                if (!currentDescribe.isAccessible()) {
+                    throw new OnboardingDomainException(label + ' is not accessible: ' + normalized);
                 }
             }
         }
@@ -362,25 +411,55 @@ public with sharing class ObjectRelatedListController {
         return normalized;
     }
 
-    private static Schema.DescribeSObjectResult resolveRelationshipDescribe(
-        Schema.DescribeSObjectResult describeResult,
-        String relationshipName
+    private static Boolean isAccessibilityException(
+        OnboardingDomainException domainException
     ) {
-        for (Schema.SObjectField sField : describeResult.fields.getMap().values()) {
-            Schema.DescribeFieldResult fieldDescribe = sField.getDescribe();
-            if (fieldDescribe.getType() != Schema.DisplayType.Reference) {
-                continue;
+        return domainException != null &&
+            !String.isBlank(domainException.getMessage()) &&
+            domainException.getMessage().contains('is not accessible');
+    }
+
+    private static Map<String, Schema.SObjectField> getDescribeFieldMap(
+        Schema.DescribeSObjectResult describeResult
+    ) {
+        String objectApiName = describeResult.getName();
+        if (!DESCRIBE_FIELD_MAP_CACHE.containsKey(objectApiName)) {
+            Schema.SObjectType objectType = Schema.getGlobalDescribe().get(objectApiName);
+            if (objectType == null) {
+                DESCRIBE_FIELD_MAP_CACHE.put(objectApiName, describeResult.fields.getMap());
+            } else {
+                DESCRIBE_FIELD_MAP_CACHE.put(
+                    objectApiName,
+                    objectType.getDescribe(SObjectDescribeOptions.DEFERRED).fields.getMap()
+                );
             }
-            if (fieldDescribe.getRelationshipName() != relationshipName) {
-                continue;
-            }
-            List<Schema.SObjectType> referenceTypes = fieldDescribe.getReferenceTo();
-            if (referenceTypes == null || referenceTypes.isEmpty()) {
-                continue;
-            }
-            return referenceTypes[0].getDescribe();
         }
-        return null;
+        return DESCRIBE_FIELD_MAP_CACHE.get(objectApiName);
+    }
+
+    @SuppressWarnings('PMD.ApexCRUDViolation')
+    private static Boolean isOrderByFieldAllowed(
+        String objectApiName,
+        String orderFieldPath,
+        String usageContext
+    ) {
+        String cacheKey = usageContext + '|' + objectApiName;
+        if (!ORDER_ALLOWLIST_CACHE.containsKey(cacheKey)) {
+            Set<String> allowedFields = new Set<String>();
+            // Allowlist rows are org configuration metadata and must be readable in all contexts.
+            for (Related_List_Order_Allowlist__mdt row : [
+                SELECT Target_Object_API_Name__c, Order_Field_Path__c, Usage_Context__c
+                FROM Related_List_Order_Allowlist__mdt
+                WHERE Target_Object_API_Name__c = :objectApiName
+                  AND Usage_Context__c = :usageContext
+            ]) {
+                if (String.isNotBlank(row.Order_Field_Path__c)) {
+                    allowedFields.add(row.Order_Field_Path__c.trim());
+                }
+            }
+            ORDER_ALLOWLIST_CACHE.put(cacheKey, allowedFields);
+        }
+        return ORDER_ALLOWLIST_CACHE.get(cacheKey).contains(orderFieldPath);
     }
     
     /**

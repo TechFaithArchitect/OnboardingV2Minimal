@@ -148,7 +148,8 @@ public with sharing class OnbReqParentBulkEvalInvocable {
     ).getRecords();
     Database.SaveResult[] firstPassResults = Database.update(
       (List<Onboarding_Requirement__c>) sanitizedFirstPassUpdates,
-      false
+      false,
+      AccessLevel.USER_MODE
     );
 
     for (Integer i = 0; i < firstPassResults.size(); i++) {
@@ -230,7 +231,8 @@ public with sharing class OnbReqParentBulkEvalInvocable {
       ).getRecords();
       Database.SaveResult[] retryResults = Database.update(
         (List<Onboarding_Requirement__c>) sanitizedRetryUpdates,
-        false
+        false,
+        AccessLevel.USER_MODE
       );
       for (Integer i = 0; i < retryResults.size(); i++) {
         Database.SaveResult retryResult = retryResults[i];
@@ -287,7 +289,8 @@ public with sharing class OnbReqParentBulkEvalInvocable {
       ).getRecords();
       Database.SaveResult[] completedOnlyResults = Database.update(
         (List<Onboarding_Requirement__c>) sanitizedCompletedOnlyUpdates,
-        false
+        false,
+        AccessLevel.USER_MODE
       );
       for (Integer i = 0; i < completedOnlyResults.size(); i++) {
         Database.SaveResult completedOnlyResult = completedOnlyResults[i];

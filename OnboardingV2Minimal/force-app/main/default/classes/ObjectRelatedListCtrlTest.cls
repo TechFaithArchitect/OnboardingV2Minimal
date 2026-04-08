@@ -130,18 +130,18 @@ private class ObjectRelatedListCtrlTest {
         System.assertNotEquals(null, limitedOptions[0].value, 'Value should be Id');
         System.assertNotEquals(null, limitedOptions[0].label, 'Label should be populated');
 
-        List<ObjectRelatedListController.LookupOption> fallbackSortOptions =
+        try {
             ObjectRelatedListController.getLookupOptions(
                 'Account',
                 'Name',
-                'Name DESC NULLS LAST',
+                'CreatedDate',
                 'DESC',
                 5
             );
-        System.assert(
-            fallbackSortOptions.size() > 0,
-            'Invalid sort field input should safely fall back to label field sorting'
-        );
+            System.assert(false, 'Expected AuraHandledException for unsupported explicit order field');
+        } catch (AuraHandledException e) {
+            System.assertNotEquals(null, e, 'Exception should be thrown');
+        }
 
         try {
             ObjectRelatedListController.getLookupOptions(
@@ -152,6 +152,28 @@ private class ObjectRelatedListCtrlTest {
                 5
             );
             System.assert(false, 'Expected AuraHandledException for invalid label field');
+        } catch (AuraHandledException e) {
+            System.assertNotEquals(null, e, 'Exception should be thrown');
+        }
+    }
+
+    @isTest
+    static void testGetRelatedRecordsRejectsUnsupportedAllowlistOrderField() {
+        Account accOne = [SELECT Id FROM Account WHERE Name = 'ORL Test Account One' LIMIT 1];
+
+        ObjectRelatedListController.QueryConfig config =
+            new ObjectRelatedListController.QueryConfig();
+        config.objectApiName = 'Contact';
+        config.parentFieldApiName = 'AccountId';
+        config.parentRecordId = accOne.Id;
+        config.fieldApiNames = new List<String>{ 'LastName', 'Email' };
+        config.orderByField = 'Email';
+        config.orderDirection = 'ASC';
+        config.recordLimit = 50;
+
+        try {
+            ObjectRelatedListController.getRelatedRecords(config);
+            System.assert(false, 'Expected AuraHandledException for unsupported allowlist order field');
         } catch (AuraHandledException e) {
             System.assertNotEquals(null, e, 'Exception should be thrown');
         }
@@ -202,4 +224,56 @@ private class ObjectRelatedListCtrlTest {
         List<SObject> maxLimitedRows = ObjectRelatedListController.getRelatedRecords(config);
         System.assertEquals(2, maxLimitedRows.size(), 'Max limit clamp path should still return matching rows');
     }
+
+    @isTest
+    static void testGetProgramDatesMatchesGenericPath() {
+        Account accOne = [SELECT Id FROM Account WHERE Name = 'ORL Test Account One' LIMIT 1];
+
+        ObjectRelatedListController.QueryConfig config =
+            new ObjectRelatedListController.QueryConfig();
+        config.objectApiName = 'Program_Dates__c';
+        config.parentFieldApiName = 'Account__c';
+        config.parentRecordId = accOne.Id;
+        config.fieldApiNames = new List<String>{
+            'Partner_Category__c',
+            'Inception_Date__c',
+            'Program_ID__c',
+            'Program_Active_Flag__c',
+            'Program_Date__c',
+            'Program_Deactivated_Flag__c',
+            'Program_Deactivated_Date__c',
+            'Program_Deactivated_Reason__c',
+            'Program_Reactivated_Date__c',
+            'Program_Reactivated_Flag__c',
+            'Vendor_Program__c'
+        };
+        config.relationshipFieldApiNames = new List<String>{
+            'Vendor_Program__r.Label__c'
+        };
+        config.orderByField = 'Program_Date__c';
+        config.orderDirection = 'DESC';
+
+        List<Program_Dates__c> legacyRows = ObjectRelatedListController.getProgramDates(accOne.Id);
+        List<SObject> genericRows = ObjectRelatedListController.getRelatedRecords(config);
+
+        System.assertEquals(
+            genericRows.size(),
+            legacyRows.size(),
+            'Deprecated wrapper should match getRelatedRecords result size.'
+        );
+    }
+
+    @isTest
+    static void testProgramDatesAllowlistMetadataIsVisible() {
+        List<Related_List_Order_Allowlist__mdt> rows = [
+            SELECT Order_Field_Path__c
+            FROM Related_List_Order_Allowlist__mdt
+            WHERE Target_Object_API_Name__c = 'Program_Dates__c'
+              AND Usage_Context__c = 'RelatedRecords'
+        ];
+
+        System.assertEquals(1, rows.size(), 'Expected Program Dates order allowlist metadata.');
+        System.assertEquals('Program_Date__c', rows[0].Order_Field_Path__c);
+    }
+
 }

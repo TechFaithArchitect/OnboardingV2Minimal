@@ -263,7 +263,7 @@ public without sharing class OnboardingNextStepRuleService {
     String soql =
       'SELECT ' +
       String.join(new List<String>(selectFields), ', ') +
-      ' FROM Onboarding__c WHERE Id = :onboardingId LIMIT 1';
+      ' FROM Onboarding__c WHERE Id = :onboardingId WITH USER_MODE LIMIT 1';
     return Database.query(soql);
   }
 
@@ -528,6 +528,8 @@ public without sharing class OnboardingNextStepRuleService {
       LoggingUtil.warn(
         'OnboardingNextStepRuleService.alignContractRecordTypeIfNeeded: update as user failed: ' + dex.getDmlMessage(0)
       );
+      // Fallback to SYSTEM_MODE only to align RecordTypeId on a row this flow just created when user-mode
+      // update is blocked by profile defaults or transient permission drift.
       Database.update(
         new List<Contract>{ new Contract(Id = contractId, RecordTypeId = expectedRecordTypeId) },
         true,
@@ -608,6 +610,7 @@ public without sharing class OnboardingNextStepRuleService {
       recordTypeId,
       retailerType
     );
+    // SYSTEM_MODE path is restricted to controlled fallback when user-mode insert is not possible.
     Database.insert(new List<Contract>{ c }, true, AccessLevel.SYSTEM_MODE);
     return c.Id;
   }

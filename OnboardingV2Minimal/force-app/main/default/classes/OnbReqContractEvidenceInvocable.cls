@@ -316,7 +316,8 @@ public with sharing class OnbReqContractEvidenceInvocable {
     ).getRecords();
     Database.SaveResult[] saveResults = Database.update(
       (List<Onboarding_Requirement_Subject__c>) sanitizedForUpdate,
-      false
+      false,
+      AccessLevel.USER_MODE
     );
     for (Integer i = 0; i < saveResults.size(); i++) {
       Database.SaveResult saveResult = saveResults[i];
@@ -454,7 +455,8 @@ public with sharing class OnbReqContractEvidenceInvocable {
     ).getRecords();
     Database.SaveResult[] saveResults = Database.update(
       (List<Onboarding__c>) sanitizedForUpdate,
-      false
+      false,
+      AccessLevel.USER_MODE
     );
     for (Integer i = 0; i < saveResults.size(); i++) {
       Database.SaveResult saveResult = saveResults[i];

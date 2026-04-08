@@ -63,7 +63,9 @@ public without sharing class OnboardingErrorLogService {
 
         Database.SaveResult sr;
         try {
-            sr = Database.insert(row, false, AccessLevel.USER_MODE);
+            // Fault logging must remain durable even when caller CRUD/FLS is narrower than
+            // platform operations support staff; use explicit SYSTEM_MODE for log persistence.
+            sr = Database.insert(row, false, AccessLevel.SYSTEM_MODE);
         } catch (Exception ex) {
             outcome.userFacingMessage = userBase + ' Reference: logging unavailable.';
             LoggingUtil.error('OnboardingErrorLogService.persistFault insert threw: ' + ex.getMessage());
@@ -94,7 +96,8 @@ public without sharing class OnboardingErrorLogService {
             Request__c = truncate(LoggingUtil.redactPii(requestBody), MAX_REQUEST_CHARS)
         );
         try {
-            Database.update(requestPatch, false, AccessLevel.USER_MODE);
+            // Keep follow-up patch in SYSTEM_MODE for the same durability reason as insert.
+            Database.update(requestPatch, false, AccessLevel.SYSTEM_MODE);
         } catch (Exception ex) {
             LoggingUtil.warn('OnboardingErrorLogService.persistFault request update failed: ' + ex.getMessage());
         }

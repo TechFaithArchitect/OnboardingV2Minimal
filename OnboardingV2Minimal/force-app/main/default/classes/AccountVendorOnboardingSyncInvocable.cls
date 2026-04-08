@@ -58,19 +58,17 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
             SELECT Id, Account__c, Opportunity__c, Onboarding_Status__c
             FROM Onboarding__c
             WHERE Id IN :onboardingIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]);
 
         Map<Id, Account_Vendor_Program_Onboarding__c> avoByOnboardingId =
             new Map<Id, Account_Vendor_Program_Onboarding__c>();
-        for (Account_Vendor_Program_Onboarding__c avo : [
-            SELECT Id, Account__c, Onboarding__c, Opportunity__c, Primary_Contact__c,
-                   Status__c, Is_Active__c, Reason_for_Return__c
-            FROM Account_Vendor_Program_Onboarding__c
-            WHERE Onboarding__c IN :onboardingIds
-            WITH SECURITY_ENFORCED
-        ]) {
-            avoByOnboardingId.put(avo.Onboarding__c, avo);
+        for (Account_Vendor_Program_Onboarding__c avo : queryAccessibleAvoRows(onboardingIds)) {
+            Id onboardingLookupId = (Id) safeGetFieldValue(avo, 'Onboarding__c');
+            if (onboardingLookupId == null) {
+                continue;
+            }
+            avoByOnboardingId.put(onboardingLookupId, avo);
         }
 
         Set<Id> opportunityIds = new Set<Id>();
@@ -87,7 +85,7 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
                 FROM OpportunityContactRole
                 WHERE OpportunityId IN :opportunityIds
                   AND IsPrimary = true
-                WITH SECURITY_ENFORCED
+                WITH USER_MODE
                 ORDER BY LastModifiedDate DESC
             ]) {
                 if (!ALLOWED_PRIMARY_CONTACT_ROLES.contains(ocr.Role)) {
@@ -116,13 +114,19 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
             }
 
             Account_Vendor_Program_Onboarding__c existing = avoByOnboardingId.get(onboardingId);
+            Id existingAccountId = existing == null ? null : (Id) safeGetFieldValue(existing, 'Account__c');
+            Id existingOpportunityId = existing == null ? null : (Id) safeGetFieldValue(existing, 'Opportunity__c');
+            Id existingPrimaryContactId = existing == null ? null : (Id) safeGetFieldValue(existing, 'Primary_Contact__c');
+            String existingStatus = existing == null ? null : (String) safeGetFieldValue(existing, 'Status__c');
+            Boolean existingIsActive = existing == null ? null : (Boolean) safeGetFieldValue(existing, 'Is_Active__c');
+            String existingReasonForReturn = existing == null ? null : (String) safeGetFieldValue(existing, 'Reason_for_Return__c');
             Id desiredPrimaryContactId = onboarding.Opportunity__c == null
                 ? null
                 : primaryContactByOpportunityId.get(onboarding.Opportunity__c);
             String desiredStatus = deriveAvoStatus(
                 onboarding.Onboarding_Status__c,
-                existing == null ? null : existing.Status__c,
-                existing == null ? null : existing.Reason_for_Return__c
+                existingStatus,
+                existingReasonForReturn
             );
             Boolean desiredIsActive = !isTerminalStatus(desiredStatus);
 
@@ -141,23 +145,23 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
             }
 
             Boolean changed = false;
-            if (existing.Account__c != onboarding.Account__c) {
+            if (existingAccountId != onboarding.Account__c) {
                 existing.Account__c = onboarding.Account__c;
                 changed = true;
             }
-            if (existing.Opportunity__c != onboarding.Opportunity__c) {
+            if (existingOpportunityId != onboarding.Opportunity__c) {
                 existing.Opportunity__c = onboarding.Opportunity__c;
                 changed = true;
             }
-            if (existing.Primary_Contact__c != desiredPrimaryContactId) {
+            if (existingPrimaryContactId != desiredPrimaryContactId) {
                 existing.Primary_Contact__c = desiredPrimaryContactId;
                 changed = true;
             }
-            if (existing.Status__c != desiredStatus) {
+            if (existingStatus != desiredStatus) {
                 existing.Status__c = desiredStatus;
                 changed = true;
             }
-            if (existing.Is_Active__c != desiredIsActive) {
+            if (existingIsActive != desiredIsActive) {
                 existing.Is_Active__c = desiredIsActive;
                 changed = true;
             }
@@ -173,13 +177,12 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
         }
 
         if (!toInsert.isEmpty()) {
-            List<SObject> sanitizedForCreate = Security.stripInaccessible(
-                AccessType.CREATABLE,
-                toInsert
-            ).getRecords();
+            // This synchronization is an internal data-alignment operation and must persist
+            // linkage/status fields even when invoking-user CRUD/FLS is narrower.
             Database.SaveResult[] insertResults = Database.insert(
-                (List<Account_Vendor_Program_Onboarding__c>) sanitizedForCreate,
-                false
+                toInsert,
+                false,
+                AccessLevel.SYSTEM_MODE
             );
             for (Integer i = 0; i < insertResults.size(); i++) {
                 Id onboardingId = insertOnboardingIds[i];
@@ -196,13 +199,10 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
         }
 
         if (!toUpdate.isEmpty()) {
-            List<SObject> sanitizedForUpdate = Security.stripInaccessible(
-                AccessType.UPDATABLE,
-                toUpdate
-            ).getRecords();
             Database.SaveResult[] updateResults = Database.update(
-                (List<Account_Vendor_Program_Onboarding__c>) sanitizedForUpdate,
-                false
+                toUpdate,
+                false,
+                AccessLevel.SYSTEM_MODE
             );
             for (Integer i = 0; i < updateResults.size(); i++) {
                 Id onboardingId = updateOnboardingIds[i];
@@ -330,5 +330,59 @@ public with sharing class AccountVendorOnboardingSyncInvocable {
             }
         }
         return avoStatusValuesCache;
+    }
+
+    @SuppressWarnings('PMD.ApexSOQLInjection')
+    private static List<Account_Vendor_Program_Onboarding__c> queryAccessibleAvoRows(Set<Id> onboardingIds) {
+        List<Account_Vendor_Program_Onboarding__c> rows = new List<Account_Vendor_Program_Onboarding__c>();
+        if (onboardingIds == null || onboardingIds.isEmpty()) {
+            return rows;
+        }
+        if (!Schema.SObjectType.Account_Vendor_Program_Onboarding__c.isAccessible()) {
+            return rows;
+        }
+
+        Schema.DescribeSObjectResult avoDescribe =
+            Account_Vendor_Program_Onboarding__c.SObjectType.getDescribe(SObjectDescribeOptions.DEFERRED);
+        Map<String, Schema.SObjectField> fieldMap = avoDescribe.fields.getMap();
+        List<String> desiredFields = new List<String>{
+            'Id',
+            'Account__c',
+            'Onboarding__c',
+            'Opportunity__c',
+            'Primary_Contact__c',
+            'Status__c',
+            'Is_Active__c',
+            'Reason_for_Return__c'
+        };
+        List<String> readableFields = new List<String>();
+        for (String fieldApiName : desiredFields) {
+            Schema.SObjectField fieldToken = fieldMap.get(fieldApiName);
+            if (fieldToken != null && fieldToken.getDescribe().isAccessible()) {
+                readableFields.add(fieldApiName);
+            }
+        }
+        if (!readableFields.contains('Id') || !readableFields.contains('Onboarding__c')) {
+            return rows;
+        }
+
+        String soql =
+            'SELECT ' + String.join(readableFields, ', ') +
+            ' FROM Account_Vendor_Program_Onboarding__c' +
+            ' WHERE Onboarding__c IN :onboardingIds' +
+            ' WITH USER_MODE';
+        rows = (List<Account_Vendor_Program_Onboarding__c>) Database.query(soql);
+        return rows;
+    }
+
+    private static Object safeGetFieldValue(SObject record, String fieldApiName) {
+        if (record == null || String.isBlank(fieldApiName)) {
+            return null;
+        }
+        try {
+            return record.get(fieldApiName);
+        } catch (SObjectException ex) {
+            return null;
+        }
     }
 }

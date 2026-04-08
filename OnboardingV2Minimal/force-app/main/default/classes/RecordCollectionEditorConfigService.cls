@@ -1,5 +1,15 @@
 @SuppressWarnings('PMD.OperationWithLimitsInLoop,PMD.ApexSOQLInjection')
 public with sharing class RecordCollectionEditorConfigService {
+    private static final Integer MAX_RECORDS_PER_REQUEST = 200;
+    private static final Integer MAX_REL_RECORDS = 500;
+    private static final Integer MAX_FIELDS_PER_RECORD = 150;
+    private static final Integer CPU_GUARD_THRESHOLD_MS = 9000;
+    private static final Integer HEAP_GUARD_THRESHOLD_BYTES = 5000000;
+    private static final String REQUEST_TOO_LARGE_MESSAGE =
+        'Request is too large to process. Submit fewer records.';
+    private static final Map<String, Map<String, Schema.SObjectField>> DESCRIBE_FIELD_MAP_CACHE =
+        new Map<String, Map<String, Schema.SObjectField>>();
+    @TestVisible private static Boolean TEST_FORCE_NEAR_LIMIT_GUARD = false;
 
     public class FieldConfig {
         @AuraEnabled public String fieldApiName;
@@ -427,20 +437,51 @@ public with sharing class RecordCollectionEditorConfigService {
                 results.add(singleResult);
                 continue;
             }
+            if (rawRecords.size() > MAX_RECORDS_PER_REQUEST) {
+                singleResult.errorMessages.add(
+                    'Too many records in a single request. Limit is ' + MAX_RECORDS_PER_REQUEST + '.'
+                );
+                results.add(singleResult);
+                continue;
+            }
+            if (isNearGovernorLimit()) {
+                singleResult.errorMessages.add(REQUEST_TOO_LARGE_MESSAGE);
+                results.add(singleResult);
+                continue;
+            }
 
             List<Map<String, Object>> childDataList = new List<Map<String, Object>>();
             List<Map<String, Object>> relationshipDataList = new List<Map<String, Object>>();
             for (Object rawRecord : rawRecords) {
                 Map<String, Object> recordData = (Map<String, Object>) rawRecord;
                 if (recordData.containsKey('child')) {
-                    childDataList.add((Map<String, Object>) recordData.get('child'));
+                    childDataList.add(recordData.get('child') == null
+                        ? new Map<String, Object>()
+                        : (Map<String, Object>) recordData.get('child'));
                     relationshipDataList.add(recordData.containsKey('relationship')
-                        ? (Map<String, Object>) recordData.get('relationship')
+                        ? (recordData.get('relationship') == null
+                            ? new Map<String, Object>()
+                            : (Map<String, Object>) recordData.get('relationship'))
                         : new Map<String, Object>());
                 } else {
                     childDataList.add(recordData);
                     relationshipDataList.add(new Map<String, Object>());
                 }
+            }
+            if (containsFieldCountViolation(childDataList, relationshipDataList)) {
+                singleResult.errorMessages.add(
+                    'Too many fields in one or more records. Limit is ' + MAX_FIELDS_PER_RECORD + ' fields per record.'
+                );
+                results.add(singleResult);
+                continue;
+            }
+            Integer relationshipRows = countRelationshipRows(relationshipDataList);
+            if (relationshipRows > MAX_REL_RECORDS) {
+                singleResult.errorMessages.add(
+                    'Too many relationship rows in a single request. Limit is ' + MAX_REL_RECORDS + '.'
+                );
+                results.add(singleResult);
+                continue;
             }
 
             Map<String, Schema.SObjectField> childFieldMap = describeFieldMap(sobjectType);
@@ -449,8 +490,13 @@ public with sharing class RecordCollectionEditorConfigService {
             List<SObject> toUpdate = new List<SObject>();
             List<Integer> insertIndices = new List<Integer>();
             List<Integer> updateIndices = new List<Integer>();
+            Boolean guardTripped = false;
 
             for (Integer i = 0; i < childDataList.size(); i++) {
+                if (isNearGovernorLimit()) {
+                    guardTripped = true;
+                    break;
+                }
                 Map<String, Object> childData = childDataList[i];
                 Object idObj = childData.get('Id');
                 Boolean isUpdate = idObj != null && String.isNotBlank(String.valueOf(idObj));
@@ -479,10 +525,20 @@ public with sharing class RecordCollectionEditorConfigService {
                     insertIndices.add(i);
                 }
             }
+            if (guardTripped) {
+                singleResult.errorMessages.add(REQUEST_TOO_LARGE_MESSAGE);
+                results.add(singleResult);
+                continue;
+            }
 
             Map<Integer, Id> indexToChildId = new Map<Integer, Id>();
 
             if (!toUpdate.isEmpty()) {
+                if (isNearGovernorLimit()) {
+                    singleResult.errorMessages.add(REQUEST_TOO_LARGE_MESSAGE);
+                    results.add(singleResult);
+                    continue;
+                }
                 Database.SaveResult[] updateResults = Database.update(toUpdate, false, AccessLevel.USER_MODE);
                 for (Integer i = 0; i < updateResults.size(); i++) {
                     if (updateResults[i].isSuccess()) {
@@ -497,6 +553,11 @@ public with sharing class RecordCollectionEditorConfigService {
             }
 
             if (!toInsert.isEmpty()) {
+                if (isNearGovernorLimit()) {
+                    singleResult.errorMessages.add(REQUEST_TOO_LARGE_MESSAGE);
+                    results.add(singleResult);
+                    continue;
+                }
                 Database.SaveResult[] insertResults = Database.insert(toInsert, false, AccessLevel.USER_MODE);
                 for (Integer i = 0; i < insertResults.size(); i++) {
                     if (insertResults[i].isSuccess()) {
@@ -607,6 +668,10 @@ public with sharing class RecordCollectionEditorConfigService {
                     }
 
                     for (Integer i = 0; i < childDataList.size(); i++) {
+                        if (isNearGovernorLimit()) {
+                            guardTripped = true;
+                            break;
+                        }
                         Id childId = indexToChildId.get(i);
                         if (childId == null) continue;
                         Map<String, Object> relFields = relationshipDataList[i];
@@ -656,8 +721,18 @@ public with sharing class RecordCollectionEditorConfigService {
                             relRecordsToInsert.add(relRec);
                         }
                     }
+                    if (guardTripped) {
+                        singleResult.errorMessages.add(REQUEST_TOO_LARGE_MESSAGE);
+                        results.add(singleResult);
+                        continue;
+                    }
 
                     if (!relRecordsToUpdate.isEmpty()) {
+                        if (isNearGovernorLimit()) {
+                            singleResult.errorMessages.add(REQUEST_TOO_LARGE_MESSAGE);
+                            results.add(singleResult);
+                            continue;
+                        }
                         Database.SaveResult[] relUpdateResults = Database.update(relRecordsToUpdate, false, AccessLevel.USER_MODE);
                         for (Integer j = 0; j < relUpdateResults.size(); j++) {
                             if (relUpdateResults[j].isSuccess()) {
@@ -670,13 +745,27 @@ public with sharing class RecordCollectionEditorConfigService {
                         }
                     }
                     if (!relRecordsToInsert.isEmpty()) {
+                        if (isNearGovernorLimit()) {
+                            singleResult.errorMessages.add(REQUEST_TOO_LARGE_MESSAGE);
+                            results.add(singleResult);
+                            continue;
+                        }
                         Database.SaveResult[] relInsertResults = Database.insert(relRecordsToInsert, false, AccessLevel.USER_MODE);
                         for (Integer j = 0; j < relInsertResults.size(); j++) {
                             if (relInsertResults[j].isSuccess()) {
                                 singleResult.createdRelationshipRecords.add(relRecordsToInsert[j]);
                             } else {
+                                Boolean hasNonDuplicateError = false;
                                 for (Database.Error err : relInsertResults[j].getErrors()) {
+                                    if (err.getStatusCode() == StatusCode.DUPLICATE_VALUE) {
+                                        continue;
+                                    }
+                                    hasNonDuplicateError = true;
                                     singleResult.errorMessages.add('Relationship: ' + err.getMessage());
+                                }
+                                if (!hasNonDuplicateError) {
+                                    // Duplicate insert race: treat as idempotent success.
+                                    continue;
                                 }
                             }
                         }
@@ -797,8 +886,58 @@ public with sharing class RecordCollectionEditorConfigService {
         return values;
     }
 
+    private static Integer countRelationshipRows(List<Map<String, Object>> relationshipDataList) {
+        Integer count = 0;
+        if (relationshipDataList == null) {
+            return count;
+        }
+        for (Map<String, Object> relFields : relationshipDataList) {
+            if (relFields != null && !relFields.isEmpty()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static Boolean containsFieldCountViolation(
+        List<Map<String, Object>> childDataList,
+        List<Map<String, Object>> relationshipDataList
+    ) {
+        for (Map<String, Object> childData : childDataList) {
+            if (childData != null && childData.size() > MAX_FIELDS_PER_RECORD) {
+                return true;
+            }
+        }
+        for (Map<String, Object> relationshipData : relationshipDataList) {
+            if (relationshipData != null && relationshipData.size() > MAX_FIELDS_PER_RECORD) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Boolean isNearGovernorLimit() {
+        if (Test.isRunningTest() && TEST_FORCE_NEAR_LIMIT_GUARD) {
+            return true;
+        }
+        return Limits.getCpuTime() > CPU_GUARD_THRESHOLD_MS ||
+            Limits.getHeapSize() > HEAP_GUARD_THRESHOLD_BYTES;
+    }
+
     private static Map<String, Schema.SObjectField> describeFieldMap(Schema.SObjectType sobjectType) {
-        return sobjectType.getDescribe(SObjectDescribeOptions.DEFERRED).fields.getMap();
+        if (sobjectType == null) {
+            return new Map<String, Schema.SObjectField>();
+        }
+        Schema.DescribeSObjectResult deferredDescribe =
+            sobjectType.getDescribe(SObjectDescribeOptions.DEFERRED);
+        String objectApiName = deferredDescribe.getName();
+        if (!DESCRIBE_FIELD_MAP_CACHE.containsKey(objectApiName)) {
+            DESCRIBE_FIELD_MAP_CACHE.put(
+                objectApiName,
+                deferredDescribe.fields.getMap()
+            );
+        }
+        return DESCRIBE_FIELD_MAP_CACHE.get(objectApiName);
     }
 
     private static String mapDescribeToDataType(Schema.DescribeFieldResult dfr) {

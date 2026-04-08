@@ -90,7 +90,11 @@ public with sharing class OnboardingRequirementSubjectInvocable {
       if (!sanitizedForCreate.isEmpty()) {
         List<Onboarding_Requirement_Subject__c> typedForCreate =
           (List<Onboarding_Requirement_Subject__c>) sanitizedForCreate;
-        Database.SaveResult[] saveResults = Database.insert(typedForCreate, false);
+        Database.SaveResult[] saveResults = Database.insert(
+          typedForCreate,
+          false,
+          AccessLevel.USER_MODE
+        );
 
         for (Integer i = 0; i < saveResults.size(); i++) {
           if (saveResults[i].isSuccess()) {

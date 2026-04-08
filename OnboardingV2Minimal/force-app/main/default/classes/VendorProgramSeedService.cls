@@ -2,6 +2,8 @@
  * Data seed for blank sandboxes / production gaps: vendors, Vendor_Customization__c, agreements, credentials,
  * training, and Vendor_Program_Requirement__c. PerfectVision Chuzo programs use PV_PROGRAM_BASE_* refs with
  * OnboardV2-aligned requirement lists in getVendorProgramRequirementRowsByProgramRef(); other refs use defaults.
+ * This service is an admin/bootstrap utility, so selected cleanup/seed writes intentionally run with
+ * elevated execution semantics when user-mode would block org-repair operations.
  */
 public with sharing class VendorProgramSeedService {
     public class Options {
@@ -940,6 +942,7 @@ public with sharing class VendorProgramSeedService {
             'SELECT Id, Vendor_Program__c, Requirement_Type__c, Sequence__c, Is_Required__c, Active__c, CreatedDate ' +
             'FROM Vendor_Program_Requirement__c ' +
             'WHERE Vendor_Program__c IN :targetProgramIds ' +
+            'WITH USER_MODE ' +
             'ORDER BY Vendor_Program__c ASC, Requirement_Type__c ASC, CreatedDate ASC, Id ASC'
         );
 

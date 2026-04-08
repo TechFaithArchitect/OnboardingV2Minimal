@@ -235,4 +235,168 @@ private class RecordCollectionEditorConfigServiceTest {
         System.assertEquals(true, documentsReadyConfig.picklistValues.contains('Yes'), 'Expected Yes option.');
         System.assertEquals(true, documentsReadyConfig.picklistValues.contains('No'), 'Expected No option.');
     }
+
+    @IsTest
+    static void createRecordsFromJson_rejectsPayloadOverLimit() {
+        Account accountRecord = new Account(Name = 'Record Editor Cap Account');
+        insert accountRecord;
+
+        List<Object> payloadRows = new List<Object>();
+        for (Integer i = 0; i < 201; i++) {
+            payloadRows.add(new Map<String, Object>{
+                'child' => new Map<String, Object>{
+                    'AccountId' => accountRecord.Id,
+                    'LastName' => 'Limit User ' + i
+                },
+                'relationship' => new Map<String, Object>{
+                    'Roles' => 'Owner'
+                }
+            });
+        }
+
+        RecordCollectionEditorConfigService.CreateFromJsonRequest requestItem =
+            new RecordCollectionEditorConfigService.CreateFromJsonRequest();
+        requestItem.configKey = 'CONTACT_ON_ACCOUNT';
+        requestItem.recordsJson = JSON.serialize(payloadRows);
+
+        List<RecordCollectionEditorConfigService.CreateFromJsonResult> results =
+            RecordCollectionEditorConfigService.createRecordsFromJson(
+                new List<RecordCollectionEditorConfigService.CreateFromJsonRequest>{ requestItem }
+            );
+
+        System.assertEquals(1, results.size(), 'Expected one response.');
+        System.assert(
+            containsMessage(results[0].errorMessages, 'Too many records in a single request.'),
+            'Expected payload-size rejection error.'
+        );
+    }
+
+    @IsTest
+    static void createRecordsFromJson_rejectsFieldCountOverLimit() {
+        Account accountRecord = new Account(Name = 'Record Editor Field Cap Account');
+        insert accountRecord;
+
+        Map<String, Object> child = new Map<String, Object>{
+            'AccountId' => accountRecord.Id,
+            'LastName' => 'Field Cap'
+        };
+        for (Integer i = 0; i < 151; i++) {
+            child.put('Fake_Field_' + i, 'v');
+        }
+
+        List<Object> payloadRows = new List<Object>{
+            new Map<String, Object>{
+                'child' => child,
+                'relationship' => new Map<String, Object>()
+            }
+        };
+
+        RecordCollectionEditorConfigService.CreateFromJsonRequest requestItem =
+            new RecordCollectionEditorConfigService.CreateFromJsonRequest();
+        requestItem.configKey = 'CONTACT_ON_ACCOUNT';
+        requestItem.recordsJson = JSON.serialize(payloadRows);
+
+        List<RecordCollectionEditorConfigService.CreateFromJsonResult> results =
+            RecordCollectionEditorConfigService.createRecordsFromJson(
+                new List<RecordCollectionEditorConfigService.CreateFromJsonRequest>{ requestItem }
+            );
+
+        System.assertEquals(1, results.size(), 'Expected one response.');
+        System.assert(
+            containsMessage(results[0].errorMessages, 'Too many fields in one or more records.'),
+            'Expected field-count rejection error.'
+        );
+    }
+
+    @IsTest
+    static void createRecordsFromJson_rejectsNearLimitGuard() {
+        Account accountRecord = new Account(Name = 'Record Editor Guard Account');
+        insert accountRecord;
+
+        String payload =
+            '[{"child":{"AccountId":"' + accountRecord.Id + '","LastName":"Guarded User"},' +
+            '"relationship":{"Roles":"Owner","StartDate":""}}]';
+
+        RecordCollectionEditorConfigService.CreateFromJsonRequest requestItem =
+            new RecordCollectionEditorConfigService.CreateFromJsonRequest();
+        requestItem.configKey = 'CONTACT_ON_ACCOUNT';
+        requestItem.recordsJson = payload;
+
+        RecordCollectionEditorConfigService.TEST_FORCE_NEAR_LIMIT_GUARD = true;
+        try {
+            List<RecordCollectionEditorConfigService.CreateFromJsonResult> results =
+                RecordCollectionEditorConfigService.createRecordsFromJson(
+                    new List<RecordCollectionEditorConfigService.CreateFromJsonRequest>{ requestItem }
+                );
+
+            System.assertEquals(1, results.size(), 'Expected one response.');
+            System.assert(
+                containsMessage(results[0].errorMessages, 'Request is too large to process.'),
+                'Expected near-limit guard message.'
+            );
+        } finally {
+            RecordCollectionEditorConfigService.TEST_FORCE_NEAR_LIMIT_GUARD = false;
+        }
+    }
+
+    @IsTest
+    static void createRecordsFromJson_repeatInvocationRemainsRelationshipIdempotent() {
+        Account accountRecord = new Account(Name = 'Record Editor Idempotent Account');
+        insert accountRecord;
+
+        String firstPayload =
+            '[{"child":{"AccountId":"' + accountRecord.Id + '","FirstName":"Idem","LastName":"One","Email":"idem.one@example.com"},' +
+            '"relationship":{"Roles":"Owner","StartDate":""}}]';
+
+        RecordCollectionEditorConfigService.CreateFromJsonRequest firstRequest =
+            new RecordCollectionEditorConfigService.CreateFromJsonRequest();
+        firstRequest.configKey = 'CONTACT_ON_ACCOUNT';
+        firstRequest.recordsJson = firstPayload;
+
+        List<RecordCollectionEditorConfigService.CreateFromJsonResult> firstResults =
+            RecordCollectionEditorConfigService.createRecordsFromJson(
+                new List<RecordCollectionEditorConfigService.CreateFromJsonRequest>{ firstRequest }
+            );
+        System.assertEquals(1, firstResults.size(), 'Expected first response.');
+        System.assertEquals(0, firstResults[0].errorMessages.size(), 'Expected first call success.');
+        Id createdContactId = (Id) firstResults[0].createdRecords[0].get('Id');
+
+        String secondPayload =
+            '[{"child":{"Id":"' + createdContactId + '","AccountId":"' + accountRecord.Id + '","LastName":"One Updated"},' +
+            '"relationship":{"Roles":"Principal Owner","StartDate":""}}]';
+
+        RecordCollectionEditorConfigService.CreateFromJsonRequest secondRequest =
+            new RecordCollectionEditorConfigService.CreateFromJsonRequest();
+        secondRequest.configKey = 'CONTACT_ON_ACCOUNT';
+        secondRequest.recordsJson = secondPayload;
+
+        List<RecordCollectionEditorConfigService.CreateFromJsonResult> secondResults =
+            RecordCollectionEditorConfigService.createRecordsFromJson(
+                new List<RecordCollectionEditorConfigService.CreateFromJsonRequest>{ secondRequest }
+            );
+
+        System.assertEquals(1, secondResults.size(), 'Expected second response.');
+        System.assertEquals(
+            0,
+            secondResults[0].errorMessages.size(),
+            'Expected second call to remain idempotent for relationship updates.'
+        );
+
+        List<AccountContactRelation> relRows = [
+            SELECT Id, AccountId, ContactId, Roles
+            FROM AccountContactRelation
+            WHERE AccountId = :accountRecord.Id AND ContactId = :createdContactId
+        ];
+        System.assertEquals(1, relRows.size(), 'Expected one relationship row after repeat invocation.');
+        System.assertEquals('Principal Owner', relRows[0].Roles, 'Expected relationship to be updated.');
+    }
+
+    private static Boolean containsMessage(List<String> messages, String containsValue) {
+        for (String message : messages) {
+            if (message != null && message.contains(containsValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

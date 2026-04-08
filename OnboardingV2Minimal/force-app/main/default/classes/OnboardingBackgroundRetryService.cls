@@ -214,6 +214,8 @@ public without sharing class OnboardingBackgroundRetryService {
             job.Status__c = STATUS_IN_PROGRESS;
             job.Last_Processed_At__c = now;
         }
+        // Background worker state transitions must persist even when replaying rows that the invoking user
+        // can no longer update due to ownership or sharing drift.
         Database.update(jobs, false, AccessLevel.SYSTEM_MODE);
 
         for (Onboarding_Background_Job__c job : jobs) {
@@ -243,6 +245,7 @@ public without sharing class OnboardingBackgroundRetryService {
                 job.Next_Run_At__c = now.addMinutes(computeBackoffMinutes(attempts));
             }
         }
+        // Final status write (Completed/Retryable Failed/Dead) is system-level operational bookkeeping.
         Database.update(jobs, false, AccessLevel.SYSTEM_MODE);
 
         if (!Test.isRunningTest() && hasDueJobs(now)) {
@@ -669,7 +672,7 @@ public without sharing class OnboardingBackgroundRetryService {
                     'SELECT ' + ocrCols +
                     ' FROM OpportunityContactRole' +
                     ' WHERE OpportunityId = :deps.opportunityRecord.Id AND IsPrimary = true' +
-                    ' ORDER BY LastModifiedDate DESC, Id DESC LIMIT 1'
+                    ' WITH USER_MODE ORDER BY LastModifiedDate DESC, Id DESC LIMIT 1'
                 );
                 if (!ocrRows.isEmpty()) {
                     deps.opportunityContactRoleRecord = ocrRows[0];
@@ -719,6 +722,7 @@ public without sharing class OnboardingBackgroundRetryService {
                 SELECT Id, Onboarding__c
                 FROM Onboarding_Requirement__c
                 WHERE Id = :contextRequirementId
+                WITH SECURITY_ENFORCED
                 LIMIT 1
             ];
             if (!reqRows.isEmpty()) {
@@ -753,7 +757,7 @@ public without sharing class OnboardingBackgroundRetryService {
         List<SObject> rows = Database.query(
             'SELECT ' + cols +
             ' FROM ' + typeToken.getDescribe().getName() +
-            ' WHERE Id = :recordId LIMIT 1'
+            ' WHERE Id = :recordId WITH USER_MODE LIMIT 1'
         );
         return rows.isEmpty() ? null : rows[0];
     }
@@ -793,6 +797,7 @@ public without sharing class OnboardingBackgroundRetryService {
             FROM Onboarding_Background_Job__c
             WHERE Status__c IN :new List<String>{ STATUS_PENDING, STATUS_RETRYABLE_FAILED }
                 AND (Next_Run_At__c = null OR Next_Run_At__c <= :now)
+            WITH USER_MODE
         ];
         return countDue > 0;
     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Strict allowlist for dynamic ORDER BY fields used by ObjectRelatedListController.</description>
+    <label>Related List Order Allowlist</label>
+    <pluralLabel>Related List Order Allowlists</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>
