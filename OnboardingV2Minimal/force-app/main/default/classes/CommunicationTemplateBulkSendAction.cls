@@ -1,4 +1,3 @@
-@SuppressWarnings('PMD.OperationWithLimitsInLoop')
 public with sharing class CommunicationTemplateBulkSendAction {
 
   private static final Integer MAX_EMAILS_PER_SEND_CALL = 10;
