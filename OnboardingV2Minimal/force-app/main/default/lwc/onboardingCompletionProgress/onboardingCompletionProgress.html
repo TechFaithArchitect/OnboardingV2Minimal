@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Onboarding Completion">
+        <lightning-button-icon
+            slot="actions"
+            icon-name="utility:refresh"
+            variant="border-filled"
+            alternative-text="Refresh completion"
+            title="Refresh completion"
+            onclick={handleRefresh}
+            disabled={isLoading}>
+        </lightning-button-icon>
+        <div class="slds-p-around_medium slds-align_absolute-center">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading progress..." size="small"></lightning-spinner>
+            </template>
+
+            <div class="chart-line slds-m-top_small">
+                <div class="chart-fill" style={fillStyle}></div>
+            </div>
+
+            <p class="slds-text-heading_small slds-m-top_small">{progress}% Complete</p>
+            <p class="slds-text-body_small slds-m-top_x-small">Last Updated: {lastUpdated}</p>
+        </div>
+    </lightning-card>
+</template>

@@ -30,6 +30,7 @@ Richer taxonomy (production vs test categories, invocable counts): [Apex Class I
 | `expCreateRecord` | `ExpOpportunityCreateRecord.loadContext` (imperative; success + error paths) | `force-app/test/lwc/expCreateRecord.test.js` |
 | `recordCollectionEditor` | `RecordCollectionEditorConfigService.getConfig` (`@wire`; missing key + error) | `force-app/test/lwc/recordCollectionEditor.test.js` |
 | `objectRelatedList` | `ObjectRelatedListController.getRelatedRecords`, LDS picklist / record wires | `force-app/test/lwc/objectRelatedList.test.js` |
+| `onboardingCompletionProgress` | `OnboardingProgressController.getCompletionPercent` (imperative), scoped `objectrelatedlistchange` event refresh | `force-app/test/lwc/onboardingCompletionProgress.test.js` |
 | `programDatesRelatedList` | `ObjectRelatedListController.getRelatedRecords` (Program Dates config), LDS | `force-app/test/lwc/programDatesRelatedList.test.js` |
 | `programDatesQuickAction` | `getLookupOptions` | `force-app/test/lwc/programDatesQuickAction.test.js` |
 
@@ -58,6 +59,12 @@ From `package.json`:
 ## Critical Regression Areas
 
 - Opportunity create screen flow and deferred onboarding tail behavior
+- Onboarding record-page live refresh contract:
+  - `onboardingCompletionProgress` must remain event-driven (no interval polling).
+  - requirement list save/create/delete should refresh progress without full page reload.
+- Related-list inline edit responsiveness:
+  - save path is async by design (server-side automation executes per update).
+  - UI should reflect edited draft values immediately and reconcile via background refresh.
 - Requirement subject expansion and evaluation
 - Parent requirement roll-up and status fallback handling
 - Onboarding status evaluator rule ordering and predicate outcomes

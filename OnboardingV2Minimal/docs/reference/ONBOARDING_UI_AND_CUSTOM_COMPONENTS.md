@@ -20,7 +20,17 @@ The onboarding record page mixes **standard Salesforce** pieces (highlights, fee
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`objectRelatedList`**            | A **configurable related list**: admins point it at a child object (API name) and fields so teams see the right rows (requirements, subjects, program dates, etc.) without code changes.                                        |
 | **`onboardingECC`**                | Shows **external contact credential** context tied to this onboarding (evidence the business collects per contact). Goes with the **credential** story in [BRE and credentials primer](./BRE_AND_CREDENTIALS_FOR_NEW_USERS.md). |
-| **`onboardingCompletionProgress`** | **Referenced** on the Onboarding flexipage metadata for a “completion progress” area. If you do not see it in your org, the component bundle may not be deployed in that branch—treat as optional until your admin confirms.    |
+| **`onboardingCompletionProgress`** | Displays completion percent derived from normalized `Onboarding_Requirement__c` statuses. Refreshes when requirement related-list changes are saved/created/deleted, and via its manual refresh icon. No fixed polling loop.      |
+
+## Live refresh behavior (Onboarding record page)
+
+- `objectRelatedList` save/create/delete is async (Lightning Data Service / server transaction), then the component dispatches:
+  - Lightning `RefreshEvent` for page-level refresh participants.
+  - A scoped browser event (`objectrelatedlistchange`) including `objectApiName` and `parentRecordId`.
+- `onboardingCompletionProgress` listens for `objectrelatedlistchange` and refetches only when:
+  - `objectApiName = Onboarding_Requirement__c`
+  - `parentRecordId` matches the current onboarding record.
+- This design removes interval polling while still updating promptly after requirement changes.
 
 ## Flow screens (screen flows)
 
@@ -60,13 +70,14 @@ These have **`isExposed = false`** in metadata: **`onboardingWorkQueue`**, **`on
 1. **Blank component** — check **field- and object-level security** and **permission sets** ([Persona and permission sets](../technical/PERSONA_AND_PERMISSION_SETS.md)).
 2. **Wrong rows in `objectRelatedList`** — admin checks **child object**, **parent lookup field**, and **parent id source** in Lightning App Builder (see bundle description in `objectRelatedList.js-meta.xml`).
 3. **Sort fails in `objectRelatedList` or lookup selectors** — confirm the requested `orderByField` is allowlisted in `Related_List_Order_Allowlist__mdt` for the target object and usage context.
-4. **Flow screen misbehaves** — use [FAQ — Admins](../support/FAQ_ADMINS.md) and flow debug; **`recordCollectionEditor`** errors often trace to **`Child_Record_Editor_Config__mdt`** mismatch.
+4. **Progress bar does not update after editing requirements** — confirm the requirements card is an `objectRelatedList` configured for `Onboarding_Requirement__c`; progress updates only for requirement-object change events scoped to the same onboarding record.
+5. **Flow screen misbehaves** — use [FAQ — Admins](../support/FAQ_ADMINS.md) and flow debug; **`recordCollectionEditor`** errors often trace to **`Child_Record_Editor_Config__mdt`** mismatch.
 
 ## LWC security and Jest coverage (engineering)
 
 - **CRUD/FLS:** Custom UI relies on **Lightning Data Service** (`@salesforce/schema`, `lightning/ui*Api`) and **Apex `with sharing`** services. Blank or partial screens usually mean **missing object/field access** — start with [Persona and permission sets](../technical/PERSONA_AND_PERMISSION_SETS.md).
 - **Apex entry points used by LWCs:** `ObjectRelatedListController`, `RecordCollectionEditorConfigService`, `ExpOpportunityCreateRecord`, `ContactECCController`, `OnboardingOrderController`, etc. Permission sets in source must expose the classes each persona’s UI touches (see persona doc **Apex classes** table).
-- **Tests:** Jest lives under `force-app/test/lwc/`. Covered bundles include **`expCreateRecord`**, **`recordCollectionEditor`**, **`objectRelatedList`**, **`programDatesRelatedList`**, **`programDatesQuickAction`**. Run `npm run test:unit`.
+- **Tests:** Jest lives under `force-app/test/lwc/`. Covered bundles include **`expCreateRecord`**, **`recordCollectionEditor`**, **`objectRelatedList`**, **`onboardingCompletionProgress`**, **`programDatesRelatedList`**, **`programDatesQuickAction`**. Run `npm run test:unit`.
 
 ## Source locations
 

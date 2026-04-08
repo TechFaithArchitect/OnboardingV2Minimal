@@ -71,6 +71,18 @@ Rules are evaluated top-down. First match wins.
 
 This standardizes mixed evidence values before rule evaluation.
 
+### Onboarding completion progress semantics
+
+- `onboardingCompletionProgress` uses `OnboardingProgressController.getCompletionPercent`.
+- Percent is computed as:
+  - numerator: count of in-scope requirements with normalized terminal status in `{Setup Complete, Signed, Complete, Ignore}`
+  - denominator: count of in-scope requirements
+- Scope follows active required `Vendor_Program_Requirement__c` types for the onboarding’s vendor customization.
+- If template types exist but none match current requirement rows, calculation falls back to all requirement rows for that onboarding.
+- UI refresh behavior is event-driven:
+  - requirement list updates dispatch a scoped `objectrelatedlistchange` event from `objectRelatedList`
+  - progress component refetches only for `Onboarding_Requirement__c` changes on the same parent onboarding.
+
 ## Contract Evidence Policy
 
 - Contract-related requirement evaluation should be driven by contract evidence status paths (contract status and linked requirement normalization).
