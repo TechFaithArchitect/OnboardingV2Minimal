@@ -1,7 +1,7 @@
 import { createElement } from 'lwc';
 import { registerApexTestWireAdapter, registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 import ProgramDatesRelatedList from 'c/programDatesRelatedList';
-import getProgramDates from '@salesforce/apex/ObjectRelatedListController.getProgramDates';
+import getRelatedRecords from '@salesforce/apex/ObjectRelatedListController.getRelatedRecords';
 import { refreshApex } from '@salesforce/apex';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { deleteRecord, updateRecord } from 'lightning/uiRecordApi';
@@ -23,7 +23,7 @@ jest.mock(
     { virtual: true }
 );
 
-const getProgramDatesAdapter = registerApexTestWireAdapter(getProgramDates);
+const getRelatedRecordsAdapter = registerApexTestWireAdapter(getRelatedRecords);
 const getObjectInfoAdapter = registerLdsTestWireAdapter(getObjectInfo);
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
@@ -49,13 +49,21 @@ describe('c-program-dates-related-list', () => {
         document.body.appendChild(element);
         await flushPromises();
 
+        const lastConfig = getRelatedRecordsAdapter.getLastConfig();
+        expect(lastConfig).toBeDefined();
+        expect(lastConfig.config.objectApiName).toBe('Program_Dates__c');
+        expect(lastConfig.config.parentFieldApiName).toBe('Account__c');
+        expect(lastConfig.config.parentRecordId).toBe('001RL0000001ABCYAA');
+        expect(lastConfig.config.orderByField).toBe('Program_Date__c');
+        expect(lastConfig.config.orderDirection).toBe('DESC');
+
         getObjectInfoAdapter.emit({
             label: 'Program Date',
             themeInfo: {
                 iconUrl: '/img/icon/t4v35/standard/account_120.png'
             }
         });
-        getProgramDatesAdapter.emit([
+        getRelatedRecordsAdapter.emit([
             {
                 Id: 'a01',
                 Name: 'Fallback Name 1',
@@ -87,7 +95,7 @@ describe('c-program-dates-related-list', () => {
         document.body.appendChild(element);
         await flushPromises();
 
-        getProgramDatesAdapter.error({
+        getRelatedRecordsAdapter.error({
             body: {
                 message: 'Program Date fetch failed'
             }
@@ -109,7 +117,7 @@ describe('c-program-dates-related-list', () => {
         document.body.appendChild(element);
         await flushPromises();
 
-        getProgramDatesAdapter.emit([
+        getRelatedRecordsAdapter.emit([
             {
                 Id: 'a01',
                 Name: 'Row 1'
@@ -143,7 +151,7 @@ describe('c-program-dates-related-list', () => {
         document.body.appendChild(element);
         await flushPromises();
 
-        getProgramDatesAdapter.emit([
+        getRelatedRecordsAdapter.emit([
             {
                 Id: 'a01',
                 Name: 'Row 1'
@@ -183,7 +191,7 @@ describe('c-program-dates-related-list', () => {
         document.body.appendChild(element);
         await flushPromises();
 
-        getProgramDatesAdapter.emit([
+        getRelatedRecordsAdapter.emit([
             {
                 Id: 'a01',
                 Name: 'Row 1'
@@ -216,7 +224,7 @@ describe('c-program-dates-related-list', () => {
         document.body.appendChild(element);
         await flushPromises();
 
-        getProgramDatesAdapter.emit([
+        getRelatedRecordsAdapter.emit([
             {
                 Id: 'a01',
                 Name: 'Row 1'
@@ -244,7 +252,7 @@ describe('c-program-dates-related-list', () => {
         document.body.appendChild(element);
         await Promise.resolve();
 
-        getProgramDatesAdapter.emit([
+        getRelatedRecordsAdapter.emit([
             {
                 Id: 'a01',
                 Name: 'Row 1'

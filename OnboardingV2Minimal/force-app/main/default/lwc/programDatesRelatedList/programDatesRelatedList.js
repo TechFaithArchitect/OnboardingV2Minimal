@@ -1,12 +1,27 @@
 import { LightningElement, api, wire } from 'lwc';
-import getProgramDates from '@salesforce/apex/ObjectRelatedListController.getProgramDates';
+import getRelatedRecords from '@salesforce/apex/ObjectRelatedListController.getRelatedRecords';
 import { refreshApex } from '@salesforce/apex';
 import { deleteRecord, updateRecord } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import PROGRAM_DATES_OBJECT from '@salesforce/schema/Program_Dates__c';
+
 const REFRESH_DEBOUNCE_MS = 200;
+const PROGRAM_DATES_FIELD_API_NAMES = [
+    'Partner_Category__c',
+    'Inception_Date__c',
+    'Program_ID__c',
+    'Program_Active_Flag__c',
+    'Program_Date__c',
+    'Program_Deactivated_Flag__c',
+    'Program_Deactivated_Date__c',
+    'Program_Deactivated_Reason__c',
+    'Program_Reactivated_Date__c',
+    'Program_Reactivated_Flag__c',
+    'Vendor_Program__c'
+];
+const PROGRAM_DATES_RELATIONSHIP_FIELD_API_NAMES = ['Vendor_Program__r.Label__c'];
 
 const COLUMNS = [
     {
@@ -69,7 +84,22 @@ export default class ProgramDatesRelatedList extends NavigationMixin(LightningEl
         }
     }
 
-    @wire(getProgramDates, { accountId: '$recordId' })
+    get queryConfig() {
+        if (!this.recordId) {
+            return undefined;
+        }
+        return {
+            objectApiName: 'Program_Dates__c',
+            parentFieldApiName: 'Account__c',
+            parentRecordId: this.recordId,
+            fieldApiNames: PROGRAM_DATES_FIELD_API_NAMES,
+            relationshipFieldApiNames: PROGRAM_DATES_RELATIONSHIP_FIELD_API_NAMES,
+            orderByField: 'Program_Date__c',
+            orderDirection: 'DESC'
+        };
+    }
+
+    @wire(getRelatedRecords, { config: '$queryConfig' })
     wiredProgramDates(value) {
         this.wiredResult = value;
         const { data, error } = value;
