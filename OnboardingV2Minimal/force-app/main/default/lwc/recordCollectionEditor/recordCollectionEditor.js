@@ -11,6 +11,7 @@ export default class RecordCollectionEditor extends LightningElement {
     @api recordLabel = 'Row';
     @api configKey;
     @api parentId;
+    @api recordTypeId;
 
     _apiExistingRecordsJson;
 
@@ -89,7 +90,7 @@ export default class RecordCollectionEditor extends LightningElement {
 
     @wire(getPicklistValuesByRecordType, {
         objectApiName: '$objectApiName',
-        recordTypeId: '$objectDefaultRecordTypeId'
+        recordTypeId: '$effectiveRecordTypeId'
     })
     wiredPicklistValues({ data }) {
         this.picklistFieldValuesByApiName = data?.picklistFieldValues || {};
@@ -132,6 +133,13 @@ export default class RecordCollectionEditor extends LightningElement {
             this.errorMessage = 'Config key is required.';
             this.isLoading = false;
         }
+    }
+
+    get effectiveRecordTypeId() {
+        if (this.hasValue(this.recordTypeId)) {
+            return String(this.recordTypeId).trim();
+        }
+        return this.objectDefaultRecordTypeId;
     }
 
     applyExistingRecordsJsonWhenConfigured() {
@@ -253,7 +261,10 @@ export default class RecordCollectionEditor extends LightningElement {
                     label: fc.label,
                     dataType,
                     required: fc.required,
+                    effectiveRequired: fc.required,
                     readOnly: fc.readOnly === true,
+                    controllingFieldApiName: fc.controllingFieldApiName,
+                    isDisabled: fc.readOnly === true,
                     isPhoneField,
                     isCheckbox,
                     isPicklist,
@@ -290,7 +301,10 @@ export default class RecordCollectionEditor extends LightningElement {
                     label: fc.label,
                     dataType: fc.dataType || 'text',
                     required: fc.required,
+                    effectiveRequired: fc.required,
                     readOnly: fc.readOnly === true,
+                    controllingFieldApiName: fc.controllingFieldApiName,
+                    isDisabled: fc.readOnly === true,
                     isPicklist,
                     isCheckbox,
                     isLookup,
@@ -356,7 +370,10 @@ export default class RecordCollectionEditor extends LightningElement {
                 label: fieldConfig.label,
                 dataType,
                 required: fieldConfig.required,
+                effectiveRequired: fieldConfig.required,
                 readOnly: fieldConfig.readOnly === true,
+                controllingFieldApiName: fieldConfig.controllingFieldApiName,
+                isDisabled: fieldConfig.readOnly === true,
                 isPhoneField,
                 isCheckbox,
                 isPicklist,
@@ -393,7 +410,10 @@ export default class RecordCollectionEditor extends LightningElement {
                 label: fieldConfig.label,
                 dataType: fieldConfig.dataType || 'text',
                 required: fieldConfig.required,
+                effectiveRequired: fieldConfig.required,
                 readOnly: fieldConfig.readOnly === true,
+                controllingFieldApiName: fieldConfig.controllingFieldApiName,
+                isDisabled: fieldConfig.readOnly === true,
                 isPicklist,
                 isCheckbox,
                 isLookup,
@@ -463,50 +483,62 @@ export default class RecordCollectionEditor extends LightningElement {
             return;
         }
 
+        const dependentFieldApiNames = this.getDependentFieldApiNames(fieldApiName, isRelationship);
+
         let rowsCopy = this.rows.map((row) => {
             if (row.clientId !== clientId) return row;
             if (isRelationship) {
                 const updatedRelStates = (row.relationshipFieldStates || []).map((fs) => {
-                    if (fs.fieldApiName !== fieldApiName) return fs;
-                    const updated = { ...fs, value: newFieldValue, errorMessage: null, formElementClass: 'slds-form-element' };
-                    if (fs.isCheckbox) updated.checked = newFieldValue;
-                    return updated;
+                    if (fs.fieldApiName === fieldApiName) {
+                        const updated = { ...fs, value: newFieldValue, errorMessage: null, formElementClass: 'slds-form-element' };
+                        if (fs.isCheckbox) updated.checked = newFieldValue;
+                        return updated;
+                    }
+                    if (dependentFieldApiNames.has(fs.fieldApiName)) {
+                        return this.resetFieldStateValue(fs);
+                    }
+                    return fs;
                 });
                 return { ...row, relationshipFieldStates: updatedRelStates };
             }
             const updatedFieldStates = row.fieldStates.map((fieldState) => {
-                if (fieldState.fieldApiName !== fieldApiName) return fieldState;
-                if (fieldState.isAddress) {
-                    const normalizedAddress = this.normalizeAddressValue(newFieldValue);
-                    const countryOptions = this.getAddressCountryOptions(fieldState.addressPrefix);
-                    const normalizedCountry = this.normalizeAddressPicklistSelection(
-                        countryOptions,
-                        normalizedAddress.country
-                    );
-                    const provinceOptions = this.getAddressProvinceOptions(
-                        fieldState.addressPrefix,
-                        normalizedCountry
-                    );
-                    const normalizedProvince = this.normalizeAddressPicklistSelection(
-                        provinceOptions,
-                        normalizedAddress.province
-                    );
-                    return {
-                        ...fieldState,
-                        street: normalizedAddress.street,
-                        city: normalizedAddress.city,
-                        province: normalizedProvince,
-                        postalCode: normalizedAddress.postalCode,
-                        country: normalizedCountry,
-                        countryOptions,
-                        provinceOptions,
-                        errorMessage: null,
-                        formElementClass: 'slds-form-element'
-                    };
+                if (fieldState.fieldApiName === fieldApiName) {
+                    if (fieldState.isAddress) {
+                        const normalizedAddress = this.normalizeAddressValue(newFieldValue);
+                        const countryOptions = this.getAddressCountryOptions(fieldState.addressPrefix);
+                        const normalizedCountry = this.normalizeAddressPicklistSelection(
+                            countryOptions,
+                            normalizedAddress.country
+                        );
+                        const provinceOptions = this.getAddressProvinceOptions(
+                            fieldState.addressPrefix,
+                            normalizedCountry
+                        );
+                        const normalizedProvince = this.normalizeAddressPicklistSelection(
+                            provinceOptions,
+                            normalizedAddress.province
+                        );
+                        return {
+                            ...fieldState,
+                            street: normalizedAddress.street,
+                            city: normalizedAddress.city,
+                            province: normalizedProvince,
+                            postalCode: normalizedAddress.postalCode,
+                            country: normalizedCountry,
+                            countryOptions,
+                            provinceOptions,
+                            errorMessage: null,
+                            formElementClass: 'slds-form-element'
+                        };
+                    }
+                    const updated = { ...fieldState, value: newFieldValue, errorMessage: null, formElementClass: 'slds-form-element' };
+                    if (fieldState.isCheckbox) updated.checked = newFieldValue;
+                    return updated;
                 }
-                const updated = { ...fieldState, value: newFieldValue, errorMessage: null, formElementClass: 'slds-form-element' };
-                if (fieldState.isCheckbox) updated.checked = newFieldValue;
-                return updated;
+                if (dependentFieldApiNames.has(fieldState.fieldApiName)) {
+                    return this.resetFieldStateValue(fieldState);
+                }
+                return fieldState;
             });
             return { ...row, fieldStates: updatedFieldStates };
         });
@@ -769,6 +801,11 @@ export default class RecordCollectionEditor extends LightningElement {
             const valueStillValid = hasCurrentValue
                 ? nextOptions.some((option) => option.value === nextValue)
                 : true;
+            const isDependentPicklist = this.hasValue(fieldConfig.controllingFieldApiName);
+            const noDependentOptionsAvailable = isDependentPicklist && nextOptions.length === 0;
+            const dependencyDisabled = this.isFieldDependencyDisabled(fieldConfig, row.fieldStates);
+            const nextDisabled = fieldState.readOnly === true || dependencyDisabled || noDependentOptionsAvailable;
+            const nextEffectiveRequired = fieldState.required === true && !nextDisabled;
 
             if (clearInvalidSelection && hasCurrentValue && !valueStillValid) {
                 nextValue = null;
@@ -776,7 +813,9 @@ export default class RecordCollectionEditor extends LightningElement {
 
             const optionsChanged = !this.arePicklistOptionsEqual(fieldState.picklistOptions, nextOptions);
             const valueChanged = nextValue !== fieldState.value;
-            if (!optionsChanged && !valueChanged) {
+            const disabledChanged = nextDisabled !== fieldState.isDisabled;
+            const requiredChanged = nextEffectiveRequired !== fieldState.effectiveRequired;
+            if (!optionsChanged && !valueChanged && !disabledChanged && !requiredChanged) {
                 return fieldState;
             }
 
@@ -784,9 +823,13 @@ export default class RecordCollectionEditor extends LightningElement {
             return {
                 ...fieldState,
                 picklistOptions: nextOptions,
+                isDisabled: nextDisabled,
+                effectiveRequired: nextEffectiveRequired,
                 value: nextValue,
-                errorMessage: valueChanged ? null : fieldState.errorMessage,
-                formElementClass: valueChanged ? 'slds-form-element' : fieldState.formElementClass
+                errorMessage: (valueChanged || disabledChanged || requiredChanged) ? null : fieldState.errorMessage,
+                formElementClass: (valueChanged || disabledChanged || requiredChanged)
+                    ? 'slds-form-element'
+                    : fieldState.formElementClass
             };
         });
 
@@ -848,6 +891,65 @@ export default class RecordCollectionEditor extends LightningElement {
         }
 
         return resolvedOptions;
+    }
+
+    isFieldDependencyDisabled(fieldConfig, rowFieldStates) {
+        const controllingFieldApiName = fieldConfig?.controllingFieldApiName;
+        if (!this.hasValue(controllingFieldApiName)) {
+            return false;
+        }
+        const controllingValue = this.getRowFieldStateValue(rowFieldStates, controllingFieldApiName);
+        return !this.hasValue(controllingValue);
+    }
+
+    getDependentFieldApiNames(controllingFieldApiName, isRelationship) {
+        const dependentSet = new Set();
+        if (!this.hasValue(controllingFieldApiName)) {
+            return dependentSet;
+        }
+        const configList = isRelationship ? this.relationshipFieldConfigs : this.fieldConfigs;
+        (configList || []).forEach((configItem) => {
+            if (configItem?.controllingFieldApiName === controllingFieldApiName) {
+                dependentSet.add(configItem.fieldApiName);
+            }
+        });
+        return dependentSet;
+    }
+
+    resetFieldStateValue(fieldState) {
+        if (!fieldState) {
+            return fieldState;
+        }
+        const baseState = {
+            ...fieldState,
+            value: null,
+            errorMessage: null,
+            formElementClass: 'slds-form-element'
+        };
+        if (fieldState.isCheckbox) {
+            baseState.checked = false;
+        }
+        if (fieldState.isAddress) {
+            baseState.street = '';
+            baseState.city = '';
+            baseState.province = '';
+            baseState.postalCode = '';
+            baseState.country = '';
+        }
+        return baseState;
+    }
+
+    isFieldRequiredForValidation(fieldState) {
+        if (!fieldState) {
+            return false;
+        }
+        if (fieldState.isDisabled === true) {
+            return false;
+        }
+        if (fieldState.effectiveRequired === false) {
+            return false;
+        }
+        return fieldState.required === true;
     }
 
     getRowFieldStateValue(rowFieldStates, fieldApiName) {
@@ -1179,12 +1281,13 @@ export default class RecordCollectionEditor extends LightningElement {
         }
         let updatedRows = this.rows.map((row, index) => {
             const updatedFieldStates = row.fieldStates.map((fieldState) => {
+                const isRequired = this.isFieldRequiredForValidation(fieldState);
                 const isBlank = fieldState.isAddress
-                    ? (fieldState.required && !this.hasCompleteAddressValue(fieldState))
+                    ? (isRequired && !this.hasCompleteAddressValue(fieldState))
                     : fieldState.isCheckbox
-                    ? (fieldState.required && (fieldState.checked !== true && fieldState.checked !== 'true'))
+                    ? (isRequired && (fieldState.checked !== true && fieldState.checked !== 'true'))
                     : (fieldState.value === null || fieldState.value === undefined || fieldState.value === '');
-                let fieldErrorMessage = fieldState.required && isBlank
+                let fieldErrorMessage = isRequired && isBlank
                     ? `${fieldState.label || fieldState.fieldApiName} is required.`
                     : null;
                 if (!fieldErrorMessage && fieldState.isPhoneField) {
@@ -1207,10 +1310,11 @@ export default class RecordCollectionEditor extends LightningElement {
             const isDuplicatePrincipalOwnerRow = duplicatePrincipalOwnerRows.includes(row);
             const isRestrictedAuthorizedSignerRow = restrictedAuthorizedSignerRows.includes(row);
             const updatedRelStates = (row.relationshipFieldStates || []).map((fs) => {
+                const isRequired = this.isFieldRequiredForValidation(fs);
                 const isBlank = fs.isCheckbox
-                    ? (fs.required && (fs.checked !== true && fs.checked !== 'true'))
+                    ? (isRequired && (fs.checked !== true && fs.checked !== 'true'))
                     : (fs.value === null || fs.value === undefined || fs.value === '');
-                let fieldErrorMessage = fs.required && isBlank
+                let fieldErrorMessage = isRequired && isBlank
                     ? `${fs.label || fs.fieldApiName} is required.`
                     : null;
                 if (fieldErrorMessage) errors.push(`Row ${index + 1}: ${fs.label || fs.fieldApiName} is required.`);
@@ -1292,7 +1396,7 @@ export default class RecordCollectionEditor extends LightningElement {
 
         return this.rows.every((row) => {
             const fieldsComplete = (row.fieldStates || []).every((fieldState) => {
-                if (!fieldState.required) {
+                if (!this.isFieldRequiredForValidation(fieldState)) {
                     return true;
                 }
                 if (fieldState.isAddress) {
@@ -1308,7 +1412,7 @@ export default class RecordCollectionEditor extends LightningElement {
             }
 
             return (row.relationshipFieldStates || []).every((fieldState) => {
-                if (!fieldState.required) {
+                if (!this.isFieldRequiredForValidation(fieldState)) {
                     return true;
                 }
                 if (fieldState.isCheckbox) {

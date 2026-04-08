@@ -13,6 +13,7 @@
             <property name="recordLabel" type="String" label="Record Label" description="Label for the record type (e.g., Contact). Used for Add/Remove button text." default="Row"/>
             <property name="configKey" type="String" label="Config Key (Child_Record_Editor_Config__mdt DeveloperName)" description="DeveloperName of Child_Record_Editor_Config__mdt row to use for field configuration."/>
             <property name="parentId" type="String" label="Parent Id" description="Id of the parent record (e.g., Account Id, Opportunity Id)."/>
+            <property name="recordTypeId" type="String" label="Record Type Id" description="Optional. Record Type Id used to resolve picklist/dependent-picklist values. Defaults to object default record type when blank."/>
             <property name="existingRecordsJson" type="String" label="Existing Records JSON" description="Optional. JSON string of existing records to edit. Use 'Get Records JSON for Editor' invocable to build from a Record Collection."/>
             <property name="minRows" type="Integer" label="Minimum Rows" description="Minimum number of child rows when no existing records. Ignored when existingRecordsJson is provided." default="1"/>
             <property name="maxRows" type="Integer" label="Maximum Rows" description="Maximum number of child rows allowed."/>

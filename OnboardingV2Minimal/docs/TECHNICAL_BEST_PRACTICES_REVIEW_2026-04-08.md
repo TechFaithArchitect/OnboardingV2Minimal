@@ -173,6 +173,11 @@ Execution Status (OnboardV2, 2026-04-08 implementation)
   - [x] Deprecated path migration tracked (`getProgramDates` wrapper retained, runtime deprecation warning added, parity test maintained)
   - [x] Note: Apex `@Deprecated` annotation on this method is not supported by the target org compiler for this class type; docblock deprecation marker is used instead.
 
+UI Follow-up Status (OnboardV2, 2026-04-08 post-implementation)
+- [x] Removed fixed polling from `onboardingCompletionProgress`; refresh now occurs on scoped related-list change events and manual refresh action.
+- [x] Added scoped browser-event contract (`objectrelatedlistchange`) from `objectRelatedList` save/create/delete to refresh dependent UI (progress bar) without full page reload.
+- [x] Improved inline-save perceived responsiveness in `objectRelatedList` by applying draft values to visible rows immediately, then reconciling with background refresh.
+
 Appendix: Observed Good Patterns
 - Field path validation using Schema and API name regex to prevent injection.
 - Structured invocable results with error list aggregation instead of throwing in flows.
@@ -181,4 +186,5 @@ Appendix: Observed Good Patterns
 Change Log
 - Created by: Engineering review, 2026-04-08
 - Updated by: implementation pass, 2026-04-08 (OnboardV2 status + deprecation exception note)
+- Updated by: UI refresh/responsiveness follow-up, 2026-04-08 (event-driven progress updates, no polling, optimistic row merge on inline save)
 - Next review: Quarterly or upon major feature changes.

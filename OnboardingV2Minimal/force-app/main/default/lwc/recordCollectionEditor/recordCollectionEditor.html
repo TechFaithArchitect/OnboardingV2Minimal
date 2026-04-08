@@ -45,8 +45,8 @@
                                                 data-client-id={row.clientId}
                                                 data-field-api-name={fieldState.fieldApiName}
                                                 label={fieldState.label}
-                                                required={fieldState.required}
-                                                disabled={fieldState.readOnly}
+                                                required={fieldState.effectiveRequired}
+                                                disabled={fieldState.isDisabled}
                                                 value={fieldState.value}
                                                 onchange={handleFieldChange}
                                             ></c-react-style-phone-input>
@@ -58,7 +58,7 @@
                                                 type="checkbox"
                                                 label={fieldState.label}
                                                 checked={fieldState.checked}
-                                                disabled={fieldState.readOnly}
+                                                disabled={fieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-input>
                                         </template>
@@ -79,8 +79,8 @@
                                                 country={fieldState.country}
                                                 country-options={fieldState.countryOptions}
                                                 province-options={fieldState.provinceOptions}
-                                                required={fieldState.required}
-                                                disabled={fieldState.readOnly}
+                                                required={fieldState.effectiveRequired}
+                                                disabled={fieldState.isDisabled}
                                                 show-address-lookup={fieldState.showAddressLookup}
                                                 onchange={handleFieldChange}
                                             ></lightning-input-address>
@@ -92,8 +92,8 @@
                                                 label={fieldState.label}
                                                 value={fieldState.value}
                                                 options={fieldState.picklistOptions}
-                                                required={fieldState.required}
-                                                disabled={fieldState.readOnly}
+                                                required={fieldState.effectiveRequired}
+                                                disabled={fieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-combobox>
                                         </template>
@@ -104,8 +104,8 @@
                                                 label={fieldState.label}
                                                 value={fieldState.value}
                                                 object-api-name={fieldState.lookupObjectApiName}
-                                                required={fieldState.required}
-                                                disabled={fieldState.readOnly}
+                                                required={fieldState.effectiveRequired}
+                                                disabled={fieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-record-picker>
                                         </template>
@@ -116,8 +116,8 @@
                                                 type={fieldState.dataType}
                                                 label={fieldState.label}
                                                 value={fieldState.value}
-                                                required={fieldState.required}
-                                                disabled={fieldState.readOnly}
+                                                required={fieldState.effectiveRequired}
+                                                disabled={fieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-input>
                                         </template>
@@ -144,8 +144,8 @@
                                                 label={relFieldState.label}
                                                 value={relFieldState.value}
                                                 options={relFieldState.picklistOptions}
-                                                required={relFieldState.required}
-                                                disabled={relFieldState.readOnly}
+                                                required={relFieldState.effectiveRequired}
+                                                disabled={relFieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-combobox>
                                         </template>
@@ -157,7 +157,7 @@
                                                 type="checkbox"
                                                 label={relFieldState.label}
                                                 checked={relFieldState.checked}
-                                                disabled={relFieldState.readOnly}
+                                                disabled={relFieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-input>
                                         </template>
@@ -169,8 +169,8 @@
                                                 label={relFieldState.label}
                                                 value={relFieldState.value}
                                                 object-api-name={relFieldState.lookupObjectApiName}
-                                                required={relFieldState.required}
-                                                disabled={relFieldState.readOnly}
+                                                required={relFieldState.effectiveRequired}
+                                                disabled={relFieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-record-picker>
                                         </template>
@@ -182,8 +182,8 @@
                                                 type={relFieldState.dataType}
                                                 label={relFieldState.label}
                                                 value={relFieldState.value}
-                                                required={relFieldState.required}
-                                                disabled={relFieldState.readOnly}
+                                                required={relFieldState.effectiveRequired}
+                                                disabled={relFieldState.isDisabled}
                                                 onchange={handleFieldChange}
                                             ></lightning-input>
                                         </template>
