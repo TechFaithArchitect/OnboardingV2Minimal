@@ -10,7 +10,11 @@
 #
 set -euo pipefail
 
-ORG_ALIAS="${1:-${SF_TARGET_ORG:-OnboardV2}}"
+REQUESTED_TARGET="${1:-${SF_TARGET_ORG:-OnboardV2}}"
+
+# Avoid sf org list pre-resolution. In this environment, running org list in the same shell
+# can invalidate subsequent sf apex run test target-org resolution.
+ORG_ALIAS="$REQUESTED_TARGET"
 
 # Deduped from CRUD/FLS, PMD CRUD burn-down, and PMD non-CRUD validation sections,
 # plus ObjectRelatedListCtrlTest (covers ObjectRelatedListController PMD hardening).

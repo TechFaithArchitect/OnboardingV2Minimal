@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset
+    name="OnboardingV2 Apex Test Ruleset"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.github.io/schema/ruleset_2_0_0.xsd">
+    <description>
+        Test-only Apex rules to enforce unit-test hygiene and prevent seeAllData regressions.
+    </description>
+
+    <include-pattern>.*/classes/.*Test\.cls</include-pattern>
+    <include-pattern>.*/classes/Test.*\.cls</include-pattern>
+    <rule ref="category/apex/bestpractices.xml/ApexUnitTestShouldNotUseSeeAllDataTrue" />
+</ruleset>

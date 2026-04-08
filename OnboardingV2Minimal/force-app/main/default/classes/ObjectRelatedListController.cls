@@ -20,10 +20,13 @@ public with sharing class ObjectRelatedListController {
     private static final String API_NAME_PATTERN = '^[A-Za-z][A-Za-z0-9_]*$';
     private static final String ORDER_USAGE_RELATED_RECORDS = 'RelatedRecords';
     private static final String ORDER_USAGE_LOOKUP_OPTIONS = 'LookupOptions';
+    private static final String GET_PROGRAM_DATES_DEPRECATION_LOG =
+        'ObjectRelatedListController.getProgramDates is deprecated; migrate callers to getRelatedRecords(QueryConfig).';
     private static final Map<String, Map<String, Schema.SObjectField>> DESCRIBE_FIELD_MAP_CACHE =
         new Map<String, Map<String, Schema.SObjectField>>();
     private static final Map<String, Set<String>> ORDER_ALLOWLIST_CACHE =
         new Map<String, Set<String>>();
+    private static Boolean hasLoggedProgramDatesDeprecation = false;
     
     /**
      * Query configuration wrapper class
@@ -474,6 +477,7 @@ public with sharing class ObjectRelatedListController {
                 new OnboardingDomainException('Account Id is required')
             );
         }
+        logProgramDatesDeprecationWarning();
         
         QueryConfig config = new QueryConfig();
         config.objectApiName = 'Program_Dates__c';
@@ -499,5 +503,13 @@ public with sharing class ObjectRelatedListController {
         config.orderDirection = 'DESC';
         
         return (List<Program_Dates__c>)ObjectRelatedListController.getRelatedRecords(config);
+    }
+
+    private static void logProgramDatesDeprecationWarning() {
+        if (hasLoggedProgramDatesDeprecation) {
+            return;
+        }
+        LoggingUtil.warn(GET_PROGRAM_DATES_DEPRECATION_LOG);
+        hasLoggedProgramDatesDeprecation = true;
     }
 }
