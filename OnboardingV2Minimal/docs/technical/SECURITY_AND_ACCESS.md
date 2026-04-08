@@ -29,6 +29,7 @@ From the DX project root:
 
 ```bash
 npm run audit:permissions:highrisk
+npm run audit:apex:security
 ```
 
 Fails the run if any permission set enables high-risk **user** permissions (for example Author Apex or Modify All Data). Always review reported **`modifyAllRecords: true`** object rows during access reviews.
@@ -63,8 +64,17 @@ Patterns present in core classes:
 - `WITH SECURITY_ENFORCED` in many read paths
 - `WITH USER_MODE` in selected queueable queries
 - `update as user` used in evaluator apply paths
+- Dynamic SOQL / DML inventory report available via `npm run audit:apex:security` (`.analysis/automation-audit/apex_security_inventory.tsv`).
 
 Exceptions are explicit and documented in code comments where automation behavior requires relaxed read paths to avoid silent no-op outcomes.
+
+## USER_MODE vs SYSTEM_MODE policy
+
+- Default for user-facing automation: use `WITH USER_MODE` / `WITH SECURITY_ENFORCED` for reads and `AccessLevel.USER_MODE` (or `insert/update as user`) for writes.
+- `SYSTEM_MODE` is allowed only for operational bookkeeping or controlled fallback paths, with in-code rationale.
+- Current explicit `SYSTEM_MODE` examples:
+  - `OnboardingBackgroundRetryService`: background job lifecycle transitions (`Pending` -> `In Progress` -> `Completed/Retryable Failed/Dead`).
+  - `OnboardingNextStepRuleService`: fallback contract record-type alignment / insert path when user-mode fails after user-mode attempt.
 
 ## Flow Security Posture
 

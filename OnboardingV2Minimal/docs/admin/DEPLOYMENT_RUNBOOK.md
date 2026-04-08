@@ -40,6 +40,11 @@ Use these companion docs:
 6. Run targeted Apex tests and smoke tests.
 7. Promote through remaining pipeline stages.
 
+### Environment Promotion Path
+
+- Standard path: **`OnboardV2 -> QA -> UAT`**
+- Current best-practices hardening pass is scoped to deployment/validation in **`OnboardV2`** only unless explicitly expanded.
+
 ## EXP Opportunity Create Record Canonicalization (April 2026)
 
 Use this checklist when promoting the new `expCreateRecord` experience as the canonical create path.

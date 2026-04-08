@@ -59,7 +59,8 @@ These have **`isExposed = false`** in metadata: **`onboardingWorkQueue`**, **`on
 
 1. **Blank component** — check **field- and object-level security** and **permission sets** ([Persona and permission sets](../technical/PERSONA_AND_PERMISSION_SETS.md)).
 2. **Wrong rows in `objectRelatedList`** — admin checks **child object**, **parent lookup field**, and **parent id source** in Lightning App Builder (see bundle description in `objectRelatedList.js-meta.xml`).
-3. **Flow screen misbehaves** — use [FAQ — Admins](../support/FAQ_ADMINS.md) and flow debug; **`recordCollectionEditor`** errors often trace to **`Child_Record_Editor_Config__mdt`** mismatch.
+3. **Sort fails in `objectRelatedList` or lookup selectors** — confirm the requested `orderByField` is allowlisted in `Related_List_Order_Allowlist__mdt` for the target object and usage context.
+4. **Flow screen misbehaves** — use [FAQ — Admins](../support/FAQ_ADMINS.md) and flow debug; **`recordCollectionEditor`** errors often trace to **`Child_Record_Editor_Config__mdt`** mismatch.
 
 ## LWC security and Jest coverage (engineering)
 

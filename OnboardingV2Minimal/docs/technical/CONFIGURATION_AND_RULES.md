@@ -26,6 +26,16 @@ Business behavior is intentionally metadata-driven where practical, so policy ch
 | `Onboarding_Logging_Config__mdt` | Logging enablement, minimum level, PII redaction |
 | `Communication_Dispatch_Policy__mdt` | Recipient dispatch policy by context |
 | `Communication_Event_Policy__mdt` | Event-to-template policy routing |
+| `Related_List_Order_Allowlist__mdt` | Strict allowlist for dynamic `ORDER BY` fields in `ObjectRelatedListController` |
+
+## Related-list order allowlist operations
+
+- `ObjectRelatedListController` rejects explicit `orderByField` values that are not allowlisted.
+- To add a new sort field safely, add a `Related_List_Order_Allowlist__mdt` row with:
+  - `Target_Object_API_Name__c`
+  - `Order_Field_Path__c`
+  - `Usage_Context__c` (`RelatedRecords` or `LookupOptions`)
+- Keep field paths exact (including relationship paths like `Parent.Requirement_Type__c`).
 
 ## Fulfillment Policies in Source
 
