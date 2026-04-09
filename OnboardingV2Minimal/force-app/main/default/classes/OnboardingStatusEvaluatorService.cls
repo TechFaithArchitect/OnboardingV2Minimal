@@ -1,13 +1,13 @@
 /**
  * Orchestrates onboarding status evaluation: loads context, applies normalization (CMDT),
- * runs rules via IOnboardingStatusRuleEngine (default: JSON Predicate_Config__c on evaluation CMDT).
+ * runs rules via OnboardingStatusRulesEngineInterface (default: JSON Predicate_Config__c on evaluation CMDT).
  */
 public with sharing class OnboardingStatusEvaluatorService {
   @TestVisible
-  private static IOnboardingStatusRuleEngine ruleEngine = new OnboardingStatusCmdtRuleEngine();
+  private static OnboardingStatusRulesEngineInterface ruleEngine = new OnboardingStatusCmdtRuleEngine();
 
   @TestVisible
-  static void setRuleEngineForTest(IOnboardingStatusRuleEngine engine) {
+  static void setRuleEngineForTest(OnboardingStatusRulesEngineInterface engine) {
     ruleEngine = engine == null ? new OnboardingStatusCmdtRuleEngine() : engine;
   }
 

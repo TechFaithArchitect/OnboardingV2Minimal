@@ -1361,7 +1361,7 @@ private class OnboardingStatusEvaluatorTest {
     );
   }
 
-  private class FalseRuleEngine implements IOnboardingStatusRuleEngine {
+  private class FalseRuleEngine implements OnboardingStatusRulesEngineInterface {
     public Boolean ruleApplies(
       Onboarding_Status_Evaluation_Rule__mdt rule,
       OnboardingStatusEvaluatorService.EvaluationContext context

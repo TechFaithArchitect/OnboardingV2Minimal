@@ -39,7 +39,7 @@ If you are new, read [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) first so the cla
 | `ExpOpportunityCreateRecordTest.cls` | Test | Unit tests for Exp Opportunity Create Record facade. |
 | `FlowAdminGuardService.cls` | Production | Service-layer logic for Flow Admin Guard. |
 | `FlowAdminGuardServiceTest.cls` | Test | Unit tests for Flow Admin Guard Service. |
-| `IOnboardingStatusRuleEngine.cls` | Production | Pluggable rule engine for onboarding status evaluation (first matching CMDT row wins). |
+| `OnboardingStatusRulesEngineInterface.cls` | Production | Pluggable rule engine contract for onboarding status evaluation (first matching CMDT row wins). |
 | `LeadAssignmentServiceTest.cls` | Test | Unit tests for Lead Assignment Service. |
 | `LoggingUtil.cls` | Production | Lightweight logging helper to centralize debug formatting. |
 | `LoggingUtilTest.cls` | Test | Unit tests for Logging Util. |
