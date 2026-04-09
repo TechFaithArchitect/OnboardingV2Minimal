@@ -11,7 +11,6 @@ public class TestCredentialFactory {
         External_Contact_Credential_Type__c externalContactCredentialType = new External_Contact_Credential_Type__c(
             Name = name,
             Sort_Order__c = sortOrder,
-            Vendor_Customization__c = vendorCustomization.Id,
             Active__c = isActive
         );
         TestDataFactoryUtil.maybeInsert(externalContactCredentialType, doInsert);

@@ -6,7 +6,7 @@
     <referenceTo>Vendor_Customization__c</referenceTo>
     <relationshipLabel>External Contact Credential Types</relationshipLabel>
     <relationshipName>External_Contact_Credential_Types</relationshipName>
-    <required>true</required>
+    <required>false</required>
     <trackHistory>false</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>

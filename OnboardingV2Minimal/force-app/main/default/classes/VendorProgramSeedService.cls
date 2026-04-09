@@ -1233,45 +1233,46 @@ public with sharing class VendorProgramSeedService {
             targetProgramIds.add(chosenProgramId);
         }
 
-        Map<Id, Vendor_Customization__c> programById = new Map<Id, Vendor_Customization__c>();
-        if (!targetProgramIds.isEmpty()) {
-            for (Vendor_Customization__c vc : [
-                SELECT Id, Vendor__c, Vendor__r.Name, Label__c
-                FROM Vendor_Customization__c
-                WHERE Id IN :targetProgramIds
-                WITH USER_MODE
-            ]) {
-                programById.put(vc.Id, vc);
-            }
+        Set<String> scopedTypeNames = new Set<String>();
+        for (List<Object> row : scopedCredentialRows) {
+            if (row == null || row.size() < 2) continue;
+            String rawTypeName = (String) row[1];
+            String normalizedTypeName = normalizeCredentialTypeName(rawTypeName);
+            if (!String.isBlank(normalizedTypeName)) scopedTypeNames.add(normalizedTypeName);
         }
 
-        Boolean credentialTypeHasVendorField =
-            Schema.SObjectType.External_Contact_Credential_Type__c.fields.getMap().containsKey('Vendor__c');
-        Map<String, External_Contact_Credential_Type__c> existingTypeByKey = new Map<String, External_Contact_Credential_Type__c>();
-        if (!targetProgramIds.isEmpty()) {
+        Map<String, External_Contact_Credential_Type__c> existingTypeByCatalogKey =
+            new Map<String, External_Contact_Credential_Type__c>();
+        if (!scopedTypeNames.isEmpty()) {
             for (External_Contact_Credential_Type__c t : [
-                SELECT Id, Name, Vendor_Customization__c, Active__c, Sort_Order__c, Unique_Key__c
+                SELECT Id, Name, Active__c, Sort_Order__c, Unique_Key__c, CreatedDate
                 FROM External_Contact_Credential_Type__c
-                WHERE Vendor_Customization__c IN :targetProgramIds
+                WHERE Name IN :scopedTypeNames
                 WITH USER_MODE
+                ORDER BY CreatedDate ASC, Id ASC
             ]) {
-                String key = String.valueOf(t.Vendor_Customization__c) + '|' + t.Name;
-                if (!existingTypeByKey.containsKey(key)) {
-                    existingTypeByKey.put(key, t);
+                String key = buildSharedCredentialTypeKey(t.Name);
+                if (!existingTypeByCatalogKey.containsKey(key)) {
+                    existingTypeByCatalogKey.put(key, t);
                 } else {
                     out.duplicateExistingRowsDetected++;
-                    out.warnings.add('Duplicate existing credential type found for key ' + key + '. Keeping first row.');
+                    out.warnings.add(
+                        'Duplicate existing credential type found for shared key ' + key +
+                        '. Keeping first row.'
+                    );
                 }
             }
         }
 
-        List<External_Contact_Credential_Type__c> typeInserts = new List<External_Contact_Credential_Type__c>();
-        List<External_Contact_Credential_Type__c> typeUpdates = new List<External_Contact_Credential_Type__c>();
+        List<External_Contact_Credential_Type__c> typeInserts =
+            new List<External_Contact_Credential_Type__c>();
+        List<External_Contact_Credential_Type__c> typeUpdates =
+            new List<External_Contact_Credential_Type__c>();
         Set<String> processedTypeKeys = new Set<String>();
 
         for (List<Object> row : scopedCredentialRows) {
             String ref = (String) row[0];
-            String typeName = (String) row[1];
+            String rawTypeName = (String) row[1];
             Integer sortOrder = (Integer) row[2];
             Boolean active = (Boolean) row[3];
 
@@ -1281,52 +1282,50 @@ public with sharing class VendorProgramSeedService {
                 continue;
             }
 
-            for (Id pid : ids) {
-                String key = String.valueOf(pid) + '|' + typeName;
-                if (processedTypeKeys.contains(key)) {
-                    out.duplicateSeedRowsSkipped++;
-                    continue;
-                }
-                processedTypeKeys.add(key);
+            String normalizedTypeName = normalizeCredentialTypeName(rawTypeName);
+            String catalogKey = buildSharedCredentialTypeKey(normalizedTypeName);
+            if (String.isBlank(catalogKey)) {
+                out.warnings.add('Skip credential row with blank credential type name for ref ' + ref);
+                continue;
+            }
+            if (processedTypeKeys.contains(catalogKey)) {
+                out.duplicateSeedRowsSkipped++;
+                continue;
+            }
+            processedTypeKeys.add(catalogKey);
 
-                Vendor_Customization__c vc = programById.get(pid);
-                if (vc == null) {
-                    out.warnings.add('Skip credential row, program missing for id ' + pid);
-                    continue;
-                }
-                if (credentialTypeHasVendorField && vc.Vendor__c == null) {
-                    out.warnings.add(
-                        'Skip credential row, program ' + pid +
-                        ' has no Vendor__c (required for External Contact Credential Type): ' + typeName
-                    );
-                    continue;
-                }
-
-                String uniqueKey = String.valueOf(vc.Vendor__c) + '|' + String.valueOf(pid) + '|' + typeName;
-                External_Contact_Credential_Type__c existing = existingTypeByKey.get(key);
-                if (existing == null) {
-                    External_Contact_Credential_Type__c newType = new External_Contact_Credential_Type__c(
-                        Name = typeName,
-                        Vendor_Customization__c = pid,
+            String uniqueKey = buildSharedCredentialUniqueKey(normalizedTypeName);
+            External_Contact_Credential_Type__c existing = existingTypeByCatalogKey.get(catalogKey);
+            if (existing == null) {
+                typeInserts.add(
+                    new External_Contact_Credential_Type__c(
+                        Name = normalizedTypeName,
                         Active__c = active,
                         Sort_Order__c = sortOrder,
                         Unique_Key__c = uniqueKey
-                    );
-                    if (credentialTypeHasVendorField) newType.put('Vendor__c', vc.Vendor__c);
-                    typeInserts.add(newType);
-                } else {
-                    Boolean changed = false;
-                    if (credentialTypeHasVendorField) {
-                        existing.put('Vendor__c', vc.Vendor__c);
-                        changed = true;
-                    }
-                    if (existing.Vendor_Customization__c != pid) { existing.Vendor_Customization__c = pid; changed = true; }
-                    if (existing.Active__c != active) { existing.Active__c = active; changed = true; }
-                    Integer existingOrder = existing.Sort_Order__c == null ? null : existing.Sort_Order__c.intValue();
-                    if (existingOrder != sortOrder) { existing.Sort_Order__c = sortOrder; changed = true; }
-                    if (existing.Unique_Key__c != uniqueKey) { existing.Unique_Key__c = uniqueKey; changed = true; }
-                    if (changed) typeUpdates.add(existing);
+                    )
+                );
+            } else {
+                Boolean changed = false;
+                if (existing.Name != normalizedTypeName) {
+                    existing.Name = normalizedTypeName;
+                    changed = true;
                 }
+                if (existing.Active__c != active) {
+                    existing.Active__c = active;
+                    changed = true;
+                }
+                Integer existingOrder =
+                    existing.Sort_Order__c == null ? null : existing.Sort_Order__c.intValue();
+                if (existingOrder != sortOrder) {
+                    existing.Sort_Order__c = sortOrder;
+                    changed = true;
+                }
+                if (existing.Unique_Key__c != uniqueKey) {
+                    existing.Unique_Key__c = uniqueKey;
+                    changed = true;
+                }
+                if (changed) typeUpdates.add(existing);
             }
         }
 
@@ -1350,24 +1349,24 @@ public with sharing class VendorProgramSeedService {
             out.credentialTypesUpdated = typeUpdates.size();
         }
 
-        Set<String> scopedTypeNames = new Set<String>();
-        for (List<Object> row : scopedCredentialRows) scopedTypeNames.add((String) row[1]);
-
-        Map<String, Id> typeIdByProgramAndName = new Map<String, Id>();
-        if (!targetProgramIds.isEmpty() && !scopedTypeNames.isEmpty()) {
+        Map<String, Id> typeIdByCatalogKey = new Map<String, Id>();
+        if (!scopedTypeNames.isEmpty()) {
             for (External_Contact_Credential_Type__c t : [
-                SELECT Id, Name, Vendor_Customization__c
+                SELECT Id, Name
                 FROM External_Contact_Credential_Type__c
-                WHERE Vendor_Customization__c IN :targetProgramIds
-                AND Name IN :scopedTypeNames
+                WHERE Name IN :scopedTypeNames
                 WITH USER_MODE
+                ORDER BY CreatedDate ASC, Id ASC
             ]) {
-                String key = String.valueOf(t.Vendor_Customization__c) + '|' + t.Name;
-                if (!typeIdByProgramAndName.containsKey(key)) {
-                    typeIdByProgramAndName.put(key, t.Id);
+                String key = buildSharedCredentialTypeKey(t.Name);
+                if (!typeIdByCatalogKey.containsKey(key)) {
+                    typeIdByCatalogKey.put(key, t.Id);
                 } else {
                     out.duplicateExistingRowsDetected++;
-                    out.warnings.add('Duplicate existing credential type found while resolving type IDs for key ' + key + '. Keeping first row.');
+                    out.warnings.add(
+                        'Duplicate existing credential type found while resolving shared type IDs for key ' +
+                        key + '. Keeping first row.'
+                    );
                 }
             }
         }
@@ -1407,7 +1406,7 @@ public with sharing class VendorProgramSeedService {
             }
 
             for (Id pid : ids) {
-                Id typeId = typeIdByProgramAndName.get(String.valueOf(pid) + '|' + typeName);
+                Id typeId = typeIdByCatalogKey.get(buildSharedCredentialTypeKey(typeName));
                 if (typeId == null) {
                     out.warnings.add('Skip required row, missing type ' + typeName + ' for ref ' + ref);
                     continue;
@@ -1492,8 +1491,8 @@ public with sharing class VendorProgramSeedService {
             }
 
             for (Id pid : ids) {
-                Id typeId = typeIdByProgramAndName.get(String.valueOf(pid) + '|' + typeName);
-                Id dependsOnId = typeIdByProgramAndName.get(String.valueOf(pid) + '|' + dependsOn);
+                Id typeId = typeIdByCatalogKey.get(buildSharedCredentialTypeKey(typeName));
+                Id dependsOnId = typeIdByCatalogKey.get(buildSharedCredentialTypeKey(dependsOn));
                 if (typeId == null || dependsOnId == null) {
                     out.warnings.add('Skip dependency row, missing type(s) for ' + ref + ': ' + typeName + ' -> ' + dependsOn);
                     continue;
@@ -1534,6 +1533,102 @@ public with sharing class VendorProgramSeedService {
 
     public static Result seedTrainingSystems() {
         return seedTrainingSystems(new Options());
+    }
+
+    public static Result migrateCredentialTypesToSharedCatalog() {
+        return migrateCredentialTypesToSharedCatalog(new Options());
+    }
+
+    /**
+     * One-time data migration for orgs that already contain program-scoped credential types.
+     * Converts External_Contact_Credential_Type__c into a shared catalog keyed by Name
+     * and repoints dependent records before removing duplicates.
+     */
+    @SuppressWarnings('PMD.AvoidNonRestrictiveQueries')
+    public static Result migrateCredentialTypesToSharedCatalog(Options inputOptions) {
+        Options options = normalizeOptions(inputOptions);
+        Result out = new Result();
+
+        List<External_Contact_Credential_Type__c> allTypes = [
+            SELECT Id, Name, Unique_Key__c, CreatedDate
+            FROM External_Contact_Credential_Type__c
+            WITH USER_MODE
+            ORDER BY CreatedDate ASC, Id ASC
+        ];
+        if (allTypes.isEmpty()) {
+            out.warnings.add(
+                'Credential type migration: no External Contact Credential Type rows found.'
+            );
+            return out;
+        }
+
+        Map<String, Id> canonicalTypeIdByKey = new Map<String, Id>();
+        Map<Id, Id> duplicateTypeToCanonical = new Map<Id, Id>();
+        Set<Id> duplicateTypeIds = new Set<Id>();
+        for (External_Contact_Credential_Type__c t : allTypes) {
+            String sharedKey = buildSharedCredentialTypeKey(t.Name);
+            if (String.isBlank(sharedKey)) {
+                out.warnings.add(
+                    'Credential type migration: skipped type with blank Name (Id=' +
+                    String.valueOf(t.Id) + ').'
+                );
+                continue;
+            }
+            if (!canonicalTypeIdByKey.containsKey(sharedKey)) {
+                canonicalTypeIdByKey.put(sharedKey, t.Id);
+            } else {
+                duplicateTypeToCanonical.put(t.Id, canonicalTypeIdByKey.get(sharedKey));
+                duplicateTypeIds.add(t.Id);
+                out.duplicateExistingRowsDetected++;
+            }
+        }
+
+        if (!duplicateTypeToCanonical.isEmpty()) {
+            out.warnings.add(
+                'Credential type migration: found ' + duplicateTypeToCanonical.size() +
+                ' duplicate credential type rows by shared name. Repointing references.'
+            );
+            repointSharedCredentialTypeReferences(duplicateTypeToCanonical, out, options);
+        }
+
+        List<SObject> typeNormalizationUpdates = new List<SObject>();
+        for (External_Contact_Credential_Type__c t : allTypes) {
+            if (duplicateTypeIds.contains(t.Id)) continue;
+            String normalizedName = normalizeCredentialTypeName(t.Name);
+            if (String.isBlank(normalizedName)) continue;
+            String sharedUniqueKey = buildSharedCredentialUniqueKey(normalizedName);
+
+            Boolean changed = false;
+            External_Contact_Credential_Type__c updateRow =
+                new External_Contact_Credential_Type__c(Id = t.Id);
+            if (t.Name != normalizedName) {
+                updateRow.Name = normalizedName;
+                changed = true;
+            }
+            if (t.Unique_Key__c != sharedUniqueKey) {
+                updateRow.Unique_Key__c = sharedUniqueKey;
+                changed = true;
+            }
+            if (changed) typeNormalizationUpdates.add(updateRow);
+        }
+        applyCleanupUpdates(
+            typeNormalizationUpdates,
+            'Credential Type shared-catalog normalization',
+            out,
+            options
+        );
+
+        if (!duplicateTypeToCanonical.isEmpty()) {
+            List<SObject> typeDeletes = new List<SObject>();
+            for (Id duplicateTypeId : duplicateTypeToCanonical.keySet()) {
+                typeDeletes.add(new External_Contact_Credential_Type__c(Id = duplicateTypeId));
+            }
+            applyCleanupDeletes(typeDeletes, 'External Contact Credential Type', out, options);
+        }
+
+        cleanupRequiredCredentialDuplicatesGlobal(out, options);
+        cleanupCredentialDependencyDuplicatesGlobal(out, options);
+        return out;
     }
 
     public static Result seedTrainingSystems(Options inputOptions) {
@@ -2188,6 +2283,23 @@ public with sharing class VendorProgramSeedService {
         return text.trim().toLowerCase();
     }
 
+    private static String normalizeCredentialTypeName(String typeName) {
+        if (String.isBlank(typeName)) return null;
+        return typeName.trim();
+    }
+
+    private static String buildSharedCredentialTypeKey(String typeName) {
+        String normalizedTypeName = normalizeCredentialTypeName(typeName);
+        if (String.isBlank(normalizedTypeName)) return null;
+        return normalizeKeyPart(normalizedTypeName);
+    }
+
+    private static String buildSharedCredentialUniqueKey(String typeName) {
+        String normalizedTypeName = normalizeCredentialTypeName(typeName);
+        if (String.isBlank(normalizedTypeName)) return null;
+        return 'GLOBAL|' + normalizedTypeName.toUpperCase();
+    }
+
     private static String buildTrainingRequirementInternalKey(
         Id vendorProgramId,
         String trainingType,
@@ -2348,70 +2460,68 @@ public with sharing class VendorProgramSeedService {
     private static void cleanupCredentialDuplicates(Set<Id> targetProgramIds, Result out, Options options) {
         if (targetProgramIds == null || targetProgramIds.isEmpty()) return;
 
+        Set<String> scopedTypeKeys = new Set<String>();
+        for (Required_Credential__c rc : [
+            SELECT External_Contact_Credential_Type__r.Name
+            FROM Required_Credential__c
+            WHERE Vendor_Customization__c IN :targetProgramIds
+            AND External_Contact_Credential_Type__c != null
+            WITH USER_MODE
+        ]) {
+            String sharedKey = buildSharedCredentialTypeKey(
+                rc.External_Contact_Credential_Type__r == null
+                    ? null
+                    : rc.External_Contact_Credential_Type__r.Name
+            );
+            if (!String.isBlank(sharedKey)) scopedTypeKeys.add(sharedKey);
+        }
+        for (External_Credential_Type_Dependency__c d : [
+            SELECT Credential_Type__r.Name, Depends_On__r.Name
+            FROM External_Credential_Type_Dependency__c
+            WHERE Vendor_Program__c IN :targetProgramIds
+            WITH USER_MODE
+        ]) {
+            String credentialTypeKey = buildSharedCredentialTypeKey(
+                d.Credential_Type__r == null
+                    ? null
+                    : d.Credential_Type__r.Name
+            );
+            if (!String.isBlank(credentialTypeKey)) scopedTypeKeys.add(credentialTypeKey);
+
+            String dependsOnKey = buildSharedCredentialTypeKey(
+                d.Depends_On__r == null
+                    ? null
+                    : d.Depends_On__r.Name
+            );
+            if (!String.isBlank(dependsOnKey)) scopedTypeKeys.add(dependsOnKey);
+        }
+
         Map<String, Id> canonicalTypeIdByKey = new Map<String, Id>();
         Map<Id, Id> duplicateTypeToCanonical = new Map<Id, Id>();
-
-        for (External_Contact_Credential_Type__c t : [
-            SELECT Id, Vendor_Customization__c, Name, CreatedDate
-            FROM External_Contact_Credential_Type__c
-            WHERE Vendor_Customization__c IN :targetProgramIds
-            WITH USER_MODE
-            ORDER BY Vendor_Customization__c ASC, Name ASC, CreatedDate ASC, Id ASC
-        ]) {
-            String key = String.valueOf(t.Vendor_Customization__c) + '|' + t.Name;
-            if (!canonicalTypeIdByKey.containsKey(key)) {
-                canonicalTypeIdByKey.put(key, t.Id);
-            } else {
-                duplicateTypeToCanonical.put(t.Id, canonicalTypeIdByKey.get(key));
-                out.duplicateExistingRowsDetected++;
+        if (!scopedTypeKeys.isEmpty()) {
+            for (External_Contact_Credential_Type__c t : [
+                SELECT Id, Name, CreatedDate
+                FROM External_Contact_Credential_Type__c
+                WITH USER_MODE
+                ORDER BY CreatedDate ASC, Id ASC
+            ]) {
+                String key = buildSharedCredentialTypeKey(t.Name);
+                if (String.isBlank(key) || !scopedTypeKeys.contains(key)) continue;
+                if (!canonicalTypeIdByKey.containsKey(key)) {
+                    canonicalTypeIdByKey.put(key, t.Id);
+                } else {
+                    duplicateTypeToCanonical.put(t.Id, canonicalTypeIdByKey.get(key));
+                    out.duplicateExistingRowsDetected++;
+                }
             }
         }
 
         if (!duplicateTypeToCanonical.isEmpty()) {
             out.warnings.add(
                 'Cleanup mode: found ' + duplicateTypeToCanonical.size() +
-                ' duplicate External Contact Credential Type rows. Repointing child records and deleting duplicates.'
+                ' duplicate External Contact Credential Type rows by shared name. Repointing child records and deleting duplicates.'
             );
-
-            List<SObject> reqTypeUpdates = new List<SObject>();
-            for (Required_Credential__c rc : [
-                SELECT Id, External_Contact_Credential_Type__c
-                FROM Required_Credential__c
-                WHERE Vendor_Customization__c IN :targetProgramIds
-                AND External_Contact_Credential_Type__c IN :duplicateTypeToCanonical.keySet()
-                WITH USER_MODE
-            ]) {
-                Id canonicalTypeId = duplicateTypeToCanonical.get(rc.External_Contact_Credential_Type__c);
-                if (canonicalTypeId != null && canonicalTypeId != rc.External_Contact_Credential_Type__c) {
-                    rc.External_Contact_Credential_Type__c = canonicalTypeId;
-                    reqTypeUpdates.add(rc);
-                }
-            }
-            applyCleanupUpdates(reqTypeUpdates, 'Required Credential type reference', out, options);
-
-            List<SObject> depTypeUpdates = new List<SObject>();
-            for (External_Credential_Type_Dependency__c d : [
-                SELECT Id, Credential_Type__c, Depends_On__c
-                FROM External_Credential_Type_Dependency__c
-                WHERE Vendor_Program__c IN :targetProgramIds
-                AND (Credential_Type__c IN :duplicateTypeToCanonical.keySet()
-                     OR Depends_On__c IN :duplicateTypeToCanonical.keySet())
-                WITH USER_MODE
-            ]) {
-                Boolean changed = false;
-                Id canonicalCredentialTypeId = duplicateTypeToCanonical.get(d.Credential_Type__c);
-                if (canonicalCredentialTypeId != null && canonicalCredentialTypeId != d.Credential_Type__c) {
-                    d.Credential_Type__c = canonicalCredentialTypeId;
-                    changed = true;
-                }
-                Id canonicalDependsOnId = duplicateTypeToCanonical.get(d.Depends_On__c);
-                if (canonicalDependsOnId != null && canonicalDependsOnId != d.Depends_On__c) {
-                    d.Depends_On__c = canonicalDependsOnId;
-                    changed = true;
-                }
-                if (changed) depTypeUpdates.add(d);
-            }
-            applyCleanupUpdates(depTypeUpdates, 'Credential Dependency type reference', out, options);
+            repointSharedCredentialTypeReferences(duplicateTypeToCanonical, out, options);
 
             List<SObject> typeDeletes = new List<SObject>();
             for (Id duplicateTypeId : duplicateTypeToCanonical.keySet()) {
@@ -2468,6 +2578,310 @@ public with sharing class VendorProgramSeedService {
         if (!dependencyDeletes.isEmpty()) {
             out.warnings.add(
                 'Cleanup mode: deleting ' + dependencyDeletes.size() +
+                ' duplicate Credential Dependency rows.'
+            );
+            applyCleanupDeletes(dependencyDeletes, 'Credential Dependency', out, options);
+        }
+    }
+
+    private static void repointSharedCredentialTypeReferences(
+        Map<Id, Id> duplicateTypeToCanonical,
+        Result out,
+        Options options
+    ) {
+        if (duplicateTypeToCanonical == null || duplicateTypeToCanonical.isEmpty()) return;
+
+        List<SObject> requiredCredentialUpdates = new List<SObject>();
+        for (Required_Credential__c rc : [
+            SELECT Id, External_Contact_Credential_Type__c
+            FROM Required_Credential__c
+            WHERE External_Contact_Credential_Type__c IN :duplicateTypeToCanonical.keySet()
+            WITH USER_MODE
+        ]) {
+            Id canonicalTypeId =
+                duplicateTypeToCanonical.get(rc.External_Contact_Credential_Type__c);
+            if (canonicalTypeId != null && canonicalTypeId != rc.External_Contact_Credential_Type__c) {
+                rc.External_Contact_Credential_Type__c = canonicalTypeId;
+                requiredCredentialUpdates.add(rc);
+            }
+        }
+        applyCleanupUpdates(
+            requiredCredentialUpdates,
+            'Required Credential type reference',
+            out,
+            options
+        );
+
+        List<SObject> dependencyUpdates = new List<SObject>();
+        for (External_Credential_Type_Dependency__c d : [
+            SELECT Id, Credential_Type__c, Depends_On__c
+            FROM External_Credential_Type_Dependency__c
+            WHERE Credential_Type__c IN :duplicateTypeToCanonical.keySet()
+               OR Depends_On__c IN :duplicateTypeToCanonical.keySet()
+            WITH USER_MODE
+        ]) {
+            Boolean changed = false;
+            Id canonicalCredentialTypeId = duplicateTypeToCanonical.get(d.Credential_Type__c);
+            if (canonicalCredentialTypeId != null && canonicalCredentialTypeId != d.Credential_Type__c) {
+                d.Credential_Type__c = canonicalCredentialTypeId;
+                changed = true;
+            }
+            Id canonicalDependsOnId = duplicateTypeToCanonical.get(d.Depends_On__c);
+            if (canonicalDependsOnId != null && canonicalDependsOnId != d.Depends_On__c) {
+                d.Depends_On__c = canonicalDependsOnId;
+                changed = true;
+            }
+            if (changed) dependencyUpdates.add(d);
+        }
+        applyCleanupUpdates(
+            dependencyUpdates,
+            'Credential Dependency type reference',
+            out,
+            options
+        );
+
+        List<SObject> displayConfigUpdates = new List<SObject>();
+        for (ECC_Field_Display_Configuration__c cfg : [
+            SELECT Id, External_Contact_Credential_Type__c
+            FROM ECC_Field_Display_Configuration__c
+            WHERE External_Contact_Credential_Type__c IN :duplicateTypeToCanonical.keySet()
+            WITH USER_MODE
+        ]) {
+            Id canonicalTypeId =
+                duplicateTypeToCanonical.get(cfg.External_Contact_Credential_Type__c);
+            if (canonicalTypeId != null && canonicalTypeId != cfg.External_Contact_Credential_Type__c) {
+                cfg.External_Contact_Credential_Type__c = canonicalTypeId;
+                displayConfigUpdates.add(cfg);
+            }
+        }
+        applyCleanupUpdates(
+            displayConfigUpdates,
+            'ECC Field Display Configuration type reference',
+            out,
+            options
+        );
+
+        repointExternalCredentialsToSharedTypes(duplicateTypeToCanonical, out, options);
+    }
+
+    private static void repointExternalCredentialsToSharedTypes(
+        Map<Id, Id> duplicateTypeToCanonical,
+        Result out,
+        Options options
+    ) {
+        if (duplicateTypeToCanonical == null || duplicateTypeToCanonical.isEmpty()) return;
+
+        Set<Id> scopedTypeIds = new Set<Id>();
+        scopedTypeIds.addAll(duplicateTypeToCanonical.keySet());
+        scopedTypeIds.addAll(duplicateTypeToCanonical.values());
+
+        Map<Id, POE_External_Contact_Credential__c> eccById =
+            new Map<Id, POE_External_Contact_Credential__c>();
+        Map<Id, Id> targetTypeByEccId = new Map<Id, Id>();
+        Map<String, List<Id>> eccIdsByFinalKey = new Map<String, List<Id>>();
+
+        for (POE_External_Contact_Credential__c ecc : [
+            SELECT Id, POE_Contact__c, Vendor__c, External_Contact_Credential_Type__c, CreatedDate
+            FROM POE_External_Contact_Credential__c
+            WHERE External_Contact_Credential_Type__c IN :scopedTypeIds
+            WITH USER_MODE
+            ORDER BY CreatedDate ASC, Id ASC
+        ]) {
+            Id targetTypeId = duplicateTypeToCanonical.containsKey(ecc.External_Contact_Credential_Type__c)
+                ? duplicateTypeToCanonical.get(ecc.External_Contact_Credential_Type__c)
+                : ecc.External_Contact_Credential_Type__c;
+            String finalKey =
+                String.valueOf(ecc.POE_Contact__c) + '|' +
+                String.valueOf(ecc.Vendor__c) + '|' +
+                String.valueOf(targetTypeId);
+
+            eccById.put(ecc.Id, ecc);
+            targetTypeByEccId.put(ecc.Id, targetTypeId);
+            if (!eccIdsByFinalKey.containsKey(finalKey)) {
+                eccIdsByFinalKey.put(finalKey, new List<Id>());
+            }
+            eccIdsByFinalKey.get(finalKey).add(ecc.Id);
+        }
+
+        Map<Id, Id> duplicateEccToCanonical = new Map<Id, Id>();
+        List<SObject> externalCredentialTypeUpdates = new List<SObject>();
+
+        for (String finalKey : eccIdsByFinalKey.keySet()) {
+            List<Id> eccIds = eccIdsByFinalKey.get(finalKey);
+            if (eccIds == null || eccIds.isEmpty()) continue;
+
+            Id canonicalEccId = eccIds[0];
+            for (Id candidateId : eccIds) {
+                POE_External_Contact_Credential__c candidate = eccById.get(candidateId);
+                Id targetTypeId = targetTypeByEccId.get(candidateId);
+                if (candidate != null && candidate.External_Contact_Credential_Type__c == targetTypeId) {
+                    canonicalEccId = candidateId;
+                    break;
+                }
+            }
+
+            for (Id eccId : eccIds) {
+                if (eccId == canonicalEccId) {
+                    POE_External_Contact_Credential__c canonical = eccById.get(eccId);
+                    Id targetTypeId = targetTypeByEccId.get(eccId);
+                    if (canonical != null &&
+                        targetTypeId != null &&
+                        canonical.External_Contact_Credential_Type__c != targetTypeId
+                    ) {
+                        canonical.External_Contact_Credential_Type__c = targetTypeId;
+                        externalCredentialTypeUpdates.add(canonical);
+                    }
+                    continue;
+                }
+                duplicateEccToCanonical.put(eccId, canonicalEccId);
+                out.duplicateExistingRowsDetected++;
+            }
+        }
+
+        if (!duplicateEccToCanonical.isEmpty()) {
+            List<SObject> requiredExternalCredentialUpdates = new List<SObject>();
+            for (Required_External_Contact_Credential__c recc : [
+                SELECT Id, External_Contact_Credential__c
+                FROM Required_External_Contact_Credential__c
+                WHERE External_Contact_Credential__c IN :duplicateEccToCanonical.keySet()
+                WITH USER_MODE
+            ]) {
+                Id canonicalEccId =
+                    duplicateEccToCanonical.get(recc.External_Contact_Credential__c);
+                if (canonicalEccId != null && canonicalEccId != recc.External_Contact_Credential__c) {
+                    recc.External_Contact_Credential__c = canonicalEccId;
+                    requiredExternalCredentialUpdates.add(recc);
+                }
+            }
+            applyCleanupUpdates(
+                requiredExternalCredentialUpdates,
+                'Required External Contact Credential external credential reference',
+                out,
+                options
+            );
+
+            List<SObject> duplicateExternalCredentialDeletes = new List<SObject>();
+            for (Id duplicateExternalCredentialId : duplicateEccToCanonical.keySet()) {
+                duplicateExternalCredentialDeletes.add(
+                    new POE_External_Contact_Credential__c(Id = duplicateExternalCredentialId)
+                );
+            }
+            applyCleanupDeletes(
+                duplicateExternalCredentialDeletes,
+                'External Contact Credential',
+                out,
+                options
+            );
+        }
+
+        applyCleanupUpdates(
+            externalCredentialTypeUpdates,
+            'External Contact Credential type reference',
+            out,
+            options
+        );
+    }
+
+    @SuppressWarnings('PMD.AvoidNonRestrictiveQueries')
+    private static void cleanupRequiredCredentialDuplicatesGlobal(Result out, Options options) {
+        Map<String, Id> canonicalRequiredIdByKey = new Map<String, Id>();
+        Map<Id, Id> duplicateRequiredToCanonical = new Map<Id, Id>();
+        List<SObject> requiredCredentialDeletes = new List<SObject>();
+
+        for (Required_Credential__c rc : [
+            SELECT Id, Vendor_Customization__c, External_Contact_Credential_Type__c, CreatedDate
+            FROM Required_Credential__c
+            WITH USER_MODE
+            ORDER BY Vendor_Customization__c ASC, External_Contact_Credential_Type__c ASC, CreatedDate ASC, Id ASC
+        ]) {
+            String key =
+                String.valueOf(rc.Vendor_Customization__c) + '|' +
+                String.valueOf(rc.External_Contact_Credential_Type__c);
+            if (!canonicalRequiredIdByKey.containsKey(key)) {
+                canonicalRequiredIdByKey.put(key, rc.Id);
+            } else {
+                Id canonicalId = canonicalRequiredIdByKey.get(key);
+                duplicateRequiredToCanonical.put(rc.Id, canonicalId);
+                requiredCredentialDeletes.add(new Required_Credential__c(Id = rc.Id));
+                out.duplicateExistingRowsDetected++;
+            }
+        }
+        if (duplicateRequiredToCanonical.isEmpty()) return;
+
+        out.warnings.add(
+            'Credential type migration: found ' + duplicateRequiredToCanonical.size() +
+            ' duplicate Required Credential rows. Repointing children and deleting duplicates.'
+        );
+
+        List<SObject> trainingRequirementUpdates = new List<SObject>();
+        for (Training_Requirement__c tr : [
+            SELECT Id, Required_Credential__c
+            FROM Training_Requirement__c
+            WHERE Required_Credential__c IN :duplicateRequiredToCanonical.keySet()
+            WITH USER_MODE
+        ]) {
+            Id canonicalRequiredId = duplicateRequiredToCanonical.get(tr.Required_Credential__c);
+            if (canonicalRequiredId != null && canonicalRequiredId != tr.Required_Credential__c) {
+                tr.Required_Credential__c = canonicalRequiredId;
+                trainingRequirementUpdates.add(tr);
+            }
+        }
+        applyCleanupUpdates(
+            trainingRequirementUpdates,
+            'Training Requirement required credential reference',
+            out,
+            options
+        );
+
+        List<SObject> requiredExternalCredentialUpdates = new List<SObject>();
+        for (Required_External_Contact_Credential__c recc : [
+            SELECT Id, Required_Credential__c
+            FROM Required_External_Contact_Credential__c
+            WHERE Required_Credential__c IN :duplicateRequiredToCanonical.keySet()
+            WITH USER_MODE
+        ]) {
+            Id canonicalRequiredId = duplicateRequiredToCanonical.get(recc.Required_Credential__c);
+            if (canonicalRequiredId != null && canonicalRequiredId != recc.Required_Credential__c) {
+                recc.Required_Credential__c = canonicalRequiredId;
+                requiredExternalCredentialUpdates.add(recc);
+            }
+        }
+        applyCleanupUpdates(
+            requiredExternalCredentialUpdates,
+            'Required External Contact Credential required credential reference',
+            out,
+            options
+        );
+
+        applyCleanupDeletes(requiredCredentialDeletes, 'Required Credential', out, options);
+    }
+
+    @SuppressWarnings('PMD.AvoidNonRestrictiveQueries')
+    private static void cleanupCredentialDependencyDuplicatesGlobal(Result out, Options options) {
+        Map<String, Id> canonicalDependencyIdByKey = new Map<String, Id>();
+        List<SObject> dependencyDeletes = new List<SObject>();
+
+        for (External_Credential_Type_Dependency__c d : [
+            SELECT Id, Vendor_Program__c, Credential_Type__c, Depends_On__c, CreatedDate
+            FROM External_Credential_Type_Dependency__c
+            WITH USER_MODE
+            ORDER BY Vendor_Program__c ASC, Credential_Type__c ASC, Depends_On__c ASC, CreatedDate ASC, Id ASC
+        ]) {
+            String key =
+                String.valueOf(d.Vendor_Program__c) + '|' +
+                String.valueOf(d.Credential_Type__c) + '|' +
+                String.valueOf(d.Depends_On__c);
+            if (!canonicalDependencyIdByKey.containsKey(key)) {
+                canonicalDependencyIdByKey.put(key, d.Id);
+            } else {
+                dependencyDeletes.add(new External_Credential_Type_Dependency__c(Id = d.Id));
+                out.duplicateExistingRowsDetected++;
+            }
+        }
+
+        if (!dependencyDeletes.isEmpty()) {
+            out.warnings.add(
+                'Credential type migration: deleting ' + dependencyDeletes.size() +
                 ' duplicate Credential Dependency rows.'
             );
             applyCleanupDeletes(dependencyDeletes, 'Credential Dependency', out, options);
@@ -2726,9 +3140,12 @@ public with sharing class VendorProgramSeedService {
         Map<String, String> seenSignatureByKey = new Map<String, String>();
         for (List<Object> row : rows) {
             if (row == null || row.isEmpty()) continue;
-            String key =
-                normalizeKeyPart(row.size() > 0 ? row[0] : null) + '|' +
-                normalizeKeyPart(row.size() > 1 ? row[1] : null);
+            String key = buildSharedCredentialTypeKey(row.size() > 1 ? (String) row[1] : null);
+            if (String.isBlank(key)) {
+                out.duplicateSeedRowsSkipped++;
+                out.warnings.add('Skip credential type seed row with blank credential type name.');
+                continue;
+            }
             String signature =
                 normalizeKeyPart(row.size() > 2 ? row[2] : null) + '|' +
                 normalizeKeyPart(row.size() > 3 ? row[3] : null);
@@ -2740,7 +3157,7 @@ public with sharing class VendorProgramSeedService {
                 out.duplicateSeedRowsSkipped++;
                 if (seenSignatureByKey.get(key) != signature) {
                     out.warnings.add(
-                        'Duplicate credential type seed row for key "' + key +
+                        'Duplicate credential type seed row for shared key "' + key +
                         '" has conflicting values. Keeping first row.'
                     );
                 }

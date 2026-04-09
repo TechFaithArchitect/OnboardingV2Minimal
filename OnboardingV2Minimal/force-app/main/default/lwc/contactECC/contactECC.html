@@ -1,0 +1,31 @@
+<template>
+    <template if:true={showECC}>
+        <template if:true={eccRecords}>
+            <template if:true={eccRecords.length}>
+                <template if:true={isFullyLoaded}>
+                    <lightning-card title="Onboarding Required Credentials" icon-name="standard:form">
+                        <template for:each={eccGroupedByProgram} for:item="group">
+                            <div key={group.programName} class="slds-m-around_medium">
+                                <h3 class="slds-text-heading_small slds-m-bottom_small">
+                                    {group.programName}
+                                </h3>
+
+                                <template for:each={group.records} for:item="item">
+                                    <c-contact-ecc-credential
+                                        key={item.record.Id}
+                                        record={item.record}
+                                        disabled={item.disabled}
+                                        process-status-options={item.picklistOptions}
+                                        field-configs={item.fieldConfigs}
+                                        onchange={handleFieldChange}
+                                        onsave={handleSave}>
+                                    </c-contact-ecc-credential>
+                                </template>
+                            </div>
+                        </template>
+                    </lightning-card>
+                </template>
+            </template>
+        </template>
+    </template>
+</template>

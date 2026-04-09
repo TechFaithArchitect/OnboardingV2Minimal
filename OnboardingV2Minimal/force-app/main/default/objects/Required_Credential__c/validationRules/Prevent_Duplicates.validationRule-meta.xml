@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Prevent_Duplicates</fullName>
-    <active>true</active>
-    <description>This can enforce uniqueness if you don’t want duplicates across Vendor + ECC Type</description>
+    <active>false</active>
+    <description>Deprecated for shared ECC Type model. Keep inactive so the same ECC Type can be reused across Vendor Programs via Required_Credential__c records.</description>
     <errorConditionFormula>AND(
   ISNEW(),
   NOT(ISBLANK(External_Contact_Credential_Type__c)),
