@@ -68,6 +68,24 @@ You do **not** need communication rows to **create** onboarding records for a fi
 
 ---
 
+## 5A. How do I configure required external credentials (ECC) for this program?
+
+Use this when the program needs credential values (for example login usernames/codes) per contact.
+
+`ECC Type` = `External_Contact_Credential_Type__c`.
+
+1. Open **External Contact Credential Types** (`External_Contact_Credential_Type__c`) and click **New**.
+2. Create shared **ECC Type** rows (`Name`, `Active`, `Sort Order`).
+3. Open **Required Credentials** (`Required_Credential__c`) and click **New**.
+4. Set **Vendor Customization** (your program) + **ECC Type** (`External_Contact_Credential_Type__c`) + **Sequence** + **Is Required**.
+5. Save and repeat for each required type.
+6. Run one onboarding create test; confirm ECC evidence rows exist for the onboarding contact and are scoped to the program.
+
+If sending credential emails, use ECC tokens in the template (for example `{{ECC_VALUE:Username N#}}`) and dispatch via `OnboardingEccEmailDispatchInvocable`.
+Advanced token form is also supported: `{{ECC_VALUE:<TypeLookupKey>|<FieldApiName>}}` (for example `{{ECC_VALUE:SSO_LOGIN|POE_N_Number__c}}`).
+
+---
+
 ## 6. How do I run a first test onboarding?
 
 **Goal:** Prove requirements materialize on an **Onboarding** for your new program.

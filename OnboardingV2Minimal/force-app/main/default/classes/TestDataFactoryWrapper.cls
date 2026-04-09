@@ -287,6 +287,7 @@ public class TestDataFactoryWrapper {
       'Verizon Fios D2D',
       'In Progress',
       mainExternalContactCredentialType,
+      vendorCustomizationWrapper.customization,
       doInsert
     );
     POE_External_Contact_Credential__c secondaryExternalContactCredential = TestECCFactory.createExternalContactCredential(
@@ -295,6 +296,7 @@ public class TestDataFactoryWrapper {
       'Verizon Fios D2D',
       'New',
       mainExternalContactCredentialType,
+      vendorCustomizationWrapper.customization,
       doInsert
     );
 

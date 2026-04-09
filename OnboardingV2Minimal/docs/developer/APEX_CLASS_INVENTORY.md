@@ -58,6 +58,8 @@ If you are new, read [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) first so the cla
 | `OnboardingDefaultVendorProgramInvocTest.cls` | Test | Test for OnboardingDefaultVendorProgramInvocable. |
 | `OnboardingDefaultVendorProgramInvocable.cls` | Production | Invocable action to resolve the default Vendor Program for a flow scenario (e.g., REQUIRE_NDA). |
 | `OnboardingDomainException.cls` | Production | Custom exception class for onboarding domain logic. |
+| `OnboardingEccEmailDispatchInvocable.cls` | Production | Invocable sender that renders Salesforce email templates, injects ECC payload tokens at send-time, and sends one personalized email per request. |
+| `OnboardingEccEmailDispatchInvocableTest.cls` | Test | Unit tests for Onboarding ECC email dispatch invocable. |
 | `OnboardingEnqueueOnboardingTailInvocable.cls` | Production | Enqueues asynchronous run of DOMAIN_OmniSObject_SFL_CREATE_Onboarding_Record with freshly queried inputs. |
 | `OnboardingEnqueueOnboardingTailRequest.cls` | Production | Request DTO used by Onboarding Enqueue Onboarding Tail. |
 | `OnboardingEnqueueOnboardingTailResponse.cls` | Production | Response DTO used by Onboarding Enqueue Onboarding Tail. |

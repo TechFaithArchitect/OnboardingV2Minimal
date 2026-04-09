@@ -91,6 +91,50 @@ Why this order matters (simple view):
 
 Reason: `Event_Key__c` is a strict picklist; new keys are not data-only changes.
 
+### Procedure C: Configure ECC-Token Email (Type + Value Merge at Send-Time)
+
+Use this when your email body needs credential values from `POE_External_Contact_Credential__c` (for example Username N# and Pin IDIQ) without copying those values onto Contact fields first.
+
+`ECC Type` = `External_Contact_Credential_Type__c` (type name used in dynamic tokens).
+
+1. Build or update a Salesforce Email Template (the actual `00X...` template):
+   - Add ECC tokens in subject/body where values should appear.
+   - Example: `{{ECC_VALUE:Username N#}}`, `{{ECC_VALUE:Pin IDIQ}}`.
+   - Advanced syntax: `{{ECC_VALUE:<TypeLookupKey>|<FieldApiName>}}` and `{{ECC_TYPE_VALUE:<TypeLookupKey>|<FieldApiName>}}`.
+   - Prefer `<TypeLookupKey> = External_Contact_Credential_Type__c.Unique_Key__c`.
+   - If the type key itself contains `|` (for example `GLOBAL|SSO ID`), field syntax remains valid: `{{ECC_VALUE:GLOBAL|SSO ID|POE_N_Number__c}}`.
+   - Optional table token: `{{ECC_TYPE_VALUE_TABLE}}`.
+   - If label and ECC Type name differ, keep label static and put the ECC Type in the token (example: `<strong>Username N#:</strong> {{ECC_VALUE:SSO ID}}`).
+   - `{{ECC_TYPE_VALUE:SSO ID}}` renders both label and value in one token (`SSO ID: <value>`).
+   - Allowed `<FieldApiName>` values: `POE_Username__c`, `POE_N_Number__c`, `POE_Code__c`, `POE_Process_Status__c`, `Training_Sent_Date__c`, `Activation_Date__c`, `POE_Program__c`.
+2. Create or update `Communication_Template__c`:
+   - `Active__c = true`
+   - `Email_Template_Id__c =` Salesforce Email Template Id (`00X...`)
+   - `Communication_Type__c` and `Recipient_Type__c` aligned to your event/route policy.
+3. Create or update `Communication_Template_Assignment__c` for the target `Vendor_Program__c`.
+4. Ensure policy rows allow the send:
+   - `Communication_Event_Policy__mdt` row for the event/type/program key.
+   - `Communication_Dispatch_Policy__mdt` row for the type/recipient/program key.
+5. In the sending flow, invoke `OnboardingEccEmailDispatchInvocable` (Apex action label: `Dispatch ECC Email (Per Contact)`) once per recipient/template row:
+   - Required inputs:
+     - `recipientContactId`
+     - `communicationTemplateId` (Id of `Communication_Template__c`)
+   - Context input:
+     - `onboardingId` for onboarding-linked contacts, or
+     - `vendorProgramId` for agent/no-onboarding sends.
+   - Optional:
+     - `defaultSenderAddress` (must match an Org-Wide Email Address to apply),
+     - `appendPayloadWhenTokensMissing` (default `true`).
+6. Validate with one controlled record:
+   - Confirm output result `ranSuccessfully = true`.
+   - Confirm email renders credential values where tokens were placed.
+   - If a credential row is missing, token output should show `Missing`.
+
+Notes:
+
+- Existing bulk communication action `CommunicationTemplateBulkSendAction` sends templates but does not inject ECC token payloads.
+- For ECC token merge behavior, use `OnboardingEccEmailDispatchInvocable`.
+
 ## Field Guide: Communication Event Policy (`Communication_Event_Policy__mdt`)
 
 | Field                   | How To Fill                                                                            | Why It Matters                                            |

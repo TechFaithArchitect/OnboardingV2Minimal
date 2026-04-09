@@ -112,6 +112,25 @@ Recent examples: `Interview`, `SubAgent License Agreement`.
 
 **Contract vs agreement ordering:** Record-triggered automation can enforce **contract/agreement sequence** on requirement updates. If your program mixes contract- and agreement-type requirements, keep **`Sequence__c`** consistent with business intent so gating and sequence rules behave predictably.
 
+### 4.2 Add required external credentials (ECC) for this program (optional but common)
+
+Use this when the vendor program requires credential values like usernames, IDs, or codes.
+
+`ECC Type` in this guide means `External_Contact_Credential_Type__c`.
+
+1. Create or confirm shared **ECC Type** (`External_Contact_Credential_Type__c`) rows:
+   - Set `Name`, `Active__c`, and `Sort_Order__c`.
+   - Types are reusable across programs; do not clone per program unless the type name is truly different.
+2. Create `Required_Credential__c` rows for this `Vendor_Customization__c`:
+   - Set **ECC Type** via `External_Contact_Credential_Type__c` (required by validation rule),
+   - Set `Is_Required__c` and `Sequence__c` per business order.
+3. Run one onboarding create test and confirm `POE_External_Contact_Credential__c` rows are generated with:
+   - `Vendor_Program__c` set to this program,
+   - expected type rows for the responsible contact(s).
+4. If the program sends credential emails, add template tokens using exact type names (for example `{{ECC_VALUE:Username N#}}`, `{{ECC_VALUE:Pin IDIQ}}`) and send through `OnboardingEccEmailDispatchInvocable`.
+   - If your visible label differs from the ECC Type name (for example label `Username N#` but ECC Type `SSO ID`), use a static label plus value token: `<strong>Username N#:</strong> {{ECC_VALUE:SSO ID}}`.
+   - `{{ECC_TYPE_VALUE:SSO ID}}` already renders both type and value (`SSO ID: <value>`).
+
 ## 5. Training links (optional)
 
 If this program includes **LearnUpon / training** assignments driven off program templates:
@@ -131,6 +150,20 @@ After the program exists:
 3. Deploy or maintain **`Communication_Event_Policy__mdt`** and **`Communication_Dispatch_Policy__mdt`** with **`Vendor_Program_Key__c`** equal to the **normalized program Name** (uppercase, spaces → `_`), or rely on **`DEFAULT`** only if that is intentional.
 
 Step-by-step for those objects is in [Admin Operations Runbook](./ADMIN_OPERATIONS_RUNBOOK.md#communication-setup-procedure-how-to).
+
+### 6.1 ECC-tokenized email setup (username/code values from ECC records)
+
+If your template must merge credential values such as Username N# / Pin IDIQ from ECC records:
+
+1. Put ECC tokens directly in the Salesforce Email Template HTML/body (for example `{{ECC_VALUE:Username N#}}`, `{{ECC_VALUE:Pin IDIQ}}`).
+   - Advanced form: `{{ECC_VALUE:<TypeLookupKey>|<FieldApiName>}}` and `{{ECC_TYPE_VALUE:<TypeLookupKey>|<FieldApiName>}}`.
+   - Use ECC Type `Unique_Key__c` as `<TypeLookupKey>` when possible (more stable than Name).
+   - If the key contains `|` (example `GLOBAL|SSO ID`), field syntax still works: `{{ECC_VALUE:GLOBAL|SSO ID|POE_N_Number__c}}`.
+   - Example: `<strong>Username N#:</strong> {{ECC_VALUE:SSO_LOGIN|POE_N_Number__c}}`.
+2. Ensure the corresponding `Communication_Template__c.Email_Template_Id__c` points to that template Id (`00X...`).
+3. Send through `OnboardingEccEmailDispatchInvocable` (not only the bulk template sender), so ECC tokens are resolved at send-time.
+
+Operational procedure: [Admin Operations Runbook — Procedure C](./ADMIN_OPERATIONS_RUNBOOK.md#procedure-c-configure-ecc-token-email-type--value-merge-at-send-time).
 
 ## 7. Scenario fallback (optional)
 

@@ -50,6 +50,12 @@ Evidence updates subjects first, then rolls up to requirement, then onboarding s
 
 This supports many-to-many linking between assignments and onboarding records.
 
+### External Credential Graph
+
+- `POE_External_Contact_Credential__c.POE_Contact__c` -> `Contact`
+- `POE_External_Contact_Credential__c.External_Contact_Credential_Type__c` -> `External_Contact_Credential_Type__c`
+- `POE_External_Contact_Credential__c.Vendor_Program__c` -> `Vendor_Customization__c` (program scope for dedupe/evaluation)
+
 ## Subject Responsibility Model
 
 Subject expansion is policy-driven by `Onboarding_Fulfillment_Policy__mdt`:

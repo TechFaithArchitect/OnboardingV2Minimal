@@ -9,6 +9,9 @@ public with sharing class ContactECCController {
                 Activation_Date__c,
                 POE_Username__c,
                 POE_Program__c,
+                Vendor_Program__c,
+                Vendor_Program__r.Name,
+                Vendor_Program__r.Label__c,
                 External_Contact_Credential_Type__c,
                 External_Contact_Credential_Type__r.Name
             FROM POE_External_Contact_Credential__c
@@ -23,13 +26,18 @@ public with sharing class ContactECCController {
         }
 
         // Step 3: Resolve Vendor Program Ids from ECC program names
+        Set<Id> vendorCustomizationIds = new Set<Id>();
         Set<String> programNames = new Set<String>();
         for (POE_External_Contact_Credential__c ecc : eccRecords) {
-            if (String.isNotBlank(ecc.POE_Program__c)) {
+            if (ecc.Vendor_Program__c != null) {
+                vendorCustomizationIds.add(ecc.Vendor_Program__c);
+            } else if (String.isNotBlank(ecc.POE_Program__c)) {
                 programNames.add(ecc.POE_Program__c.trim());
             }
         }
-        Set<Id> vendorCustomizationIds = resolveVendorProgramIdsByLabel(programNames);
+        if (!programNames.isEmpty()) {
+            vendorCustomizationIds.addAll(resolveVendorProgramIdsByLabel(programNames));
+        }
 
         // Step 4: Get field configurations
         Map<Id, List<ContactECCFieldConfigurationWrapper.FieldDisplayConfig>> fieldConfigurations =
@@ -161,7 +169,7 @@ public with sharing class ContactECCController {
     @AuraEnabled(cacheable=true)
     public static List<POE_External_Contact_Credential__c> getECCRecordsForOnboarding(Id onboardingId) {
         Onboarding__c onboarding = [
-            SELECT Account__c, Vendor_Customization__c
+            SELECT Account__c, Vendor_Customization__c, Vendor_Customization__r.Name, Vendor_Customization__r.Label__c
             FROM Onboarding__c
             WHERE Id = :onboardingId
             LIMIT 1
@@ -195,6 +203,38 @@ public with sharing class ContactECCController {
             return new List<POE_External_Contact_Credential__c>();
         }
 
+        Set<String> legacyProgramLabels = new Set<String>();
+        if (onboarding.Vendor_Customization__r != null) {
+            if (String.isNotBlank(onboarding.Vendor_Customization__r.Name)) {
+                legacyProgramLabels.add(onboarding.Vendor_Customization__r.Name);
+            }
+            if (String.isNotBlank(onboarding.Vendor_Customization__r.Label__c)) {
+                legacyProgramLabels.add(onboarding.Vendor_Customization__r.Label__c);
+            }
+        }
+
+        if (onboarding.Vendor_Customization__c == null) {
+            return new List<POE_External_Contact_Credential__c>();
+        }
+
+        if (legacyProgramLabels.isEmpty()) {
+            return [
+                SELECT Id,
+                       POE_Process_Status__c,
+                       Training_Sent_Date__c,
+                       Activation_Date__c,
+                       POE_Username__c,
+                       POE_Program__c,
+                       Vendor_Program__c,
+                       External_Contact_Credential_Type__r.Name
+                FROM POE_External_Contact_Credential__c
+                WHERE POE_Contact__c = :principalContactId
+                  AND External_Contact_Credential_Type__c IN :requiredECCTypes
+                  AND Vendor_Program__c = :onboarding.Vendor_Customization__c
+                ORDER BY CreatedDate DESC
+            ];
+        }
+
         return [
             SELECT Id,
                    POE_Process_Status__c,
@@ -202,11 +242,16 @@ public with sharing class ContactECCController {
                    Activation_Date__c,
                    POE_Username__c,
                    POE_Program__c,
+                   Vendor_Program__c,
                    External_Contact_Credential_Type__r.Name
             FROM POE_External_Contact_Credential__c
             WHERE POE_Contact__c = :principalContactId
               AND External_Contact_Credential_Type__c IN :requiredECCTypes
-            ORDER BY POE_Program__c, CreatedDate DESC
+              AND (
+                Vendor_Program__c = :onboarding.Vendor_Customization__c
+                OR (Vendor_Program__c = NULL AND POE_Program__c IN :legacyProgramLabels)
+              )
+            ORDER BY CreatedDate DESC
         ];
     }
 }

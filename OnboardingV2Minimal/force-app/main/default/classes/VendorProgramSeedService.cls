@@ -16,6 +16,7 @@ public with sharing class VendorProgramSeedService {
         public Boolean seedTrainingSystems = true;
         public Boolean seedTrainingRequirements = true;
         public Boolean seedVendorProgramRequirements = true;
+        public Boolean migrateEccVendorProgramLookups = true;
         public Boolean cleanupDuplicates = false;
         public Set<String> vendorNames = new Set<String>();
     }
@@ -47,6 +48,9 @@ public with sharing class VendorProgramSeedService {
         public Integer trainingRequirementsUpdated = 0;
         public Integer vendorProgramRequirementsInserted = 0;
         public Integer vendorProgramRequirementsUpdated = 0;
+        public Integer eccVendorProgramBackfilled = 0;
+        public Integer eccUniqueKeysBackfilled = 0;
+        public Integer eccVendorProgramBackfillSkipped = 0;
         public List<String> warnings = new List<String>();
 
         public void mergeFrom(Result other) {
@@ -77,12 +81,36 @@ public with sharing class VendorProgramSeedService {
             trainingRequirementsUpdated += other.trainingRequirementsUpdated;
             vendorProgramRequirementsInserted += other.vendorProgramRequirementsInserted;
             vendorProgramRequirementsUpdated += other.vendorProgramRequirementsUpdated;
+            eccVendorProgramBackfilled += other.eccVendorProgramBackfilled;
+            eccUniqueKeysBackfilled += other.eccUniqueKeysBackfilled;
+            eccVendorProgramBackfillSkipped += other.eccVendorProgramBackfillSkipped;
             warnings.addAll(other.warnings);
         }
 
         public String summary() {
             return JSON.serialize(this);
         }
+    }
+
+    private class VendorProgramCandidate {
+        public Id id;
+        public Id vendorId;
+        public String name;
+        public String label;
+        public Boolean active;
+        public String status;
+        public Datetime createdDate;
+    }
+
+    private class EccBackfillPlan {
+        public POE_External_Contact_Credential__c row;
+        public Boolean willBackfillVendorProgram = false;
+        public Boolean willBackfillUniqueKey = false;
+    }
+
+    private class VendorProgramResolution {
+        public Id vendorProgramId;
+        public Boolean ambiguous = false;
     }
 
     public static Result runAll() {
@@ -97,7 +125,14 @@ public with sharing class VendorProgramSeedService {
         out.mergeFrom(seedCredentialData(options));
         out.mergeFrom(seedTrainingSystems(options));
         out.mergeFrom(seedTrainingRequirements(options));
+        if (options.migrateEccVendorProgramLookups) {
+            out.mergeFrom(migrateEccVendorProgramLookups(options));
+        }
         return out;
+    }
+
+    public static Result migrateEccVendorProgramLookups() {
+        return migrateEccVendorProgramLookups(new Options());
     }
 
     public static Result seedProgramsAndAgreements() {
@@ -2261,9 +2296,287 @@ public with sharing class VendorProgramSeedService {
         return out;
     }
 
+    private static Result migrateEccVendorProgramLookups(Options inputOptions) {
+        Options options = normalizeOptions(inputOptions);
+        Result out = new Result();
+
+        Map<Id, VendorProgramCandidate> candidateById = new Map<Id, VendorProgramCandidate>();
+        Map<String, List<Id>> vendorLabelCandidates = new Map<String, List<Id>>();
+        Map<String, List<Id>> vendorNameCandidates = new Map<String, List<Id>>();
+        Map<String, List<Id>> globalLabelCandidates = new Map<String, List<Id>>();
+        Map<String, List<Id>> globalNameCandidates = new Map<String, List<Id>>();
+
+        for (Vendor_Customization__c vendorProgram : [
+            SELECT Id, Vendor__c, Name, Label__c, Active__c, Status__c, CreatedDate
+            FROM Vendor_Customization__c
+            ORDER BY CreatedDate ASC, Id ASC
+        ]) {
+            VendorProgramCandidate candidate = new VendorProgramCandidate();
+            candidate.id = vendorProgram.Id;
+            candidate.vendorId = vendorProgram.Vendor__c;
+            candidate.name = vendorProgram.Name;
+            candidate.label = vendorProgram.Label__c;
+            candidate.active = vendorProgram.Active__c;
+            candidate.status = vendorProgram.Status__c;
+            candidate.createdDate = vendorProgram.CreatedDate;
+            candidateById.put(candidate.id, candidate);
+
+            addVendorProgramCandidate(vendorLabelCandidates, buildVendorProgramMatchKey(candidate.vendorId, candidate.label), candidate.id);
+            addVendorProgramCandidate(vendorNameCandidates, buildVendorProgramMatchKey(candidate.vendorId, candidate.name), candidate.id);
+            addVendorProgramCandidate(globalLabelCandidates, normalizeKeyPart(candidate.label), candidate.id);
+            addVendorProgramCandidate(globalNameCandidates, normalizeKeyPart(candidate.name), candidate.id);
+        }
+
+        if (candidateById.isEmpty()) {
+            out.warnings.add('ECC vendor program migration skipped: no Vendor_Customization__c records found.');
+            return out;
+        }
+
+        List<EccBackfillPlan> plans = new List<EccBackfillPlan>();
+        Integer unresolvedCount = 0;
+        Integer ambiguousCount = 0;
+        Integer detailedWarningLimit = 25;
+
+        for (POE_External_Contact_Credential__c ecc : [
+            SELECT
+                Id,
+                POE_Contact__c,
+                Vendor__c,
+                Vendor_Program__c,
+                POE_Program__c,
+                External_Contact_Credential_Type__c,
+                Unique_Key__c
+            FROM POE_External_Contact_Credential__c
+        ]) {
+            Id resolvedVendorProgramId = ecc.Vendor_Program__c;
+            if (resolvedVendorProgramId == null && String.isNotBlank(ecc.POE_Program__c)) {
+                VendorProgramResolution resolution = resolveVendorProgramIdForCredential(
+                    ecc,
+                    candidateById,
+                    vendorLabelCandidates,
+                    vendorNameCandidates,
+                    globalLabelCandidates,
+                    globalNameCandidates
+                );
+                resolvedVendorProgramId = resolution == null ? null : resolution.vendorProgramId;
+
+                if (resolvedVendorProgramId == null) {
+                    out.eccVendorProgramBackfillSkipped++;
+                    if (resolution != null && resolution.ambiguous) {
+                        ambiguousCount++;
+                        if (ambiguousCount <= detailedWarningLimit) {
+                            out.warnings.add(
+                                'ECC vendor program migration ambiguous for row ' + String.valueOf(ecc.Id) +
+                                ' (Program="' + String.valueOf(ecc.POE_Program__c) +
+                                '", Vendor=' + String.valueOf(ecc.Vendor__c) + ').'
+                            );
+                        }
+                    } else {
+                        unresolvedCount++;
+                        if (unresolvedCount <= detailedWarningLimit) {
+                            out.warnings.add(
+                                'ECC vendor program migration could not resolve row ' + String.valueOf(ecc.Id) +
+                                ' (Program="' + String.valueOf(ecc.POE_Program__c) +
+                                '", Vendor=' + String.valueOf(ecc.Vendor__c) + ').'
+                            );
+                        }
+                    }
+                }
+            }
+
+            String targetUniqueKey = buildEccUniqueKey(
+                ecc.POE_Contact__c,
+                resolvedVendorProgramId,
+                ecc.Vendor__c,
+                ecc.POE_Program__c,
+                ecc.External_Contact_Credential_Type__c
+            );
+
+            Boolean setVendorProgram = resolvedVendorProgramId != null && ecc.Vendor_Program__c != resolvedVendorProgramId;
+            Boolean setUniqueKey = !String.isBlank(targetUniqueKey) && ecc.Unique_Key__c != targetUniqueKey;
+            if (!setVendorProgram && !setUniqueKey) {
+                continue;
+            }
+
+            POE_External_Contact_Credential__c updateRow = new POE_External_Contact_Credential__c(Id = ecc.Id);
+            if (setVendorProgram) {
+                updateRow.Vendor_Program__c = resolvedVendorProgramId;
+            }
+            if (setUniqueKey) {
+                updateRow.Unique_Key__c = targetUniqueKey;
+            }
+
+            EccBackfillPlan plan = new EccBackfillPlan();
+            plan.row = updateRow;
+            plan.willBackfillVendorProgram = setVendorProgram;
+            plan.willBackfillUniqueKey = setUniqueKey;
+            plans.add(plan);
+        }
+
+        if (plans.isEmpty()) {
+            if (unresolvedCount > detailedWarningLimit) {
+                out.warnings.add(
+                    'ECC vendor program migration had ' + unresolvedCount +
+                    ' unresolved rows (details truncated).'
+                );
+            }
+            if (ambiguousCount > detailedWarningLimit) {
+                out.warnings.add(
+                    'ECC vendor program migration had ' + ambiguousCount +
+                    ' ambiguous rows (details truncated).'
+                );
+            }
+            return out;
+        }
+
+        if (options.dryRun) {
+            for (EccBackfillPlan plan : plans) {
+                if (plan.willBackfillVendorProgram) out.eccVendorProgramBackfilled++;
+                if (plan.willBackfillUniqueKey) out.eccUniqueKeysBackfilled++;
+            }
+            return out;
+        }
+
+        List<POE_External_Contact_Credential__c> updateRows = new List<POE_External_Contact_Credential__c>();
+        for (EccBackfillPlan plan : plans) {
+            updateRows.add(plan.row);
+        }
+
+        Database.SaveResult[] saveResults = Database.update(updateRows, false);
+        for (Integer i = 0; i < saveResults.size(); i++) {
+            if (saveResults[i].isSuccess()) {
+                if (plans[i].willBackfillVendorProgram) out.eccVendorProgramBackfilled++;
+                if (plans[i].willBackfillUniqueKey) out.eccUniqueKeysBackfilled++;
+            } else {
+                out.warnings.add(
+                    'ECC vendor program migration update failed (' + String.valueOf(updateRows[i].Id) +
+                    '): ' + saveResults[i].getErrors()[0].getMessage()
+                );
+            }
+        }
+
+        if (unresolvedCount > detailedWarningLimit) {
+            out.warnings.add(
+                'ECC vendor program migration had ' + unresolvedCount +
+                ' unresolved rows (details truncated).'
+            );
+        }
+        if (ambiguousCount > detailedWarningLimit) {
+            out.warnings.add(
+                'ECC vendor program migration had ' + ambiguousCount +
+                ' ambiguous rows (details truncated).'
+            );
+        }
+        return out;
+    }
+
+    private static String buildVendorProgramMatchKey(Id vendorId, String value) {
+        String normalizedValue = normalizeKeyPart(value);
+        if (String.isBlank(normalizedValue)) {
+            return null;
+        }
+        return String.valueOf(vendorId) + '|' + normalizedValue;
+    }
+
+    private static void addVendorProgramCandidate(Map<String, List<Id>> targetMap, String key, Id candidateId) {
+        if (targetMap == null || String.isBlank(key) || candidateId == null) {
+            return;
+        }
+        if (!targetMap.containsKey(key)) {
+            targetMap.put(key, new List<Id>());
+        }
+        targetMap.get(key).add(candidateId);
+    }
+
+    private static VendorProgramResolution resolveVendorProgramIdForCredential(
+        POE_External_Contact_Credential__c ecc,
+        Map<Id, VendorProgramCandidate> candidateById,
+        Map<String, List<Id>> vendorLabelCandidates,
+        Map<String, List<Id>> vendorNameCandidates,
+        Map<String, List<Id>> globalLabelCandidates,
+        Map<String, List<Id>> globalNameCandidates
+    ) {
+        VendorProgramResolution resolution = new VendorProgramResolution();
+        if (ecc == null || String.isBlank(ecc.POE_Program__c)) {
+            return resolution;
+        }
+
+        List<Id> candidateIds = new List<Id>();
+        appendCandidates(candidateIds, vendorLabelCandidates.get(buildVendorProgramMatchKey(ecc.Vendor__c, ecc.POE_Program__c)));
+        appendCandidates(candidateIds, vendorNameCandidates.get(buildVendorProgramMatchKey(ecc.Vendor__c, ecc.POE_Program__c)));
+        appendCandidates(candidateIds, globalLabelCandidates.get(normalizeKeyPart(ecc.POE_Program__c)));
+        appendCandidates(candidateIds, globalNameCandidates.get(normalizeKeyPart(ecc.POE_Program__c)));
+
+        if (candidateIds.isEmpty()) {
+            return resolution;
+        }
+
+        Id bestId;
+        Integer bestScore = -1;
+        for (Id candidateId : candidateIds) {
+            VendorProgramCandidate candidate = candidateById.get(candidateId);
+            if (candidate == null) {
+                continue;
+            }
+            Integer score = 0;
+            if (candidate.vendorId == ecc.Vendor__c) score += 100;
+            if (normalizeKeyPart(candidate.label) == normalizeKeyPart(ecc.POE_Program__c)) score += 40;
+            if (normalizeKeyPart(candidate.name) == normalizeKeyPart(ecc.POE_Program__c)) score += 30;
+            if (candidate.active == true) score += 20;
+            if (normalizeKeyPart(candidate.status) == 'active') score += 10;
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestId = candidateId;
+            } else if (score == bestScore && bestId != null && bestId != candidateId) {
+                resolution.ambiguous = true;
+            }
+        }
+
+        if (!resolution.ambiguous) {
+            resolution.vendorProgramId = bestId;
+        }
+        return resolution;
+    }
+
+    private static void appendCandidates(List<Id> target, List<Id> source) {
+        if (target == null || source == null) {
+            return;
+        }
+        Set<Id> existing = new Set<Id>(target);
+        for (Id sourceId : source) {
+            if (sourceId == null || existing.contains(sourceId)) {
+                continue;
+            }
+            target.add(sourceId);
+            existing.add(sourceId);
+        }
+    }
+
+    private static String buildEccUniqueKey(
+        Id contactId,
+        Id vendorProgramId,
+        Id vendorId,
+        String legacyProgramName,
+        Id credentialTypeId
+    ) {
+        if (contactId == null || credentialTypeId == null) {
+            return null;
+        }
+
+        String scopePart;
+        if (vendorProgramId != null) {
+            scopePart = String.valueOf(vendorProgramId);
+        } else {
+            scopePart = 'LEGACY:' + String.valueOf(vendorId) + ':' + String.valueOf(legacyProgramName);
+        }
+        return String.valueOf(contactId) + '|' + scopePart + '|' + String.valueOf(credentialTypeId);
+    }
+
     private static Options normalizeOptions(Options options) {
         Options normalized = options == null ? new Options() : options;
         if (normalized.vendorNames == null) normalized.vendorNames = new Set<String>();
+        if (normalized.migrateEccVendorProgramLookups == null) normalized.migrateEccVendorProgramLookups = true;
         return normalized;
     }
 
@@ -2681,7 +2994,7 @@ public with sharing class VendorProgramSeedService {
         Map<String, List<Id>> eccIdsByFinalKey = new Map<String, List<Id>>();
 
         for (POE_External_Contact_Credential__c ecc : [
-            SELECT Id, POE_Contact__c, Vendor__c, External_Contact_Credential_Type__c, CreatedDate
+            SELECT Id, POE_Contact__c, Vendor__c, Vendor_Program__c, POE_Program__c, External_Contact_Credential_Type__c, CreatedDate
             FROM POE_External_Contact_Credential__c
             WHERE External_Contact_Credential_Type__c IN :scopedTypeIds
             WITH USER_MODE
@@ -2690,10 +3003,16 @@ public with sharing class VendorProgramSeedService {
             Id targetTypeId = duplicateTypeToCanonical.containsKey(ecc.External_Contact_Credential_Type__c)
                 ? duplicateTypeToCanonical.get(ecc.External_Contact_Credential_Type__c)
                 : ecc.External_Contact_Credential_Type__c;
-            String finalKey =
-                String.valueOf(ecc.POE_Contact__c) + '|' +
-                String.valueOf(ecc.Vendor__c) + '|' +
-                String.valueOf(targetTypeId);
+            String finalKey = buildEccUniqueKey(
+                ecc.POE_Contact__c,
+                ecc.Vendor_Program__c,
+                ecc.Vendor__c,
+                ecc.POE_Program__c,
+                targetTypeId
+            );
+            if (String.isBlank(finalKey)) {
+                finalKey = 'ROW|' + String.valueOf(ecc.Id);
+            }
 
             eccById.put(ecc.Id, ecc);
             targetTypeByEccId.put(ecc.Id, targetTypeId);

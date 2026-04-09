@@ -45,8 +45,10 @@ Credit and Background progress are tracked on **`Onboarding_Requirement__c`** (n
 Dealer or partner onboarding often requires **proof** (license, certification, background result). The product models many of these as:
 
 1. **`Required_Credential__c`** — “this **program** needs credential type T.”
-2. **`External_Contact_Credential_Type__c`** — the **catalog of types**.
+2. **`External_Contact_Credential_Type__c`** — the **catalog of types** (commonly called **ECC Type**).
 3. **`POE_External_Contact_Credential__c`** — the **actual evidence row** on a contact (status, dates, etc.).
+   - Program scope is now explicit on `POE_External_Contact_Credential__c.Vendor_Program__c` (lookup to `Vendor_Customization__c`).
+   - `POE_Program__c` remains as legacy/display text during transition.
 
 When credential records **change**, automation (`BLL_External_Contact_Credential_*` flows and related **DOMAIN** flows) can **update onboarding requirements/subjects** so status and work stay aligned.
 
@@ -62,9 +64,107 @@ When credential records **change**, automation (`BLL_External_Contact_Credential
 - [Automation catalog](../technical/AUTOMATION_CATALOG.md) — rows for `POE_External_Contact_Credential__c`.
 - [Data model](../technical/DATA_MODEL.md) — evidence list.
 
+### ECC email dispatch without Contact field projection
+
+If you need credential-specific emails but do **not** want to project ECC values into Contact fields first, use the Apex invocable
+`OnboardingEccEmailDispatchInvocable`.
+
+What it does:
+
+1. Loads required credential types from `Required_Credential__c` for the vendor program context.
+2. Loads matching evidence rows from `POE_External_Contact_Credential__c` for one recipient contact.
+3. Renders a Salesforce Email Template and injects ECC tokens at send-time.
+4. Sends **one personalized email per request**.
+
+Input context rules:
+
+- Provide `onboardingId` for onboarding-linked contacts.
+- For agent contacts without onboarding, provide `vendorProgramId` directly.
+- At least one of `onboardingId` or `vendorProgramId` is required.
+
+Supported template tokens:
+
+- `{{ECC_SUMMARY}}`
+- `{{ECC_TABLE}}`
+- `{{ECC_ROWS}}`
+- `{{ECC_TYPE_VALUE_TABLE}}` (Credential Type + resolved Value only)
+- `{{ECC_TYPE_VALUE_ROWS}}` (text rows: `Type: Value`)
+- `{{ECC_REQUIRED_TOTAL}}`
+- `{{ECC_COMPLETE_TOTAL}}`
+- `{{ECC_MISSING_TOTAL}}`
+
+Dynamic per-type tokens:
+
+- `{{ECC_VALUE:<Credential Type Name>}}` -> inserts only the resolved value for that type.
+- `{{ECC_TYPE_VALUE:<Credential Type Name>}}` -> inserts `Type: Value` for that type.
+- `{{ECC_VALUE:<TypeLookupKey>|<FieldApiName>}}` -> inserts the value from the requested ECC field for that type.
+- `{{ECC_TYPE_VALUE:<TypeLookupKey>|<FieldApiName>}}` -> inserts `Type: Value` using the requested ECC field.
+
+Token behavior notes:
+
+- Use the exact **ECC Type name** inside the token (for example `SSO ID`, `Username N#`, `Pin IDIQ`).
+- You can also use ECC Type `Unique_Key__c` as the type lookup key (recommended for stability).
+- For keys containing `|` (for example `GLOBAL|SSO ID`), field syntax still works: `{{ECC_VALUE:GLOBAL|SSO ID|POE_N_Number__c}}`.
+- `{{ECC_TYPE_VALUE:...}}` already includes both label and value. Do not append another `: {{ECC_VALUE:...}}` after it unless you intentionally want duplicate output.
+- If you want a friendlier label than the ECC Type name, keep the label static and use `ECC_VALUE` for the value.
+
+Allowed `<FieldApiName>` values:
+
+- `POE_Username__c`
+- `POE_N_Number__c`
+- `POE_Code__c`
+- `POE_Process_Status__c`
+- `Training_Sent_Date__c`
+- `Activation_Date__c`
+- `POE_Program__c`
+
+If `<FieldApiName>` is not allowed, output is `Missing`.
+
+Resolved value precedence per credential row:
+
+1. `POE_Username__c`
+2. `POE_N_Number__c`
+3. `POE_Code__c`
+4. `Missing`
+
+If tokens are omitted, the invocable can append ECC summary/details to the rendered body by default.
+
 ---
 
 ### How to set up credentials (admin path)
+
+#### Super-simple setup walkthrough (Vendor Program + ECC + Email)
+
+Use this when you want one clean path from setup to a working ECC email:
+
+1. Create/activate `Vendor__c`.
+2. Create/activate `Vendor_Customization__c` (your Vendor Program).
+3. Create shared `External_Contact_Credential_Type__c` rows (global catalog).
+4. Create `Required_Credential__c` rows on that program, each pointing to one credential type.
+5. Run one onboarding create test for that vendor program.
+6. Confirm generated `POE_External_Contact_Credential__c` rows are program-scoped (`Vendor_Program__c` populated).
+7. Put ECC tokens in a Salesforce Email Template (for example `{{ECC_VALUE:Username N#}}`, `{{ECC_VALUE:Pin IDIQ}}`).
+8. Send via `OnboardingEccEmailDispatchInvocable` and verify one personalized email per recipient.
+
+Notes:
+
+- `External_Contact_Credential_Type__c` is now reusable across vendor programs (shared model).
+- Program-specific mapping lives on `Required_Credential__c`, not on the credential-type record.
+- Dynamic token names must match credential type names exactly.
+
+Example token usage in HTML:
+
+```html
+<p><strong>Username N#:</strong> {{ECC_VALUE:Username N#}}</p>
+<p><strong>Pin IDIQ:</strong> {{ECC_VALUE:Pin IDIQ}}</p>
+<p><strong>Username N#:</strong> {{ECC_VALUE:SSO ID}}</p>
+<p><strong>{{ECC_TYPE_VALUE:SSO ID}}</strong></p>
+<p><strong>Username N#:</strong> {{ECC_VALUE:SSO_LOGIN|POE_N_Number__c}}</p>
+<p><strong>{{ECC_TYPE_VALUE:SSO_LOGIN|POE_N_Number__c}}</strong></p>
+<p><strong>Username N#:</strong> {{ECC_VALUE:GLOBAL|SSO ID|POE_N_Number__c}}</p>
+```
+
+---
 
 Use this order so config stays consistent:
 
@@ -77,8 +177,10 @@ Setup details:
 
 Step 1 — Configure `External_Contact_Credential_Type__c`
 
-- Set `Vendor_Customization__c` (required), `Active__c`, and `Sort_Order__c` (required).
+- This object is your **ECC Type catalog**.
+- Set `Name`, `Active__c`, and `Sort_Order__c` (required).
 - Use `Unique_Key__c` if your org uses integration/dedupe patterns.
+- Keep type names stable because dynamic email tokens match by type name.
 
 Step 2 — Configure `Required_Credential__c`
 
@@ -89,6 +191,7 @@ Step 2 — Configure `Required_Credential__c`
 Step 3 — Let automation create evidence links (normal path)
 
 - `POE_External_Contact_Credential__c` (evidence rows) and `Required_External_Contact_Credential__c` (link rows) are usually populated/maintained by flow automation.
+- Ensure new ECC rows set `Vendor_Program__c` so duplicate prevention and requirement evaluation are program-scoped.
 - Key automation touchpoints: `DOMAIN_OmniSObject_SFL_GET_External_Contact_Credential_Types`, `DOMAIN_OmniSObject_SFL_CREATE_External_Contact_Credentials`, `DOMAIN_OmniSObject_SFL_CREATE_Required_External_Contact_Credenti`, `BLL_External_Contact_Credential_RCD_Logical_Process`.
 
 Step 4 — Validate end-to-end
@@ -104,7 +207,7 @@ Step 4 — Validate end-to-end
 
 Use this when a vendor adds a new compliance artifact.
 
-1. Add `External_Contact_Credential_Type__c` for that program (`Active__c = true`, set `Sort_Order__c`).
+1. Add shared `External_Contact_Credential_Type__c` (`Active__c = true`, set `Sort_Order__c`).
 2. Add `Required_Credential__c` pointing to that type.
 3. Run one onboarding create test and confirm expected ECC rows appear.
 4. Verify the new credential participates in requirement status progression.
@@ -132,6 +235,20 @@ Use this when users say “I marked the credential done but onboarding is stuck.
 4. Check `Error_Log__c` for ECC evaluation faults.
 
 Expected result: you isolate whether the issue is data mismatch, mapping/config gap, or automation fault.
+
+### Existing-data migration (one-time per environment)
+
+When an environment already has ECC data, run the migration once after deploying metadata:
+
+1. Deploy the data-model/flow changes (`POE_External_Contact_Credential__c.Vendor_Program__c` + duplicate-key updates).
+2. Run:
+   `VendorProgramSeedService.migrateEccVendorProgramLookups()`
+   (or `VendorProgramSeedService.runAll()` with default options).
+3. Review returned counters:
+   - `eccVendorProgramBackfilled`
+   - `eccUniqueKeysBackfilled`
+   - `eccVendorProgramBackfillSkipped`
+4. Investigate any skipped rows in `warnings` (typically ambiguous legacy program text) and correct those rows manually.
 
 ---
 
