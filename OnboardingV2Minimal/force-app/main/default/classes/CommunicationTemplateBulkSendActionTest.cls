@@ -112,4 +112,36 @@ private class CommunicationTemplateBulkSendActionTest {
       'Expected per-request failure details when send does not succeed.'
     );
   }
+
+  @IsTest
+  static void testSendBulkReportsTemplateBccDiagnostics() {
+    Communication_Template__c template = new Communication_Template__c(
+      Name = 'Unit Test Template With BCC',
+      Email_Template_Id__c = '00X000000000000AAA',
+      BCC_User_Ids__c = 'notAnId',
+      BCC_Public_Group_DeveloperNames__c = 'MISSING_GROUP'
+    );
+    insert template;
+
+    CommunicationTemplateBulkSendAction.BulkSendRequest invocation =
+      new CommunicationTemplateBulkSendAction.BulkSendRequest();
+    invocation.communicationTemplateIds = new List<String>{ String.valueOf(template.Id) };
+    invocation.recipientIds = new List<String>{ UserInfo.getUserId() };
+
+    List<CommunicationTemplateBulkSendAction.BulkSendResult> results =
+      CommunicationTemplateBulkSendAction.sendBulk(
+        new List<CommunicationTemplateBulkSendAction.BulkSendRequest>{ invocation }
+      );
+
+    System.assertEquals(1, results.size());
+    System.assertEquals(true, results[0].sendFailed);
+    System.assert(
+      results[0].errorMessage.contains('ignored invalid BCC user Id tokens'),
+      'Expected invalid BCC user token diagnostic.'
+    );
+    System.assert(
+      results[0].errorMessage.contains('BCC public groups not found'),
+      'Expected missing BCC public group diagnostic.'
+    );
+  }
 }

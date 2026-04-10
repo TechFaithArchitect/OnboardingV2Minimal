@@ -146,8 +146,12 @@ If the program has **no** training-driven onboarding, you can skip this object e
 After the program exists:
 
 1. Ensure **`Communication_Template__c`** records exist and are active for the types you send.
-2. Create **`Communication_Template_Assignment__c`** rows linking **this vendor program** to each template that applies.
-3. Deploy or maintain **`Communication_Event_Policy__mdt`** and **`Communication_Dispatch_Policy__mdt`** with **`Vendor_Program_Key__c`** equal to the **normalized program Name** (uppercase, spaces → `_`), or rely on **`DEFAULT`** only if that is intentional.
+2. Optional internal copy behavior (template-level BCC):
+   - Set `Communication_Template__c.BCC_User_Ids__c` with internal User Ids (`005...`) when specific users should be BCCd.
+   - Set `Communication_Template__c.BCC_Public_Group_DeveloperNames__c` with Public Group `DeveloperName` values when groups should be BCCd.
+   - Use comma, semicolon, or newline separators in either field.
+3. Create **`Communication_Template_Assignment__c`** rows linking **this vendor program** to each template that applies.
+4. Deploy or maintain **`Communication_Event_Policy__mdt`** and **`Communication_Dispatch_Policy__mdt`** with **`Vendor_Program_Key__c`** equal to the **normalized program Name** (uppercase, spaces → `_`), or rely on **`DEFAULT`** only if that is intentional.
 
 Step-by-step for those objects is in [Admin Operations Runbook](./ADMIN_OPERATIONS_RUNBOOK.md#communication-setup-procedure-how-to).
 

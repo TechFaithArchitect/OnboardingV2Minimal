@@ -278,6 +278,15 @@ public with sharing class OnboardingEccEmailDispatchInvocable {
         }
       }
 
+      CommunicationBccResolver.ResolutionResult bccResolution = CommunicationBccResolver.resolve(
+        communicationTemplate.BCC_User_Ids__c,
+        communicationTemplate.BCC_Public_Group_DeveloperNames__c
+      );
+      if (!bccResolution.bccAddresses.isEmpty()) {
+        outbound.setBccAddresses(bccResolution.bccAddresses);
+      }
+      appendBccDiagnostics(result, communicationTemplate.Id, bccResolution);
+
       Messaging.SendEmailResult[] sendResults = Messaging.sendEmail(
         new List<Messaging.SingleEmailMessage>{ outbound },
         false
@@ -338,7 +347,12 @@ public with sharing class OnboardingEccEmailDispatchInvocable {
 
   private static Communication_Template__c loadCommunicationTemplate(Id communicationTemplateId) {
     List<Communication_Template__c> rows = [
-      SELECT Id, Active__c, Email_Template_Id__c
+      SELECT
+        Id,
+        Active__c,
+        Email_Template_Id__c,
+        BCC_User_Ids__c,
+        BCC_Public_Group_DeveloperNames__c
       FROM Communication_Template__c
       WHERE Id = :communicationTemplateId
       WITH USER_MODE
@@ -844,6 +858,16 @@ public with sharing class OnboardingEccEmailDispatchInvocable {
     result.ranSuccessfully = false;
     result.failedCount = Math.max(result.failedCount, 1);
     appendDiagnostic(result, message);
+  }
+
+  private static void appendBccDiagnostics(
+    DispatchResult result,
+    Id templateId,
+    CommunicationBccResolver.ResolutionResult bccResolution
+  ) {
+    for (String diagnostic : CommunicationBccResolver.buildDiagnostics(templateId, bccResolution)) {
+      appendDiagnostic(result, diagnostic);
+    }
   }
 
   private static void appendDiagnostic(DispatchResult result, String message) {

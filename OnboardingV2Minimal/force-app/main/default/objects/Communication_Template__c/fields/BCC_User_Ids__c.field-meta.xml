@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BCC_User_Ids__c</fullName>
+    <description>Optional internal User Ids (005...) to BCC when this template is sent. Accepts comma, semicolon, or newline-separated values.</description>
+    <label>BCC User Ids</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>4</visibleLines>
+</CustomField>

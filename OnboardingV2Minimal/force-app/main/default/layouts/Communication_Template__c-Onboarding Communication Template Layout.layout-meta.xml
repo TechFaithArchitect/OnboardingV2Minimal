@@ -20,6 +20,14 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>BCC_User_Ids__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>BCC_Public_Group_DeveloperNames__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Send_Order__c</field>
             </layoutItems>
             <layoutItems>

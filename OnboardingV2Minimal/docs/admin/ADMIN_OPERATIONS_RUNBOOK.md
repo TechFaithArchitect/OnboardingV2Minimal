@@ -74,6 +74,8 @@ Operational behavior:
 2. Create/update `Communication_Event_Policy__mdt` rows for that event and communication type.
 3. Create/update `Communication_Dispatch_Policy__mdt` rows for each recipient type you want to allow.
 4. Ensure target `Communication_Template__c` records exist and are `Active__c = true`.
+   - Optional internal-copy routing: set `BCC_User_Ids__c` and/or `BCC_Public_Group_DeveloperNames__c` on the template.
+   - Both fields accept comma, semicolon, or newline-separated values.
 5. Create/update `Communication_Template_Assignment__c` rows linking templates to vendor program.
 6. Validate in UAT with one positive and one blocked-recipient test case.
 
@@ -111,6 +113,9 @@ Use this when your email body needs credential values from `POE_External_Contact
    - `Active__c = true`
    - `Email_Template_Id__c =` Salesforce Email Template Id (`00X...`)
    - `Communication_Type__c` and `Recipient_Type__c` aligned to your event/route policy.
+   - Optional internal BCC:
+     - `BCC_User_Ids__c =` internal User Id list (`005...`)
+     - `BCC_Public_Group_DeveloperNames__c =` Public Group `DeveloperName` list
 3. Create or update `Communication_Template_Assignment__c` for the target `Vendor_Program__c`.
 4. Ensure policy rows allow the send:
    - `Communication_Event_Policy__mdt` row for the event/type/program key.
@@ -134,6 +139,8 @@ Notes:
 
 - Existing bulk communication action `CommunicationTemplateBulkSendAction` sends templates but does not inject ECC token payloads.
 - For ECC token merge behavior, use `OnboardingEccEmailDispatchInvocable`.
+- Both send paths honor template-level BCC (`BCC_User_Ids__c`, `BCC_Public_Group_DeveloperNames__c`).
+- Invalid BCC user-id tokens or missing public groups are skipped and logged in action diagnostics.
 
 ## Field Guide: Communication Event Policy (`Communication_Event_Policy__mdt`)
 
@@ -175,6 +182,8 @@ Notes:
 | `Communication_Type__c` | Match event policy type.                                             | Required for policy-to-template alignment.             |
 | `Recipient_Type__c`     | Match intended route (`Contact`, `PrincipalOwner`, `Agent`, `User`). | Ensures correct recipient strategy.                    |
 | `Email_Template_Id__c`  | Salesforce Email Template Id (`00X...`).                             | Bulk send action cannot send without this.             |
+| `BCC_User_Ids__c`       | Optional internal User Id list (`005...`).                           | Adds template-level BCC recipients without changing the main recipient route. |
+| `BCC_Public_Group_DeveloperNames__c` | Optional Public Group `DeveloperName` list.                       | Expands group members (including nested groups) to active users with emails for template-level BCC. |
 | `Send_Order__c`         | Optional within-type ordering.                                       | Controls ordering when multiple templates are in play. |
 
 ## Default Vendor Program Setup

@@ -159,7 +159,11 @@ public with sharing class CommunicationTemplateBulkSendAction {
         Map<Id, Communication_Template__c> templateById = new Map<Id, Communication_Template__c>();
         if (!templateIds.isEmpty()) {
           for (Communication_Template__c template : [
-            SELECT Id, Email_Template_Id__c
+            SELECT
+              Id,
+              Email_Template_Id__c,
+              BCC_User_Ids__c,
+              BCC_Public_Group_DeveloperNames__c
             FROM Communication_Template__c
             WHERE Id IN :templateIds
             WITH SECURITY_ENFORCED
@@ -167,6 +171,9 @@ public with sharing class CommunicationTemplateBulkSendAction {
             templateById.put(template.Id, template);
           }
         }
+        Map<Id, CommunicationBccResolver.ResolutionResult> bccResolutionByTemplateId =
+          new Map<Id, CommunicationBccResolver.ResolutionResult>();
+        Set<Id> bccDiagnosticsLoggedTemplateIds = new Set<Id>();
 
         Map<String, Id> orgWideByAddress = new Map<String, Id>();
         if (!senderAddresses.isEmpty() && Schema.sObjectType.OrgWideEmailAddress.isAccessible()) {
@@ -201,12 +208,24 @@ public with sharing class CommunicationTemplateBulkSendAction {
             continue;
           }
 
+          CommunicationBccResolver.ResolutionResult bccResolution = resolveTemplateBcc(
+            template,
+            bccResolutionByTemplateId
+          );
+          if (!bccDiagnosticsLoggedTemplateIds.contains(template.Id)) {
+            appendBccDiagnostics(result, template.Id, bccResolution);
+            bccDiagnosticsLoggedTemplateIds.add(template.Id);
+          }
+
           try {
             Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
             message.setTemplateId(template.Email_Template_Id__c);
             message.setTargetObjectId(row.recipientId);
             message.setTreatTargetObjectAsRecipient(true);
             message.setSaveAsActivity(true);
+            if (bccResolution != null && !bccResolution.bccAddresses.isEmpty()) {
+              message.setBccAddresses(bccResolution.bccAddresses);
+            }
 
             if (row.onboardingId != null) {
               message.setWhatId(row.onboardingId);
@@ -302,6 +321,36 @@ public with sharing class CommunicationTemplateBulkSendAction {
     }
 
     return results;
+  }
+
+  private static CommunicationBccResolver.ResolutionResult resolveTemplateBcc(
+    Communication_Template__c template,
+    Map<Id, CommunicationBccResolver.ResolutionResult> cacheByTemplateId
+  ) {
+    if (template == null || template.Id == null) {
+      return new CommunicationBccResolver.ResolutionResult();
+    }
+
+    if (cacheByTemplateId.containsKey(template.Id)) {
+      return cacheByTemplateId.get(template.Id);
+    }
+
+    CommunicationBccResolver.ResolutionResult resolution = CommunicationBccResolver.resolve(
+      template.BCC_User_Ids__c,
+      template.BCC_Public_Group_DeveloperNames__c
+    );
+    cacheByTemplateId.put(template.Id, resolution);
+    return resolution;
+  }
+
+  private static void appendBccDiagnostics(
+    BulkSendResult result,
+    Id templateId,
+    CommunicationBccResolver.ResolutionResult bccResolution
+  ) {
+    for (String message : CommunicationBccResolver.buildDiagnostics(templateId, bccResolution)) {
+      appendError(result, message);
+    }
   }
 
   private static Id parseId(String value) {

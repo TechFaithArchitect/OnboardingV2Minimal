@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BCC_Public_Group_DeveloperNames__c</fullName>
+    <description>Optional Public Group developer names to BCC for this template. Accepts comma, semicolon, or newline-separated values and expands group membership to active users with email addresses.</description>
+    <label>BCC Public Group Developer Names</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>4</visibleLines>
+</CustomField>

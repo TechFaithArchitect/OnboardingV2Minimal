@@ -226,14 +226,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>EmailTemplateSyncOrchestrator</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>EmailTemplateSyncOrchestratorTest</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>EmailTemplateSyncRequestDTO</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -2706,6 +2698,16 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Communication_Template__c.Active__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Communication_Template__c.BCC_Public_Group_DeveloperNames__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Communication_Template__c.BCC_User_Ids__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

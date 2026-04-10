@@ -59,6 +59,7 @@ Create **`Vendor_Program_Requirement__c`** rows for that program:
 - Minimum: none required for **record creation**.
 - If you want simple email behavior, use **`Vendor_Program_Key__c = DEFAULT`** in communication policy metadata.
 - `DEFAULT` means: “use this rule for every vendor program unless a program-specific key exists.”
+- If certain templates need internal copies, configure template-level BCC on `Communication_Template__c` (`BCC_User_Ids__c`, `BCC_Public_Group_DeveloperNames__c`) per the [Admin Operations Runbook](./admin/ADMIN_OPERATIONS_RUNBOOK.md#field-guide-communication-template-communication_template__c).
 - Add program-specific keys later only when you truly need different behavior per program ([FAQ](./support/FAQ_ADMINS.md#scenario-program-specific-communications-beyond-default)).
 
 ### Step 4 — First onboarding
